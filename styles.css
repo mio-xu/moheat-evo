@@ -317,3 +317,6 @@ section[id]{scroll-margin-top:70px}
   .news-cta{font-size:12px}
   .news-inquiry{font-size:12px;padding:8px 12px}
 }
+
+/* AI-generated usage imagery is labelled on the image */
+.ai-tag{position:absolute;right:10px;top:10px;z-index:2;padding:3px 8px;border-radius:999px;background:rgba(9,7,8,.6);color:#e6dcde;font-size:10px;font-weight:600;letter-spacing:.04em;backdrop-filter:blur(4px)}
