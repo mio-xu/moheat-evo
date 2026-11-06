@@ -12,12 +12,48 @@ There are no characters and no dialogue. **The temperature in each ear comes fro
 
 Spec: 150 s · 1920×1080 · 30 fps · 48 kHz binaural · thermal CSV at 20 Hz (3000 rows).
 
+## Run it
+- Double-click `start_demo.command`, or open `index.html`, or visit `https://moheat-evo.github.io/Demo_SeasonsExpress/`.
+- Connect MoHeat Evo (top right, Chrome / Edge), press **Start**.
+- Keys: `Space` play/pause, `←/→` ±5 s, `Esc` emergency stop.
+- Final film: `video/final/final_seasons_express_150s.mp4` (local, rebuild with `scripts/render_mp4.py`).
+
 ## Status
 - ✅ Art (procedural, see `storyboard/visual_prompts.md`)
 - ✅ 16 audio stems + binaural mix
 - ✅ Thermal CSV
 - ✅ Sync report (all checks pass)
-- ⏳ Browser player + MP4 render (next step)
+- ✅ Browser player (`index.html`, `demo.js`)
+- ✅ MP4 (`scripts/render_mp4.py`)
+
+## Player
+The player draws, back to front:
+1. Each window, clipped to its glass polygon from `window_geometry.json`.
+   - Parallax scenery: far 0.12×, mid 0.45×, near 1.2× of the train speed. The tunnel walls move at 1.5×.
+   - The left window scrolls left and the right window scrolls right, as seen when facing forward.
+   - Weather drawn in code: snow, rain streaks, ice glitter, embers, petals, tunnel lights.
+   - Glass layers: frost thaws away, rain drips, sun haze pulses, fog drifts.
+   - Lightning flashes at the thunder cues.
+2. Warm light in the door window.
+3. The interior: day → dusk → night → day, cross-faded.
+4. Window colour spill and lamp glow.
+5. The clock hands, drawn in code: one gentle hour; they spin forward in the chaos, stop in the blackout and spin back after it.
+6. Table props with steaming tea.
+7. Particles inside the car:
+   - steam puffs from the window the steam comes from;
+   - the season swirl when control is lost;
+   - ice and flame on the matching sides in the tunnel;
+   - sakura petals in spring.
+
+**Shared timing:**
+- The train sways on every rail joint, using the same speed integral as the wheel clacks in the mix.
+- The station slides in as the train brakes (139–146 s).
+- 110–114 s goes dark with the lamps dying and flickering back.
+- Each window's season comes from `seasons.py` (`SEGMENTS` + `CHAOS`), the same table that places the sounds, so what you see on a side is what you hear and feel there.
+
+**Previews:** `python3 scripts/render_mp4.py --at 10,30,75` renders stills to `video/clips/preview/`.
+
+**Cover:** `?cover=1` gives the cover page, saved as `media/cover.jpg`.
 
 ## Pipeline
 ```
@@ -27,9 +63,11 @@ scripts/build_audio.py  ──► audio/source_stems/*.wav (dry), audio/spatiali
 scripts/thermal.py      ──► thermal/thermal_4ch.csv, thermal/thermal_mapping_config.json, analysis/audio_features.csv,
                             analysis/thermal_energy_curves.png
 scripts/check_sync.py   ──► analysis/synchronization_report.md, analysis/sync_report.json
+scripts/export.py       ──► media/art/*.webp, media/data.js, media/mix.m4a, media/thermal.csv
+scripts/render_mp4.py   ──► video/final/final_seasons_express_150s.mp4
 ```
-Full rebuild (about 1 min, no VOICEVOX needed):
-`python3 scripts/art_train.py && python3 scripts/art_scenery.py && python3 scripts/make_style_sheet.py && python3 scripts/build_audio.py && python3 scripts/thermal.py && python3 scripts/check_sync.py`
+Full rebuild (assets + audio ≈ 1 min, MP4 ≈ 10 min; no VOICEVOX needed):
+`python3 scripts/art_train.py && python3 scripts/art_scenery.py && python3 scripts/make_style_sheet.py && python3 scripts/build_audio.py && python3 scripts/thermal.py && python3 scripts/check_sync.py && python3 scripts/export.py && python3 scripts/render_mp4.py`
 
 Play on the device without a browser:
 `python3 "../ASMR Demo/tools/play_thermal_csv.py" --csv thermal/thermal_4ch.csv --audio audio/final/final_binaural_150s.wav --port /dev/cu.…`
