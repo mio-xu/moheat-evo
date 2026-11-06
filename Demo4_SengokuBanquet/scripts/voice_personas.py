@@ -49,7 +49,7 @@ PERSONAS = {
 
 
 # FINAL voices (chosen by the user, 2026-11-07) — use these for the real dialogue
-FINAL = {"N": "信長_青山龍星", "I": "家康_黒沢冴白_低沈-2"}
+FINAL = {"N": "信長_青山龍星_低沈-1.5", "I": "家康_黒沢冴白_低沈-2"}
 
 
 def shift(x, semis):
