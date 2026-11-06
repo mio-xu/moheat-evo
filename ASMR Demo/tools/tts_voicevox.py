@@ -15,13 +15,13 @@ URL = os.environ.get("VOICEVOX_URL", "http://127.0.0.1:50021")
 
 # Character → VOICEVOX speaker, style per expression, prosody.  Change speakers here (see --audition).
 CAST = {
-    "K": dict(speaker="九州そら", speed=1.02, pitch=0.02, inton=1.25,
-              styles=dict(default="あまあま", smile="あまあま", happy="あまあま", laugh="あまあま", shy="あまあま",
-                          smug="ノーマル", surprise="ノーマル", pout="ツンツン", determined="ノーマル",
+    "K": dict(speaker="ユーレイちゃん", speed=1.0, pitch=0.04, inton=1.3,
+              styles=dict(default="甘々", smile="甘々", happy="甘々", laugh="甘々", shy="甘々",
+                          smug="ノーマル", surprise="ノーマル", pout="ノーマル", determined="ノーマル",
                           whisper="ささやき", sleepy="ささやき")),
-    "H": dict(speaker="四国めたん", speed=1.08, pitch=0.04, inton=1.4,
-              styles=dict(default="ノーマル", smile="あまあま", happy="ノーマル", laugh="あまあま", shy="あまあま",
-                          smug="ツンツン", surprise="ノーマル", pout="ツンツン", determined="ツンツン",
+    "H": dict(speaker="満別花丸", speed=1.05, pitch=0.05, inton=1.45,
+              styles=dict(default="元気", smile="ノーマル", happy="元気", laugh="元気", shy="ぶりっ子",
+                          smug="ぶりっ子", surprise="元気", pout="ぶりっ子", determined="元気",
                           whisper="ささやき", sleepy="ささやき")),
 }
 WHISPER_STYLES = ("ささやき", "ヒソヒソ")

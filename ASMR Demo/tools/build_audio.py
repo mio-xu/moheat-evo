@@ -307,10 +307,20 @@ def main():
     over = np.abs(mix) > thr
     mix[over] = np.sign(mix[over]) * (thr + (1 - thr) * np.tanh((np.abs(mix[over]) - thr) / (1 - thr)))
     mix = mix / np.max(np.abs(mix)) * db(-1.0)
-    write_wav(os.path.join(OUT, "mix_48k.wav"), mix)
+    # loudness: gentle compression + limiter + EBU R128 normalisation (−18 LUFS, −1.5 dBTP).
+    # Only the listening mix changes — the thermal controller reads the dry stems.
+    pre = os.path.join(OUT, "mix_premaster.wav"); write_wav(pre, mix)
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", pre, "-af",
+                    "acompressor=threshold=-30dB:ratio=3:attack=5:release=150:makeup=6,"
+                    "alimiter=limit=0.84:attack=3:release=60:level=disabled,"
+                    "loudnorm=I=-18:TP=-1.5:LRA=8",
+                    "-ar", str(SR), "-c:a", "pcm_s24le", os.path.join(OUT, "mix_48k.wav")], check=True)
+    os.remove(pre)
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", os.path.join(OUT, "mix_48k.wav"),
                     "-c:a", "aac", "-b:a", "192k", os.path.join(MEDIA, "mix.m4a")], check=True)
-    print("mix: peak %.1f dBFS, rms %.1f dBFS" % (20 * np.log10(np.max(np.abs(mix))), 20 * np.log10(np.sqrt(np.mean(mix ** 2)))))
+    r = subprocess.run(["ffmpeg", "-hide_banner", "-i", os.path.join(OUT, "mix_48k.wav"), "-af", "ebur128=peak=true", "-f", "null", "-"], capture_output=True, text=True).stderr
+    summ = r[r.rfind("Summary:"):]
+    print("mix loudness:", " ".join(l.strip() for l in summ.splitlines() if l.strip().startswith(("I:", "Peak:"))))
 
 if __name__ == "__main__":
     main()
