@@ -41,6 +41,9 @@ assets/
 - A raw command box sends any firmware line (`BH100`, `ID:6`, `stop`).
 - Both pages share the serial connection code in `device.js`.
 
+## ASMR demo
+`ASMR Demo/` — *雪と狐火のひそひそ話 / Whispers of Snow and Flame*: 150 s binaural ASMR story whose two characters drive MoHeat Evo (Koyuki → cooling, Homura → warming; left/right follows where they are). Open `ASMR Demo/index.html` (or `start_demo.command`), connect the device, play. Pipeline, thermal mapping, deliverables and manual steps: `ASMR Demo/README.md`.
+
 ## Publishing updates
 ```bash
 git add -A && git commit -m "Describe the change" && git push
