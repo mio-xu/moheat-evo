@@ -72,7 +72,8 @@ def main():
     for who in "KH":
         az, d = pos[who]
         anim["chars"][who] = dict(az=np.round(az, 1).tolist(), d=np.round(d, 3).tolist(),
-                                  mouth=np.round(mouth(os.path.join(STEMS, f"{who}_voice.wav"), times), 2).tolist())
+                                  mouth=np.round(mouth(os.path.join(STEMS, f"{who}_voice.wav"), times), 2).tolist(),
+                                  breath=np.round(mouth(os.path.join(STEMS, f"{who}_breath.wav"), times), 2).tolist())
     anim["cues"] = [dict(t=c["t"], who=c["who"], kind=c["kind"], expr=c["expr"], style=c.get("style"),
                          dur=round(tm["dur"], 2)) for c, tm in zip(S.CUES, timing)]
     json.dump(anim, open(os.path.join(MEDIA, "anim.json"), "w"), separators=(",", ":"))

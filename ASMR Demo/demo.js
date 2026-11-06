@@ -152,14 +152,24 @@ function wisp(ctx, x, y, r, alpha, t) {
 let parts = [];
 function spawn(o) { if (parts.length < 900) parts.push(o); }
 function updateParts(dt) {
-  for (const q of parts) { q.life += dt; q.x += q.vx * dt; q.y += q.vy * dt; q.vx *= 1 - .6 * dt; q.vy *= 1 - .6 * dt; if (q.spin) q.rot += q.spin * dt; if (q.grow) q.size += q.grow * dt; }
+  for (const q of parts) { q.life += dt; if (q.seed !== undefined && (q.kind === 'frost' || q.kind === 'haze')) { q.vx += Math.sin(q.life * 5 + q.seed) * 40 * dt; q.vy += Math.cos(q.life * 4 + q.seed) * 30 * dt + (q.kind === 'haze' ? -20 : 12) * dt; } q.x += q.vx * dt; q.y += q.vy * dt; q.vx *= 1 - 1.4 * dt; q.vy *= 1 - 1.4 * dt; if (q.spin) q.rot += q.spin * dt; if (q.grow) q.size += q.grow * dt; }
   parts = parts.filter((q) => q.life < q.max);
 }
 function drawParts(ctx) {
   ctx.save(); ctx.globalCompositeOperation = 'lighter';
   for (const q of parts) {
     const k = q.life / q.max, a = Math.sin(Math.PI * Math.min(1, k * 1.2)) * q.a;
-    if (q.kind === 'mist') {
+    if (q.kind === 'frost' || q.kind === 'haze') {
+      const fa = q.a * Math.min(1, k * 2.6) * Math.pow(1 - k, 1.3);
+      ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(Math.atan2(q.vy, q.vx)); ctx.scale(1.9, 1);
+      const g = ctx.createRadialGradient(0, 0, 0, 0, 0, q.size);
+      if (q.kind === 'frost') { g.addColorStop(0, `rgba(228,242,255,${fa * .42})`); g.addColorStop(.6, `rgba(200,228,255,${fa * .16})`); g.addColorStop(1, 'rgba(190,225,255,0)'); }
+      else { g.addColorStop(0, `rgba(255,222,190,${fa * .4})`); g.addColorStop(.6, `rgba(255,180,140,${fa * .16})`); g.addColorStop(1, 'rgba(255,170,120,0)'); }
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, q.size, 0, 7); ctx.fill(); ctx.restore();
+    } else if (q.kind === 'glint') {
+      ctx.fillStyle = `rgba(240,250,255,${a})`; ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(q.rot);
+      ctx.beginPath(); for (let i = 0; i < 4; i++) { ctx.rotate(Math.PI / 2); ctx.lineTo(0, q.size); ctx.lineTo(q.size * .2, q.size * .2); } ctx.fill(); ctx.restore();
+    } else if (q.kind === 'mist') {
       const g = ctx.createRadialGradient(q.x, q.y, 0, q.x, q.y, q.size);
       g.addColorStop(0, `rgba(210,235,255,${a * .5})`); g.addColorStop(1, 'rgba(180,220,255,0)');
       ctx.fillStyle = g; ctx.beginPath(); ctx.arc(q.x, q.y, q.size, 0, 7); ctx.fill();
@@ -200,7 +210,7 @@ function chooseLook(st, t) {
   let pose;
   if (c && c.kind === 'magic' && c.style !== 'whoosh' && t < c.t + c.dur) pose = 'magic';
   else if (st.running) pose = 'run';
-  else if (st.d < .55) pose = 'bust';
+  else if (st.d < .55 && bustReachesBottom(st)) pose = 'bust';
   else if (who === 'H' && t >= 49.8 && t < 54) pose = 'appear';
   else if (st.blowing) pose = 'blow';
   else if (who === 'K' && c && c.kind === 'pant') pose = 'rest';
@@ -220,6 +230,13 @@ function chooseLook(st, t) {
   const dx = xOf(azAt(who, t + .1)) - xOf(azAt(who, t - .1));
   const want = Math.abs(dx) > 6 ? (dx > 0 ? 'R' : 'L') : (st.x > W / 2 ? 'L' : 'R');
   return { img: `art.${name}`, kind, pose, flip: FACING_R.has(name) && want === 'L' };
+}
+
+function bustReachesBottom(st) {   // a waist-up image must continue below the frame, otherwise the cut-off body shows
+  const F = FACES[`${st.who}_bust`], im = IMG[`art.${st.who}_bust_base`];
+  if (!F || !im || !im.naturalHeight) return true;
+  const k = (240 * st.s) / (F.rx * 1.25);
+  return st.y + (im.naturalHeight - F.cy) * k > H + 40;
 }
 
 function bustFrame(st) {   // blink > talking mouth > expression > base
@@ -286,6 +303,15 @@ function drawFigure(st, t) {
   g.addColorStop(0, `rgba(${p.glow},${.2 * st.alpha})`); g.addColorStop(1, `rgba(${p.glow},0)`);
   ctx.fillStyle = g; ctx.fillRect(st.x - 400 * st.s, st.y - 340 * st.s, 800 * st.s, 800 * st.s);
 
+  if (fs.cur.look.kind === 'pose') {   // soft contact shadow so the figure stands on the tatami
+    const L0 = layout(fs.cur.look, st), img0 = IMG[fs.cur.look.img];
+    const feetY = st.y + L0.top + img0.naturalHeight * L0.k * .975, hw = 130 * st.s * (st.running ? .8 : 1);
+    const lift = st.running ? Math.max(0, -(st.bob || 0)) : 0;
+    ctx.save(); ctx.globalAlpha = st.alpha * (.5 - Math.min(.3, lift / 80)); ctx.translate(st.x, feetY); ctx.scale(1, .22);
+    const sg = ctx.createRadialGradient(0, 0, 0, 0, 0, hw);
+    sg.addColorStop(0, 'rgba(20,10,5,.55)'); sg.addColorStop(1, 'rgba(20,10,5,0)');
+    ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(0, 0, hw, 0, 7); ctx.fill(); ctx.restore();
+  }
   const breath = .012 * Math.sin((t / 3.4) * Math.PI * 2 + (st.who === 'K' ? 0 : 1.7));
   const talk = st.mouth * 6 * st.s;
   const sway = (Math.sin(t * 1.7 + (st.who === 'K' ? 0 : 1.3)) * 10 - clamp(st.vel * .35, -40, 40)) * st.s;
@@ -356,7 +382,7 @@ function charState(who, t) {
   const x = W / 2 + Math.sin(rad(clamp(az, -118, 118))) * W * .43 + (absAz > 90 ? Math.sign(az) * (absAz - 90) * 9 : 0);
   const bob = running ? Math.abs(Math.sin(t * 13)) * -22 * s : Math.sin(t * 1.6 + (who === 'K' ? 0 : 2)) * 6 * s;
   return {
-    who, az, d, vel, alpha, s, near, cue, expr, blowing, running, t,
+    who, az, d, vel, alpha, s, near, cue, expr, blowing, running, t, bob,
     x, y: lerp(HORIZON, 540, near) + bob + (expr === 'pant' ? Math.sin(t * 9) * 5 * s : 0),
     rot: -side * .22 * near * (absAz > 50 ? 1 : .3) + clamp(vel / 900, -.12, .12),
     turn: clamp(-side * .7, -.7, .7) * (absAz > 100 ? .5 : 1),
@@ -370,16 +396,17 @@ function emit(st, t, dt) {
   const mx = st.mx ?? st.x + st.turn * 18 * st.s, my = st.my ?? st.y + 76 * st.s;
   const dir = Math.sin(rad(st.az));
   if (st.blowing) {
-    const n = Math.ceil(dt * 90);
+    // breath follows the loudness of the character's own breath track; drifts toward the ear on that side
+    const env = A.chars[st.who].breath ? sample(A.chars[st.who].breath, A.fps, t) : .7;
+    const cold = st.who === 'K', side = Math.sin(rad(st.az));
+    const n = env > .04 ? Math.ceil(dt * 150 * env) : 0;
     for (let i = 0; i < n; i++) {
-      const sp = 300 + Math.random() * 260;
-      if (st.who === 'K') {
-        spawn({ kind: 'mist', x: mx, y: my, vx: (dir * .9 + (Math.random() - .5) * .5) * sp, vy: (Math.random() - .2) * 120, size: 18 * st.s, grow: 140 * st.s, life: 0, max: 1.6, a: .9 });
-        if (Math.random() < .5) spawn({ kind: 'spark', x: mx, y: my, vx: (dir + (Math.random() - .5) * .8) * sp * 1.2, vy: (Math.random() - .5) * 160, size: 8 + Math.random() * 10, rot: Math.random() * 3, spin: 3, life: 0, max: 1.2, a: 1 });
-      } else {
-        spawn({ kind: 'warm', x: mx, y: my, vx: (dir * .9 + (Math.random() - .5) * .5) * sp, vy: -40 - Math.random() * 120, size: 20 * st.s, grow: 120 * st.s, life: 0, max: 1.5, a: .9 });
-        if (Math.random() < .6) spawn({ kind: 'ember', x: mx, y: my, vx: (dir + (Math.random() - .5)) * sp, vy: -100 - Math.random() * 200, size: 2 + Math.random() * 4, life: 0, max: 1.3, a: 1 });
-      }
+      const sp = (160 + 260 * env) * Math.max(.5, st.s) * (.7 + Math.random() * .6);
+      const vx = (side * .9 + (Math.random() - .5) * .55) * sp, vy = ((cold ? .12 : -.18) + (Math.random() - .5) * .35) * sp;
+      const off = 22 * st.s / Math.max(1, Math.hypot(vx, vy));   // start just past the lips, so no fog piles up on the face
+      spawn({ kind: cold ? 'frost' : 'haze', x: mx + vx * off + (Math.random() - .5) * 6 * st.s, y: my + vy * off, vx, vy, size: 7 * st.s, grow: (cold ? 120 : 105) * st.s,
+              life: 0, max: .9 + Math.random() * .7, a: .25 + .5 * env, seed: Math.random() * 6.3 });
+      if (cold && Math.random() < .08 * env) spawn({ kind: 'glint', x: mx, y: my, vx: vx * 1.1, vy: vy + (Math.random() - .5) * 60, size: 3 + Math.random() * 4, rot: Math.random() * 3, spin: 2, life: 0, max: .9, a: .9 });
     }
   }
   if (st.cue && st.cue.kind === 'magic' && t < st.cue.t + st.cue.dur) {
