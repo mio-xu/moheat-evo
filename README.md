@@ -42,7 +42,7 @@ assets/
 - Both pages share the serial connection code in `device.js`.
 
 ## ASMR demo
-`ASMR Demo/` — *雪と狐火のひそひそ話 / Whispers of Snow and Flame*: 150 s binaural ASMR story whose two characters drive MoHeat Evo (Koyuki → cooling, Homura → warming; left/right follows where they are). Open `ASMR Demo/index.html` (or `start_demo.command`), connect the device, play. Pipeline, thermal mapping, deliverables and manual steps: `ASMR Demo/README.md`.
+`demos/Demo1_SnowFoxfire/` — *雪と狐火のひそひそ話 / Whispers of Snow and Flame*: 150 s binaural ASMR story whose two characters drive MoHeat Evo (Koyuki → cooling, Homura → warming; left/right follows where they are). Open `demos/Demo1_SnowFoxfire/index.html` (or `start_demo.command`), connect the device, play. Pipeline, thermal mapping, deliverables and manual steps: `demos/Demo1_SnowFoxfire/README.md`.
 
 ## Publishing updates
 ```bash

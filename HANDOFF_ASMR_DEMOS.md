@@ -1,7 +1,7 @@
 # MoHeat Evo — 冷热触觉 ASMR Demo 系列：交接文档 / Handoff
 
 > 写给接手的 agent（Claude Code、Codex 等）和项目负责人。**先读完"必须遵守的约定"再动手。**
-> 最后更新：2026-11-07。状态：Demo 1/2/3/4 已完成（Demo 4 可选补 3 张道具图）；Demo 5 素材（程序绘制美术 + 16 条合成音轨）、冷热 CSV、同步报告已完成，下一步做播放器和 MP4。
+> 最后更新：2026-11-07。状态：Demo 1/2/3/4 已完成（Demo 4 可选补 3 张道具图）；Demo 5 已完成（程序绘制美术、16 条合成音轨、冷热 CSV、同步报告、播放器、MP4）。
 
 ---
 
@@ -28,14 +28,16 @@
 index.html, styles.css, script.js        品牌官网（不要随意改动风格；商业文案简短）
 control.html/js, test.html/js, device.js 设备控制页、输出测试页、Web Serial 公共代码（所有 Demo 共用 device.js）
 arduino/MoHeatEvoArduino.ino             ESP32 固件（.gitignore 排除，仅本地）
-ASMR Demo/                               Demo 1《雪と狐火のひそひそ話》
-ASMR Demo 2/                             Demo 2《キミだけのスペシャルファンミーティング》
-Demo3_ShiningSmileConcert/               Demo 3《Shining Smile Melody — Ice & Fire Concert》
-Demo4_SengokuBanquet/                    Demo 4《安土最後の酒宴》
-Demo_SeasonsExpress/                     Demo 5《四季暴走列車 / The Runaway Seasons Express》（素材完成，待播放器）
+demos/Demo1_SnowFoxfire/                 Demo 1《雪と狐火のひそひそ話》（原 `ASMR Demo/`）
+demos/Demo2_FanMeeting/                  Demo 2《キミだけのスペシャルファンミーティング》（原 `ASMR Demo 2/`）
+demos/Demo3_ShiningSmileConcert/         Demo 3《Shining Smile Melody — Ice & Fire Concert》
+demos/Demo4_SengokuBanquet/              Demo 4《安土最後の酒宴》
+Demo_SeasonsExpress/                     Demo 5《四季暴走列車》（另一个会话制作中，做完后移到 demos/Demo5_SeasonsExpress/）
+ASMR Demo, ASMR Demo 2, Demo3_ShiningSmileConcert   ← 临时兼容符号链接（指向 demos/），只为 Demo 5 的旧路径；Demo 5 迁移后删除
 HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
 ```
+- 2026-11-07 起所有 Demo 统一放在 `demos/DemoN_英文名/`。Demo 之间互相引用用同级路径（如 `demos/Demo1_SnowFoxfire/tools`），播放器引用 `../../device.js`，`render_mp4.py` 的服务器根目录是仓库根。
 每个 Demo 文件夹里都有自己的 `README.md`（运行方法、管线、交付物清单），本文件是总览和交接。
 
 ---
@@ -47,9 +49,9 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 | Python | 系统 `python3` 3.9；已有 numpy 2.0、scipy 1.13、matplotlib 3.9、Pillow 11。**没有** librosa / soundfile / torch / pyserial（Demo 3 的音乐分析特意只用 numpy/scipy）|
 | ffmpeg / ffprobe | 9.0（Homebrew）|
 | Chrome | `/Applications/Google Chrome.app`，headless 用于截图和逐帧渲染 MP4 |
-| Swift | `/usr/bin/swift`，`ASMR Demo/tools/lift_subject.swift` 用 macOS Vision 抠图（素材是绿底时可用）|
-| **VOICEVOX 引擎** | 0.26.1，`~/VOICEVOX-engine/engine`（3.9 GB，不在仓库里）。**agent 不能自己启动下载的二进制**（权限拦截），需要用户双击 `ASMR Demo/start_voicevox.command`。端口 `http://127.0.0.1:50021`。检查：`curl -s http://127.0.0.1:50021/version` |
-| 本地预览服务器 | 在仓库根目录 `python3 -m http.server 8765`，然后打开 `http://localhost:8765/<Demo 文件夹>/`。各 Demo 的 `start_demo.command` 会自动做这件事 |
+| Swift | `/usr/bin/swift`，`demos/Demo1_SnowFoxfire/tools/lift_subject.swift` 用 macOS Vision 抠图（素材是绿底时可用）|
+| **VOICEVOX 引擎** | 0.26.1，`~/VOICEVOX-engine/engine`（3.9 GB，不在仓库里）。**agent 不能自己启动下载的二进制**（权限拦截），需要用户双击 `demos/Demo1_SnowFoxfire/start_voicevox.command`。端口 `http://127.0.0.1:50021`。检查：`curl -s http://127.0.0.1:50021/version` |
+| 本地预览服务器 | 在仓库根目录 `python3 -m http.server 8765`，然后打开 `http://localhost:8765/demos/<Demo 文件夹>/`。各 Demo 的 `start_demo.command` 会自动做这件事 |
 | MP4 渲染端口 | Demo 1: 8766，Demo 2: 8767，Demo 3: 8768，Demo 4: 8769（`render_mp4.py` 自带服务器）|
 
 ---
@@ -59,7 +61,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 固件命令（115200 baud，每行一条）：`LC<35..80> RH<0..200>` 等，`L/R/B` + `C`(冷)/`H`(热) + PWM；`stop` 全关。**写同一侧的 C 会清掉 H，反之亦然**。
 - 默认 PWM 范围：冷 35–80，热 0–200（固件上限）。`test.html` 设置的范围保存在浏览器 localStorage（`moheat.range`），所有播放器共用。
 - 播放器：Web Serial（`device.js`），最多 10 条命令/秒，变化时才发；暂停/结束/切走页面/断开/Esc/STOP → `stop`。
-- 无浏览器播放：`python3 "ASMR Demo/tools/play_thermal_csv.py" --csv <csv> --audio <wav> --port /dev/cu.…`（需 `pip3 install pyserial`；`--dry-run` 可测试）。
+- 无浏览器播放：`python3 "demos/Demo1_SnowFoxfire/tools/play_thermal_csv.py" --csv <csv> --audio <wav> --port /dev/cu.…`（需 `pip3 install pyserial`；`--dry-run` 可测试）。
 - CSV 统一格式：`time_s, L_cool, R_cool, L_heat, R_heat, *_pwm, command`，20 Hz，已含设备延迟补偿（冷提前 0.35 s，热提前 0.60 s）。
 
 ---
@@ -68,30 +70,30 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 
 **管线**：时间轴文件（台词/音效/位置关键帧）→ `build_audio.py`（配音、音效、HRTF 双耳渲染、母带）→ `thermal.py`（四通道 CSV）→ `export.py`（字幕 + `media/data.js`）→ 浏览器播放器 → `render_mp4.py`（headless Chrome 逐帧 → MP4）。
 
-- **双耳渲染**：`ASMR Demo/tools/build_audio.py::render()`，球形头模型（Brown–Duda ITD + 头影滤波）+ 近场 ILD + 房间混响，位置由时间轴模块的 `positions(times)` 提供（复用时把 `B.S` 替换成新 Demo 的时间轴模块）。
-- **冷热控制器**：`ASMR Demo/tools/thermal.py`：50 ms RMS → 噪声门 → 归一化 → 曲线 → hold/attack/release → 距离 → 左右权重 → 设备延迟 → 同侧仲裁 `resolve_ear` → 8 s 剂量限制 → PWM。Demo 2 的 `ear_weights` 更锐利（归一化到较近的耳朵）。
-- **美术处理**：`ASMR Demo/tools/prepare_art.py`：差分图对齐（缩放搜索 + 相位相关）→ 自动找脸部区域（眨眼/张嘴差异）→ **只合成脸部** → WebP（`media/art/` + `faces.json`）。手/道具也变化的差分要列入 `FULL_FRAME` 保留整张。
+- **双耳渲染**：`demos/Demo1_SnowFoxfire/tools/build_audio.py::render()`，球形头模型（Brown–Duda ITD + 头影滤波）+ 近场 ILD + 房间混响，位置由时间轴模块的 `positions(times)` 提供（复用时把 `B.S` 替换成新 Demo 的时间轴模块）。
+- **冷热控制器**：`demos/Demo1_SnowFoxfire/tools/thermal.py`：50 ms RMS → 噪声门 → 归一化 → 曲线 → hold/attack/release → 距离 → 左右权重 → 设备延迟 → 同侧仲裁 `resolve_ear` → 8 s 剂量限制 → PWM。Demo 2 的 `ear_weights` 更锐利（归一化到较近的耳朵）。
+- **美术处理**：`demos/Demo1_SnowFoxfire/tools/prepare_art.py`：差分图对齐（缩放搜索 + 相位相关）→ 自动找脸部区域（眨眼/张嘴差异）→ **只合成脸部** → WebP（`media/art/` + `faces.json`）。手/道具也变化的差分要列入 `FULL_FRAME` 保留整张。
 - **播放器**（`demo.js`）：Live2D 风格（呼吸、说话弹动、条带网格摆动、镜像、交叉淡化）；按配音 RMS 切换眨眼/口型/表情帧；粒子特效；冷热边缘光晕、雷达、四通道表、时间轴；URL 参数：`?t=95` 定格预览、`?cover=1` 封面导出、`?render=1` 离线渲染。
-- **配音**：`ASMR Demo/tools/tts_voicevox.py`（`CAST` 配置、按表情选风格、停顿上限、音色 tone）；唱歌：Demo 2 `build_audio.py::sing()` 逐 mora 设定音高和时长。
+- **配音**：`demos/Demo1_SnowFoxfire/tools/tts_voicevox.py`（`CAST` 配置、按表情选风格、停顿上限、音色 tone）；唱歌：Demo 2 `build_audio.py::sing()` 逐 mora 设定音高和时长。
 - **封面**：`?cover=1` 截图 → `media/cover.jpg`（分享图、MP4 开头 2–3 s 标题卡、MP4 内嵌缩略图）。
 
 ---
 
 ## 5. 各 Demo 状态
 
-### Demo 1 · `ASMR Demo/` ✅ 完成
+### Demo 1 · `demos/Demo1_SnowFoxfire/` ✅ 完成
 - 角色：小雪（冷）/ 小焰（热）；ChatGPT 美术在 `art/chatgpt/`，设定图 `art/Character.jpg`，房间背景 `room_bg`。
 - 配音：ずんだもん（两人用音高/风格区分）。字幕：日 + 英。
 - 重建：`./build_all.sh`（需 VOICEVOX）→ `python3 tools/render_mp4.py`。成品：`output/final_1080p.mp4`（本地）。
 
-### Demo 2 · `ASMR Demo 2/` ✅ 完成
+### Demo 2 · `demos/Demo2_FanMeeting/` ✅ 完成
 - 角色：星乃綾音（`A_` 前缀），ChatGPT 美术 `art/chatgpt/`（35 张），设定图 `art/A_Character.png`。
 - 热 = 绫音人声（含原创歌曲，VOICEVOX 逐音唱）随她的位置；冷 = 扇子/冰饮/冷气/魔法，各自独立位置。检查：左右同时异温 4 次、左右交替 17 次、同侧冲突 0（`output/thermal_checks.json`）。
 - 配音：ずんだもん 原声。字幕：日 + 英。萌妹音试听保留在 `output/audition/`（本地）。
 - 重建：`./build_all.sh` → `python3 tools/render_mp4.py`。成品：`output/final_1080p.mp4`。
 - 代码复用 Demo 1：`tools/demo1.py` 按路径加载（同名模块冲突，不能直接 import）。
 
-### Demo 3 · `Demo3_ShiningSmileConcert/` ✅ 完成
+### Demo 3 · `demos/Demo3_ShiningSmileConcert/` ✅ 完成
 - 真实歌曲 *Shining Smile Melody – Jpop*（ZTMusic, Pixabay），来源/许可/哈希见 `assets/music_original/SOURCE.md`；原曲 MP3 不提交。
 - 音乐分析（numpy/scipy）→ 88.2 BPM 半拍（≈176），剪辑 170.04 → 150.000 s（去掉 131.33–150.43 s 间奏 7 小节）。
 - 两种冷热模式：A 纯音乐、B 音乐 × 舞台位置（默认）。`scripts/check_sync.py` 全部通过。
@@ -99,7 +101,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 重建命令见 `README.md`；成品 `video/final/final_concert_150s.mp4`、`audio/final/final_stereo_150s.wav`（本地）。
 - 无歌词字幕（没有授权的歌词文本），只有段落标题（日/英）和片尾音乐署名。
 
-### Demo 4 · `Demo4_SengokuBanquet/` ✅ 完成 —《安土最後の酒宴 / The Last Banquet at Azuchi》
+### Demo 4 · `demos/Demo4_SengokuBanquet/` ✅ 完成 —《安土最後の酒宴 / The Last Banquet at Azuchi》
 - **方向**：以 `demo4.jpg` 设定板为准，**B 细密浮世绘·金箔装饰风**、写实成年人比例（Q 版已淘汰，见 `project/discarded_chibi_drafts/`）。
 - **角色与冷热**：織田信長坐左前方 → 他的声音主要驱动 **L_Heat**；徳川家康坐右前方 → **R_Heat**。冷感来自风/雨/冰镇等环境（按设定板：冷气、风、雨；热：火焰、热酒蒸汽、炭火）。
 - **已有素材**（用户仍在陆续生成，开工前先 `ls assets/*/` 确认）：`assets/characters/N_Character.png`、`I_Character.png`、`N_bust_base.png`、`I_bust_base.png`、`N_ear.png`、`I_ear.png`；`assets/stage/banquet_bg.png`。
@@ -132,7 +134,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
   - QA `scripts/check_sync.py` → `analysis/qa_report.json` 全部通过。一键重建 `./build_all.sh`。
 - **可选后续**：用户试听 `audio/takes/` 后换 take；补 3 张道具图后重跑 build + 渲染。
 
-### Demo 5 · `Demo_SeasonsExpress/` 🚧 素材完成 —《四季暴走列車 / The Runaway Seasons Express》
+### Demo 5 · `Demo_SeasonsExpress/` ✅ 完成 —《四季暴走列車 / The Runaway Seasons Express》
 - **任务书要点**（用户提供的完整制作指令）：
   - 150 s，1920×1080，30 fps，48 kHz 双耳声。第一人称坐在魔法列车车厢里朝前看，**无角色、无台词、无旁白**。
   - 画风必须和 Demo 1–3 一致：可爱日系 2D、粉彩、赛璐璐。**不要浮世绘或金箔风**（那是 Demo 4 的风格）。
@@ -156,7 +158,12 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
   - **音频**：`scripts/seasons.py` 是唯一时间轴（音源包络、方位、距离、冷热角色、设计包络、静音段 110–114 s、乱季窗户表 `CHAOS`）。`scripts/build_audio.py` 程序合成 16 条音轨，用 Demo 1 的 HRTF 双耳渲染混音（约 20 s）。
   - **冷热**：`scripts/thermal.py` 计算各音轨 RMS × 权重 × Demo 2 左右分配（与双耳渲染用同一方位），加两个设计包络（右窗阳光、左窗残霜），再软饱和，最后经过 Demo 1 的延迟补偿、同侧仲裁和剂量限制，输出 `thermal/thermal_4ch.csv`（3000 行）。
   - **验收**：`scripts/check_sync.py` 全部通过（10 次左右移动、7 段左右相反温度、冰火反转、静音全零、春天平静归零、同侧冲突 0、每个驱动声源的 ILD 方向与冷热侧一致、冷热比声音提前约 0.3/0.6 s）。
-  - **下一步**：播放器（沿用 Demo 3 的 demo.js：车厢 + 窗户遮罩 + 视差滚动景色 + 玻璃层 + 粒子 + 程序绘制的时钟指针 + 静音段熄灯）→ `render_mp4.py` → 成品 MP4。
+  - **播放器**（`index.html` / `demo.js` / `demo.css`，基于 Demo 3）：
+    - 窗户按 `window_geometry.json` 的玻璃多边形裁剪，里面是视差滚动的景色（左窗向左滚、右窗向右滚），加上程序绘制的天气、玻璃层和闪电。
+    - 车厢日 / 黄昏 / 夜交叉淡化，叠加窗外颜色溢光和灯光；时钟指针由程序绘制（乱季时快转，熄灯时停住，之后倒转）。
+    - 列车晃动和车轮声使用同一个速度积分；樱花站随刹车滑入；110–114 s 熄灯。
+    - `scripts/export.py` → `media/`；`scripts/render_mp4.py`（端口 8770）→ `video/final/final_seasons_express_150s.mp4`；`--at 10,30` 只渲染预览静帧。
+    - 封面：`?cover=1` 截图 → `media/cover.jpg`（cover 模式不跑动画循环，headless 截图才不会卡住）。
 - **美术（原计划）**：`ChatGPT素材命令.md`（车厢主图的窗玻璃用 #00FF00 填满 → 抠出窗户遮罩；窗外每个季节分远/中/近三层，可无缝横向滚动；霜花、雨滴等玻璃层；特效小图）。复用 Demo 3 的 fx_snowflake / fx_ice_crystal / fx_flame / fx_star。
 - **计划**：
   - 播放器沿用 Demo 3 结构：车厢前景固定，左右窗遮罩后面滚动视差景色，叠加玻璃层和粒子；列车有轻微晃动；时钟指针由程序绘制。
@@ -170,11 +177,11 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 
 | 文件 | 大小 | 重建 |
 |---|---|---|
-| `ASMR Demo/output/final_1080p.mp4`、`mix_48k.wav`、`stems/` | ~700 MB | `./build_all.sh` + `tools/render_mp4.py`（需 VOICEVOX）|
-| `ASMR Demo 2/output/final_1080p.mp4`、`mix_48k.wav`、`stems/`、`audition/` | ~640 MB | 同上 |
-| `Demo3_ShiningSmileConcert/video/final/final_concert_150s.mp4`、`audio/` | ~410 MB | README 中的命令（不需要 VOICEVOX）|
-| `Demo3_ShiningSmileConcert/assets/music_original/*.mp3`、`music_edited/*.wav` | 5 MB + 43 MB | 原曲需从 Pixabay 手动下载（Cloudflare 拦截自动下载）|
-| `Demo4_SengokuBanquet/audio/`（选定声线试听、take 缓存、4 条干声 stem、mix）、`video/`（MP4、srt）| ~160 MB + ~520 MB | `./build_all.sh`（需 VOICEVOX）+ `scripts/render_mp4.py` |
+| `demos/Demo1_SnowFoxfire/output/final_1080p.mp4`、`mix_48k.wav`、`stems/` | ~700 MB | `./build_all.sh` + `tools/render_mp4.py`（需 VOICEVOX）|
+| `demos/Demo2_FanMeeting/output/final_1080p.mp4`、`mix_48k.wav`、`stems/`、`audition/` | ~640 MB | 同上 |
+| `demos/Demo3_ShiningSmileConcert/video/final/final_concert_150s.mp4`、`audio/` | ~410 MB | README 中的命令（不需要 VOICEVOX）|
+| `demos/Demo3_ShiningSmileConcert/assets/music_original/*.mp3`、`music_edited/*.wav` | 5 MB + 43 MB | 原曲需从 Pixabay 手动下载（Cloudflare 拦截自动下载）|
+| `demos/Demo4_SengokuBanquet/audio/`（选定声线试听、take 缓存、4 条干声 stem、mix）、`video/`（MP4、srt）| ~160 MB + ~520 MB | `./build_all.sh`（需 VOICEVOX）+ `scripts/render_mp4.py` |
 | `~/VOICEVOX-engine/` | 3.9 GB | 官方 release 0.26.1 macos-arm64 `.vvpp`（zip）解压 |
 
 ---

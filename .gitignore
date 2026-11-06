@@ -1,15 +1,15 @@
 .DS_Store
 .claude/
 arduino/
-ASMR Demo/output/
+demos/Demo1_SnowFoxfire/output/
 __pycache__/
-ASMR Demo 2/output/
-Demo3_ShiningSmileConcert/assets/music_original/*.mp3
-Demo3_ShiningSmileConcert/audio/
-Demo3_ShiningSmileConcert/video/
-Demo3_ShiningSmileConcert/assets/music_edited/*.wav
-Demo4_SengokuBanquet/audio/
-Demo4_SengokuBanquet/video/
+demos/Demo2_FanMeeting/output/
+demos/Demo3_ShiningSmileConcert/assets/music_original/*.mp3
+demos/Demo3_ShiningSmileConcert/audio/
+demos/Demo3_ShiningSmileConcert/video/
+demos/Demo3_ShiningSmileConcert/assets/music_edited/*.wav
+demos/Demo4_SengokuBanquet/audio/
+demos/Demo4_SengokuBanquet/video/
 Demo_SeasonsExpress/audio/
 Demo_SeasonsExpress/video/
 Demo_SeasonsExpress/project/art_render/
