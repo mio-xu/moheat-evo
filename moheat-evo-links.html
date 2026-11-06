@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>MoHeat Evo — リンク集 | 東京大学制作展2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;800&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+rel="stylesheet"
+/>
+<style>
+:root {
+--bg: #f4f4f2;
+--card: #ffffff;
+--ink: #1d2422;
+--ink-soft: #4c5754;
+--ink-faint: #77827e;
+--line: #e2e4e0;
+--warm: #d9481f;
+--warm-ink: #b23a17;
+--cool: #0e7c86;
+--cool-ink: #0a626b;
+--ok-bg: #eef6f3;
+--radius: 14px;
+color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+:root {
+--bg: #11161a;
+--card: #1a2126;
+--ink: #e9edeb;
+--ink-soft: #b7c0bc;
+--ink-faint: #8b968f;
+--line: #2c353b;
+--warm: #ff7a4d;
+--warm-ink: #ffa07e;
+--cool: #3fb6c0;
+--cool-ink: #6fcdd4;
+--ok-bg: #16241f;
+}
+}
+* { box-sizing: border-box;}
+html { -webkit-text-size-adjust: 100%;}
+body {
+margin: 0;
+background: var(--bg);
+color: var(--ink);
+font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
+line-height: 1.65;
+}
+.wrap {
+max-width: 660px;
+margin: 0 auto;
+padding: 28px 18px 56px;
+}
+/* ---------- header ---------- */
+.event-line {
+font-size: 13px;
+font-weight: 700;
+letter-spacing: 0.08em;
+color: var(--ink-soft);
+margin: 0 0 10px;
+}
+.event-dot { color: var(--warm);}
+h1 {
+font-family: "Archivo", "Noto Sans JP", sans-serif;
+font-weight: 800;
+font-size: clamp(42px, 11vw, 58px);
+line-height: 1.02;
+letter-spacing: -0.01em;
+margin: 0;
+}
+.title-jp {
+font-size: 15px;
+font-weight: 700;
+color: var(--ink-soft);
+margin: 8px 0 0;
+}
+.thermal-bar {
+height: 6px;
+border-radius: 3px;
+margin: 22px 0 20px;
+background: linear-gradient(90deg, #d9481f 0%, #f08a2e 32%, #c9c2ae 55%, #57a7a5 78%, #0e7c86 100%);
+}
+.lede {
+font-size: 15.5px;
+margin: 0 0 6px;
+}
+.lede-en {
+font-size: 13.5px;
+color: var(--ink-soft);
+margin: 0 0 18px;
+}
+.byline {
+font-size: 13.5px;
+color: var(--ink-soft);
+border-top: 1px solid var(--line);
+padding-top: 14px;
+margin: 0;
+}
+.byline strong { color: var(--ink); font-weight: 700;}
+/* ---------- sections ---------- */
+section { margin-top: 34px;}
+h2 {
+font-size: 15px;
+font-weight: 700;
+letter-spacing: 0.06em;
+margin: 0 0 12px;
+display: flex;
+align-items: baseline;
+gap: 10px;
+}
+.h2-en {
+font-family: "Archivo", sans-serif;
+font-size: 11.5px;
+font-weight: 600;
+letter-spacing: 0.12em;
+color: var(--ink-faint);
+text-transform: uppercase;
+}
+/* ---------- policy cards ---------- */
+.policy {
+display: grid;
+gap: 12px;
+}
+.policy-item {
+background: var(--card);
+border: 1px solid var(--line);
+border-radius: var(--radius);
+padding: 16px 18px;
+display: flex;
+gap: 14px;
+align-items: flex-start;
+}
+.policy-icon {
+flex: 0 0 auto;
+width: 44px;
+height: 44px;
+border-radius: 10px;
+background: var(--ok-bg);
+display: grid;
+place-items: center;
+color: var(--cool-ink);
+}
+.policy-icon.warm { color: var(--warm-ink);}
+.policy-icon svg { width: 24px; height: 24px;}
+.policy-item h3 {
+margin: 1px 0 4px;
+font-size: 16.5px;
+font-weight: 700;
+}
+.badge {
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 0.05em;
+color: var(--cool-ink);
+border: 1.5px solid currentColor;
+border-radius: 999px;
+padding: 1px 8px;
+margin-left: 8px;
+vertical-align: 2px;
+white-space: nowrap;
+}
+.badge-warm { color: var(--warm-ink);}
+.policy-item p {
+margin: 0;
+font-size: 14px;
+color: var(--ink-soft);
+}
+.policy-item p a {
+color: var(--cool-ink);
+font-weight: 700;
+overflow-wrap: anywhere;
+}
+/* ---------- link rows ---------- */
+.links { display: grid; gap: 12px;}
+a.link-row {
+background: var(--card);
+border: 1px solid var(--line);
+border-radius: var(--radius);
+padding: 15px 18px;
+display: flex;
+align-items: center;
+gap: 14px;
+text-decoration: none;
+color: var(--ink);
+}
+a.link-row:active { transform: scale(0.99);}
+.link-mark {
+flex: 0 0 auto;
+width: 44px;
+height: 44px;
+border-radius: 10px;
+display: grid;
+place-items: center;
+background: var(--ok-bg);
+color: var(--cool-ink);
+}
+.link-mark.warm { color: var(--warm-ink);}
+.link-mark svg { width: 24px; height: 24px;}
+.li-box {
+width: 24px; height: 24px; border-radius: 5px;
+background: #0a66c2; color: #fff;
+font-family: "Archivo", sans-serif;
+font-weight: 800; font-size: 15px;
+display: grid; place-items: center;
+line-height: 1; padding-bottom: 2px;
+}
+.link-text { min-width: 0; flex: 1;}
+.lt-label { font-size: 16px; font-weight: 700; display: block;}
+.lt-sub { font-size: 12.5px; color: var(--ink-soft); display: block;}
+.lt-url {
+font-size: 12.5px;
+color: var(--ink-faint);
+display: block;
+overflow-wrap: anywhere;
+font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+.link-arrow { flex: 0 0 auto; color: var(--ink-faint);}
+.link-arrow svg { width: 18px; height: 18px; display: block;}
+/* ---------- footer ---------- */
+footer {
+margin-top: 40px;
+border-top: 1px solid var(--line);
+padding-top: 16px;
+font-size: 13px;
+color: var(--ink-faint);
+}
+footer p { margin: 2px 0;}
+/* ---------- print ---------- */
+@media print {
+body { background: #fff;}
+.wrap { max-width: 640px; padding: 10px;}
+.policy-item, a.link-row { border-color: #ccc; break-inside: avoid;}
+section { margin-top: 22px;}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header>
+<p class="event-line">東京大学制作展 2026 <span class="event-dot">●</span> 招待作品</p>
+<h1>MoHeat Evo</h1>
+<p class="title-jp">モヒート・エヴォ ― 音とともに温度を感じるヘッドホン</p>
+<div class="thermal-bar" aria-hidden="true"></div>
+<p class="lede">
+LEDの光による加熱とエタノールミストによる冷却で、肌に触れることなく耳まわりに温感・冷感を提示する、ヘッドホン型の非接触温冷覚デバイス。音と温度が同期することで、声や音楽に「ぬくもり」と「気配」が生まれます。
+</p>
+<p class="lede-en">
+A non-contact thermal headphone: LED heating and ethanol-mist cooling deliver warmth and coolness around your ears, in sync with sound — no skin contact required.
+</p>
+<p class="byline">
+<strong>XU Jiayi（許 佳禕）</strong>　東京大学 先端科学技術研究センター 稲見・門内研究室<br />
+サントリーグローバルイノベーションセンターとの共同研究
+</p>
+</header>
+
+<section aria-labelledby="guide-h">
+<h2 id="guide-h">ご来場の方へ <span class="h2-en">For visitors</span></h2>
+<div class="policy">
+<div class="policy-item">
+<div class="policy-icon warm" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6.5a1.5 1.5 0 0 0-3 0V11"/><path d="M15 10V4.5a1.5 1.5 0 0 0-3 0V10"/><path d="M12 10.5v-6a1.5 1.5 0 0 0-3 0V12"/><path d="M18 8.5a1.5 1.5 0 0 1 3 0V14a7 7 0 0 1-7 7h-2c-2.8 0-4.5-1.1-5.9-3.3L3.6 14a1.6 1.6 0 0 1 2.6-1.8L9 14.5V6"/></svg>
+</div>
+<div>
+<h3>触れて体験できます <span class="badge badge-warm">スタッフ在席時のみ</span></h3>
+<p>スタッフがいる場合に限り、作品に触れて体験していただけます。スタッフ不在のときは、展示のみご覧ください。</p>
+</div>
+</div>
+<div class="policy-item">
+<div class="policy-icon" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="14" r="3.5"/></svg>
+</div>
+<div>
+<h3>写真撮影 OK <span class="badge">SNS投稿も歓迎</span></h3>
+<p>写真・動画の撮影は自由です。SNSへの投稿も歓迎します。ぜひ感想をお聞かせください。</p>
+</div>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="links-h">
+<h2 id="links-h">リンク <span class="h2-en">Links</span></h2>
+<div class="links">
+<a class="link-row" href="https://moheat-evo.github.io/" target="_blank" rel="noopener">
+<span class="link-mark warm" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><path d="M3 14h4v7H4a1 1 0 0 1-1-1v-6Z"/><path d="M21 14h-4v7h3a1 1 0 0 0 1-1v-6Z"/></svg>
+</span>
+<span class="link-text">
+<span class="lt-label">MoHeat Evo プロジェクトサイト</span>
+<span class="lt-sub">デバイスの仕組み・映像・展示情報</span>
+<span class="lt-url">moheat-evo.github.io</span>
+</span>
+<span class="link-arrow" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+</span>
+</a>
+<a class="link-row" href="https://www.linkedin.com/in/jiayi-xu-b25979446/" target="_blank" rel="noopener">
+<span class="link-mark" aria-hidden="true"><span class="li-box">in</span></span>
+<span class="link-text">
+<span class="lt-label">LinkedIn</span>
+<span class="lt-sub">Jiayi Xu ― 最新情報とつながりはこちら</span>
+<span class="lt-url">linkedin.com/in/jiayi-xu-b25979446</span>
+</span>
+<span class="link-arrow" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+</span>
+</a>
+<a class="link-row" href="https://jiayi-xu-hci.github.io/" target="_blank" rel="noopener">
+<span class="link-mark" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c1.2-3.2 3.9-4.8 7-4.8s5.8 1.6 7 4.8"/></svg>
+</span>
+<span class="link-text">
+<span class="lt-label">個人ウェブサイト</span>
+<span class="lt-sub">Jiayi Xu ― 研究紹介・論文・プロフィール</span>
+<span class="lt-url">jiayi-xu-hci.github.io</span>
+</span>
+<span class="link-arrow" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+</span>
+</a>
+<a class="link-row" href="mailto:xu.jiayi@star.rcast.u-tokyo.ac.jp">
+<span class="link-mark" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+</span>
+<span class="link-text">
+<span class="lt-label">Email</span>
+<span class="lt-sub">お問い合わせ・連携のご相談はこちら</span>
+<span class="lt-url">xu.jiayi@star.rcast.u-tokyo.ac.jp</span>
+</span>
+<span class="link-arrow" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+</span>
+</a>
+</div>
+</section>
+
+<section aria-labelledby="collab-h">
+<h2 id="collab-h">連携・コラボレーション <span class="h2-en">Collaboration</span></h2>
+<div class="policy">
+<div class="policy-item">
+<div class="policy-icon" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+</div>
+<div>
+<h3>研究・事業連携を歓迎します</h3>
+<p>MoHeat Evoをはじめとする温冷覚・触覚技術について、大学・研究機関との共同研究や、企業との共同開発・事業連携のご相談を歓迎しています。ご関心をお持ちの方は、<a href="mailto:xu.jiayi@star.rcast.u-tokyo.ac.jp">メール（xu.jiayi@star.rcast.u-tokyo.ac.jp）</a>またはLinkedInよりお気軽にご連絡ください。</p>
+</div>
+</div>
+<div class="policy-item">
+<div class="policy-icon warm" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+</div>
+<div>
+<h3>音楽制作の専門家・制作会社を探しています</h3>
+<p>温度提示に音楽的なフィードバックを組み合わせる研究（温度と音・音楽を連動させる試み）について、作曲やサウンドデザインの専門家、音楽制作会社とのコラボレーションを希望しています。ご興味のある方は、ぜひご連絡ください。</p>
+</div>
+</div>
+<div class="policy-item">
+<div class="policy-icon" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>
+</div>
+<div>
+<h3>イベント・展示での活用も</h3>
+<p>応用シーンの一例として、YouTuberやアイドルのVRファンミーティングなど、オンライン・遠隔の交流イベントへの活用も考えています。映像や音声に温度が加わることで、離れた場所でも「ぬくもり」と臨場感のあるコミュニケーションが可能になります。イベント主催者・関係者の方もお気軽にご相談ください。</p>
+</div>
+</div>
+</div>
+</section>
+
+<footer>
+<p>東京大学制作展 2026 ― 会期：2026年11月12日（木）〜16日（月）／ 本郷キャンパス</p>
+<p>MoHeat Evo ― XU Jiayi（東京大学 先端科学技術研究センター 稲見・門内研究室）</p>
+</footer>
+</main>
+</body>
+</html>
