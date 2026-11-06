@@ -34,6 +34,10 @@ PERSONAS = {
     # final: Nobunaga = 青山龍星 (user's pick, 2026-11-07)
     "信長_青山龍星": dict(speaker="青山龍星", pitch=-.03, lines=N_LINES, pros=N_PROS, chest=4, grit=.22, dark=0, tremor=0,
                        styles=dict(invite="ノーマル", excited="熱血", tease="喜び", suspicious="囁き"), laugh=dict(base=150, drop=.72, n=5, style="熱血")),
+    # deeper Nobunaga (user: "not low enough"): lower VOICEVOX pitch + post pitch shift
+    **{f"信長_青山龍星_低沈{st:g}": dict(speaker="青山龍星", pitch=-.06, shift=st, lines=N_LINES, pros=N_PROS, chest=5, grit=.24, dark=0, tremor=0,
+                                    styles=dict(invite="ノーマル", excited="熱血", tease="喜び", suspicious="囁き"),
+                                    laugh=dict(base=145, drop=.72, n=5, style="熱血")) for st in (-1.5, -3.0, -4.5)},
     # Ieyasu = 黒沢冴白, deeper: VOICEVOX pitch near its floor + post pitch shift (semitones)
     "家康_黒沢冴白_低沈-2": dict(speaker="黒沢冴白", pitch=-.1, shift=-2.0, lines=I_LINES, pros=I_PROS, chest=5, grit=.08, dark=5200, tremor=.02,
                             styles={}, speed_mul=.88, laugh=dict(base=112, drop=.84, n=3, style="ノーマル")),
@@ -121,12 +125,13 @@ def perform(name, p):
     return np.concatenate(out)
 
 
-def main():
-    d = os.path.join(ROOT, "audio", "audition", "v3"); os.makedirs(d, exist_ok=True)
+def main(only=None):
+    d = os.path.join(ROOT, "audio", "audition", "v4" if only else "v3"); os.makedirs(d, exist_ok=True)
     for name, p in PERSONAS.items():
+        if only and not any(o in name for o in only): continue
         y = perform(name, p)
         wavfile.write(os.path.join(d, f"{name}.wav"), SR, (np.clip(y, -1, 1) * 32767).astype(np.int16)); print("wrote", name)
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:] or None)       # e.g. python3 scripts/voice_personas.py 低沈 → only the matching personas (→ v4/)
