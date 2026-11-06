@@ -1,7 +1,7 @@
 # MoHeat Evo — 冷热触觉 ASMR Demo 系列：交接文档 / Handoff
 
 > 写给接手的 agent（Claude Code、Codex 等）和项目负责人。**先读完"必须遵守的约定"再动手。**
-> 最后更新：2026-11-07。状态：Demo 1/2/3 已完成；Demo 4 美术制作中，配音试听已生成，等用户选声线。
+> 最后更新：2026-11-07。状态：Demo 1/2/3 已完成；Demo 4 美术制作中，配音试听已生成，等用户选声线；Demo 5 已建目录、已出 ChatGPT 素材命令，等素材。
 
 ---
 
@@ -32,6 +32,7 @@ ASMR Demo/                               Demo 1《雪と狐火のひそひそ話
 ASMR Demo 2/                             Demo 2《キミだけのスペシャルファンミーティング》
 Demo3_ShiningSmileConcert/               Demo 3《Shining Smile Melody — Ice & Fire Concert》
 Demo4_SengokuBanquet/                    Demo 4《安土最后的酒宴》（制作中）
+Demo_SeasonsExpress/                     Demo 5《四季暴走列車 / The Runaway Seasons Express》（等美术素材）
 HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
 ```
@@ -123,6 +124,29 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
   5. thermal：信长 → L_Heat、家康 → R_Heat，风雨等 → 冷，Demo 2 风格的位置分配。
   6. 播放器复用 Demo 2/3 结构，背景 `banquet_bg` / 风雨版，特效按设定板。
   7. 渲染、检查脚本（参考 Demo 3 `check_sync.py`）、README，commit/push。
+
+### Demo 5 · `Demo_SeasonsExpress/` 📝 已立项 —《四季暴走列車 / The Runaway Seasons Express》
+- **任务书要点**（用户提供的完整制作指令）：
+  - 150 s，1920×1080，30 fps，48 kHz 双耳声。第一人称坐在魔法列车车厢里朝前看，**无角色、无台词、无旁白**。
+  - 画风必须和 Demo 1–3 一致：可爱日系 2D、粉彩、赛璐璐。**不要浮世绘或金箔风**（那是 Demo 4 的风格）。
+  - 车厢全程不变，只变左右两扇窗外的季节。
+  - 时间轴：
+    - 0–20 冬（左冷）
+    - 20–45 夏（右热、左窗残霜）
+    - 45–70 热带暴雨（左雨冷、右阳光热，冷感随雨从左移到右）
+    - 70–95 冰火隧道（左冷右热 → 短暂中性 → 左热右冷）
+    - 95–125 四季失控（快速左右变化，含一段**全静音、冷热归零**）
+    - 125–150 春天樱花站（轻柔，150 s 时全部归零）
+  - 冷热来自各环境音的**独立音轨** RMS（风、雪、冰、雨 → 冷；夏风、火、熔岩、蒸汽 → 热）。阳光、热浪这类无声的视觉事件用**设计好的包络**，不能假装从音频推出温度。背景音乐和列车声不驱动冷热。
+  - 音轨要求：winter_wind, snow, ice_cracking, summer_breeze, ocean_waves, tropical_rain, water_drops, thunder, fire_crackling, lava, steam, spring_breeze, birds, train_wheels, train_interior, background_music。
+  - 交付物：thermal_4ch.csv（3000 点，0–149.95 s）、thermal_mapping_config.json、audio_features.csv、thermal_energy_curves.png、storyboard_150s.md、visual_prompts.md、reuse_inventory.md、synchronization_report.md、README.md；目录结构已按任务书建好。
+  - 验收：至少 4 次清晰的左右环境移动、至少 2 次左右同时相反温度、一次清楚的冰火左右反转、一段静音零输出、平静的春天结尾。
+- **美术**：`ChatGPT素材命令.md`（车厢主图的窗玻璃用 #00FF00 填满 → 抠出窗户遮罩；窗外每个季节分远/中/近三层，可无缝横向滚动；霜花、雨滴等玻璃层；特效小图）。复用 Demo 3 的 fx_snowflake / fx_ice_crystal / fx_flame / fx_star。
+- **计划**：
+  - 播放器沿用 Demo 3 结构：车厢前景固定，左右窗遮罩后面滚动视差景色，叠加玻璃层和粒子；列车有轻微晃动；时钟指针由程序绘制。
+  - 环境音由程序合成（风、雨、火等），双耳渲染沿用 Demo 1。
+  - thermal 用"环境音轨 RMS + 设计包络"，按每个声源的位置分到左右，再经 Demo 1 的仲裁、限幅和延迟补偿。
+  - 同步报告参考 Demo 3 的 `check_sync.py`。
 
 ---
 
