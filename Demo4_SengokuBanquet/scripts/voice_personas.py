@@ -44,6 +44,10 @@ PERSONAS = {
 }
 
 
+# FINAL voices (chosen by the user, 2026-11-07) — use these for the real dialogue
+FINAL = {"N": "信長_青山龍星", "I": "家康_黒沢冴白_低沈-2"}
+
+
 def shift(x, semis):
     """Lower the pitch by `semis` semitones keeping the tempo (ffmpeg asetrate + atempo). Formants drop too → deeper, older."""
     if not semis: return x
