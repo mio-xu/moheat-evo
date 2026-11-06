@@ -1,0 +1,596 @@
+// 安土最後の酒宴 The Last Banquet at Azuchi — MoHeat Evo ASMR demo 4.
+// Built on the Demo 2 player. Clock = the binaural mix. Everything is a function of that time:
+//   Nobunaga (left) and Ieyasu (right): positions, lip sync, expressions, poses; warm sources (steam, brazier) and
+//   cold sources (ice, wind, rain) at their own positions; subtitles (ja + en); the 4-channel thermal track.
+'use strict';
+
+const W = 1920, H = 1080;
+const D = window.DEMO_DATA, A = D.anim;
+const $ = (id) => document.getElementById(id);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, k) => a + (b - a) * k;
+const smooth = (k) => { k = clamp(k, 0, 1); return k * k * (3 - 2 * k); };
+const rad = (d) => (d * Math.PI) / 180;
+const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+const hash = (n) => { const x = Math.sin(n * 12.9898) * 43758.5453; return x - Math.floor(x); };
+
+// ---------------------------------------------------------------- data access
+const TH = (() => {
+  const lines = D.thermalCsv.trim().split('\n');
+  const head = lines[0].split(',');
+  const cols = Object.fromEntries(head.map((h) => [h, []]));
+  for (const l of lines.slice(1)) l.split(',').forEach((v, i) => cols[head[i]].push(head[i] === 'command' ? v : +v));
+  return { rate: 20, Lc: cols.L_cool, Rc: cols.R_cool, Lh: cols.L_heat, Rh: cols.R_heat };
+})();
+const sample = (arr, rate, t) => {
+  const x = clamp(t * rate, 0, arr.length - 1), i = Math.floor(x), f = x - i;
+  return i + 1 < arr.length ? arr[i] * (1 - f) + arr[i + 1] * f : arr[i];
+};
+const thermalAt = (t) => ({ Lc: sample(TH.Lc, TH.rate, t), Rc: sample(TH.Rc, TH.rate, t), Lh: sample(TH.Lh, TH.rate, t), Rh: sample(TH.Rh, TH.rate, t) });
+const wrapAz = (arr, t) => {
+  const x = clamp(t * A.fps, 0, arr.length - 1), i = Math.floor(x), f = x - i;
+  if (i + 1 >= arr.length) return arr[i];
+  let d = arr[i + 1] - arr[i]; if (d > 180) d -= 360; if (d < -180) d += 360;
+  return ((arr[i] + d * f + 540) % 360) - 180;
+};
+const srcAt = (s, t) => ({ az: wrapAz(s.az, t), d: sample(s.d, A.fps, t), env: sample(s.env, A.fps, t) });
+const VOICE = new Set(['say', 'whisper', 'laugh']);
+const cueOf = (t, test, tail = .8) => { let best = null; for (const c of A.cues) if (test(c) && t >= c.t - .15 && t <= c.t + c.dur + tail) best = c; return best; };
+const lineOf = (who, t, tail = 1.0) => cueOf(t, (c) => c.who === who && VOICE.has(c.kind), tail);
+const ambOf = (t, kinds, tail = .3) => cueOf(t, (c) => kinds.includes(c.kind), tail);
+
+// ---------------------------------------------------------------- art (assets → scripts/prepare_art.py → media/art)
+const ART = new Set(D.art || []);
+const FACES = D.artFaces || {};
+const IMG = {};
+for (const f of ART) { const im = new Image(); im.src = `media/art/${f}.webp`; IMG[f] = im; }
+const ok = (k) => IMG[k] && IMG[k].complete && IMG[k].naturalWidth > 0;
+const xOf = (az) => W / 2 + Math.sin(rad(clamp(az, -100, 100))) * W * .43;
+const PAL = { N: '255,96,60', I: '120,225,170' };
+
+// ---------------------------------------------------------------- weather schedule (from the cold cues)
+const STORM = (t) => smooth((t - 81.5) / 3) * (1 - smooth((t - 128.5) / 4));
+const RAIN = (t) => smooth((t - 103.8) / 2.5) * (1 - smooth((t - 127.5) / 3.5));
+const FLASH = (t) => { let f = 0; for (const [t0, a] of [[104.9, 1], [105.25, .6], [118.2, .35]]) { const d = t - t0; if (d >= 0 && d < .35) f = Math.max(f, a * (1 - d / .35)); } return f; };
+
+// ---------------------------------------------------------------- background (bg 1536×1024)
+const BGW = 1536, BGH = 1024;
+let BGX = { ox: 0, oy: 0, k: 1 };
+const bx = (x) => BGX.ox + x * BGX.k, by = (y) => BGX.oy + y * BGX.k;
+const GARDEN = [505, 165, 1070, 515];    // the open shoji (bg coords)
+const LANTERNS = [[170, 470], [1362, 470]];
+
+function drawBackground(ctx, t, shift) {
+  const storm = STORM(t), base = IMG.banquet_bg, wind = IMG.banquet_bg_wind;
+  const k = (W + 90) / BGW; BGX = { ox: -45 + clamp(shift, -45, 45), oy: -(BGH * k - H) * .3, k };
+  if (ok('banquet_bg')) ctx.drawImage(base, BGX.ox, BGX.oy, BGW * k, BGH * k);
+  if (storm > 0 && ok('banquet_bg_wind')) { ctx.globalAlpha = storm * .92; ctx.drawImage(wind, BGX.ox, BGX.oy, BGW * k, BGH * k); ctx.globalAlpha = 1; }
+  // rain over the garden opening
+  const rain = RAIN(t);
+  const [gx0, gy0, gx1, gy1] = GARDEN;
+  if (rain > 0) {
+    ctx.save(); ctx.beginPath(); ctx.rect(bx(gx0), by(gy0), bx(gx1) - bx(gx0), by(gy1) - by(gy0)); ctx.clip();
+    ctx.fillStyle = `rgba(20,30,50,${.35 * rain})`; ctx.fillRect(bx(gx0), by(gy0), bx(gx1) - bx(gx0), by(gy1) - by(gy0));
+    ctx.strokeStyle = `rgba(200,220,255,${.45 * rain})`; ctx.lineWidth = 1.6;
+    const slant = sample(A.cool.az, A.fps, t) < 0 ? -.35 : .35;
+    ctx.beginPath();
+    for (let i = 0; i < 260 * rain; i++) {
+      const x = bx(gx0) + hash(i) * (bx(gx1) - bx(gx0) + 200) - 100, sp = 1300 + hash(i + 7) * 700;
+      const y = by(gy0) + ((hash(i + 3) * 900 + t * sp) % (by(gy1) - by(gy0) + 80)) - 40;
+      ctx.moveTo(x, y); ctx.lineTo(x + slant * 34, y + 34);
+    }
+    ctx.stroke(); ctx.restore();
+  }
+  // lantern glow (flickers harder in the wind)
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  LANTERNS.forEach(([lx, ly], j) => {
+    const fl = .82 + .1 * Math.sin(t * 7.1 + j * 2) + .06 * Math.sin(t * 13.3 + j) - storm * .25 * (.5 + .5 * Math.sin(t * 17 + j * 4)) ** 2;
+    const g = ctx.createRadialGradient(bx(lx), by(ly), 10, bx(lx), by(ly), 330);
+    g.addColorStop(0, `rgba(255,190,90,${.32 * fl})`); g.addColorStop(1, 'rgba(255,170,80,0)');
+    ctx.fillStyle = g; ctx.fillRect(bx(lx) - 330, by(ly) - 330, 660, 660);
+  });
+  ctx.restore();
+  // night / storm grade
+  ctx.fillStyle = `rgba(12,24,48,${.12 + .22 * storm})`; ctx.fillRect(0, 0, W, H);
+  const fl = FLASH(t);
+  if (fl > 0) { ctx.fillStyle = `rgba(220,230,255,${.55 * fl})`; ctx.fillRect(0, 0, W, H); }
+  const v = ctx.createRadialGradient(W / 2, H / 2, H * .38, W / 2, H / 2, H * .98);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, `rgba(8,4,0,${.45 + .15 * storm})`);
+  ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+}
+
+// ---------------------------------------------------------------- particles
+let parts = [];
+const spawn = (o) => { if (parts.length < 1400) parts.push(o); };
+function updateParts(dt) {
+  for (const q of parts) {
+    q.life += dt;
+    if (q.kind === 'steam' || q.kind === 'mist') { q.vx += Math.sin(q.life * 3 + q.seed) * 30 * dt; q.vy += (q.kind === 'steam' ? -30 : 6) * dt; }
+    if (q.kind === 'leaf' || q.kind === 'petal' || q.kind === 'gold') { q.vy += Math.sin(q.life * 2 + q.seed) * 40 * dt; q.vx += Math.cos(q.life * 1.7 + q.seed) * 20 * dt; }
+    q.x += q.vx * dt; q.y += q.vy * dt;
+    const damp = q.kind === 'drop' ? 0 : q.kind === 'ember' ? .4 : .9;
+    q.vx *= 1 - damp * dt; q.vy *= 1 - damp * dt;
+    if (q.spin) q.rot += q.spin * dt; if (q.grow) q.size += q.grow * dt;
+  }
+  parts = parts.filter((q) => q.life < q.max && q.x > -300 && q.x < W + 300 && q.y < H + 200);
+}
+function drawParts(ctx) {
+  ctx.save();
+  for (const q of parts) {
+    const k = q.life / q.max, a = Math.sin(Math.PI * Math.min(1, k * 1.15)) * q.a;
+    if (q.kind === 'steam' || q.kind === 'mist') {
+      ctx.globalCompositeOperation = 'lighter';
+      const g = ctx.createRadialGradient(q.x, q.y, 0, q.x, q.y, q.size);
+      const c = q.kind === 'steam' ? '255,240,225' : '205,228,255';
+      g.addColorStop(0, `rgba(${c},${a * .3})`); g.addColorStop(1, `rgba(${c},0)`);
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(q.x, q.y, q.size, 0, 7); ctx.fill();
+    } else if (q.kind === 'streak' || q.kind === 'drop') {
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.strokeStyle = q.kind === 'drop' ? `rgba(200,222,255,${a})` : `rgba(215,235,255,${a})`; ctx.lineWidth = q.size; ctx.lineCap = 'round';
+      const L = q.kind === 'drop' ? 46 : 120 + 120 * (1 - k), sp = Math.hypot(q.vx, q.vy) || 1;
+      ctx.beginPath(); ctx.moveTo(q.x, q.y); ctx.lineTo(q.x - q.vx / sp * L, q.y - q.vy / sp * L); ctx.stroke();
+    } else if (q.kind === 'ember') {
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.fillStyle = `rgba(255,${150 + 80 * (1 - k)},60,${a})`; ctx.beginPath(); ctx.arc(q.x, q.y, q.size * (1 - k * .6), 0, 7); ctx.fill();
+    } else if (q.kind === 'flame') {
+      ctx.globalCompositeOperation = 'lighter';
+      const g = ctx.createRadialGradient(q.x, q.y, 0, q.x, q.y, q.size);
+      g.addColorStop(0, `rgba(255,230,140,${a * .7})`); g.addColorStop(.45, `rgba(255,120,40,${a * .45})`); g.addColorStop(1, 'rgba(200,40,10,0)');
+      ctx.fillStyle = g; ctx.save(); ctx.translate(q.x, q.y); ctx.scale(.6, 1.3); ctx.translate(-q.x, -q.y); ctx.beginPath(); ctx.arc(q.x, q.y, q.size, 0, 7); ctx.fill(); ctx.restore();
+    } else if (q.kind === 'glint') {
+      ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = `rgba(235,248,255,${a})`;
+      ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(q.rot);
+      ctx.beginPath(); for (let i = 0; i < 4; i++) { ctx.rotate(Math.PI / 2); ctx.lineTo(0, q.size); ctx.lineTo(q.size * .2, q.size * .2); } ctx.fill(); ctx.restore();
+    } else if (q.kind === 'leaf' || q.kind === 'petal' || q.kind === 'gold') {
+      ctx.globalCompositeOperation = q.kind === 'gold' ? 'lighter' : 'source-over';
+      ctx.save(); ctx.globalAlpha = clamp(a, 0, 1); ctx.translate(q.x, q.y); ctx.rotate(q.rot); ctx.scale(1, .55 + .45 * Math.sin(q.life * 5 + q.seed));
+      if (q.kind === 'gold') { ctx.fillStyle = `rgba(246,205,110,${.9})`; ctx.fillRect(-q.size / 2, -q.size / 3, q.size, q.size * .66); }
+      else { const im = IMG[q.kind === 'leaf' ? 'fx_leaf' : 'fx_petal']; if (im && im.naturalWidth) ctx.drawImage(im, -q.size / 2, -q.size / 2, q.size, q.size); }
+      ctx.restore();
+    }
+  }
+  ctx.restore(); ctx.globalAlpha = 1;
+}
+
+// ---------------------------------------------------------------- characters (Live2D-style motion on the ukiyo-e art)
+function blinkAmt(t, seed) {
+  const p = 3.6 + seed, k = Math.floor(t / p), off = hash(k * 7 + seed * 31) * (p - .5), dt = t - k * p - off;
+  return dt >= 0 && dt < .16 ? Math.abs(Math.cos((dt / .16) * Math.PI)) : 1;
+}
+const EXPR = {
+  N: { proud: 'proud', invite: 'grin', tease: 'grin', excited: 'grin', laugh: 'laugh', suspicious: 'suspicious', whisper: 'whisper', soft: 'base', earlaugh: 'laugh' },
+  I: { polite: 'polite', calm: 'base', concern: 'concern', surprise: 'surprise', thoughtful: 'thoughtful', chuckle: 'chuckle', laugh: 'chuckle', whisper: 'whisper' },
+};
+const ACTION = { N: new Set(['invite', 'laugh', 'alert', 'stand', 'sit']), I: new Set(['pour', 'offer', 'wind', 'calm']) };
+
+function poseCue(who, t) {   // gesture poses shown during (and just after) the line that asks for them
+  return cueOf(t, (c) => c.who === who && VOICE.has(c.kind) && c.pose && ACTION[who].has(c.pose) && (c.pose !== 'sit' || ['excited', 'invite'].includes(c.emo)), .9);
+}
+
+function bustFrame(st) {
+  const has = (s) => ART.has(`${st.who}_bust_${s}`);
+  const c = st.line, ex = c ? EXPR[st.who][c.emo] : null, talking = c && st.t <= c.t + c.dur + .1;
+  if (talking && c.kind === 'laugh') return `${st.who}_bust_${has('laugh') ? 'laugh' : 'chuckle'}`;
+  if (st.blink < .5 && !(talking && st.mouth > .3)) return `${st.who}_bust_blink`;
+  if (talking) {
+    if (c.kind === 'whisper') return st.mouth > .55 ? `${st.who}_bust_mouth_half` : `${st.who}_bust_whisper`;
+    if (st.mouth > .5) return `${st.who}_bust_mouth_open`;
+    if (st.mouth > .18) return `${st.who}_bust_mouth_half`;
+  }
+  return ex && has(ex) ? `${st.who}_bust_${ex}` : `${st.who}_bust_base`;
+}
+
+function chooseLook(st) {
+  const who = st.who, c = st.line;
+  if (st.d < .3 && ART.has(`${who}_ear`)) {
+    const alt = who === 'N' ? 'N_ear_laugh' : 'I_ear_smile';
+    const laughing = c && c.kind === 'laugh' && st.t <= c.t + c.dur + .2;
+    return { img: laughing || (c && st.mouth > .62) ? alt : `${who}_ear`, kind: 'ear' };
+  }
+  const p = poseCue(who, st.t);
+  if (p && ART.has(`${who}_pose_${p.pose}`)) return { img: `${who}_pose_${p.pose}`, kind: 'pose' };
+  return { img: bustFrame(st), kind: 'bust' };
+}
+
+function layout(look, st) {
+  const im = IMG[look.img], iw = im.naturalWidth, ih = im.naturalHeight, who = st.who;
+  if (look.kind === 'ear') {
+    const F = FACES[`${who}_ear`] || { cx: iw * .5, cy: ih * .35, rx: 240 };
+    const k = 330 / F.rx, fx = who === 'N' ? 330 : W - 330;
+    return { k, cx: fx, pivotX: F.cx, top: 520 - F.cy * k, mouth: [F.cx + (who === 'N' ? 120 : -120), F.cy + 90] };
+  }
+  if (look.kind === 'bust') {
+    const F = FACES[`${who}_bust`] || { cx: iw * .45, cy: ih * .22, rx: 200 };
+    const sc = clamp(Math.pow(1.15 / st.d, .55), 1, 2.2), k = (970 / ih) * sc;    // bottom stays anchored below the frame
+    return { k, cx: st.x, pivotX: F.cx, top: H + 14 - ih * k, mouth: [F.cx + (who === 'N' ? 30 : -30), F.cy + 120] };
+  }
+  const sc = clamp(Math.pow(1.15 / st.d, .45), .9, 1.6), standing = /stand|invite/.test(look.img);
+  const h = (standing ? 1060 : 940) * sc, k = h / ih;
+  return { k, cx: st.x + (who === 'N' ? 40 : -40), pivotX: iw / 2, top: H + 12 - h, mouth: [iw * (who === 'N' ? .55 : .45), ih * .2] };
+}
+
+function drawWarped(ctx, img, cx, pivotX, top, k, alpha, rot, sway, breath) {
+  const iw = img.naturalWidth, ih = img.naturalHeight, N = 24, pivotY = top + ih * k;
+  ctx.save(); ctx.globalAlpha = alpha;
+  ctx.translate(cx, pivotY); ctx.rotate(rot); ctx.scale(1 - breath * .4, 1 + breath);
+  for (let i = 0; i < N; i++) {
+    const v0 = i / N, v1 = (i + 1) / N, off = sway * Math.pow(1 - (v0 + v1) / 2, 2.2);
+    ctx.drawImage(img, 0, ih * v0, iw, ih * (v1 - v0) + 1, -pivotX * k + off, -ih * k + ih * k * v0, iw * k, ih * k * (v1 - v0) + 1);
+  }
+  ctx.restore();
+}
+
+const fig = { N: { cur: null, prev: null, since: -9, lastT: -9 }, I: { cur: null, prev: null, since: -9, lastT: -9 } };
+
+function drawChar(ctx, st) {
+  const fs = fig[st.who], look = chooseLook(st);
+  if (!ok(look.img)) return;
+  const jumped = Math.abs(st.t - fs.lastT) > .5;
+  const same = fs.cur && fs.cur.kind === look.kind && look.kind === 'bust';
+  if (!fs.cur || jumped) { fs.cur = look; fs.prev = null; fs.since = -9; }
+  else if (look.img !== fs.cur.img) { if (same) fs.cur = look; else { fs.prev = fs.cur; fs.cur = look; fs.since = st.t; } }
+  fs.lastT = st.t;
+  const fade = clamp((st.t - fs.since) / .28, 0, 1);
+  // warm aura behind the speaker
+  const glow = .1 + .35 * st.mouth;
+  const g = ctx.createRadialGradient(st.x, 420, 40, st.x, 420, 520);
+  g.addColorStop(0, `rgba(${PAL[st.who]},${glow * .5})`); g.addColorStop(1, `rgba(${PAL[st.who]},0)`);
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = g; ctx.fillRect(st.x - 520, -100, 1040, 1100); ctx.restore();
+  const breath = .008 * Math.sin((st.t / 3.8 + (st.who === 'N' ? 0 : .5)) * Math.PI * 2);
+  const laughBob = st.line && st.line.kind === 'laugh' && st.t < st.line.t + st.line.dur ? Math.abs(Math.sin((st.t - st.line.t) * 14)) * 10 : 0;
+  const sway = Math.sin(st.t * 1.3 + (st.who === 'N' ? 0 : 2)) * 6 + STORM(st.t) * Math.sin(st.t * 3.1) * 5;
+  for (const [layer, a] of [[fs.prev, 1 - fade], [fs.cur, fade < 1 && fs.prev ? fade : 1]]) {
+    if (!layer || a <= .01 || !ok(layer.img)) continue;
+    const L = layout(layer, st), img = IMG[layer.img];
+    const lift = st.mouth * 5 + laughBob;
+    drawWarped(ctx, img, L.cx, L.pivotX, L.top - lift, L.k, a, st.rot, sway * (layer.kind === 'pose' ? 1 : .6), breath + st.mouth * .005);
+    if (layer === fs.cur) { st.mx = L.cx + (L.mouth[0] - L.pivotX) * L.k; st.my = L.top + L.mouth[1] * L.k; st.kind = layer.kind; }
+  }
+}
+
+function charState(who, t) {
+  const C = A.chars[who];
+  const az = wrapAz(C.az, t), d = sample(C.d, A.fps, t);
+  const line = lineOf(who, t, 1.4);
+  const near = clamp((1.15 - d) / .9, 0, 1);
+  return { who, t, az, d, line, x: xOf(az), mouth: sample(C.env, A.fps, t), blink: blinkAmt(t, who === 'N' ? .3 : .9),
+           rot: (who === 'N' ? 1 : -1) * near * .05 };
+}
+
+function emit(st, t, dt) {   // breath on the ear during whispers; gold sparkle on big laughs
+  if (!st.line || t > st.line.t + st.line.dur) return;
+  const side = st.who === 'N' ? -1 : 1, mx = st.mx ?? st.x, my = st.my ?? 400;
+  if (st.line.kind === 'whisper' && st.d < .35 && Math.random() < dt * 18 * (.3 + st.mouth))
+    spawn({ kind: 'steam', x: mx, y: my, vx: side * (160 + Math.random() * 120), vy: -10 + Math.random() * 30, size: 18, grow: 110, life: 0, max: 1.1, a: .45, seed: Math.random() * 6 });
+  if (st.line.kind === 'laugh' && st.line.emo === 'laugh' && Math.random() < dt * 22)
+    spawn({ kind: 'gold', x: st.x + (Math.random() - .5) * 400, y: 200 + Math.random() * 300, vx: (Math.random() - .5) * 120, vy: -60 - Math.random() * 80, size: 7 + Math.random() * 7, rot: Math.random() * 3, spin: 3, life: 0, max: 2, a: 1, seed: Math.random() * 6 });
+}
+
+// ---------------------------------------------------------------- ambience visuals at their own positions
+function drawAmbience(ctx, t, dt) {
+  const warm = srcAt(A.warm, t), cold = srcAt(A.cool, t);
+  const wc = ambOf(t, ['steam', 'brazier'], 0), cc = ambOf(t, ['ice', 'wind', 'rain'], .2);
+  // warm: hot-sake steam rising from the cup in front of Ieyasu / the charcoal brazier
+  if (wc && t <= wc.t + wc.dur) {
+    const p = clamp((t - wc.t) / wc.dur, 0, 1), vis = smooth(p * 5) * smooth((1 - p) * 4 + .2);
+    if (wc.kind === 'steam') {
+      const sx = lerp(W / 2, xOf(warm.az), .55), sy = 860;
+      const key = ok('prop_hot_sake') ? 'prop_hot_sake' : 'prop_sakazuki';   // optional ChatGPT add-on art, else the cup
+      if (ok(key)) { ctx.save(); ctx.globalAlpha = vis; ctx.shadowColor = 'rgba(255,170,90,.8)'; ctx.shadowBlur = 40; ctx.drawImage(IMG[key], sx - 140, sy - 60, 280, 280); ctx.restore(); }
+      if (Math.random() < dt * 26 * (.3 + warm.env)) spawn({ kind: 'steam', x: sx + (Math.random() - .5) * 80, y: sy + 10, vx: (Math.random() - .5) * 20, vy: -70 - Math.random() * 40, size: 14, grow: 70, life: 0, max: 2.6, a: .9 * vis, seed: Math.random() * 6 });
+    } else {
+      const fx = lerp(W / 2, xOf(warm.az), .62), fy = 960;
+      ctx.save(); ctx.globalAlpha = vis;
+      const gl = ctx.createRadialGradient(fx, fy - 30, 10, fx, fy - 30, 420);
+      gl.addColorStop(0, `rgba(255,120,40,${.45 * (.6 + .4 * warm.env)})`); gl.addColorStop(1, 'rgba(255,90,30,0)');
+      ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = gl; ctx.fillRect(fx - 420, fy - 450, 840, 840); ctx.globalCompositeOperation = 'source-over';
+      if (ok('prop_brazier')) ctx.drawImage(IMG.prop_brazier, fx - 200, fy - 220, 400, 400);   // optional ChatGPT add-on art
+      else {   // procedural hibachi
+        ctx.fillStyle = '#1b120b'; ctx.beginPath(); ctx.ellipse(fx, fy + 30, 170, 70, 0, 0, 7); ctx.fill();
+        ctx.strokeStyle = 'rgba(217,168,74,.85)'; ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(fx, fy - 4, 150, 34, 0, 0, 7); ctx.stroke();
+        ctx.fillStyle = `rgba(255,${90 + 60 * hash(Math.floor(t * 12))},30,.9)`; ctx.beginPath(); ctx.ellipse(fx, fy - 4, 135, 26, 0, 0, 7); ctx.fill();
+      }
+      ctx.restore();
+      if (Math.random() < dt * 40 * vis) spawn({ kind: 'flame', x: fx + (Math.random() - .5) * 200, y: fy - 20, vx: (Math.random() - .5) * 20, vy: -90 - Math.random() * 60, size: 26 + Math.random() * 20, life: 0, max: .8, a: .9 });
+      if (Math.random() < dt * 14 * vis) spawn({ kind: 'ember', x: fx + (Math.random() - .5) * 200, y: fy - 20, vx: (Math.random() - .5) * 80, vy: -160 - Math.random() * 120, size: 3 + Math.random() * 3, life: 0, max: 1.8, a: 1 });
+    }
+  }
+  if (!cc) return;
+  const side = Math.sign(cold.az) || 0, env = cold.env;
+  if (cc.kind === 'ice' && t <= cc.t + cc.dur) {   // the chilled tokkuri lifted out of the ice bucket, lower right
+    const p = clamp((t - cc.t) / cc.dur, 0, 1), vis = smooth(p * 5) * smooth((1 - p) * 4 + .3);
+    const cx = W * .63 + Math.sin(t * 15) * 3 * env, cy = H - 170 + (1 - vis) * 220;
+    const key = ok('prop_ice_bucket') ? 'prop_ice_bucket' : 'prop_tokkuri', sz = key === 'prop_ice_bucket' ? 360 : 260;   // optional add-on art
+    if (ok(key)) { ctx.save(); ctx.globalAlpha = vis; ctx.shadowColor = 'rgba(150,210,255,.95)'; ctx.shadowBlur = 45; ctx.drawImage(IMG[key], cx - sz / 2, cy - sz * .65, sz, sz); ctx.restore(); }
+    if (Math.random() < dt * 30 * (env + .2)) spawn({ kind: 'glint', x: cx + (Math.random() - .5) * 220, y: cy + (Math.random() - .5) * 200, vx: 0, vy: 0, size: 6 + Math.random() * 10, rot: Math.random(), spin: 4, life: 0, max: .5, a: 1 });
+    if (Math.random() < dt * 22) spawn({ kind: 'mist', x: cx + (Math.random() - .5) * 200, y: cy + 60, vx: (Math.random() - .5) * 40, vy: 20, size: 30, grow: 90, life: 0, max: 1.8, a: .8, seed: Math.random() * 6 });
+  } else if (cc.kind === 'wind') {   // gusts from the garden toward the cold side + leaves & petals
+    const n = Math.ceil(dt * 70 * env);
+    for (let i = 0; i < n; i++) {
+      const y = 180 + Math.random() * 700, x0 = side ? W / 2 + side * (Math.random() * 300) : bx(600 + Math.random() * 400);
+      spawn({ kind: 'streak', x: x0, y, vx: (side || (Math.random() - .5) * 2) * (900 + Math.random() * 600), vy: 60 + (Math.random() - .5) * 120, size: 1.5 + Math.random() * 2.5, life: 0, max: .8, a: .5 * env });
+    }
+    if (Math.random() < dt * 9 * env) spawn({ kind: Math.random() < .6 ? 'leaf' : 'petal', x: bx(800 + (Math.random() - .5) * 400), y: by(300 + Math.random() * 200),
+      vx: (side || (Math.random() - .5) * 2) * (500 + Math.random() * 400), vy: 80 + Math.random() * 120, size: 44 + Math.random() * 40, rot: Math.random() * 6, spin: (Math.random() - .5) * 8, life: 0, max: 3, a: 1, seed: Math.random() * 6 });
+  } else if (cc.kind === 'rain') {   // rain blown in through the shoji on the cold side, cold mist on that ear
+    const n = Math.ceil(dt * 160 * env), sd = side || 1;
+    for (let i = 0; i < n; i++) {
+      const x = sd < 0 ? Math.random() * W * .45 : W - Math.random() * W * .45;
+      spawn({ kind: 'drop', x: x - sd * 200, y: -40 + Math.random() * 200, vx: sd * 420, vy: 1700 + Math.random() * 500, size: 1.3 + Math.random() * 1.4, life: 0, max: .9, a: .55 * env });
+    }
+    if (Math.random() < dt * 10 * env) spawn({ kind: 'mist', x: sd < 0 ? 80 + Math.random() * 300 : W - 80 - Math.random() * 300, y: 300 + Math.random() * 500, vx: -sd * 30, vy: 10, size: 60, grow: 120, life: 0, max: 2.4, a: .7, seed: Math.random() * 6 });
+  }
+}
+
+function drawYourCup(ctx, t) {   // your own cup rises into view at each toast, sake ripples
+  for (const c of A.cues) {
+    if (c.kind !== 'clink') continue;
+    const d = t - c.t; if (d < -1 || d > 2.6) continue;
+    const vis = smooth((d + 1) / .8) * smooth((2.6 - d) / .8), x = W / 2, y = H - 150 + (1 - vis) * 260;
+    if (ok('prop_sakazuki')) { ctx.save(); ctx.globalAlpha = vis; ctx.shadowColor = 'rgba(255,190,90,.7)'; ctx.shadowBlur = 30; ctx.drawImage(IMG.prop_sakazuki, x - 210, y - 170, 420, 420); ctx.restore(); }
+    if (d > 0 && ok('fx_sake_ripple')) {
+      for (let r = 0; r < 2; r++) {
+        const rr = (d - r * .35); if (rr < 0) continue;
+        const s = 90 + rr * 120; ctx.save(); ctx.globalAlpha = clamp(1 - rr / 1.6, 0, 1) * vis; ctx.globalCompositeOperation = 'lighter';
+        ctx.translate(x, y - 20); ctx.scale(1, .32); ctx.drawImage(IMG.fx_sake_ripple, -s, -s, s * 2, s * 2); ctx.restore();
+      }
+    }
+  }
+}
+
+function goldDrift(t, dt) {   // gold-leaf flakes drifting in the lantern light (calm scenes)
+  const calm = 1 - STORM(t) * .85;
+  if (Math.random() < dt * 2.2 * calm) spawn({ kind: 'gold', x: Math.random() * W, y: -20, vx: (Math.random() - .5) * 40, vy: 40 + Math.random() * 40, size: 5 + Math.random() * 6, rot: Math.random() * 3, spin: (Math.random() - .5) * 3, life: 0, max: 14, a: .7, seed: Math.random() * 6 });
+}
+
+function thermalEdges(ctx, th) {
+  for (const [side, c, h] of [[-1, th.Lc, th.Lh], [1, th.Rc, th.Rh]]) {
+    const v = Math.max(c, h); if (v < .02) continue;
+    const col = c >= h ? '70,170,255' : '255,110,50';
+    const x0 = side < 0 ? 0 : W, x1 = side < 0 ? 460 : W - 460;
+    const g = ctx.createLinearGradient(x0, 0, x1, 0);
+    g.addColorStop(0, `rgba(${col},${.34 * v})`); g.addColorStop(1, `rgba(${col},0)`);
+    ctx.fillStyle = g; ctx.fillRect(Math.min(x0, x1), 0, 460, H);
+  }
+}
+
+// ---------------------------------------------------------------- frame
+const cv = $('scene'), ctx = cv.getContext('2d');
+let camYaw = 0, lastT = 0, lastFrame = performance.now();
+
+function frame(t, dt) {
+  const sts = ['N', 'I'].map((w) => charState(w, t));
+  const talker = sts.filter((s) => s.line && t <= s.line.t + s.line.dur).sort((a, b) => b.mouth - a.mouth)[0];
+  camYaw += ((talker ? clamp(talker.az, -50, 50) * .12 : 0) - camYaw) * clamp(dt * 1.2, 0, 1);
+  drawBackground(ctx, t, -camYaw * 5);
+  goldDrift(t, dt);
+  ctx.save(); ctx.translate(-camYaw * 8, 0);
+  // the one at your ear is drawn last (closest)
+  for (const st of [...sts].sort((a, b) => b.d - a.d)) { drawChar(ctx, st); emit(st, t, dt); }
+  ctx.restore();
+  drawAmbience(ctx, t, dt);
+  drawYourCup(ctx, t);
+  updateParts(dt); drawParts(ctx);
+  const th = thermalAt(t + offsetMs / 1000);
+  thermalEdges(ctx, th);
+  return { sts, th };
+}
+
+// ---------------------------------------------------------------- radar + meters + timeline
+const radar = $('radar'), rctx = radar.getContext('2d');
+function drawRadar(sts, th, t) {
+  const c = rctx, w = radar.width, h = radar.height, cx = w / 2, cy = h / 2 + 6, R = 170;
+  c.clearRect(0, 0, w, h);
+  c.strokeStyle = '#3a2a14'; c.lineWidth = 2;
+  for (const r of [.33, .66, 1]) { c.beginPath(); c.arc(cx, cy, R * r, 0, 7); c.stroke(); }
+  c.fillStyle = '#8a7552'; c.font = '20px Inter'; c.textAlign = 'center'; c.fillText('garden', cx, cy - R - 10);
+  for (const [sd, cl, hh] of [[-1, th.Lc, th.Lh], [1, th.Rc, th.Rh]]) {
+    const v = Math.max(cl, hh), col = cl >= hh ? '79,179,255' : '255,122,69';
+    const g = c.createRadialGradient(cx + sd * 44, cy, 0, cx + sd * 44, cy, 90); g.addColorStop(0, `rgba(${col},${.8 * v})`); g.addColorStop(1, `rgba(${col},0)`);
+    c.fillStyle = g; c.beginPath(); c.arc(cx + sd * 44, cy, 90, 0, 7); c.fill();
+    c.fillStyle = v > .02 ? `rgb(${col})` : '#4a3a22'; c.beginPath(); c.roundRect(cx + sd * 44 - 9, cy - 22, 18, 44, 8); c.fill();
+  }
+  c.fillStyle = '#24180c'; c.strokeStyle = '#8a7552'; c.beginPath(); c.arc(cx, cy, 36, 0, 7); c.fill(); c.stroke();
+  c.fillStyle = '#8a7552'; c.beginPath(); c.moveTo(cx - 7, cy - 34); c.lineTo(cx, cy - 46); c.lineTo(cx + 7, cy - 34); c.fill();
+  const dot = (az, d, col, label, r0) => {
+    const r = 44 + (R - 44) * clamp(Math.log(d / .15) / Math.log(5 / .15), 0, 1);
+    const x = cx + Math.sin(rad(az)) * r, y = cy - Math.cos(rad(az)) * r;
+    c.fillStyle = col; c.beginPath(); c.arc(x, y, r0, 0, 7); c.fill();
+    c.fillStyle = '#fff'; c.font = '600 20px "Noto Sans JP"'; c.fillText(label, x, y - r0 - 6);
+  };
+  for (const st of sts) dot(st.az, st.d, st.who === 'N' ? '#ff7a5c' : '#7fdcae', st.who === 'N' ? '信長' : '家康', 12 + st.mouth * 7);
+  const w2 = srcAt(A.warm, t), c2 = srcAt(A.cool, t);
+  if (w2.env > .05) { c.globalAlpha = clamp(w2.env * 1.5, 0, 1); dot(w2.az, w2.d, '#ffb050', '🔥', 9 + w2.env * 7); c.globalAlpha = 1; }
+  if (c2.env > .05) { c.globalAlpha = clamp(c2.env * 1.5, 0, 1); dot(c2.az, c2.d, '#7cc4ff', '❄', 9 + c2.env * 7); c.globalAlpha = 1; }
+}
+
+const tl = $('timeline'), tlctx = tl.getContext('2d');
+(function drawTimeline() {
+  const c = tlctx, w = tl.width, h = tl.height, n = TH.Lc.length;
+  c.fillStyle = '#160e06'; c.fillRect(0, 0, w, h);
+  for (let i = 0; i < n; i++) {
+    const x = (i / (n - 1)) * w, bw = w / n + 1;
+    for (const [row, cl, hh] of [[0, TH.Lc[i], TH.Lh[i]], [1, TH.Rc[i], TH.Rh[i]]]) {
+      const v = Math.max(cl, hh); if (v < .02) continue;
+      c.fillStyle = cl >= hh ? `rgba(79,179,255,${.15 + .85 * v})` : `rgba(255,122,69,${.15 + .85 * v})`;
+      c.fillRect(x, row ? h / 2 + 1 : 2, bw, h / 2 - 3);
+    }
+  }
+  c.fillStyle = 'rgba(255,240,210,.45)'; c.font = '600 15px "Noto Sans JP"';
+  for (const s of A.scenes) { const x = (s.t / A.duration) * w; c.fillRect(x, 0, 1.5, h); c.fillText(s.n, x + 5, 17); }
+})();
+
+// ---------------------------------------------------------------- media / clock
+const mix = $('mix'), media = mix, playBtn = $('playBtn');
+const QS = new URLSearchParams(location.search);
+if (QS.has('cover')) document.body.classList.add('cover-only');
+let previewT = QS.get('t') != null ? +QS.get('t') : null;     // ?t=95 → still frame at 1:35 (for checks)
+if (previewT != null) $('intro').classList.add('hidden');
+const now = () => (previewT != null ? previewT : media.currentTime || 0);
+const play = () => { $('intro').classList.add('hidden'); if (previewT != null) { media.currentTime = previewT; previewT = null; } media.play().catch(() => {}); };
+const pause = () => media.pause();
+const toggle = () => (media.paused ? play() : pause());
+playBtn.addEventListener('click', toggle);
+$('startBtn').addEventListener('click', () => { media.currentTime = 0; parts = []; play(); });
+media.addEventListener('play', () => { playBtn.textContent = '❚❚'; });
+media.addEventListener('pause', () => { playBtn.textContent = '▶'; stopOutput(); });
+media.addEventListener('ended', () => { playBtn.textContent = '▶'; stopOutput(); });
+$('timelineWrap').addEventListener('click', (e) => {
+  const r = e.currentTarget.getBoundingClientRect();
+  previewT = null; media.currentTime = clamp((e.clientX - r.left) / r.width, 0, 1) * A.duration; parts = [];
+  $('intro').classList.add('hidden');
+});
+document.addEventListener('keydown', (e) => {
+  if (e.target.matches('input, select')) return;
+  if (e.code === 'Space') { e.preventDefault(); toggle(); }
+  else if (e.code === 'Escape') emergencyStop();
+  else if (e.code === 'ArrowRight') { media.currentTime = Math.min(A.duration, now() + 5); parts = []; }
+  else if (e.code === 'ArrowLeft') { media.currentTime = Math.max(0, now() - 5); parts = []; }
+});
+document.addEventListener('visibilitychange', () => { if (document.hidden) { pause(); stopOutput(); } });
+
+$('lrBtn').addEventListener('click', () => {
+  const ac = new AudioContext();
+  [[-1, 0], [1, .9]].forEach(([pan, at]) => {
+    for (const [f, d] of [[1318.5, 0], [1760, .14]]) {
+      const o = ac.createOscillator(), g = ac.createGain(), p = new StereoPannerNode(ac, { pan });
+      o.frequency.value = pan < 0 ? f : f * 1.25; o.connect(g).connect(p).connect(ac.destination);
+      const t0 = ac.currentTime + at + d; g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(.25, t0 + .01); g.gain.exponentialRampToValueAtTime(.001, t0 + .5);
+      o.start(t0); o.stop(t0 + .55);
+    }
+  });
+  const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; ac.close(); }, 1900);
+});
+
+// ---------------------------------------------------------------- subtitles & scene titles (Japanese + English only)
+const subsEl = $('subs'), sceneEl = $('sceneTitle');
+let subKey = '', sceneIdx = -1, sceneTimer = 0;
+const esc = (s) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
+const SUB_LANGS = { jaen: ['ja', 'en'], ja: ['ja'], en: ['en'], off: [] };
+function updateSubs(t) {
+  const mode = $('subMode').value, langs = SUB_LANGS[mode] || ['ja', 'en'];
+  const act = langs.length ? A.subs.filter((s) => t >= s.t0 && t < s.t1).slice(-2) : [];
+  const key = mode + act.map((s) => s.t0).join('|');
+  if (key === subKey) return; subKey = key;
+  subsEl.innerHTML = act.map((s) => `<div class="line">${langs.map((l, i) => `<div class="${i === 0 ? 'ja' : 'en'}${s.kind === 'laugh' ? ' laugh' : ''}">${i === 0 ? `<span class="who ${s.who}">${A.names[s.who][l]}</span>` : ''}${esc(s[l])}</div>`).join('')}</div>`).join('');
+}
+function updateScene(t) {
+  let i = -1; A.scenes.forEach((s, k) => { if (t >= s.t) i = k; });
+  if (i !== sceneIdx && i >= 0) {
+    sceneIdx = i; const s = A.scenes[i];
+    sceneEl.innerHTML = `${s.n}　${s.ja}<small>${s.en}</small>`;
+    sceneEl.classList.add('show'); clearTimeout(sceneTimer);
+    sceneTimer = setTimeout(() => sceneEl.classList.remove('show'), 3200);
+  }
+}
+$('credits').textContent = A.voice ? `Voice: ${A.voice.credits.join(' / ')} · original script, koto & SFX` : '';
+
+// ---------------------------------------------------------------- device output (same protocol as Demo 1–3)
+const DEFAULT_RANGE = { heatMin: 0, heatMax: 200, coolMin: 35, coolMax: 80 };
+const SEND_INTERVAL = 100, OFF = .03;
+const store = {
+  get: (k, d) => { try { return JSON.parse(localStorage.getItem(`moheat.${k}`)) ?? d; } catch { return d; } },
+  set: (k, v) => { try { localStorage.setItem(`moheat.${k}`, JSON.stringify(v)); } catch {} },
+};
+const range = { ...DEFAULT_RANGE, ...store.get('range', {}) };
+let lastSent = '', lastSendAt = 0, tripped = false, offsetMs = +store.get('asmr.offset', 0), intensity = +store.get('asmr.intensity', 100) / 100;
+const device = MoHeatDevice.create(
+  { select: $('portSelect'), addBtn: $('addPort'), connectBtn: $('connectBtn'), status: $('deviceStatus') },
+  { log: (l) => console.log('[MoHeat]', l), onConnect: () => { lastSent = ''; } },
+);
+if (!MoHeatDevice.supported) $('deviceStatus').querySelector('span').textContent = 'Web Serial needs desktop Chrome / Edge';
+function command(th) {
+  const part = (sd, c, h) => (c > OFF ? `${sd}C${Math.round(range.coolMin + c * (range.coolMax - range.coolMin))}`
+    : h > OFF ? `${sd}H${Math.round(range.heatMin + h * (range.heatMax - range.heatMin))}` : `${sd}H0`);
+  if (Math.max(th.Lc, th.Lh, th.Rc, th.Rh) <= OFF) return 'stop';
+  return `${part('L', th.Lc, th.Lh)} ${part('R', th.Rc, th.Rh)}`;
+}
+function stopOutput() { if (device.isConnected()) device.send('stop'); lastSent = 'stop'; }
+function emergencyStop() {
+  tripped = !tripped;
+  const b = $('estop');
+  if (tripped) { pause(); stopOutput(); b.textContent = '↺ Re-arm output'; b.classList.add('tripped'); }
+  else { b.textContent = '■ STOP'; b.classList.remove('tripped'); lastSent = ''; }
+}
+$('estop').addEventListener('click', emergencyStop);
+addEventListener('pagehide', stopOutput);
+const bindRange = (id, valId, fmtV, set) => { const el = $(id); el.addEventListener('input', () => { set(+el.value); $(valId).textContent = fmtV(+el.value); }); };
+$('intensity').value = Math.round(intensity * 100); $('intensityVal').textContent = `${Math.round(intensity * 100)}%`;
+$('offset').value = offsetMs; $('offsetVal').textContent = `${offsetMs >= 0 ? '+' : ''}${offsetMs} ms`;
+bindRange('intensity', 'intensityVal', (v) => `${v}%`, (v) => { intensity = v / 100; store.set('asmr.intensity', v); });
+bindRange('offset', 'offsetVal', (v) => `${v >= 0 ? '+' : ''}${v} ms`, (v) => { offsetMs = v; store.set('asmr.offset', v); });
+$('subMode').value = SUB_LANGS[store.get('asmr4.subs', 'jaen')] ? store.get('asmr4.subs', 'jaen') : 'jaen';
+$('subMode').addEventListener('change', () => { store.set('asmr4.subs', $('subMode').value); subKey = ''; });
+const meterEls = Object.fromEntries(['Lc', 'Lh', 'Rc', 'Rh'].map((k) => [k, [$(`m${k}`), $(`v${k}`)]]));
+function updateOutput(th, playing) {
+  const scaled = Object.fromEntries(Object.entries(th).map(([k, v]) => [k, playing && !tripped ? v * intensity : 0]));
+  for (const [k, [bar, val]] of Object.entries(meterEls)) { bar.style.width = `${scaled[k] * 100}%`; val.textContent = Math.round(scaled[k] * 100); }
+  const cmd = command(scaled);
+  $('cmd').textContent = cmd;
+  if (!device.isConnected() || !$('sendOn').checked) return;
+  const n = performance.now();
+  if (cmd !== lastSent && n - lastSendAt >= SEND_INTERVAL) { device.send(cmd); lastSent = cmd; lastSendAt = n; }
+}
+
+// ---------------------------------------------------------------- main loop
+function loop() {
+  const n = performance.now(), dt = clamp((n - lastFrame) / 1000, 0, .05); lastFrame = n;
+  const t = now();
+  if (Math.abs(t - lastT) > .5) parts = [];
+  lastT = t;
+  const playing = (!media.paused && !media.ended) || previewT != null;
+  const { sts, th } = frame(t, playing ? dt : 0);
+  drawRadar(sts, playing ? th : { Lc: 0, Lh: 0, Rc: 0, Rh: 0 }, t);
+  updateOutput(th, playing && previewT == null);
+  updateSubs(t); updateScene(t);
+  $('time').textContent = `${fmt(t)} / ${fmt(A.duration)}`;
+  $('playhead').style.left = `${(t / A.duration) * 100}%`;
+  $('posInfo').textContent = sts.map((s) => `${A.names[s.who].ja} ${Math.round(s.az)}° ${s.d.toFixed(2)} m`).join(' · ');
+  requestAnimationFrame(loop);
+}
+
+// ---------------------------------------------------------------- offline render (scripts/render_mp4.py): ja + en subtitles burned in
+const RENDER = QS.has('render');
+function drawSubsCanvas(t) {
+  const act = A.subs.filter((s) => t >= s.t0 && t < s.t1).slice(-2);
+  let y = H - 58 - (act.length - 1) * 118;
+  for (const s of act) {
+    const nm = A.names[s.who].ja + '　';
+    ctx.font = '800 46px "Shippori Mincho B1", "Noto Sans JP", serif';
+    const wj = ctx.measureText(nm + s.ja).width, wn = ctx.measureText(nm).width;
+    ctx.font = '500 30px Inter, sans-serif';
+    const en = `${A.names[s.who].en}: ${s.en}`, we = ctx.measureText(en).width, bw = Math.max(wj, we) + 64;
+    ctx.fillStyle = 'rgba(18,10,4,.66)'; ctx.strokeStyle = 'rgba(217,168,74,.45)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.roundRect(W / 2 - bw / 2, y - 64, bw, 110, 12); ctx.fill(); ctx.stroke();
+    ctx.textAlign = 'left'; const x0 = W / 2 - wj / 2;
+    ctx.font = '800 46px "Shippori Mincho B1", "Noto Sans JP", serif';
+    ctx.fillStyle = s.who === 'N' ? '#ff8a6a' : '#8fe0b4'; ctx.fillText(nm, x0, y - 12); ctx.fillStyle = '#fff'; ctx.fillText(s.ja, x0 + wn, y - 12);
+    ctx.textAlign = 'center'; ctx.font = `${s.kind === 'laugh' ? 'italic ' : ''}500 30px Inter, sans-serif`; ctx.fillStyle = '#efe3c8'; ctx.fillText(en, W / 2, y + 32);
+    y += 118;
+  }
+}
+async function renderAll() {
+  await document.fonts.load('800 46px "Shippori Mincho B1"'); await document.fonts.ready;
+  const cover = new Image(); cover.src = 'media/cover.jpg'; await cover.decode().catch(() => {});
+  await Promise.all(Object.values(IMG).map((im) => im.decode().catch(() => {})));
+  const fps = 30, n = Math.round(A.duration * fps);
+  parts = [];
+  for (let i = 0; i < n; i++) {
+    const t = i / fps;
+    frame(t, 1 / fps);
+    if (t < 3.0 && cover.naturalWidth) { ctx.globalAlpha = t < 2.2 ? 1 : (3.0 - t) / .8; ctx.drawImage(cover, 0, 0, W, H); ctx.globalAlpha = 1; }
+    let si = -1; A.scenes.forEach((s, k) => { if (t >= s.t) si = k; });
+    const st = A.scenes[si], sAge = si === 0 ? t - 3.0 : t - st.t;
+    if (sAge >= 0 && sAge < 3.4) {
+      ctx.globalAlpha = clamp(Math.min(sAge / .5, (3.4 - sAge) / .6), 0, 1);
+      ctx.fillStyle = 'rgba(18,10,4,.55)'; ctx.fillRect(70, 60, 560, 96); ctx.fillStyle = '#d9a84a'; ctx.fillRect(70, 60, 5, 96);
+      ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; ctx.font = '800 38px "Shippori Mincho B1", serif'; ctx.fillText(`${st.n}　${st.ja}`, 96, 106);
+      ctx.fillStyle = '#e6d6b6'; ctx.font = '500 24px Inter, sans-serif'; ctx.fillText(st.en, 96, 140); ctx.globalAlpha = 1;
+    }
+    drawSubsCanvas(t);
+    const blob = await new Promise((r) => cv.toBlob(r, 'image/jpeg', .92));
+    await fetch(`/frame/${String(i).padStart(5, '0')}.jpg`, { method: 'PUT', body: blob });
+  }
+  await fetch('/done', { method: 'PUT' });
+}
+if (RENDER) renderAll(); else requestAnimationFrame(loop);

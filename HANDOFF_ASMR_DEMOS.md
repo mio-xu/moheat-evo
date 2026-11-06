@@ -1,7 +1,7 @@
 # MoHeat Evo — 冷热触觉 ASMR Demo 系列：交接文档 / Handoff
 
 > 写给接手的 agent（Claude Code、Codex 等）和项目负责人。**先读完"必须遵守的约定"再动手。**
-> 最后更新：2026-11-07。状态：Demo 1/2/3 已完成；Demo 4 美术制作中，配音试听已生成，等用户选声线；Demo 5 已建目录、已出 ChatGPT 素材命令，等素材。
+> 最后更新：2026-11-07。状态：Demo 1/2/3/4 已完成（Demo 4 可选补 3 张道具图）；Demo 5 已建目录、已出 ChatGPT 素材命令，等素材。
 
 ---
 
@@ -31,7 +31,7 @@ arduino/MoHeatEvoArduino.ino             ESP32 固件（.gitignore 排除，仅�
 ASMR Demo/                               Demo 1《雪と狐火のひそひそ話》
 ASMR Demo 2/                             Demo 2《キミだけのスペシャルファンミーティング》
 Demo3_ShiningSmileConcert/               Demo 3《Shining Smile Melody — Ice & Fire Concert》
-Demo4_SengokuBanquet/                    Demo 4《安土最后的酒宴》（制作中）
+Demo4_SengokuBanquet/                    Demo 4《安土最後の酒宴》
 Demo_SeasonsExpress/                     Demo 5《四季暴走列車 / The Runaway Seasons Express》（等美术素材）
 HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
@@ -50,7 +50,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 | Swift | `/usr/bin/swift`，`ASMR Demo/tools/lift_subject.swift` 用 macOS Vision 抠图（素材是绿底时可用）|
 | **VOICEVOX 引擎** | 0.26.1，`~/VOICEVOX-engine/engine`（3.9 GB，不在仓库里）。**agent 不能自己启动下载的二进制**（权限拦截），需要用户双击 `ASMR Demo/start_voicevox.command`。端口 `http://127.0.0.1:50021`。检查：`curl -s http://127.0.0.1:50021/version` |
 | 本地预览服务器 | 在仓库根目录 `python3 -m http.server 8765`，然后打开 `http://localhost:8765/<Demo 文件夹>/`。各 Demo 的 `start_demo.command` 会自动做这件事 |
-| MP4 渲染端口 | Demo 1: 8766，Demo 2: 8767，Demo 3: 8768（`render_mp4.py` 自带服务器）|
+| MP4 渲染端口 | Demo 1: 8766，Demo 2: 8767，Demo 3: 8768，Demo 4: 8769（`render_mp4.py` 自带服务器）|
 
 ---
 
@@ -99,7 +99,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 重建命令见 `README.md`；成品 `video/final/final_concert_150s.mp4`、`audio/final/final_stereo_150s.wav`（本地）。
 - 无歌词字幕（没有授权的歌词文本），只有段落标题（日/英）和片尾音乐署名。
 
-### Demo 4 · `Demo4_SengokuBanquet/` 🚧 制作中 —《安土最后的酒宴》
+### Demo 4 · `Demo4_SengokuBanquet/` ✅ 完成 —《安土最後の酒宴 / The Last Banquet at Azuchi》
 - **方向**：以 `demo4.jpg` 设定板为准，**B 细密浮世绘·金箔装饰风**、写实成年人比例（Q 版已淘汰，见 `project/discarded_chibi_drafts/`）。
 - **角色与冷热**：織田信長坐左前方 → 他的声音主要驱动 **L_Heat**；徳川家康坐右前方 → **R_Heat**。冷感来自风/雨/冰镇等环境（按设定板：冷气、风、雨；热：火焰、热酒蒸汽、炭火）。
 - **已有素材**（用户仍在陆续生成，开工前先 `ls assets/*/` 确认）：`assets/characters/N_Character.png`、`I_Character.png`、`N_bust_base.png`、`I_bust_base.png`、`N_ear.png`、`I_ear.png`；`assets/stage/banquet_bg.png`。
@@ -122,14 +122,15 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
   - **家康 = 黒沢冴白「低沈-2」（已选定）**：VOICEVOX pitch −0.1、合成后 −2 半音、语速 ×0.88、胸腔 +5 dB、轻微颤音。
   - 用户又反馈"信长不够低"：v4 做了青山龍星降 1.5 / 3 / 4.5 半音三档，**用户选定 −1.5 档**（VOICEVOX pitch −0.06、合成后 −1.5 半音、胸腔 +5 dB、沙哑颗粒 0.24）。
   - **最终声线已锁定**：`scripts/voice_personas.py` 的 `FINAL = {"N": "信長_青山龍星_低沈-1.5", "I": "家康_黒沢冴白_低沈-2"}`；正式配音直接用这两个 `PERSONAS` 参数和 `laugh()`。
-- **下一步建议**：
-  1. 用户选声线。
-  2. 写完整 150 s 日语剧本（日/英字幕，可附中文对照列）和时间轴 `scripts/banquet.py`（信长左、家康右，含贴耳、敬酒、大笑、起风等）。
-  3. 配音（复用 Demo 1 `tts_voicevox` + Demo 2 的 `demo1.py` 加载方式），每句多候选。
-  4. 环境音：炭火、热酒蒸汽（热）；风、雨、冰镇（冷）。
-  5. thermal：信长 → L_Heat、家康 → R_Heat，风雨等 → 冷，Demo 2 风格的位置分配。
-  6. 播放器复用 Demo 2/3 结构，背景 `banquet_bg` / 风雨版，特效按设定板。
-  7. 渲染、检查脚本（参考 Demo 3 `check_sync.py`）、README，commit/push。
+- **已完成（2026-11-07）**：
+  - 素材检查：第 1–4 优先、4 道具、2 背景、3 特效齐全；6 张差分的暗色背景残留由 `prepare_art.py`（base 透明遮罩）自动清除。设定板追加的 12 张未生成，播放器用程序绘制的火焰/蒸汽/冷气/风/雨/金箔代替；若用户补 `prop_brazier` / `prop_ice_bucket` / `prop_hot_sake`，播放器自动换用。
+  - 剧本与时间轴 `scripts/banquet.py`（6 场景、30 句；每句含说话人、情绪、语气、位置、对谁说）→ `storyboard/script_150s.md`（`scripts/docs.py` 生成）。
+  - 配音 `scripts/voice.py`：锁定声线，每句 3 个 take 在 `audio/takes/`，`TAKE` 字典选用；先生成表演再按实际长度排时间轴。
+  - 音频 `scripts/build_audio.py`：两人干声、热酒蒸汽/炭火（热）、冰镇/风/雨（冷）、琴、铃虫、雷 → HRTF 双耳 → `audio/final/mix_48k.wav`（-18 LUFS）。
+  - 冷热 `scripts/thermal.py`：信长声 → L_Heat、家康声 → R_Heat（同一人一个响度标尺：大笑 > 说话 > 耳语），环境冷热按各自位置；同侧冲突 0、左右反温 19 次、左右切换 16 次。
+  - 播放器 `index.html / demo.js / demo.css`，封面 `media/cover.jpg`，渲染 `scripts/render_mp4.py`（端口 8769）→ `video/final/final_banquet_150s.mp4`（本地）。
+  - QA `scripts/check_sync.py` → `analysis/qa_report.json` 全部通过。一键重建 `./build_all.sh`。
+- **可选后续**：用户试听 `audio/takes/` 后换 take；补 3 张道具图后重跑 build + 渲染。
 
 ### Demo 5 · `Demo_SeasonsExpress/` 📝 已立项 —《四季暴走列車 / The Runaway Seasons Express》
 - **任务书要点**（用户提供的完整制作指令）：
@@ -164,7 +165,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 | `ASMR Demo 2/output/final_1080p.mp4`、`mix_48k.wav`、`stems/`、`audition/` | ~640 MB | 同上 |
 | `Demo3_ShiningSmileConcert/video/final/final_concert_150s.mp4`、`audio/` | ~410 MB | README 中的命令（不需要 VOICEVOX）|
 | `Demo3_ShiningSmileConcert/assets/music_original/*.mp3`、`music_edited/*.wav` | 5 MB + 43 MB | 原曲需从 Pixabay 手动下载（Cloudflare 拦截自动下载）|
-| `Demo4_SengokuBanquet/audio/audition/` | 小 | `python3 scripts/voice_audition.py` |
+| `Demo4_SengokuBanquet/audio/`（试听、takes、stems、mix）、`video/`（MP4、srt）| ~400 MB | `./build_all.sh`（需 VOICEVOX）+ `scripts/render_mp4.py` |
 | `~/VOICEVOX-engine/` | 3.9 GB | 官方 release 0.26.1 macos-arm64 `.vvpp`（zip）解压 |
 
 ---

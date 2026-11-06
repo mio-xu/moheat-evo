@@ -1,5 +1,13 @@
 # Demo 4《安土最后的酒宴》— 给 ChatGPT 的素材生成命令
 
+> ## ✅ 素材进度（2026-11-07 检查）
+> - **已齐**：两张设定图；第 1–4 优先全部（半身 + 眨眼口型 + 表情 12 张、贴耳 4 张、动作 12 张）；道具 4 张；背景 `banquet_bg` / `banquet_bg_wind`；特效 `fx_leaf` / `fx_petal` / `fx_sake_ripple`。影片已用这些素材完成。
+> - 检查发现 `I_bust_blink/chuckle/concern`、`N_bust_suspicious/whisper`、`N_ear_laugh` 背景带半透明暗色残留 → `prepare_art.py` 已用 base 的透明遮罩自动清除，**不用重做**。
+> - **可选（不做也能用）**：下面"设定板追加"里的 12 张还没有。播放器已用程序绘制的火焰、蒸汽、冷气、风、雨、金箔代替。若想更精致，优先做这 3 张，放进 `assets/stage/` 后重跑 `./build_all.sh` 和渲染，播放器会自动换用：
+>   1. `prop_brazier.png`（炭火炉，替换目前程序画的火盆）
+>   2. `prop_ice_bucket.png`（冰镇桶，55–60 s 冰镇冷酒）
+>   3. `prop_hot_sake.png`（冒热气的热酒壶，25–32 s 热燗）
+
 > ## ⚠ 风格方向已更新（以 `demo4.jpg` 设定板为准）
 > - 画风：**B 细密浮世绘·金箔装饰风**（写实成年人比例、精细线描、金箔与家纹纹样），**不是 Q 版**。Q 版草稿已淘汰（`project/discarded_chibi_drafts/`）。
 > - 第 0 步已完成：`assets/characters/N_Character.png`、`I_Character.png`；已完成 `N_bust_base.png`、`assets/stage/banquet_bg.png`。
