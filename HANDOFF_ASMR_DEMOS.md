@@ -174,7 +174,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 | `ASMR Demo 2/output/final_1080p.mp4`、`mix_48k.wav`、`stems/`、`audition/` | ~640 MB | 同上 |
 | `Demo3_ShiningSmileConcert/video/final/final_concert_150s.mp4`、`audio/` | ~410 MB | README 中的命令（不需要 VOICEVOX）|
 | `Demo3_ShiningSmileConcert/assets/music_original/*.mp3`、`music_edited/*.wav` | 5 MB + 43 MB | 原曲需从 Pixabay 手动下载（Cloudflare 拦截自动下载）|
-| `Demo4_SengokuBanquet/audio/`（试听、takes、stems、mix）、`video/`（MP4、srt）| ~400 MB | `./build_all.sh`（需 VOICEVOX）+ `scripts/render_mp4.py` |
+| `Demo4_SengokuBanquet/audio/`（选定声线试听、take 缓存、4 条干声 stem、mix）、`video/`（MP4、srt）| ~160 MB + ~520 MB | `./build_all.sh`（需 VOICEVOX）+ `scripts/render_mp4.py` |
 | `~/VOICEVOX-engine/` | 3.9 GB | 官方 release 0.26.1 macos-arm64 `.vvpp`（zip）解压 |
 
 ---
