@@ -799,7 +799,7 @@ function thermalEdges(ctx, th) {
     const col = c >= h ? '70,170,255' : '255,110,50';
     const x0 = side < 0 ? 0 : W, x1 = side < 0 ? 520 : W - 520;
     const g = ctx.createLinearGradient(x0, 0, x1, 0);
-    g.addColorStop(0, `rgba(${col},${.62 * v})`); g.addColorStop(1, `rgba(${col},0)`);
+    g.addColorStop(0, `rgba(${col},${.36 * v})`); g.addColorStop(1, `rgba(${col},0)`);
     ctx.fillStyle = g; ctx.fillRect(Math.min(x0, x1), 0, 520, H);
   }
 }
