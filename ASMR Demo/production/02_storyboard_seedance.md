@@ -6,7 +6,7 @@ Position notation: az 0° = in front, −90° = at the left ear, +90° = at the 
 
 ## How to generate
 
-1. **Reference images first** (see `03_characters_scenes.md`): Koyuki and Homura turnarounds, an expression sheet, and the empty room (background plate). Use them as image references on every shot. Keep the seed per character where the tool allows it.
+1. **Reference images first**: the approved sheet `../Character.jpg` (turnarounds, expressions, action poses, props for both characters) plus the empty room plate (see `03_characters_scenes.md`). Use them as image references on every shot. Keep the seed per character where the tool allows it.
 2. Generate each shot as **image-to-video**: first paint or generate the shot's key frame from the references, then animate it with the motion prompt below. Shots longer than the tool's clip limit (5–10 s) are split at the "/" marks.
 3. Put the **shared style block** in front of every prompt. Add the character block for whoever is in the shot.
 4. Lip sync: generate the mouth movement neutral ("talking softly"), then fix mouths in the edit or with a lip-sync pass against the character's own stem (`output/stems/K_voice.wav`, `H_voice.wav`).
@@ -15,11 +15,11 @@ Position notation: az 0° = in front, −90° = at the left ear, +90° = at the 
 **Shared style block**
 > Original Japanese 2D anime, clean cel shading, soft line art, gentle bloom, all-ages, cozy and slightly mischievous mood. First-person POV of a viewer sitting on tatami in a small traditional Japanese cabin on a winter night: open shoji window with falling snow and a full moon, paper shoji panels, dark wooden beams, warm glow of an irori hearth from below, an andon lantern on the right. 16:9, 24 fps, stable character design, no text, no watermark.
 
-**Koyuki block**
-> Koyuki: a gentle, shy snow-spirit girl (yuki-onna), long straight silver-white hair with blunt bangs and long side locks, large ice-blue eyes, pale skin with soft pink blush, pale-blue kimono with a white snowflake pattern and long furisode sleeves, fluffy white fur collar, navy obi, snowflake-crystal hairpin on her left side.
+**Koyuki block** (from `Character.jpg`)
+> Koyuki: a gentle, shy, slightly mischievous snow-spirit girl (yuki-onna), chibi-leaning proportions, long wavy lavender-silver hair with a small braid, large sparkling blue eyes, a hair ornament on her right side made of a white flower with a yellow centre, a blue snowflake, a gold cord and a white tassel; white fluffy fur collar; kimono fading from white at the top to light blue with white snowflake patterns, wide sleeves; blue obi with a big blue bow at the front with a gold knot and white tassel; white frilled underskirt, white socks, dark shoes with white fur.
 
-**Homura block**
-> Homura: a cheerful, playful foxfire spirit girl, long orange-red hair with spiky bangs, orange fox ears with cream insides, a large fluffy fox tail with a white tip, amber eyes, a tiny fang when she grins, red kimono with gold trim and gold flame pattern, black-and-gold obi, small gold bell on a red cord in her hair; two or three small orange foxfire wisps float around her.
+**Homura block** (from `Character.jpg`)
+> Homura: a lively, cheerful, prankster foxfire-spirit girl, chibi-leaning proportions, long wavy orange hair, big orange fox ears with white fluffy insides, red ribbons with gold bells on both sides of her head, large amber eyes, a tiny fang when she grins; red kimono with gold floral patterns, wide sleeves with dark lining and red tassels; dark obi with a gold band and a red bow with a gold bell at the front; white frilled underskirt, white stockings, brown lace-up boots; a large fluffy orange fox tail with a cream-white tip; small orange foxfire flames float around her.
 
 ---
 

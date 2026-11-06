@@ -64,8 +64,14 @@ button, select, input { font: inherit; color: inherit; }
 .intro { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 10px; padding: 24px;
   background: radial-gradient(ellipse at 30% 40%, rgba(79,179,255,.18), transparent 60%), radial-gradient(ellipse at 70% 60%, rgba(255,122,69,.18), transparent 60%), rgba(5, 8, 18, .82); }
 .intro.hidden { display: none; }
+.intro > *:not(.portrait) { position: relative; z-index: 1; max-width: 50%; }
+@media (max-width: 700px) { .intro > *:not(.portrait) { max-width: none; } }
+.intro .portrait { position: absolute; bottom: 0; height: 74%; width: 23%; object-fit: cover; object-position: top; border-radius: 18px 18px 0 0; opacity: .92;
+  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent); mask-image: linear-gradient(to bottom, #000 70%, transparent); }
+.intro .portrait.k { left: 2%; } .intro .portrait.h { right: 2%; }
+@media (max-width: 700px) { .intro .portrait { display: none; } }
 .intro .kicker { margin: 0; color: var(--soft); letter-spacing: .12em; text-transform: uppercase; font-size: 12px; }
-.intro h1 { margin: 0; font-family: "Zen Maru Gothic", sans-serif; font-size: clamp(26px, 4.4vw, 60px); font-weight: 700; background: linear-gradient(90deg, #bfe6ff, #fff, #ffc59a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.intro h1 { margin: 0; font-family: "Zen Maru Gothic", sans-serif; font-size: clamp(24px, 3.6vw, 52px); font-weight: 700; background: linear-gradient(90deg, #bfe6ff, #fff, #ffc59a); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .intro .en { margin: 0; color: var(--soft); font-size: clamp(14px, 1.6vw, 20px); }
 .intro .cast { margin: 6px 0 8px; color: var(--soft); }
 .intro .cast .k { color: var(--k); } .intro .cast .h { color: var(--h); }

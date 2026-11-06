@@ -47,7 +47,7 @@ tools/story.py ── cues (lines, breaths, magic) + position key-frames (azimut
 | 3 | Separate voice / breath / magic stems | `output/stems/{K,H}_{voice,breath,magic,foley,dry,binaural}.wav`, `ambience_binaural.wav` | Done, draft voices |
 | 4 | Subtitles ja / en (+ zh) | `media/subs_{ja,en}.vtt`, `output/subs_{ja,en,zh}.{srt,vtt}` | Done |
 | 5 | Script ja + en + zh, shot list | `production/01_script.md`, `production/02_storyboard_seedance.md` | Done |
-| 6 | Character / scene sheets, AI prompts | `production/03_characters_scenes.md` | Done (text). Reference images = manual step A |
+| 6 | Character / scene sheets, AI prompts | `Character.jpg` (approved design), `production/03_characters_scenes.md` | Done. The animatic and the prompts follow the sheet |
 | 7 | 4-channel thermal CSV | `media/thermal.csv` (= `output/thermal_control.csv`) | Done (20 Hz, normalised + PWM + firmware command) |
 | 8 | RMS mapping / position / sync code | `tools/thermal.py`, `tools/story.py` | Done |
 | 9 | ESP32 interface | Existing firmware protocol; `tools/play_thermal_csv.py`, `demo.js` (Web Serial) | Done (not yet tested on hardware) |
