@@ -118,11 +118,11 @@ function drawParts(ctx) {
   ctx.save();
   for (const q of parts) {
     const k = q.life / q.max, a = Math.sin(Math.PI * Math.min(1, k * 1.15)) * q.a;
-    if (q.kind === 'steam' || q.kind === 'mist') {
-      ctx.globalCompositeOperation = 'lighter';
+    if (q.kind === 'steam' || q.kind === 'mist') {   // normal blend: soft translucent wisps, never a glowing blob
+      ctx.globalCompositeOperation = 'source-over';
       const g = ctx.createRadialGradient(q.x, q.y, 0, q.x, q.y, q.size);
-      const c = q.kind === 'steam' ? '255,240,225' : '205,228,255';
-      g.addColorStop(0, `rgba(${c},${a * .3})`); g.addColorStop(1, `rgba(${c},0)`);
+      const c = q.kind === 'steam' ? '250,246,238' : '214,232,250';
+      g.addColorStop(0, `rgba(${c},${a * (q.kind === "steam" ? .34 : .16)})`); g.addColorStop(1, `rgba(${c},0)`);
       ctx.fillStyle = g; ctx.beginPath(); ctx.arc(q.x, q.y, q.size, 0, 7); ctx.fill();
     } else if (q.kind === 'streak' || q.kind === 'drop') {
       ctx.globalCompositeOperation = 'lighter';
@@ -182,7 +182,7 @@ function bustFrame(st) {
 
 function chooseLook(st) {
   const who = st.who, c = st.line;
-  if (st.d < .3 && ART.has(`${who}_ear`)) {
+  if (st.d < .45 && ART.has(`${who}_ear`)) {
     const alt = who === 'N' ? 'N_ear_laugh' : 'I_ear_smile';
     const laughing = c && c.kind === 'laugh' && st.t <= c.t + c.dur + .2;
     return { img: laughing || (c && st.mouth > .62) ? alt : `${who}_ear`, kind: 'ear' };
@@ -201,7 +201,7 @@ function layout(look, st) {
   }
   if (look.kind === 'bust') {
     const F = FACES[`${who}_bust`] || { cx: iw * .45, cy: ih * .22, rx: 200 };
-    const sc = clamp(Math.pow(1.15 / st.d, .55), 1, 2.2), k = (970 / ih) * sc;    // bottom stays anchored below the frame
+    const sc = clamp(Math.pow(1.15 / st.d, .45), 1, 1.35), k = (970 / ih) * sc;    // bottom stays anchored below the frame
     return { k, cx: st.x, pivotX: F.cx, top: H + 14 - ih * k, mouth: [F.cx + (who === 'N' ? 30 : -30), F.cy + 120] };
   }
   const sc = clamp(Math.pow(1.15 / st.d, .45), .9, 1.6), standing = /stand|invite/.test(look.img);
@@ -220,6 +220,8 @@ function drawWarped(ctx, img, cx, pivotX, top, k, alpha, rot, sway, breath) {
   ctx.restore();
 }
 
+const CUP = { I_pose_pour: [368, 826] };   // cup position in the pose image (px) → steam origin
+const CUP_AT = {};
 const fig = { N: { cur: null, prev: null, since: -9, lastT: -9 }, I: { cur: null, prev: null, since: -9, lastT: -9 } };
 
 function drawChar(ctx, st) {
@@ -230,7 +232,7 @@ function drawChar(ctx, st) {
   if (!fs.cur || jumped) { fs.cur = look; fs.prev = null; fs.since = -9; }
   else if (look.img !== fs.cur.img) { if (same) fs.cur = look; else { fs.prev = fs.cur; fs.cur = look; fs.since = st.t; } }
   fs.lastT = st.t;
-  const fade = clamp((st.t - fs.since) / .28, 0, 1);
+  const age = st.t - fs.since, pop = age >= 0 && age < .3 ? Math.sin(Math.PI * age / .3) : 0;   // hard cut + a small settle bounce
   // warm aura behind the speaker
   const glow = .1 + .35 * st.mouth;
   const g = ctx.createRadialGradient(st.x, 420, 40, st.x, 420, 520);
@@ -239,15 +241,13 @@ function drawChar(ctx, st) {
   const breath = .008 * Math.sin((st.t / 3.8 + (st.who === 'N' ? 0 : .5)) * Math.PI * 2);
   const laughBob = st.line && st.line.kind === 'laugh' && st.t < st.line.t + st.line.dur ? Math.abs(Math.sin((st.t - st.line.t) * 14)) * 10 : 0;
   const sway = Math.sin(st.t * 1.3 + (st.who === 'N' ? 0 : 2)) * 6 + STORM(st.t) * Math.sin(st.t * 3.1) * 5;
-  // cross-fade without see-through: the new look fades in ON TOP of a still-opaque old look, then the old one fades out
-  const inA = fs.prev ? clamp(fade * 2, 0, 1) : 1, outA = clamp((1 - fade) * 2, 0, 1);
-  for (const [layer, a] of [[fs.prev, outA], [fs.cur, inA]]) {
-    if (!layer || a <= .01 || !ok(layer.img)) continue;
-    const L = layout(layer, st), img = IMG[layer.img];
-    const lift = st.mouth * 5 + laughBob;
-    drawWarped(ctx, img, L.cx, L.pivotX, L.top - lift, L.k, a, st.rot, sway * (layer.kind === 'pose' ? 1 : .6), breath + st.mouth * .005);
-    if (layer === fs.cur) { st.mx = L.cx + (L.mouth[0] - L.pivotX) * L.k; st.my = L.top + L.mouth[1] * L.k; st.kind = layer.kind; }
-  }
+  // no cross-fade: two different silhouettes blended at partial alpha read as a see-through ghost
+  const layer = fs.cur, L = layout(layer, st), img = IMG[layer.img];
+  const lift = st.mouth * 5 + laughBob + pop * 10;
+  drawWarped(ctx, img, L.cx, L.pivotX, L.top - lift, L.k, 1, st.rot, sway * (layer.kind === 'pose' ? 1 : .6), breath + st.mouth * .005 + pop * .012);
+  st.mx = L.cx + (L.mouth[0] - L.pivotX) * L.k; st.my = L.top + L.mouth[1] * L.k; st.kind = layer.kind;
+  const c = CUP[layer.img];
+  CUP_AT[st.who] = c ? [L.cx + (c[0] - L.pivotX) * L.k - camYaw * 8, L.top - lift + c[1] * L.k] : null;
 }
 
 function charState(who, t) {
@@ -273,10 +273,8 @@ function drawAmbience(ctx, t, dt) {
   if (wc && t <= wc.t + wc.dur) {
     const p = clamp((t - wc.t) / wc.dur, 0, 1), vis = smooth(p * 5) * smooth((1 - p) * 4 + .2);
     if (wc.kind === 'steam') {
-      const sx = lerp(W / 2, xOf(warm.az), .55), sy = 860;
-      const key = ok('prop_hot_sake') ? 'prop_hot_sake' : 'prop_sakazuki';   // optional ChatGPT add-on art, else the cup
-      if (ok(key)) { ctx.save(); ctx.globalAlpha = vis; ctx.shadowColor = 'rgba(255,170,90,.8)'; ctx.shadowBlur = 40; ctx.drawImage(IMG[key], sx - 140, sy - 60, 280, 280); ctx.restore(); }
-      if (Math.random() < dt * 26 * (.3 + warm.env)) spawn({ kind: 'steam', x: sx + (Math.random() - .5) * 80, y: sy + 10, vx: (Math.random() - .5) * 20, vy: -70 - Math.random() * 40, size: 14, grow: 70, life: 0, max: 2.6, a: .9 * vis, seed: Math.random() * 6 });
+      const cup = CUP_AT.I;   // steam rises from the cup in Ieyasu's hand (only while he holds it in the pour pose)
+      if (cup) steamWisps(ctx, cup[0], cup[1] - 12, t, vis * (.55 + .45 * warm.env));
     } else {
       const fx = lerp(W / 2, xOf(warm.az), .62), fy = 960;
       ctx.save(); ctx.globalAlpha = vis;
@@ -319,6 +317,21 @@ function drawAmbience(ctx, t, dt) {
     }
     if (Math.random() < dt * 10 * env) spawn({ kind: 'mist', x: sd < 0 ? 80 + Math.random() * 300 : W - 80 - Math.random() * 300, y: 300 + Math.random() * 500, vx: -sd * 30, vy: 10, size: 60, grow: 120, life: 0, max: 2.4, a: .7, seed: Math.random() * 6 });
   }
+}
+
+function steamWisps(ctx, x, y, t, amt) {   // ukiyo-e style steam: a few thin curling strokes, no glow
+  if (amt < .02) return;
+  ctx.save(); ctx.lineCap = 'round';
+  for (let j = 0; j < 3; j++) {
+    const ph = t * 1.6 + j * 2.1, x0 = x + (j - 1) * 14, H0 = 120 + 30 * Math.sin(t * .7 + j);
+    const g = ctx.createLinearGradient(0, y, 0, y - H0);
+    g.addColorStop(0, `rgba(252,249,242,${.75 * amt})`); g.addColorStop(1, 'rgba(250,246,236,0)');
+    ctx.strokeStyle = g; ctx.lineWidth = 5.5 - j * 1.2;
+    ctx.beginPath(); ctx.moveTo(x0, y);
+    for (let k = 1; k <= 12; k++) { const u = k / 12; ctx.lineTo(x0 + Math.sin(ph + u * 5) * 12 * u + u * 8, y - H0 * u); }
+    ctx.stroke();
+  }
+  ctx.restore();
 }
 
 function drawYourCup(ctx, t) {   // your own cup rises into view at each toast, sake ripples
