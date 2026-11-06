@@ -1,7 +1,7 @@
 """Demo 4 voice personas (v2): historically fitting delivery for Nobunaga (48 in 1582) and Ieyasu (39), plus a natural
 laugh built mora-by-mora instead of reading 「ふはははは」 as text.  Needs the VOICEVOX engine.
 
-  python3 scripts/voice_personas.py   → audio/audition/v2/*.wav
+  python3 scripts/voice_personas.py   → audio/audition/v3/*.wav
 
 Persona = VOICEVOX speaker + per-emotion style/prosody + post-processing:
   chest  : low-shelf warmth (+dB around 120–250 Hz)      → mature, resonant
@@ -31,20 +31,34 @@ I_PROS = {"hospitality": (.88, 0, 1.05, .95, False), "calm": (.84, -.01, .9, .85
           "surprise": (.9, .02, 1.15, .95, False)}
 
 PERSONAS = {
+    # final: Nobunaga = 青山龍星 (user's pick, 2026-11-07)
     "信長_青山龍星": dict(speaker="青山龍星", pitch=-.03, lines=N_LINES, pros=N_PROS, chest=4, grit=.22, dark=0, tremor=0,
                        styles=dict(invite="ノーマル", excited="熱血", tease="喜び", suspicious="囁き"), laugh=dict(base=150, drop=.72, n=5, style="熱血")),
-    "信長_玄野武宏": dict(speaker="玄野武宏", pitch=-.06, lines=N_LINES, pros=N_PROS, chest=5, grit=.25, dark=0, tremor=0,
-                       styles=dict(invite="ノーマル", excited="喜び", tease="喜び", suspicious="ノーマル"), laugh=dict(base=145, drop=.72, n=5, style="喜び")),
-    "家康_黒沢冴白_年長": dict(speaker="黒沢冴白", pitch=-.05, lines=I_LINES, pros=I_PROS, chest=3, grit=0, dark=6500, tremor=.012,
-                          styles={}, speed_mul=.95, laugh=dict(base=125, drop=.82, n=3, style="ノーマル")),
-    "家康_黒沢冴白_更年長": dict(speaker="黒沢冴白", pitch=-.08, lines=I_LINES, pros=I_PROS, chest=4, grit=.06, dark=5200, tremor=.02,
-                           styles={}, speed_mul=.9, laugh=dict(base=115, drop=.82, n=3, style="ノーマル")),
-    "家康_黒沢冴白_老成": dict(speaker="黒沢冴白", pitch=-.11, lines=I_LINES, pros=I_PROS, chest=5, grit=.1, dark=4500, tremor=.03,
-                          styles={}, speed_mul=.85, laugh=dict(base=108, drop=.85, n=3, style="ノーマル")),
+    # Ieyasu = 黒沢冴白, deeper: VOICEVOX pitch near its floor + post pitch shift (semitones)
+    "家康_黒沢冴白_低沈-2": dict(speaker="黒沢冴白", pitch=-.1, shift=-2.0, lines=I_LINES, pros=I_PROS, chest=5, grit=.08, dark=5200, tremor=.02,
+                            styles={}, speed_mul=.88, laugh=dict(base=112, drop=.84, n=3, style="ノーマル")),
+    "家康_黒沢冴白_低沈-3.5": dict(speaker="黒沢冴白", pitch=-.1, shift=-3.5, lines=I_LINES, pros=I_PROS, chest=5, grit=.1, dark=5000, tremor=.025,
+                              styles={}, speed_mul=.86, laugh=dict(base=112, drop=.84, n=3, style="ノーマル")),
+    "家康_黒沢冴白_低沈-5": dict(speaker="黒沢冴白", pitch=-.1, shift=-5.0, lines=I_LINES, pros=I_PROS, chest=6, grit=.12, dark=4800, tremor=.03,
+                            styles={}, speed_mul=.85, laugh=dict(base=112, drop=.84, n=3, style="ノーマル")),
 }
 
 
+def shift(x, semis):
+    """Lower the pitch by `semis` semitones keeping the tempo (ffmpeg asetrate + atempo). Formants drop too → deeper, older."""
+    if not semis: return x
+    import subprocess, tempfile
+    r = 2 ** (semis / 12)
+    with tempfile.TemporaryDirectory() as d:
+        a, b = os.path.join(d, "a.wav"), os.path.join(d, "b.wav")
+        wavfile.write(a, SR, x.astype(np.float32))
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", a, "-af", f"asetrate={SR * r:.3f},aresample={SR},atempo={1 / r:.5f}",
+                        "-c:a", "pcm_f32le", b], check=True)
+        return wavfile.read(b)[1].astype(np.float64)
+
+
 def post(x, p):
+    x = shift(x, p.get("shift", 0))
     if p["chest"]:
         lo = signal.sosfilt(signal.butter(2, [110, 260], "bandpass", fs=SR, output="sos"), x)
         x = x + lo * (10 ** (p["chest"] / 20) - 1)
@@ -104,7 +118,7 @@ def perform(name, p):
 
 
 def main():
-    d = os.path.join(ROOT, "audio", "audition", "v2"); os.makedirs(d, exist_ok=True)
+    d = os.path.join(ROOT, "audio", "audition", "v3"); os.makedirs(d, exist_ok=True)
     for name, p in PERSONAS.items():
         y = perform(name, p)
         wavfile.write(os.path.join(d, f"{name}.wav"), SR, (np.clip(y, -1, 1) * 32767).astype(np.int16)); print("wrote", name)
