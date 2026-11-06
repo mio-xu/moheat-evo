@@ -18,6 +18,10 @@ from scipy.io import wavfile
 
 sys.path.insert(0, os.path.dirname(__file__))
 import story as S
+import tts_voicevox as VV
+
+# Voice backend: VOICEVOX (emotional anime voices) when its engine is running, otherwise macOS Kyoko (draft).
+BACKEND = "voicevox" if VV.available() else "kyoko"
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT, MEDIA = os.path.join(ROOT, "output"), os.path.join(ROOT, "media")
@@ -67,7 +71,18 @@ def write_wav(path, x):
     os.remove(tmp)
 
 # ---------------------------------------------------------------- voices (draft TTS)
-def tts(text, who, whisper=False):
+def tts(text, who, whisper=False, expr="smile"):
+    if BACKEND == "voicevox":
+        cfg = json.dumps(VV.CAST[who], ensure_ascii=False, sort_keys=True)
+        key = hashlib.md5(f"vv|{cfg}|{whisper}|{expr}|{text}".encode()).hexdigest()[:12]
+        wav = os.path.join(CACHE, f"vv_{key}.wav")
+        if not os.path.exists(wav):
+            x, style = VV.synth(text, who, "whisper" if whisper else "say", expr, SR)
+            wavfile.write(wav, SR, (np.clip(x, -1, 1) * 32767).astype(np.int16))
+        sr, x = wavfile.read(wav)
+        x = x.astype(np.float64) / 32768.0
+        e = env_follow(x, 40); idx = np.where(e > 0.01)[0]
+        return x[max(0, idx[0] - 480): idx[-1] + 2400] if len(idx) else x
     ch = S.CHARACTERS[who]
     rate = ch["whisper_rate"] if whisper else ch["rate"]
     key = hashlib.md5(f"{ch['voice']}|{rate}|{ch['pitch']}|{text}".encode()).hexdigest()[:12]
@@ -223,9 +238,10 @@ def main():
     for i, c in enumerate(S.CUES):
         who, kind = c["who"], c["kind"]
         if kind in ("say", "whisper"):
-            x = tts(c["tts"], who, whisper=(kind == "whisper"))
+            x = tts(c["tts"], who, whisper=(kind == "whisper"), expr=c["expr"])
             if kind == "whisper":
-                x = norm_to(whisperize(x), -25)
+                # VOICEVOX already whispers (ささやき style): only add a little air; Kyoko needs the full treatment
+                x = norm_to(x + 0.35 * whisperize(x) if BACKEND == "voicevox" else whisperize(x), -25)
                 place(tracks[who]["breath"], c["t"] - 0.55, inhale())
             else:
                 x = norm_to(x, -19 if not c.get("duet") else -21)
@@ -249,6 +265,9 @@ def main():
             if a["t"] + a["dur"] > b["t"] - 0.05:
                 print(f"  ! {w}: line at {a['t']}s ({a['dur']:.2f}s) runs into {b['t']}s")
     with open(os.path.join(OUT, "voice_timing.json"), "w") as f: json.dump(timing, f, indent=1)
+    with open(os.path.join(MEDIA, "voice.json"), "w") as f:
+        json.dump(dict(backend=BACKEND, credits=VV.credits() if BACKEND == "voicevox" else ["macOS Kyoko (draft)"]), f, ensure_ascii=False)
+    print("voice backend:", BACKEND)
 
     # stems
     mix = np.zeros((N, 2))

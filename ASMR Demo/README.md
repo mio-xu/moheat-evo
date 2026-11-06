@@ -42,8 +42,8 @@ tools/story.py ── cues (lines, breaths, magic) + position key-frames (azimut
 
 | # | Item | Where | Status |
 |---|---|---|---|
-| 1 | 150 s 1080p MP4 | `output/animatic_1080p.mp4` | **Animatic** (vector art, burned-in ja/en subs). Final film = manual step A |
-| 2 | 48 kHz stereo binaural WAV | `output/mix_48k.wav` (24-bit) | Done, **draft voices** |
+| 1 | 150 s 1080p MP4 | `output/animatic_1080p.mp4` | **Animatic** (cel-shaded vector art, burned-in ja/en subs). Final film = manual step A |
+| 2 | 48 kHz stereo binaural WAV | `output/mix_48k.wav` (24-bit) | Done (VOICEVOX when the engine runs; Kyoko draft otherwise) |
 | 3 | Separate voice / breath / magic stems | `output/stems/{K,H}_{voice,breath,magic,foley,dry,binaural}.wav`, `ambience_binaural.wav` | Done, draft voices |
 | 4 | Subtitles ja / en (+ zh) | `media/subs_{ja,en}.vtt`, `output/subs_{ja,en,zh}.{srt,vtt}` | Done |
 | 5 | Script ja + en + zh, shot list | `production/01_script.md`, `production/02_storyboard_seedance.md` | Done |
@@ -61,10 +61,15 @@ tools/story.py ── cues (lines, breaths, magic) + position key-frames (azimut
 - Cut each shot to the animatic timing in DaVinci Resolve over `output/mix_48k.wav`.
 - Export 1920×1080 MP4 and load it with **Load MP4…**.
 
-**B. Real Japanese voices.** The current voices are macOS *Kyoko* TTS, pitch-shifted per character. Whispers are synthesized. They are placeholders.
-- Record two voice actors, or use a high-quality Japanese TTS, line by line from `production/01_script.md`.
-- Put each take at the cue time in `tools/story.py`. The simplest path is to replace the cached files listed in `output/voice_timing.json` with matching-length WAVs.
-- Then run `./build_all.sh`. Timing, mix, lip sync and thermal all update automatically.
+**B. Voices: VOICEVOX (emotional anime TTS, recommended).**
+1. The engine is already downloaded to `~/VOICEVOX-engine/engine`. Double-click `start_voicevox.command`, or run `cd ~/VOICEVOX-engine/engine && ./run`. Leave it running.
+2. `./build_all.sh`. The build detects the engine and regenerates every line with a style per emotion:
+   - Koyuki = 九州そら (あまあま / ツンツン / **ささやき**)
+   - Homura = 四国めたん (ノーマル / ツンツン / **ささやき**)
+3. To change voices, edit `CAST` in `tools/tts_voicevox.py`. `python3 tools/tts_voicevox.py --audition` writes comparison clips to `output/audition/`.
+4. Credit required by the voice terms: the demo shows `VOICEVOX:九州そら / VOICEVOX:四国めたん` automatically. Keep it in the film credits too.
+
+Without the engine running, the build falls back to macOS Kyoko (draft). For the final release, voice actors can still replace lines: put the takes at the cue times in `tools/story.py` and rebuild.
 
 **C. Optional pro spatial mix.** The included renderer is a spherical-head HRTF model (Brown–Duda ITD/head shadow, near-field ILD, room tail). For a REAPER mix:
 - Import the `{K,H}_dry.wav` stems.

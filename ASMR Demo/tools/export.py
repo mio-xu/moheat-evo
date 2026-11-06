@@ -67,7 +67,8 @@ def main():
     times = np.arange(int(S.DURATION * FPS) + 1) / FPS
     pos = S.positions(times)
     anim = dict(duration=S.DURATION, fps=FPS, scenes=[dict(t=t, n=n, ja=ja, en=en) for t, n, ja, en in S.SCENES],
-                present=S.PRESENT, subs=items, chars={})
+                present=S.PRESENT, subs=items, chars={},
+                voice=json.load(open(os.path.join(MEDIA, "voice.json"))))
     for who in "KH":
         az, d = pos[who]
         anim["chars"][who] = dict(az=np.round(az, 1).tolist(), d=np.round(d, 3).tolist(),
