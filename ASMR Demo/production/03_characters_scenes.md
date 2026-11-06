@@ -37,7 +37,7 @@
 ## Reference prompts
 
 **Turnaround (each character):**
-> Character turnaround sheet, front / three-quarter / side / back views, full body, neutral pose, flat light grey background, original Japanese 2D anime style, clean line art, cel shading. [Koyuki or Homura block from 02_storyboard_seedance.md]
+> Character turnaround sheet, front / three-quarter / side / back views, full body, neutral pose, flat light grey background, original Japanese 2D anime style, clean line art, cel shading. [Koyuki or Homura description from the tables above]
 
 **Expression sheet:**
 > Expression sheet, 9 head-and-shoulders panels: smile, shy blush, closed-eye happy laugh, smug grin, whispering with half-closed eyes, pursed lips blowing, pout with puffed cheeks, surprised, sleepy. Original Japanese 2D anime, consistent design. [character block]

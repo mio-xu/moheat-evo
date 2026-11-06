@@ -1,5 +1,5 @@
 // キミだけのスペシャルファンミーティング — MoHeat Evo ASMR demo 2.
-// Built on Demo 1's player. Clock = the binaural mix (or a loaded final film). Everything is a function of that time:
+// Built on Demo 1's player. Clock = the binaural mix . Everything is a function of that time:
 //   Ayane (positions, lip sync, poses), the cooling source (its own position), subtitles, and the 4-channel thermal
 //   track (media/thermal.csv: voice → heat, cooling SFX → cool, each split left/right by its own position).
 'use strict';
@@ -473,18 +473,6 @@ document.addEventListener('keydown', (e) => {
 });
 document.addEventListener('visibilitychange', () => { if (document.hidden) { pause(); stopOutput(); } });
 
-$('filmFile').addEventListener('change', () => {
-  const f = $('filmFile').files[0]; if (!f) return;
-  const t = now(); mix.pause();
-  if (film.src) URL.revokeObjectURL(film.src);
-  film.src = URL.createObjectURL(f); film.hidden = false; media = film;
-  film.addEventListener('loadedmetadata', () => { film.currentTime = Math.min(t, film.duration || t); }, { once: true });
-  $('filmState').textContent = f.name; $('filmClear').hidden = false;
-});
-$('filmClear').addEventListener('click', () => {
-  const t = now(); film.pause(); film.hidden = true; media = mix; mix.currentTime = t;
-  $('filmState').textContent = 'animatic'; $('filmClear').hidden = true;
-});
 
 $('lrBtn').addEventListener('click', () => {
   const ac = new AudioContext();

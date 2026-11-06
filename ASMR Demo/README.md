@@ -7,7 +7,6 @@ A 150 s first-person binaural ASMR story. 小雪 Koyuki (snow spirit) cools you 
 - Headphones on → **Start**. To get thermal feedback: **+ Add** → choose the MoHeat Evo port → **Connect** (desktop Chrome/Edge, Web Serial).
 - Keys: `Space` play/pause · `←/→` ±5 s · `Esc` emergency stop (press again to re-arm).
 - **Intensity** scales all output. **Device lead** shifts the thermal track against the picture: + = earlier. The PWM range is the one set on `../test.html` (shared).
-- **Load MP4…** swaps the animatic for the finished film. The film plays with its own audio, and the thermal track follows its clock.
 - Without a browser: `python3 tools/play_thermal_csv.py --port /dev/cu.… ` plays the WAV and streams the CSV (needs `pip3 install pyserial`; `--list`, `--dry-run`, `--intensity`, `--offset`).
 
 ## Characters
@@ -26,8 +25,8 @@ build_all.sh                         rebuild audio → thermal → subtitles/dat
 art/        Character.jpg, chatgpt/*.png        source art (never modified)
 media/      mix.m4a, thermal.csv, subs_*.vtt, data.js, cover.jpg, art/*.webp   web assets (generated)
 tools/      story.py (timeline) · build_audio.py · tts_voicevox.py · thermal.py · export.py · prepare_art.py · render_mp4.py · docs.py · play_thermal_csv.py · lift_subject.swift
-production/ 01 script · 02 storyboard + Seedance prompts · 03 characters · 04 ChatGPT art list
-output/     mix_48k.wav, stems/, animatic_1080p.mp4, thermal_control.csv, subtitles (local, not committed)
+production/ 01 script · 02 storyboard · 03 characters · 04 ChatGPT art list
+output/     mix_48k.wav, stems/, final_1080p.mp4, thermal_control.csv, subtitles (local, not committed)
 ```
 
 ## How the thermal control works
@@ -56,17 +55,17 @@ tools/story.py ── cues (lines, breaths, magic) + position key-frames (azimut
 ## Rebuild after editing the story
 `./build_all.sh` (≈1 min) regenerates voices, mix, thermal CSV, subtitles and `media/data.js`. After new art: `python3 tools/prepare_art.py && python3 tools/export.py`. Then:
 - `python3 tools/docs.py` regenerates `production/01_script.md`.
-- `python3 tools/render_mp4.py` (≈5–10 min) regenerates `output/animatic_1080p.mp4`.
+- `python3 tools/render_mp4.py` (≈5–10 min) regenerates `output/final_1080p.mp4`.
 
 ## Deliverables
 
 | # | Item | Where | Status |
 |---|---|---|---|
-| 1 | 150 s 1080p MP4 | `output/animatic_1080p.mp4` | Done: ChatGPT art with blink/lip sync, burned-in ja/en subs, cover title card. A Seedance film is optional (step A) |
+| 1 | 150 s 1080p MP4 | `output/final_1080p.mp4` | Done: ChatGPT art with blink/lip sync, burned-in ja/en subs, cover title card |
 | 2 | 48 kHz stereo binaural WAV | `output/mix_48k.wav` (24-bit) | Done (VOICEVOX when the engine runs; Kyoko draft otherwise) |
 | 3 | Separate voice / breath / magic stems | `output/stems/{K,H}_{voice,breath,magic,foley,dry,binaural}.wav`, `ambience_binaural.wav` | Done, draft voices |
 | 4 | Subtitles ja / en (+ zh) | `media/subs_{ja,en}.vtt`, `output/subs_{ja,en,zh}.{srt,vtt}` | Done |
-| 5 | Script ja + en + zh, shot list | `production/01_script.md`, `production/02_storyboard_seedance.md` | Done |
+| 5 | Script ja + en + zh, shot list | `production/01_script.md`, `production/02_storyboard.md` | Done |
 | 6 | Character / scene sheets, AI prompts | `art/Character.jpg` (approved design), `art/chatgpt/`, `production/03_characters_scenes.md` | Done. The animatic and the prompts follow the sheet |
 | 7 | 4-channel thermal CSV | `media/thermal.csv` (= `output/thermal_control.csv`) | Done (20 Hz, normalised + PWM + firmware command) |
 | 8 | RMS mapping / position / sync code | `tools/thermal.py`, `tools/story.py` | Done |
@@ -75,13 +74,8 @@ tools/story.py ── cues (lines, breaths, magic) + position key-frames (azimut
 
 `output/` holds large files and is not committed; run `./build_all.sh` to recreate it.
 
-## Manual steps still needed
-**A. Final animation (Seedance or similar).** Log in to the video tool and follow `production/02_storyboard_seedance.md`:
-- Generate references, then 18 shots image-to-video.
-- Cut each shot to the animatic timing in DaVinci Resolve over `output/mix_48k.wav`.
-- Export 1920×1080 MP4 and load it with **Load MP4…**.
-
-**B. Voices: VOICEVOX (emotional anime TTS, recommended).**
+## Optional / manual steps
+**A. Voices: VOICEVOX (emotional anime TTS, recommended).**
 1. The engine is already downloaded to `~/VOICEVOX-engine/engine`. Double-click `start_voicevox.command`, or run `cd ~/VOICEVOX-engine/engine && ./run`. Leave it running.
 2. `./build_all.sh`. The build detects the engine and regenerates every line with a style per emotion:
    - Both characters use ずんだもん, told apart by style and delivery:
@@ -92,12 +86,12 @@ tools/story.py ── cues (lines, breaths, magic) + position key-frames (azimut
 
 Without the engine running, the build falls back to macOS Kyoko (draft). For the final release, voice actors can still replace lines: put the takes at the cue times in `tools/story.py` and rebuild.
 
-**C. Optional pro spatial mix.** The included renderer is a spherical-head HRTF model (Brown–Duda ITD/head shadow, near-field ILD, room tail). For a REAPER mix:
+**B. Optional pro spatial mix.** The included renderer is a spherical-head HRTF model (Brown–Duda ITD/head shadow, near-field ILD, room tail). For a REAPER mix:
 - Import the `{K,H}_dry.wav` stems.
 - Automate an HRTF panner (e.g. IEM BinauralDecoder / dearVR) from the azimuth/distance columns in `output/thermal_intent.csv`.
 - Keep the stems unchanged so the thermal CSV stays valid.
 
-**D. Hardware calibration (on the real device).**
+**C. Hardware calibration (on the real device).**
 1. On `../test.html`, find the lowest cool and heat PWM you can just feel, and the highest that stays comfortable. Set them as the output range; the demo uses it automatically.
 2. Measure latency: send `LC80`, then `LH200`, and time the moment the skin feels the change. Put the values in `COOL_LEAD` / `HEAT_LEAD` and rebuild, or fine-tune live with **Device lead**.
 3. Play the full demo with headphones. Check the left/right match in scenes 2, 4 and 5.

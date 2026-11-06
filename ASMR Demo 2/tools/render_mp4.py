@@ -1,9 +1,9 @@
-"""Render the browser animatic to output/animatic_1080p.mp4 (1920×1080, 30 fps, ja/en subtitles burned in,
+"""Render the browser player to output/final_1080p.mp4 (1920×1080, 30 fps, ja/en subtitles burned in,
 48 kHz binaural mix).  Deterministic: headless Chrome steps the timeline frame by frame.
 
   python3 tools/render_mp4.py        (≈5–10 min)
 
-This is the ANIMATIC preview, not the final Seedance film.
+This is the final film of the demo.
 """
 import http.server, os, shutil, subprocess, sys, threading, time
 
@@ -41,7 +41,7 @@ def main():
             print(f"  {len(os.listdir(FRAMES))} / 4500 frames  ({time.time() - t0:.0f} s)", flush=True)
     finally:
         chrome.terminate(); srv.shutdown()
-    out = os.path.join(ROOT, "output", "animatic_1080p.mp4")
+    out = os.path.join(ROOT, "output", "final_1080p.mp4")
     main_mp4 = out + ".main.mp4"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-framerate", "30", "-i", os.path.join(FRAMES, "%05d.jpg"),
                     "-i", os.path.join(ROOT, "output", "mix_48k.wav"), "-c:v", "libx264", "-preset", "medium", "-crf", "18",

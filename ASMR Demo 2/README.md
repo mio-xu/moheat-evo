@@ -46,20 +46,20 @@ index.html · demo.js · demo.css · start_demo.command · build_all.sh
 art/        A_Character.png (design sheet), concept_board.jpg, chatgpt/*.png (35 ChatGPT assets + prompts)
 media/      mix.m4a, thermal.csv, subs_{ja,zh,en}.vtt, data.js, cover.jpg, art/*.webp
 tools/      fanmeeting.py (timeline) · build_audio.py · thermal.py · export.py · prepare_art.py · render_mp4.py · docs.py · demo1.py
-production/ 01 ChatGPT asset prompts · 02 script (ja/zh/en) · 03 storyboard + Seedance prompts
+production/ 01 ChatGPT asset prompts · 02 script (ja/zh/en) · 03 storyboard
 output/     mix_48k.wav · stems/ (heat_voice, heat_breath, cool_fan, cool_ice, cool_breath, cool_magic, *_dry, *_binaural, music, foley, ambience)
-            animatic_1080p.mp4 · thermal_control.csv · thermal_intent.csv · mapping_config.json · thermal_checks.json · subs_*.srt   (local, not committed)
+            final_1080p.mp4 · thermal_control.csv · thermal_intent.csv · mapping_config.json · thermal_checks.json · subs_*.srt   (local, not committed)
 ```
 
 ## Deliverables
 
 | Item | Where | Status |
 |---|---|---|
-| 150 s MP4 | `output/animatic_1080p.mp4` | Done: ChatGPT art, blink/lip sync, ja+zh subs burned in, cover title card. A Seedance film is optional |
+| 150 s MP4 | `output/final_1080p.mp4` | Done: ChatGPT art, blink/lip sync, ja+zh subs burned in, cover title card |
 | Binaural ASMR WAV, 48 kHz | `output/mix_48k.wav` | Done (−17 LUFS) |
 | Separate voice / breath / cooling SFX stems | `output/stems/` | Done |
 | Subtitles ja + zh (+ en) | `media/subs_*.vtt`, `output/subs_*.srt` | Done |
-| Script and storyboard | `production/02_script.md`, `production/03_storyboard_seedance.md` | Done |
+| Script and storyboard | `production/02_script.md`, `production/03_storyboard.md` | Done |
 | Character sheet and reference art | `art/` | Done |
 | 4-channel thermal CSV | `media/thermal.csv` | Done |
 | RMS mapping and sync code | `tools/thermal.py` (+ Demo 1 controller) | Done |
@@ -71,6 +71,5 @@ output/     mix_48k.wav · stems/ (heat_voice, heat_breath, cool_fan, cool_ice, 
 - After new art: `python3 tools/prepare_art.py && python3 tools/export.py`.
 - Credit required by the voice terms: **VOICEVOX:満別花丸**. The demo shows it; keep it in any film credits.
 
-## Manual / optional
-- **Seedance film**: follow `production/03_storyboard_seedance.md`, then load the MP4 with **Load MP4…**.
+## Manual
 - **Hardware calibration**: set the comfortable PWM range on `../test.html`, then measure the device lead and set `COOL_LEAD` / `HEAT_LEAD` in `tools/thermal.py`.

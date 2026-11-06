@@ -1,5 +1,5 @@
 // 雪と狐火のひそひそ話 — MoHeat Evo ASMR demo.
-// Clock = the binaural mix (or a loaded final film). Everything else is a function of that time:
+// Clock = the binaural mix . Everything else is a function of that time:
 //   characters (positions + lip sync from media/data.js), subtitles, and the 4-channel thermal track
 //   (media/thermal.csv, already latency-compensated and conflict-resolved by tools/thermal.py).
 'use strict';
@@ -557,19 +557,6 @@ document.addEventListener('keydown', (e) => {
 });
 document.addEventListener('visibilitychange', () => { if (document.hidden) { pause(); stopOutput(); } });
 
-// final film
-$('filmFile').addEventListener('change', () => {
-  const f = $('filmFile').files[0]; if (!f) return;
-  const t = now(); mix.pause();
-  if (film.src) URL.revokeObjectURL(film.src);
-  film.src = URL.createObjectURL(f); film.hidden = false; media = film;
-  film.addEventListener('loadedmetadata', () => { film.currentTime = Math.min(t, film.duration || t); }, { once: true });
-  $('filmState').textContent = f.name; $('filmClear').hidden = false;
-});
-$('filmClear').addEventListener('click', () => {
-  const t = now(); film.pause(); film.hidden = true; media = mix; mix.currentTime = t;
-  $('filmState').textContent = 'animatic'; $('filmClear').hidden = true;
-});
 
 // headphone check
 $('lrBtn').addEventListener('click', () => {
@@ -614,8 +601,8 @@ function updateScene(t) {
 
 // voice credits (required by the VOICEVOX terms) / draft notice
 $('credits').textContent = A.voice && A.voice.backend === 'voicevox'
-  ? `Voices: ${A.voice.credits.join(' / ')} · cel-shaded animatic (final film pending)`
-  : 'Draft build: cel-shaded animatic + synthesized voice (macOS Kyoko). Replace with the final film and voices.';
+  ? `Voices: ${A.voice.credits.join(' / ')}`
+  : 'Draft build: synthesized voice (macOS Kyoko).';
 
 // ---------------------------------------------------------------- device output
 const DEFAULT_RANGE = { heatMin: 0, heatMax: 200, coolMin: 35, coolMax: 80 };   // firmware HOT/COLD_PWM_MIN/MAX
