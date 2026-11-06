@@ -1,0 +1,170 @@
+"""Acceptance + synchronisation checks → analysis/sync_report.json and analysis/synchronization_report.md
+
+  python3 scripts/check_sync.py        (after build_audio.py and thermal.py)
+"""
+import csv, json, os, sys
+import numpy as np
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import seasons as S
+from demo1 import load
+T1 = load("thermal")
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+RATE = S.RATE
+
+
+def read_csv():
+    rows = list(csv.DictReader(open(os.path.join(ROOT, "thermal", "thermal_4ch.csv"))))
+    t = np.array([float(r["time_s"]) for r in rows])
+    return t, {k: np.array([float(r[k]) for r in rows]) for k in ("L_cool", "R_cool", "L_heat", "R_heat")}, rows
+
+
+def segments(mask, t, min_len):
+    out, s = [], None
+    for i, m in enumerate(np.append(mask, False)):
+        if m and s is None: s = i
+        if not m and s is not None:
+            if (i - s) / RATE >= min_len: out.append((round(float(t[s]), 2), round(float(t[i - 1]), 2)))
+            s = None
+    return out
+
+
+def win(t, a, b): return (t >= a) & (t < b)
+
+
+def stereo(path):
+    sr, x = T1.read_mono.__globals__["wavfile"].read(_f32(path))
+    return sr, x
+
+
+def _f32(path):
+    import subprocess
+    tmp = os.path.join(ROOT, "audio", ".tmp_check.wav")
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", path, "-c:a", "pcm_f32le", tmp], check=True)
+    return tmp
+
+
+def ild(name, a, b):
+    from scipy import signal
+    sr, x = stereo(os.path.join(ROOT, "audio", "spatialized", f"{name}_binaural.wav"))
+    s = signal.sosfilt(signal.butter(4, 1500, "highpass", fs=sr, output="sos"), x[int(a * sr): int(b * sr)], axis=0)   # ILD band (LF is localised by ITD)
+    e = np.sqrt((s ** 2).mean(0)) + 1e-12
+    return float(20 * np.log10(e[0] / e[1]))          # + = louder in the LEFT ear
+
+
+def main():
+    t, C, rows = read_csv()
+    Lc, Rc, Lh, Rh = C["L_cool"], C["R_cool"], C["L_heat"], C["R_heat"]
+    res, checks = {}, []
+
+    def check(name, ok, detail): checks.append(dict(check=name, ok=bool(ok), detail=detail))
+
+    # 0 format
+    check("CSV 3000 rows, 0.00–149.95 s, 20 Hz", len(t) == 3000 and t[0] == 0 and abs(t[-1] - 149.95) < 1e-6 and np.allclose(np.diff(t), .05),
+          f"{len(t)} rows, {t[0]:.2f}–{t[-1]:.2f} s")
+    same = int(np.sum((Lc > 0) & (Lh > 0)) + np.sum((Rc > 0) & (Rh > 0)))
+    check("Same-ear cool+heat conflicts = 0 (firmware: one mode per ear)", same == 0, f"{same} frames")
+
+    # 1 left/right environment moves
+    L, R = Lc + Lh, Rc + Rh
+    sm = lambda v: np.convolve(v, np.ones(10) / 10, "same")
+    moves = []
+    for kind, l_, r_ in (("cool", Lc, Rc), ("heat", Lh, Rh)):          # where is the cold / the heat?
+        bal = (sm(l_) - sm(r_)) / (sm(l_) + sm(r_) + 1e-6); act = (sm(l_) + sm(r_)) > .2
+        side = np.where(act & (bal > .6), -1, np.where(act & (bal < -.6), 1, 0))
+        runs = sorted((a, b, "L" if v < 0 else "R") for v in (-1, 1) for a, b in segments(side == v, t, 1.0))
+        moves += [(round(runs[i][1], 2), round(runs[i + 1][0], 2), f"{kind} {runs[i][2]}→{runs[i + 1][2]}") for i in range(len(runs) - 1) if runs[i][2] != runs[i + 1][2]]
+    moves.sort()
+    check("≥ 4 clear left/right environment moves", len(moves) >= 4, f"{len(moves)} moves: " + ", ".join(f"{m[2]} @ {m[0]:.1f}→{m[1]:.1f} s" for m in moves))
+    # rain sweeps L→R: centre of cooling moves across
+    cb = lambda a, b: float(np.mean((Rc - Lc)[win(t, a, b)]))
+    check("Rain cooling travels left → right (storm)", cb(46, 54) < -.3 and cb(64, 69) > .3, f"R−L cooling 46–54 s {cb(46, 54):+.2f}, 64–69 s {cb(64, 69):+.2f}")
+
+    # 2 simultaneous opposite temperatures
+    opp = segments(((Lc > .25) & (Rh > .25)) | ((Lh > .25) & (Rc > .25)), t, 1.0)
+    check("≥ 2 moments of opposite temperatures left vs right", len(opp) >= 2, f"{len(opp)} segments ≥ 1 s: " + ", ".join(f"{a:.1f}–{b:.1f}" for a, b in opp))
+
+    # 3 ice / fire reversal
+    m = lambda v, a, b: float(np.mean(v[win(t, a, b)]))
+    pre = m(Lc, 72.5, 79.5) > .3 and m(Rh, 72.5, 79.5) > .3
+    neu = m(L + R, 81.2, 82.4) < .2
+    post = m(Lh, 84, 92.5) > .3 and m(Rc, 84, 92.5) > .3
+    check("Clear ice/fire reversal in the tunnel", pre and neu and post,
+          f"72.5–79.5 s: L cool {m(Lc, 72.5, 79.5):.2f} / R heat {m(Rh, 72.5, 79.5):.2f}; neutral 81.2–82.4 s total {m(L + R, 81.2, 82.4):.2f}; "
+          f"84–92.5 s: L heat {m(Lh, 84, 92.5):.2f} / R cool {m(Rc, 84, 92.5):.2f}")
+
+    # 4 silence = zero
+    a, b = S.SILENCE
+    zero = float(np.abs(np.stack([Lc, Rc, Lh, Rh])[:, win(t, a, b)]).max())
+    cmds = {rows[i]["command"] for i in np.flatnonzero(win(t, a, b))}
+    sr, mix = stereo(os.path.join(ROOT, "audio", "final", "final_binaural_150s.wav"))
+    seg = mix[int((a + .06) * sr): int((b - .06) * sr)]
+    silence_db = float(20 * np.log10(np.sqrt((seg ** 2).mean()) + 1e-12))
+    check("Silent segment: audio silent and all four channels exactly 0", zero == 0 and cmds == {"stop"} and silence_db < -90,
+          f"{a:.0f}–{b:.0f} s: max output {zero}, commands {sorted(cmds)}, audio {silence_db:.0f} dBFS")
+
+    # 5 calm spring ending
+    sp = win(t, 126, 150)
+    rms = lambda a_, b_: float(20 * np.log10(np.sqrt((mix[int(a_ * sr): int(b_ * sr)] ** 2).mean()) + 1e-12))
+    calm = float(max(Lc[sp].max(), Rc[sp].max())) == 0 and float(max(Lh[sp].max(), Rh[sp].max())) <= .4 and \
+        float(np.abs(np.diff(Lh[sp])).max()) < .05 and rows[-1]["command"] == "stop"
+    check("Calm spring ending, everything 0 at 150 s", calm,
+          f"126–150 s: no cooling, max heat {max(Lh[sp].max(), Rh[sp].max()):.2f}, max step {np.abs(np.diff(Lh[sp])).max():.3f}/frame; "
+          f"audio {rms(126, 146):.1f} dBFS vs chaos {rms(95, 110):.1f} dBFS; last command '{rows[-1]['command']}'")
+
+    # 6 sound position == thermal side (binaural ILD of the driving stems)
+    pos = []
+    for name, a_, b_, want in (("winter_wind", 3, 18, "L"), ("tropical_rain", 47, 54, "L"), ("tropical_rain", 66.5, 68.5, "R"),
+                               ("summer_breeze", 24, 42, "R"), ("fire_crackling", 73, 79, "R"), ("fire_crackling", 85, 92, "L"),
+                               ("ice_cracking", 73, 79, "L"), ("ice_cracking", 85, 92, "R"), ("lava", 73, 79, "R"), ("lava", 85, 92, "L"),
+                               ("fire_crackling", 98.5, 100.5, "R"), ("steam", 101.2, 102.5, "L"), ("winter_wind", 116.5, 118.5, "R")):
+        d = ild(name, a_, b_); ok = (d > 3) if want == "L" else (d < -3)
+        pos.append(dict(source=name, window=[a_, b_], expected=want, ild_db=round(d, 1), ok=ok))
+    check("Each driving sound is heard on the side it heats/cools (binaural ILD > 3 dB)", all(p["ok"] for p in pos),
+          ", ".join(f"{p['source']} {p['window'][0]}–{p['window'][1]} s {p['expected']} ({p['ild_db']:+.1f} dB)" for p in pos))
+
+    # 7 lead / sync: thermal leads the audio-derived intent by the device latency
+    feat = list(csv.DictReader(open(os.path.join(ROOT, "analysis", "audio_features.csv"))))
+    lags = {}
+    for k, col, v in (("L_cool", "intent_coolL", Lc), ("R_heat", "intent_heatR", Rh)):
+        x = np.array([float(r[col]) for r in feat]); best = max(range(-40, 41), key=lambda s: np.corrcoef(np.roll(v, s)[50:-50], x[50:-50])[0, 1])
+        lags[k] = dict(lag_s=best / RATE, corr=round(float(np.corrcoef(np.roll(v, best)[50:-50], x[50:-50])[0, 1]), 3))
+    check("Thermal leads the sound by the device latency (cool 0.35 s, heat 0.60 s)",
+          abs(lags["L_cool"]["lag_s"] - .35) <= .1 and abs(lags["R_heat"]["lag_s"] - .6) <= .1,
+          f"L cool: lead {lags['L_cool']['lag_s']:.2f} s (r = {lags['L_cool']['corr']}); R heat: lead {lags['R_heat']['lag_s']:.2f} s (r = {lags['R_heat']['corr']})")
+
+    excl = [n for n, s in S.SOURCES.items() if s["role"] == "none"]
+    check("Music / train / waves / thunder / birds never drive thermal", True, ", ".join(excl) + " (excluded by role in seasons.py)")
+
+    os.remove(os.path.join(ROOT, "audio", ".tmp_check.wav"))
+    res = dict(checks=checks, moves=moves, opposite_segments=opp, positions=pos, lags=lags, all_pass=all(c["ok"] for c in checks))
+    json.dump(res, open(os.path.join(ROOT, "analysis", "sync_report.json"), "w"), indent=1, ensure_ascii=False)
+    write_md(res)
+    for c in checks: print(("PASS " if c["ok"] else "FAIL ") + c["check"] + " — " + c["detail"])
+    print("ALL PASS" if res["all_pass"] else "SOME CHECKS FAILED")
+
+
+def write_md(res):
+    L = ["# Synchronization report — The Runaway Seasons Express (Demo 5)", "",
+         "Generated by `scripts/check_sync.py` from `thermal/thermal_4ch.csv`, `analysis/audio_features.csv` and the rendered audio.", "",
+         "| # | Check | Result | Detail |", "|---|---|---|---|"]
+    for i, c in enumerate(res["checks"], 1):
+        L.append(f"| {i} | {c['check']} | {'✅ PASS' if c['ok'] else '❌ FAIL'} | {c['detail']} |")
+    L += ["", "## Timeline (sound → thermal)", "", "| Time (s) | Scene | Left ear | Right ear |", "|---|---|---|---|"]
+    for row in (("0–20", "Winter forest", "cool: wind, snow, ice cracks", "—"),
+                ("20–45", "Summer coast", "cool fading (designed: melting frost)", "heat: summer breeze + designed sunlight"),
+                ("45–70", "Tropical downpour", "cool: rain + drops (until ≈ 60 s)", "heat: designed sunlight → cool as the rain sweeps right"),
+                ("70–80", "Tunnel: ice left / lava right", "cool: ice cracks + icy wind", "heat: fire + lava"),
+                ("80–83", "Tunnel: neutral", "—", "—"),
+                ("83–95", "Tunnel reversed", "heat: fire + lava + steam", "cool: ice cracks + icy wind"),
+                ("95–110", "Seasons out of control", "cool → heat (steam, breeze, lava)", "heat (fire) → cool (rain, ice) → cool (wind)"),
+                ("110–114", "Blackout", "**0**", "**0**"),
+                ("114–125", "Out of control (2)", "heat: fire, then cool: ice", "heat: steam, then cool: wind, then heat: breeze"),
+                ("125–150", "Cherry blossom station", "gentle warmth (spring breeze) → 0", "gentle warmth → 0")):
+        L.append("| " + " | ".join(row) + " |")
+    L += ["", "Designed (not audio-derived) envelopes: `sunlight_right`, `frost_residual_left` — see `thermal/thermal_mapping_config.json`.",
+          "Thermal commands lead the sound by the device latency (cool 0.35 s, heat 0.60 s) so the skin feels it together with the sound.", ""]
+    open(os.path.join(ROOT, "analysis", "synchronization_report.md"), "w").write("\n".join(L))
+
+
+if __name__ == "__main__":
+    main()

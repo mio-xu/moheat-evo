@@ -6,6 +6,8 @@
 
 生成好的图按下表的文件夹放进 `Demo_SeasonsExpress/assets/` 下，然后告诉我。
 
+> **2026-11-07 更新**：ChatGPT 没有额度，所有素材已经由代码生成（`scripts/art_train.py`、`scripts/art_scenery.py`，说明见 `storyboard/visual_prompts.md`）。下面的命令保留作备用：以后用 ChatGPT 生成同名文件可以直接替换。
+
 ---
 
 ## 画风（最重要）：必须和 Demo 1–3 是同一个动画世界

@@ -1,0 +1,470 @@
+{
+ "description": "Demo 5 thermal mapping. Strength = RMS of each ambience source's own dry stem; L/R = the source's azimuth in the binaural mix.",
+ "controller": {
+  "RATE": 20,
+  "WIN": 0.05,
+  "GATE_BELOW_REF": 32,
+  "REF_PCT": 90,
+  "CURVE": 1.6,
+  "HOLD": 0.2,
+  "ATTACK": 0.12,
+  "RELEASE": 0.8,
+  "PROX_REF": 0.3,
+  "PROX_EXP": 1.0,
+  "PROX_MIN": 0.08,
+  "COOL_LEAD": 0.35,
+  "HEAT_LEAD": 0.6,
+  "CANCEL": 0.5,
+  "HYSTERESIS": 0.08,
+  "MIN_DWELL": 0.4,
+  "DEAD_TIME": 0.15,
+  "CAP": 1.0,
+  "DOSE_WIN": 8.0,
+  "DOSE_MAX": 0.85,
+  "OFF_BELOW": 0.03,
+  "COOL_PWM": [
+   35,
+   80
+  ],
+  "HEAT_PWM": [
+   0,
+   200
+  ],
+  "N_SAMPLES": 3000,
+  "SIDE_EXP_FAR": 2.5,
+  "SIDE_EXP_NEAR": 4.0,
+  "SUSTAIN": 0.7,
+  "SAT_K": 1.6,
+  "SILENCE": [
+   110.0,
+   114.0
+  ]
+ },
+ "sources": {
+  "winter_wind": {
+   "role": "cool",
+   "weight": 1.0,
+   "azimuth_keyframes": [
+    [
+     0,
+     -72.0
+    ],
+    [
+     81.6,
+     -72.0
+    ],
+    [
+     82.3,
+     72.0
+    ],
+    [
+     94.1,
+     72.0
+    ],
+    [
+     94.5,
+     -72.0
+    ],
+    [
+     100,
+     -72.0
+    ],
+    [
+     108,
+     72.0
+    ]
+   ],
+   "distance_m": 1.3,
+   "drives_thermal": true,
+   "reference_dbfs": -27.1
+  },
+  "snow": {
+   "role": "cool",
+   "weight": 0.6,
+   "azimuth_keyframes": [
+    [
+     0,
+     -62
+    ]
+   ],
+   "distance_m": 1.1,
+   "drives_thermal": true,
+   "reference_dbfs": -36.7
+  },
+  "ice_cracking": {
+   "role": "cool",
+   "weight": 0.9,
+   "azimuth_keyframes": [
+    [
+     0,
+     -76
+    ],
+    [
+     81.6,
+     -76
+    ],
+    [
+     82.3,
+     76
+    ],
+    [
+     119.5,
+     76
+    ],
+    [
+     119.8,
+     -76
+    ]
+   ],
+   "distance_m": 0.9,
+   "drives_thermal": true,
+   "reference_dbfs": -32.5
+  },
+  "summer_breeze": {
+   "role": "heat",
+   "weight": 0.8,
+   "azimuth_keyframes": [
+    [
+     0,
+     72.0
+    ],
+    [
+     60,
+     72.0
+    ],
+    [
+     100,
+     -72.0
+    ],
+    [
+     118,
+     -72.0
+    ],
+    [
+     118.5,
+     0
+    ]
+   ],
+   "distance_m": 1.3,
+   "drives_thermal": true,
+   "reference_dbfs": -27.3
+  },
+  "ocean_waves": {
+   "role": "none",
+   "weight": 0,
+   "azimuth_keyframes": [
+    [
+     0,
+     80
+    ]
+   ],
+   "distance_m": 4.0,
+   "drives_thermal": false,
+   "reference_dbfs": -27.9
+  },
+  "tropical_rain": {
+   "role": "cool",
+   "weight": 1.0,
+   "azimuth_keyframes": [
+    [
+     0,
+     -76
+    ],
+    [
+     55,
+     -76
+    ],
+    [
+     66,
+     76
+    ]
+   ],
+   "distance_m": 1.2,
+   "drives_thermal": true,
+   "reference_dbfs": -29.9
+  },
+  "water_drops": {
+   "role": "cool",
+   "weight": 0.5,
+   "azimuth_keyframes": [
+    [
+     0,
+     -70
+    ],
+    [
+     55,
+     -70
+    ],
+    [
+     66,
+     70
+    ]
+   ],
+   "distance_m": 0.6,
+   "drives_thermal": true,
+   "reference_dbfs": -35.4
+  },
+  "thunder": {
+   "role": "none",
+   "weight": 0,
+   "azimuth_keyframes": [
+    [
+     0,
+     -40
+    ],
+    [
+     56,
+     -40
+    ],
+    [
+     57,
+     35
+    ],
+    [
+     64,
+     35
+    ],
+    [
+     65,
+     55
+    ]
+   ],
+   "distance_m": 6.0,
+   "drives_thermal": false,
+   "reference_dbfs": -16.5
+  },
+  "fire_crackling": {
+   "role": "heat",
+   "weight": 1.0,
+   "azimuth_keyframes": [
+    [
+     0,
+     72.0
+    ],
+    [
+     81.6,
+     72.0
+    ],
+    [
+     82.3,
+     -72.0
+    ],
+    [
+     95,
+     -72.0
+    ],
+    [
+     96,
+     72.0
+    ],
+    [
+     110,
+     72.0
+    ],
+    [
+     114.5,
+     -72.0
+    ]
+   ],
+   "distance_m": 1.0,
+   "drives_thermal": true,
+   "reference_dbfs": -27.9
+  },
+  "lava": {
+   "role": "heat",
+   "weight": 0.9,
+   "azimuth_keyframes": [
+    [
+     0,
+     78
+    ],
+    [
+     81.6,
+     78
+    ],
+    [
+     82.3,
+     -78
+    ]
+   ],
+   "distance_m": 1.6,
+   "drives_thermal": true,
+   "reference_dbfs": -30.0
+  },
+  "steam": {
+   "role": "heat",
+   "weight": 0.8,
+   "azimuth_keyframes": [
+    [
+     0,
+     -66
+    ],
+    [
+     110,
+     -66
+    ],
+    [
+     112,
+     66
+    ]
+   ],
+   "distance_m": 0.9,
+   "drives_thermal": true,
+   "reference_dbfs": -30.2
+  },
+  "spring_breeze": {
+   "role": "heat",
+   "weight": 0.22,
+   "azimuth_keyframes": [
+    [
+     0,
+     0
+    ]
+   ],
+   "distance_m": 1.5,
+   "drives_thermal": true,
+   "reference_dbfs": -30.5
+  },
+  "birds": {
+   "role": "none",
+   "weight": 0,
+   "azimuth_keyframes": [
+    [
+     0,
+     65
+    ],
+    [
+     133,
+     65
+    ],
+    [
+     135,
+     -60
+    ],
+    [
+     140,
+     -60
+    ],
+    [
+     142,
+     30
+    ]
+   ],
+   "distance_m": 5.0,
+   "drives_thermal": false,
+   "reference_dbfs": -28.6
+  },
+  "train_wheels": {
+   "role": "none",
+   "weight": 0,
+   "azimuth_keyframes": null,
+   "distance_m": 1.5,
+   "drives_thermal": false,
+   "reference_dbfs": -33.9
+  },
+  "train_interior": {
+   "role": "none",
+   "weight": 0,
+   "azimuth_keyframes": null,
+   "distance_m": 2.0,
+   "drives_thermal": false,
+   "reference_dbfs": -33.0
+  },
+  "background_music": {
+   "role": "none",
+   "weight": 0,
+   "azimuth_keyframes": null,
+   "distance_m": null,
+   "drives_thermal": false,
+   "reference_dbfs": -32.5
+  }
+ },
+ "designed_envelopes": {
+  "sunlight_right": {
+   "role": "heat",
+   "side": "R",
+   "keyframes": [
+    [
+     22,
+     0
+    ],
+    [
+     26,
+     0.7
+    ],
+    [
+     44,
+     0.75
+    ],
+    [
+     50,
+     0.62
+    ],
+    [
+     57,
+     0.35
+    ],
+    [
+     60.5,
+     0
+    ]
+   ],
+   "audio_derived": false,
+   "why": "sunshine through the right window (summer coast → sunny half of the downpour); light has no sound"
+  },
+  "frost_residual_left": {
+   "role": "cool",
+   "side": "L",
+   "keyframes": [
+    [
+     19,
+     0
+    ],
+    [
+     21.5,
+     0.45
+    ],
+    [
+     27,
+     0.3
+    ],
+    [
+     31,
+     0
+    ]
+   ],
+   "audio_derived": false,
+   "why": "left window still frosted after winter — melting frost is silent"
+  }
+ },
+ "excluded_from_thermal": [
+  "ocean_waves",
+  "thunder",
+  "birds",
+  "train_wheels",
+  "train_interior",
+  "background_music"
+ ],
+ "silence_zero_window_s": [
+  110.0,
+  114.0
+ ],
+ "csv": {
+  "rate_hz": 20,
+  "rows": 3000,
+  "first": 0.0,
+  "last": 149.95,
+  "columns": [
+   "time_s",
+   "L_cool",
+   "R_cool",
+   "L_heat",
+   "R_heat",
+   "L_cool_pwm",
+   "R_cool_pwm",
+   "L_heat_pwm",
+   "R_heat_pwm",
+   "command"
+  ]
+ }
+}
