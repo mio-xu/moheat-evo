@@ -47,6 +47,9 @@ def lines():
 def _key(*a): return hashlib.md5(json.dumps(a, ensure_ascii=False, sort_keys=True, default=str).encode()).hexdigest()[:12]
 
 
+_last_path = [None]
+
+
 def perform(c, take=0):
     """→ dry mono float voice for one line (persona post-processing applied, peak-normalised later by the mixer)."""
     who, p = c["who"], PERSONA[c["who"]]
@@ -70,6 +73,7 @@ def perform(c, take=0):
         if len(idx): x = x[max(0, idx[0] - 960): idx[-1] + 2400]
         os.makedirs(CACHE, exist_ok=True)
         wavfile.write(path, SR, (np.clip(x / (np.max(np.abs(x)) + 1e-9) * .9, -1, 1) * 32767).astype(np.int16))
+    _last_path[0] = path
     return wavfile.read(path)[1].astype(np.float64) / 32768
 
 
@@ -80,7 +84,9 @@ def main():
         durs = []
         for k in range(len(TAKE_VARIANTS)):
             x = perform(c, k); durs.append(round(len(x) / SR, 2))
-            wavfile.write(os.path.join(TAKES_DIR, f"{i:02d}_{c['who']}_{c['emo']}_t{k}.wav"), SR, (x * 32767).astype(np.int16))
+            dst = os.path.join(TAKES_DIR, f"{i:02d}_{c['who']}_{c['emo']}_t{k}.wav")     # readable name → symlink to the cached take (no copy)
+            if os.path.lexists(dst): os.remove(dst)
+            os.symlink(os.path.relpath(_last_path[0], TAKES_DIR), dst)
         nxt = next((d["t"] for d in BQ.CUES[i + 1:] if d["kind"] in ("say", "whisper", "laugh") and d["who"] == c["who"]), BQ.DURATION)
         use = TAKE.get(i, 0)
         flag = "  ! overlaps his next line" if c["t"] + durs[use] > nxt - .15 else ""

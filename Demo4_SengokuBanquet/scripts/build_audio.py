@@ -3,7 +3,7 @@ cold ambience (ice bucket, night wind, rain), foley, koto, night insects → HRT
 Reuses Demo 1's helpers + binaural renderer (ASMR Demo/tools/build_audio.py, loaded by path).
 
   python3 scripts/build_audio.py
-Outputs: audio/stems/{N_voice,I_voice,F_warm,C_cool,foley,music,insects}.wav (dry), *_binaural.wav,
+Outputs: audio/stems/{N_voice,I_voice,F_warm,C_cool}.wav (dry, read by thermal/export/QA),
          audio/final/mix_48k.wav ; media/mix.m4a ; audio/voice_timing.json
 """
 import json, os, subprocess, sys
@@ -188,7 +188,8 @@ def main():
     t = np.arange(N) / SR
     # insects: present in calm scenes, gone in wind/rain, back at the end
     ins_env = np.interp(t, [0, 3, 80, 83, 129, 135, 148, 150], [0, 1, 1, 0, 0, .8, .8, 0])
-    for name, x in [("N_voice", VO["N"]), ("I_voice", VO["I"]), ("F_warm", warm), ("C_cool", cool), ("foley", foley), ("rain_bed", bed)]:
+    # only the dry stems the thermal controller / export / QA read (binaural intermediates are not kept: −300 MB)
+    for name, x in [("N_voice", VO["N"]), ("I_voice", VO["I"]), ("F_warm", warm), ("C_cool", cool)]:
         B.write_wav(os.path.join(STEMS, name + ".wav"), x)
     print("rendering binaural…", flush=True)
     nb, ib = B.render(VO["N"], who="N"), B.render(VO["I"], who="I")
@@ -199,8 +200,6 @@ def main():
     ins = insects(ins_env) * db(-30)
     room = np.stack([filt(B.sos_lp(300), noise(N)) for _ in range(2)], 1)
     room = room / np.sqrt(np.mean(room ** 2)) * db(-50) * (np.clip(t / 2, 0, 1) * np.clip((BQ.DURATION - t) / 3, 0, 1))[:, None]
-    for name, x in [("N_binaural", nb), ("I_binaural", ib), ("F_binaural", fb), ("C_binaural", cb), ("foley_binaural", ob), ("music_binaural", mb)]:
-        B.write_wav(os.path.join(STEMS, name + ".wav"), x)
     mix = nb + ib + fb * .9 + cb * .85 + ob + rb + mb * .5 + ins + room
     mix = mix / np.max(np.abs(mix)) * db(-1)
     pre = os.path.join(FINAL, "mix_premaster.wav"); B.write_wav(pre, mix)
