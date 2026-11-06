@@ -257,11 +257,8 @@ function charState(who, t) {
            rot: (who === 'N' ? 1 : -1) * near * .05 };
 }
 
-function emit(st, t, dt) {   // breath on the ear during whispers; gold sparkle on big laughs
+function emit(st, t, dt) {   // gold sparkle on big laughs (no breath haze on whispers: it read as a glare on the face)
   if (!st.line || t > st.line.t + st.line.dur) return;
-  const side = st.who === 'N' ? -1 : 1, mx = st.mx ?? st.x, my = st.my ?? 400;
-  if (st.line.kind === 'whisper' && st.d < .35 && Math.random() < dt * 18 * (.3 + st.mouth))
-    spawn({ kind: 'steam', x: mx, y: my, vx: side * (160 + Math.random() * 120), vy: -10 + Math.random() * 30, size: 18, grow: 110, life: 0, max: 1.1, a: .45, seed: Math.random() * 6 });
   if (st.line.kind === 'laugh' && st.line.emo === 'laugh' && Math.random() < dt * 22)
     spawn({ kind: 'gold', x: st.x + (Math.random() - .5) * 400, y: 200 + Math.random() * 300, vx: (Math.random() - .5) * 120, vy: -60 - Math.random() * 80, size: 7 + Math.random() * 7, rot: Math.random() * 3, spin: 3, life: 0, max: 2, a: 1, seed: Math.random() * 6 });
 }
