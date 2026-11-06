@@ -239,7 +239,9 @@ function drawChar(ctx, st) {
   const breath = .008 * Math.sin((st.t / 3.8 + (st.who === 'N' ? 0 : .5)) * Math.PI * 2);
   const laughBob = st.line && st.line.kind === 'laugh' && st.t < st.line.t + st.line.dur ? Math.abs(Math.sin((st.t - st.line.t) * 14)) * 10 : 0;
   const sway = Math.sin(st.t * 1.3 + (st.who === 'N' ? 0 : 2)) * 6 + STORM(st.t) * Math.sin(st.t * 3.1) * 5;
-  for (const [layer, a] of [[fs.prev, 1 - fade], [fs.cur, fade < 1 && fs.prev ? fade : 1]]) {
+  // cross-fade without see-through: the new look fades in ON TOP of a still-opaque old look, then the old one fades out
+  const inA = fs.prev ? clamp(fade * 2, 0, 1) : 1, outA = clamp((1 - fade) * 2, 0, 1);
+  for (const [layer, a] of [[fs.prev, outA], [fs.cur, inA]]) {
     if (!layer || a <= .01 || !ok(layer.img)) continue;
     const L = layout(layer, st), img = IMG[layer.img];
     const lift = st.mouth * 5 + laughBob;
