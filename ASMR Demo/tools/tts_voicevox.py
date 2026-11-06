@@ -14,15 +14,18 @@ from scipy.io import wavfile
 URL = os.environ.get("VOICEVOX_URL", "http://127.0.0.1:50021")
 
 # Character → VOICEVOX speaker, style per expression, prosody.  Change speakers here (see --audition).
+# Both characters use ずんだもん; they are told apart by style, tempo, pitch, intonation, pauses and tone:
+#   Koyuki = introverted & shy (soft, slow, low, flat, hesitant pauses, darker tone)
+#   Homura = lively & cute     (bright, fast, high, bouncy intonation, short pauses, brighter tone)
 CAST = {
-    "K": dict(speaker="ユーレイちゃん", speed=1.0, pitch=0.04, inton=1.3,
-              styles=dict(default="甘々", smile="甘々", happy="甘々", laugh="甘々", shy="甘々",
-                          smug="ノーマル", surprise="ノーマル", pout="ノーマル", determined="ノーマル",
+    "K": dict(speaker="ずんだもん", speed=0.90, pitch=-0.03, inton=0.80, pause=0.60, tone="soft",
+              styles=dict(default="あまあま", smile="あまあま", happy="あまあま", laugh="あまあま", shy="あまあま",
+                          smug="あまあま", surprise="ノーマル", pout="なみだめ", determined="ノーマル",
                           whisper="ささやき", sleepy="ささやき")),
-    "H": dict(speaker="満別花丸", speed=1.05, pitch=0.05, inton=1.45,
-              styles=dict(default="元気", smile="ノーマル", happy="元気", laugh="元気", shy="ぶりっ子",
-                          smug="ぶりっ子", surprise="元気", pout="ぶりっ子", determined="元気",
-                          whisper="ささやき", sleepy="ささやき")),
+    "H": dict(speaker="ずんだもん", speed=1.12, pitch=0.08, inton=1.60, pause=0.25, tone="bright",
+              styles=dict(default="ノーマル", smile="ノーマル", happy="ノーマル", laugh="ノーマル", shy="あまあま",
+                          smug="ツンツン", surprise="ノーマル", pout="ツンツン", determined="ツンツン",
+                          whisper="ヒソヒソ", sleepy="ささやき")),
 }
 WHISPER_STYLES = ("ささやき", "ヒソヒソ")
 PAUSE_MAX = 0.4   # s
@@ -65,7 +68,7 @@ def synth(text, who, kind="say", expr="smile", sr=48000):
     with urllib.request.urlopen(req, timeout=60) as r: query = json.load(r)
     whisper = style in WHISPER_STYLES
     # cap the pauses at "…" / "、" / "。" (some voices hold them ~1.7 s) so lines keep their timing
-    cap = PAUSE_MAX * (1.25 if whisper else 1.0)
+    cap = c.get("pause", PAUSE_MAX) * (1.25 if whisper else 1.0)
     for ph in query["accent_phrases"]:
         if ph.get("pause_mora"): ph["pause_mora"]["vowel_length"] = min(ph["pause_mora"]["vowel_length"], cap)
     query.update(speedScale=c["speed"] * (0.92 if whisper else 1.0), pitchScale=c["pitch"],
@@ -78,11 +81,15 @@ def synth(text, who, kind="say", expr="smile", sr=48000):
     x = x.astype(np.float64) / 32768.0 if x.dtype == np.int16 else x.astype(np.float64)
     if x.ndim > 1: x = x.mean(axis=1)
     if rate != sr: x = signal.resample_poly(x, sr, rate)
+    if c.get("tone") == "soft":      # darker, gentler
+        x = 0.6 * x + 0.4 * signal.sosfilt(signal.butter(2, 5500, "lowpass", fs=sr, output="sos"), x)
+    elif c.get("tone") == "bright":  # presence / sparkle
+        x = x + 0.35 * signal.sosfilt(signal.butter(2, 3000, "highpass", fs=sr, output="sos"), x)
     return x, style
 
 
 def credits():
-    return [f"VOICEVOX:{CAST[w]['speaker']}" for w in "KH"]
+    return list(dict.fromkeys(f"VOICEVOX:{CAST[w]['speaker']}" for w in "KH"))
 
 
 if __name__ == "__main__":

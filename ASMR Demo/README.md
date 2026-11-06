@@ -64,10 +64,11 @@ tools/story.py ── cues (lines, breaths, magic) + position key-frames (azimut
 **B. Voices: VOICEVOX (emotional anime TTS, recommended).**
 1. The engine is already downloaded to `~/VOICEVOX-engine/engine`. Double-click `start_voicevox.command`, or run `cd ~/VOICEVOX-engine/engine && ./run`. Leave it running.
 2. `./build_all.sh`. The build detects the engine and regenerates every line with a style per emotion:
-   - Koyuki = ユーレイちゃん (甘々 / **ささやき**)
-   - Homura = 満別花丸 (元気 / ぶりっ子 / **ささやき**)
+   - Both characters use ずんだもん, told apart by style and delivery:
+   - Koyuki (shy): あまあま / なみだめ / **ささやき**, slow, lower pitch, flat intonation, longer pauses, softer tone
+   - Homura (lively): ノーマル / ツンツン / **ヒソヒソ**, fast, higher pitch, bouncy intonation, short pauses, brighter tone
 3. To change voices, edit `CAST` in `tools/tts_voicevox.py`. `python3 tools/tts_voicevox.py --audition` writes comparison clips to `output/audition/`.
-4. Credit required by the voice terms: the demo shows `VOICEVOX:ユーレイちゃん / VOICEVOX:満別花丸` automatically. Keep it in the film credits too.
+4. Credit required by the voice terms: the demo shows `VOICEVOX:ずんだもん` automatically. Keep it in the film credits too.
 
 Without the engine running, the build falls back to macOS Kyoko (draft). For the final release, voice actors can still replace lines: put the takes at the cue times in `tools/story.py` and rebuild.
 
