@@ -9,7 +9,7 @@ from demo1 import load
 E1 = load("export")                       # Demo 1: ts(), mouth()  (envelope from a stem)
 OUT, MEDIA, STEMS = os.path.join(ROOT, "output"), os.path.join(ROOT, "media"), os.path.join(ROOT, "output", "stems")
 FPS = 30
-NAME = {"ja": "綾音", "zh": "绫音", "en": "Ayane"}
+NAME = {"ja": "綾音", "en": "Ayane"}   # subtitles: Japanese + English only
 
 
 def main():
@@ -18,7 +18,7 @@ def main():
     for c, tm in zip(FM.CUES, timing):
         if not c.get("ja"): continue
         items.append(dict(t0=c["t"], t1=c["t"] + max(tm["dur"], .9) + .45, who="A", ja=c["ja"], zh=c["zh"], en=c["en"], kind=c["kind"]))
-    for lang in ("ja", "zh", "en"):
+    for lang in ("ja", "en"):
         vtt, srt = ["WEBVTT", ""], []
         for i, it in enumerate(items, 1):
             vtt += [f"{E1.ts(it['t0'])} --> {E1.ts(it['t1'])}", f"<v Ayane>{NAME[lang]}：{it[lang]}", ""]
@@ -46,7 +46,7 @@ def main():
         json.dump(dict(anim=anim, thermalCsv=open(os.path.join(MEDIA, "thermal.csv")).read(), art=art, artFaces=faces),
                   f, separators=(",", ":"), ensure_ascii=False)
         f.write(";\n")
-    print(f"subtitles: {len(items)} lines (ja/zh/en) | art {len(art)} | data.js {os.path.getsize(os.path.join(MEDIA, 'data.js')) // 1024} KB")
+    print(f"subtitles: {len(items)} lines (ja/en) | art {len(art)} | data.js {os.path.getsize(os.path.join(MEDIA, 'data.js')) // 1024} KB")
 
 
 if __name__ == "__main__":

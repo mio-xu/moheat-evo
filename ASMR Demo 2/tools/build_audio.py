@@ -1,4 +1,4 @@
-"""Demo 2 audio: voice (VOICEVOX 満別花丸), sung melody, warm breaths (HEAT stem), cooling SFX (COOL stem),
+"""Demo 2 audio: voice (VOICEVOX ずんだもん), sung melody, warm breaths (HEAT stem), cooling SFX (COOL stem),
 music & foley (no thermal), binaural render, 48 kHz master.  Reuses Demo 1's synthesis / HRTF / mastering code.
 
   python3 tools/build_audio.py

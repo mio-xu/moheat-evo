@@ -15,9 +15,9 @@ SR = 48000
 CHARACTERS = {   # Kyoko fallback only (VOICEVOX is the real voice)
     "A": {"name_ja": "綾音", "name_en": "Ayane", "name_zh": "绫音", "voice": "Kyoko", "rate": 175, "pitch": 1.12, "whisper_rate": 155},
 }
-VOICE = dict(speaker="満別花丸", speed=1.04, pitch=0.03, inton=1.35, pause=0.32, tone="bright",
-             styles=dict(default="元気", smile="ノーマル", happy="元気", laugh="元気", shy="ぶりっ子", playful="ぶりっ子",
-                         smug="ぶりっ子", curious="ノーマル", surprise="元気", determined="元気",
+VOICE = dict(speaker="ずんだもん", speed=1.0, pitch=0.0, inton=1.0, pause=0.32, tone=None,   # her original voice: no pitch / intonation / EQ changes
+             styles=dict(default="ノーマル", smile="ノーマル", happy="ノーマル", laugh="ノーマル", shy="ノーマル", playful="ノーマル",
+                         smug="ノーマル", curious="ノーマル", surprise="ノーマル", determined="ノーマル",
                          whisper="ささやき", sleepy="ささやき", sing="ノーマル"))
 
 SCENES = [  # (t, no, ja, zh, en)
@@ -58,7 +58,7 @@ CUES = [
       tts="ねえねえ…キミにだけ、ひみつおしえてあげる。"),
     L(31.0, "whisper", "じつはね…今日のステージ、すっごく緊張してたの。", "其实呀…今天的舞台，我超紧张的。", "Actually… I was super nervous about today's stage.", "whisper",
       tts="じつはね…きょうのステージ、すっごくきんちょうしてたの。"),
-    L(35.6, "whisper", "でも、キミの顔を見たら…ぜんぶ忘れちゃった。", "可是看到你的脸…就全忘掉了。", "But when I saw your face… I forgot all about it.", "shy",
+    L(35.9, "whisper", "でも、キミの顔を見たら…ぜんぶ忘れちゃった。", "可是看到你的脸…就全忘掉了。", "But when I saw your face… I forgot all about it.", "shy",
       tts="でも、キミのかおをみたら…ぜんぶわすれちゃった。"),
     L(39.8, "whisper", "ふふっ。", "呵呵。", "Hehe.", "happy"),
     L(42.4, "say", "だから今日は、キミのためだけに歌っちゃうね！", "所以今天，我只为你一个人唱歌！", "So today, I'll sing just for you!", "happy",
@@ -81,7 +81,7 @@ CUES = [
       tts="はい、どうぞ。…カランって、いいおとでしょ？", pose="drink"),
 
     # ── 4  1:15–1:45  Left or right? (the main thermal showcase) ──────────────────
-    L(76.1, "say", "じゃあ次は…どっちから話しかけるか、当てるゲーム！", "接下来…猜猜我从哪边跟你说话的游戏！", "Next… a game! Guess which side I'll talk from!", "happy",
+    L(76.7, "say", "じゃあ次は…どっちから話しかけるか、当てるゲーム！", "接下来…猜猜我从哪边跟你说话的游戏！", "Next… a game! Guess which side I'll talk from!", "happy",
       tts="じゃあつぎは…どっちからはなしかけるか、あてるゲーム！", pose="wave"),
     L(79.6, "steps", dur=1.4),
     L(81.2, "whisper", "…右でした♪", "…是右边哦♪", "…Right side ♪", "playful", tts="…みぎでした。"),

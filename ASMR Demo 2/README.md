@@ -5,7 +5,7 @@ A 150 s first-person binaural ASMR fan meeting with the idol 星乃綾音 Hoshin
 ## Run it
 - **Double-click `start_demo.command`**, or open `index.html`, or visit `https://moheat-evo.github.io/ASMR%20Demo%202/`.
 - Headphones on → **Start**. For thermal feedback: **+ Add** → MoHeat Evo port → **Connect** (desktop Chrome/Edge).
-- Keys: `Space` play/pause · `←/→` ±5 s · `Esc` emergency stop. Subtitles: 日本語+中文 (default), 日本語+English, ja / zh / en / off.
+- Keys: `Space` play/pause · `←/→` ±5 s · `Esc` emergency stop. Subtitles: 日本語 + English (default), ja / en / off (no Chinese).
 - Without a browser: `python3 "../ASMR Demo/tools/play_thermal_csv.py" --csv media/thermal.csv --audio output/mix_48k.wav --port /dev/cu.…`
 
 ## Thermal design
@@ -44,7 +44,7 @@ New in Demo 2:
 ```
 index.html · demo.js · demo.css · start_demo.command · build_all.sh
 art/        A_Character.png (design sheet), concept_board.jpg, chatgpt/*.png (35 ChatGPT assets + prompts)
-media/      mix.m4a, thermal.csv, subs_{ja,zh,en}.vtt, data.js, cover.jpg, art/*.webp
+media/      mix.m4a, thermal.csv, subs_{ja,en}.vtt, data.js, cover.jpg, art/*.webp
 tools/      fanmeeting.py (timeline) · build_audio.py · thermal.py · export.py · prepare_art.py · render_mp4.py · docs.py · demo1.py
 production/ 01 ChatGPT asset prompts · 02 script (ja/zh/en) · 03 storyboard
 output/     mix_48k.wav · stems/ (heat_voice, heat_breath, cool_fan, cool_ice, cool_breath, cool_magic, *_dry, *_binaural, music, foley, ambience)
@@ -55,10 +55,10 @@ output/     mix_48k.wav · stems/ (heat_voice, heat_breath, cool_fan, cool_ice, 
 
 | Item | Where | Status |
 |---|---|---|
-| 150 s MP4 | `output/final_1080p.mp4` | Done: ChatGPT art, blink/lip sync, ja+zh subs burned in, cover title card |
+| 150 s MP4 | `output/final_1080p.mp4` | Done: ChatGPT art, blink/lip sync, ja+en subs burned in, cover title card |
 | Binaural ASMR WAV, 48 kHz | `output/mix_48k.wav` | Done (−17 LUFS) |
 | Separate voice / breath / cooling SFX stems | `output/stems/` | Done |
-| Subtitles ja + zh (+ en) | `media/subs_*.vtt`, `output/subs_*.srt` | Done |
+| Subtitles ja + en | `media/subs_{ja,en}.vtt`, `output/subs_{ja,en}.srt` | Done |
 | Script and storyboard | `production/02_script.md`, `production/03_storyboard.md` | Done |
 | Character sheet and reference art | `art/` | Done |
 | 4-channel thermal CSV | `media/thermal.csv` | Done |
@@ -69,7 +69,8 @@ output/     mix_48k.wav · stems/ (heat_voice, heat_breath, cool_fan, cool_ice, 
 - Start VOICEVOX (`../ASMR Demo/start_voicevox.command`), then `./build_all.sh` (≈1 min).
 - MP4: `python3 tools/render_mp4.py` (≈5 min).
 - After new art: `python3 tools/prepare_art.py && python3 tools/export.py`.
-- Credit required by the voice terms: **VOICEVOX:満別花丸**. The demo shows it; keep it in any film credits.
+- Voice: VOICEVOX ずんだもん, her original voice (ノーマル; whispers in her own ささやき style). No pitch, intonation or EQ changes.
+- Credit required by the voice terms: **VOICEVOX:ずんだもん**. The demo shows it; keep it in any film credits.
 
 ## Manual
 - **Hardware calibration**: set the comfortable PWM range on `../test.html`, then measure the device lead and set `COOL_LEAD` / `HEAT_LEAD` in `tools/thermal.py`.

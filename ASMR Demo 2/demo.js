@@ -492,9 +492,9 @@ const subsEl = $('subs'), sceneEl = $('sceneTitle');
 let subKey = '', sceneIdx = -1, sceneTimer = 0;
 const NAME = { ja: '綾音', zh: '绫音', en: 'Ayane' };
 const esc = (s) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
-const SUB_LANGS = { jazh: ['ja', 'zh'], jaen: ['ja', 'en'], ja: ['ja'], zh: ['zh'], en: ['en'], off: [] };
+const SUB_LANGS = { jaen: ['ja', 'en'], ja: ['ja'], en: ['en'], off: [] };   // Japanese + English only
 function updateSubs(t) {
-  const mode = $('subMode').value, langs = SUB_LANGS[mode] || ['ja', 'zh'];
+  const mode = $('subMode').value, langs = SUB_LANGS[mode] || ['ja', 'en'];
   const act = langs.length ? A.subs.filter((s) => t >= s.t0 && t < s.t1).slice(-2) : [];
   const key = mode + act.map((s) => s.t0).join('|');
   if (key === subKey) return; subKey = key;
@@ -507,7 +507,7 @@ function updateScene(t) {
   let i = -1; A.scenes.forEach((s, k) => { if (t >= s.t) i = k; });
   if (i !== sceneIdx) {
     sceneIdx = i; const s = A.scenes[i];
-    sceneEl.innerHTML = `${s.n}　${s.ja}<small>${s.zh} · ${s.en}</small>`;
+    sceneEl.innerHTML = `${s.n}　${s.ja}<small>${s.en}</small>`;
     sceneEl.classList.add('show'); clearTimeout(sceneTimer);
     sceneTimer = setTimeout(() => sceneEl.classList.remove('show'), 3200);
   }
@@ -548,7 +548,7 @@ $('intensity').value = Math.round(intensity * 100); $('intensityVal').textConten
 $('offset').value = offsetMs; $('offsetVal').textContent = `${offsetMs >= 0 ? '+' : ''}${offsetMs} ms`;
 bindRange('intensity', 'intensityVal', (v) => `${v}%`, (v) => { intensity = v / 100; store.set('asmr.intensity', v); });
 bindRange('offset', 'offsetVal', (v) => `${v >= 0 ? '+' : ''}${v} ms`, (v) => { offsetMs = v; store.set('asmr.offset', v); });
-$('subMode').value = store.get('asmr2.subs', 'jazh');
+$('subMode').value = SUB_LANGS[store.get('asmr2.subs', 'jaen')] ? store.get('asmr2.subs', 'jaen') : 'jaen';
 $('subMode').addEventListener('change', () => { store.set('asmr2.subs', $('subMode').value); subKey = ''; });
 const meterEls = Object.fromEntries(['Lc', 'Lh', 'Rc', 'Rh'].map((k) => [k, [$(`m${k}`), $(`v${k}`)]]));
 function updateOutput(th, playing) {
@@ -579,7 +579,7 @@ function loop() {
   requestAnimationFrame(loop);
 }
 
-// ---------------------------------------------------------------- offline render (tools/render_mp4.py): ja + zh subtitles burned in
+// ---------------------------------------------------------------- offline render (tools/render_mp4.py): ja + en subtitles burned in
 const RENDER = new URLSearchParams(location.search).has('render');
 function drawSubsCanvas(t) {
   const act = A.subs.filter((s) => t >= s.t0 && t < s.t1).slice(-2);
@@ -588,13 +588,13 @@ function drawSubsCanvas(t) {
     const sing = s.kind === 'sing' ? '♪ ' : '';
     ctx.font = '700 46px "Zen Maru Gothic", "Noto Sans JP", sans-serif';
     const nm = NAME.ja + '　', ja = nm + sing + s.ja, wj = ctx.measureText(ja).width, wn = ctx.measureText(nm).width;
-    ctx.font = '500 32px "Noto Sans SC", "PingFang SC", "Noto Sans JP", sans-serif';
-    const zh = sing + s.zh, wz = ctx.measureText(zh).width, bw = Math.max(wj, wz) + 60;
+    ctx.font = '500 30px Inter, sans-serif';
+    const en = sing + s.en, wz = ctx.measureText(en).width, bw = Math.max(wj, wz) + 60;
     ctx.fillStyle = 'rgba(20,6,30,.6)'; ctx.beginPath(); ctx.roundRect(W / 2 - bw / 2, y - 64, bw, 110, 16); ctx.fill();
     ctx.textAlign = 'left'; const x0 = W / 2 - wj / 2;
     ctx.font = '700 46px "Zen Maru Gothic", "Noto Sans JP", sans-serif';
     ctx.fillStyle = '#ff9fd0'; ctx.fillText(nm, x0, y - 12); ctx.fillStyle = '#fff'; ctx.fillText(sing + s.ja, x0 + wn, y - 12);
-    ctx.textAlign = 'center'; ctx.font = '500 32px "Noto Sans SC", "PingFang SC", "Noto Sans JP", sans-serif'; ctx.fillStyle = '#f2e6f7'; ctx.fillText(zh, W / 2, y + 32);
+    ctx.textAlign = 'center'; ctx.font = '500 30px Inter, sans-serif'; ctx.fillStyle = '#f2e6f7'; ctx.fillText(en, W / 2, y + 32);
     y += 118;
   }
 }
@@ -614,7 +614,7 @@ async function renderAll() {
       ctx.globalAlpha = clamp(Math.min(sAge / .5, (3.4 - sAge) / .6), 0, 1);
       ctx.fillStyle = 'rgba(20,6,30,.5)'; ctx.fillRect(70, 60, 620, 96); ctx.fillStyle = '#ff8cc6'; ctx.fillRect(70, 60, 5, 96);
       ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; ctx.font = '700 38px "Zen Maru Gothic", sans-serif'; ctx.fillText(`${st.n}　${st.ja}`, 96, 106);
-      ctx.fillStyle = '#e6d6ef'; ctx.font = '500 24px "Noto Sans SC", "PingFang SC", sans-serif'; ctx.fillText(`${st.zh} · ${st.en}`, 96, 140); ctx.globalAlpha = 1;
+      ctx.fillStyle = '#e6d6ef'; ctx.font = '500 24px Inter, sans-serif'; ctx.fillText(st.en, 96, 140); ctx.globalAlpha = 1;
     }
     drawSubsCanvas(t);
     const blob = await new Promise((r) => cv.toBlob(r, 'image/jpeg', .92));
