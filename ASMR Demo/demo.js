@@ -592,6 +592,135 @@ function drawParts(ctx) {
   ctx.restore();
 }
 
+// ---------------------------------------------------------------- original-art figures (sprites from Character.jpg)
+// Each character is drawn from the approved design sheet: a portrait for close-ups and the sheet's action poses for
+// medium/far shots, with Live2D-style motion (breathing, talk bounce, strip-mesh sway of hair/sleeves, lean, mirroring).
+// Drop-in upgrade: files listed in DEMO_DATA.art (the ASMR Demo/art/ folder, see production/04) take priority, incl.
+// blink / mouth / expression frames for the bust.
+const SPRITES = {   // key: [file, facing ('R' | 'L' | 'F'), faceCenter (bust only), faceWidth (bust only)]
+  K: { bust: ['K_portrait', 'R', [690, 580], 460], front: ['K_front', 'F'], near: ['K_near', 'R'], side: ['K_side', 'R'],
+       run: ['K_run', 'R'], blow: ['K_blow', 'R'], magic: ['K_magic', 'R'], rest: ['K_rest', 'F'] },
+  H: { bust: ['H_portrait', 'L', [690, 710], 460], front: ['H_front', 'F'], near: ['H_near', 'R'], appear: ['H_appear', 'R'],
+       run: ['H_run', 'R'], blow: ['H_blow', 'R'], magic: ['H_magic', 'R'], hug: ['H_hug', 'R'] },
+};
+const ART_POSES = { front: 'idle', side: 'walk', run: 'run', blow: 'blow', magic: 'magic', rest: 'rest', appear: 'appear', hug: 'hug', near: 'idle' };
+const ART = new Set((D.art || []).map((f) => f.replace(/\.png$/i, '')));
+const IMG = {};
+const loadImg = (key, src) => { const im = new Image(); im.src = src; IMG[key] = im; };
+for (const [who, m] of Object.entries(SPRITES)) for (const [k, [file]] of Object.entries(m)) loadImg(`${who}.${k}`, `media/sprites/${file}.png`);
+for (const f of ART) loadImg(`art.${f}`, `art/${f}.png`);
+const ok = (key) => IMG[key] && IMG[key].complete && IMG[key].naturalWidth > 0;
+const spritesReady = () => ['K.bust', 'H.bust', 'K.front', 'H.front'].every(ok);
+const xOf = (az) => W / 2 + Math.sin(rad(clamp(az, -118, 118))) * W * .43 + (Math.abs(az) > 90 ? Math.sign(az) * (Math.abs(az) - 90) * 9 : 0);
+
+function chooseLook(st, t) {
+  const who = st.who, c = st.cue;
+  let pose;
+  if (c && c.kind === 'magic' && c.style !== 'whoosh' && t < c.t + c.dur) pose = 'magic';
+  else if (st.running) pose = 'run';
+  else if (st.d < .55) pose = 'bust';
+  else if (who === 'H' && t >= 49.8 && t < 54) pose = 'appear';
+  else if (st.blowing) pose = 'blow';
+  else if (who === 'K' && c && c.kind === 'pant') pose = 'rest';
+  else if (who === 'H' && c && Math.abs(c.t - 119.4) < .01) pose = 'hug';
+  else if (Math.abs(st.vel) > 18) pose = who === 'K' ? 'side' : 'near';
+  else pose = st.d < 1.3 ? 'near' : 'front';
+  if (!SPRITES[who][pose]) pose = 'near';
+  // which image: designer art (art/) first, then the sheet cut-out
+  let img = `${who}.${pose}`, facing = SPRITES[who][pose][1], kind = pose === 'bust' ? 'bust' : 'pose';
+  if (kind === 'bust') {
+    const ear = st.d < .3 && Math.abs(st.az) > 55 && ART.has(`${who}_ear`);
+    if (ear) { img = `art.${who}_ear${st.blowing && ART.has(`${who}_ear_blow`) ? '_blow' : ''}`; facing = 'R'; kind = 'ear'; }
+    else if (ART.has(`${who}_bust_base`)) { img = `art.${bustFrame(st)}`; facing = 'F'; kind = 'artbust'; }
+  } else if (ART.has(`${who}_pose_${ART_POSES[pose]}`)) { img = `art.${who}_pose_${ART_POSES[pose]}`; facing = pose === 'front' || pose === 'near' ? 'F' : 'R'; }
+  // face the direction of travel; when still, face the centre of the screen
+  const dx = xOf(azAt(who, t + .1)) - xOf(azAt(who, t - .1));
+  const want = Math.abs(dx) > 6 ? (dx > 0 ? 'R' : 'L') : (st.x > W / 2 ? 'L' : 'R');
+  return { img, kind, pose, flip: facing !== 'F' && facing !== want };
+}
+
+function bustFrame(st) {   // pick the designer's bust frame: blink > talking mouth > expression > base
+  const w = st.who, has = (s) => ART.has(`${w}_bust_${s}`);
+  const exprMap = { shy: 'shy', happy: 'happy', laugh: 'happy', surprise: 'surprise', whisper: 'whisper', sleepy: 'whisper', pout: 'pout', smug: 'smug', blow: 'blow' };
+  if (st.blowing && has('blow')) return `${w}_bust_blow`;
+  if (st.blink < .5 && has('blink')) return `${w}_bust_blink`;
+  if (st.mouth > .45 && has('mouth_open')) return `${w}_bust_mouth_open`;
+  if (st.mouth > .15 && has('mouth_half')) return `${w}_bust_mouth_half`;
+  const ex = exprMap[st.expr];
+  return ex && has(ex) ? `${w}_bust_${ex}` : `${w}_bust_base`;
+}
+
+// strip-mesh draw: the lower a slice, the more it sways (hair ends, sleeves, tail) — a cheap Live2D-style deformation
+function drawWarped(img, cx, pivotX, pivotY, top, k, flip, alpha, rot, sway, breath) {
+  const iw = img.naturalWidth, ih = img.naturalHeight, N = 26;
+  ctx.save(); ctx.globalAlpha = alpha;
+  ctx.translate(cx, pivotY); ctx.rotate(rot); ctx.scale((flip ? -1 : 1) * (1 - breath * .5), 1 + breath);
+  const ox = -pivotX * k;
+  for (let i = 0; i < N; i++) {
+    const v0 = i / N, v1 = (i + 1) / N, off = sway * Math.pow((v0 + v1) / 2, 2.2) * (flip ? -1 : 1);
+    ctx.drawImage(img, 0, ih * v0, iw, ih * (v1 - v0) + 1, ox + off, top + ih * k * v0, iw * k, ih * k * (v1 - v0) + 1);
+  }
+  ctx.restore();
+}
+
+const figState = { K: { cur: null, prev: null, since: -9, lastT: -9 }, H: { cur: null, prev: null, since: -9, lastT: -9 } };
+
+function layout(look, st) {
+  const img = IMG[look.img], iw = img.naturalWidth, ih = img.naturalHeight;
+  if (look.kind === 'bust') {
+    const [, , [fx, fy], fw] = SPRITES[st.who].bust, k = (230 * st.s) / fw;
+    return { k, pivotX: fx, top: -fy * k, mouth: [fx + 30, fy + 90] };
+  }
+  if (look.kind === 'artbust' || look.kind === 'ear') {   // designer art: face assumed near the upper middle
+    const fx = iw * (look.kind === 'ear' ? .55 : .5), fy = ih * (look.kind === 'ear' ? .4 : .3), k = (230 * st.s) / (iw * .42);
+    return { k, pivotX: fx, top: -fy * k, mouth: [fx, fy + ih * .07] };
+  }
+  const h = 780 * st.s * (look.pose === 'rest' ? .82 : 1), k = h / ih;   // full-body pose, head ≈ 26 % from the top
+  return { k, pivotX: iw / 2, top: -.26 * h, mouth: [iw * .55, ih * .33] };
+}
+
+function drawFigure(st, t) {
+  const fs = figState[st.who];
+  const look = chooseLook(st, t);
+  if (!ok(look.img)) return false;
+  const key = look.img + (look.flip ? ':f' : '');
+  const jumped = Math.abs(t - fs.lastT) > .5;
+  if (!fs.cur || jumped) { fs.cur = { look, key }; fs.prev = null; fs.since = -9; }
+  else if (key !== fs.cur.key) { fs.prev = fs.cur; fs.cur = { look, key }; fs.since = t; }
+  fs.lastT = t;
+  const fade = clamp((t - fs.since) / .22, 0, 1);
+
+  // aura behind the figure
+  const p = PAL[st.who];
+  const g = ctx.createRadialGradient(st.x, st.y + 60 * st.s, 30 * st.s, st.x, st.y + 60 * st.s, 380 * st.s);
+  g.addColorStop(0, `rgba(${p.glow},${.22 * st.alpha})`); g.addColorStop(1, `rgba(${p.glow},0)`);
+  ctx.fillStyle = g; ctx.fillRect(st.x - 400 * st.s, st.y - 340 * st.s, 800 * st.s, 800 * st.s);
+
+  const breath = .012 * Math.sin((t / 3.4) * Math.PI * 2 + (st.who === 'K' ? 0 : 1.7));
+  const talk = st.mouth * 8 * st.s;
+  const sway = (Math.sin(t * 1.7 + (st.who === 'K' ? 0 : 1.3)) * 10 - clamp(st.vel * .35, -40, 40)) * st.s;
+  for (const [layer, a] of [[fs.prev, 1 - fade], [fs.cur, fade < 1 && fs.prev ? fade : 1]]) {
+    if (!layer || a <= .01) continue;
+    const lk = layer.look, img = IMG[lk.img], L = layout(lk, st);
+    const pivotY = st.y - talk;                       // head centre
+    drawWarped(img, st.x, L.pivotX, pivotY, L.top, L.k, lk.flip, st.alpha * a, st.rot * .6, sway, breath + st.mouth * .01);
+    if (layer === fs.cur) {
+      const mx = (L.mouth[0] - L.pivotX) * L.k * (lk.flip ? -1 : 1);
+      st.mx = st.x + mx; st.my = pivotY + L.top + L.mouth[1] * L.k;
+    }
+  }
+
+  if (st.who === 'H') {   // foxfire wisps orbiting Homura
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    for (let k = 0; k < 3; k++) {
+      const a = t * 1.3 + (k * Math.PI * 2) / 3, x = st.x + Math.cos(a) * 230 * st.s, y = st.y - 20 * st.s + Math.sin(a) * 80 * st.s;
+      wisp(ctx, x, y, 22 * st.s * (1 + .15 * Math.sin(t * 6 + k)), st.alpha * .9, t + k);
+    }
+    ctx.restore();
+  }
+  return true;
+}
+
 // ---------------------------------------------------------------- scene state per frame
 function charState(who, t) {
   const [t0, t1] = A.present[who];
@@ -622,7 +751,7 @@ function charState(who, t) {
 }
 
 function emit(st, t, dt) {
-  const mx = st.x + st.turn * 18 * st.s, my = st.y + 76 * st.s;
+  const mx = st.mx ?? st.x + st.turn * 18 * st.s, my = st.my ?? st.y + 76 * st.s;
   const dir = Math.sin(rad(st.az));
   if (st.blowing) {
     const n = Math.ceil(dt * 90);
@@ -700,7 +829,7 @@ function frame(t, dt) {
   camYaw += (target - camYaw) * clamp(dt * 1.5, 0, 1);
   drawRoomFrame(ctx, t, -camYaw * 6);
   ctx.save(); ctx.translate(-camYaw * 10, 0);
-  states.sort((a, b) => b.d - a.d).forEach((st) => { if (st.alpha > .01) drawChar(ctx, st.who, st); emit(st, t, dt); });
+  states.sort((a, b) => b.d - a.d).forEach((st) => { if (st.alpha > .01 && !(spritesReady() && drawFigure(st, t))) drawChar(ctx, st.who, st); emit(st, t, dt); });
   ctx.restore();
   jointMagic(ctx, t);
   updateParts(dt); drawParts(ctx);
@@ -937,6 +1066,7 @@ function drawSubsCanvas(t) {
 }
 async function renderAll() {
   await document.fonts.ready;
+  await Promise.all(Object.values(IMG).map((im) => im.decode().catch(() => {})));
   const fps = 30, n = Math.round(A.duration * fps);
   parts = [];
   for (let i = 0; i < n; i++) {
