@@ -1,6 +1,6 @@
 # Characters, scene & reference prompts
 
-**Approved design: `../Character.jpg`.** It holds turnarounds, eight expressions each, six action poses each (ear-whisper, side-to-side, run, cold/warm breath, spell, rest/hug) and prop details. Use it as the image reference for every shot. The tables below summarise it, and the browser animatic follows it. The prompts are only for regenerating extra sheets in the same design.
+**Approved design: `../art/Character.jpg`.** It holds turnarounds, eight expressions each, six action poses each (ear-whisper, side-to-side, run, cold/warm breath, spell, rest/hug) and prop details. Use it as the image reference for every shot. The tables below summarise it, and the browser animatic follows it. The prompts are only for regenerating extra sheets in the same design.
 
 ## 小雪 Koyuki (snow spirit, cooling ❄)
 

@@ -6,7 +6,7 @@ Position notation: az 0° = in front, −90° = at the left ear, +90° = at the 
 
 ## How to generate
 
-1. **Reference images first**: the approved sheet `../Character.jpg` (turnarounds, expressions, action poses, props for both characters) plus the empty room plate (see `03_characters_scenes.md`). Use them as image references on every shot. Keep the seed per character where the tool allows it.
+1. **Reference images first**: the approved sheet `../art/Character.jpg` (turnarounds, expressions, action poses, props for both characters) plus the empty room plate (see `03_characters_scenes.md`). Use them as image references on every shot. Keep the seed per character where the tool allows it.
 2. Generate each shot as **image-to-video**: first paint or generate the shot's key frame from the references, then animate it with the motion prompt below. Shots longer than the tool's clip limit (5–10 s) are split at the "/" marks.
 3. Put the **shared style block** in front of every prompt. Add the character block for whoever is in the shot.
 4. Lip sync: generate the mouth movement neutral ("talking softly"), then fix mouths in the edit or with a lip-sync pass against the character's own stem (`output/stems/K_voice.wav`, `H_voice.wav`).

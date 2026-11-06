@@ -42,9 +42,17 @@ def main():
     finally:
         chrome.terminate(); srv.shutdown()
     out = os.path.join(ROOT, "output", "animatic_1080p.mp4")
+    main_mp4 = out + ".main.mp4"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-framerate", "30", "-i", os.path.join(FRAMES, "%05d.jpg"),
                     "-i", os.path.join(ROOT, "output", "mix_48k.wav"), "-c:v", "libx264", "-preset", "medium", "-crf", "18",
-                    "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "256k", "-ar", "48000", "-shortest", "-movflags", "+faststart", out], check=True)
+                    "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "256k", "-ar", "48000", "-shortest", "-movflags", "+faststart", main_mp4], check=True)
+    cover = os.path.join(ROOT, "media", "cover.jpg")
+    if os.path.exists(cover):   # embed the cover as the file thumbnail (separate pass: a 1-frame stream must not affect -shortest)
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", main_mp4, "-i", cover, "-map", "0", "-map", "1", "-c", "copy",
+                        "-c:v:1", "mjpeg", "-disposition:v:1", "attached_pic", "-movflags", "+faststart", out], check=True)
+        os.remove(main_mp4)
+    else:
+        os.replace(main_mp4, out)
     shutil.rmtree(FRAMES, ignore_errors=True); shutil.rmtree(os.path.join(ROOT, "output", ".chrome"), ignore_errors=True)
     print("wrote", out)
 

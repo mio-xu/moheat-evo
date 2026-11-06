@@ -10,6 +10,26 @@ A 150 s first-person binaural ASMR story. 小雪 Koyuki (snow spirit) cools you 
 - **Load MP4…** swaps the animatic for the finished film. The film plays with its own audio, and the thermal track follows its clock.
 - Without a browser: `python3 tools/play_thermal_csv.py --port /dev/cu.… ` plays the WAV and streams the CSV (needs `pip3 install pyserial`; `--list`, `--dry-run`, `--intensity`, `--offset`).
 
+## Characters
+- Art: `art/Character.jpg` (approved design sheet) → ChatGPT asset set in `art/chatgpt/` (37 PNGs, prompts in `generation-prompts.json`, request list in `production/04_ChatGPT素材清单.md`).
+- `python3 tools/prepare_art.py` aligns each bust/ear variant to its base, composites **only the face** (found automatically from where blink/mouth frames differ), and writes WebP to `media/art/` (+ `faces.json`). Blink, lip sync and expressions therefore change the face only, with no jitter.
+- The player picks frames from the voice and the story: blink → talking mouth (half/open from the voice RMS) → expression. Ear close-ups use `*_ear*` (mirrored for the right ear), and the poses follow the story beats. Live2D-style motion: breathing, talk bounce, strip-mesh sway of hair and sleeves, lean, cross-fades between poses.
+- Background: `room_bg`, with live snow in the window and hearth/lantern flicker.
+- Cover: `?cover=1` renders the poster. `media/cover.jpg` is the share image, the MP4's 3 s opening title card and its file thumbnail.
+
+## Folder layout
+```
+index.html · demo.js · demo.css      player (opens straight from disk or GitHub Pages)
+start_demo.command                   double-click: local server + Chrome
+start_voicevox.command               double-click: VOICEVOX engine (needed only to regenerate voices)
+build_all.sh                         rebuild audio → thermal → subtitles/data
+art/        Character.jpg, chatgpt/*.png        source art (never modified)
+media/      mix.m4a, thermal.csv, subs_*.vtt, data.js, cover.jpg, art/*.webp   web assets (generated)
+tools/      story.py (timeline) · build_audio.py · tts_voicevox.py · thermal.py · export.py · prepare_art.py · render_mp4.py · docs.py · play_thermal_csv.py · lift_subject.swift
+production/ 01 script · 02 storyboard + Seedance prompts · 03 characters · 04 ChatGPT art list
+output/     mix_48k.wav, stems/, animatic_1080p.mp4, thermal_control.csv, subtitles (local, not committed)
+```
+
 ## How the thermal control works
 ```
 tools/story.py ── cues (lines, breaths, magic) + position key-frames (azimuth, distance)
@@ -34,7 +54,7 @@ tools/story.py ── cues (lines, breaths, magic) + position key-frames (azimut
 `output/thermal_overview.png` plots the whole track. `output/thermal_intent.csv` holds the per-character RMS, level, position and per-ear intent before conflict resolution.
 
 ## Rebuild after editing the story
-`./build_all.sh` (≈1 min) regenerates voices, mix, thermal CSV, subtitles and `media/data.js`. Then:
+`./build_all.sh` (≈1 min) regenerates voices, mix, thermal CSV, subtitles and `media/data.js`. After new art: `python3 tools/prepare_art.py && python3 tools/export.py`. Then:
 - `python3 tools/docs.py` regenerates `production/01_script.md`.
 - `python3 tools/render_mp4.py` (≈5–10 min) regenerates `output/animatic_1080p.mp4`.
 
@@ -42,12 +62,12 @@ tools/story.py ── cues (lines, breaths, magic) + position key-frames (azimut
 
 | # | Item | Where | Status |
 |---|---|---|---|
-| 1 | 150 s 1080p MP4 | `output/animatic_1080p.mp4` | **Animatic** (cel-shaded vector art, burned-in ja/en subs). Final film = manual step A |
+| 1 | 150 s 1080p MP4 | `output/animatic_1080p.mp4` | Done: ChatGPT art with blink/lip sync, burned-in ja/en subs, cover title card. A Seedance film is optional (step A) |
 | 2 | 48 kHz stereo binaural WAV | `output/mix_48k.wav` (24-bit) | Done (VOICEVOX when the engine runs; Kyoko draft otherwise) |
 | 3 | Separate voice / breath / magic stems | `output/stems/{K,H}_{voice,breath,magic,foley,dry,binaural}.wav`, `ambience_binaural.wav` | Done, draft voices |
 | 4 | Subtitles ja / en (+ zh) | `media/subs_{ja,en}.vtt`, `output/subs_{ja,en,zh}.{srt,vtt}` | Done |
 | 5 | Script ja + en + zh, shot list | `production/01_script.md`, `production/02_storyboard_seedance.md` | Done |
-| 6 | Character / scene sheets, AI prompts | `Character.jpg` (approved design), `production/03_characters_scenes.md` | Done. The animatic and the prompts follow the sheet |
+| 6 | Character / scene sheets, AI prompts | `art/Character.jpg` (approved design), `art/chatgpt/`, `production/03_characters_scenes.md` | Done. The animatic and the prompts follow the sheet |
 | 7 | 4-channel thermal CSV | `media/thermal.csv` (= `output/thermal_control.csv`) | Done (20 Hz, normalised + PWM + firmware command) |
 | 8 | RMS mapping / position / sync code | `tools/thermal.py`, `tools/story.py` | Done |
 | 9 | ESP32 interface | Existing firmware protocol; `tools/play_thermal_csv.py`, `demo.js` (Web Serial) | Done (not yet tested on hardware) |
