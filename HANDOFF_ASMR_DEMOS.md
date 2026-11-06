@@ -101,7 +101,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 ### Demo 4 · `Demo4_SengokuBanquet/` 🚧 制作中 —《安土最后的酒宴》
 - **方向**：以 `demo4.jpg` 设定板为准，**B 细密浮世绘·金箔装饰风**、写实成年人比例（Q 版已淘汰，见 `project/discarded_chibi_drafts/`）。
 - **角色与冷热**：織田信長坐左前方 → 他的声音主要驱动 **L_Heat**；徳川家康坐右前方 → **R_Heat**。冷感来自风/雨/冰镇等环境（按设定板：冷气、风、雨；热：火焰、热酒蒸汽、炭火）。
-- **已有素材**：`assets/characters/N_Character.png`、`I_Character.png`、`N_bust_base.png`；`assets/stage/banquet_bg.png`。
+- **已有素材**（用户仍在陆续生成，开工前先 `ls assets/*/` 确认）：`assets/characters/N_Character.png`、`I_Character.png`、`N_bust_base.png`、`I_bust_base.png`、`N_ear.png`、`I_ear.png`；`assets/stage/banquet_bg.png`。
 - **素材命令**：`ChatGPT素材命令.md`（已更新为浮世绘金箔风，含设定板追加的道具/场景/特效）。还缺：信长其余口型与表情、家康全部半身/表情、贴耳特写、动作、道具、风雨夜背景、特效。
 - **配音（用户的 Demo 4 配音要求要点）**：
   - 必须有情感，不能是平淡机械的 TTS。每个角色全片只用一个声线。
