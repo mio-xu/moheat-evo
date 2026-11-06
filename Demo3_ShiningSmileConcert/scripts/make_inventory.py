@@ -29,7 +29,7 @@ RULES = [
     ("ASMR Demo/tools/render_mp4.py", "Deterministic frame renderer → MP4", "1", "Yes", "Path only", "—", "scripts/render_mp4.py", "own code"),
     ("ASMR Demo 2/output/stems/*.wav", "Demo 2 voice / SFX stems", "2", "No", "—", "—", "Not needed: Demo 3 uses the real song", "VOICEVOX:ずんだもん (credit) / own SFX"),
     ("ASMR Demo 2/output/final_1080p.mp4", "Demo 2 film", "2", "No", "—", "—", "Not reused (different scene)", "own"),
-    ("Demo3_ShiningSmileConcert/assets/music_original/*", "Shining Smile Melody – Jpop (ZTMusic, Pixabay)", "3", "Yes", "Edit to 150 s", "FILE NOT YET DOWNLOADED", "Download manually (Pixabay blocks automated download), then analyse", "Pixabay Content License — verify before public release"),
+    ("Demo3_ShiningSmileConcert/assets/music_original/*", "Shining Smile Melody – Jpop (ZTMusic, Pixabay)", "3", "Yes", "Edited to 150 s", "—", "Downloaded manually; analysed (scripts/music_features.py), edited at a bar boundary (scripts/edit_music.py); see assets/music_original/SOURCE.md", "Pixabay Content License — verify before public release"),
 ]
 
 

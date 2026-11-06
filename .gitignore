@@ -5,3 +5,7 @@ ASMR Demo/output/
 __pycache__/
 ASMR Demo 2/output/
 Demo3_ShiningSmileConcert/assets/music_original/*.mp3
+Demo3_ShiningSmileConcert/audio/
+Demo3_ShiningSmileConcert/video/
+Demo3_ShiningSmileConcert/assets/music_edited/*.wav
+Demo4_SengokuBanquet/audio/

@@ -25,7 +25,7 @@ Priority: direct reuse > modify > regenerate from existing reference > new. Demo
 | `ASMR Demo/tools/render_mp4.py` | Deterministic frame renderer → MP4 | 1 | Yes | Path only | — | scripts/render_mp4.py | own code |
 | `ASMR Demo 2/output/stems/*.wav` (14 files: ambience, cool_binaural, cool_breath, cool_dry, cool_fan, cool_ice, cool_magic, foley, foley_binaural, heat_binaural, heat_breath, heat_dry, heat_voice, music_binaural) | Demo 2 voice / SFX stems | 2 | No | — | — | Not needed: Demo 3 uses the real song | VOICEVOX:ずんだもん (credit) / own SFX |
 | `ASMR Demo 2/output/final_1080p.mp4` | Demo 2 film | 2 | No | — | — | Not reused (different scene) | own |
-| `Demo3_ShiningSmileConcert/assets/music_original/*` | Shining Smile Melody – Jpop (ZTMusic, Pixabay) | 3 | Yes | Edit to 150 s | **not found** | Download manually (Pixabay blocks automated download), then analyse | Pixabay Content License — verify before public release |
+| `Demo3_ShiningSmileConcert/assets/music_original/*` (2 files: SOURCE, ztmusic-shining-smile-melody-jpop-203898) | Shining Smile Melody – Jpop (ZTMusic, Pixabay) | 3 | Yes | Edited to 150 s | — | Downloaded manually; analysed (scripts/music_features.py), edited at a bar boundary (scripts/edit_music.py); see assets/music_original/SOURCE.md | Pixabay Content License — verify before public release |
 
 ## Licence notes
 - **Song**: Pixabay Content License allows free use incl. commercial, editing and public display without attribution; it does not allow selling or redistributing the track as a standalone file. Recorded in `assets/music_original/SOURCE.md` once downloaded. **Check the licence text on the page at download time** before any public release.

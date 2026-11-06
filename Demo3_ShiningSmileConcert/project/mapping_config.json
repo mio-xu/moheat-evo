@@ -1,0 +1,107 @@
+{
+ "RATE": 20,
+ "WIN": 0.05,
+ "GATE_BELOW_REF": 30,
+ "REF_PCT": 93,
+ "CURVE": 2.2,
+ "HOLD": 0.1,
+ "ATTACK": 0.08,
+ "RELEASE": 0.45,
+ "PROX_REF": 0.3,
+ "PROX_EXP": 1.0,
+ "PROX_MIN": 0.08,
+ "COOL_LEAD": 0.35,
+ "HEAT_LEAD": 0.6,
+ "CANCEL": 0.5,
+ "HYSTERESIS": 0.08,
+ "MIN_DWELL": 0.4,
+ "DEAD_TIME": 0.15,
+ "CAP": 1.0,
+ "DOSE_WIN": 8.0,
+ "DOSE_MAX": 0.65,
+ "OFF_BELOW": 0.03,
+ "COOL_PWM": [
+  35,
+  80
+ ],
+ "HEAT_PWM": [
+  0,
+  200
+ ],
+ "N_SAMPLES": 3000,
+ "HEAT_WEIGHTS": {
+  "vocal": 0.65,
+  "bass": 0.25,
+  "drums": 0.1
+ },
+ "COOL_WEIGHTS": {
+  "high": 0.75,
+  "coolfx": 0.25
+ },
+ "NORM_PCT": [
+  10,
+  97
+ ],
+ "FEATURE_CURVE": 1.3,
+ "CONTRAST_PCT": [
+  20,
+  98
+ ],
+ "CONTRAST_CURVE": 1.4,
+ "STAGE_XFADE_S": 2.73,
+ "SIDE_EXP_FAR": 2.0,
+ "SIDE_EXP_NEAR": 3.5,
+ "MODE_A_BALANCE_DB": 4.0,
+ "STAGE_WEIGHTS": {
+  "normal": {
+   "heat": [
+    1.0,
+    1.0
+   ],
+   "cool": [
+    0.55,
+    0.55
+   ]
+  },
+  "ice": {
+   "heat": [
+    0.45,
+    0.45
+   ],
+   "cool": [
+    1.0,
+    1.0
+   ]
+  },
+  "split": {
+   "heat": [
+    0.25,
+    1.0
+   ],
+   "cool": [
+    1.0,
+    0.2
+   ]
+  },
+  "split_swap": {
+   "heat": [
+    1.0,
+    0.25
+   ],
+   "cool": [
+    0.2,
+    1.0
+   ]
+  },
+  "climax": {
+   "heat": [
+    1.0,
+    1.0
+   ],
+   "cool": [
+    1.0,
+    1.0
+   ]
+  }
+ }
+}
