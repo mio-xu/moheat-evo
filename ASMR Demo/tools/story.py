@@ -47,18 +47,18 @@ def L(t, who, kind, ja="", en="", zh="", expr="smile", tts=None, **kw):
 CUES = [
     # ── 1  0:00–0:25  Koyuki arrives ────────────────────────────────────────
     L(4.0, "K", "say", "こんばんは…。あ、まだ起きてたんだ。", "Good evening… Oh, you're still awake.", "晚上好…啊，你还醒着呀。", "smile"),
-    L(7.8, "K", "say", "雪の音がきれいだったから…ちょっとだけ、遊びに来ちゃった。",
-      "The snow sounded so pretty… so I came to play, just for a bit.", "雪的声音太好听了…所以就稍微过来玩一下。", "shy",
-      tts="ゆきのおとがきれいだったから…ちょっとだけ、あそびにきちゃった。"),
-    L(13.1, "K", "say", "わたし、小雪。雪女なの。", "I'm Koyuki. A snow spirit.", "我是小雪，是雪女哦。", "smile",
+    L(7.8, "K", "say", "雪の音がきれいで…遊びに来ちゃった。",
+      "The snow sounded so pretty… so I came to play.", "雪的声音好好听…我就来玩啦。", "shy",
+      tts="ゆきのおとがきれいで…あそびにきちゃった。"),
+    L(12.0, "K", "say", "わたし、小雪。雪女なの。", "I'm Koyuki. A snow spirit.", "我是小雪，是雪女哦。", "smile",
       tts="わたし、こゆき。ゆきおんななの。"),
     L(16.3, "K", "whisper", "ねえ…こっちの耳、ちょっと貸して？", "Hey… can I borrow this ear for a moment?", "呐…这边的耳朵，借我一下好吗？", "whisper",
       tts="ねえ…こっちのみみ、ちょっとかして？"),
-    L(19.5, "K", "breath", "（ふぅー…）", "(fuuu…)", "（呼——…）", "blow", style="cold", dur=2.2, gain=1.0),
-    L(22.1, "K", "say", "ふふっ…つめたかった？", "Hehe… was that cold?", "呵呵…凉不凉？", "happy"),
+    L(20.6, "K", "breath", "（ふぅー…）", "(fuuu…)", "（呼——…）", "blow", style="cold", dur=2.2, gain=1.0),
+    L(23.0, "K", "say", "ふふっ…つめたかった？", "Hehe… was that cold?", "呵呵…凉不凉？", "happy"),
 
     # ── 2  0:25–0:50  Koyuki's trick: left / right ──────────────────────────
-    L(25.0, "K", "say", "じゃあ…次はどっちから来るか、当ててみて。", "Then… guess which side I'll come from next.", "那…猜猜我下次从哪边来？", "smug",
+    L(25.6, "K", "say", "じゃあ…次はどっちから来るか、当ててみて。", "Then… guess which side I'll come from next.", "那…猜猜我下次从哪边来？", "smug",
       tts="じゃあ…つぎはどっちからくるか、あててみて。"),
     L(31.6, "K", "whisper", "…こっちでした。", "…This side.", "…是这边哦。", "whisper"),
     L(33.2, "K", "breath", "（ふっ…）", "(fuu…)", "（呼…）", "blow", style="cold", dur=1.1, gain=0.85),
@@ -78,10 +78,10 @@ CUES = [
     L(58.2, "K", "say", "ほ、焔ちゃん…押さないでよぉ…", "H-Homura… don't push me…", "小、小焰…别挤我嘛…", "pout", tts="ほ、ほむらちゃん…おさないでよぉ…"),
     L(61.6, "H", "whisper", "はじめまして。わたしは焔。狐火の精だよ。", "Nice to meet you. I'm Homura, a foxfire spirit.", "初次见面，我是小焰，是狐火精灵哦。", "smile",
       tts="はじめまして。わたしは、ほむら。きつねびのせいだよ。"),
-    L(65.8, "H", "whisper", "ほら…あったかいでしょ？", "See… nice and warm, right?", "你看…很暖和吧？", "smile"),
-    L(67.2, "H", "magic", "", "", "", "smile", style="fire", dur=2.6, gain=0.55),
-    L(67.4, "H", "breath", "（はぁ〜…）", "(haaa…)", "（哈——…）", "blow", style="warm", dur=2.2, gain=1.0),
-    L(69.8, "H", "say", "にひひっ。", "Nihihi.", "嘻嘻。", "laugh"),
+    L(66.2, "H", "whisper", "ほら…あったかいでしょ？", "See… nice and warm, right?", "你看…很暖和吧？", "smile"),
+    L(67.8, "H", "magic", "", "", "", "smile", style="fire", dur=2.6, gain=0.55),
+    L(68.0, "H", "breath", "（はぁ〜…）", "(haaa…)", "（哈——…）", "blow", style="warm", dur=2.2, gain=1.0),
+    L(70.4, "H", "say", "にひひっ。", "Nihihi.", "嘻嘻。", "laugh"),
 
     # ── 4  1:10–1:35  Cool vs. warm (both ears at once, then swap) ──────────
     L(71.0, "K", "say", "つ、冷たいほうが気持ちいいよね…？", "C-cool feels nicer, right…?", "凉、凉凉的更舒服吧…？", "shy",
@@ -162,7 +162,7 @@ def _chase(az0, t0=96.0, t1=116.0, rate=36.0, step=0.25):
 KEYS = {
     "K": [
         (0.0, 0, 6.0), (1.8, 0, 3.4), (4.0, 0, 2.8), (8.0, -10, 2.0), (11.6, -20, 1.2),
-        (15.4, -80, 0.32), (18.6, -88, 0.18), (21.6, -88, 0.16), (23.6, -60, 0.45),
+        (15.4, -80, 0.32), (18.6, -88, 0.18), (22.8, -88, 0.16), (24.4, -60, 0.45),
         (25.0, -50, 0.6), (28.4, -90, 0.5), (30.2, -180, 0.7), (31.3, -270, 0.28), (34.6, -270, 0.22),
         (35.6, -180, 0.6), (36.8, -90, 0.3), (39.8, -86, 0.28), (40.5, -20, 0.6), (41.3, 80, 0.3),
         (43.4, 82, 0.3), (43.9, 0, 0.5), (44.4, -85, 0.2), (47.2, -88, 0.18), (48.6, -40, 0.6),

@@ -15,7 +15,7 @@ URL = os.environ.get("VOICEVOX_URL", "http://127.0.0.1:50021")
 
 # Character → VOICEVOX speaker, style per expression, prosody.  Change speakers here (see --audition).
 CAST = {
-    "K": dict(speaker="九州そら", speed=0.94, pitch=0.02, inton=1.25,
+    "K": dict(speaker="九州そら", speed=1.02, pitch=0.02, inton=1.25,
               styles=dict(default="あまあま", smile="あまあま", happy="あまあま", laugh="あまあま", shy="あまあま",
                           smug="ノーマル", surprise="ノーマル", pout="ツンツン", determined="ノーマル",
                           whisper="ささやき", sleepy="ささやき")),
@@ -25,6 +25,7 @@ CAST = {
                           whisper="ささやき", sleepy="ささやき")),
 }
 WHISPER_STYLES = ("ささやき", "ヒソヒソ")
+PAUSE_MAX = 0.4   # s
 
 
 def _get(path):
@@ -63,6 +64,10 @@ def synth(text, who, kind="say", expr="smile", sr=48000):
     req = urllib.request.Request(f"{URL}/audio_query?{q}", method="POST")
     with urllib.request.urlopen(req, timeout=60) as r: query = json.load(r)
     whisper = style in WHISPER_STYLES
+    # cap the pauses at "…" / "、" / "。" (some voices hold them ~1.7 s) so lines keep their timing
+    cap = PAUSE_MAX * (1.25 if whisper else 1.0)
+    for ph in query["accent_phrases"]:
+        if ph.get("pause_mora"): ph["pause_mora"]["vowel_length"] = min(ph["pause_mora"]["vowel_length"], cap)
     query.update(speedScale=c["speed"] * (0.92 if whisper else 1.0), pitchScale=c["pitch"],
                  intonationScale=c["inton"] * (0.9 if whisper else 1.0), volumeScale=1.0,
                  prePhonemeLength=0.05, postPhonemeLength=0.12, outputSamplingRate=sr, outputStereo=False)
