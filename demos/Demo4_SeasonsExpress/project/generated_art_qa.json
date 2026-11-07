@@ -2,10 +2,11 @@
   "count": 37,
   "expected_count": 37,
   "newly_generated": 36,
-  "reused_existing": 1,
+  "reused_existing": 0,
+  "user_supplied": 1,
   "all_dimensions_ok": true,
   "all_transparency_ok": true,
-  "integration_status": "Source pack only; not installed in player. Chroma key, geometry alignment and animated seam review remain before integration.",
+  "integration_status": "Season vortex installed in player; remaining 36 source assets await chroma key, geometry alignment and animated seam review.",
   "assets": [
     {
       "path": "ice_fire/fx_icicle.png",
@@ -182,8 +183,8 @@
       "dimensions_ok": true,
       "alpha_expected": true,
       "transparency_ok": true,
-      "sha256": "fab08db0de64779f232549ffac9391f7d5a3f199376a4bbbcb290ae4ad250ea0",
-      "fully_transparent_fraction": 0.3188
+      "sha256": "a0a2195237cf8d0ae0ceade4ba5aeda3175e9a305c22f0c346eeb697c4dd98d0",
+      "fully_transparent_fraction": 0.5612
     },
     {
       "path": "seasonal_chaos/night_aurora_far.png",

@@ -6,12 +6,12 @@
   "destination": "project/generated_art/",
   "status": "source_pack_not_integrated",
   "newly_generated": 36,
-  "reused_existing": 1,
+  "reused_existing": 0,
   "notes": [
     "车厢保持绿幕源图；尚未抠绿、测量新几何或替换播放器和成片。",
     "远处第三盏吊灯在车厢源图中不够清晰，接入时需用独立 lamp.png 补足。",
     "横向景色尚未做滚动接缝验收；光线差分接入前需检查对齐。",
-    "最后一张 fx_season_swirl.png 因生成额度已满，按素材清单约定符号链接引用现有程序版本。"
+    "fx_season_swirl.png 已用用户提供的 Seedance 候选 (1) 在 1.1 秒处提帧替换并接入播放器；其余 36 张初版仍未接入。"
   ],
   "assets": [
     {
@@ -102,10 +102,14 @@
     },
     {
       "path": "seasonal_chaos/fx_season_swirl.png",
-      "source": "assets/seasonal_chaos/fx_season_swirl.png",
-      "provenance": "reused_existing_procedural_asset",
-      "reason": "Built-in image generation returned usage_limit_reached (429) for this final asset. Existing version retained by symlink, per prompt-list fallback.",
-      "prompt": "ONE magical spiral vortex, half blue snowflakes and ice crystals, half pink cherry petals and golden sunshine, centered, transparent gaps."
+      "source": "video/seedance/fx_season_swirl_selected.mp4",
+      "provenance": "user_supplied_seedance",
+      "prompt": "ONE magical spiral vortex, half blue snowflakes and ice crystals, half pink cherry petals and golden sunshine, centered, transparent gaps.",
+      "original_filename": "video_batch_9a (1).mp4",
+      "source_sha256": "56097a5824f726047d64d461160bb5016f63198c265447ca1ec60caa10531351",
+      "frame_seconds": 1.1,
+      "postprocess": "ffmpeg: centered 1080 square crop, scale 1024, black colorkey; scripts/import_season_swirl.py",
+      "integration_status": "Installed in assets and player media; source pack symlink points to installed asset"
     },
     {
       "path": "seasonal_chaos/night_aurora_far.png",
@@ -257,5 +261,6 @@
       "postprocess": "none",
       "provenance": "built_in_image_gen"
     }
-  ]
+  ],
+  "user_supplied": 1
 }

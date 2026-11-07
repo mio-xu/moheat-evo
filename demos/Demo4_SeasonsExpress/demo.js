@@ -287,7 +287,7 @@ function drawParts(c) {
   for (const q of parts) {
     const k = q.life / q.max, a = Math.sin(Math.PI * Math.min(1, k * 1.3)) * q.a;
     if (!ok(q.img)) continue;
-    c.save(); c.globalAlpha = a; if (q.add) c.globalCompositeOperation = 'lighter';
+    c.save(); c.globalAlpha = a; if (q.blend) c.globalCompositeOperation = q.blend; else if (q.add) c.globalCompositeOperation = 'lighter';
     c.translate(q.x, q.y); c.rotate(q.rot); const s = q.size * (q.grow ? 1 + k * q.grow : 1); c.drawImage(IMG[q.img], -s / 2, -s / 2, s, s); c.restore();
   }
 }
@@ -301,7 +301,7 @@ function emitFx(t, dt) {
     for (let i = 0; i < 14; i++) { const [x, y] = winPt(q.side); spawn({ img: 'fx_steam', x, y, vx: (q.side === 'L' ? 1 : -1) * (80 + Math.random() * 160), vy: -30 - Math.random() * 50, size: 160 + Math.random() * 120, grow: 1.2, rot: Math.random() * 6, spin: .3, life: 0, max: 2.4, a: .55 }); }
   }
   for (const s of [TW(95), TW(114.3)]) if (t >= s && !cueDone.has(s) && t < s + .5) {   // the seasons swirl when control is lost
-    cueDone.add(s); spawn({ img: 'fx_season_swirl', x: W / 2, y: 330, vx: 0, vy: 0, size: 300, grow: 1.4, rot: 0, spin: 4, life: 0, max: 2.4, a: .9, add: true });
+    cueDone.add(s); spawn({ img: 'fx_season_swirl', x: W / 2, y: 330, vx: 0, vy: 0, size: 300, grow: 1.4, rot: 0, spin: 4, life: 0, max: 2.4, a: .9, blend: 'screen' });
   }
   const seg = segAt(t).key, R = (rate) => Math.random() < dt * rate;
   if (seg === 'spring' && t > 126 && R(4)) { const [x, y] = winPt(Math.random() < .5 ? 'L' : 'R'); spawn({ img: 'fx_sakura_petal', x, y, vx: (x < W / 2 ? 1 : -1) * (60 + Math.random() * 90), vy: 30 + Math.random() * 40, size: 26 + Math.random() * 18, rot: Math.random() * 6, spin: 2, life: 0, max: 6, a: .95 }); }
