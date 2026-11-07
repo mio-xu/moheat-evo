@@ -629,7 +629,9 @@
   }
   if (QS.get('shot')) {
     document.body.classList.add('cover-only', 'shot'); $('intro').classList.add('hidden');
-    const k = QS.get('shot'); ART.drawBg(ctx, k === 'gateOpen' ? 'gate' : k, 1);
+    const k = QS.get('shot');
+    if (k === 'hutFire') { Object.assign(S.hut, { tinder: true, flint: true, candle: true, ember: 1, fire: 1 }); S.scene = 'hut'; drawHut(ctx, 1.1); lighting(ctx, 1.1); return; }   // layout ref: hearth burning
+    ART.drawBg(ctx, k === 'gateOpen' ? 'gate' : k, 1);
     if (k === 'gateOpen') { ART.gateSlab(ctx, 1); }
     else if (k === 'gate') ART.gateSlab(ctx, 0);
     return;
