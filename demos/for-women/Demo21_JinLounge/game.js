@@ -10,20 +10,22 @@
   const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v)), rnd = (a, b) => a + Math.random() * (b - a);
   const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000));
 
-  // ---------------------------------------------------------------- art: stills (fallback / cover) + loops
-  // views: a still each (jin_<view>.jpg). Clips: v_<view> = he talks (loop), v_<view>_idle = he is silent (loop), v_off = one shot
-  // (he pushes his sunglasses up: glasses → gaze). 'off' has no still of its own and shows the glasses still as fallback.
+  // ---------------------------------------------------------------- art: stills (fallback / cover) + clips (handoff §4b, 2026-11-08)
+  // Seedance 2.5 Lite 1080p clips whose first and last frames are EXACTLY the stills (scripts/prepare_video.py): talk loops
+  // v_<view>, quiet loops v_<view>_idle while he waits, and a transition t_<from>_<to> for every cut. Clips only switch at a clip's
+  // end (identical frames → hard cut, no ghosting); the story asks for a transition with go(). ?stills = no video.
   const VIEWS = ['lounge', 'can', 'wrist', 'glasses', 'gaze', 'whisper', 'jacket'];
-  const CLIPS = ['lounge', 'can', 'wrist', 'glasses', 'whisper', 'jacket', 'lounge_idle', 'gaze_idle', 'jacket_idle', 'off'];
   const IMG = {};
-  const artReady = Promise.all(VIEWS.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; if (n === 'glasses') IMG.off = im; res(); }; im.onerror = () => res(); im.src = `media/art/jin_${n}.jpg?v=1`; })));
-  const CLIP = {}, POSTER = {};
-  const clipReady = (n) => CLIP[n] && CLIP[n].readyState >= 2;
-  if (!QS.has('stills')) for (const n of CLIPS) {
-    const v = document.createElement('video'); Object.assign(v, { muted: true, loop: n !== 'off', playsInline: true, preload: 'auto', src: `media/video/v_${n}.mp4?v=2` });
+  const artReady = Promise.all(VIEWS.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/jin_${n}.jpg?v=1`; })));
+  const CLIP_NAMES = ['v_lounge', 'v_lounge_idle', 'v_can', 'v_can_idle', 'v_wrist', 'v_glasses', 'v_gaze_idle', 'v_whisper', 'v_jacket', 'v_jacket_idle',
+    't_lounge_can', 't_can_wrist', 't_wrist_glasses', 't_glasses_gaze', 't_gaze_whisper', 't_whisper_jacket'];
+  const ONCE = new Set(CLIP_NAMES.filter((n) => n.startsWith('t_')));
+  const CLIP = {};
+  if (!QS.has('stills')) for (const n of CLIP_NAMES) {
+    const v = document.createElement('video'); Object.assign(v, { muted: true, loop: false, playsInline: true, preload: 'auto', src: `media/video/${n}.mp4?v=4` });
     v.setAttribute('playsinline', ''); v.addEventListener('error', () => { delete CLIP[n]; }); CLIP[n] = v;
-    v.addEventListener('loadeddata', () => { if (POSTER[n]) return; const c = document.createElement('canvas'); c.width = v.videoWidth; c.height = v.videoHeight; c.getContext('2d').drawImage(v, 0, 0); POSTER[n] = c; }, { once: true });
   }
+  const clipOK = (n) => n && CLIP[n] && CLIP[n].readyState >= 2;
 
   // ---------------------------------------------------------------- state
   const fresh = () => ({ started: false, done: false, t: 0, clock: 0, view: 'lounge', can: 0, grip: 0, gaze: 0, ear: 0, jacket: 0, near: 0, fade: 0, lv: 0, pos: { az: 0, dist: .8 } });
@@ -91,7 +93,7 @@
       await action('👣', '近づく', 'Go to him');
       SND.fx.leather(0, .7); S.near = .5; await sleep(.6);
       // the cold can on your right cheek
-      setStep(1); S.view = 'can'; await sleep(.5);
+      setStep(1); await go('t_lounge_can', 'can');
       await say('j03', CLOSE); SND.fx.can(); S.can = 1; await sleep(.8);
       await say('j04', CLOSE);
       S.can = .4;
@@ -99,37 +101,27 @@
       const a = await choice([['ずっと迅を見てた', 'I was watching only you'], ['…ほかのメンバーも', '…the other members too']]);
       S.can = 0;
       // he grabs your wrist
-      setStep(2); S.view = 'wrist'; SND.fx.leather(.5, .35); S.grip = 1; S.near = .8;
+      setStep(2); await go('t_can_wrist', 'wrist'); SND.fx.leather(.5, .35); S.grip = 1; S.near = .8;
       await say(a ? 'j06b' : 'j06a', CLOSE);
-      S.view = 'glasses'; S.near = 1; await sleep(.4); SND.fx.leather(.3, .3);
+      await go('t_wrist_glasses', 'glasses'); S.near = 1; SND.fx.leather(.3, .3);
       await say('j07', CLOSE);
       // he pushes his sunglasses up (one shot), then just looks at you, silent, while you hold his gaze
-      SND.loop('heart')?.set(.12); await playOnce('off', 4.2); S.view = 'gaze';
+      SND.loop('heart')?.set(.12); await go('t_glasses_gaze', 'gaze');
       await hold('👀', '目をそらさない（長押し）', 'Hold his gaze (press and hold)', 3, (down, k) => { S.gaze = down ? k : S.gaze * .98; SND.loop('heart')?.set(down ? .35 + .35 * k : .15); });
       await sleep(.8);
       // he leans in to your right ear
-      setStep(3); S.view = 'whisper'; S.gaze = .5; SND.fx.leather(.8, .3); await sleep(.4);
+      setStep(3); await go('t_gaze_whisper', 'whisper'); S.gaze = .5; SND.fx.leather(.8, .3); await sleep(.4);
       await say('j08', { az: .9, dist: .3 });
       S.near = .5; S.gaze = 0; SND.loop('heart')?.set(.12); await sleep(.3);
       S.ear = 1; await say('j10', RIGHT_EAR); await sleep(.6); S.ear = .4;
       // his jacket
-      setStep(4); S.view = 'jacket'; S.near = .8; SND.fx.leather(0, .3);
+      setStep(4); await go('t_whisper_jacket', 'jacket'); S.near = .8; SND.fx.leather(0, .3);
       await say('j09', CLOSE);
       await action('🧥', 'ジャケットにくるまる', 'Wrap yourself in his jacket');
       SND.fx.leather(-.6, .2); setTimeout(() => SND.fx.leather(.6, .2), 200); S.jacket = 1; S.ear = 0;
       await sleep(1.2); await say('j11', CLOSE);
       await sleep(2.2); SND.fx.ice(); S.fade = 1; await sleep(3.2); finish();
     } catch (e) { if (e.message !== 'stopped') console.error(e); }
-  }
-
-  async function playOnce(n, max) {
-    const my = run, v = CLIP[n];
-    S.view = n;
-    if (!clipReady(n)) { await sleep(1); return; }
-    v.currentTime = 0; S.once = n;
-    await new Promise((res) => { const t0 = performance.now(); const chk = () => (v.ended || performance.now() - t0 > max * 1000 || my !== run ? res() : setTimeout(chk, 50)); chk(); });
-    S.once = '';
-    if (my !== run) throw new Error('stopped');
   }
 
   // ---------------------------------------------------------------- per-frame state + thermal
@@ -166,35 +158,39 @@
     return { th: { ...ear }, src };
   }
 
-  // ---------------------------------------------------------------- drawing: the view's loop while he talks, its first frame while he waits
+  // ---------------------------------------------------------------- drawing: clips switch only at a clip's end (handoff §4b)
   let viewA = 'lounge', viewB = 'lounge', mix = 1;
-  const VS = {};
-    function clips(dt) {
-    const used = new Set();
-    for (const view of new Set([viewA, viewB])) {
-      const st = VS[view] || (VS[view] = { mode: 'still', k: 1 });
-      const want = view === 'off' ? (clipReady('off') ? 'play' : 'still')
-        : talking && clipReady(view) ? 'play' : clipReady(view + '_idle') ? 'idle' : clipReady(view) ? 'poster' : 'still';
-      if (want !== st.mode) { st.prev = st.mode; st.mode = want; st.k = 0; }
-      st.k = Math.min(1, st.k + dt / .3);
-      for (const m of ['play', 'idle']) if (st.mode === m || (st.prev === m && st.k < 1)) used.add(m === 'idle' ? view + '_idle' : view);
-    }
-    for (const [n, v] of Object.entries(CLIP)) { if (used.has(n)) { if (v.paused && !v.ended) v.play().catch(() => {}); } else if (!v.paused) v.pause(); }
+  let cur = null, curView = null, pending = null;
+  function loopFor(view) {
+    const quiet = !talking, idle = `v_${view}_idle`, talk = `v_${view}`;
+    if (quiet && clipOK(idle)) return idle;
+    return clipOK(talk) ? talk : clipOK(idle) ? idle : null;
   }
-  function layer(view, mode, a) {
-    const src = mode === 'play' ? CLIP[view] : mode === 'idle' ? CLIP[view + '_idle'] : mode === 'poster' ? POSTER[view] : IMG[view];
-    if (!src) return false;
-    const w = src.videoWidth || src.width, h = src.videoHeight || src.height, dh = W * h / w;
-    ctx.globalAlpha = a; ctx.drawImage(src, 0, (H - dh) / 2, W, dh); ctx.globalAlpha = 1; return true;
+  function go(name, view) {   // a one-shot transition at the next clip end, then continue in `view`
+    if (!clipOK(name) || !cur) { S.view = view; return Promise.resolve(); }
+    const my = run;
+    return new Promise((done, fail) => { pending = { name, view, done: () => (my === run ? done() : fail(new Error('stopped'))), started: false }; });
+  }
+  function playClip(name, view) { const v = CLIP[name]; cur = name; curView = view; v.currentTime = 0; v.play().catch(() => {}); }
+  function startLoop() { const w = loopFor(S.view); if (w) playClip(w, S.view); else cur = null; }
+  function clips() {
+    if (QS.has('stills')) return;
+    if (!cur) { startLoop(); return; }
+    if (!ONCE.has(cur) && curView !== S.view && !pending) { startLoop(); return; }
+    const v = CLIP[cur];
+    if (!v.ended && v.currentTime < v.duration - .03) return;   // mid-clip: never switch
+    if (ONCE.has(cur) && pending && pending.started) { const p = pending; pending = null; S.view = curView; viewA = viewB = curView; mix = 1; p.done(); return; }   // next frame: the line that follows go() has started, so loopFor picks the talk loop
+    if (pending && !pending.started) { pending.started = true; playClip(pending.name, pending.view); return; }
+    startLoop();
   }
   function drawView(view, alpha) {
-    const st = VS[view] || { mode: 'still', k: 1 };
-    if (st.k < 1 && st.prev && layer(view, st.prev, alpha)) layer(view, st.mode, alpha * st.k);
-    else if (!layer(view, st.mode, alpha)) { ctx.fillStyle = '#1a0f14'; ctx.globalAlpha = alpha; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; }
+    const src = cur && clipOK(cur) && (view === curView || (view === S.view && ONCE.has(cur))) ? CLIP[cur] : IMG[view];
+    if (!src) { ctx.fillStyle = '#1a0f14'; ctx.globalAlpha = alpha; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
+    ctx.globalAlpha = alpha; ctx.drawImage(src, 0, 0, W, H); ctx.globalAlpha = 1;
   }
   function draw(t, dt) {
     if (S.view !== viewB) { viewA = viewB; viewB = S.view; mix = 0; }
-    clips(dt);
+    clips();
     mix = Math.min(1, mix + dt / .5);
     if (mix < 1) drawView(viewA, 1);
     drawView(viewB, mix < 1 ? mix : 1);
@@ -272,7 +268,7 @@
   }
   function start() {
     SND.init(); SND.loadVoices(Object.keys(LINES));
-    S = fresh(); S.started = true; viewA = viewB = 'lounge'; mix = 1; for (const k in VS) delete VS[k]; $('cleared').hidden = true;
+    S = fresh(); S.started = true; viewA = viewB = 'lounge'; mix = 1; cur = null; pending = null; $('cleared').hidden = true;
     $('intro').classList.add('hidden');
     story();
   }

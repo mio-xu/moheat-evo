@@ -1,0 +1,89 @@
+{
+ "model": "Seedance 2.5 Lite",
+ "resolution": "1080p",
+ "duration_s": 4,
+ "mode": "First & Last Frame",
+ "frames": "assets/frames/<name>.jpg = media/art stills",
+ "clips": {
+  "v_lounge": {
+   "first": "jin_lounge",
+   "last": "jin_lounge",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Jin: messy wine-red hair, golden eyes, a black leather jacket over an open black shirt, silver rings and a silver chain, dark sunglasses (on his eyes or pushed up on his head exactly as in the input image).\n\nLounging on the red velvet sofa he beckons the viewer with his outstretched hand and talks to her with a confident smirk: natural mouth movement as if speaking Japanese, his fingers curl in a come-here gesture, a small tilt of the head, the warm bulbs of the dressing-room mirror glow. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_lounge_idle": {
+   "first": "jin_lounge",
+   "last": "jin_lounge",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Jin: messy wine-red hair, golden eyes, a black leather jacket over an open black shirt, silver rings and a silver chain, dark sunglasses (on his eyes or pushed up on his head exactly as in the input image).\n\nLounging on the red velvet sofa, he silently waits for the viewer with a lazy smirk, mouth closed: slow breathing, his outstretched fingers tap once, a slight tilt of the head, the mirror bulbs glow. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_can": {
+   "first": "jin_can",
+   "last": "jin_can",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Jin: messy wine-red hair, golden eyes, a black leather jacket over an open black shirt, silver rings and a silver chain, dark sunglasses (on his eyes or pushed up on his head exactly as in the input image).\n\nHolding the ice-cold can against the viewer's cheek, he talks to her with a teasing grin: natural mouth movement as if speaking Japanese, condensation glistens on the can, he presses it a little closer, one blink. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_can_idle": {
+   "first": "jin_can",
+   "last": "jin_can",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Jin: messy wine-red hair, golden eyes, a black leather jacket over an open black shirt, silver rings and a silver chain, dark sunglasses (on his eyes or pushed up on his head exactly as in the input image).\n\nHolding the ice-cold can against the viewer's cheek, he waits for her answer with a teasing grin, mouth closed: slow breathing, condensation glistens on the can, his eyes narrow slightly, one blink. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_wrist": {
+   "first": "jin_wrist",
+   "last": "jin_wrist",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Jin: messy wine-red hair, golden eyes, a black leather jacket over an open black shirt, silver rings and a silver chain, dark sunglasses (on his eyes or pushed up on his head exactly as in the input image).\n\nGripping the viewer's wrist, he talks to her in a low, possessive voice: natural mouth movement as if speaking Japanese, his thumb moves slightly on her wrist, intense eyes, one blink. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_glasses": {
+   "first": "jin_glasses",
+   "last": "jin_glasses",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Jin: messy wine-red hair, golden eyes, a black leather jacket over an open black shirt, silver rings and a silver chain, dark sunglasses (on his eyes or pushed up on his head exactly as in the input image).\n\nHolding the frame of his dark sunglasses, he looks at the viewer over them and talks in a low voice: natural mouth movement as if speaking Japanese, a slow smirk, one blink. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_gaze_idle": {
+   "first": "jin_gaze",
+   "last": "jin_gaze",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Jin: messy wine-red hair, golden eyes, a black leather jacket over an open black shirt, silver rings and a silver chain, dark sunglasses (on his eyes or pushed up on his head exactly as in the input image).\n\nVery close, with his sunglasses pushed up on his head, he silently holds the viewer's gaze, mouth closed in a faint smile: slow breathing, a very slow blink, his golden eyes soften a little, a few strands of red hair move. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_whisper": {
+   "first": "jin_whisper",
+   "last": "jin_whisper",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Jin: messy wine-red hair, golden eyes, a black leather jacket over an open black shirt, silver rings and a silver chain, dark sunglasses (on his eyes or pushed up on his head exactly as in the input image).\n\nLeaning in close to the viewer's ear, he murmurs softly: lips moving gently as he speaks in a low voice, half-lidded eyes, slow breathing, a few strands of red hair move. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_jacket": {
+   "first": "jin_jacket",
+   "last": "jin_jacket",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Jin: messy wine-red hair, golden eyes, a black leather jacket over an open black shirt, silver rings and a silver chain, dark sunglasses (on his eyes or pushed up on his head exactly as in the input image).\n\nHolding his black leather jacket open around the viewer's shoulders, he talks to her with a rough, caring look: natural mouth movement as if speaking Japanese, the leather creases softly, one blink. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_jacket_idle": {
+   "first": "jin_jacket",
+   "last": "jin_jacket",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Jin: messy wine-red hair, golden eyes, a black leather jacket over an open black shirt, silver rings and a silver chain, dark sunglasses (on his eyes or pushed up on his head exactly as in the input image).\n\nHolding his black leather jacket open around the viewer's shoulders, he silently waits, mouth closed in a small smile: slow breathing, the leather creases softly, one slow blink. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_lounge_can": {
+   "first": "jin_lounge",
+   "last": "jin_can",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Jin: messy wine-red hair, golden eyes, a black leather jacket over an open black shirt, silver rings and a silver chain, dark sunglasses (on his eyes or pushed up on his head exactly as in the input image).\n\nHe gets up from the sofa, pushes his sunglasses up onto his head, picks up a cold silver can and steps close to the viewer, pressing the can against her cheek with a grin. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_can_wrist": {
+   "first": "jin_can",
+   "last": "jin_wrist",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Jin: messy wine-red hair, golden eyes, a black leather jacket over an open black shirt, silver rings and a silver chain, dark sunglasses (on his eyes or pushed up on his head exactly as in the input image).\n\nHe puts the can down out of frame and grabs the viewer's wrist with his ringed hand, his expression turning serious and intense. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_wrist_glasses": {
+   "first": "jin_wrist",
+   "last": "jin_glasses",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Jin: messy wine-red hair, golden eyes, a black leather jacket over an open black shirt, silver rings and a silver chain, dark sunglasses (on his eyes or pushed up on his head exactly as in the input image).\n\nHe lets go of the viewer's wrist, pulls his sunglasses down onto his eyes with one hand and looks at her over the frame with a slow smirk. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_glasses_gaze": {
+   "first": "jin_glasses",
+   "last": "jin_gaze",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Jin: messy wine-red hair, golden eyes, a black leather jacket over an open black shirt, silver rings and a silver chain, dark sunglasses (on his eyes or pushed up on his head exactly as in the input image).\n\nHe slowly pushes his dark sunglasses up onto his head and leans in very close, looking straight into the viewer's eyes. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_gaze_whisper": {
+   "first": "jin_gaze",
+   "last": "jin_whisper",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Jin: messy wine-red hair, golden eyes, a black leather jacket over an open black shirt, silver rings and a silver chain, dark sunglasses (on his eyes or pushed up on his head exactly as in the input image).\n\nFrom face to face he slowly leans past the viewer's face toward her ear, his eyes half closing, a faint smile. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_whisper_jacket": {
+   "first": "jin_whisper",
+   "last": "jin_jacket",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Jin: messy wine-red hair, golden eyes, a black leather jacket over an open black shirt, silver rings and a silver chain, dark sunglasses (on his eyes or pushed up on his head exactly as in the input image).\n\nHe leans back, shrugs off his black leather jacket and holds it open around the viewer's shoulders, looking at her with a rough, caring look. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  }
+ }
+}

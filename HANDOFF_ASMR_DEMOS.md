@@ -42,7 +42,7 @@ demos/all-ages/Demo10_CaveSpring/                 纯交互解谜《火をとも
 demos/healing/Demo11_Naomi/                      纯交互治愈小游戏《ナオミと、ふわふわの一日》（用户家的猫 Naomi，Seedance 美术）
 demos/for-women/Demo12_LateCall/                   纯交互深夜电话《もしもし、きこえる？》（原创男偶像 蓮，ElevenLabs）
 demos/for-women/Demo20_HinataHandshake/           纯交互握手会《あと10秒だけ、ね？》（原创男偶像 陽向，ElevenLabs）
-demos/for-women/Demo21_JinLounge/                 纯交互 VIP 休息室《俺だけ見てろ》（原创男偶像 迅，VOICEVOX:青山龍星，Seedance 动画）
+demos/for-women/Demo21_JinLounge/                 纯交互 VIP 休息室《俺だけ見てろ》（原创男偶像 迅，ElevenLabs，Seedance 2.5 Lite 动画）
 demos/for-women/Demo22_ShionRain/                 纯交互雨夜《雨が止むまで》（原创男偶像 紫苑，ElevenLabs，Seedance 动画）
 demos/healing/Demo15_FamilyCall/                 纯交互家庭电话《もしもし、おばあちゃん？》（外婆ハナ VOICEVOX:もち子さん，外公ゲン VOICEVOX:ちび式じい）
 demos/healing/Demo13_NaomiCam/                   Naomi 监控摄像头版《ナオミ、いまなにしてる？》（复用 Demo 11 美术和音频）
@@ -340,6 +340,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 声音：**VOICEVOX:青山龍星**，用户选的「a4」：しっとり（耳语句用 囁き），pitch +0.03、intonation 1.20、speed 1.02、**共振峰 ×1.06**（先以 pitch −ln1.06 合成，再 asetrate×1.06 + atempo 1/1.06，音高不变、声质更年轻）。`scripts/voice.py`；试听记录在 `scripts/audition*.py`（结果在 `audio/`，本地）。
 - 流程：床头手机震动 → 接听（声音带电话音质、只在**左耳**，左耳热）→ 两次选择 → 他在雪夜回家路上 → **开窗看同一场雪（右耳凉，左耳仍热）**→ 关窗 → **换耳朵（声音和热度移到右耳）**→ 耳语秘密 → 说「おやすみ」（麦克风或按钮）→ 门铃（电话里和走廊同时响）→ 开门（两耳一凉）→ 真实立体声「来ちゃった」→ 拥抱（两耳热）→ 右耳「会いたかった」→ 回封面 `stop`。同侧冲突 0（`CALL.conflicts()`）。
 - 美术 10 张：`scripts/seedance.py scenes`（2K，16:9）→ `scripts/prepare_art.py`（表情帧对齐只换脸，用 Demo 11 的对齐函数按路径加载）→ `media/art/*.webp`。
+- **动画已按新标准重做（2026-11-08）**：11 段 Seedance 2.5 Lite 1080p 首尾帧（房间 / 开窗 / 街头说话·安静 / 特写 / 门口说话·安静 / 拥抱 + 过渡 `t_room_open`、`t_room_close`、`t_door_hug`），新静帧 `ren_hug`（他的脸在左 → 最后一句改到左耳）；换地点用叠化。`scripts/prepare_video.py`（读 `media/art/*.webp`）全部 `exact 0.0 / 0.0`；旧 `v_close_whisper` 已删。自动通关 3:17，0 报错。两个播放器修了一处：过渡结束后等一帧再选循环，让紧接着的台词直接用说话循环。
 
 ### Demo15_FamilyCall + Demo16_FamilyCall2 ✅ 可玩 —《もしもし、おばあちゃん？》+《じいちゃんの、ゆきだるま》（纯交互两集，2026-11-07/08）
 - 用户要求"和外公外婆打家庭电话，要可爱的爷爷奶奶"。原创角色：外婆**ハナ**（话多爱操心）、外公**ゲン**（笨拙嘴硬、爱抢电话），乡下雪天的老房子。
@@ -394,6 +395,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 美术：Seedance 网页 GPT Image 2（3 号柔和赛璐璐）6 张场景；动画：Seedance 2.0 Pro 首尾帧同图 4 s × 6（1464 credits）→ ping-pong 压缩。
 - 补动画（用户选方案 C）：开场待机 / 皮衣待机（720p）、摘墨镜一次性片段 + 对视待机（1080p，新图 `jin_gaze`）；全部重压 CRF 20。另有一段多生成的皮衣待机放在 `assets/video_alt/`（多点了一次，浪费 244）。余额剩 5620。
 - 用户 2026-11-08 规则：**以后先用静态图做完游戏，Seedance 视频放在最后做。**
+- **动画已按新标准重做（2026-11-08）**：16 段 Seedance 2.5 Lite 1080p 首尾帧（10 段循环 + 6 段过渡，`project/web_video_prompts.json`），网页端提交（API 上传限流），`scripts/prepare_video.py` 全部 `exact 0.0 / 0.0`；播放器只在片段结尾切换、`go()` 播过渡。旧的 720p ping-pong 片段、`v_off`、`compress_video.sh` 已删。自动通关 1:41，0 报错。
 - 另：Demo16_HandshakeEvent（未入 git）是我给春翔做的半成品，已交给另一个会话；那 6 段春翔动画（1464 credits）对方不用。
 - 下一集计划：紫苑（白金长发、白衬衫大敞、偶尔眼镜；VOICEVOX:青山龍星「s9」），雨夜他家，用吹风机帮你吹头发（暖风绕头）。造型图在 Demo16 的 `shion_v4_platinum.png`。
 

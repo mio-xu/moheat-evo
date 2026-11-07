@@ -14,7 +14,7 @@
   // ---------------------------------------------------------------- art
   const IMG = {};
   const PATCH = window.REN_PATCHES || {};   // small face patches (mouth / eyes) laid over the base frame — scripts/prepare_art.py
-  const NAMES = ['bg_room', 'bg_room_open', 'ren_call', 'ren_close', 'ren_door', ...Object.keys(PATCH)];
+  const NAMES = ['bg_room', 'bg_room_open', 'ren_call', 'ren_close', 'ren_door', 'ren_hug', ...Object.keys(PATCH)];
   const artReady = Promise.all(NAMES.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/${n}.webp?v=1`; })));
 
   // ---------------------------------------------------------------- state
@@ -117,10 +117,10 @@
       // the window: the same snow (window on the right of your room → cool on the right, phone warm on the left)
       setStep(2); await say('c07'); S.view = 'room';
       await action('🪟', '窓をあける', 'Open the window', { x0: 1250, x1: 1920, y0: 0, y1: 800 });
-      SND.fx.window(1.2, true); S.windowOpen = 1; setLoops();
+      await go('t_room_open', 'roomOpen', () => { SND.fx.window(1.2, true); S.windowOpen = 1; setLoops(); });
       await sleep(2.2); await say('c08'); await sleep(1.5); await say('c09');
       await action('🪟', '窓をしめる', 'Close the window', { x0: 1250, x1: 1920, y0: 0, y1: 800 });
-      SND.fx.window(1.2, false); S.windowOpen = 0; setLoops(); SND.loop('street')?.stop();
+      await go('t_room_close', 'room', () => { SND.fx.window(1.2, false); S.windowOpen = 0; setLoops(); }); SND.loop('street')?.stop();
       S.view = 'call'; await sleep(.6);
       // switch ears: his voice and the warmth move to your right ear
       setStep(3); await say('c10');
@@ -142,8 +142,8 @@
       await sleep(1.4); await say('c18', { az: 0, dist: 1 }); await sleep(.4);
       await say('c19', { az: .1, dist: .8 });
       await action('🤍', 'ぎゅっ', 'Hold him');
-      S.hug = 1; SND.fx.rustle(-.8, .3); SND.fx.rustle(.8, .3); SND.loop('heart', 0, .3)?.set(.5); S.view = 'hug';
-      await sleep(1.8); await say('c20', { az: 1.35, dist: .12 });
+      await go('t_door_hug', 'hug', () => { S.hug = 1; SND.fx.rustle(-.8, .3); SND.fx.rustle(.8, .3); SND.loop('heart', 0, .3)?.set(.5); });
+      await sleep(1.8); await say('c20', { az: -1.35, dist: .12 });   // his face is on the left of the hug picture → your left ear
       await sleep(3); SND.fx.chime();
       S.fade = 1; await sleep(3.2); finish();
     } catch (e) { if (e.message !== 'stopped') console.error(e); }
@@ -209,69 +209,55 @@
     FW.shy = ease(FW.shy, S.shy ? 1 : 0, dt, .25, .35);
     FW.blink = ease(FW.blink, t < blinkUntil && !talking ? 1 : 0, dt, .025, .05);
   }
-  const BASE = { call: 'ren_call', close: 'ren_close', door: 'ren_door', hug: 'ren_door' };
-  // ---- animated loops (Seedance video, first frame = last frame = the still) — used whenever loaded, else still + face patches
-  const CLIP_NAMES = ['v_call_idle', 'v_call_talk', 'v_call_shy', 'v_close_whisper', 'v_door_idle', 'v_door_talk', 'v_room_open'];
-  const CLIP = {}, POSTER = {};
+  const BASE = { room: 'bg_room', roomOpen: 'bg_room_open', call: 'ren_call', close: 'ren_close', door: 'ren_door', hug: 'ren_hug' };
+  // ---- animation (handoff §4b, 2026-11-08): Seedance 2.5 Lite 1080p clips whose first and last frames are EXACTLY the stills
+  // (scripts/prepare_video.py). Loops per view (talk / quiet), transitions within one place (window open / close, door → hug);
+  // a change of place (your room ↔ his street ↔ his close-up) cross-fades. Clips only switch at a clip's end. ?stills = stills + patches.
+  const CLIP_NAMES = ['v_room', 'v_room_open', 'v_call_talk', 'v_call_idle', 'v_close', 'v_door_talk', 'v_door_idle', 'v_hug', 't_room_open', 't_room_close', 't_door_hug'];
+  const ONCE = new Set(CLIP_NAMES.filter((n) => n.startsWith('t_')));
+  const CLIP = {};
   if (!QS.has('stills')) for (const n of CLIP_NAMES) {
-    const v = document.createElement('video'); Object.assign(v, { muted: true, loop: true, playsInline: true, preload: 'auto', src: `media/video/${n}.mp4?v=1` });
+    const v = document.createElement('video'); Object.assign(v, { muted: true, loop: false, playsInline: true, preload: 'auto', src: `media/video/${n}.mp4?v=3` });
     v.setAttribute('playsinline', ''); v.addEventListener('error', () => { delete CLIP[n]; }); CLIP[n] = v;
-    v.addEventListener('loadeddata', () => { if (POSTER[n]) return; const c = document.createElement('canvas'); c.width = v.videoWidth; c.height = v.videoHeight; c.getContext('2d').drawImage(v, 0, 0); POSTER[n] = c; }, { once: true });
   }
-  // a view that has any clip never goes back to the still (colours differ a little): a missing clip → that view's clip, frozen on its first frame
-  const VIEW_CLIPS = { call: ['v_call_talk', 'v_call_idle', 'v_call_shy'], close: ['v_close_whisper'], door: ['v_door_talk', 'v_door_idle'], hug: ['v_door_talk', 'v_door_idle'], room: ['v_room_open'] };
-  const clipOK = (n) => n && (n.startsWith('poster:') ? !!POSTER[n.slice(7)] : CLIP[n] && CLIP[n].readyState >= 2);
-  function wantClip(view) {
-    if (view === 'call') return talking ? (S.shy ? 'v_call_shy' : 'v_call_talk') : 'v_call_idle';
-    if (view === 'close') return 'v_close_whisper';
-    if (view === 'door' || view === 'hug') return talking ? 'v_door_talk' : 'v_door_idle';
-    if (view === 'room' && S.windowOpen) return 'v_room_open';
-    return null;
+  const clipOK = (n) => n && CLIP[n] && CLIP[n].readyState >= 2;
+  let cur = null, curView = null, pending = null;
+  function loopFor(view) {
+    const quiet = !talking;
+    const L = { room: ['v_room'], roomOpen: ['v_room_open'], call: quiet ? ['v_call_idle', 'v_call_talk'] : ['v_call_talk'], close: ['v_close'],
+      door: quiet ? ['v_door_idle', 'v_door_talk'] : ['v_door_talk', 'v_door_idle'], hug: ['v_hug'] }[view] || [];
+    return L.find(clipOK) || null;
   }
-  const VS = {};   // per view: current clip, previous clip, crossfade
-  function clips(dt) {
-    const used = new Set();
-    for (const view of new Set([viewA, viewB])) {
-      const st = VS[view] || (VS[view] = { cur: null, prev: null, k: 1 }), want = wantClip(view);
-      if (want && !clipOK(want)) {
-        const sib = (VIEW_CLIPS[view] || []).find((c) => POSTER[c]);
-        const alt = sib ? 'poster:' + sib : null;                 // frozen first frame of a sibling clip, else the still + patches
-        if (alt !== st.cur) { st.prev = st.cur; st.cur = alt; st.k = alt && st.prev ? 0 : 1; }
-      }
-      else if (want !== st.cur && clipOK(want)) {
-        st.prev = st.cur; st.cur = want; st.k = 0;
-        if (want === 'v_call_shy') CLIP[want].currentTime = 0;   // the shy glance plays from its start
-      }
-      st.k = Math.min(1, st.k + dt / .3);
-      if (st.cur) used.add(st.cur); if (st.prev && st.k < 1) used.add(st.prev);
-    }
-    for (const [n, v] of Object.entries(CLIP)) {
-      if (used.has(n)) { if (v.paused) v.play().catch(() => {}); } else if (!v.paused) v.pause();
-    }
+  function go(name, view, onStart) {   // a one-shot transition at the next clip end (onStart when it begins), then continue in `view`
+    if (!clipOK(name) || !cur) { onStart && onStart(); S.view = view; return Promise.resolve(); }
+    const my = run;
+    return new Promise((done, fail) => { pending = { name, view, onStart, done: () => (my === run ? done() : fail(new Error('stopped'))), started: false }; });
   }
-  function drawClip(n, ox, oy, z, a) {
-    if (!clipOK(n)) return false;
-    const v = n.startsWith('poster:') ? POSTER[n.slice(7)] : CLIP[n], vw = v.videoWidth || v.width, vh = v.videoHeight || v.height;
-    const h = W * z * vh / vw;          // fill the width, centre vertically
-    ctx.globalAlpha = a; ctx.drawImage(v, ox, oy + (H * z - h) / 2, W * z, h); return true;
+  function playClip(name, view) { const v = CLIP[name]; cur = name; curView = view; v.currentTime = 0; v.play().catch(() => {}); }
+  function startLoop() { const w = loopFor(S.view); if (w) playClip(w, S.view); else cur = null; }
+  function clips() {
+    if (QS.has('stills')) return;
+    if (!cur) { startLoop(); return; }
+    if (!ONCE.has(cur) && curView !== S.view && !pending) { startLoop(); return; }   // a change of place: the view cross-fade covers it
+    const v = CLIP[cur];
+    if (!v.ended && v.currentTime < v.duration - .03) return;   // mid-clip: never switch
+    if (ONCE.has(cur) && pending && pending.started) { const p = pending; pending = null; S.view = curView; viewA = viewB = curView; mix = 1; p.done(); return; }   // next frame: the line that follows go() has started, so loopFor picks the talk loop
+    if (pending && !pending.started) { pending.started = true; playClip(pending.name, pending.view); pending.onStart && pending.onStart(); return; }
+    startLoop();
   }
   function drawView(view, t, alpha) {
-    const name = view === 'room' ? (S.windowOpen ? 'bg_room_open' : 'bg_room') : BASE[view], im = IMG[name] || IMG.bg_room;
-    const z = view === 'hug' ? 1.12 : view === 'close' ? 1.02 + .01 * Math.sin(t * .5) : 1.0 + .004 * Math.sin(t * .4);
-    const ox = W / 2 - W * z / 2, oy = H / 2 - H * z / 2 - (view === 'hug' ? 40 : 0);
+    if (cur && clipOK(cur) && (view === curView || (view === S.view && ONCE.has(cur)))) { ctx.globalAlpha = alpha; ctx.drawImage(CLIP[cur], 0, 0, W, H); ctx.globalAlpha = 1; return; }
+    const name = BASE[view], im = IMG[name] || IMG.bg_room;
+    const exact = !QS.has('stills') && Object.keys(CLIP).length > 0;   // with video the still must match the clips' frames exactly
+    const z = exact ? 1 : view === 'close' ? 1.02 + .01 * Math.sin(t * .5) : 1.0 + .004 * Math.sin(t * .4);
+    const ox = W / 2 - W * z / 2, oy = H / 2 - H * z / 2;
     ctx.globalAlpha = alpha;
     if (!im) { ctx.fillStyle = '#1b1d36'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
-    const st = VS[view];
-    if (st && st.cur && clipOK(st.cur)) {             // animated
-      if (st.prev && st.k < 1 && drawClip(st.prev, ox, oy, z, alpha)) drawClip(st.cur, ox, oy, z, alpha * st.k);
-      else drawClip(st.cur, ox, oy, z, alpha);
-      ctx.globalAlpha = 1; return;
-    }
     ctx.drawImage(im, ox, oy, W * z, H * z);
     const patch = (pn, w) => { const p = IMG[pn], at = PATCH[pn]; if (!p || !at || w < .01) return; ctx.globalAlpha = alpha * Math.min(1, w); ctx.drawImage(p, ox + at[0] * z, oy + at[1] * z, p.width * z, p.height * z); };
     if (view === 'call') { patch('ren_call_blink_eyeL', FW.blink); patch('ren_call_blink_eyeR', FW.blink); patch('ren_call_talk_mouth', FW.mouth); }
     if (view === 'close') patch('ren_close_talk_mouth', FW.mouth);
-    if (view === 'door' || view === 'hug') patch('ren_door_talk_mouth', FW.mouth);
+    if (view === 'door') patch('ren_door_talk_mouth', FW.mouth);
     ctx.globalAlpha = 1;
   }
   let snow = [];
@@ -279,11 +265,11 @@
     if (t > blinkAt) { blinkUntil = t + .13; blinkAt = t + rnd(2.5, 5); }
     faces(t, dt);
     if (S.view !== viewB) { viewA = viewB; viewB = S.view; mix = 0; }
-    clips(dt);
+    clips();
     mix = Math.min(1, mix + dt / .6);
     if (mix < 1) drawView(viewA, t, 1);
     drawView(viewB, t, mix < 1 ? mix : 1);
-    if (S.windowOpen && viewB === 'room') {   // snow drifting in from the window
+    if (S.windowOpen && (viewB === 'room' || viewB === 'roomOpen') && !(cur && clipOK(cur))) {   // snow drifting in from the window
       if (Math.random() < dt * 30) snow.push({ x: rnd(1350, 1900), y: rnd(-20, 300), vx: rnd(-90, -20), vy: rnd(40, 110), r: rnd(3, 7), life: 0 });
     }
     for (const f of snow) { f.life += dt; f.x += f.vx * dt; f.y += f.vy * dt; }
@@ -367,7 +353,7 @@
   }
   function start() {
     SND.init(); ensureMic(); SND.loadVoices(Object.keys(LINES));
-    S = fresh(); S.started = true; snow = []; viewA = viewB = 'room'; mix = 1; $('cleared').hidden = true;
+    S = fresh(); S.started = true; snow = []; viewA = viewB = 'room'; mix = 1; cur = null; pending = null; $('cleared').hidden = true;
     $('intro').classList.add('hidden');
     story();
   }

@@ -90,5 +90,16 @@
  "bg_room_open": {
   "generation": "api_d1c1513a05cc9262df09ee8eb15b977be68715fd53858db9a622bd9e1959a355",
   "idempotency_key": "moheat-d12-bg-room-open-s3-v1"
+ },
+ "v_call_idle": {
+  "generation": "api_97ae9fcc7fd1af3df704ff61fcb38817ba50dff7aa6ed705804807a4fbf0e78a",
+  "idempotency_key": "moheat-d12-v-call-idle-seedance-25-lite-v1"
+ },
+ "v_close_whisper": {
+  "generation": "api_319cbdf4396ea0c3049c0ab0f5d46770cc6f8709fceeb5eff970d667fd174acd",
+  "idempotency_key": "moheat-d12-v-close-whisper-seedance-25-lite-v1"
+ },
+ "v_call_talk": {
+  "generation": "api_f627d6a18db8ebad38905589aafb8b9c7c7228ed3e66072c1609fc7ad498a3cb"
  }
 }

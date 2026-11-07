@@ -18,7 +18,8 @@ the thermal output (firmware **DUAL**: cool and heat independent per ear) is com
 Files: `index.html`, `lounge.css` (+ Demo 10's `demo.css` and `../../shared/series.css` by path), `game.js`, `audio.js` (JLAudio), `lines.js`.
 Voice: `scripts/voice.py` — ElevenLabs, the user's pick `jin r1_a` (tools/eleven/cast.json; earlier VOICEVOX:青山龍星 "j6"), audio tags per line.
 Art: Seedance web (GPT Image 2, style 3 soft cel; raw PNGs in `assets/art/`, not in git) → `media/art/jin_*.jpg` (stills / fallback).
-Animation: Seedance 2.0 Pro first = last frame, 4 s, 720p (raw in `assets/video/`, not in git) → `scripts/compress_video.sh` (ping-pong, 1280 w, CRF 26) → `media/video/v_*.mp4`.
-Clips: `v_<view>` = he talks (720p); `v_<view>_idle` = he is silent (lounge, jacket 720p; gaze 1080p); `v_off` = one shot, he pushes his
-sunglasses up (1080p, glasses → gaze still `jin_gaze`). Silent moments play the idle loop, else the talk clip's first frame.
-Compression: CRF 20, native width (1280 / 1920).
+Animation (redone 2026-11-08 to the DEMO_DESIGN_GUIDE §6 standard): 16 Seedance 2.5 Lite 1080p 4 s clips, first & last frame = the stills
+(`assets/frames/`, prompts in `project/web_video_prompts.json`; raw in `assets/video/`, not in git) → `scripts/prepare_video.py` (colour / position
+drift fixed, first and last frame = the still pixel for pixel) → `media/video/*.mp4` (1920×1080, 24 fps, CRF 23).
+Clips: `v_<view>` = he talks, `v_<view>_idle` = he is silent, `t_<from>_<to>` = one transition for every cut. The player switches only at a clip's end;
+`go()` plays the transition, then the next view's loop. `?stills` = stills only.
