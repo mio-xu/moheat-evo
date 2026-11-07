@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rebuild Demo 7 from scripts/izakaya.py (needs VOICEVOX: ../Demo1_SnowFoxfire/start_voicevox.command).
+# Rebuild Demo 7 from scripts/izakaya.py (voices: ElevenLabs, key in the repo .env.local).
 # Cast, voices and the thermal controller come from the Sengoku banquet demo (Demo 9, loaded by path, never modified).
 set -e
 cd "$(dirname "$0")"

@@ -141,8 +141,8 @@ def koto(dur, outro=False):
 
 def insects(level_env):
     """Suzumushi (bell crickets): 4.5 kHz trills, stereo, scattered in the garden."""
-    out = np.zeros((N, 2)); t = 0.0
-    while t < BQ.DURATION - 1:
+    n_out = len(level_env); out = np.zeros((n_out, 2)); t = 0.0      # length of the caller's film (Demo 5–8 reuse this)
+    while t < n_out / SR - 1:
         m = int(rng.uniform(.25, .6) * SR); k = np.arange(m) / SR; f = rng.uniform(4200, 4900)
         x = np.sin(2 * np.pi * f * k) * (np.sin(2 * np.pi * rng.uniform(28, 40) * k) > .2) * adsr(m, .02, .08)
         pan = rng.uniform(-1, 1); place(out[:, 0], t, x * (1 - pan) * .5); place(out[:, 1], t, x * (1 + pan) * .5)

@@ -18,30 +18,30 @@
  },
  "heat_vs_voice": {
   "heat_by_delivery": {
-   "say": 0.604,
-   "whisper": 0.482,
-   "laugh": 0.76
+   "say": 0.594,
+   "whisper": 0.323,
+   "laugh": 0.74
   },
   "correlation": {
-   "N": 0.843,
-   "I": 0.865
+   "N": 0.828,
+   "I": 0.709
   },
   "ok": true
  },
  "left_right_alternation": {
-  "side_switches": 21,
-  "opposite_temps": 37,
+  "side_switches": 22,
+  "opposite_temps": 22,
   "ok": true
  },
  "thermal": {
-  "rows": 3000,
+  "rows": 3050,
   "same_ear_conflicts": 0,
   "ends_at_stop": true,
   "ok": true
  },
  "mix": {
   "sample_rate": "48000",
-  "duration_s": "150.000000",
+  "duration_s": "152.510000",
   "ok": true
  }
 }

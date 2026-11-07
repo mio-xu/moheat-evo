@@ -12,7 +12,7 @@ VOICED = ("say", "whisper", "laugh")
 def main():
     d = os.path.join(ROOT, "audio", "takes"); os.makedirs(d, exist_ok=True); os.makedirs(V.CACHE, exist_ok=True)
     info = {}
-    for i, c in enumerate(WK.CUES):
+    for i, c in enumerate(WK.CUES0):
         if c["kind"] not in VOICED: continue
         durs = []
         for k in range(3):
@@ -23,11 +23,14 @@ def main():
         use = TAKE.get(i, 0)
         info[i] = dict(who=c["who"], t=c["t"], kind=c["kind"], durs=durs, take=use, dur=durs[use])
     # report overlaps (same speaker, and any two voices) so the timeline can be laid out around the real performances
-    seq = sorted(((c["t"], c["t"] + info[i]["dur"], c["who"], i) for i, c in enumerate(WK.CUES) if i in info))
+    seq = sorted(((c["t"], c["t"] + info[i]["dur"], c["who"], i) for i, c in enumerate(WK.CUES0) if i in info))
     for a, b in zip(seq, seq[1:]):
         if a[1] > b[0] - .1: print(f"  ! {a[2]} {a[0]:.1f}–{a[1]:.1f}s runs into {b[2]} {b[0]:.1f}s")
     for i, x in info.items(): print(f"{i:02d} {x['t']:6.1f}s {x['who']} {x['kind']:7s} {x['durs']}  ends {x['t'] + x['dur']:6.1f}")
     json.dump(info, open(os.path.join(ROOT, "audio", "takes.json"), "w"), indent=1)
+    pts = WK._R.compute(WK.CUES0, {i: v["dur"] for i, v in info.items()})
+    json.dump(pts, open(os.path.join(ROOT, "audio", "retime.json"), "w"))
+    print(f"retime: {len(pts)} gaps, +{sum(e for _, e in pts):.1f} s → film {WK.DURATION0 + sum(e for _, e in pts):.1f} s")
 
 
 if __name__ == "__main__":

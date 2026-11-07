@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rebuild Demo 6 from scripts/whisky.py (needs VOICEVOX: ../Demo1_SnowFoxfire/start_voicevox.command).
+# Rebuild Demo 6 from scripts/whisky.py (voices: ElevenLabs, key in the repo .env.local).
 # Cast, room art, voices and the thermal controller come from the Sengoku banquet demo (loaded by path, never modified).
 set -e
 cd "$(dirname "$0")"

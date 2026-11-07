@@ -12,7 +12,7 @@ VOICED = ("say", "whisper", "laugh")
 def main():
     d = os.path.join(ROOT, "audio", "takes"); os.makedirs(d, exist_ok=True); os.makedirs(V.CACHE, exist_ok=True)
     info = {}
-    for i, c in enumerate(ST.CUES):
+    for i, c in enumerate(ST.CUES0):
         if c["kind"] not in VOICED: continue
         durs = []
         for k in range(3):
@@ -23,10 +23,13 @@ def main():
         use = TAKE.get(i, 0)
         info[i] = dict(who=c["who"], t=c["t"], kind=c["kind"], ja=c["ja"], durs=durs, take=use, dur=durs[use])
         print(f"{i:02d} {c['t']:6.1f}s {c['who']} {c['kind']:7s} {durs}  ends {c['t'] + durs[use]:6.1f}  {c['ja']}", flush=True)
-    seq = sorted((c["t"], c["t"] + info[i]["dur"], c["who"], i) for i, c in enumerate(ST.CUES) if i in info)
+    seq = sorted((c["t"], c["t"] + info[i]["dur"], c["who"], i) for i, c in enumerate(ST.CUES0) if i in info)
     for a, b in zip(seq, seq[1:]):
         if a[2] == b[2] and a[1] > b[0] - .1: print(f"  ! {a[2]} {a[0]:.1f}–{a[1]:.1f}s runs into {b[2]} {b[0]:.1f}s")
     json.dump(info, open(os.path.join(ROOT, "audio", "takes.json"), "w"), indent=1, ensure_ascii=False)
+    pts = ST._R.compute(ST.CUES0, {i: v["dur"] for i, v in info.items()})
+    json.dump(pts, open(os.path.join(ROOT, "audio", "retime.json"), "w"))
+    print(f"retime: {len(pts)} gaps, +{sum(e for _, e in pts):.1f} s → film {ST.DURATION0 + sum(e for _, e in pts):.1f} s")
 
 
 if __name__ == "__main__":

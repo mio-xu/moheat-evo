@@ -167,3 +167,11 @@ def _interp(keys, times):
 def positions(times):
     return {"N": _interp(_visits("N"), times), "I": _interp(_visits("I"), times),
             "C": _interp(_src_keys(COOL_KINDS), times), "F": _interp(_src_keys(WARM_KINDS), times)}
+
+
+# ---------------------------------------------------------------- retime (2026-11-08): the film follows the ElevenLabs voices' natural
+# length (no need to keep 150 s); make_voice.py writes audio/retime.json, every time above goes through W(). Script times: CUES0 / DURATION0.
+import importlib.util as _iu, os as _os
+_ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+_s = _iu.spec_from_file_location("retime", _os.path.join(_ROOT, "..", "..", "..", "tools", "eleven", "retime.py"))
+_R = _iu.module_from_spec(_s); _s.loader.exec_module(_R); _R.apply(globals(), _ROOT)

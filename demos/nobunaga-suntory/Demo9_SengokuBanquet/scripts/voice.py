@@ -82,7 +82,9 @@ def perform(c, take=0):
         os.makedirs(CACHE, exist_ok=True)
         wavfile.write(path, SR, (np.clip(x / (np.max(np.abs(x)) + 1e-9) * .9, -1, 1) * 32767).astype(np.int16))
     _last_path[0] = path
-    return wavfile.read(path)[1].astype(np.float64) / 32768
+    x = wavfile.read(path)[1].astype(np.float64) / 32768
+    a, b = int(.01 * SR), int(.06 * SR); x[:a] *= np.linspace(0, 1, a); x[-b:] *= np.linspace(1, 0, b)   # clean edges
+    return x
 
 
 def retime(cues, durs, gap_same=.15, gap_other=.3):
@@ -91,7 +93,8 @@ def retime(cues, durs, gap_same=.15, gap_other=.3):
     vo = sorted([c for c in cues if c["kind"] in ("say", "whisper", "laugh")], key=lambda c: c["t"])
     pts, shift = [], 0.0
     for a, b in zip(vo, vo[1:]):
-        end = a["t"] + shift + durs[id(a)] + (gap_same if a["who"] == b["who"] else gap_other)
+        inhale = .45 if b["kind"] == "whisper" and a["who"] == b["who"] else 0   # build_audio places an inhale 0.45 s before a whisper
+        end = a["t"] + shift + durs[id(a)] + (gap_same if a["who"] == b["who"] else gap_other) + inhale
         over = end - (b["t"] + shift)
         if over > 0: pts.append((round(b["t"] - .01, 3), round(over, 3))); shift += over
     return pts

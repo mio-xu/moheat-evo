@@ -42,10 +42,10 @@ def main():
                                          ok=chk["side_switches"] >= 20 and len(chk["simultaneous_opposite_temps"]) >= 12)
     rows = list(csv.reader(open(os.path.join(ROOT, "thermal", "thermal_4ch.csv"))))[1:]
     rep["thermal"] = dict(rows=len(rows), same_ear_conflicts=chk["same_ear_conflicts"], ends_at_stop=rows[-1][-1] == "stop",
-                          ok=len(rows) == 3000 and chk["same_ear_conflicts"] == 0 and rows[-1][-1] == "stop")
+                          ok=len(rows) == int(WK.DURATION * 20) and chk["same_ear_conflicts"] == 0 and rows[-1][-1] == "stop")
     r = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "stream=duration,sample_rate", "-of", "csv=p=0",
                         os.path.join(ROOT, "audio", "final", "mix_48k.wav")], capture_output=True, text=True).stdout.strip().strip(",").split(",")
-    rep["mix"] = dict(sample_rate=r[0], duration_s=r[1], ok=r[0] == "48000" and abs(float(r[1]) - 150) < .01)
+    rep["mix"] = dict(sample_rate=r[0], duration_s=r[1], ok=r[0] == "48000" and abs(float(r[1]) - WK.DURATION) < .01)
     ok = all(v["ok"] for v in rep.values())
     os.makedirs(os.path.join(ROOT, "analysis"), exist_ok=True)
     json.dump(dict(all_ok=ok, **rep), open(os.path.join(ROOT, "analysis", "qa_report.json"), "w"), indent=1, ensure_ascii=False, default=str)

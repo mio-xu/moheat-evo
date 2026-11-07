@@ -1,5 +1,5 @@
-"""Every voiced line × 3 takes with the locked personas (信長 青山龍星 −1.5 st, 家康 黒沢冴白 −2 st) → audio/takes/
-  python3 scripts/make_voice.py      Needs VOICEVOX. TAKE = {cue index: take} picks the take used in the film."""
+"""Every voiced line × 3 takes with the ElevenLabs voices (nobunaga r1_a / ieyasu r1_a via Demo 9 perform(); was VOICEVOX) → audio/takes/
+  python3 scripts/make_voice.py      Needs ELEVENLABS_API_KEY in the repo .env.local. TAKE = {cue index: take} picks the take used in the film."""
 import json, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import gifu as ST
@@ -12,7 +12,7 @@ VOICED = ("say", "whisper", "laugh")
 def main():
     d = os.path.join(ROOT, "audio", "takes"); os.makedirs(d, exist_ok=True); os.makedirs(V.CACHE, exist_ok=True)
     info = {}
-    for i, c in enumerate(ST.CUES):
+    for i, c in enumerate(ST.CUES0):
         if c["kind"] not in VOICED: continue
         durs = []
         for k in range(3):
@@ -23,10 +23,13 @@ def main():
         use = TAKE.get(i, 0)
         info[i] = dict(who=c["who"], t=c["t"], kind=c["kind"], ja=c["ja"], durs=durs, take=use, dur=durs[use])
         print(f"{i:02d} {c['t']:6.1f}s {c['who']} {c['kind']:7s} {durs}  ends {c['t'] + durs[use]:6.1f}  {c['ja']}", flush=True)
-    seq = sorted((c["t"], c["t"] + info[i]["dur"], c["who"], i) for i, c in enumerate(ST.CUES) if i in info)
+    seq = sorted((c["t"], c["t"] + info[i]["dur"], c["who"], i) for i, c in enumerate(ST.CUES0) if i in info)
     for a, b in zip(seq, seq[1:]):
         if a[2] == b[2] and a[1] > b[0] - .1: print(f"  ! {a[2]} {a[0]:.1f}–{a[1]:.1f}s runs into {b[2]} {b[0]:.1f}s")
     json.dump(info, open(os.path.join(ROOT, "audio", "takes.json"), "w"), indent=1, ensure_ascii=False)
+    pts = ST._R.compute(ST.CUES0, {i: v["dur"] for i, v in info.items()})
+    json.dump(pts, open(os.path.join(ROOT, "audio", "retime.json"), "w"))
+    print(f"retime: {len(pts)} gaps, +{sum(e for _, e in pts):.1f} s → film {ST.DURATION0 + sum(e for _, e in pts):.1f} s")
 
 
 if __name__ == "__main__":

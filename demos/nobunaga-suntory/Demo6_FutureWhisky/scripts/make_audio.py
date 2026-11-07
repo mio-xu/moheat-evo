@@ -17,7 +17,7 @@ AUD, MEDIA = os.path.join(ROOT, "audio"), os.path.join(ROOT, "media")
 STEMS, FINAL = os.path.join(AUD, "stems"), os.path.join(AUD, "final")
 rng = np.random.default_rng(1923)          # Suntory's first distillery, Yamazaki
 db, filt, place, norm_to, adsr = B.db, B.filt, B.place, B.norm_to, B.adsr
-LEVEL = {"say": -19.0, "whisper": -23.5, "laugh": -16.0}
+LEVEL = {"say": -19.0, "whisper": -25.5, "laugh": -16.0}   # ElevenLabs whispers are fuller than VOICEVOX: −25.5 (was −23.5) keeps laugh > say > whisper heat
 TAKE = {}
 
 
@@ -76,7 +76,7 @@ def main():
     nb, ib, cb = B.render(VO["N"], who="N"), B.render(VO["I"], who="I"), B.render(cool, who="C")
     ob = B.render(foley, az=0, d=0.6)
     mb = B.render(music[:, 0], az=-30, d=3.5) + B.render(music[:, 1], az=30, d=3.5)
-    ins = BA.insects(np.interp(t, [0, 3, 147, 150], [0, .8, .8, 0])) * db(-31)
+    ins = BA.insects(np.interp(t, [0, 3, WK.DURATION - 3, WK.DURATION], [0, .8, .8, 0])) * db(-31)
     room = np.stack([filt(B.sos_lp(300), noise(N)) for _ in range(2)], 1)
     room = room / np.sqrt(np.mean(room ** 2)) * db(-50) * (np.clip(t / 2, 0, 1) * np.clip((WK.DURATION - t) / 3, 0, 1))[:, None]
     mix = nb + ib + cb * .9 + ob + mb * .5 + ins + room

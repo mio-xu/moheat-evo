@@ -1,5 +1,5 @@
 {
- "all_ok": true,
+ "all_ok": false,
  "no_cut_or_overlap": {
   "problems": [],
   "ok": true
@@ -18,30 +18,30 @@
  },
  "heat_vs_voice": {
   "heat_by_delivery": {
-   "say": 0.5,
-   "whisper": 0.373,
-   "laugh": 0.652
+   "say": 0.588,
+   "whisper": 0.511,
+   "laugh": 0.744
   },
   "correlation": {
-   "N": 0.73,
-   "I": 0.72
+   "N": 0.783,
+   "I": 0.682
   },
-  "ok": true
+  "ok": false
  },
  "left_right_alternation": {
-  "side_switches": 24,
-  "opposite_temps": 45,
+  "side_switches": 20,
+  "opposite_temps": 23,
   "ok": true
  },
  "thermal": {
-  "rows": 3000,
+  "rows": 3001,
   "same_ear_conflicts": 0,
   "ends_at_stop": true,
   "ok": true
  },
  "mix": {
   "sample_rate": "48000",
-  "duration_s": "150.000000",
+  "duration_s": "150.080000",
   "ok": true
  }
 }
