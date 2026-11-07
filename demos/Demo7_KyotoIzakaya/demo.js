@@ -618,10 +618,12 @@ function loop() {
   const t = now();
   if (Math.abs(t - lastT) > .5) parts = [];
   lastT = t;
+  const ix = window.MoHeatInteract && previewT == null ? window.MoHeatInteract.tick(t) : null;   // ../shared/interact.js: waiting for your line / breath
   const playing = (!media.paused && !media.ended) || previewT != null;
-  const { sts, th } = frame(t, playing ? dt : 0);
-  drawRadar(sts, playing ? th : { Lc: 0, Lh: 0, Rc: 0, Rh: 0 }, t);
-  updateOutput(th, playing && previewT == null);
+  const { sts, th } = frame(t, playing || ix ? dt : 0);
+  const out = (ix && ix.th) || th, live = (playing && previewT == null) || !!(ix && ix.th);
+  drawRadar(sts, playing || live ? out : { Lc: 0, Lh: 0, Rc: 0, Rh: 0 }, t);
+  updateOutput(out, live);
   updateSubs(t); updateScene(t);
   $('time').textContent = `${fmt(t)} / ${fmt(A.duration)}`;
   $('playhead').style.left = `${(t / A.duration) * 100}%`;

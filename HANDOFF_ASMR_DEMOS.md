@@ -292,3 +292,11 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 
 ### Demo switcher (`demos/shared/nav.js`)
 Every full demo page loads `../shared/nav.js`, which adds ‹ ☰ Demos N/9 › to the top bar and a thumbnail panel of all demos (thumbs = `assets/images/demos/demoN.jpg`). `#demos` in the URL opens the panel. Hidden with `?embed`, `?cover`, `?render`. **A new demo must be added to the `DEMOS` list in nav.js.**
+
+### Interactive mode, Nobunaga series (`demos/shared/interact.js`)
+Demo 5–9 full pages pause at "your" moments (cover toggle 「あなたも参加する」 + stage chip 「参加モード ON/OFF」, default on, stored in localStorage):
+- **read**: your subtitle line → say it aloud (mic level only: speech then ~0.5 s silence) → continues, skipping the silent rest of your line.
+- **toast**: say 乾杯 or tap 🥂. **blow**: blow into the mic (Demo 5 tea, Demo 7 yakitori); while blowing, both ears cool (thermal override).
+- No mic → tap / press-and-hold; every gate auto-continues after 15 s; ▶ skips. Nothing is recorded or uploaded.
+- Gates are hand-picked per demo in `GATES` (on silent gaps: audio and thermal CSVs unchanged). Hook: one `MoHeatInteract.tick(t)` call in each demo.js `loop()`.
+- Off in `?embed` (site menu), `?cover`, `?render` → the MP4s and the homepage player stay linear.
