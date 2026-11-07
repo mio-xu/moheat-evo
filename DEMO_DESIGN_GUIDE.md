@@ -250,6 +250,23 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 - 照 Demo20 / 22 的播放器（`CLIP_NAMES`、`loopFor`、`go()`、只在片段结尾切换）。有视频时静帧不加漂移。
 - 用脚本自动通关一次，记录画面切换时间和报错，确认每个 `go()` 都按时结束；整段流程会比静帧版多出几秒的等待（每次过渡约 4–8 s）。
 
+### 6.2 严格分层制作（用户 2026-11-08，省 Seedance credits 的核心规则）
+
+背景、人物、特效、道具**一律分开出图、分开做动，在页面里叠起来**。只给真正需要动的那一层花钱，其他层用免费的本地工具或代码。
+
+| 层 | 出图 | 让它动起来（按优先级，前面的免费） | 复用 |
+|---|---|---|---|
+| 背景 | 不含人物的空场景图（同一场地只出一张） | 深度视差（`tools/animate/depth.py` + WebGL）→ 代码加光影闪烁 → 实在需要才用 Seedance 出**纯背景**环境循环 | 同一场地的所有画面共用一张 / 一段 |
+| 人物 | 纯色背景上的人物，或从整图抠出（本地抠图模型，透明 PNG / WebP） | LivePortrait（`tools/animate/lp_pose.py`：眨眼、跟配音的口型、转头、视线、微笑）→ 只有身体大动作（手势、起身、拿东西）才用 Seedance，而且在纯色背景上生成，换背景也能用 | 一套表情 / 口型帧服务所有台词 |
+| 特效 | 不出图，或黑底小素材 | 代码粒子（火星、雪、雨、蒸汽、呼气白雾）；黑底视频用 `mix-blend-mode: screen` 叠加 | 放 `demos/shared/` 跨 Demo 复用 |
+| 道具 | 单独的透明 PNG | 代码做位移、旋转、出现 / 消失；拿在手里的道具单独一层 | 同上 |
+
+- **开工前先写分层表**（`project/layers.md`）：每个画面列出用到哪几层、每层怎么动、哪些地方必须用 Seedance、一共多少 credits。全片的 Seedance 片段数应远少于 §6.0 的整图做法。
+- **出图提示词**：背景图写 "empty scene, no people"；人物图写 "plain flat background, full figure in frame, no props unless held"；同一场地的人物图光线方向、色温和背景图一致（火光在哪边，人物亮面就在哪边）。
+- **叠层时要补的东西**：人物脚下或椅子的接触阴影、环境光（火光用代码在人物层上做暖色边缘光闪烁）、景深（背景稍微模糊）。缺了这些看起来像贴纸。
+- **文件**：`media/art/bg_<场地>.webp`、`char_<角色>_<姿势>.webp`（带透明）、`prop_<名>.webp`；LivePortrait 片段放 `media/video/`；原始 PNG 照旧放 `assets/`。
+- **旧的整图素材**（如 Demo24）可以事后拆层：本地抠出人物，背景用本地补画模型补上被挡住的部分。
+
 ## 7. 页面与版式
 
 - **以最近一个同类 Demo 为模板**复制（女性向：Demo21 / 22 的 `index.html` + `style.css` + `main.js` + `audio.js` + `lines.js` + `l10n.js`），共用 `../../shared/game.css`、`../../shared/series.css`、`../../shared/nav.js`、`../../../device.js`。
