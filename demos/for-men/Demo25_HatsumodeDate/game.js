@@ -110,15 +110,15 @@
       setStep(0); S.view = 'torii';
       const wind = SND.loop('wind'), crowd = SND.loop('crowd');
       wind?.set(.25, .8); crowd?.set(.32, 1.2);
-      await sleep(1.6); SND.fx.geta(1.3, .2, 9, .19); await sleep(1.9); alive(my);
+      await sleep(.8); SND.fx.geta(1.3, .2, 9, .17); await sleep(1.5); alive(my);
       await say('t01', { az: .25, dist: .9 });
       await say('t02', FRONT);
       const a = await choice([['…すごく、綺麗だ', '…You look beautiful'], ['…寒くない？', '…Aren\'t you cold?']]);
       await say(a ? 't03b' : 't03a', FRONT);
       gust(-1.5, 1.5, 3.2, .8);   // a gust across the precinct
-      await sleep(1.2);
+      await sleep(.5);
       await say('t04', CLOSE);
-      for (let n = 10; n >= 1; n--) { alive(my); S.count = n; SND.fx.tick(0); await sleep(.85); }
+      for (let n = 5; n >= 1; n--) { alive(my); S.count = n; SND.fx.tick(0); await sleep(.85); }
       S.count = 0; SND.fx.cheer(); await sleep(.3); SND.fx.bell(.7);
       await action('🎍', '「あけましておめでとう！」', 'Say "Happy New Year!"');
       S.count = null;
@@ -126,23 +126,22 @@
       setTimeout(() => { if (my === run) SND.fx.bell(.7); }, 2500);
 
       // 2 · the food stalls: she has no cash; a hot amazake at your right cheek
-      setStep(1); SND.fx.geta(.3, .5, 6, .3); await sleep(1); S.view = 'stall'; await sleep(.6);
-      await say('t06', RIGHT);
+      setStep(1); SND.fx.geta(.3, .5, 6, .25); await sleep(.6); S.view = 'stall'; await sleep(.8);
       await say('t07', CLOSE);
       const b = await choice([['僕がおごるよ', 'My treat'], ['…カード、使えるか聞いてみたら？', '…Ask if they take cards?']]);
       await say(b ? 't08b' : 't08a', CLOSE);
-      SND.fx.coin(.3); await sleep(1.2);
-      S.view = 'amazake'; await sleep(.8);
+      SND.fx.coin(.3); await sleep(.8);
+      S.view = 'amazake'; await sleep(.5);
       S.cup = 1; S.steam = 1; SND.fx.rustle(.9, .25);
       await say('t09', CHEEK_R);
-      await sleep(1.5); S.cup = 0;
+      await sleep(.9); S.cup = 0;
       SND.fx.sip(.3, .45);
       await say('t10', { az: .3, dist: .45 });
       S.steam = 0;
 
       // 3 · the bonfire on your left; the crowd pushes her to your right ear
       setStep(2); S.view = 'fire'; const fire = SND.loop('fire'); fire?.at(-1.0, 1.4); fire?.set(.55, 1.2);
-      await sleep(1.4); alive(my);
+      await sleep(1); alive(my);
       await say('t11', RIGHT);
       crowd?.set(.6, .5); crowd?.at(1.8, 1.2); SND.fx.rustle(1.4, .3); await sleep(.4);
       S.view = 'close'; S.near = 1; S.nearAz = 1.3;
@@ -151,14 +150,13 @@
       crowd?.set(.32, 1); crowd?.at(Math.PI, 3); S.near = 0;
 
       // 4 · the prayer: coin, the bell rope, two bows two claps, hold your hands together
-      setStep(3); fire?.set(0, 1.5); SND.fx.geta(.4, -.6, 6, .3); await sleep(1.6); S.view = 'pray'; fire?.stop();
-      await say('t13', LEFT);
-      await action('🪙', 'お賽銭を入れる', 'Toss in a coin'); SND.fx.coin(0); await sleep(.9);
+      setStep(3); fire?.set(0, 1.5); SND.fx.geta(.4, -.6, 6, .3); await sleep(1.1); S.view = 'pray'; fire?.stop(); await sleep(.4);
+      await action('🪙', 'お賽銭を入れる', 'Toss in a coin'); SND.fx.coin(0); await sleep(.6);
       await taps('🔔', '鈴を鳴らす（タップ）', 'Ring the shrine bell (tap)', 3, () => SND.fx.suzu(0));
       await sleep(.4); for (let i = 0; i < 2; i++) { SND.fx.clap(-.8, .5); SND.fx.clap(0, .3); await sleep(.55); }
       crowd?.set(.12, 1.5); wind?.set(.12, 1.5);
       await hold('🙏', '手を合わせて、お願いする（長押し）', 'Hands together, make a wish (press and hold)', 3.5);
-      crowd?.set(.3, 1.5); wind?.set(.25, 1.5); await sleep(.6);
+      crowd?.set(.3, 1.5); wind?.set(.25, 1.5); await sleep(.3);
       await say('t14', LEFT);
       S.wish = await choice([['…秘密', '…It\'s a secret'], ['椿さんと、また来られますように', 'That I can come here with you again']]);
       await say(S.wish ? 't15b' : 't15a', LEFT);
@@ -166,18 +164,18 @@
       // 5 · the omikuji: you draw 大吉, she draws 凶; tie it in the cold wind; she shares her stole
       setStep(4); await sleep(.4); S.view = 'omikuji';
       await action('🎋', 'おみくじを引く', 'Draw a fortune'); SND.fx.shake(0, .4); await sleep(1.2); SND.fx.paper(0, .4);
-      S.slip = { k: 0, text: '大吉', en: 'Excellent luck' }; await sleep(2.2); S.slip = null; alive(my);
+      S.slip = { k: 0, text: '大吉', en: 'Excellent luck' }; await sleep(1.9); S.slip = null; alive(my);
       await say('t16', CLOSE);
       const c = await choice([['僕の大吉と、交換しよう', 'Swap with my great luck'], ['一緒に、結びに行こう', 'Let\'s tie it up together']]);
       await say(c ? 't17b' : 't17a', CLOSE);
       SND.fx.paper(-.3, .5); await sleep(.5);
-      await gust(-1.6, 1.6, 4.5, 1);
+      await gust(-1.6, 1.6, 3.6, 1);
       SND.fx.rustle(-1.1, .25); S.view = 'stole';
       await say('t18', { az: -.7, dist: .3 });
-      S.stole = 1; SND.fx.rustle(0, .15); await sleep(1.4);
+      S.stole = 1; SND.fx.rustle(0, .15); await sleep(1);
       S.near = 1; S.nearAz = -1.3;
       await say(S.wish ? 't19b' : 't19a', LEFT_EAR);
-      await sleep(2.6); S.fade = 1; crowd?.set(.15, 2); wind?.set(.1, 2); setTimeout(() => SND.fx.bell(.7), 600); await sleep(3.6); alive(my); finish();
+      await sleep(2); S.fade = 1; crowd?.set(.15, 2); wind?.set(.1, 2); setTimeout(() => SND.fx.bell(.7), 600); await sleep(3.2); alive(my); finish();
     } catch (e) { if (e.message !== 'stopped') console.error(e); }
   }
 

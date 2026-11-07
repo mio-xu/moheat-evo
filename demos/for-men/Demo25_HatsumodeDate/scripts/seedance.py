@@ -46,6 +46,51 @@ DESIGNS = {
 }
 
 
+# ---------------------------------------------------------------- the date stills (16:9, 2K). Image 1 = style anchor, image 2 = the chosen design.
+LOOK2 = ("Image 1 is the ART STYLE reference only (do not copy its person or room). Image 2 is the CHARACTER reference: keep this exact young "
+         "woman (face, hair, eyes, hair ornament, furisode, fur stole). Art style EXACTLY like image 1: soft modern cel animation with a light, "
+         "airy palette, thin coloured lineart (dark lavender instead of black), flat colours with one soft-edged but still flat shadow tone, "
+         "simple clean backgrounds with a few round lights. Hand-drawn feel, NOT glossy, no bloom. Realistic adult proportions (not chibi).")
+CHAR = "{CHAR}"   # filled from the design the user picks (see CHARS)
+CHARS = {
+    'A': "Tsubaki: long straight silver-white hair with a neat hime cut (straight bangs, side locks), deep ruby-red eyes, a big red camellia hair ornament with dangling red tassels; a crimson furisode with white camellia and snowflake patterns, a gold obi, a fluffy white fur stole.",
+    'B': "Tsubaki: silver-white hair in a soft half-up style with a large crimson ribbon bow, long hair to the waist, gentle violet eyes; a deep plum furisode with an arrow-feather pattern, a red obi, a white fur stole.",
+    'C': "Tsubaki: silver-white hair in an elegant low updo with a gold kanzashi and dangling red beads, two long side locks, golden amber eyes; a black furisode with gold and white cranes, a red obi, a white fur stole.",
+    'D': "Tsubaki: very long silver-white hair in a loose low side ponytail tied with a red-and-white braided cord, soft pink-red eyes, a small red camellia pin; a white furisode fading to crimson at the sleeves with red camellias, a gold obi, a white fur stole.",
+}
+BG = ("A Japanese shrine on New Year's Eve night: snow on the ground and on stone lanterns, warm paper lanterns, a deep navy night sky, "
+      "light snow falling, soft round bokeh lights, distant crowd silhouettes.")
+CAM = ("First-person view (the viewer is her date; at most the viewer's hand is visible). Wide 16:9. Leave the bottom fifth calm for subtitles. "
+       "No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere.")
+AVOID2 = ("Avoid: chibi, super-deformed, childish face, realistic photo, 3D render, glossy, airbrushed, bloom, extra fingers, deformed hands, "
+          "readable text, letters, the man from image 1.")
+SCENES = {
+    'tsubaki_torii': "She has just hurried up to you in front of a big red torii gate and stands about one metre away, centre-right of the picture, "
+        "a little out of breath, one hand raised in a small shy wave, cheeks pink from the cold, a bright happy smile. Warm lantern light on her face.",
+    'tsubaki_stall': "A street of food stalls (yatai) inside the shrine: glowing stall awnings, steam, hanging lanterns. She stands centre, turned toward "
+        "you, holding up a small black credit card with an embarrassed, apologetic little smile, the other hand at her cheek.",
+    'tsubaki_amazake': "Close-up by the food stalls: she leans in from the RIGHT side of the picture and playfully presses a steaming white paper cup of "
+        "amazake against the viewer's right cheek (the cup at the right edge, very near the camera, soft steam rising); her own cup in her other hand; "
+        "a teasing, delighted smile.",
+    'tsubaki_fire': "A large shrine bonfire (takibi) burns on the LEFT side of the picture with orange sparks rising. She stands on the right half, "
+        "holding both hands out toward the fire, her face lit warm orange on the side facing the fire, the cool blue night on her other side; a soft, "
+        "content smile.",
+    'tsubaki_close': "Extreme close-up: the crowd has pushed her against you. Her face is very close on the RIGHT side of the picture, right beside the "
+        "viewer's right ear, looking up through her lashes, deeply blushing, lips parted as if whispering; one hand resting on the viewer's chest. "
+        "Warm bonfire glow from the left, people's shoulders blurred behind.",
+    'tsubaki_pray': "In front of the main shrine hall: the big thick bell rope with a brass bell, a wooden offering box, white paper streamers. She stands "
+        "on the LEFT side of the picture beside you, seen in three-quarter profile, eyes closed, both palms pressed together in prayer, serene and earnest.",
+    'tsubaki_omikuji': "By the omikuji racks covered in many tied white paper slips. She stands centre, holding an opened plain paper fortune slip with "
+        "both hands (no readable writing), a cute shocked and teary face, mouth a small wobbly line, a sweat drop.",
+    'tsubaki_stole': "Very close from the LEFT side: she wraps her white fur stole around both of your shoulders, her face right beside the viewer's left "
+        "ear, eyes half closed, a tender shy smile, snowflakes in her hair; lanterns softly blurred behind.",
+}
+
+
+def scene_prompt(name, design):
+    return '\n\n'.join([LOOK2, CHARS[design], SCENES[name], BG, CAM, AVOID2])
+
+
 def call_once(method, path, body):
     """One request without the client's long retry loop — to see at once whether the upload endpoint is rate-limited."""
     req = urllib.request.Request(m.BASE + path, data=json.dumps(body).encode(), method=method,
