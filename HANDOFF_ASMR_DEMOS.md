@@ -35,6 +35,7 @@ demos/Demo4_SeasonsExpress/              Demo 4《四季暴走列車 / The Runaw
 demos/Demo5_SengokuBanquet/              Demo 5《安土最後の酒宴》
 demos/Demo7_KyotoIzakaya/                Demo 7《信長と家康、京都の居酒屋へ》（策划中：剧本 + Seedance 命令，等用户的关键帧和 clip）
 demos/Demo8_YamazakiDistillery/          Demo 8《信長と家康、山崎蒸溜所へ》（策划中：剧本 + Seedance 命令，等用户的关键帧和 clip）
+demos/Demo9_GifuCastle/                   Demo 9《信長の岐阜城へようこそ》（策划中：剧本 + Seedance 命令，等用户的关键帧和 clip）
 HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
 ```
@@ -208,6 +209,12 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - **下一步**：等用户确认剧本 → 写 `scripts/izakaya.py` / `yamazaki.py` 时间轴 → 配音（需要用户启动 VOICEVOX）→ 拿到 clip 后按台词剪辑，合成双耳音频和冷热，生成 MP4 和播放器。
 - Seedance 的口型不会和配音对上：长台词剪在说话镜头上，耳语用遮嘴或侧脸构图。
 - Demo 8 涉及三得利商标：AI 画面里不出现可读的商标，酒瓶用 Demo 6 的真实图合成；公开前需向三得利确认。
+
+### Demo 9 · `demos/Demo9_GifuCastle/` 📝 策划中 —《信長の岐阜城へようこそ》
+- 用户（2026-11-07）："再来个岐阜城的？"。设定：1569 年夏天的岐阜城（刚改名、开始用"天下布武"印），你是来自未来的客人，信长亲自导览，盟友家康同行。灵感来自弗洛伊斯 1569 年访问岐阜：信长亲自带他参观宫殿和山顶，还亲手上菜。
+- 场景顺序：山脚宫殿、庭院瀑布 → 登金华山顶看浓尾平原 → 信长亲手点茶、家康拿到冰室的冰 → 夜晚长良川鹈饲 → 送你一张盖了"天下布武"印的纸。画风和 Demo 5 一样（浮世绘金箔），11 个镜头 G01–G11。
+- 冷热亮点：鹈饲的篝火船从左划到右，热感跟着船从左耳移到右耳。冷：瀑布水雾、山顶大风（左→右）、冰室之冰、夜晚河风。
+- 印章文字后期叠加（AI 生成的字会变形）。其余流程和 Demo 7、8 相同。
 
 ## 6. 本地未提交的大文件（仅在本机，可用脚本重建）
 
