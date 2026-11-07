@@ -101,7 +101,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - **进度**：女性向完成：陽向（Demo20）、蓮 ren r1_c（Demo12）、迅 jin r1_a（Demo21）、握手会女工作人员 staff_f r1_a（Demo20）。男性向完成：ミント mint r1_a、ココア cocoa r1_a、ひなた hinata_s r1_b、ルナ luna r1_b（Demo14 `scripts/voice.py`：每人一个默认标签 + 耳语 `[whispers]` + 个别句 OVERRIDE）。紫苑还没有 Demo。下一步：信长系列（Demo5–9）。
 - **已有声音**：全部在 `tools/eleven/cast.json`（陽向 = `lODKQ6pXINFtajDz9nqR`；Demo20 试听时存下的 v1 / v3 没用上，名额满时可删，先问用户）。
 - **额度**：账号是 **Creator 档**（每月 12 万字符，30 个声音名额，可商用）；一轮试听 3 个预览，一个 Demo 全部台词约 500–1000 字符。
-- **坑**：`pcm_44100` / `pcm_48000` 要 Pro 账号，用 `pcm_24000`；页面署名写 `<角色> ElevenLabs`（VOICEVOX 角色仍写 `VOICEVOX:<名>`）。
+- **坑**：`pcm_44100` / `pcm_48000` 要 Pro 账号，用 `pcm_24000`；页面署名写 `<角色> ElevenLabs`（VOICEVOX 角色仍写 `VOICEVOX:<名>`）。 Voice Design 会拒绝含真实人物名字的描述（信长、家康）：描述里写成"虚构的战国武将角色"。
 
 ---
 
