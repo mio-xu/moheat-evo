@@ -103,8 +103,25 @@
             </button>
           </nav>
 
-          <div class="td-screen">
-            <iframe id="demoFrame" src="demos/Demo1_SnowFoxfire/?embed=1" title="MoHeat Evo interactive demo" loading="lazy" allow="autoplay; fullscreen; serial" allowfullscreen></iframe>
+          <div class="td-main">
+            <div class="td-screen">
+              <iframe id="demoFrame" src="demos/Demo1_SnowFoxfire/?embed=1" title="MoHeat Evo interactive demo" loading="lazy" allow="autoplay; fullscreen; serial" allowfullscreen></iframe>
+            </div>
+            <div class="td-output" aria-label="MoHeat Evo output, live">
+              <div class="td-ear" data-side="L"><span>LEFT EAR</span><b>Off</b><div class="td-meter"><i></i></div></div>
+              <div class="td-head">
+                <svg viewBox="0 0 200 170" aria-hidden="true">
+                  <path d="M38 170C38 138 64 124 100 124S162 138 162 170Z" fill="#2b2225"/>
+                  <rect x="84" y="96" width="32" height="36" rx="12" fill="#d8c6c0"/>
+                  <ellipse cx="100" cy="66" rx="42" ry="50" fill="#4a3639"/>
+                  <path d="M52 66C52 8 148 8 148 66" fill="none" stroke="#8f8587" stroke-width="7" stroke-linecap="round"/>
+                  <rect class="td-cup" data-side="L" x="38" y="44" width="20" height="42" rx="10"/>
+                  <rect class="td-cup" data-side="R" x="142" y="44" width="20" height="42" rx="10"/>
+                </svg>
+                <code id="tdCmd">stop</code>
+              </div>
+              <div class="td-ear r" data-side="R"><span>RIGHT EAR</span><b>Off</b><div class="td-meter"><i></i></div></div>
+            </div>
           </div>
         </div>
         <p class="td-foot">Headphones on. Have a MoHeat Evo? <a id="demoOpen" href="demos/Demo1_SnowFoxfire/" target="_blank" rel="noopener">Open the full demo and connect ↗</a></p>

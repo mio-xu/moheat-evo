@@ -11,10 +11,35 @@ document.querySelectorAll('.td-item').forEach((item) => {
   item.addEventListener('click', () => {
     if (item.classList.contains('is-active')) return;
     document.querySelectorAll('.td-item').forEach((x) => x.classList.toggle('is-active', x === item));
-    demoFrame.src = `${item.dataset.demo}?embed=1`;
+    demoFrame.src = `${item.dataset.demo}?embed=1&autoplay=1`;   // chosen by a click → starts playing right away
     demoOpen.href = item.dataset.demo;
   });
 });
+
+// Live device-output diagram: reads the embedded player's own thermal meters (same origin), i.e. exactly what is sent to the headset.
+const WARM = '255,99,69', COOL = '96,178,255';
+const outEars = ['L', 'R'].map((s) => {
+  const el = document.querySelector(`.td-ear[data-side="${s}"]`);
+  return { s, value: el.querySelector('b'), meter: el.querySelector('.td-meter i'), cup: document.querySelector(`.td-cup[data-side="${s}"]`) };
+});
+const tdCmd = document.getElementById('tdCmd');
+const readOutput = () => {
+  let doc = null;
+  try { doc = demoFrame.contentDocument; } catch (e) { /* not reachable */ }
+  const num = (id) => Number((doc && doc.getElementById(id) || {}).textContent) || 0;
+  outEars.forEach((e) => {
+    const c = num(`v${e.s}c`), h = num(`v${e.s}h`), a = Math.max(c, h), cool = c > h, rgb = cool ? COOL : WARM;
+    e.value.textContent = a ? `${a}% ${cool ? 'cooling' : 'warmth'}` : 'Off';
+    e.value.className = a ? (cool ? 'cool' : '') : 'off';
+    e.meter.style.width = `${a}%`; e.meter.style.background = `rgb(${rgb})`;
+    e.cup.style.fill = a ? `rgba(${rgb},${.45 + a / 180})` : '';
+    e.cup.style.filter = a ? `drop-shadow(0 0 ${4 + a / 8}px rgba(${rgb},${.4 + a / 160}))` : '';
+  });
+  const cmd = doc && doc.getElementById('cmd');
+  tdCmd.textContent = cmd ? cmd.textContent : 'stop';
+  requestAnimationFrame(readOutput);
+};
+readOutput();
 
 const modal = document.getElementById('videoModal');
 const modalTitle = document.getElementById('modalTitle');

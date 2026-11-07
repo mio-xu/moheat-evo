@@ -34,11 +34,23 @@
 .td-item.is-active img{opacity:1}.td-item.is-active em{color:#ffab93}
 .td-screen{position:relative;border-radius:22px;overflow:hidden;background:#000;border:1px solid #ffffff12;aspect-ratio:16/10.4}
 .td-screen iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.td-main{display:flex;flex-direction:column;gap:12px;min-width:0}
+.td-output{display:grid;grid-template-columns:1fr 150px 1fr;align-items:center;gap:14px;padding:14px 18px;border-radius:20px;background:#ffffff06;border:1px solid #ffffff10}
+.td-ear span{display:block;font-size:10px;font-weight:800;letter-spacing:.14em;color:#8f8587}
+.td-ear b{display:block;margin:5px 0 9px;font:700 18px Manrope;letter-spacing:-.02em;color:#f4d0c6;transition:color .2s}
+.td-ear b.cool{color:#b9e0ff}.td-ear b.off{color:#6d6264}
+.td-ear.r{text-align:right}.td-ear.r .td-meter{transform:scaleX(-1)}
+.td-meter{height:5px;border-radius:999px;background:#ffffff14;overflow:hidden}
+.td-meter i{display:block;height:100%;width:0;border-radius:inherit;transition:width .1s linear}
+.td-head{position:relative;height:96px;display:grid;place-items:center}
+.td-head svg{height:92px;width:auto;overflow:visible}
+.td-cup{fill:#3a2d30;stroke:#ffffff30;stroke-width:1.5;transition:fill .15s,filter .15s}
+.td-head code{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);font:600 10px/1 "JetBrains Mono",ui-monospace,monospace;color:#8f8587;white-space:nowrap}
 .td-foot{margin:16px 0 0;font-size:13px;color:#8f8587}
 .td-foot a{color:#ffab93;font-weight:700;text-decoration:none}.td-foot a:hover{text-decoration:underline}
 @media (max-width:900px){.td-head{flex-direction:column;align-items:flex-start}.td-body{grid-template-columns:1fr}
-  .td-menu{flex-direction:row;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px}.td-item{flex:0 0 200px;scroll-snap-align:start;grid-template-columns:1fr}.td-screen{order:-1}}
-@media (max-width:620px){.td{padding:20px;border-radius:24px}.td-item{flex-basis:170px}.td-screen{aspect-ratio:16/11.2}}
+  .td-menu{flex-direction:row;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px}.td-item{flex:0 0 200px;scroll-snap-align:start;grid-template-columns:1fr}.td-main{order:-1}}
+@media (max-width:620px){.td{padding:20px;border-radius:24px}.td-item{flex-basis:170px}.td-screen{aspect-ratio:16/11.2}.td-output{grid-template-columns:1fr 96px 1fr;padding:12px;gap:8px}.td-ear b{font-size:15px}.td-head svg{height:70px}}
 @media (max-width:900px){.section-head{gap:20px}}
 
 /* Use-case cards with photo on top, copy below */
