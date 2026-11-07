@@ -11,7 +11,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = os.path.dirname(os.path.dirname(os.path.dirname(ROOT)))   # repo root (device.js)
 FRAMES = os.path.join(ROOT, "video", "frames")
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-PORT = 8771
+PORT = int(os.environ.get("RENDER_PORT", 8771))   # override when another session holds 8771
 done = threading.Event()
 
 
