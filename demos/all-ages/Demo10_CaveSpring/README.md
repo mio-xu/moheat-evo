@@ -22,8 +22,8 @@ Your breath always cools both ears. Per ear only the stronger mode is sent (hyst
 - `game.js` — puzzle state, hit areas, Kohaku's speech queue, thermal engine, device output (same protocol / range as all demos).
 - `art.js` — code-drawn pastel cel-shaded scenes; Seedance clips in `assets/video/<name>.mp4` replace them automatically (see `Seedance素材命令.md`; layout references in `project/layout_refs/`). When clips arrive: re-measure `GEO`, skip the code-drawn hearth flames when `hut_fire` is present, compress to 720p before committing.
 - `audio.js` — synthesized sounds (wind, fire, candle, foxfire, stream, waterfall, drips, bats, door rumble…) + Kohaku's voice playback.
-- `lines.js` — Kohaku's lines (ja / en / TTS reading). `scripts/voice.py` → `media/voice/<id>.m4a` + `media/voice.js` (needs VOICEVOX).
-- Voice: **VOICEVOX:猫使ビィ ノーマル** (user's pick, default parameters). Auditions: `audio/audition/` (local only).
+- `lines.js` — Kohaku's lines (ja / en / TTS reading). `scripts/voice.py` → `media/voice/<id>.m4a` + `media/voice.js` (ElevenLabs, key in the repo .env.local).
+- Voice: **ElevenLabs** `kohaku r1_b` (user's pick 2026-11-08, tools/eleven/cast.json; earlier VOICEVOX:猫使ビィ). Auditions: `audio/audition/` (local only).
 
 ## Painted art (images, 2026-11-07)
 All scenes, Kohaku and the props are painted images in the Demo 1–4 style (no ukiyo-e), generated with the Seedance 2.5 site's

@@ -1,4 +1,4 @@
-// Kohaku's lines (VOICEVOX:猫使ビィ ノーマル, unchanged voice). id: [ja subtitle, en subtitle, optional reading for TTS]
+// Kohaku's lines (ElevenLabs, user's pick kohaku r1_b; tags in scripts/voice.py). id: [ja subtitle, en subtitle, optional reading]
 // scripts/voice.py reads this file (the JSON object after "= ") → media/voice/<id>.m4a + media/voice.js (durations).
 window.KOHAKU_LINES = {
   "intro1": ["こんばんは！ ぼく、きつねのコハク", "Good evening! I'm Kohaku, a fox"],
