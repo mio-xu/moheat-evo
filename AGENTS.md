@@ -11,4 +11,5 @@ Key rules (details in the handoff):
 - **Images and video: Seedance, API first** (`~/.seedance_key`); if the API is unavailable (upload 429 / long Retry-After, 401) switch at once to the seedance2-5.com website via Chrome (user, 2026-11-08). Details and the credit / token-saving checklist for video: `DEMO_DESIGN_GUIDE.md` §5.3 and §6.1. (Earlier art came from ChatGPT prompt lists the user ran.)
 - **Never modify earlier demos**: reuse art by symlink and code by import-by-path.
 - **Commit and push every change to `origin main`.** Large media stay out of git.
+- **Keep the repo tidy** (user, 2026-11-08): new files follow the folder layout in `DEMO_DESIGN_GUIDE.md` §12; after each finished demo run `python3 tools/cleanup/audit.py` and, with the user's OK, move unneeded resources to the Trash (`--trash`).
 - The device firmware allows **one mode per ear** (cool or heat). Every thermal CSV must have 0 same-ear conflicts.

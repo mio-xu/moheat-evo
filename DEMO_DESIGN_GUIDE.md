@@ -261,3 +261,45 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 - 不能替用户登录；网页没登录时请用户自己登录。credits 是多个会话共用的，批量超过约 1000 时先问用户。
 - API：上传接口有长时间限流（429，约 6–10 小时）；一次最多 5 个文件；不接受外部 URL 和 data URI；旧的生成记录约 10 分钟后会 503。不要 `pkill` 别的会话的 seedance 进程。
 - 网页偶尔会在生成后自己跳到 My Creations：回到原页面后，模式、1080p、Add end frame 这几项都要重新确认。
+
+## 12. 资源清理与文件结构
+
+### 12.1 文件结构（新 Demo 一律照这个放）
+
+```
+仓库根目录            官网（index.html / styles.css / script.js）、设备页（control / test）、device.js、文档（CLAUDE / AGENTS / HANDOFF / 本文件）
+demos/shared/         所有 Demo 共用的 nav.js、series.css、interact.js、scrub.js
+demos/<品类>/<DemoN_英文名>/      品类：all-ages / healing / for-men / for-women / nobunaga-suntory
+  index.html  <名>.css  game.js  audio.js  lines.js  README.md     页面（进 git）
+  media/      art/*.jpg  video/*.mp4  voice/*.m4a  voice.js  cover.jpg   页面实际加载的压缩成品（进 git）
+  scripts/    voice.py  seedance.py  prepare_art.*  prepare_video.py      可重建管线（进 git）
+  project/    提示词 JSON、设计笔记、小的参考图                           （进 git，只放小文件）
+  assets/     原始 PNG、首尾帧、下载的原始视频                           （不进 git：在 .gitignore 里逐个加）
+  audio/      voice_cache.json 进 git；试听、中间音频不进 git
+tools/eleven/         配音（cast.json、audition / pick / tts）
+tools/seedance/       Seedance 共用工具（ident_clips.py）
+tools/cleanup/        清理报告（audit.py）
+assets/images/demos/  官网菜单缩略图（按文件夹名命名）
+```
+
+- 一个文件只放在它所属 Demo 的文件夹里；多个 Demo 共用的放 `demos/shared/` 或 `tools/`，**按路径引用，不复制**。
+- 从 Downloads 下载的东西**马上**改名，移进对应 Demo 的 `assets/`，不在 Downloads 或仓库根目录留着。
+- 临时文件放会话的 scratchpad，不放进仓库。
+- 旧 Demo 内部的目录结构不动（脚本按路径引用，改了会坏）；只有新 Demo 照上面的结构。
+
+### 12.2 定期清理
+
+- **什么时候做**：每个 Demo 完成并 push 之后、动画做完之后，以及用户要求的时候。
+- **工具**：`python3 tools/cleanup/audit.py`，只报告，按类别列出大小；`--list <类别>` 看具体路径。
+  - `junk`：.DS_Store、__pycache__、下载残留。可以直接清理。
+  - `auditions`：声音已经选定的角色的试听（VOICEVOX 时代的试听、已确认角色的 ElevenLabs 预览）。
+  - `rejected`：用户没选的造型 / 画风 / 备选图 / 测试图、首尾帧副本。
+  - `rebuild`：可以用脚本重建的大中间文件（双耳 stem、spatialized 音频），磁盘紧张时才清。
+- **删除方式**：`--trash <类别>` 移到废纸篓（可以恢复），不直接永久删除。除 `junk` 外，每次都先把清单和大小给用户看，用户确认后才执行。
+- **永远不删**：
+  - 进了 git 的文件。
+  - 成片（`video/final`、`output/final_*.mp4`）和 `media/`。
+  - ElevenLabs 台词缓存（重做要花字符额度）。
+  - 生成 `media/` 用的原始图。
+  - 别的会话正在用的文件夹（如 `Demo16_HandshakeEvent`，见 `audit.py` 的 `KEEP`）。
+- 用户做了选择（造型、画风、声音、图片版本）之后，就把落选的东西标记为 `rejected`，下次清理时一起处理。不知道是不是别的会话在用时，先问用户。
