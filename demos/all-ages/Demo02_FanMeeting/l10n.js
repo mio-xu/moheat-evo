@@ -70,7 +70,12 @@ window.MOHEAT_L10N = {
    "ひんやりサプライズ": "清凉惊喜",
    "どっちでしょうゲーム": "猜猜是哪边",
    "キミだけのミニライブ": "只为你的迷你演唱会",
-   "またね": "下次见"
+   "またね": "下次见",
+   "綾音": "绫音",
+   "綾音 🔥": "绫音 🔥",
+   "綾音 ↻ うしろ": "绫音 ↻ 后面",
+   "綾音 ← ひだり": "绫音 ← 左边",
+   "綾音 みぎ →": "绫音 右边 →"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -88,7 +93,12 @@ window.MOHEAT_L10N = {
    "ひんやりサプライズ": "ひんやりサプライズ",
    "どっちでしょうゲーム": "どっちでしょうゲーム",
    "キミだけのミニライブ": "キミだけのミニライブ",
-   "またね": "またね"
+   "またね": "またね",
+   "綾音": "綾音",
+   "綾音 🔥": "綾音 🔥",
+   "綾音 ↻ うしろ": "綾音 ↻ うしろ",
+   "綾音 ← ひだり": "綾音 ← ひだり",
+   "綾音 みぎ →": "綾音 みぎ →"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -106,7 +116,12 @@ window.MOHEAT_L10N = {
    "ひんやりサプライズ": "A cool surprise",
    "どっちでしょうゲーム": "Left or right?",
    "キミだけのミニライブ": "A mini live for you",
-   "またね": "See you again"
+   "またね": "See you again",
+   "綾音": "Ayane",
+   "綾音 🔥": "Ayane 🔥",
+   "綾音 ↻ うしろ": "Ayane ↻ behind",
+   "綾音 ← ひだり": "Ayane ← left",
+   "綾音 みぎ →": "Ayane right →"
   }
  },
  "names": {

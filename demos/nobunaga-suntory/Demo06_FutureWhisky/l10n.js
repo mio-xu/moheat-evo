@@ -67,7 +67,10 @@ window.MOHEAT_L10N = {
    "さすがに、毎晩ではないです": "倒也不是每晚啦",
    "…毎晩、かもしれません": "……说不定是每晚",
    "家康様が、くすっと笑った": "家康大人扑哧一笑",
-   "信長様、うらやましそう": "信长大人一脸羡慕"
+   "信長様、うらやましそう": "信长大人一脸羡慕",
+   "山崎 YAMAZAKI": "山崎",
+   "白州 HAKUSHU": "白州",
+   "響 HIBIKI": "响"
   },
   "ja": {
    "信長シリーズ 第二話 · Nobunaga Series Ep. 2 / 5": "信長シリーズ 第二話 · 全5話",
@@ -85,7 +88,10 @@ window.MOHEAT_L10N = {
    "白州 ― ハイボール": "白州 ― ハイボール",
    "響 ― 左右で利き酒": "響 ― 左右で利き酒",
    "未来への乾杯": "未来への乾杯",
-   "また、いつか": "また、いつか"
+   "また、いつか": "また、いつか",
+   "山崎 YAMAZAKI": "山崎",
+   "白州 HAKUSHU": "白州",
+   "響 HIBIKI": "響"
   },
   "en": {
    "信長シリーズ 第二話 · Nobunaga Series Ep. 2 / 5": "Nobunaga Series Ep. 2 / 5",
@@ -103,7 +109,10 @@ window.MOHEAT_L10N = {
    "白州 ― ハイボール": "Hakushu, as a highball",
    "響 ― 左右で利き酒": "Hibiki, left and right",
    "未来への乾杯": "A toast to the future",
-   "また、いつか": "Until next time"
+   "また、いつか": "Until next time",
+   "山崎 YAMAZAKI": "YAMAZAKI",
+   "白州 HAKUSHU": "HAKUSHU",
+   "響 HIBIKI": "HIBIKI"
   }
  },
  "names": {

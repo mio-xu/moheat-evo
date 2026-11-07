@@ -38,7 +38,8 @@ window.MOHEAT_L10N = {
    "Tropical Downpour": "热带暴雨",
    "Tunnel of Ice & Fire": "冰与火的隧道",
    "Seasons Out of Control": "失控的四季",
-   "Cherry Blossom Station": "春日樱花站"
+   "Cherry Blossom Station": "春日樱花站",
+   "終点・さくら駅": "终点・樱花站"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -63,7 +64,8 @@ window.MOHEAT_L10N = {
    "Tropical Downpour": "熱帯のスコール",
    "Tunnel of Ice & Fire": "氷と炎のトンネル",
    "Seasons Out of Control": "季節の暴走",
-   "Cherry Blossom Station": "春のさくら駅"
+   "Cherry Blossom Station": "春のさくら駅",
+   "終点・さくら駅": "終点・さくら駅"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -88,7 +90,8 @@ window.MOHEAT_L10N = {
    "Tropical Downpour": "Tropical Downpour",
    "Tunnel of Ice & Fire": "Tunnel of Ice & Fire",
    "Seasons Out of Control": "Seasons Out of Control",
-   "Cherry Blossom Station": "Cherry Blossom Station"
+   "Cherry Blossom Station": "Cherry Blossom Station",
+   "終点・さくら駅": "Last stop: Sakura Station"
   }
  },
  "names": {},

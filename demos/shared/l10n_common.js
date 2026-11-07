@@ -51,7 +51,14 @@ window.MOHEAT_L10N_COMMON = {
    "Progress": "進行",
    "Stream": "配信",
    "Answer with your voice (microphone + the browser's speech recognition; nothing is stored)": "声で答える（マイク＋ブラウザの音声認識。何も保存されません）",
-   "Nobunaga's voice → left warmth, Ieyasu's → right; sake steam & brazier warm, ice / wind / rain cool their own side. One mode per ear (firmware rule).": "信長の声 → 左が温かく、家康の声 → 右が温かく。酒の湯気と火鉢は温かく、氷・風・雨はそれぞれの側を冷やします。冷・温は片耳ごとにどちらか一方（ファームウェアの仕様）。"
+   "Nobunaga's voice → left warmth, Ieyasu's → right; sake steam & brazier warm, ice / wind / rain cool their own side. One mode per ear (firmware rule).": "信長の声 → 左が温かく、家康の声 → 右が温かく。酒の湯気と火鉢は温かく、氷・風・雨はそれぞれの側を冷やします。冷・温は片耳ごとにどちらか一方（ファームウェアの仕様）。",
+   "信長": "信長",
+   "家康": "家康",
+   "front": "前",
+   "stage": "ステージ",
+   "garden": "庭",
+   "front · locomotive": "前 · 機関車",
+   "camera view": "カメラの向き"
   },
   "zh": {
    "ASMR Demo": "ASMR 演示",
@@ -102,7 +109,14 @@ window.MOHEAT_L10N_COMMON = {
    "Progress": "进度",
    "Stream": "直播",
    "Answer with your voice (microphone + the browser's speech recognition; nothing is stored)": "用声音回答（麦克风 + 浏览器的语音识别；不会保存任何内容）",
-   "Nobunaga's voice → left warmth, Ieyasu's → right; sake steam & brazier warm, ice / wind / rain cool their own side. One mode per ear (firmware rule).": "信长的声音 → 左侧变暖，家康的 → 右侧变暖；酒的热气和火盆带来温暖，冰 / 风 / 雨让各自那一侧变凉。每只耳朵一次只能冷或热其一（固件规则）。"
+   "Nobunaga's voice → left warmth, Ieyasu's → right; sake steam & brazier warm, ice / wind / rain cool their own side. One mode per ear (firmware rule).": "信长的声音 → 左侧变暖，家康的 → 右侧变暖；酒的热气和火盆带来温暖，冰 / 风 / 雨让各自那一侧变凉。每只耳朵一次只能冷或热其一（固件规则）。",
+   "信長": "信长",
+   "家康": "家康",
+   "front": "前方",
+   "stage": "舞台",
+   "garden": "庭院",
+   "front · locomotive": "前方 · 车头",
+   "camera view": "摄像头视角"
   },
   "en": {
    "ASMR Demo": "ASMR Demo",
@@ -153,7 +167,14 @@ window.MOHEAT_L10N_COMMON = {
    "Progress": "Progress",
    "Stream": "Stream",
    "Answer with your voice (microphone + the browser's speech recognition; nothing is stored)": "Answer with your voice (microphone + the browser's speech recognition; nothing is stored)",
-   "Nobunaga's voice → left warmth, Ieyasu's → right; sake steam & brazier warm, ice / wind / rain cool their own side. One mode per ear (firmware rule).": "Nobunaga's voice → left warmth, Ieyasu's → right; sake steam & brazier warm, ice / wind / rain cool their own side. One mode per ear (firmware rule)."
+   "Nobunaga's voice → left warmth, Ieyasu's → right; sake steam & brazier warm, ice / wind / rain cool their own side. One mode per ear (firmware rule).": "Nobunaga's voice → left warmth, Ieyasu's → right; sake steam & brazier warm, ice / wind / rain cool their own side. One mode per ear (firmware rule).",
+   "信長": "Nobunaga",
+   "家康": "Ieyasu",
+   "front": "front",
+   "stage": "stage",
+   "garden": "garden",
+   "front · locomotive": "front · locomotive",
+   "camera view": "camera view"
   }
  }
 };

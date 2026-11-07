@@ -116,6 +116,8 @@
     '乾杯！': { en: 'Cheers!', zh: '干杯！' }, 'あなたも参加する': { en: 'Interactive — answer & play along', zh: '参与互动 — 回答并一起玩' },
     '声援で参加する': { en: 'Cheer along (mic or tap)', zh: '一起应援（麦克风或点击）' },
     '相手': { en: 'With', zh: '对象' }, '場所': { en: 'Where', zh: '地点' }, 'あなたの言葉': { en: 'You speak', zh: '你的语言' },   // Demo23 pickers
+    '正解！': { en: 'Correct!', zh: '答对了！' }, 'ざんねん…': { en: 'Not quite — listen!', zh: '可惜……再听听！' }, 'ちょうどいい！': { en: 'Just right!', zh: '刚刚好！' },
+    'いいね！': { en: 'Nice!', zh: '很好！' }, 'ありがとう〜！': { en: 'Thank you~!', zh: '谢谢～！' },   // interact.js feedback pops
     'もう一度': { en: 'Play again', zh: '再玩一次', 'zh-Hant': '再玩一次', ko: '다시 하기', es: 'Jugar de nuevo', fr: 'Rejouer', de: 'Nochmal', pt: 'Jogar de novo', id: 'Main lagi', th: 'เล่นอีกครั้ง', vi: 'Chơi lại' },
   };
   function pickSplit(t) {   // "↺ 日本語 · English" written by the demo at run time (e.g. the replay button) → the chosen language, or null
@@ -190,7 +192,8 @@
     } else if (!sm && li.dataset.mshown !== undefined && li.textContent !== li.dataset.mshown) { delete li.dataset.mja; delete li.dataset.mshown; }
     if (li.dataset.mja === undefined || li.dataset.mlang === lang) return;
     li.dataset.mlang = lang;
-    const t = lang === 'ja' ? li.dataset.mja : lang === 'en' || lang === 'off' ? li.dataset.men : tr(li.dataset.mja, lang, false) || li.dataset.men;
+    const ui = UI[norm(li.dataset.mja)], uiT = ui && chain(lang).slice(0, -1).map((x) => ui[x]).find(Boolean);
+    const t = lang === 'ja' ? li.dataset.mja : lang === 'en' || lang === 'off' ? li.dataset.men : uiT || tr(li.dataset.mja, lang, false) || li.dataset.men;
     li.textContent = `${li.dataset.mnum}${t}`; li.dataset.mshown = li.textContent;
   }
 
@@ -222,6 +225,19 @@
       else for (const a of r.addedNodes) { if (a.nodeType === 3) textNode(a); else if (a.nodeType === 1) chrome(a); }
     }
   });
+  // text drawn on a <canvas> (prop labels, direction hints, radar names, camera overlay): fillText / strokeText look the text up in the same
+  // dictionary; "" = not drawn in this language (e.g. the English line under a Japanese prop label). Off in ?render (MP4 export).
+  for (const fn of ['fillText', 'strokeText']) {
+    const orig2 = CanvasRenderingContext2D.prototype[fn];
+    CanvasRenderingContext2D.prototype[fn] = function (text, ...rest) {
+      if (typeof text === 'string' && text.length > 1 && root.classList.contains('msub')) {
+        const v = map(lang === 'off' ? 'en' : lang).get(norm(text));
+        if (v === '') return;
+        if (v != null) text = v;
+      }
+      return orig2.call(this, text, ...rest);
+    };
+  }
   function renderAll() {
     for (const li of document.querySelectorAll(SMALL)) step(li);
     for (const [sel, ja, en, tag, cls] of KINDS) for (const c of document.querySelectorAll(sel)) pair(c, ja, en, tag, cls);
@@ -313,9 +329,9 @@
     if (sel) { sel.value = lang; sel.dispatchEvent(new Event('change')); }   // the demo drops its old ja + en mode
     apply();
     const me = document.currentScript?.src || [...document.scripts].map((x) => x.src).find((x) => /shared\/subs\.js/.test(x));
-    if (me) { const c = document.createElement('script'); c.src = me.replace(/subs\.js(\?.*)?$/, 'l10n_common.js?v=1'); c.onload = () => { maps = {}; apply(); }; document.head.appendChild(c); }
+    if (me) { const c = document.createElement('script'); c.src = me.replace(/subs\.js(\?.*)?$/, 'l10n_common.js?v=2'); c.onload = () => { maps = {}; apply(); }; document.head.appendChild(c); }
     const s = document.createElement('script');   // relative to the page (or its <base>): the demo's own languages
-    s.src = 'l10n.js?v=1';
+    s.src = 'l10n.js?v=2';
     s.onload = () => {
       maps = {}; missing.clear(); lang = eff(); fill();
       containers().forEach((c) => delete c.dataset.msub); document.querySelectorAll('[data-mlang]').forEach((e) => { e.dataset.mlang = ''; });

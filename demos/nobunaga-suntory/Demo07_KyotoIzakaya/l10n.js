@@ -58,7 +58,11 @@ window.MOHEAT_L10N = {
    "はじめての生ビール": "第一杯生啤",
    "ハイボールと熱燗": "嗨棒与热清酒",
    "鴨川の灯り": "鸭川的灯火",
-   "未来に乾杯": "为未来干杯"
+   "未来に乾杯": "为未来干杯",
+   "Draft beer": "",
+   "Yakitori": "",
+   "Highball": "",
+   "Hot sake": ""
   },
   "ja": {
    "信長シリーズ 第三話 · Nobunaga Series Ep. 3 / 5": "信長シリーズ 第三話 · 全5話",
@@ -76,7 +80,15 @@ window.MOHEAT_L10N = {
    "はじめての生ビール": "はじめての生ビール",
    "ハイボールと熱燗": "ハイボールと熱燗",
    "鴨川の灯り": "鴨川の灯り",
-   "未来に乾杯": "未来に乾杯"
+   "未来に乾杯": "未来に乾杯",
+   "生ビール": "生ビール",
+   "Draft beer": "",
+   "焼き鳥": "焼き鳥",
+   "Yakitori": "",
+   "ハイボール": "ハイボール",
+   "Highball": "",
+   "あつかん": "あつかん",
+   "Hot sake": ""
   },
   "en": {
    "信長シリーズ 第三話 · Nobunaga Series Ep. 3 / 5": "Nobunaga Series Ep. 3 / 5",
@@ -94,7 +106,15 @@ window.MOHEAT_L10N = {
    "はじめての生ビール": "Their first draft beer",
    "ハイボールと熱燗": "Highball and hot sake",
    "鴨川の灯り": "Lights on the Kamo River",
-   "未来に乾杯": "A toast to the future"
+   "未来に乾杯": "A toast to the future",
+   "生ビール": "",
+   "Draft beer": "Draft beer",
+   "焼き鳥": "",
+   "Yakitori": "Yakitori",
+   "ハイボール": "",
+   "Highball": "Highball",
+   "あつかん": "",
+   "Hot sake": "Hot sake"
   }
  },
  "names": {

@@ -33,7 +33,8 @@ window.MOHEAT_L10N = {
    "氷と炎": "冰与火",
    "氷と炎 — 入れ替わり": "冰与火 — 交换",
    "クライマックス": "高潮",
-   "カーテンコール": "谢幕"
+   "カーテンコール": "谢幕",
+   "綾音 🔥": "绫音 🔥"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -56,7 +57,9 @@ window.MOHEAT_L10N = {
    "氷と炎": "氷と炎",
    "氷と炎 — 入れ替わり": "氷と炎 — 入れ替わり",
    "クライマックス": "クライマックス",
-   "カーテンコール": "カーテンコール"
+   "カーテンコール": "カーテンコール",
+   "綾音": "綾音",
+   "綾音 🔥": "綾音 🔥"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -80,7 +83,8 @@ window.MOHEAT_L10N = {
    "氷と炎": "Ice & Fire",
    "氷と炎 — 入れ替わり": "Ice & Fire — swap",
    "クライマックス": "Climax",
-   "カーテンコール": "Curtain call"
+   "カーテンコール": "Curtain call",
+   "綾音 🔥": "Ayane 🔥"
   }
  },
  "names": {},

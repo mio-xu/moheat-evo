@@ -55,7 +55,11 @@ window.MOHEAT_L10N = {
    "蒸留釜の熱": "蒸馏釜的热度",
    "眠る樽": "沉睡的酒桶",
    "あの夜の香り": "那一夜的香气",
-   "樽を安土へ": "把酒桶运往安土"
+   "樽を安土へ": "把酒桶运往安土",
+   "Yamazaki spring water": "",
+   "Yamazaki": "",
+   "Highball": "",
+   "A sleeping cask": ""
   },
   "ja": {
    "信長シリーズ 第四話 · Nobunaga Series Ep. 4 / 5": "信長シリーズ 第四話 · 全5話",
@@ -74,7 +78,14 @@ window.MOHEAT_L10N = {
    "眠る樽": "眠る樽",
    "山崎の名水": "山崎の名水",
    "あの夜の香り": "あの夜の香り",
-   "樽を安土へ": "樽を安土へ"
+   "樽を安土へ": "樽を安土へ",
+   "Yamazaki spring water": "",
+   "山崎": "山崎",
+   "Yamazaki": "",
+   "ハイボール": "ハイボール",
+   "Highball": "",
+   "ねむる樽": "ねむる樽",
+   "A sleeping cask": ""
   },
   "en": {
    "信長シリーズ 第四話 · Nobunaga Series Ep. 4 / 5": "Nobunaga Series Ep. 4 / 5",
@@ -91,9 +102,16 @@ window.MOHEAT_L10N = {
    "霧の谷": "A misty valley",
    "蒸留釜の熱": "The heat of the stills",
    "眠る樽": "Sleeping casks",
-   "山崎の名水": "Yamazaki's spring water",
+   "山崎の名水": "",
    "あの夜の香り": "The scent of that night",
-   "樽を安土へ": "A cask for Azuchi"
+   "樽を安土へ": "A cask for Azuchi",
+   "Yamazaki spring water": "Yamazaki spring water",
+   "山崎": "",
+   "Yamazaki": "Yamazaki",
+   "ハイボール": "",
+   "Highball": "Highball",
+   "ねむる樽": "",
+   "A sleeping cask": "A sleeping cask"
   }
  },
  "names": {

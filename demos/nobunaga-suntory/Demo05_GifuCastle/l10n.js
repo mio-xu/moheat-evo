@@ -30,7 +30,7 @@ window.MOHEAT_L10N = {
    "土産じゃ。わしの印を押してやろう。「天下布武」！": "送你的礼物。本王给你盖上印章。「天下布武」！",
    "……ありがとうございます。大切にします。": "……谢谢您。我会好好珍藏的。",
    "また、お会いしましょうぞ。": "后会有期。",
-   "おうすの茶碗": "薄茶的茶碗",
+   "おうすの茶碗": "一碗抹茶",
    "ひむろの氷": "冰室的冰",
    "「天下布武」の印": "「天下布武」之印",
    "信長の岐阜城へようこそ": "欢迎来到信长的岐阜城",
@@ -49,7 +49,10 @@ window.MOHEAT_L10N = {
    "🔥 茶・鵜飼の篝火": "🔥 茶・鹈饲篝火",
    "▶ Start · 2:30": "▶ 开始 · 2:30",
    "🎧 Left / Right check": "🎧 左右声道检查",
-   "Headphones on · connect MoHeat Evo (top right): Nobunaga shows you his castle: the summit wind and ice cool you, the tea and the fire boats warm you — the boats' fire crosses from left to right": "请戴上耳机 · 连接 MoHeat Evo（右上角）：信长带你参观他的城：山顶的风和冰让你清凉，热茶和篝火船让你温暖 — 船上的火光从左向右划过"
+   "Headphones on · connect MoHeat Evo (top right): Nobunaga shows you his castle: the summit wind and ice cool you, the tea and the fire boats warm you — the boats' fire crosses from left to right": "请戴上耳机 · 连接 MoHeat Evo（右上角）：信长带你参观他的城：山顶的风和冰让你清凉，热茶和篝火船让你温暖 — 船上的火光从左向右划过",
+   "A bowl of matcha": "",
+   "Ice from the ice-house": "",
+   "The 'Tenka Fubu' seal": ""
   },
   "ja": {
    "信長シリーズ 第一話 · Nobunaga Series Ep. 1 / 5": "信長シリーズ 第一話 · 全5話",
@@ -67,7 +70,13 @@ window.MOHEAT_L10N = {
    "金華山の風": "金華山の風",
    "信長の茶": "信長の茶",
    "長良川の鵜飼": "長良川の鵜飼",
-   "天下布武": "天下布武"
+   "天下布武": "天下布武",
+   "おうすの茶碗": "おうすの茶碗",
+   "A bowl of matcha": "",
+   "ひむろの氷": "ひむろの氷",
+   "Ice from the ice-house": "",
+   "「天下布武」の印": "「天下布武」の印",
+   "The 'Tenka Fubu' seal": ""
   },
   "en": {
    "信長シリーズ 第一話 · Nobunaga Series Ep. 1 / 5": "Nobunaga Series Ep. 1 / 5",
@@ -85,7 +94,13 @@ window.MOHEAT_L10N = {
    "金華山の風": "Wind on Mt. Kinka",
    "信長の茶": "Tea by Nobunaga's hand",
    "長良川の鵜飼": "Cormorant fishing on the Nagara",
-   "天下布武": "Tenka Fubu"
+   "天下布武": "Tenka Fubu",
+   "おうすの茶碗": "",
+   "A bowl of matcha": "A bowl of matcha",
+   "ひむろの氷": "",
+   "Ice from the ice-house": "Ice from the ice-house",
+   "「天下布武」の印": "",
+   "The 'Tenka Fubu' seal": "The 'Tenka Fubu' seal"
   }
  },
  "names": {

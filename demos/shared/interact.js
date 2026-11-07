@@ -28,7 +28,7 @@
       { t: 8.95, kind: 'read', what: ['うん、来たよ！', "Yep, I'm here!"] },
       { t: 60.1, kind: 'read', what: ['すずしい〜！', 'So cool~!'] },
       { t: 80.85, kind: 'choice', what: ['綾音は、どっちから話しかける？', 'Which side will Ayane talk from?'], options: LR, answer: 1 },
-      { t: 129.6, kind: 'toast', icon: '👏', btn: '👏 拍手！', what: ['さいこう！', 'That was amazing!'], how: ['拍手するか、「さいこう！」と言ってみて · Clap, cheer — or tap', '拍手ボタンをタップ · Tap to applaud'], done: 'ありがとう〜！' },
+      { t: 129.6, kind: 'toast', icon: '👏', btn: '👏 拍手！', what: ['さいこう！', 'That was amazing!'], how: ['拍手するか、「さいこう！」と言ってみて · Clap, cheer — or tap', '拍手ボタンをタップ · Tap to applaud'], done: 'ありがとう〜！', doneEn: 'Thank you~!' },
       { t: 143.9, kind: 'read', what: ['うん、やくそく！', 'Yes — I promise!'] },
     ],
     Demo03_ShiningSmileConcert: 'cheer',
@@ -304,7 +304,8 @@
         wait = 900;
         if (g.answer != null) (pick === g.answer ? pop('正解！', 'Correct!') : pop('ざんねん…', 'Not quite — listen!'));
         else if (g.fb) pop(...g.fb[pick]);
-      } else pop(g.done || (g.kind === 'toast' ? '乾杯！' : g.kind === 'blow' ? 'ちょうどいい！' : 'いいね！'), g.kind === 'blow' ? 'Just right!' : g.kind === 'read' ? 'Nice!' : '');
+      } else pop(g.done || (g.kind === 'toast' ? '乾杯！' : g.kind === 'blow' ? 'ちょうどいい！' : 'いいね！'),   // ja + en always: shared/subs.js shows one language
+        g.doneEn || (g.done ? '' : g.kind === 'toast' ? 'Cheers!' : g.kind === 'blow' ? 'Just right!' : 'Nice!'));
     }
     setTimeout(() => { if (Math.abs(media.currentTime - g.resume) > .05) media.currentTime = g.resume; lastT = g.resume; media.play().catch(() => {}); }, wait);
   }
