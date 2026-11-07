@@ -153,6 +153,8 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
     - **前段节奏**：各音源都有 2–3 s 的阵风或脉冲（`PULSE`），阳光有云影明暗，冬天整片暴风雪（风、雪、冰）每 2–3 s 左右扫一次，夏风两次扫到左边。窗外天气的浓淡跟着对应音源的包络变化（demo.js 的 `gust()`）。
     - **冷热算法**：改为同一侧、同一种冷或热的音源能量先相加，再整体换算成强度（参考电平取 99.5 百分位、动态范围 30 dB、曲线 1.5、峰值 0.95）。原来是每个音源各自归一化后相加，几个音源一叠就顶在 0.8，没有强弱。春风功率权重 0.05。
     - **标题页**：和其他 Demo 统一（Demo 1 的居中版式；Zen Maru 圆体日语大标题「季節が暴走する／魔法の列車」、英文副标题、日英双语冷暖胶囊标签）。背景用 68 s 的冰火隧道帧，左冰右火代替 Demo 1 两侧的角色。
+  - **ChatGPT 美术命令 v2（2026-11-07）**：`ChatGPT素材命令.md` 已按现在的设计重写（全景玻璃车厢、玻璃区域 #00FF00、钟不画指针、景色地平线在 y≈590、上半大片天空可透过车顶看到、新增 `night_aurora_far.png`）。做法是"按现有版式重画成高质量插画"：版式参考图是当前程序画的整套 PNG，备份在 `project/chatgpt_layout_refs/`（仅本地，已加入 .gitignore）。
+    - 用户把新图按同名放回 `assets/` 后要做的事：从 master 抠绿幕得到 day/dusk/night 的透明玻璃；重新测量时钟中心和半径、吊灯位置、门窗多边形，写入 `window_geometry.json`；接上 `night_aurora_far`（目前 `dark` 外观的天空是程序绘制的 `stars`）；然后 `export.py`、`make_cover.py`、`render_mp4.py`。
   - **Seedance 暂停**：用户说"先不管 Seedance"。`Seedance素材命令.md` 和 `project/seedance_refs/` 还是旧的大车窗版本，以后要用时需要按全景车厢重新生成首帧图，并把提示词里的 "two huge panoramic side windows" 改掉。
   - **Seedance（用户要求，2026-11-07，已暂停）**：`Seedance素材命令.md` 里有 15 个图生视频镜头（S01–S15，每个 ≤10 s，熄灯段 107.5–111.5 s 不生成）。内容包括通用提示词、负面提示词、每个镜头左右窗的季节和事件时间，都与 `seasons.py` 一致。
     - 首帧和尾帧图：`scripts/make_seedance_refs.py` → `project/seedance_refs/S##_{start,end}.jpg`（播放器 `?clean=1` 干净渲染，`render_mp4.py --at … --clean`）。
