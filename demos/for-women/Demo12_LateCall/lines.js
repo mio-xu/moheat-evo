@@ -1,5 +1,5 @@
 // Ren's lines: id → [ja, en, style ('n' = しっとり, 'w' = 囁き), TTS reading (optional)].
-// Voice: VOICEVOX:青山龍星, user's pick "a4" (pitch +0.03, intonation 1.20, speed 1.02, formant ×1.06) — scripts/voice.py.
+// Voice: ElevenLabs, user's pick "ren r1_c" (tools/eleven/cast.json) — scripts/voice.py (tagged text there).
 window.REN_LINES = {
   "c01": ["…もしもし？", "…Hello?", "n"],
   "c02": ["ごめん、こんな時間に。起こしちゃった？", "Sorry, calling this late. Did I wake you?", "n"],

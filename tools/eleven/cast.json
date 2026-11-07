@@ -21,7 +21,9 @@
    "demos/for-women/Demo12_LateCall/media/voice/c02.m4a",
    "demos/for-women/Demo12_LateCall/media/voice/c13.m4a"
   ],
-  "voice_id": null
+  "voice_id": "7Wkt5Mmmpwr2sLss90Sx",
+  "confirmed": "2026-11-08",
+  "pick": "r1_c"
  },
  "jin": {
   "name": "迅 Jin",
@@ -35,7 +37,9 @@
    "demos/for-women/Demo21_JinLounge/media/voice/j01.m4a",
    "demos/for-women/Demo21_JinLounge/media/voice/j10.m4a"
   ],
-  "voice_id": null
+  "voice_id": "l1hVja3dChhcMKwBT6Nx",
+  "confirmed": "2026-11-08",
+  "pick": "r1_a"
  },
  "staff_f": {
   "name": "スタッフ（女）Event staff",
