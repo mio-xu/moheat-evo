@@ -217,7 +217,7 @@
     if (micWait) {
       const ml = micState === 'on' ? micLevel() : 0; floor = ml < floor ? ml : floor + (ml - floor) * dt * .05;
       const loud = micState === 'on' && ml > Math.max(.02, floor * 4);
-      if (loud) { micWait.talk += dt; micWait.quiet = 0; } else if (micWait.talk > .25) { micWait.quiet += dt; if (micWait.quiet > .5) micWait.done(); }
+      if (loud) { micWait.talk += dt; micWait.quiet = 0; } else if (micWait.talk > .25) { micWait.quiet += dt; if (micWait.quiet > .5 && !window.MoHeatVoice?.judging()) micWait.done(); }   // speech recognition (shared/voice.js) judges the words; the level is the fallback
       micEl.querySelectorAll('.mic i').forEach((b, i) => { const on = ml * 9 > (i + 1) / 7; b.style.height = `${on ? 35 + 65 * Math.min(1, ml * 9 - i / 7) : 15}%`; b.style.opacity = on ? 1 : .35; });
       micEl.querySelector('.mic').hidden = micState !== 'on';
     }

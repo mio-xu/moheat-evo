@@ -1,14 +1,16 @@
 // Interactive mode for the full demo pages: the film pauses at "your" moments and waits for you.
-//   read   — a line for you (your subtitle, or a reply written here): say it aloud (mic hears speech, then a short silence)
+//   read   — a line for you (your subtitle, or a reply written here): say it aloud — speech recognition (shared/voice.js)
+//            checks that you said it; without recognition the mic level is used (speech, then a short silence)
 //   toast  — say it or tap the big button (乾杯 / 拍手)
 //   blow   — blow into the mic to cool something hot; your breath cools both ears while you blow
-//   choice — tap one of two answers (which side? cool or warm?); `answer` → 正解 / ざんねん; `hold` keeps the current
+//   choice — say or tap one of two answers (which side? cool or warm?); `answer` → 正解 / ざんねん; `hold` keeps the current
 //            thermal on while you decide (fades out after HOLD s), so you can feel which side is cold
 //   cheer  — Demo 3 (a song: never paused): cheer or tap 👏 any time → hearts on stage and a little extra warmth
 // No mic (denied / unsupported): every gate becomes a tap (blow = press and hold). Each gate auto-continues after GIVE_UP s.
 // Hook: each demo.js loop calls MoHeatInteract.tick(t, media) → { waiting, th, hold, boost } and MoHeatInteract.out(th, ix).
 // Off in ?embed (site menu), ?cover and ?render (MP4) — those stay linear. Gates sit on gaps of the existing mix, so the
-// audio and thermal tracks are unchanged. Mic: level only, nothing is recorded or sent anywhere.
+// audio and thermal tracks are unchanged. Mic: the level for blow / toast / fallback, and the browser's speech recognition
+// (voice.js) while a gate waits for words; nothing is recorded or stored here.
 (() => {
   const QS = new URLSearchParams(location.search);
   if (QS.has('embed') || QS.has('cover') || QS.has('render')) return;
@@ -229,7 +231,19 @@
   const say = (g) => (g.sub ? [g.sub.ja, g.sub.en] : g.what || ['', '']);
   function start(g) {
     cur = { g, t0: performance.now(), speech: 0, silence: 0, heard: false, blow: 0, b: 0, holding: false, done: false };
-    fired.add(g); media.pause(); stage.classList.add('ix-wait'); render();
+    fired.add(g); media.pause(); stage.classList.add('ix-wait'); render(); listen(g);
+  }
+  // voice input (shared/voice.js): your line / your answer is recognised and judged
+  const V = window.MoHeatVoice;
+  let vs = null;
+  const unlisten = () => { vs?.stop(); vs = null; };
+  function listen(g) {
+    unlisten();
+    if (!V || !V.supported || g.kind === 'blow') return;
+    const [ja, en] = say(g), anchor = () => (card ? [card] : []);
+    if (g.kind === 'choice') vs = V.listen({ phrases: g.options.map((o) => o.split(/\s[·・]\s/)), anchor, onHit: (i) => { vs = null; finish(true, i); } });
+    else vs = V.listen({ phrases: [g.kind === 'toast' ? [ja, en, '乾杯', 'かんぱい', 'cheers', 'さいこう', '最高', '拍手'] : [ja, en]], single: true, lenient: true, anchor,
+      onHit: () => { vs = null; if (cur && !cur.done) { cur.done = true; finish(true); } } });
   }
   function render() {
     if (!cur) return;
@@ -275,6 +289,7 @@
   }
   function finish(ok, pick) {
     if (!cur) return;
+    unlisten();
     const { g } = cur; cur = null; card?.remove(); card = null; stage.classList.remove('ix-wait');
     let wait = 0;
     if (ok) {
@@ -314,7 +329,7 @@
       lastT = t;
       if (!cur) return null;
     }
-    if (!media.paused) { cur = null; card?.remove(); card = null; stage.classList.remove('ix-wait'); return null; }   // ▶ pressed: skip
+    if (!media.paused) { unlisten(); cur = null; card?.remove(); card = null; stage.classList.remove('ix-wait'); return null; }   // ▶ pressed: skip
     const c = cur, g = c.g, waited = (n - c.t0) / 1000;
     const lv = g.kind === 'choice' ? 0 : level(), loud = lv > Math.max(.018, floor * 3.2);
     if (!loud) floor = floor * .97 + lv * .03;
@@ -337,7 +352,8 @@
       if (loud) { c.speech += dt; c.silence = 0; if (c.speech > .25) c.heard = true; } else c.silence += dt;
       const len = (g.sub ? g.sub.ja : (g.what || [''])[0]).length;
       const need = g.kind === 'toast' ? .25 : Math.min(1.2, .35 + len * .04);
-      if (c.heard && c.speech >= need && c.silence > (g.kind === 'toast' ? .15 : .55) && !c.done) { c.done = true; finish(true); }
+      const words = g.kind !== 'toast' && V?.judging();   // recognition is judging the words: the level alone does not count
+      if (!words && c.heard && c.speech >= need && c.silence > (g.kind === 'toast' ? .15 : .55) && !c.done) { c.done = true; finish(true); }
     }
     if (waited > GIVE_UP && !c.done) { c.done = true; finish(false); }
     return { waiting: true, th, hold };

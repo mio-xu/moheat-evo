@@ -90,7 +90,7 @@
       <div class="card">
         <label class="row"><span>Intensity</span><input id="intensity" type="range" min="0" max="100" value="100" /><b id="intensityVal">100%</b></label>
         <label class="row check"><input id="sendOn" type="checkbox" checked /> <span>Send to device</span></label>
-        <label class="row check"><input id="micOn" type="checkbox" checked /> <span>Use the microphone to answer (level only, nothing recorded)</span></label>
+        <label class="row check"><input id="micOn" type="checkbox" checked /> <span>Answer with your voice (microphone + the browser's speech recognition; nothing is stored)</span></label>
       </div>
     </aside>
   </main>
@@ -99,7 +99,8 @@
   <script src="lines.js?v=1"></script>
   <script src="media/art/patches.js?v=2"></script>
   <script src="audio.js?v=1"></script>
-  <script src="game.js?v=9"></script>
+  <script src="game.js?v=10"></script>
+  <script src="../../shared/voice.js?v=1"></script>
   <script src="../../shared/nav.js?v=7"></script>
 </body>
 </html>
