@@ -11,12 +11,16 @@
   const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000));
 
   // ---------------------------------------------------------------- art: stills (fallback / cover) + loops
-  const VIEWS = ['lounge', 'can', 'wrist', 'glasses', 'whisper', 'jacket'];
+  // views: a still each (jin_<view>.jpg). Clips: v_<view> = he talks (loop), v_<view>_idle = he is silent (loop), v_off = one shot
+  // (he pushes his sunglasses up: glasses → gaze). 'off' has no still of its own and shows the glasses still as fallback.
+  const VIEWS = ['lounge', 'can', 'wrist', 'glasses', 'gaze', 'whisper', 'jacket'];
+  const CLIPS = ['lounge', 'can', 'wrist', 'glasses', 'whisper', 'jacket', 'lounge_idle', 'gaze_idle', 'jacket_idle', 'off'];
   const IMG = {};
-  const artReady = Promise.all(VIEWS.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/jin_${n}.jpg?v=1`; })));
+  const artReady = Promise.all(VIEWS.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; if (n === 'glasses') IMG.off = im; res(); }; im.onerror = () => res(); im.src = `media/art/jin_${n}.jpg?v=1`; })));
   const CLIP = {}, POSTER = {};
-  if (!QS.has('stills')) for (const n of VIEWS) {
-    const v = document.createElement('video'); Object.assign(v, { muted: true, loop: true, playsInline: true, preload: 'auto', src: `media/video/v_${n}.mp4?v=1` });
+  const clipReady = (n) => CLIP[n] && CLIP[n].readyState >= 2;
+  if (!QS.has('stills')) for (const n of CLIPS) {
+    const v = document.createElement('video'); Object.assign(v, { muted: true, loop: n !== 'off', playsInline: true, preload: 'auto', src: `media/video/v_${n}.mp4?v=2` });
     v.setAttribute('playsinline', ''); v.addEventListener('error', () => { delete CLIP[n]; }); CLIP[n] = v;
     v.addEventListener('loadeddata', () => { if (POSTER[n]) return; const c = document.createElement('canvas'); c.width = v.videoWidth; c.height = v.videoHeight; c.getContext('2d').drawImage(v, 0, 0); POSTER[n] = c; }, { once: true });
   }
@@ -99,11 +103,14 @@
       await say(a ? 'j06b' : 'j06a', CLOSE);
       S.view = 'glasses'; S.near = 1; await sleep(.4); SND.fx.leather(.3, .3);
       await say('j07', CLOSE);
-      SND.loop('heart')?.set(.0);
+      // he pushes his sunglasses up (one shot), then just looks at you, silent, while you hold his gaze
+      SND.loop('heart')?.set(.12); await playOnce('off', 4.2); S.view = 'gaze';
       await hold('👀', '目をそらさない（長押し）', 'Hold his gaze (press and hold)', 3, (down, k) => { S.gaze = down ? k : S.gaze * .98; SND.loop('heart')?.set(down ? .35 + .35 * k : .15); });
-      await say('j08', CLOSE);
-      // at your right ear
-      setStep(3); S.view = 'whisper'; S.near = .5; S.gaze = 0; SND.loop('heart')?.set(.12); await sleep(.5);
+      await sleep(.8);
+      // he leans in to your right ear
+      setStep(3); S.view = 'whisper'; S.gaze = .5; SND.fx.leather(.8, .3); await sleep(.4);
+      await say('j08', { az: .9, dist: .3 });
+      S.near = .5; S.gaze = 0; SND.loop('heart')?.set(.12); await sleep(.3);
       S.ear = 1; await say('j10', RIGHT_EAR); await sleep(.6); S.ear = .4;
       // his jacket
       setStep(4); S.view = 'jacket'; S.near = .8; SND.fx.leather(0, .3);
@@ -113,6 +120,16 @@
       await sleep(1.2); await say('j11', CLOSE);
       await sleep(2.2); SND.fx.ice(); S.fade = 1; await sleep(3.2); finish();
     } catch (e) { if (e.message !== 'stopped') console.error(e); }
+  }
+
+  async function playOnce(n, max) {
+    const my = run, v = CLIP[n];
+    S.view = n;
+    if (!clipReady(n)) { await sleep(1); return; }
+    v.currentTime = 0; S.once = n;
+    await new Promise((res) => { const t0 = performance.now(); const chk = () => (v.ended || performance.now() - t0 > max * 1000 || my !== run ? res() : setTimeout(chk, 50)); chk(); });
+    S.once = '';
+    if (my !== run) throw new Error('stopped');
   }
 
   // ---------------------------------------------------------------- per-frame state + thermal
@@ -152,20 +169,20 @@
   // ---------------------------------------------------------------- drawing: the view's loop while he talks, its first frame while he waits
   let viewA = 'lounge', viewB = 'lounge', mix = 1;
   const VS = {};
-  const clipReady = (n) => CLIP[n] && CLIP[n].readyState >= 2;
-  function clips(dt) {
+    function clips(dt) {
     const used = new Set();
     for (const view of new Set([viewA, viewB])) {
       const st = VS[view] || (VS[view] = { mode: 'still', k: 1 });
-      const want = clipReady(view) ? (talking || view === 'jacket' ? 'play' : 'poster') : 'still';
+      const want = view === 'off' ? (clipReady('off') ? 'play' : 'still')
+        : talking && clipReady(view) ? 'play' : clipReady(view + '_idle') ? 'idle' : clipReady(view) ? 'poster' : 'still';
       if (want !== st.mode) { st.prev = st.mode; st.mode = want; st.k = 0; }
       st.k = Math.min(1, st.k + dt / .3);
-      if (st.mode === 'play' || (st.prev === 'play' && st.k < 1)) used.add(view);
+      for (const m of ['play', 'idle']) if (st.mode === m || (st.prev === m && st.k < 1)) used.add(m === 'idle' ? view + '_idle' : view);
     }
-    for (const [n, v] of Object.entries(CLIP)) { if (used.has(n)) { if (v.paused) v.play().catch(() => {}); } else if (!v.paused) v.pause(); }
+    for (const [n, v] of Object.entries(CLIP)) { if (used.has(n)) { if (v.paused && !v.ended) v.play().catch(() => {}); } else if (!v.paused) v.pause(); }
   }
   function layer(view, mode, a) {
-    const src = mode === 'play' ? CLIP[view] : mode === 'poster' ? POSTER[view] : IMG[view];
+    const src = mode === 'play' ? CLIP[view] : mode === 'idle' ? CLIP[view + '_idle'] : mode === 'poster' ? POSTER[view] : IMG[view];
     if (!src) return false;
     const w = src.videoWidth || src.width, h = src.videoHeight || src.height, dh = W * h / w;
     ctx.globalAlpha = a; ctx.drawImage(src, 0, (H - dh) / 2, W, dh); ctx.globalAlpha = 1; return true;
