@@ -1,6 +1,6 @@
 // 『ガクの、焚き火キャンプ配信 · Gaku's Campfire Stream』 — the for-women live-stream room (engine adapted from Demo 14's stream.js).
 // Gaku (26, original character): a strikingly handsome, cool and quiet solo-camping streamer who has no idea how good-looking he is.
-// His binaural mic sits on a camp chair by the fire = YOUR head: the campfire is on your RIGHT, the cold lake wind comes from your LEFT.
+// His phone streams from a tripod at his eye level with a binaural mic clipped under it = YOUR head: the campfire is on your RIGHT, the cold lake wind comes from your LEFT.
 // Signature move: he sits down on your left to be your windbreak — the left ear's cold fades and his voice warms it instead.
 // Thermal (firmware DUAL, cool and heat independent per ear), two layers:
 //   VOICE  — his loudness (0.1 + 0.8 × envelope) warms the ear he is at: × 1 at the ear, × 0.6 within 30 cm, × 0.28 from the fire.
@@ -26,10 +26,10 @@
 
   // ---------------------------------------------------------------- art (stills; video comes last)
   const IMG = {};
-  const artReady = Promise.all(CH.views.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/gaku_${n}.jpg?v=1`; })));
+  const artReady = Promise.all(CH.views.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/gaku_${n}.jpg?v=2`; })));
   // where the campfire is in each picture (fraction of width / height) — sparks rise from here; steam spots for the treats
-  const FIRE = { live: [.81, .66], log: [.6, .74], left: [.93, .6], coffee: [.9, .6], imo: [.86, .58], blanket: [.83, .86], bye: [.58, .67] };
-  const STEAM = { coffee: [.2, .6], imo: [.23, .57] };
+  const FIRE = { live: [.9, .74], log: [.76, .8], left: [.76, .62], coffee: [.92, .55], imo: [.92, .63], blanket: [.94, .63], whisper_R: [.95, .7], bye: [.74, .7] };
+  const STEAM = { coffee: [.44, .6], imo: [.2, .62] };
 
   // ---------------------------------------------------------------- state
   const fresh = () => ({ started: true, t: 0, clock: 0, view: 'live', pos: { az: 0, dist: 1 }, lv: 0, env: 0,
@@ -365,7 +365,7 @@
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
 
   function drawCover() {   // his stream frame, darkened on the right where the title sits
-    const im = IMG.live; ctx.fillStyle = '#121c20'; ctx.fillRect(0, 0, W, H); if (im) ctx.drawImage(im, 0, 0, W, H);
+    const im = IMG.live; ctx.fillStyle = '#121c20'; ctx.fillRect(0, 0, W, H); if (im) ctx.drawImage(im, -150, -45, W * 1.085, H * 1.085);   // shifted left: the title stays clear of his face
     const g = ctx.createLinearGradient(0, 0, W, 0); g.addColorStop(0, 'rgba(8,14,16,0)'); g.addColorStop(.4, 'rgba(8,14,16,.08)'); g.addColorStop(.58, 'rgba(8,14,16,.62)'); g.addColorStop(1, 'rgba(8,14,16,.82)');
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
   }
