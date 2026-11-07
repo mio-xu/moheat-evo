@@ -126,12 +126,12 @@
       setTimeout(() => { if (my === run) SND.fx.bell(.7); }, 2500);
 
       // 2 · the food stalls: she has no cash; a hot amazake at your right cheek
-      setStep(1); SND.fx.geta(.3, .5, 6, .25); await sleep(.6); S.view = 'stall'; await sleep(.8);
+      setStep(1); SND.fx.geta(.3, .5, 6, .25); await go('t_torii_stall', 'stall'); await sleep(.4);
       await say('t07', CLOSE);
       const b = await choice([['僕がおごるよ', 'My treat'], ['…カード、使えるか聞いてみたら？', '…Ask if they take cards?']]);
       await say(b ? 't08b' : 't08a', CLOSE);
       SND.fx.coin(.3); await sleep(.8);
-      S.view = 'amazake'; await sleep(.5);
+      await go('t_stall_amazake', 'amazake'); await sleep(.2);
       S.cup = 1; S.steam = 1; SND.fx.rustle(.9, .25);
       await say('t09', CHEEK_R);
       await sleep(.9); S.cup = 0;
@@ -140,17 +140,17 @@
       S.steam = 0;
 
       // 3 · the bonfire on your left; the crowd pushes her to your right ear
-      setStep(2); S.view = 'fire'; const fire = SND.loop('fire'); fire?.at(-1.0, 1.4); fire?.set(.55, 1.2);
-      await sleep(1); alive(my);
+      setStep(2); const fire = SND.loop('fire'); fire?.at(-1.0, 1.4); fire?.set(.55, 1.2);
+      await go('t_amazake_fire', 'fire'); await sleep(.4); alive(my);
       await say('t11', RIGHT);
       crowd?.set(.6, .5); crowd?.at(1.8, 1.2); SND.fx.rustle(1.4, .3); await sleep(.4);
-      S.view = 'close'; S.near = 1; S.nearAz = 1.3;
+      await go('t_fire_close', 'close'); S.near = 1; S.nearAz = 1.3;
       await say('t12', RIGHT_EAR);
       await hold('🤝', '支えてあげる（長押し）', 'Steady her (press and hold)', 2.8, (down, k) => { S.near = 1 + .4 * (down ? k : 0); });
       crowd?.set(.32, 1); crowd?.at(Math.PI, 3); S.near = 0;
 
       // 4 · the prayer: coin, the bell rope, two bows two claps, hold your hands together
-      setStep(3); fire?.set(0, 1.5); SND.fx.geta(.4, -.6, 6, .3); await sleep(1.1); S.view = 'pray'; fire?.stop(); await sleep(.4);
+      setStep(3); fire?.set(0, 1.5); SND.fx.geta(.4, -.6, 6, .3); await go('t_close_pray', 'pray'); fire?.stop(); await sleep(.2);
       await action('🪙', 'お賽銭を入れる', 'Toss in a coin'); SND.fx.coin(0); await sleep(.6);
       await taps('🔔', '鈴を鳴らす（タップ）', 'Ring the shrine bell (tap)', 3, () => SND.fx.suzu(0));
       await sleep(.4); for (let i = 0; i < 2; i++) { SND.fx.clap(-.8, .5); SND.fx.clap(0, .3); await sleep(.55); }
@@ -162,7 +162,7 @@
       await say(S.wish ? 't15b' : 't15a', LEFT);
 
       // 5 · the omikuji: you draw 大吉, she draws 凶; tie it in the cold wind; she shares her stole
-      setStep(4); await sleep(.4); S.view = 'omikuji';
+      setStep(4); await go('t_pray_omikuji', 'omikuji');
       await action('🎋', 'おみくじを引く', 'Draw a fortune'); SND.fx.shake(0, .4); await sleep(1.2); SND.fx.paper(0, .4);
       S.slip = { k: 0, text: '大吉', en: 'Excellent luck' }; await sleep(1.9); S.slip = null; alive(my);
       await say('t16', CLOSE);
@@ -170,7 +170,7 @@
       await say(c ? 't17b' : 't17a', CLOSE);
       SND.fx.paper(-.3, .5); await sleep(.5);
       await gust(-1.6, 1.6, 3.6, 1);
-      SND.fx.rustle(-1.1, .25); S.view = 'stole';
+      SND.fx.rustle(-1.1, .25); await go('t_omikuji_stole', 'stole');
       await say('t18', { az: -.7, dist: .3 });
       S.stole = 1; SND.fx.rustle(0, .15); await sleep(1);
       S.near = 1; S.nearAz = -1.3;
@@ -225,18 +225,56 @@
 
   // ---------------------------------------------------------------- drawing: stills with a slow breathing drift, cross-fades between views
   let viewA = 'torii', viewB = 'torii', mix = 1;
+  // ---- animation (handoff §4b, as Demo20 / 22): Seedance 2.5 Lite 1080p clips whose first and last frames are EXACTLY the stills
+  // (scripts/prepare_video.py), so clips are only switched at a clip's end — a hard cut between identical frames, no ghosting.
+  // One loop per view; one transition per cut, asked for with go(): it starts when the current loop reaches its end. ?stills = no video.
+  const CLIP_NAMES = ['v_torii', 'v_stall', 'v_amazake', 'v_fire', 'v_close', 'v_pray', 'v_omikuji', 'v_stole',
+    't_torii_stall', 't_stall_amazake', 't_amazake_fire', 't_fire_close', 't_close_pray', 't_pray_omikuji', 't_omikuji_stole'];
+  const ONCE = new Set(CLIP_NAMES.filter((n) => n.startsWith('t_')));
+  const CLIP = {};
+  if (!QS.has('stills') && !QS.has('cover')) for (const n of CLIP_NAMES) {
+    const v = document.createElement('video'); Object.assign(v, { muted: true, loop: false, playsInline: true, preload: 'auto', src: `media/video/${n}.mp4?v=1` });
+    v.setAttribute('playsinline', ''); v.addEventListener('error', () => { delete CLIP[n]; }); CLIP[n] = v;
+  }
+  const clipOK = (n) => n && CLIP[n] && CLIP[n].readyState >= 2;
+  let cur = null, curView = null, pending = null;
+  const loopFor = (view) => 'v_' + view;
+  function go(name, view) {   // a one-shot transition at the next clip end, then continue in `view`
+    if (!clipOK(name) || !cur) { S.view = view; return sleep(.6); }
+    const my = run;
+    return new Promise((done, fail) => { pending = { name, view, done: () => (my === run ? done() : fail(new Error('stopped'))), started: false }; });
+  }
+  function playClip(name, view) { const v = CLIP[name]; cur = name; curView = view; v.currentTime = 0; v.play().catch(() => {}); }
+  function startLoop() { const w = loopFor(S.view); if (clipOK(w)) playClip(w, S.view); else cur = null; }
+  function clips() {
+    if (QS.has('stills')) return;
+    if (!cur) { startLoop(); return; }
+    if (!ONCE.has(cur) && curView !== S.view && !pending) { startLoop(); return; }
+    const v = CLIP[cur];
+    if (!v.ended && v.currentTime < v.duration - .03) return;   // mid-clip: never switch
+    if (ONCE.has(cur) && pending && pending.started) { const p = pending; pending = null; S.view = curView; viewA = viewB = curView; mix = 1; p.done(); }
+    if (pending && !pending.started) { pending.started = true; playClip(pending.name, pending.view); return; }
+    startLoop();
+  }
+  function drawClip(view, alpha) {
+    if (!(cur && clipOK(cur) && (view === curView || (view === S.view && ONCE.has(cur))))) return false;
+    ctx.globalAlpha = alpha; ctx.drawImage(CLIP[cur], 0, 0, W, H); ctx.globalAlpha = 1; return true;
+  }
   function drawView(view, alpha, t) {
+    if (drawClip(view, alpha)) return;
+    const exact = !QS.has('stills') && Object.keys(CLIP).length > 0;   // with video the still must match the clips' frames exactly (no drift)
     const im = IMG[view];
     ctx.globalAlpha = alpha;
     if (!im) { ctx.fillStyle = '#140d14'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
-    const z = 1.02 + .008 * Math.sin(t * 1.1) + (view === 'close' ? .03 * clamp(nearK - 1, 0, .4) / .4 : 0), dh = W * im.height / im.width;
-    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + 4 * Math.sin(t * .9), W, dh); ctx.restore();
+    const z = exact ? 1 : 1.02 + .008 * Math.sin(t * 1.1) + (view === 'close' ? .03 * clamp(nearK - 1, 0, .4) / .4 : 0), dh = W * im.height / im.width;
+    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + (exact ? 0 : 4 * Math.sin(t * .9)), W, dh); ctx.restore();
     ctx.globalAlpha = 1;
   }
   const flakes = Array.from({ length: 90 }, () => ({ x: Math.random() * W, y: Math.random() * H, v: 40 + Math.random() * 70, r: 1.5 + Math.random() * 3.5, p: Math.random() * 6 }));
   const sparks = Array.from({ length: 26 }, () => ({ x: 0, y: H + 10, v: 0, life: 0 }));
   function draw(t, dt) {
     if (S.view !== viewB) { viewA = viewB; viewB = S.view; mix = 0; }
+    clips();
     mix = Math.min(1, mix + dt / .6);
     if (mix < 1) drawView(viewA, 1, t);
     drawView(viewB, mix < 1 ? mix : 1, t);
@@ -345,7 +383,7 @@
   }
   function start() {
     SND.init(); SND.loadVoices(Object.keys(LINES));
-    S = fresh(); S.started = true; viewA = viewB = 'torii'; mix = 1; fireK = cupK = stoleK = nearK = steamK = 0; $('cleared').hidden = true;
+    S = fresh(); S.started = true; viewA = viewB = 'torii'; mix = 1; cur = null; pending = null; fireK = cupK = stoleK = nearK = steamK = 0; $('cleared').hidden = true;
     $('intro').classList.add('hidden'); window.TSUBAKI.done = false;
     story();
   }

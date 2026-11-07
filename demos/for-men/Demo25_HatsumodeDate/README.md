@@ -21,4 +21,5 @@ Hinata / Luna) in look (silver-white side ponytail, white-to-crimson camellia fu
 - `scripts/voice.py` → `media/voice/*.m4a` (ElevenLabs `tsubaki` r1_b, user pick), `scripts/seedance.py` (design + scene prompts; `project/web_prompts.json`), `scripts/prepare_art.sh` → `media/art/*.jpg`, `scripts/make_cover.py` → `media/cover.jpg` + menu thumbnail.
 - Look: user picked **D** (`project/designs_contact.jpg`); stills `project/scenes_contact.jpg`. Raw PNGs in `assets/` (git-ignored).
 - `?auto=1` answers every choice / action itself (testing), `?cover=1` poster, `?embed=1` stage only.
-- Animation (Seedance video) not made yet — stills first (user rule).
+- Animation (handoff §4b): 15 Seedance 2.5 Lite 1080p First & Last Frame clips (960 credits, web): a talk loop per view + a transition for each of the 7 cuts (`project/web_video_prompts.json`). `scripts/prepare_video.py` snaps every clip's ends onto its still (all exact 0.0 / 0.0); QA mid-frames `project/video_qa.jpg`. The player switches clips only at a clip's end (`go()`), `?stills` = no video. Auto run with video 3:13 (stills 2:31; each cut waits for the loop end + a 4 s transition), 0 errors.
+- The amazake still was redone (user): she presses the cup to your right cheek herself (v1 had your hand holding it).
