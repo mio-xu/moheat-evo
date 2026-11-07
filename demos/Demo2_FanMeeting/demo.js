@@ -567,10 +567,12 @@ function loop() {
   const t = now();
   if (Math.abs(t - lastT) > .5) parts = [];
   lastT = t;
+  const ix = window.MoHeatInteract && previewT == null ? window.MoHeatInteract.tick(t, media) : null;   // ../shared/interact.js: waits for you / cheer mode
   const playing = (!media.paused && !media.ended) || previewT != null;
-  const { states, th } = frame(t, playing ? dt : 0);
-  drawRadar(states, playing ? th : { Lc: 0, Lh: 0, Rc: 0, Rh: 0 }, t);
-  updateOutput(th, playing);
+  const { states, th: th0 } = frame(t, playing || ix ? dt : 0);
+  const io = window.MoHeatInteract ? window.MoHeatInteract.out(th0, ix) : { th: th0, live: null }, th = io.th, live = io.live ?? playing;
+  drawRadar(states, live ? th : { Lc: 0, Lh: 0, Rc: 0, Rh: 0 }, t);
+  updateOutput(th, live);
   updateSubs(t); updateScene(t);
   $('time').textContent = `${fmt(t)} / ${fmt(A.duration)}`;
   $('playhead').style.left = `${(t / A.duration) * 100}%`;

@@ -293,10 +293,12 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 ### Demo switcher (`demos/shared/nav.js`)
 Every full demo page loads `../shared/nav.js`, which adds ‹ ☰ Demos N/9 › to the top bar and a thumbnail panel of all demos (thumbs = `assets/images/demos/demoN.jpg`). `#demos` in the URL opens the panel. Hidden with `?embed`, `?cover`, `?render`. **A new demo must be added to the `DEMOS` list in nav.js.**
 
-### Interactive mode, Nobunaga series (`demos/shared/interact.js`)
-Demo 5–9 full pages pause at "your" moments (cover toggle 「あなたも参加する」 + stage chip 「参加モード ON/OFF」, default on, stored in localStorage):
-- **read**: your subtitle line → say it aloud (mic level only: speech then ~0.5 s silence) → continues, skipping the silent rest of your line.
-- **toast**: say 乾杯 or tap 🥂. **blow**: blow into the mic (Demo 5 tea, Demo 7 yakitori); while blowing, both ears cool (thermal override).
-- No mic → tap / press-and-hold; every gate auto-continues after 15 s; ▶ skips. Nothing is recorded or uploaded.
-- Gates are hand-picked per demo in `GATES` (on silent gaps: audio and thermal CSVs unchanged). Hook: one `MoHeatInteract.tick(t)` call in each demo.js `loop()`.
-- Off in `?embed` (site menu), `?cover`, `?render` → the MP4s and the homepage player stay linear.
+### Interactive mode, all demos (`demos/shared/interact.js`)
+Every full demo page waits for the viewer at hand-picked moments (cover toggle 「あなたも参加する」 / 「声援で参加する」 + stage chip, default on, localStorage):
+- **read**: say a line aloud (mic level only: speech then ~0.5 s silence). Nobunaga series (5–9): **every "you" subtitle line** is a read gate (auto-generated), skipping the silent rest of the line. Demo 1/2/4: replies written in `GATES`.
+- **toast** (乾杯 / Demo 2 拍手), **blow** (Demo 5 tea, Demo 7 yakitori, Demo 4 summer heat: breath cools both ears), **choice** (Demo 1/2 "which side will she come from?" with answer from the data; Demo 1 cool vs warm; Demo 4 "which ear is cold?" with `hold`: current thermal stays on while choosing).
+- **Demo 3 = cheer mode** (song, never paused): cheering / 👏 tap → hearts + penlight glow and up to +30 % on heat that is already on (no new same-ear conflict).
+- No mic → tap / press-and-hold; auto-continue after 15 s; ▶ skips. Nothing recorded or uploaded.
+- Hook in each demo.js `loop()`: `MoHeatInteract.tick(t, media)` + `MoHeatInteract.out(th, ix)` (Demo 5–9 use the earlier tick-only form). Gates sit on dialogue gaps → audio and thermal CSVs unchanged.
+- Off in `?embed`, `?cover`, `?render` → homepage player and MP4s stay linear.
+- Note: Demo 3's demo.css paints every `.stage canvas` black → the cheer layer overrides it (`.stage canvas.ix-fx{background:transparent}`).
