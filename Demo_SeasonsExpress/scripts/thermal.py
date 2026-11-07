@@ -15,7 +15,7 @@ import csv, importlib.util, json, os, sys
 import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import seasons as S
-from demo1 import load
+from demo1 import load, load_path, D2_TOOLS
 
 T1 = load("thermal")
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,7 +27,7 @@ def _load_path(name, path):
     sys.modules[name] = m; spec.loader.exec_module(m); return m
 
 
-T2 = _load_path("demo2_thermal", os.path.join(SITE, "ASMR Demo 2", "tools", "thermal.py"))
+T2 = load_path("demo2_thermal", os.path.join(D2_TOOLS, "thermal.py"))
 
 CFG = dict(T1.CFG)
 CFG.update(dict(
