@@ -33,7 +33,7 @@ demos/Demo2_FanMeeting/                  Demo 2《キミだけのスペシャル
 demos/Demo3_ShiningSmileConcert/         Demo 3《Shining Smile Melody — Ice & Fire Concert》
 demos/Demo4_SeasonsExpress/              Demo 4《四季暴走列車 / The Runaway Seasons Express》（原 `Demo_SeasonsExpress/`）
 demos/Demo5_SengokuBanquet/              Demo 5《安土最後の酒宴》
-demos/Demo7_KyotoIzakaya/                Demo 7《信長と家康、京都の居酒屋へ》（策划中：剧本 + Seedance 命令，等用户的关键帧和 clip）
+demos/Demo7_KyotoIzakaya/                Demo 7《信長と家康、京都の居酒屋へ》（完成）
 demos/Demo8_YamazakiDistillery/          Demo 8《信長と家康、山崎蒸溜所へ》（策划中：剧本 + Seedance 命令，等用户的关键帧和 clip）
 demos/Demo9_GifuCastle/                   Demo 9《信長の岐阜城へようこそ》（策划中：剧本 + Seedance 命令，等用户的关键帧和 clip）
 HANDOFF_ASMR_DEMOS.md                    本文件
@@ -202,7 +202,14 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 
 ---
 
-### Demo 7 · `demos/Demo7_KyotoIzakaya/` 📝 策划中 —《信長と家康、京都の居酒屋へ》
+### Demo 7 · `demos/Demo7_KyotoIzakaya/` ✅ 完成 —《信長と家康、京都の居酒屋へ》
+- **Demo 7 已完成（2026-11-07）**：
+  - **素材**：用户的 7 张图从桌面收进 `assets/bg/`（`d7_bg_pontocho`、`d7_bg_izakaya`，另有备选 `d7_bg_pontocho_alt`）和 `assets/props/`（beer、yakitori、highball、atsukan）。嗨棒图的格子底是画进去的，已抠掉。"开窗"背景没做，播放器用推近窗户代替。
+  - **结构**：照搬 Demo 6（Demo 5 的角色图通过 `artBase` 读取），时间轴 `scripts/izakaya.py`，`build_all.sh` 约 30 s，渲染端口 8771。
+  - **场景**：先斗町 → 居酒屋 → 推近窗户看鸭川 → 居酒屋；道具依次出现，带日英名称牌；穿越金光让角色出现、消失（`PRESENT`）；干杯时你举起当时的道具。
+  - **冷热**：冷是雪夜风（左右交替）、冰啤、嗨棒、窗外河风；热是两人的声音，加上炭火（左前）和热燗蒸汽（右）。QA 全部通过：左右切换 23 次、相反温度 36 段、0 冲突。
+  - **注意**：暖的环境音不要和同侧那位大名的台词重叠，否则 QA 的"声音和热的相关性"会掉到 0.7 以下；把暖源放在说话者的另一侧。
+  - 你的字幕台词 7 句；`render_mp4.py --at …` 可以只渲染预览静帧；封面用 `--timeout=7000` 截图；官网菜单已加第 7 项。
 ### Demo 8 · `demos/Demo8_YamazakiDistillery/` 📝 策划中 —《信長と家康、山崎蒸溜所へ》
 - 用户（2026-11-07）：信长和家康穿越到现代，京都居酒屋和三得利山崎蒸馏所"各做一个，剧情不一样"。两部都和 Demo 6（你带威士忌去安土）呼应；Demo 8 是时间环：两人尝到这酒，才认出是"那晚在安土喝过的"。
 - 每个文件夹里有：`README.md`（剧情、角色位置、冷热来源、管线）、`storyboard/script_150s.md`（日英台词 + 时间 + 冷热）、`Seedance素材命令.md`（Demo 7 有 14 个镜头 K01–K14，Demo 8 有 12 个镜头 Y01–Y12）。
