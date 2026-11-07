@@ -1,8 +1,8 @@
 """Reusable IMAGE assets for Demo 7, 8, 9 (replaces the per-shot Seedance plan; user, 2026-11-07:
 "too many prompts — can we just make reusable images?").
 
-The two warlords are NOT redrawn: all of Demo 5's character art (busts, expressions, poses, ear close-ups) is reused.
-Only new backgrounds and a few props are needed, all in Demo 5's ukiyo-e / gold-leaf style, composed like Demo 5's
+The two warlords are NOT redrawn: all of Demo 9's character art (busts, expressions, poses, ear close-ups) is reused.
+Only new backgrounds and a few props are needed, all in Demo 9's ukiyo-e / gold-leaf style, composed like Demo 9's
 banquet room so the existing seated characters drop in on the left and right.
 
   python3 demos/Demo7_KyotoIzakaya/scripts/make_image_kit.py
@@ -13,8 +13,8 @@ import json, os, shutil, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEMOS = os.path.dirname(os.path.dirname(HERE))
-CHAR = os.path.join(DEMOS, "Demo5_SengokuBanquet", "assets", "characters")
-STAGE = os.path.join(DEMOS, "Demo5_SengokuBanquet", "assets", "stage")
+CHAR = os.path.join(DEMOS, "Demo9_SengokuBanquet", "assets", "characters")
+STAGE = os.path.join(DEMOS, "Demo9_SengokuBanquet", "assets", "stage")
 WHISKY = os.path.join(DEMOS, "Demo6_FutureWhisky", "assets", "whisky")
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.expanduser("~/Desktop/MoHeat_Demo7-9_图片素材")
 
@@ -48,7 +48,7 @@ DEMOS_SPEC = [
         ("D8-5", "prop", "d8_prop_ladle.png", "A bamboo water ladle (hishaku) filled with crystal-clear cold spring water, droplets falling.", []),
         ("D8-6", "prop", "d8_prop_cask.png", "A single oak whisky cask lying on its side, softly glowing golden from within, a few golden sparkles.", []),
     ]),
-    ("Demo9_GifuCastle", "Demo9_岐阜城", [
+    ("Demo5_GifuCastle", "Demo5_岐阜城", [
         ("D9-1", "bg", "d9_bg_palace_garden.png", "Gifu Castle's palace at the foot of Mt. Kinka in summer, 1569: an open veranda room with gold-leaf sliding doors on both sides, looking out over a garden with a waterfall falling from a rock cliff into a pond, mist, a vermilion bridge, pine trees, cicada-summer light.", []),
         ("D9-2", "bg", "d9_bg_summit.png", "The summit of Mt. Kinka at golden late afternoon: a wooden lookout platform beside the castle keep, a vast view over the Nōbi plain with rivers, rice fields and distant mountains, banners in the wind, wind-swept clouds.", []),
         ("D9-3", "bg", "d9_bg_tearoom.png", "A small elegant tea room inside the mountaintop castle at sunset: tatami, a tea brazier with a steaming iron kettle in the centre, a round window glowing with the orange sunset over the plain.", []),
@@ -101,7 +101,7 @@ def main():
     for folder, label, items in DEMOS_SPEC:
         droot = os.path.join(OUT, label); os.makedirs(droot, exist_ok=True)
         md = [f"# {label} — ChatGPT 图片素材（可复用，2026-11-07 起替代逐镜头 Seedance 方案）", "",
-              "角色**不用重画**：直接复用 Demo 5 的信长、家康全部角色图（表情、坐姿、耳语、大笑）。这里只需要新背景和几个小道具。", "",
+              "角色**不用重画**：直接复用 Demo 9 的信长、家康全部角色图（表情、坐姿、耳语、大笑）。这里只需要新背景和几个小道具。", "",
               "做法：新对话里上传每条列出的参考图 → 粘贴提示词 → 选最好的一张，按文件名存到 "
               f"`demos/{folder}/assets/`（或桌面素材包对应文件夹）。标「编辑」的那张要在上一张图上用「编辑」生成。", ""]
         for iid, kind, fname, what, extra in items:
@@ -124,10 +124,10 @@ def main():
         open(os.path.join(DEMOS, folder, "ChatGPT素材命令.md"), "w").write("\n".join(md))
     howto = """MoHeat Evo Demo 7 / 8 / 9 — 图片素材包（可复用图片，不需要视频）
 
-角色不用画！信长、家康直接复用 Demo 5 的全部角色图。这里只有：
+角色不用画！信长、家康直接复用 Demo 9 的全部角色图。这里只有：
   Demo 7 京都居酒屋：背景 3 张（其中 1 张是编辑上一张）+ 道具 4 个
   Demo 8 山崎蒸溜所：背景 4 张 + 道具 2 个
-  Demo 9 岐阜城：背景 4 张 + 道具 4 个
+  Demo 5 岐阜城：背景 4 张 + 道具 4 个
 共 21 张。
 
 最方便：双击 index.html。每张图一张卡片：参考图缩略图 + 一个「复制提示词」按钮。
@@ -158,7 +158,7 @@ main{max-width:1000px;margin:0 auto;padding:16px}h2{margin:26px 0 8px}
 .meta{color:var(--soft)}.done{margin-left:auto}.refs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.refs img{height:80px;border-radius:8px;border:1px solid var(--line)}
 button{font:inherit;border:0;border-radius:8px;padding:5px 12px;background:var(--acc);color:#fff;cursor:pointer}button.ok{background:#2e8b57}
 pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px;margin:8px 0 0;max-height:130px;overflow:auto;font-size:12.5px}
-</style></head><body><header><b>Demo 7–9 图片素材（角色复用 Demo 5）</b></header><main id="m"></main><script>
+</style></head><body><header><b>Demo 7–9 图片素材（角色复用 Demo 9）</b></header><main id="m"></main><script>
 const C=__DATA__;const m=document.getElementById('m'),hd=document.querySelector('header');
 const cp=async(t,b)=>{try{await navigator.clipboard.writeText(t)}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}const o=b.textContent;b.textContent='已复制 ✓';b.classList.add('ok');setTimeout(()=>{b.textContent=o;b.classList.remove('ok')},1200)};
 let last='';for(const c of C){if(c.demo!==last){last=c.demo;const h=document.createElement('h2');h.id=c.demo;h.textContent=c.demo;m.appendChild(h);const a=document.createElement('a');a.href='#'+c.demo;a.textContent=c.demo;hd.appendChild(a)}

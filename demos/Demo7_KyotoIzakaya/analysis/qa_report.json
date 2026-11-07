@@ -19,18 +19,18 @@
  "heat_vs_voice": {
   "heat_by_delivery": {
    "say": 0.494,
-   "laugh": 0.708,
-   "whisper": 0.318
+   "laugh": 0.712,
+   "whisper": 0.321
   },
   "correlation": {
-   "N": 0.809,
+   "N": 0.812,
    "I": 0.857
   },
   "ok": true
  },
  "left_right_alternation": {
   "side_switches": 23,
-  "opposite_temps": 36,
+  "opposite_temps": 37,
   "ok": true
  },
  "thermal": {

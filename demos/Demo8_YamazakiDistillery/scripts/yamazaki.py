@@ -1,6 +1,6 @@
 """Demo 8《信長と家康、山崎蒸溜所へ》Two Warlords at the Yamazaki Distillery — single source of truth (script + timeline).
 
-Same cast, voices and controller as the Sengoku banquet demo (Demo 5), loaded by path:
+Same cast, voices and controller as the Sengoku banquet demo (Demo 9), loaded by path:
   N = Oda Nobunaga  — front-LEFT  (voice → mostly L heat)
   I = Tokugawa Ieyasu — front-RIGHT (voice → mostly R heat)
   Y = you, their guide — subtitles only, no voice
@@ -96,7 +96,7 @@ CUES = [
     L(120.4, "C", "chill", dur=6.4, az=-64, d=0.8, gain=.7),                 # cool warehouse air LEFT while Ieyasu (RIGHT) speaks
     L(120.6, "I", "say", "一樽、安土へ持ち帰りとうございますな。", "I would like to take a cask home to Azuchi.", "polite",
       tts="ひとたる、あづちへ、もちかえりとう、ございますな。", pose="offer"),
-    Y(127.2, "その樽は、きっと四百年後に届きますよ。", "That cask will reach you — four hundred years from now.", 3.6),
+    Y(127.2, "次は、この樽を持って、安土へ伺います。", "Next time, I'll bring this cask to Azuchi.", 3.6),
     L(127.4, "C", "chill", dur=3.4, az=64, d=0.8, gain=.6),
     L(131.6, "-", "slip", dur=6.0),
     L(132.0, "-", "koto", dur=18.0, outro=True),

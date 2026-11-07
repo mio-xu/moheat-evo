@@ -12,8 +12,8 @@ import html, json, os, re, shutil, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEMOS = os.path.dirname(os.path.dirname(HERE))
-CHAR = os.path.join(DEMOS, "Demo5_SengokuBanquet", "assets", "characters")
-STAGE = os.path.join(DEMOS, "Demo5_SengokuBanquet", "assets", "stage")
+CHAR = os.path.join(DEMOS, "Demo9_SengokuBanquet", "assets", "characters")
+STAGE = os.path.join(DEMOS, "Demo9_SengokuBanquet", "assets", "stage")
 WHISKY = os.path.join(DEMOS, "Demo6_FutureWhisky", "assets", "whisky")
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.expanduser("~/Desktop/MoHeat_Demo7-9_Seedance素材")
 
@@ -24,7 +24,7 @@ DEMO_LIST = [  # folder, label, scene-only prefix (for shots without the warlord
     ("Demo8_YamazakiDistillery", "Demo8_山崎蒸溜所",
      "A modern whisky distillery in a misty green valley near Kyoto where three rivers meet, bamboo groves and wooded hills. Premium Japanese 2D anime film illustration, richly detailed, soft volumetric light.",
      {s: [os.path.join(WHISKY, f) for f in ("yamazaki.png", "hakushu.png", "hibiki_glass.png")] for s in ("Y09", "Y10", "Y11")}),
-    ("Demo9_GifuCastle", "Demo9_岐阜城",
+    ("Demo5_GifuCastle", "Demo5_岐阜城",
      "Summer of 1569 at Gifu Castle, Japan: Mt. Kinka, the Nagara River and the castle town. Detailed Japanese ukiyo-e inspired anime illustration with gold-leaf decoration, rich mineral colors, elegant line work, cinematic lighting.",
      {s: [os.path.join(STAGE, "banquet_bg.png")] for s in ("G02", "G03", "G06")}),
 ]

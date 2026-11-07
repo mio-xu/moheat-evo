@@ -2,7 +2,7 @@
 
 **Status: ✅ done (2026-11-07).** Rebuild: `./build_all.sh` (VOICEVOX) then `python3 scripts/render_mp4.py` (`--at 10,30` for stills). **Picture plan:**
 - no Seedance clips; this is a browser animatic like Demo 1–6;
-- the two warlords reuse all of Demo 5's character art;
+- the two warlords reuse all of Demo 9's character art;
 - the user makes only new backgrounds and a few props (`ChatGPT素材命令.md`).
 
 Voices are generated (`scripts/make_voice.py`).
@@ -18,13 +18,13 @@ Voices are generated (`scripts/make_voice.py`).
 - Demo 6 was "you bring the future's drinks to Azuchi". Demo 7 is the reverse: **they come to the future**.
 
 ## Cast and position
-| | Where | Voice (locked, same as Demo 5 / 6) | Thermal |
+| | Where | Voice (locked, same as Demo 9 / 6) | Thermal |
 |---|---|---|---|
 | 織田信長 | front-left at the counter | VOICEVOX:青山龍星, −1.5 st persona | his voice → **L heat** (laugh > speech > whisper) |
 | 徳川家康 | front-right | VOICEVOX:黒沢冴白, −2 st persona | his voice → **R heat** |
 | You | centre, seated at the counter | subtitles only (no voice) | — |
 
-Both lords keep their Demo 5 design and costume (rich kimono, gold-leaf patterns), which is the joke: Sengoku lords in a modern izakaya.
+Both lords keep their Demo 9 design and costume (rich kimono, gold-leaf patterns), which is the joke: Sengoku lords in a modern izakaya.
 
 **Subtitles:** Japanese + English only. Japanese display text must contain kana.
 
@@ -35,11 +35,11 @@ Both lords keep their Demo 5 design and costume (rich kimono, gold-leaf patterns
 | ice-cold draft beer mugs at the toast (both) | hot sake (熱燗) and oden steam (R) |
 | highball ice and fizz (L, then both) | the warm glow of the time slip at the end |
 
-The cool and warm sources are placed on opposite ears as much as possible, as in Demo 5 / 6.
+The cool and warm sources are placed on opposite ears as much as possible, as in Demo 9 / 6.
 
 ## Pipeline (planned)
 1. Script and timeline: `storyboard/script_150s.md`. After the user approves it, it becomes `scripts/izakaya.py`.
-2. Voices: VOICEVOX with the locked personas from `../Demo5_SengokuBanquet/scripts/voice_personas.py`, several takes per line. The user starts VOICEVOX.
+2. Voices: VOICEVOX with the locked personas from `../Demo9_SengokuBanquet/scripts/voice_personas.py`, several takes per line. The user starts VOICEVOX.
 3. Picture: the user makes keyframes (`ChatGPT / 任意生图`) and Seedance clips, following `Seedance素材命令.md`. We cut the clips to the voice timeline.
 4. Audio: binaural mix with Demo 1's HRTF renderer, plus synthesised SFX (door, wind, beer tap, grill, ice, fizz, crowd murmur).
 5. Thermal: Demo 1's controller, run on voice + SFX stems.

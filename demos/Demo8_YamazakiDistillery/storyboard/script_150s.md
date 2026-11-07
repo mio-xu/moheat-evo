@@ -88,7 +88,7 @@ Nobunaga (front-left) and Ieyasu (front-right) slip into the present at the Yama
 | 128.3 | 20.0 | — | prop |  | d8_prop_cask |  |  |  |
 | 128.8 | 6.4 | ❄ cold | chill |  |  | az -64°, 0.8 m |  |  |
 | 129.0 | 5.9 | 家康 | say | polite |  | right +38°, 1.15 m | 一樽、安土へ持ち帰りとうございますな。 | I would like to take a cask home to Azuchi. |
-| 136.1 | 3.6 | あなた (text only) | you |  |  |  | その樽は、きっと四百年後に届きますよ。 | That cask will reach you — four hundred years from now. |
+| 136.1 | 3.6 | あなた (text only) | you |  |  |  | 次は、この樽を持って、安土へ伺います。 | Next time, I'll bring this cask to Azuchi. |
 | 136.3 | 3.4 | ❄ cold | chill |  |  | az +64°, 0.8 m |  |  |
 | 140.8 | 6.0 | — | slip |  |  |  |  |  |
 | 141.3 | 18.0 | — | koto |  |  |  |  |  |

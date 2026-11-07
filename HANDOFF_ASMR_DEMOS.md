@@ -1,7 +1,7 @@
 # MoHeat Evo — 冷热触觉 ASMR Demo 系列：交接文档 / Handoff
 
 > 写给接手的 agent（Claude Code、Codex 等）和项目负责人。**先读完"必须遵守的约定"再动手。**
-> 最后更新：2026-11-07（Demo 4 / Demo 5 已按用户要求互换编号：四季列车 = Demo 4，安土酒宴 = Demo 5）。状态：Demo 1–5 全部完成。Demo 4（四季列车）：程序绘制美术、16 条合成音轨、冷热 CSV、同步报告、播放器、MP4；Demo 5（安土酒宴）可选补 3 张道具图。
+> 最后更新：2026-11-07（Demo 4 / Demo 9 已按用户要求互换编号：四季列车 = Demo 4，安土酒宴 = Demo 9）。状态：Demo 1–5 全部完成。Demo 4（四季列车）：程序绘制美术、16 条合成音轨、冷热 CSV、同步报告、播放器、MP4；Demo 9（安土酒宴）可选补 3 张道具图。
 
 ---
 
@@ -11,7 +11,7 @@
 |---|---|
 | **用中文和用户沟通** | 代码、commit message、站点英文文案可以用英文 |
 | **字幕只用日语 + 英文** | 适用于 Demo 2 及之后所有 Demo。播放器字幕、MP4 内嵌字幕、场景标题、封面都**不要中文**。内部文档可以保留中文列 |
-| **Seedance 只在用户要求时用** | Demo 1–3 和 Demo 5：浏览器动画渲染出的 MP4 就是正式成品。Demo 4（四季列车）：用户（2026-11-07）想要更精致、有穿梭感的画面，要求给 Seedance 提示词；clip 到位之前浏览器 MP4 仍是现行成品 |
+| **Seedance 只在用户要求时用** | Demo 1–3 和 Demo 9：浏览器动画渲染出的 MP4 就是正式成品。Demo 4（四季列车）：用户（2026-11-07）想要更精致、有穿梭感的画面，要求给 Seedance 提示词；clip 到位之前浏览器 MP4 仍是现行成品 |
 | **美术素材由用户用 ChatGPT 生成** | 我们写"ChatGPT 素材命令.md"（文件名、提示词、优先级、放哪个文件夹），用户生成后放进指定文件夹。差分图必须"编辑上一张图"生成，保证构图一致 |
 | **不修改、不覆盖之前的 Demo** | 新 Demo 复用旧素材用**符号链接/只读引用**，复用旧代码用**按路径 import**（见各 Demo 的 `demo1.py`）|
 | **每次改动自动 commit 并 push 到 `origin main`** | 这是 GitHub Pages 站点仓库（`moheat-evo.github.io`），push 即公开。大文件（WAV/MP4/原始音乐）已在 `.gitignore` 中排除 |
@@ -32,10 +32,10 @@ demos/Demo1_SnowFoxfire/                 Demo 1《雪と狐火のひそひそ話
 demos/Demo2_FanMeeting/                  Demo 2《キミだけのスペシャルファンミーティング》（原 `ASMR Demo 2/`）
 demos/Demo3_ShiningSmileConcert/         Demo 3《Shining Smile Melody — Ice & Fire Concert》
 demos/Demo4_SeasonsExpress/              Demo 4《四季暴走列車 / The Runaway Seasons Express》（原 `Demo_SeasonsExpress/`）
-demos/Demo5_SengokuBanquet/              Demo 5《安土最後の酒宴》
+demos/Demo9_SengokuBanquet/              Demo 9《安土最後の酒宴》
 demos/Demo7_KyotoIzakaya/                Demo 7《信長と家康、京都の居酒屋へ》（完成）
 demos/Demo8_YamazakiDistillery/          Demo 8《信長と家康、山崎蒸溜所へ》（完成）
-demos/Demo9_GifuCastle/                   Demo 9《信長の岐阜城へようこそ》（完成）
+demos/Demo5_GifuCastle/                   Demo 5《信長の岐阜城へようこそ》（完成）
 HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
 ```
@@ -55,7 +55,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 | Swift | `/usr/bin/swift`，`demos/Demo1_SnowFoxfire/tools/lift_subject.swift` 用 macOS Vision 抠图（素材是绿底时可用）|
 | **VOICEVOX 引擎** | 0.26.1，`~/VOICEVOX-engine/engine`（3.9 GB，不在仓库里）。**agent 不能自己启动下载的二进制**（权限拦截），需要用户双击 `demos/Demo1_SnowFoxfire/start_voicevox.command`。端口 `http://127.0.0.1:50021`。检查：`curl -s http://127.0.0.1:50021/version` |
 | 本地预览服务器 | 在仓库根目录 `python3 -m http.server 8765`，然后打开 `http://localhost:8765/demos/<Demo 文件夹>/`。各 Demo 的 `start_demo.command` 会自动做这件事 |
-| MP4 渲染端口 | Demo 1: 8766，Demo 2: 8767，Demo 3: 8768，Demo 5: 8769，Demo 4: 8770（`render_mp4.py` 自带服务器）|
+| MP4 渲染端口 | Demo 1: 8766，Demo 2: 8767，Demo 3: 8768，Demo 9: 8769，Demo 4: 8770（`render_mp4.py` 自带服务器）|
 
 ---
 
@@ -84,6 +84,17 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 
 ## 5. 各 Demo 状态
 
+### 信长系列：剧情顺序 = 编号顺序（2026-11-07 用户要求剧情连贯，按剧情重新编号）
+| # | 文件夹 | 剧情 | 承上 / 启下 |
+|---|---|---|---|
+| 5 | `Demo5_GifuCastle`（原 Demo 9） | 1569 年岐阜城，**第一次见面**："光里走出来一个人……你说你来自未来？" | 结尾送你"天下布武"印 |
+| 6 | `Demo6_FutureWhisky` | 你带未来的威士忌回访安土："哦，未来的客人！自岐阜一别以来啊" | "后会有期" |
+| 7 | `Demo7_KyotoIzakaya` | 两人来到现代京都的居酒屋 | 结尾："下次，带我们去好酒诞生的地方！" |
+| 8 | `Demo8_YamazakiDistillery` | 山崎蒸馏所，认出"那晚在安土喝的酒" | 家康想带一桶回安土；你："下次我带这桶酒去安土拜访" |
+| 9 | `Demo9_SengokuBanquet`（原 Demo 5） | 安土最后的酒宴，你："约好的酒桶，带来了"；信长："等你很久了" | 系列结局（暴风雨之夜、"这样的夜晚不会再有"） |
+- 改编号时对调了文件夹、全仓库文字引用、缩略图和官网菜单。Demo 6–8 和 Demo 5 用 `sengoku.py` 按 `Demo*_SengokuBanquet` 名称找安土酒宴的模块，不受影响；封面上的人物图路径已改为 `../Demo9_SengokuBanquet/`。
+- 以后改信长系列的台词，要先确认它和前后两部的承接不冲突。
+
 ### Demo 1 · `demos/Demo1_SnowFoxfire/` ✅ 完成
 - 角色：小雪（冷）/ 小焰（热）；ChatGPT 美术在 `art/chatgpt/`，设定图 `art/Character.jpg`，房间背景 `room_bg`。
 - 配音：ずんだもん（两人用音高/风格区分）。字幕：日 + 英。
@@ -107,7 +118,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 ### Demo 4 · `demos/Demo4_SeasonsExpress/` ✅ 完成 —《四季暴走列車 / The Runaway Seasons Express》
 - **任务书要点**（用户提供的完整制作指令）：
   - 150 s，1920×1080，30 fps，48 kHz 双耳声。第一人称坐在魔法列车车厢里朝前看，**无角色、无台词、无旁白**。
-  - 画风必须和 Demo 1–3 一致：可爱日系 2D、粉彩、赛璐璐。**不要浮世绘或金箔风**（那是 Demo 5 的风格）。
+  - 画风必须和 Demo 1–3 一致：可爱日系 2D、粉彩、赛璐璐。**不要浮世绘或金箔风**（那是 Demo 9 的风格）。
   - 车厢全程不变，只变左右两扇窗外的季节。
   - 时间轴：
     - 0–20 冬（左冷）
@@ -166,13 +177,13 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
     - 用户把生成的视频放进 `video/seedance/S01.mp4` … `S15.mp4` 之后：**下一步**写合成脚本，按时间轴剪辑和调速（24→30 fps），叠加 0–1.8 s 封面、场景标题、熄灯黑场和结尾卡，再与 `audio/final/final_binaural_150s.wav` 合成。冷热 CSV 不变。还要检查每个 clip 的左右季节是否画反。
   - **以后可选**：如果 ChatGPT 有额度，可按 `ChatGPT素材命令.md` 生成同名文件替换程序绘制的图，然后运行 `export.py` 和 `render_mp4.py`。
 
-### Demo 5 · `demos/Demo5_SengokuBanquet/` ✅ 完成 —《安土最後の酒宴 / The Last Banquet at Azuchi》
+### Demo 9 · `demos/Demo9_SengokuBanquet/` ✅ 完成 —《安土最後の酒宴 / The Last Banquet at Azuchi》
 - **第一人称台词（2026-11-07，用户："少了我的参与"）**：`banquet.py` 的 `CUES` 末尾追加了 7 句 `Y`（你）的台词，只出字幕、不配音，都放在两位大名说话的空档里并回应他们：失礼します／乾杯／ひとくちだけ／その先……ですか？／あったかい／ずっとここにいたい／はい、必ず。追加在末尾是为了让已配音台词的序号（`TAKE`）不变。`build_audio`、`export`、`docs`、`check_sync`、CSS 都已支持 `you` 类型；QA 检查你的台词是否压在配音上。
-- **方向**：以 `demo5.jpg` 设定板为准，**B 细密浮世绘·金箔装饰风**、写实成年人比例（Q 版已淘汰，见 `project/discarded_chibi_drafts/`）。
+- **方向**：以 `demo9.jpg` 设定板为准，**B 细密浮世绘·金箔装饰风**、写实成年人比例（Q 版已淘汰，见 `project/discarded_chibi_drafts/`）。
 - **角色与冷热**：織田信長坐左前方 → 他的声音主要驱动 **L_Heat**；徳川家康坐右前方 → **R_Heat**。冷感来自风/雨/冰镇等环境（按设定板：冷气、风、雨；热：火焰、热酒蒸汽、炭火）。
 - **已有素材**（用户仍在陆续生成，开工前先 `ls assets/*/` 确认）：`assets/characters/N_Character.png`、`I_Character.png`、`N_bust_base.png`、`I_bust_base.png`、`N_ear.png`、`I_ear.png`；`assets/stage/banquet_bg.png`。
 - **素材命令**：`ChatGPT素材命令.md`（已更新为浮世绘金箔风，含设定板追加的道具/场景/特效）。还缺：信长其余口型与表情、家康全部半身/表情、贴耳特写、动作、道具、风雨夜背景、特效。
-- **配音（用户的 Demo 5 配音要求要点）**：
+- **配音（用户的 Demo 9 配音要求要点）**：
   - 必须有情感，不能是平淡机械的 TTS。每个角色全片只用一个声线。
   - 每句台词要定义：说话人、情绪、语气、空间位置、对谁说。尽量生成多个候选，挑最自然的。
   - 信长：低沉、有威严、有魅力，会豪爽大笑，也会低声说话。家康：中低音、温和沉稳，语气更柔。
@@ -205,7 +216,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 ### Demo 7 · `demos/Demo7_KyotoIzakaya/` ✅ 完成 —《信長と家康、京都の居酒屋へ》
 - **Demo 7 已完成（2026-11-07）**：
   - **素材**：用户的 7 张图从桌面收进 `assets/bg/`（`d7_bg_pontocho`、`d7_bg_izakaya`，另有备选 `d7_bg_pontocho_alt`）和 `assets/props/`（beer、yakitori、highball、atsukan）。嗨棒图的格子底是画进去的，已抠掉。"开窗"背景没做，播放器用推近窗户代替。
-  - **结构**：照搬 Demo 6（Demo 5 的角色图通过 `artBase` 读取），时间轴 `scripts/izakaya.py`，`build_all.sh` 约 30 s，渲染端口 8771。
+  - **结构**：照搬 Demo 6（Demo 9 的角色图通过 `artBase` 读取），时间轴 `scripts/izakaya.py`，`build_all.sh` 约 30 s，渲染端口 8771。
   - **场景**：先斗町 → 居酒屋 → 推近窗户看鸭川 → 居酒屋；道具依次出现，带日英名称牌；穿越金光让角色出现、消失（`PRESENT`）；干杯时你举起当时的道具。
   - **冷热**：冷是雪夜风（左右交替）、冰啤、嗨棒、窗外河风；热是两人的声音，加上炭火（左前）和热燗蒸汽（右）。QA 全部通过：左右切换 23 次、相反温度 36 段、0 冲突。
   - **注意**：暖的环境音不要和同侧那位大名的台词重叠，否则 QA 的"声音和热的相关性"会掉到 0.7 以下；把暖源放在说话者的另一侧。
@@ -213,32 +224,32 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 ### Demo 8 · `demos/Demo8_YamazakiDistillery/` ✅ 完成 —《信長と家康、山崎蒸溜所へ》
 - 用户（2026-11-07）：信长和家康穿越到现代，京都居酒屋和三得利山崎蒸馏所"各做一个，剧情不一样"。两部都和 Demo 6（你带威士忌去安土）呼应；Demo 8 是时间环：两人尝到这酒，才认出是"那晚在安土喝过的"。
 - 每个文件夹里有：`README.md`（剧情、角色位置、冷热来源、管线）、`storyboard/script_150s.md`（日英台词 + 时间 + 冷热）、`Seedance素材命令.md`（Demo 7 有 14 个镜头 K01–K14，Demo 8 有 12 个镜头 Y01–Y12）。
-- 画面由用户制作：先用 ChatGPT 或任意生图工具做关键帧（以 Demo 5 的 `N_Character.png` / `I_Character.png` 和表情、姿势图为人物参考），再用 Seedance 图生视频。交付位置：`assets/keyframes/`、`video/seedance/`。
+- 画面由用户制作：先用 ChatGPT 或任意生图工具做关键帧（以 Demo 9 的 `N_Character.png` / `I_Character.png` 和表情、姿势图为人物参考），再用 Seedance 图生视频。交付位置：`assets/keyframes/`、`video/seedance/`。
 - 声音和冷热沿用前几个 Demo：信长在左前（声音 → 左耳热），家康在右前（→ 右耳热），声线锁定；"你"的台词只出字幕。冷热来源：Demo 7 是冰啤酒、嗨棒冰块、鸭川夜风 / 炭火、热燗、关东煮；Demo 8 是晨雾、熟成库、泉水、冰块 / 发酵桶蒸汽、铜制蒸馏器。
 - **2026-11-07 进展**：
   - **桌面素材包** `~/Desktop/MoHeat_Demo7-9_Seedance素材/`（`demos/Demo7_KyotoIzakaya/scripts/make_seedance_kit.py` 生成，直接读三份 `Seedance素材命令.md`）。每个镜头一个文件夹：放好要上传的参考图（硬链接）、完整的关键帧 prompt、Seedance 动作 prompt 和负面 prompt；`index.html` 一页列出所有镜头，带复制按钮、"已完成"勾选和参考图缩略图。
   - 用户把关键帧存成 `<镜头号>_关键帧.png`、视频存成 `<镜头号>.mp4`，放回同一个镜头文件夹。之后从桌面收素材。
-  - **台词表已写成代码**：`scripts/izakaya.py`（Demo 7，23 句配音）、`yamazaki.py`（Demo 8，20 句）、`gifu.py`（Demo 9，15 句），格式和 Demo 6 一样（`cues_common.py`）。
+  - **台词表已写成代码**：`scripts/izakaya.py`（Demo 7，23 句配音）、`yamazaki.py`（Demo 8，20 句）、`gifu.py`（Demo 5，15 句），格式和 Demo 6 一样（`cues_common.py`）。
   - **配音已生成**：`scripts/make_voice.py` 按名称找到安土酒宴的 `voice.perform`，用锁定声线每句 3 个候选，写入 `audio/takes/` 和 `takes.json`（时长）。试听文件复制到桌面素材包的 `配音试听/`，每个 Demo 有一份 `00_台词连播_*.m4a`。
-  - 草稿时间偏短：不少句子比预留时间长（例如 Demo 9 家康第二句 10 s），正式时间轴要按 `takes.json` 的实际时长重排，150 s 里可能要删减或合并台词。
+  - 草稿时间偏短：不少句子比预留时间长（例如 Demo 5 家康第二句 10 s），正式时间轴要按 `takes.json` 的实际时长重排，150 s 里可能要删减或合并台词。
 - **画面方案改了（2026-11-07）**：用户觉得逐镜头的 Seedance prompt 太多。现在不做视频，改为**可复用图片 + 浏览器动画**，和 Demo 1–6 一样。
-  - 角色**不重画**，直接复用 Demo 5 的信长、家康全部角色图（参照 Demo 6 用 `artBase` 读取 Demo 5 `media/art` 的做法）。
-  - 新素材只有背景和道具，共 21 张：Demo 7 有背景 3 张（其中 1 张是编辑上一张）、道具 4 个；Demo 8 有背景 4 张、道具 2 个；Demo 9 有背景 4 张、道具 4 个，其中鹈饲船是横向的透明道具，播放器里让它从左滑到右。
-  - 背景都按 Demo 5 宴会厅的构图画（你坐在中间，左右三分之一前景留空），并尽量设计成坐着的场景（居酒屋包间、品酒室、观赏船、茶室），这样 Demo 5 的坐姿图可以直接用。画风统一用 Demo 5 的浮世绘金箔风。
+  - 角色**不重画**，直接复用 Demo 9 的信长、家康全部角色图（参照 Demo 6 用 `artBase` 读取 Demo 9 `media/art` 的做法）。
+  - 新素材只有背景和道具，共 21 张：Demo 7 有背景 3 张（其中 1 张是编辑上一张）、道具 4 个；Demo 8 有背景 4 张、道具 2 个；Demo 5 有背景 4 张、道具 4 个，其中鹈饲船是横向的透明道具，播放器里让它从左滑到右。
+  - 背景都按 Demo 9 宴会厅的构图画（你坐在中间，左右三分之一前景留空），并尽量设计成坐着的场景（居酒屋包间、品酒室、观赏船、茶室），这样 Demo 9 的坐姿图可以直接用。画风统一用 Demo 9 的浮世绘金箔风。
   - 清单和提示词由 `demos/Demo7_KyotoIzakaya/scripts/make_image_kit.py` 生成，写到每个 Demo 的 `ChatGPT素材命令.md` 和桌面 `~/Desktop/MoHeat_Demo7-9_图片素材/`（每张图一个文件夹：参考图 + `prompt.txt`；`index.html` 带复制按钮；`配音试听/` 也移到了这里）。旧的桌面 Seedance 素材包已改名为 `（旧方案_可删除）`。三份 `Seedance素材命令.md` 都标了"已停用"。
-- **下一步**：用户听配音、挑候选或改台词，并生成背景和道具 → 按实际时长排正式时间轴 → 播放器（复用 Demo 5/6 的播放器，按场景切换背景） → 配音（需要用户启动 VOICEVOX）→ 拿到 clip 后按台词剪辑，合成双耳音频和冷热，生成 MP4 和播放器。
+- **下一步**：用户听配音、挑候选或改台词，并生成背景和道具 → 按实际时长排正式时间轴 → 播放器（复用 Demo 9/6 的播放器，按场景切换背景） → 配音（需要用户启动 VOICEVOX）→ 拿到 clip 后按台词剪辑，合成双耳音频和冷热，生成 MP4 和播放器。
 - Seedance 的口型不会和配音对上：长台词剪在说话镜头上，耳语用遮嘴或侧脸构图。
 - Demo 8 涉及三得利商标：AI 画面里不出现可读的商标，酒瓶用 Demo 6 的真实图合成；公开前需向三得利确认。
 
-### Demo 9 · `demos/Demo9_GifuCastle/` ✅ 完成 —《信長の岐阜城へようこそ》
+### Demo 5 · `demos/Demo5_GifuCastle/` ✅ 完成 —《信長の岐阜城へようこそ》
 - **Demo 8 / 9 已完成（2026-11-07）**：
-  - **共用播放器**：Demo 7 的 `demo.js` 已改成通用版，三个 Demo 都用它。各 Demo 的不同之处写在时间轴模块的 `VIS` 里，由 `make_export` 传给播放器：每个背景的天气（`bgfx`：snow / mist / dust / fireflies）、推近镜头（`zoomRect`）、道具的日英名称和尺寸、哪些道具冒热气。新增 `boat` 类提示，让图片横穿画面并带篝火光（Demo 9 的鹈饲船）。
-  - **素材**：Demo 8 的 6 张、Demo 9 的 8 张都已收进各自的 `assets/`。Demo 8 品酒时的山崎酒瓶用 Demo 6 抠好的图，干杯的嗨棒用 Demo 7 的。
+  - **共用播放器**：Demo 7 的 `demo.js` 已改成通用版，三个 Demo 都用它。各 Demo 的不同之处写在时间轴模块的 `VIS` 里，由 `make_export` 传给播放器：每个背景的天气（`bgfx`：snow / mist / dust / fireflies）、推近镜头（`zoomRect`）、道具的日英名称和尺寸、哪些道具冒热气。新增 `boat` 类提示，让图片横穿画面并带篝火光（Demo 5 的鹈饲船）。
+  - **素材**：Demo 8 的 6 张、Demo 5 的 8 张都已收进各自的 `assets/`。Demo 8 品酒时的山崎酒瓶用 Demo 6 抠好的图，干杯的嗨棒用 Demo 7 的。
   - **规则**：暖的环境音放在说话者**同一侧**，并和他的台词对齐（Demo 8 的蒸馏器）；如果放在不说话的那一侧，那位大名的"声音和热的相关性"会掉到 0.6。冷的放在对侧。你的字幕台词那里各加一阵冷风，增加左右切换。
-  - **QA 全部通过**：Demo 8 左右切换 21 次、相反温度 37 段；Demo 9 左右切换 22 次、相反温度 45 段。
-  - 渲染端口：Demo 7 是 8771，Demo 8 是 8772，Demo 9 是 8773。官网菜单已有 9 项。三个 Demo 的封面都补了暖色 `.chip.h` 样式。
+  - **QA 全部通过**：Demo 8 左右切换 21 次、相反温度 37 段；Demo 5 左右切换 22 次、相反温度 45 段。
+  - 渲染端口：Demo 7 是 8771，Demo 8 是 8772，Demo 5 是 8773。官网菜单已有 9 项。三个 Demo 的封面都补了暖色 `.chip.h` 样式。
 - 用户（2026-11-07）："再来个岐阜城的？"。设定：1569 年夏天的岐阜城（刚改名、开始用"天下布武"印），你是来自未来的客人，信长亲自导览，盟友家康同行。灵感来自弗洛伊斯 1569 年访问岐阜：信长亲自带他参观宫殿和山顶，还亲手上菜。
-- 场景顺序：山脚宫殿、庭院瀑布 → 登金华山顶看浓尾平原 → 信长亲手点茶、家康拿到冰室的冰 → 夜晚长良川鹈饲 → 送你一张盖了"天下布武"印的纸。画风和 Demo 5 一样（浮世绘金箔），11 个镜头 G01–G11。
+- 场景顺序：山脚宫殿、庭院瀑布 → 登金华山顶看浓尾平原 → 信长亲手点茶、家康拿到冰室的冰 → 夜晚长良川鹈饲 → 送你一张盖了"天下布武"印的纸。画风和 Demo 9 一样（浮世绘金箔），11 个镜头 G01–G11。
 - 冷热亮点：鹈饲的篝火船从左划到右，热感跟着船从左耳移到右耳。冷：瀑布水雾、山顶大风（左→右）、冰室之冰、夜晚河风。
 - 印章文字后期叠加（AI 生成的字会变形）。其余流程和 Demo 7、8 相同。
 
@@ -250,7 +261,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 | `demos/Demo2_FanMeeting/output/final_1080p.mp4`、`mix_48k.wav`、`stems/`、`audition/` | ~640 MB | 同上 |
 | `demos/Demo3_ShiningSmileConcert/video/final/final_concert_150s.mp4`、`audio/` | ~410 MB | README 中的命令（不需要 VOICEVOX）|
 | `demos/Demo3_ShiningSmileConcert/assets/music_original/*.mp3`、`music_edited/*.wav` | 5 MB + 43 MB | 原曲需从 Pixabay 手动下载（Cloudflare 拦截自动下载）|
-| `demos/Demo5_SengokuBanquet/audio/`（选定声线试听、take 缓存、4 条干声 stem、mix）、`video/`（MP4、srt）| ~160 MB + ~520 MB | `./build_all.sh`（需 VOICEVOX）+ `scripts/render_mp4.py` |
+| `demos/Demo9_SengokuBanquet/audio/`（选定声线试听、take 缓存、4 条干声 stem、mix）、`video/`（MP4、srt）| ~160 MB + ~520 MB | `./build_all.sh`（需 VOICEVOX）+ `scripts/render_mp4.py` |
 | `demos/Demo4_SeasonsExpress/audio/`（16 条干声、双耳 stem、混音）、`video/`（MP4、预览帧）| ~250 MB + ~100 MB | `scripts/build_audio.py` + `scripts/render_mp4.py`（不需要 VOICEVOX）|
 | `~/VOICEVOX-engine/` | 3.9 GB | 官方 release 0.26.1 macos-arm64 `.vvpp`（zip）解压 |
 

@@ -18,9 +18,9 @@
  },
  "heat_vs_voice": {
   "heat_by_delivery": {
-   "say": 0.565,
-   "laugh": 0.705,
-   "whisper": 0.361
+   "say": 0.564,
+   "laugh": 0.697,
+   "whisper": 0.352
   },
   "correlation": {
    "N": 0.996,

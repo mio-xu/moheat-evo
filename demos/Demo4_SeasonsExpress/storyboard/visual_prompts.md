@@ -15,7 +15,7 @@ python3 scripts/make_style_sheet.py   # assets/style_sheet.png + storyboard/fram
 
 ## Style rules (same world as Demo 1–3)
 - Cute Japanese 2D animation backgrounds: pastel palette, cel shading (flat light and shade shapes), soft warm outlines (`#7a5446` interior, `#6f5a6e` exterior), rounded shapes and soft glows.
-- **Not** ukiyo-e or gold leaf (that is Demo 5). No photorealism, 3D, horror, people, animals, text or logos.
+- **Not** ukiyo-e or gold leaf (that is Demo 9). No photorealism, 3D, horror, people, animals, text or logos.
   - The only text is the style-sheet title.
   - The station sign is deliberately blank.
 

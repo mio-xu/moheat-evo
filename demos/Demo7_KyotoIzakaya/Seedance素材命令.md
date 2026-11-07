@@ -10,8 +10,8 @@
 
 1. **关键帧**：用 ChatGPT（或任意生图工具）生成每个镜头的第一帧，1536×1024 横版。
    - 每次都上传**角色设定图**作为人物参考：
-     - `demos/Demo5_SengokuBanquet/assets/characters/N_Character.png`（信长）
-     - `demos/Demo5_SengokuBanquet/assets/characters/I_Character.png`（家康）
+     - `demos/Demo9_SengokuBanquet/assets/characters/N_Character.png`（信长）
+     - `demos/Demo9_SengokuBanquet/assets/characters/I_Character.png`（家康）
    - 需要特定表情或姿势时，再加上表格里列的 `N_bust_*` / `I_pose_*`（同一文件夹）。
 2. **Seedance**：图生视频，首帧用第 1 步的关键帧，再加上该镜头的"动作提示词"。
    - 参数：16:9，1080p，固定镜头或缓慢运镜；时长按表格（5 s 或 10 s，我来剪）。

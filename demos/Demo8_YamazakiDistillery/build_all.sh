@@ -1,6 +1,6 @@
 #!/bin/bash
 # Rebuild Demo 8 from scripts/yamazaki.py (needs VOICEVOX: ../Demo1_SnowFoxfire/start_voicevox.command).
-# Cast, voices and the thermal controller come from the Sengoku banquet demo (Demo 5, loaded by path, never modified).
+# Cast, voices and the thermal controller come from the Sengoku banquet demo (Demo 9, loaded by path, never modified).
 set -e
 cd "$(dirname "$0")"
 python3 scripts/make_voice.py      # every line × 3 takes → audio/takes/

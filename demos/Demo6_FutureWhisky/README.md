@@ -10,7 +10,7 @@ Japanese + English subtitles. The browser-rendered MP4 is the final film.
 - Voices: the same locked personas (信長 = VOICEVOX 青山龍星 −1.5 st, 家康 = 黒沢冴白 −2 st), `voice.perform()`.
 - SFX, HRTF renderer, thermal controller and checks: loaded by file path in `scripts/sengoku.py`
   (the folder is found as `demos/Demo*_SengokuBanquet`, so a renumbering does not break this demo; re-run `make_export.py`
-  and update the two `../Demo5_SengokuBanquet/` paths in `index.html` / `demo.css` if it moves).
+  and update the two `../Demo9_SengokuBanquet/` paths in `index.html` / `demo.css` if it moves).
 - New art: the user's Suntory renders in `demos/suntory/`, cut out by `scripts/cutout_whisky.py` → `assets/whisky/`.
 
 ## Run / rebuild

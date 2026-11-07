@@ -8,9 +8,9 @@ You have slipped back 400 years to Azuchi Castle with three bottles of Suntory w
 |---|---|---|---|---|---|---|---|---|
 | 0.3 | 18.0 | — | koto |  |  |  |  |  |
 | 1.4 | 2.6 | あなた (text only) | you |  |  |  | ……ここは、安土城？ | …Is this Azuchi Castle? |
-| 4.2 | 3.7 | 信長 | say | proud | amused, sizing you up | left -38°, 1.15 m | ほう、妙な身なりの客人じゃな。 | Hoh — a guest in strange clothes. |
-| 8.4 | 2.9 | 家康 | say | polite | gentle, curious | right +38°, 1.15 m | どちらから、参られた？ | Where have you come from? |
-| 11.6 | 3.4 | あなた (text only) | you |  |  |  | 四百年後の未来から。お土産に、お酒を持ってきました。 | From 400 years in the future. I brought you some drinks. |
+| 4.2 | 4.6 | 信長 | say | proud | delighted to see you again | left -38°, 1.15 m | おお、未来の客人！ 岐阜以来じゃな。 | Ah, the guest from the future! Not since Gifu. |
+| 9.0 | 4.2 | 家康 | say | polite | gentle, curious | right +38°, 1.15 m | 今宵は、何を持ってこられた？ | And what have you brought us tonight? |
+| 13.3 | 1.8 | あなた (text only) | you |  |  |  | 未来のお酒を、持ってきました。 | I've brought you drinks from the future. |
 | 15.2 | 3.4 | 信長 | say | excited | delighted, leaning forward | left -38°, 1.15 m | 未来の酒とな！ 面白い、見せてみよ！ | Drink from the future? Splendid — show me! |
 | 18.9 | 0.9 | 家康 | laugh | chuckle |  | right +38°, 1.15 m | ほっほっほ。 | Ho ho ho. |
 

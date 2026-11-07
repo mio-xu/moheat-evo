@@ -8,8 +8,8 @@ demos/Demo3_ShiningSmileConcert/assets/music_original/*.mp3
 demos/Demo3_ShiningSmileConcert/audio/
 demos/Demo3_ShiningSmileConcert/video/
 demos/Demo3_ShiningSmileConcert/assets/music_edited/*.wav
-demos/Demo5_SengokuBanquet/audio/
-demos/Demo5_SengokuBanquet/video/
+demos/Demo9_SengokuBanquet/audio/
+demos/Demo9_SengokuBanquet/video/
 demos/Demo4_SeasonsExpress/audio/
 demos/Demo4_SeasonsExpress/video/
 demos/Demo4_SeasonsExpress/project/art_render/
@@ -20,5 +20,5 @@ demos/Demo7_KyotoIzakaya/audio/
 demos/Demo7_KyotoIzakaya/video/
 demos/Demo8_YamazakiDistillery/audio/
 demos/Demo8_YamazakiDistillery/video/
-demos/Demo9_GifuCastle/audio/
-demos/Demo9_GifuCastle/video/
+demos/Demo5_GifuCastle/audio/
+demos/Demo5_GifuCastle/video/

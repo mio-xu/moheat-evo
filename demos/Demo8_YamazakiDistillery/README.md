@@ -2,7 +2,7 @@
 
 **Status: ✅ done (2026-11-07).** Rebuild: `./build_all.sh` (VOICEVOX) then `python3 scripts/render_mp4.py` (`--at 10,30` for stills). **Picture plan:**
 - no Seedance clips; this is a browser animatic like Demo 1–6;
-- the two warlords reuse all of Demo 5's character art;
+- the two warlords reuse all of Demo 9's character art;
 - the user makes only new backgrounds and a few props (`ChatGPT素材命令.md`).
 
 Voices are generated (`scripts/make_voice.py`).

@@ -1,5 +1,5 @@
 """Load the Sengoku banquet demo's modules by path (never modified): voices, SFX, binaural renderer, thermal controller.
-The folder is found by name pattern, so a renumbering (Demo4_/Demo5_SengokuBanquet) does not break this demo."""
+The folder is found by name pattern, so a renumbering (Demo4_/Demo9_SengokuBanquet) does not break this demo."""
 import glob, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

@@ -10,8 +10,8 @@
 
 1. **关键帧**：用 ChatGPT（或任意生图工具）生成每个镜头的第一帧，1536×1024 横版。
    - 每次都上传角色设定图：
-     - `demos/Demo5_SengokuBanquet/assets/characters/N_Character.png`
-     - `demos/Demo5_SengokuBanquet/assets/characters/I_Character.png`
+     - `demos/Demo9_SengokuBanquet/assets/characters/N_Character.png`
+     - `demos/Demo9_SengokuBanquet/assets/characters/I_Character.png`
    - 加上表格里列的表情和姿势图（同一文件夹）。
    - 威士忌镜头另外上传 `demos/Demo6_FutureWhisky/assets/whisky/` 里的瓶子和杯子图，作为造型参考。
 2. **Seedance**：图生视频，首帧用关键帧，再加动作提示词；16:9，1080p，时长按表格。

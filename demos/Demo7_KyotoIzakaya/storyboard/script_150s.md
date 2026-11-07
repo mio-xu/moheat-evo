@@ -84,7 +84,7 @@ Nobunaga (front-left) and Ieyasu (front-right) slip 400 years forward into a sno
 | 118.6 | 6.4 | ❄ cold | wind |  |  | az -60°, 1.3 m |  |  |
 | 118.4 | 6.8 | 家康 | say | polite |  | right +38°, 1.15 m | 楽しい夜でございました。また、呼んでくだされ。 | It was a joyful night. Call us again. |
 | 126.2 | 5.2 | ❄ cold | wind |  |  | az +60°, 1.3 m |  |  |
-| 126.0 | 5.0 | 信長 | say | invite |  | left -38°, 1.15 m | 次は、わしの城に来い。うまい酒を持ってな！ | Next time, come to my castle — and bring good sake! |
-| 131.6 | 2.8 | あなた (text only) | you |  |  |  | はい！ 必ず行きます。 | Yes! I'll be there. |
+| 126.0 | 4.9 | 信長 | say | invite |  | left -38°, 1.15 m | 次は、うまい酒の生まれる所へ、連れて行ってくれ！ | Next time, take us to where good sake is born! |
+| 132.4 | 2.6 | あなた (text only) | you |  |  |  | はい！ 約束します。 | Yes! I promise. |
 | 134.6 | 6.0 | — | slip |  |  |  |  |  |
 | 135.0 | 15.0 | — | koto |  |  |  |  |  |

@@ -1,6 +1,6 @@
 """Demo 7《信長と家康、京都の居酒屋へ》Two Warlords in a Kyoto Izakaya — single source of truth (script + timeline).
 
-Same cast, voices and controller as the Sengoku banquet demo (Demo 5), loaded by path:
+Same cast, voices and controller as the Sengoku banquet demo (Demo 9), loaded by path:
   N = Oda Nobunaga  — front-LEFT  (voice → mostly L heat)
   I = Tokugawa Ieyasu — front-RIGHT (voice → mostly R heat)
   Y = you — subtitles only, no voice
@@ -102,9 +102,9 @@ CUES = [
     L(118.4, "I", "say", "楽しい夜でございました。また、呼んでくだされ。", "It was a joyful night. Call us again.", "polite",
       tts="たのしい、よるで、ございました。また、よんでくだされ。"),
     L(126.2, "C", "wind", dur=5.2, az=60, d=1.3, gain=.75),                  # … RIGHT while Nobunaga (LEFT) invites you
-    L(126.0, "N", "say", "次は、わしの城に来い。うまい酒を持ってな！", "Next time, come to my castle — and bring good sake!", "invite",
-      tts="つぎは、わしの、しろにこい。うまいさけを、もってな！", pose="invite"),
-    Y(131.6, "はい！ 必ず行きます。", "Yes! I'll be there.", 2.8),
+    L(126.0, "N", "say", "次は、うまい酒の生まれる所へ、連れて行ってくれ！", "Next time, take us to where good sake is born!", "invite",
+      tts="つぎは、うまいさけの、うまれるところへ、つれていってくれ！", pose="invite"),
+    Y(132.4, "はい！ 約束します。", "Yes! I promise.", 2.6),
     L(134.6, "-", "slip", dur=6.0),
     L(135.0, "-", "koto", dur=15.0, outro=True),
 ]
