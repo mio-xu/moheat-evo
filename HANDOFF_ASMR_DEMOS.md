@@ -289,3 +289,6 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 带动画循环（requestAnimationFrame）的播放器用 headless `--screenshot --virtual-time-budget` 会卡住：预览静帧用 `render_mp4.py --at …`，封面页的 cover 模式不要启动动画循环。
 - headless 截图前确认 8765 服务器在运行（`curl localhost:8765`），否则截图静默失败。
 - `.DS_Store`、`__pycache__` 提交前删掉。
+
+### Demo switcher (`demos/shared/nav.js`)
+Every full demo page loads `../shared/nav.js`, which adds ‹ ☰ Demos N/9 › to the top bar and a thumbnail panel of all demos (thumbs = `assets/images/demos/demoN.jpg`). `#demos` in the URL opens the panel. Hidden with `?embed`, `?cover`, `?render`. **A new demo must be added to the `DEMOS` list in nav.js.**
