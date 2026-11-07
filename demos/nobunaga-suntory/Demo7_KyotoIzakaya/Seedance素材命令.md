@@ -10,14 +10,14 @@
 
 1. **关键帧**：用 ChatGPT（或任意生图工具）生成每个镜头的第一帧，1536×1024 横版。
    - 每次都上传**角色设定图**作为人物参考：
-     - `demos/Demo9_SengokuBanquet/assets/characters/N_Character.png`（信长）
-     - `demos/Demo9_SengokuBanquet/assets/characters/I_Character.png`（家康）
+     - `demos/nobunaga-suntory/Demo9_SengokuBanquet/assets/characters/N_Character.png`（信长）
+     - `demos/nobunaga-suntory/Demo9_SengokuBanquet/assets/characters/I_Character.png`（家康）
    - 需要特定表情或姿势时，再加上表格里列的 `N_bust_*` / `I_pose_*`（同一文件夹）。
 2. **Seedance**：图生视频，首帧用第 1 步的关键帧，再加上该镜头的"动作提示词"。
    - 参数：16:9，1080p，固定镜头或缓慢运镜；时长按表格（5 s 或 10 s，我来剪）。
 3. **交付**：
-   - 关键帧放进 `demos/Demo7_KyotoIzakaya/assets/keyframes/K01.png` …
-   - 视频放进 `demos/Demo7_KyotoIzakaya/video/seedance/K01.mp4` …
+   - 关键帧放进 `demos/nobunaga-suntory/Demo7_KyotoIzakaya/assets/keyframes/K01.png` …
+   - 视频放进 `demos/nobunaga-suntory/Demo7_KyotoIzakaya/video/seedance/K01.mp4` …
    - 然后告诉我。我按台词时间剪辑、叠字幕，再与双耳音频和冷热合成。
 
 **口型说明**：Seedance 生成的说话口型不会和我们的配音逐字对上。所以说长句的镜头，提示词里写"说话、表情生动"，我按台词起止剪辑；耳语镜头用侧脸或贴耳构图，看不到嘴。

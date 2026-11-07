@@ -10,14 +10,14 @@
 
 1. **关键帧**：用 ChatGPT（或任意生图工具）生成每个镜头的第一帧，1536×1024 横版。
    - 每次都上传角色设定图：
-     - `demos/Demo9_SengokuBanquet/assets/characters/N_Character.png`
-     - `demos/Demo9_SengokuBanquet/assets/characters/I_Character.png`
+     - `demos/nobunaga-suntory/Demo9_SengokuBanquet/assets/characters/N_Character.png`
+     - `demos/nobunaga-suntory/Demo9_SengokuBanquet/assets/characters/I_Character.png`
    - 加上表格里列的表情和姿势图（同一文件夹）。
-   - 室内镜头再加 `demos/Demo9_SengokuBanquet/assets/stage/banquet_bg.png`，作为战国室内的画风参考。
+   - 室内镜头再加 `demos/nobunaga-suntory/Demo9_SengokuBanquet/assets/stage/banquet_bg.png`，作为战国室内的画风参考。
 2. **Seedance**：图生视频，首帧用关键帧，再加动作提示词；16:9，1080p，时长按表格。
 3. **交付**：
-   - 关键帧放进 `demos/Demo5_GifuCastle/assets/keyframes/G01.png` …
-   - 视频放进 `demos/Demo5_GifuCastle/video/seedance/G01.mp4` …
+   - 关键帧放进 `demos/nobunaga-suntory/Demo5_GifuCastle/assets/keyframes/G01.png` …
+   - 视频放进 `demos/nobunaga-suntory/Demo5_GifuCastle/video/seedance/G01.mp4` …
    - 然后告诉我。
 
 ---

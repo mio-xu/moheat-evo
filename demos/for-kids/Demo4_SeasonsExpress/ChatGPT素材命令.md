@@ -3,18 +3,18 @@
 现在 Demo 4 里的美术是程序画的（简单的矢量图），版式、透视、分层都已经调好，并且和声音、冷热的时间轴对齐。
 这次请 ChatGPT **按现有版式，重画成高质量的日系动画背景插画**：构图和位置保持不变，只把画质、细节、光影提上去。
 
-- **版式参考**：每张图都上传我们现有的同名图，它们在 `demos/Demo4_SeasonsExpress/project/chatgpt_layout_refs/`（按文件夹分好；透明图层另附一张叠在远景上的 `*_on_far_preview.jpg`，更容易看懂）。
+- **版式参考**：每张图都上传我们现有的同名图，它们在 `demos/for-kids/Demo4_SeasonsExpress/project/chatgpt_layout_refs/`（按文件夹分好；透明图层另附一张叠在远景上的 `*_on_far_preview.jpg`，更容易看懂）。
 - **整体效果参考**（可选）：`storyboard/frames/*.jpg` 是 6 个场景的合成画面，`assets/style_sheet.png` 是设定板。
-- 生成好的图**用同样的文件名**放回 `demos/Demo4_SeasonsExpress/assets/<文件夹>/`，覆盖旧图，然后告诉我。我来抠绿幕、对齐时钟位置、导出，并重新渲染 MP4。
+- 生成好的图**用同样的文件名**放回 `demos/for-kids/Demo4_SeasonsExpress/assets/<文件夹>/`，覆盖旧图，然后告诉我。我来抠绿幕、对齐时钟位置、导出，并重新渲染 MP4。
 
 ---
 
 ## 一、每次新对话先做的事（画风统一）
 
 上传这 3 张参考图：
-- `demos/Demo1_SnowFoxfire/art/chatgpt/room_bg.png`
-- `demos/Demo2_FanMeeting/art/chatgpt/stage_bg.png`
-- `demos/Demo3_ShiningSmileConcert/assets/new_stage/concert_stage_base.png`
+- `demos/for-kids/Demo1_SnowFoxfire/art/chatgpt/room_bg.png`
+- `demos/for-men/Demo2_FanMeeting/art/chatgpt/stage_bg.png`
+- `demos/for-men/Demo3_ShiningSmileConcert/assets/new_stage/concert_stage_base.png`
 
 然后发这段**通用规则**：
 
