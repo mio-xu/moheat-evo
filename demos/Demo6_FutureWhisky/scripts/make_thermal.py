@@ -18,7 +18,7 @@ T1 = T5.T1
 OUT, MEDIA, STEMS = os.path.join(ROOT, "thermal"), os.path.join(ROOT, "media"), os.path.join(ROOT, "audio", "stems")
 T5.TH, T5.BQ = OUT, WK                     # its checks() / plot() write here and read this timeline
 CFG = dict(T5.CFG)
-CFG.update(GAIN=dict(N=1.0, I=1.0, C=1.0), WHISPER_BOOST=1.5,   # whispers are quiet; at the ear they should still be clearly felt
+CFG.update(GAIN=dict(N=1.0, I=1.0, C=1.0), WHISPER_BOOST=1.0,   # whispers are 4 dB louder now; their warmth stays below normal speech
            SOURCES=dict(N="N_voice.wav (Nobunaga dry voice)", I="I_voice.wav (Ieyasu dry voice)", C="C_cool.wav (ice + highball fizz + chilled glass)"))
 
 

@@ -21,7 +21,7 @@ AUD, MEDIA = os.path.join(ROOT, "audio"), os.path.join(ROOT, "media")
 STEMS, FINAL = os.path.join(AUD, "stems"), os.path.join(AUD, "final")
 rng = np.random.default_rng(1582)
 db, filt, place, norm_to, adsr = B.db, B.filt, B.place, B.norm_to, B.adsr
-LEVEL = {"say": -19.0, "whisper": -27.5, "laugh": -16.0}    # active RMS (dBFS) per delivery → laugh > speech > whisper
+LEVEL = {"say": -19.0, "whisper": -23.5, "laugh": -16.0}    # active RMS (dBFS) per delivery → laugh > speech > whisper
 
 
 def noise(n): return rng.standard_normal(n)
@@ -161,7 +161,7 @@ def main():
         k = c["kind"]
         if k in ("say", "whisper", "laugh"):
             x = V.perform(c, V.TAKE.get(i, 0))
-            x = norm_to(x, LEVEL[k] + (2.0 if c["emo"] == "excited" else 0) - (5.0 if c["emo"] == "earlaugh" else 0))
+            x = norm_to(x, LEVEL[k] + (2.0 if c["emo"] == "excited" else 0) - (2.0 if c["emo"] == "earlaugh" else 0))
             if k == "whisper": place(VO[c["who"]], c["t"] - .45, B.inhale() * .7)
             place(VO[c["who"]], c["t"], x); dur = len(x) / SR
         elif k == "steam": x = steam(c["dur"]) * c["gain"]; place(warm, c["t"], x); dur = c["dur"]

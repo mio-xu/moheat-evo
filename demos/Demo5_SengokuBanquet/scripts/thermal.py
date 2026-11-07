@@ -34,6 +34,9 @@ CFG.update(
     PROX_NEAR=1.0,        # … and at the ear (≤ 0.15 m)
     GAIN=dict(N=1.0, I=1.0, F=0.85, C=1.0),
     SIDE_EXP_FAR=2.0, SIDE_EXP_NEAR=3.5,
+    # cold behaves like air temperature: per-source ceiling, slow rise and slower fade (no on/off blocks)
+    COOL_CAP=dict(ice=0.6, wind=0.8, rain=0.45), COOL_ATTACK=0.9, COOL_RELEASE=2.0,
+    WHISPER_HEAT=0.65,   # whispers are louder now (closer to the ear), but should stay the gentlest warmth
     SOURCES=dict(N="N_voice.wav (Nobunaga dry voice)", I="I_voice.wav (Ieyasu dry voice)",
                  F="F_warm.wav (hot-sake steam + brazier)", C="C_cool.wav (ice bucket + wind + rain)"),
 )
@@ -75,6 +78,21 @@ def run(cfg=CFG):
         az, d = pos[who]
         wl, wr = ear_weights(az, d, cfg)
         g = lv * proximity(d, cfg) * cfg["GAIN"][who]
+        if voice:
+            for c in BQ.CUES:
+                if c["who"] == who and c["kind"] == "whisper":
+                    m = (times >= c["t"] - .3) & (times <= c["t"] + 6.0)
+                    g[m] *= cfg["WHISPER_HEAT"]
+        if who == "C":
+            ceil = np.zeros_like(times)
+            for c in BQ.CUES:
+                if c["kind"] in cfg["COOL_CAP"]:
+                    t0, t1 = c["t"], c["t"] + c["dur"]
+                    ramp = np.clip((times - t0) / 1.5, 0, 1) * np.clip((t1 + 1.0 - times) / 2.5, 0, 1)   # fade in 1.5 s, out 2.5 s
+                    if c["kind"] == "rain":   # damp air drifting in, in slow waves rather than a flat block
+                        ramp = ramp * (.72 + .28 * np.sin(2 * np.pi * (times - t0) / 5.5) ** 2)
+                    ceil = np.maximum(ceil, cfg["COOL_CAP"][c["kind"]] * ramp)
+            g = T1.one_pole(np.minimum(g, ceil), rate, cfg["COOL_ATTACK"], cfg["COOL_RELEASE"])
         srcs[who] = dict(L=g * wl, R=g * wr, level=lv, db=dbs, ref=ref, az=az, d=d)
         print(f"{who}: reference {ref:.1f} dBFS")
 

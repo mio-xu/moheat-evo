@@ -34,7 +34,7 @@ Voices (locked): 信長 = VOICEVOX 青山龍星, −1.5 st post shift · 家康 
 | t (s) | dur | who | kind | emotion | delivery | position | to | 日本語 | English |
 |---|---|---|---|---|---|---|---|---|---|
 | 50.8 | 4.0 | 信長 | whisper | whisper | low, conspiratorial, at your left ear | left -86°, 0.18 m — AT THE EAR | you (viewer) | …近う寄れ。そなたにだけ、教えてやろう。 | …Come closer. I'll tell you alone. |
-| 54.8 | 5.0 | ❄ cold | ice |  |  | az +72°, 0.45 m |  |  |  |
+| 54.8 | 5.0 | ❄ cold | ice |  |  | az +70°, 0.5 m |  |  |  |
 | 55.8 | 3.7 | 信長 | whisper | whisper | quiet ambition, almost tender | left -86°, 0.18 m — AT THE EAR | you (viewer) | わしはな、この国の、その先を見ておる。 | I am looking past this land — to what lies beyond. |
 | 61.4 | 5.7 | 家康 | say | polite | calm, from his seat | right +38°, 1.15 m | you (viewer) | こちらは冷や酒。氷で冷やしてござる。 | And this is chilled sake, kept on ice. |
 | 68.2 | 5.4 | 家康 | whisper | whisper | confiding, at your right ear, hand by his mouth | right +87°, 0.17 m — AT THE EAR | you (viewer) | …信長様は、ああ見えて寂しがりでな。 | …For all his bluster, Lord Nobunaga gets lonely. |
@@ -45,12 +45,12 @@ Voices (locked): 信長 = VOICEVOX 青山龍星, −1.5 st post shift · 家康 
 
 | t (s) | dur | who | kind | emotion | delivery | position | to | 日本語 | English |
 |---|---|---|---|---|---|---|---|---|---|
-| 82.0 | 6.0 | ❄ cold | wind |  |  | az -10° → -30°, 1.6 m |  |  |  |
+| 82.0 | 6.0 | ❄ cold | wind |  |  | az +0° → -20°, 1.6 m |  |  |  |
 | 83.2 | 4.1 | 家康 | say | surprise | turning to the garden | right +38°, 1.15 m | you (viewer) | おや……風が、強うなりましたな。 | Oh… the wind has grown strong. |
 | 88.0 | 1.9 | 信長 | say | suspicious | low, alert, hand on his sword | left -40°, 1.24 m | you (viewer) | ……妙な気配じゃ。 | ……Something feels wrong. |
-| 90.0 | 6.0 | ❄ cold | wind |  |  | az -82°, 0.35 m |  |  |  |
+| 90.0 | 6.0 | ❄ cold | wind |  |  | az -62°, 0.9 m |  |  |  |
 | 90.8 | 4.8 | 家康 | say | calm | steady, raising a calming hand | right +38°, 1.15 m | you (viewer) | ご案じなさるな。ただの夜風にござる。 | Do not worry. It is only the night wind. |
-| 96.4 | 6.0 | ❄ cold | wind |  |  | az +82°, 0.35 m |  |  |  |
+| 96.4 | 6.0 | ❄ cold | wind |  |  | az +62°, 0.9 m |  |  |  |
 | 97.2 | 4.3 | 信長 | say | proud | defiant, standing tall | left -42°, 1.30 m | you (viewer) | ふん。風ごときで、わしの宴は終わらぬ。 | Hmph. A little wind won't end my banquet. |
 | 101.9 | 0.8 | 信長 | laugh | laugh | short defiant laugh | left -39°, 1.20 m | you (viewer) | ははっ！ | Ha! |
 
@@ -58,11 +58,11 @@ Voices (locked): 信長 = VOICEVOX 青山龍星, −1.5 st post shift · 家康 
 
 | t (s) | dur | who | kind | emotion | delivery | position | to | 日本語 | English |
 |---|---|---|---|---|---|---|---|---|---|
-| 104.0 | 10.5 | ❄ cold | rain |  |  | az -70°, 1.0 m |  |  |  |
+| 104.0 | 9.0 | ❄ cold | rain |  |  | az -60°, 1.4 m |  |  |  |
 | 105.0 | 4.0 | — | thunder |  |  |  |  |  |  |
 | 106.0 | 4.5 | 家康 | say | thoughtful | quiet, practical | right +38°, 1.15 m | you (viewer) | 雨にござる。…炭を、足しましょう。 | Rain. …Let me add more charcoal. |
 | 108.6 | 5.6 | 🔥 warm | brazier |  |  | az +52°, 0.55 m |  |  |  |
-| 114.6 | 14.8 | ❄ cold | rain |  |  | az +60° → +70°, 0.9 m |  |  |  |
+| 114.6 | 14.8 | ❄ cold | rain |  |  | az +55° → +65°, 1.3 m |  |  |  |
 | 115.0 | 2.7 | 信長 | whisper | whisper | intimate, at your left ear | left -87°, 0.17 m — AT THE EAR | you (viewer) | …雨の音を聞け。悪くなかろう。 | …Listen to the rain. Not bad, is it? |
 | 119.0 | 2.9 | 信長 | whisper | whisper | wistful — a hint of foreboding | left -87°, 0.17 m — AT THE EAR | you (viewer) | この一夜は、二度とは来ぬ。 | A night like this never comes twice. |
 | 122.6 | 0.9 | 信長 | laugh | earlaugh | soft laugh into your ear | left -87°, 0.18 m — AT THE EAR | you (viewer) | ふっふっふ… | Heh heh heh… |

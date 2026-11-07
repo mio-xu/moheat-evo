@@ -67,7 +67,7 @@ CUES = [
     # ── 三  0:50–1:22  Nobunaga at your LEFT ear (warm) while the ice bucket clinks RIGHT (cool) ─
     L(50.8, "N", "whisper", "…近う寄れ。そなたにだけ、教えてやろう。", "…Come closer. I'll tell you alone.", "whisper",
       tts="…ちこうよれ。そなたにだけ、おしえてやろう。", tone="low, conspiratorial, at your left ear"),
-    L(54.8, "C", "ice", dur=5.0, az=72, d=0.45, gain=1.0),
+    L(54.8, "C", "ice", dur=5.0, az=70, d=0.5, gain=1.0),
     L(55.8, "N", "whisper", "わしはな、この国の、その先を見ておる。", "I am looking past this land — to what lies beyond.", "whisper",
       tts="わしはな、このくにの、そのさきをみておる。", tone="quiet ambition, almost tender"),
     L(61.4, "I", "say", "こちらは冷や酒。氷で冷やしてござる。", "And this is chilled sake, kept on ice.", "polite",
@@ -80,26 +80,26 @@ CUES = [
       tts="なにを、こそこそ、はなしておる。", tone="mock-suspicious, from his seat"),
 
     # ── 四  1:22–1:44  The wind turns: cold gusts LEFT then RIGHT, each against a warm voice ──────
-    L(82.0, "C", "wind", dur=6.0, az=-10, az1=-30, d=1.6, gain=.8),
+    L(82.0, "C", "wind", dur=6.0, az=0, az1=-20, d=1.6, gain=.8),      # first gust from the garden: both ears, mildly
     L(83.2, "I", "say", "おや……風が、強うなりましたな。", "Oh… the wind has grown strong.", "surprise",
       tts="おや……かぜが、つようなりましたな。", tone="turning to the garden", pose="wind"),
     L(88.0, "N", "say", "……妙な気配じゃ。", "……Something feels wrong.", "suspicious",
       tts="……みょうな、けはいじゃ。", tone="low, alert, hand on his sword", pose="alert"),
-    L(90.0, "C", "wind", dur=6.0, az=-82, d=0.35, gain=1.0),          # LEFT cold gust while Ieyasu (right) speaks
+    L(90.0, "C", "wind", dur=6.0, az=-62, d=0.9, gain=1.0),           # gust through the LEFT shoji while Ieyasu (right) speaks
     L(90.8, "I", "say", "ご案じなさるな。ただの夜風にござる。", "Do not worry. It is only the night wind.", "calm",
       tts="ごあんじなさるな。ただの、よかぜにござる。", tone="steady, raising a calming hand", pose="calm"),
-    L(96.4, "C", "wind", dur=6.0, az=82, d=0.35, gain=1.0),           # RIGHT cold gust while Nobunaga (left) speaks
+    L(96.4, "C", "wind", dur=6.0, az=62, d=0.9, gain=1.0),            # the wind swings to the RIGHT shoji while Nobunaga (left) speaks
     L(97.2, "N", "say", "ふん。風ごときで、わしの宴は終わらぬ。", "Hmph. A little wind won't end my banquet.", "proud",
       tts="ふん。かぜごときで、わしのうたげは、おわらぬ。", tone="defiant, standing tall", pose="stand"),
     L(101.9, "N", "laugh", "ははっ！", "Ha!", "laugh", tts="はっはっは", tone="short defiant laugh", pose="stand", n=3),
 
     # ── 五  1:44–2:09  Rain: left cold + right brazier → reversal: Nobunaga warm at LEFT ear, rain RIGHT ─
-    L(104.0, "C", "rain", dur=10.5, az=-70, d=1.0, gain=1.0),
+    L(104.0, "C", "rain", dur=9.0, az=-60, d=1.4, gain=1.0),         # damp air from the LEFT
     L(105.0, "-", "thunder", dur=4.0),
     L(106.0, "I", "say", "雨にござる。…炭を、足しましょう。", "Rain. …Let me add more charcoal.", "thoughtful",
       tts="あめにござる。…すみを、たしましょう。", tone="quiet, practical", pose="sit"),
     L(108.6, "F", "brazier", dur=5.6, az=52, d=0.55, gain=1.0),
-    L(114.6, "C", "rain", dur=14.8, az=60, az1=70, d=0.9, gain=1.0),     # the wind swings: rain now from the RIGHT
+    L(114.6, "C", "rain", dur=14.8, az=55, az1=65, d=1.3, gain=1.0),     # the wind swings across the front: rain now from the RIGHT
     L(115.0, "N", "whisper", "…雨の音を聞け。悪くなかろう。", "…Listen to the rain. Not bad, is it?", "whisper",
       tts="…あめのおとをきけ。わるくなかろう。", tone="intimate, at your left ear"),
     L(119.0, "N", "whisper", "この一夜は、二度とは来ぬ。", "A night like this never comes twice.", "whisper",

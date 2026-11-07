@@ -40,10 +40,18 @@
  },
  "SIDE_EXP_FAR": 2.0,
  "SIDE_EXP_NEAR": 3.5,
+ "COOL_CAP": {
+  "ice": 0.6,
+  "wind": 0.8,
+  "rain": 0.45
+ },
+ "COOL_ATTACK": 0.9,
+ "COOL_RELEASE": 2.0,
+ "WHISPER_HEAT": 0.65,
  "SOURCES": {
   "N": "N_voice.wav (Nobunaga dry voice)",
   "I": "I_voice.wav (Ieyasu dry voice)",
   "C": "C_cool.wav (ice + highball fizz + chilled glass)"
  },
- "WHISPER_BOOST": 1.5
+ "WHISPER_BOOST": 1.0
 }

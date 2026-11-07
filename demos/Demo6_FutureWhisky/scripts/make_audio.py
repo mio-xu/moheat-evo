@@ -17,7 +17,7 @@ AUD, MEDIA = os.path.join(ROOT, "audio"), os.path.join(ROOT, "media")
 STEMS, FINAL = os.path.join(AUD, "stems"), os.path.join(AUD, "final")
 rng = np.random.default_rng(1923)          # Suntory's first distillery, Yamazaki
 db, filt, place, norm_to, adsr = B.db, B.filt, B.place, B.norm_to, B.adsr
-LEVEL = {"say": -19.0, "whisper": -27.5, "laugh": -16.0}
+LEVEL = {"say": -19.0, "whisper": -23.5, "laugh": -16.0}
 TAKE = {}
 
 

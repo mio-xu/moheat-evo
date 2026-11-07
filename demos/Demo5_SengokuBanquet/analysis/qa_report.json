@@ -20,7 +20,7 @@
   "ok": true
  },
  "4_lip_sync": {
-  "min_fraction_of_line_with_mouth_open": 0.5,
+  "min_fraction_of_line_with_mouth_open": 0.52,
   "ok": true
  },
  "5_positions": {
@@ -29,13 +29,13 @@
  },
  "6_heat_vs_voice": {
   "heat_by_delivery": {
-   "say": 0.553,
+   "say": 0.507,
    "laugh": 0.696,
-   "whisper": 0.339
+   "whisper": 0.304
   },
   "correlation": {
-   "N": 0.995,
-   "I": 0.828
+   "N": 0.971,
+   "I": 0.814
   },
   "ok": true
  },
@@ -44,7 +44,7 @@
   "first": "0.00",
   "last": "149.95",
   "same_ear_conflicts": 0,
-  "opposite_temps": 19,
+  "opposite_temps": 15,
   "side_switches": 16,
   "ends_at_zero": true,
   "ok": true
