@@ -327,7 +327,7 @@ function frame(t, dt) {
   const f = lampFlicker(t), dark = inSilence(t) ? 1 : (t >= A.silence[0] - .6 && t < A.silence[0]) || (t >= A.silence[1] && t < A.silence[1] + .8) ? (1 - f) * .75 : 0;
   if (dark > 0) { c.fillStyle = `rgba(2,2,6,${inSilence(t) ? .97 : dark})`; c.fillRect(0, 0, W, H); }
   const th = thermalAt(t + offsetMs / 1000);
-  thermalEdges(c, th);
+  if (!QS.has('clean')) thermalEdges(c, th);   // ?clean=1: reference stills for video generation (no UI overlays)
   return { th };
 }
 
@@ -482,8 +482,8 @@ async function renderAll() {
     const t = i / fps;
     if (AT) { reset(); for (let k = 45; k > 0; k--) frame(Math.max(0, t - k / fps), 1 / fps); }   // warm up particles
     frame(t, 1 / fps);
-    if (t < 1.8 && cover.naturalWidth) { ctx.globalAlpha = t < 1.2 ? 1 : (1.8 - t) / .6; ctx.drawImage(cover, 0, 0, W, H); ctx.globalAlpha = 1; }
-    if (!inSilence(t)) titleCard(ctx, t);
+    if (t < 1.8 && cover.naturalWidth && !QS.has('clean')) { ctx.globalAlpha = t < 1.2 ? 1 : (1.8 - t) / .6; ctx.drawImage(cover, 0, 0, W, H); ctx.globalAlpha = 1; }
+    if (!inSilence(t) && !QS.has('clean')) titleCard(ctx, t);
     const blob = await new Promise((r) => cv.toBlob(r, 'image/jpeg', .92));
     await fetch(`/frame/${String(i).padStart(5, '0')}.jpg`, { method: 'PUT', body: blob });
   }

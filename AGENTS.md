@@ -7,7 +7,7 @@ This repo is the public GitHub Pages site for MoHeat Evo (thermal headphones) **
 Key rules (details in the handoff):
 - Talk to the user in **Chinese**.
 - Subtitles are **Japanese + English only** (no Chinese).
-- **No Seedance**: the browser-rendered MP4 is the final film.
+- **Seedance only when the user asks**: for Demo 1–4 the browser-rendered MP4 is the final film. For Demo 5 the user asked (2026-11-07) for Seedance prompts (`demos/Demo5_SeasonsExpress/Seedance素材命令.md`); the browser MP4 stays the current film until the clips arrive.
 - Character art comes from **ChatGPT prompt lists** that the user runs.
 - **Never modify earlier demos**: reuse art by symlink and code by import-by-path.
 - **Commit and push every change to `origin main`.** Large media stay out of git.

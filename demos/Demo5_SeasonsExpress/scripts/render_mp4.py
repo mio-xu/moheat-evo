@@ -3,6 +3,7 @@ Deterministic: headless Chrome steps the timeline frame by frame.
 
   python3 scripts/render_mp4.py               # full film (≈5–10 min)
   python3 scripts/render_mp4.py --at 10,30,75 # preview stills → video/clips/preview/<frame>.jpg
+  python3 scripts/render_mp4.py --at 10 --clean   # same without title cards / cover / thermal glow (Seedance first frames)
 """
 import http.server, os, shutil, subprocess, sys, threading, time
 
@@ -46,7 +47,7 @@ def main():
     if "--at" in sys.argv:
         at = sys.argv[sys.argv.index("--at") + 1]
         OUT_DIR[0] = os.path.join(ROOT, "video", "clips", "preview"); shutil.rmtree(OUT_DIR[0], ignore_errors=True); os.makedirs(OUT_DIR[0])
-        run_chrome(f"render=1&at={at}", len(at.split(",")))
+        run_chrome(f"render=1&at={at}" + ("&clean=1" if "--clean" in sys.argv else ""), len(at.split(",")))
         print("preview →", OUT_DIR[0]); return
     frames = OUT_DIR[0]; shutil.rmtree(frames, ignore_errors=True); os.makedirs(frames)
     run_chrome("render=1", 4500)
