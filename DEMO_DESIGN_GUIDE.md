@@ -69,7 +69,7 @@
 
 ## 4. 声音
 
-- **新角色配音用 ElevenLabs**，完全照交接文档 §4「配音标准：ElevenLabs」：
+- **配音默认一律用 ElevenLabs**（新角色、重配音都一样；2026-11-08 起旧 Demo 也已全部换成 ElevenLabs，不再用 VOICEVOX）。完全照交接文档 §4「配音标准：ElevenLabs」：
   - 流程：`tools/eleven/cast.json` 登记人设 → `audition.py` 出 3 个预览 → 用户选 → `pick.py`。
   - 每个 Demo 一个 `scripts/voice.py`，台词写在 `TAGGED = {id: '[tag] 台词'}` 里。
   - 贴耳的句子用 `[whispers]`。
@@ -81,7 +81,7 @@
   - 贴耳 az ±1.35、0.12 m
   - 坐在身旁 az ±0.9、0.5 m
 - 环境音用程序合成（雨、风、门、脚步、布料、心跳……），放在真实方位上，跟着剧情移动。
-- 页面署名：`<角色> ElevenLabs`（VOICEVOX 角色写 `VOICEVOX:<名>`）。
+- 页面署名：`<角色> ElevenLabs`。
 
 ## 5. 画风与视觉风格
 
@@ -129,7 +129,15 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 ```
 
 - 全部提示词存进 `project/web_prompts.json`（或 `scripts/seedance.py`），便于重做和给下一个角色复用。
-- 出图方式：Seedance 网页 GPT Image 2，图生图，**16:9、2K**（25 credits）。每次提交前确认比例，因为网页会重置成 Auto。
+- **出图（图片和视频都一样）：Seedance 优先用 API，API 用不了时才用网页端**（用户 2026-11-08 定的默认做法）。
+  - **API**（`~/.seedance_key`，客户端 `demos/all-ages/Demo10_CaveSpring/scripts/seedance_images.py`，每个 Demo 的写法参考 `Demo20 / Demo22 scripts/seedance.py`）：
+    - 开始前先查余额 `GET /credits/balance`。
+    - 参考图上传一次、缓存 URL，一次最多 5 个文件。
+    - 用 `Idempotency-Key`，重试不会重复扣费。
+    - 生成后 10 分钟内就下载，之后 `GET /generations/<id>` 会 503。
+  - **判断 API 能不能用**：只发一次 `POST /uploads` 试探。返回 429 并带很长的 `Retry-After`（限流，常见约 6–10 小时），或返回 401，就**立刻改用网页端**，不要让脚本一直重试等待。
+  - **网页端**（seedance2-5.com，Chrome 扩展控制；需要用户本人已登录）：Image to Image，GPT Image 2，**16:9、2K**（25 credits）。每次提交前确认比例，因为网页会把它重置成 Auto。
+  - 两种方式用的提示词完全一样，都存在 `project/web_prompts.json` / `scripts/seedance.py` 里。
 
 ### 5.4 页面与封面视觉
 
@@ -162,7 +170,38 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
   - 换画面用 `go(过渡, 目标画面)`，等当前循环播完再播过渡。
   - 有视频时静帧不加漂移动画。
   - `?stills` 可回退到静帧。
-- 生成后用首尾帧自动比对来确认每个文件对应哪一段，再改名。
+- 生成后用 `tools/seedance/ident_clips.py <demo> [--newest-first] [--rename]` 按首尾帧自动认出每个文件是哪一段，再改名。
+
+### 6.1 做视频时要注意的细节（避免浪费 credits 和 token）
+
+**开始前**
+- 静帧、剧情、台词全部定稿，并且已经通关测试过，才开始做视频（场景一改，视频就作废：春翔的 6 段 1464 credits 就是这样浪费的）。
+- 先写好片段清单 `project/web_video_prompts.json`（`{clips: {name: {first, last, prompt}}}`），算出总价（段数 × 64）。超过约 1000 credits 先问用户；余额记一下，提交完再核对一次。
+- 首尾帧文件提前准备好：页面实际显示的 1920×1080 JPG（`media/art`），镜像帧单独存成文件（如 `shion_dryer_r.jpg`），统一放在 `assets/frames/`，不进 git。
+- 模型只用 2.5 Lite 1080p，4 s。720p 画质不够；2.0 Pro、2.5 标准版贵近 10 倍，只有用户点名才用。
+
+**写提示词**
+- 固定开头：保持原画风、角色、配色、光线；镜头锁定（不缩放、不平移、不晃动）；脸部比例不变、手保持五指。
+- 循环结尾加一句 "starts and ends on exactly the same frame"；过渡结尾加一句 "the first image is the start and the second image is the end"。
+- 动作写得小而慢：呼吸、眨眼、说话口型、头发轻动、一个手部动作。复杂的手部动作、快速大幅度运动、首尾帧都没有的新道具最容易崩。
+- 过渡里出现的东西要在首帧或尾帧里能找到（例如道具从画面外拿进来），否则会凭空冒出来。
+- 固定结尾的 Avoid 列表：morphing、face distortion、extra fingers、flicker、colour shift、new objects、text、camera movement。
+
+**提交（网页端，最省 token 的做法）**
+- 用 `javascript_tool` 在页面里定义好函数（填提示词、确认 1080p、检查图片数是 `(2/2)` 而且按钮写着 64 credits，再点生成；然后清空两张图并把 `input.value` 设为 `''`），每段只调用一次。不要每步都截图；需要看的时候用 0.5 倍缩放截图，或者直接读页面文字。
+- 上传后读一下 `(n/2)` 计数：同一个 input 连续上传时，偶尔会"假成功"，没清空 value 时更常见。
+- 首尾帧相同的循环片段（说话和安静）可以连续提交，不用换图。
+- 记下提交顺序（`window.__done`），下载和认片段都要用。
+
+**下载与核对**
+- 等全部生成完再一起下载：历史列表里的下载按钮从上往下点，每次间隔约 3 s，按下载时间排序；只渲染了前 10 个时，去 My Creations → Video 再下载剩下的。
+- 用 `ident_clips.py` 认片段，而不是逐个打开视频看。说话和安静循环的首尾帧一样，靠提交顺序区分。
+- 跑 `scripts/prepare_video.py`，检查每段输出都是 `exact 0.0 / 0.0`。再抽每段中间的 1–2 帧拼成一张对比图，一眼看完有没有崩坏，不要逐段播放。
+- 坏掉的只重做那一段：首尾帧不变，只改动作描述。
+
+**接进页面**
+- 照 Demo20 / 22 的播放器（`CLIP_NAMES`、`loopFor`、`go()`、只在片段结尾切换）。有视频时静帧不加漂移。
+- 用脚本自动通关一次，记录画面切换时间和报错，确认每个 `go()` 都按时结束；整段流程会比静帧版多出几秒的等待（每次过渡约 4–8 s）。
 
 ## 7. 页面与版式
 
@@ -214,9 +253,11 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 - 旧的时间轴 Demo（1–9）的 CSV 规则不变（同侧不冲突）；要换成 DUAL 需要用户同意，并重新跑 QA。
 - 美术风格要统一时，先只改一张给用户看，确认后再批量做。（2026-11-08：用户试过"重新打光"后选择保留原图。）
 
-## 11. 常见坑（网页端）
+## 11. 常见坑（Seedance API / 网页端）
 
 - 同一个 file input 连续上传要先把 `input.value = ''` 清空，否则每隔一次不生效；上传后检查 `(n/8)` 或 `(n/2)` 计数。
 - 图生图提交后比例会被重置成 Auto，每次提交前都要确认 16:9 / 2K。
 - 下载文件名不带场景名（`image_batch_xx.png`、`video_batch_xx.mp4`），按下载时间对应，再用画面核对。
 - 不能替用户登录；网页没登录时请用户自己登录。credits 是多个会话共用的，批量超过约 1000 时先问用户。
+- API：上传接口有长时间限流（429，约 6–10 小时）；一次最多 5 个文件；不接受外部 URL 和 data URI；旧的生成记录约 10 分钟后会 503。不要 `pkill` 别的会话的 seedance 进程。
+- 网页偶尔会在生成后自己跳到 My Creations：回到原页面后，模式、1080p、Add end frame 这几项都要重新确认。

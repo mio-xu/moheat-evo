@@ -8,7 +8,7 @@ Key rules (details in the handoff):
 - Talk to the user in **Chinese**.
 - Subtitles are **Japanese + English only** (no Chinese).
 - **Seedance only when the user asks**: for Demo 1–3 and Demo 9 the browser-rendered MP4 is the final film. For Demo 4 (Seasons Express) the user asked (2026-11-07) for Seedance prompts (`demos/all-ages/Demo4_SeasonsExpress/Seedance素材命令.md`); the browser MP4 stays the current film until the clips arrive.
-- Character art comes from **ChatGPT prompt lists** that the user runs.
+- **Images and video: Seedance, API first** (`~/.seedance_key`); if the API is unavailable (upload 429 / long Retry-After, 401) switch at once to the seedance2-5.com website via Chrome (user, 2026-11-08). Details and the credit / token-saving checklist for video: `DEMO_DESIGN_GUIDE.md` §5.3 and §6.1. (Earlier art came from ChatGPT prompt lists the user ran.)
 - **Never modify earlier demos**: reuse art by symlink and code by import-by-path.
 - **Commit and push every change to `origin main`.** Large media stay out of git.
 - The device firmware allows **one mode per ear** (cool or heat). Every thermal CSV must have 0 same-ear conflicts.

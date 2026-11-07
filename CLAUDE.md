@@ -8,8 +8,8 @@ Key rules (details in the handoff):
 - Talk to the user in **Chinese**.
 - Subtitles are **Japanese + English only** (no Chinese).
 - **Seedance only when the user asks**: for Demo 1–3 and Demo 9 the browser-rendered MP4 is the final film. For Demo 4 (Seasons Express) the user asked (2026-11-07) for Seedance prompts (`demos/all-ages/Demo4_SeasonsExpress/Seedance素材命令.md`); the browser MP4 stays the current film until the clips arrive.
-- **Voices for new characters: ElevenLabs** (user, 2026-11-08), already set up. Follow the handoff §4 "配音标准：ElevenLabs" (template code, settings, tag conventions, audition flow) instead of re-researching; earlier demos keep VOICEVOX.
-- Character art comes from **ChatGPT prompt lists** that the user runs.
+- **Voices: ElevenLabs by default for everything** (user, 2026-11-08), already set up; all earlier demos have been re-voiced with it too. Follow the handoff §4 "配音标准：ElevenLabs" (template code, settings, tag conventions, audition flow) instead of re-researching.
+- **Images and video: Seedance, API first** (`~/.seedance_key`); if the API is unavailable (upload 429 / long Retry-After, 401) switch at once to the seedance2-5.com website via Chrome (user, 2026-11-08). Details and the credit / token-saving checklist for video: `DEMO_DESIGN_GUIDE.md` §5.3 and §6.1. (Earlier art came from ChatGPT prompt lists the user ran.)
 - **Never modify earlier demos**: reuse art by symlink and code by import-by-path.
 - **Commit and push every change to `origin main`.** Large media stay out of git.
 - Thermal output per ear: the old commands (`LC50 RH0`) are one mode per ear (cool or heat), and every old thermal CSV must keep 0 same-ear conflicts. Since 2026-11-08 the firmware (`arduino/`, local only) also takes `DUAL LC.. LH.. RC.. RH..`: cool and heat independent on the same ear. The user prefers new demos to use it: a voice close to your ear warms it with its loudness, and ambient warm / cool shows the surroundings.
