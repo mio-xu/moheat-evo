@@ -23,6 +23,13 @@ FACES = {   # base: (eyes box, mouth box) in 1920×1080 px. Talk frames blend ON
     'hinata_live': ((500, 245, 765, 375), (610, 395, 750, 470)),
     'luna_live': ((455, 238, 685, 345), (550, 372, 660, 435)),
     'luna_window': ((515, 280, 750, 350), (615, 378, 725, 440)),
+    'hinata_spicy': ((520, 230, 790, 330), (620, 345, 770, 462)),
+    'hinata_cool': ((520, 240, 780, 340), (610, 385, 732, 472)),
+    'hinata_whisper': ((520, 330, 780, 420), (615, 478, 742, 562)),
+    'hinata_bye': ((520, 270, 780, 350), (605, 355, 737, 447)),
+    'mint_ice': ((470, 300, 720, 380), (575, 385, 690, 447)),
+    'mint_towel': ((470, 300, 720, 380), (570, 385, 682, 447)),
+    'cocoa_fufu': ((480, 380, 760, 470), (615, 505, 722, 582)),
     'luna_tea': ((470, 290, 720, 360), (565, 398, 670, 460)),
     'luna_musicbox': ((440, 300, 700, 370), (555, 432, 665, 495)),
     'luna_close': ((330, 380, 680, 520), (515, 468, 665, 555)),
@@ -35,7 +42,7 @@ FACES = {   # base: (eyes box, mouth box) in 1920×1080 px. Talk frames blend ON
     'cocoa_bye': ((510, 320, 760, 405), (600, 420, 740, 520)),
 }
 KINDS = ['talk_s', 'talk', 'half', 'blink']
-SKIP = {'mint_lean_L_talk_s'}   # Seedance re-framed it (scale 1.08): the blended chin ghosts over the dummy head
+SKIP = set()   # (2026-11-08: mint_lean_L_talk_s was re-made after the first one ghosted)
 has = lambda n: os.path.exists(os.path.join(SRC, n + '.png'))
 load = lambda n: Image.open(os.path.join(SRC, n + '.png')).convert('RGB').resize((1920, 1080), Image.LANCZOS)
 
