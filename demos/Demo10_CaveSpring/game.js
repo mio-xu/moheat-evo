@@ -80,7 +80,7 @@
     say.push(...lines);
   }
   function foxPos() {
-    return { hut: [500, 1040, .92], gate: [235, 1040, .95], tunnel: [960, 1012, .95], spring: [560, 1000, 1] }[S.scene];
+    return { hut: [500, 1040, .92], gate: [235, 1040, .95], tunnel: [960, 1012, .95], spring: ART.hasArt('spring') ? [330, 1015, 1] : [560, 1000, 1] }[S.scene];
   }
   function tickBubble(now) {
     if (now < sayUntil) return;
@@ -155,7 +155,7 @@
   // ---------------------------------------------------------------- hit areas
   const inRect = (x, y, [x0, y0, x1, y1]) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
   const inEll = (x, y, cx, cy, rx, ry) => ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1;
-  const drawerRect = (k) => { const [x0, y0, x1] = GEO.hut.chest; return [x0 + 18, y0 + 26 + k * 116, x1 - 18, y0 + 126 + k * 116]; };
+  const drawerRect = (k) => { if (GEO.hut.drawers) return GEO.hut.drawers[k]; const [x0, y0, x1] = GEO.hut.chest; return [x0 + 18, y0 + 26 + k * 116, x1 - 18, y0 + 126 + k * 116]; };
   function foxHit(x, y) { const [fx, fy, s] = foxPos(); return inEll(x, y, fx + 30 * s, fy - 130 * s, 120 * s, 150 * s); }
   function hitHut(x, y, act) {
     const h = S.hut, G = GEO.hut;
@@ -380,6 +380,14 @@
 
   // ---------------------------------------------------------------- drawing
   function drawFox(c, x, y, s, t, speaking) {
+    if (ART.pic('kohaku_base')) {   // painted Kohaku: talk / blink / happy frames on the same pose, gentle bob and a soft warm glow
+      const bob = Math.sin(t * 2.2) * 3, blink = (t % 3.7) < .14, happy = S.scene === 'spring' && S.spring.glow > .6 && !speaking;
+      const n = speaking && Math.sin(t * 22) > -.2 ? 'kohaku_talk' : blink && ART.pic('kohaku_blink') ? 'kohaku_blink' : happy && ART.pic('kohaku_happy') ? 'kohaku_happy' : 'kohaku_base';
+      c.save(); c.globalCompositeOperation = 'lighter'; c.fillStyle = ART.rad(c, x, y - 130 * s, 10, 240 * s, [[0, 'rgba(255,214,140,.18)'], [1, 'rgba(255,214,140,0)']]); c.fillRect(x - 260 * s, y - 380 * s, 520 * s, 420 * s); c.restore();
+      c.save(); c.fillStyle = 'rgba(20,10,20,.28)'; c.beginPath(); c.ellipse(x, y - 4, 110 * s, 16 * s, 0, 0, 7); c.fill(); c.restore();
+      ART.sprite(c, ART.pic(n) ? n : 'kohaku_base', x + 20 * s, y + bob * .3, 300 * s + bob);
+      return;
+    }
     const bob = Math.sin(t * 2.2) * 3, blink = (t % 3.7) < .12, ink = ART.INK, sh = ART.shape;
     c.save(); c.translate(x, y + bob); c.scale(s, s);
     c.save(); c.globalCompositeOperation = 'lighter'; c.fillStyle = ART.rad(c, 0, -120, 10, 230, [[0, 'rgba(255,214,140,.22)'], [1, 'rgba(255,214,140,0)']]); c.fillRect(-240, -360, 480, 480); c.restore();
@@ -414,13 +422,23 @@
     const k = (S.t * 1.2) % 1;
     c.save(); c.strokeStyle = `rgba(255,224,150,${.8 * (1 - k)})`; c.lineWidth = 6; c.beginPath(); c.arc(x, y, r * (.8 + .4 * k), 0, 7); c.stroke(); c.restore();
   }
-  const filmDark = (k) => (ART.hasClip(k) ? .45 : 1);
+  const filmDark = (k) => (ART.hasClip(k) ? .45 : ART.hasArt(k) ? .72 : 1);   // painted backgrounds are already moody: lighter darkness
   function drawHut(c, t) {
     const h = S.hut, G = GEO.hut, [hx, hy] = G.hearth;
-    ART.drawBg(c, 'hut'); if (ART.hasClip('hutFire')) ART.drawBg(c, 'hutFire', h.fire);
-    if (!h.tinder) { const [bx, by] = G.basket; c.strokeStyle = '#e9cf7a'; c.lineWidth = 5; for (let i = 0; i < 26; i++) { const a = -2.4 + i * .07; c.beginPath(); c.moveTo(bx - 90 + i * 7, by - 40); c.lineTo(bx - 90 + i * 7 + Math.cos(a) * 60, by - 40 + Math.sin(a) * 60 - 20); c.stroke(); } }
+    const fireArt = ART.hasClip('hutFire') || ART.hasArt('hutFire');
+    ART.drawBg(c, 'hut'); if (fireArt) ART.drawBg(c, 'hutFire', clamp(h.fire * 1.2));
+    if (!h.tinder && ART.pic('prop_straw')) { const [bx, by] = G.basket; ART.sprite(c, 'prop_straw', bx, by - 22, 150); }
+    else if (!h.tinder) { const [bx, by] = G.basket; c.strokeStyle = '#e9cf7a'; c.lineWidth = 5; for (let i = 0; i < 26; i++) { const a = -2.4 + i * .07; c.beginPath(); c.moveTo(bx - 90 + i * 7, by - 40); c.lineTo(bx - 90 + i * 7 + Math.cos(a) * 60, by - 40 + Math.sin(a) * 60 - 20); c.stroke(); } }
     for (let k = 0; k < 3; k++) {            // drawers: slide toward you when open
       const [x0, y0, x1, y1] = drawerRect(k), o = h.drawers[k], dy = o * 46, gw = o * 14;
+      if (ART.pic('prop_drawer') || (ART.hasArt('hut') && o <= .02)) {   // painted: closed drawers are in the background; an opening one slides toward you
+        if (o <= .02) continue;
+        ART.shape(c, '#1c100c', (p) => p.rect(x0 + 4, y0 + 4, x1 - x0 - 8, y1 - y0 - 8), 0);
+        if (k === h.flintIn && !h.flint && o > .4) ART.sprite(c, 'prop_flint', (x0 + x1) / 2, y0 + 44 + dy * .5, 70);
+        if (ART.pic('prop_drawer')) { c.save(); c.filter = 'brightness(0.72) saturate(0.85)'; c.drawImage(ART.pic('prop_drawer'), x0 - gw, y0 + dy, x1 - x0 + gw * 2, y1 - y0 + gw); c.restore(); }   // match the dim painted chest
+        else ART.shape(c, ART.lin(c, 0, y0 + dy, 0, y1 + dy, [[0, '#7a4a32'], [1, '#5a3422']]), (p) => p.rect(x0 - gw, y0 + dy, x1 - x0 + gw * 2, y1 - y0 + gw), 3);
+        continue;
+      }
       if (o > .02) { ART.shape(c, '#2c1a14', (p) => p.rect(x0 + 6, y0 + 6, x1 - x0 - 12, 30 + dy), 3);
         if (k === h.flintIn && !h.flint && o > .4) { ART.shape(c, '#8e96a8', (p) => ART.blob(p, (x0 + x1) / 2, y0 + 26 + dy * .5, 34, 18, 7, .25), 4); c.fillStyle = 'rgba(255,255,255,.6)'; c.fillRect((x0 + x1) / 2 - 14, y0 + 16 + dy * .5, 12, 4); } }
       ART.shape(c, ART.lin(c, 0, y0 + dy, 0, y1 + dy, [[0, '#9a6240'], [1, '#7a4a2e']]), (p) => p.rect(x0 - gw, y0 + dy, x1 - x0 + gw * 2, y1 - y0 + gw), 4);
@@ -428,7 +446,7 @@
     }
     if (!h.candle) ART.candle(c, G.candle[0], G.candle[1], 96, 28);
     if (h.ember > 0 && h.fire < 1) { const p = .7 + .3 * Math.sin(t * 6); c.save(); c.globalCompositeOperation = 'lighter'; c.fillStyle = ART.rad(c, hx, hy, 4, 60, [[0, `rgba(255,170,60,${p})`], [1, 'rgba(255,90,30,0)']]); c.fillRect(hx - 80, hy - 80, 160, 160); c.restore(); }
-    for (let i = 0; i < 5; i++) ART.flame(c, hx - 100 + i * 50, hy + 22 - Math.abs(i - 2) * 6, (1.2 + (i % 2) * .5 - Math.abs(i - 2) * .15) * h.fire, t, 'warm', clamp(h.fire * 2), i);
+    for (let i = 0; i < 5; i++) ART.flame(c, hx - 100 + i * 50, hy + 22 - Math.abs(i - 2) * 6, (1.2 + (i % 2) * .5 - Math.abs(i - 2) * .15) * h.fire, t, 'warm', clamp(h.fire * 2) * (fireArt ? .55 : 1), i);   // over the painted fire: lighter, for the flicker
   }
   function drawGate(c, t) {
     const g = S.gate;
@@ -500,7 +518,7 @@
     lighting(ctx, t);
     // hint rings at level 2
     const lvl = S.hint[S.step] || 0;
-    if (lvl >= 2 && S.step === 'find') { if (!S.hut.tinder) ring(ctx, GEO.hut.basket[0], GEO.hut.basket[1] - 40, 150); if (!S.hut.flint) ring(ctx, 1300, GEO.hut.chest[1] + 76 + S.hut.flintIn * 116, 140); }
+    if (lvl >= 2 && S.step === 'find') { if (!S.hut.tinder) ring(ctx, GEO.hut.basket[0], GEO.hut.basket[1] - 40, 150); if (!S.hut.flint) { const r = drawerRect(S.hut.flintIn); ring(ctx, (r[0] + r[2]) / 2, (r[1] + r[3]) / 2, 140); } }
     if (lvl >= 2 && S.step === 'candle') ring(ctx, ...(S.hut.lit ? [1700, 560, 200] : S.hut.candle ? [GEO.hut.hearth[0], GEO.hut.hearth[1], 240] : [GEO.hut.candle[0], GEO.hut.candle[1] - 60, 110]));
     if (S.step === 'enter' && S.gate.open > .9 && S.t % 2 < 1.3) ring(ctx, 960, 600, 220);
     const [fx, fy, fs] = foxPos();
@@ -620,11 +638,12 @@
     S.scene = 'gate'; S.started = false; S.gate.open = .5;
     S.gate.cands.forEach((c, i) => { c.fox = i >= 2; });
     S.hint.gate = 2;
-    document.fonts.ready.then(() => {
+    const poster = () => {
       ART.drawBg(ctx, 'gate'); drawGate(ctx, 1.3); lighting(ctx, 1.3);
       S.gate.cands.forEach((cd, i) => ART.flame(ctx, cd.x, GEO.gate.ledgeY - 128, 1.5, 1.3, cd.fox ? 'fox' : 'warm', 1, i * 1.7));   // poster: bright flames, warm left / foxfire right
       drawFox(ctx, 235, 1040, .95, .3, false);
-    });
+    };
+    document.fonts.ready.then(poster); addEventListener('load', () => setTimeout(poster, 50));   // again once the painted art has loaded
     return;
   }
   if (QS.get('shot')) {

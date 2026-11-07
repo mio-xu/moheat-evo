@@ -25,7 +25,7 @@ def key():
         return f.read().strip()
 
 
-def call(method, path, body=None, headers=None, tries=6):
+def call(method, path, body=None, headers=None, tries=40):   # 429 = one generation at a time / rate limit: wait and resend the same request
     h = {'Authorization': f'Bearer {key()}', 'Accept': 'application/json', 'User-Agent': 'moheat-demo10/1.0'}
     data = None
     if body is not None:
@@ -40,7 +40,7 @@ def call(method, path, body=None, headers=None, tries=6):
         except urllib.error.HTTPError as e:
             txt = e.read().decode(errors='ignore')
             if e.code in (429, 503) or e.code >= 500:
-                wait = int(e.headers.get('Retry-After') or 10 * (i + 1)); print(f'  {e.code}, retry in {wait}s'); time.sleep(wait); continue
+                wait = max(int(e.headers.get('Retry-After') or 0), 15 if path in ('/images', '/uploads') else 3); print(f'  {e.code}, retry in {wait}s'); time.sleep(wait); continue
             raise SystemExit(f'{method} {path} → HTTP {e.code}: {txt[:400]}')
         except urllib.error.URLError as e:
             print(f'  network error {e}, retry'); time.sleep(10 * (i + 1))

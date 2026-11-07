@@ -321,3 +321,9 @@ Covers, top bar and page titles carry **no demo number**, so a demo can be inser
 - Thumbnails are named by folder: `assets/images/demos/<DemoFolder>.jpg` (480×270 from `media/cover.jpg`). Folder names keep their old numbers as IDs only.
 - To insert a demo: add one entry to nav.js `DEMOS` and one `.td-item` in `index.html` at the wanted position, plus its thumbnail. Nothing else is renumbered.
 - Nobunaga covers keep 「第N話 · Ep. N / 5」 (episode within the series).
+
+### Demo 10 painted art (2026-11-07)
+Demo10_CaveSpring now uses painted images (Demo 1–4 look) for all 4 scenes, Kohaku (4 face frames on one body) and 6 props.
+Generated through the seedance2-5.com API with **GPT Image 2** image-to-image (`scripts/seedance_images.py`, key in `~/.seedance_key`,
+backgrounds 2K / sprites 1K), processed by `scripts/prepare_art.py` → `media/art/*.webp` (raw PNGs git-ignored). Code drawing stays as fallback.
+Details in `demos/Demo10_CaveSpring/README.md` (Painted art). Note: GPT Image 2 often paints a fake checkerboard instead of alpha → Vision lift.

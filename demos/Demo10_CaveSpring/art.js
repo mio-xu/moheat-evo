@@ -11,6 +11,33 @@ window.CaveArt = (() => {
     spring: { lakeY: 640, fall: [1430, 160, 1580, 660] },
     hand: [1640, 872],
   };
+  // ---------------------------------------------------------------- painted art (Seedance/GPT Image 2 → media/art/*.webp, see scripts/seedance_images.py)
+  // When the painted backgrounds load, GEO switches to positions measured on them (they follow the layout refs closely).
+  const ARTGEO = {
+    hut: { window: [110, 160, 505, 560], basket: [340, 860], hearth: [900, 866], kettle: [960, 680], chest: [1175, 567, 1470, 925], candle: [1322, 572], door: [1520, 150, 1865, 930],
+      drawers: [[1200, 603, 1453, 693], [1200, 707, 1453, 797], [1200, 810, 1453, 900]] },
+    gate: { door: [722, 305, 1205, 830], ledgeY: 860, candles: [560, 820, 1100, 1360] },
+    tunnel: { left: [560, 575, 245, 280], right: [1355, 565, 240, 270] },
+    spring: { lakeY: 700, fall: [1410, 160, 1590, 700] },
+    hand: [1640, 872],
+  };
+  const PIC = {};
+  let HAND_WICK = [.5, .08];   // wick tip position inside prop_hand_candle (fraction of width / height), measured after cut-out
+  const ART_FILES = ['bg_hut_night', 'bg_hut_fire', 'bg_gate_open', 'bg_tunnel_fork', 'bg_spring_glow', 'kohaku_base', 'kohaku_talk', 'kohaku_blink', 'kohaku_happy',
+    'prop_gate_door', 'prop_candle', 'prop_hand_candle', 'prop_straw', 'prop_flint', 'prop_drawer'];
+  const NOART = new URLSearchParams(location.search).has('noart');
+  if (!NOART) fetch('media/art/art_meta.json?v=1').then((r) => r.json()).then((m) => { if (m.prop_hand_candle) HAND_WICK = m.prop_hand_candle.wick; }).catch(() => {});
+  if (!NOART) for (const n of ART_FILES) { const im = new Image(); im.src = `media/art/${n}.webp?v=1`; im.onload = () => { PIC[n] = im; if (n === 'bg_hut_night') Object.assign(GEO, ARTGEO); }; }
+  const pic = (n) => PIC[n] || null;
+  // sprite helpers: draw image n with its bottom centre at (x, y) and height h; returns the drawn box
+  function sprite(c, n, x, y, h, a = 1) {
+    const im = PIC[n]; if (!im) return null;
+    const w = im.naturalWidth * h / im.naturalHeight;
+    if (a < 1) { c.save(); c.globalAlpha *= a; }
+    c.drawImage(im, x - w / 2, y - h, w, h);
+    if (a < 1) c.restore();
+    return [x - w / 2, y - h, w, h];
+  }
   // ---------------------------------------------------------------- helpers
   let seed = 1;
   const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
@@ -123,6 +150,10 @@ window.CaveArt = (() => {
   }
   function gateSlab(c, open) {                       // the stone door, slides left as it opens
     const [x0, y0, x1, y1] = GEO.gate.door, dx = -open * (x1 - x0 + 60);
+    if (PIC.prop_gate_door) {   // painted door slab, clipped to the arched doorway
+      c.save(); c.beginPath(); c.moveTo(x0, y1 + 4); c.lineTo(x0, y0 + (x1 - x0) * .42); c.quadraticCurveTo(x0, y0, (x0 + x1) / 2, y0); c.quadraticCurveTo(x1, y0, x1, y0 + (x1 - x0) * .42); c.lineTo(x1, y1 + 4); c.closePath(); c.clip();
+      c.drawImage(PIC.prop_gate_door, x0 - 14 + dx, y0 - 10, x1 - x0 + 28, y1 - y0 + 22); c.restore(); return;
+    }
     c.save(); c.beginPath(); c.moveTo(x0 - 40, y1 + 20); c.lineTo(x0 - 40, y0 + 80); c.quadraticCurveTo((x0 + x1) / 2, y0 - 90, x1 + 40, y0 + 80); c.lineTo(x1 + 40, y1 + 20); c.closePath(); c.clip();
     c.translate(dx, 0);
     shape(c, lin(c, x0, 0, x1, 0, [[0, '#8a95b4'], [1, '#6c7796']]), (p) => { p.moveTo(x0, y1); p.lineTo(x0, y0 + 90); p.quadraticCurveTo((x0 + x1) / 2, y0 - 50, x1, y0 + 90); p.lineTo(x1, y1); p.closePath(); }, 6);
@@ -197,6 +228,7 @@ window.CaveArt = (() => {
     c.restore();
   }
   function candle(c, x, y, h = 120, w = 34) {      // white candle standing on y
+    if (PIC.prop_candle) { const H2 = h * 1.38; sprite(c, 'prop_candle', x, y + 8, H2); return [x, y + 8 - H2 + H2 * .03]; }
     shape(c, '#c7a052', (p) => p.ellipse(x, y, w * 1.4, 12, 0, 0, 7), 4);
     shape(c, lin(c, x - w / 2, 0, x + w / 2, 0, [[0, '#fff8ec'], [1, '#e9dcc8']]), (p) => rr(p, x - w / 2, y - h, w, h, 6), 4);
     c.strokeStyle = INK; c.lineWidth = 3; c.beginPath(); c.moveTo(x, y - h); c.lineTo(x, y - h - 12); c.stroke();
@@ -204,6 +236,9 @@ window.CaveArt = (() => {
   }
   function handCandle(c, t, lit, sway = 1) {        // 手燭 held at the bottom right: returns the flame base
     const [hx, hy] = GEO.hand, dx = Math.sin(t * .9) * 6 * sway, dy = Math.sin(t * 1.3) * 4 * sway;
+    if (PIC.prop_hand_candle) {   // painted 手燭: dish resting just above the bottom edge, flame on the wick
+      const im = PIC.prop_hand_candle, H2 = 270, w = im.naturalWidth * H2 / im.naturalHeight, x0 = hx + dx - w * HAND_WICK[0], y0 = H - 6 - H2 + dy;
+      c.drawImage(im, x0, y0, w, H2); return [hx + dx, y0 + H2 * HAND_WICK[1] + 4]; }
     c.save(); c.translate(dx, dy);
     shape(c, '#d8a84f', (p) => p.ellipse(hx, hy + 170, 110, 26, 0, 0, 7), 5);
     shape(c, '#b98a3a', (p) => rr(p, hx + 90, hy + 160, 180, 22, 10), 4);
@@ -239,9 +274,18 @@ window.CaveArt = (() => {
       v.src = `assets/video/${name}.mp4`;
     }
   }
+  const BGART = { hut: 'bg_hut_night', hutFire: 'bg_hut_fire', gate: 'bg_gate_open', tunnel0: 'bg_tunnel_fork', tunnel1: 'bg_tunnel_fork', spring: 'bg_spring_glow', springGlow: 'bg_spring_glow' };
   function drawBg(c, key, a = 1, flip = false) {
     if (a <= 0) return;
     const v = video[CLIPS[key]];
+    const im = !(v && v.readyState >= 2) && PIC[BGART[key]];
+    if (im) {   // painted: tunnel1 is the same fork mirrored; the unlit spring is the glowing one, darkened
+      c.save(); c.globalAlpha = a;
+      if (flip !== (key === 'tunnel1')) { c.translate(W, 0); c.scale(-1, 1); }
+      c.drawImage(im, 0, 0, W, H);
+      if (key === 'spring') { c.globalCompositeOperation = 'multiply'; c.fillStyle = 'rgb(70,72,96)'; c.fillRect(0, 0, W, H); }
+      c.restore(); return;
+    }
     c.save(); c.globalAlpha = a;
     if (flip) { c.translate(W, 0); c.scale(-1, 1); }
     if (v && v.readyState >= 2) { if (v.paused && v.loop) v.play().catch(() => {}); const s = Math.max(W / v.videoWidth, H / v.videoHeight); c.drawImage(v, (W - v.videoWidth * s) / 2, (H - v.videoHeight * s) / 2, v.videoWidth * s, v.videoHeight * s); }
@@ -249,5 +293,6 @@ window.CaveArt = (() => {
     c.restore();
   }
   const hasClip = (key) => !!video[CLIPS[key]];
-  return { W, H, INK, GEO, flame, candle, handCandle, gateSlab, light, drawBg, hasClip, loadClips, video, shape, rr, lin, rad, blob };
+  const hasArt = (key) => !!PIC[BGART[key]];
+  return { W, H, INK, GEO, flame, candle, handCandle, gateSlab, light, drawBg, hasClip, hasArt, loadClips, video, shape, rr, lin, rad, blob, pic, sprite };
 })();

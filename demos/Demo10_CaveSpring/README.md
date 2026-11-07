@@ -24,3 +24,15 @@ Your breath always cools both ears. Per ear only the stronger mode is sent (hyst
 - `audio.js` — synthesized sounds (wind, fire, candle, foxfire, stream, waterfall, drips, bats, door rumble…) + Kohaku's voice playback.
 - `lines.js` — Kohaku's lines (ja / en / TTS reading). `scripts/voice.py` → `media/voice/<id>.m4a` + `media/voice.js` (needs VOICEVOX).
 - Voice: **VOICEVOX:猫使ビィ ノーマル** (user's pick, default parameters). Auditions: `audio/audition/` (local only).
+
+## Painted art (images, 2026-11-07)
+All scenes, Kohaku and the props are painted images in the Demo 1–4 style (no ukiyo-e), generated with the Seedance 2.5 site's
+**GPT Image 2** image-to-image model through its API, with a Demo 1–4 style board + the code-drawn layout as references.
+- `scripts/seedance_images.py <ids|all>` — generate (key in `~/.seedance_key`, never committed). Jobs, prompts, ratios and references:
+  `project/seedance_jobs.json`, `project/seedance_refs/`; log with generation IDs: `project/seedance_log.json`.
+  Backgrounds 2K (25 credits), sprites 1K (15 credits); `--again` = new variant, `--fetch` = download a submitted job.
+- `scripts/prepare_art.py` — raw `assets/art/*.png` (git-ignored) → `media/art/*.webp`: backgrounds 1920×1080; sprites cut out
+  (real alpha or macOS Vision lift); Kohaku's talk / blink / happy faces are aligned and blended onto `kohaku_base`, so frames never jump.
+- `art.js` loads `media/art/*.webp`; when the backgrounds are present `GEO` switches to `ARTGEO` (positions measured on the paintings).
+  Missing files fall back to the code drawing (`?noart=1` forces it). Flames, light, sparks and ripples stay code-drawn on top.
+- The unlit spring is the glowing painting multiplied dark; tunnel 2 is the fork mirrored; the hut cross-fades to `bg_hut_fire` as the fire grows.
