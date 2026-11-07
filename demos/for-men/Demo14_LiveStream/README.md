@@ -11,7 +11,7 @@ You are a viewer in the streamer's live room: chat comments and Super Chats, she
 so her voice, whispers and triggers come from her side.
 
 **Thermal (firmware `DUAL`, cool and heat independent on each ear; user 2026-11-08: rich but plausible)** — two layers:
-- *voice*: when she speaks right at an ear (≤ 25 cm) that ear warms with her loudness (0.1 + 0.8 × envelope); at her desk: none;
+- *voice* (a voice is always warm, user 2026-11-08): her loudness (0.1 + 0.8 × envelope) warms the ear she is at — full at the ear, ×0.6 within 30 cm, a mild ×0.28 from her desk;
 - *ambient*: only real warm / cold things next to the binaural mic (mug and steam, cold bottle, ice, towel, blanket, heater,
   night wind gusting with the wind sound, desk fan, blown breath). Nothing for what only she feels (spicy food, a topping she tastes).
 Both layers can hit the same ear at once (Mint's menthol whisper, Cocoa's fu-fu next to the steaming mug). `STREAM.both()` counts those frames.

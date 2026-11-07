@@ -337,14 +337,15 @@
     bots(dt);
   }
   // Thermal, two layers (firmware DUAL: cool and heat independent on each ear; user 2026-11-08: rich but plausible).
-  //  · VOICE: when she speaks right at an ear (≤ 25 cm), that ear warms with her loudness (0.1 + 0.8 × envelope); at her desk: none.
+  //  · VOICE (always warm — user: a voice is warm unless the character is e.g. a snow spirit): her loudness (0.1 + 0.8 × envelope)
+  //    warms the ear she is at — × 1 at the ear, × 0.6 within 30 cm, × 0.28 from her desk (both ears, halved when in front).
   //  · AMBIENT: only things that really are warm or cold near the binaural mic (= your head): a mug, steam, a cold bottle, ice,
   //    a towel, a blanket, a draft, a fan, a blown breath. Nothing for what only she feels (spicy food, a topping she tastes).
   function sources() {
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S.started) return out;
     const v = S.view, P = S.pos;
-    if (talking && P.dist <= .25) add(P.az, 'h', (.1 + .8 * S.env) * (P.dist < .15 ? 1 : .6) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
+    if (talking) add(P.az, 'h', (.1 + .8 * S.env) * (P.dist < .15 ? 1 : P.dist <= .3 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');   // a voice is warm: strongest at your ear, mild from her desk
     if (S.ch === 'mint') {
       if (S.mintLip && talking && P.dist < .15 && Math.abs(P.az) > 1) add(P.az, 'c', .25 * S.env, '🌿');   // menthol breath: warm and cool at once
       if (S.blow > 0) add(S.blowSide * 1.5, 'c', .9 * Math.min(1, S.blow * 1.6), '💨');
