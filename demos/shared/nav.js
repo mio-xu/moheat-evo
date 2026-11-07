@@ -92,6 +92,7 @@
   .dn-card.is-cur em{color:#ffab93}
   .dn-card b{display:block;margin-top:4px;font:700 14px/1.3 "Noto Sans JP",sans-serif}
   .dn-card small{display:block;margin-top:2px;font:500 12px/1.3 Inter,sans-serif;color:#cbbfb8}
+  .dn-card small.dn-now{color:#ffd58a;font-weight:600}   /* under the title, so every card's title lines up */
   @media (max-width:700px){.dnav .dn-label{display:none}.dn-panel{top:110px}.dn-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dn-card b{font-size:12.5px}.dn-card small{display:none}}`;
   document.head.appendChild(css);
 
@@ -101,8 +102,9 @@
   const TITLE = (d) => pickT({ ja: d.ja, en: d.en, zh: d.zh });
   const GZH = ['全年龄', '治愈', '男性向', '女性向', '信长系列'];
   const GT = (gi) => { const [ja, en] = GROUPS[gi].split(' · '); return pickT({ ja, en, zh: GZH[gi] }); };
-  const W = { all: { ja: 'すべて', en: 'All', zh: '全部' }, now: { ja: '再生中', en: 'now playing', zh: '正在播放' }, ep: { ja: '第', en: 'Ep ', zh: '第' },
-    demos: { ja: 'デモ', en: 'Demos', zh: '演示' }, prev: { ja: '前へ', en: 'Previous', zh: '上一个' }, next: { ja: '次へ', en: 'Next', zh: '下一个' } };
+  const W = { all: { ja: 'すべて', en: 'All', zh: '全部' }, now: { ja: '▶ 再生中', en: '▶ Now playing', zh: '▶ 正在播放' }, ep: { ja: '第', en: 'Ep ', zh: '第' },
+    demos: { ja: 'デモ', en: 'Demos', zh: '演示' }, credits: { ja: '権利表記', en: 'Credits', zh: '版权与署名' },
+    rights: { ja: '声・イラスト・音楽・商標', en: 'voices, art, music, trademarks', zh: '配音、美术、音乐、商标' }, prev: { ja: '前へ', en: 'Previous', zh: '上一个' }, next: { ja: '次へ', en: 'Next', zh: '下一个' } };
   const nav = document.createElement('nav'); nav.className = 'dnav'; nav.setAttribute('aria-label', 'Choose another demo');
   const prev = DEMOS[cur - 1], next = DEMOS[cur + 1];
   nav.innerHTML = `<a class="dn-step" href="${prev ? href(prev) : '#'}" title="${prev ? 'Previous: ' + prev.en : ''}" aria-label="Previous demo" ${prev ? '' : 'aria-disabled="true"'}>‹</a>`
@@ -114,8 +116,8 @@
   panel.innerHTML = `<div class="dn-tabs" role="tablist"><button type="button" role="tab" data-g="all"><span data-w="all"></span><i>${DEMOS.length}</i></button>`
     + GROUPS.map((g, gi) => `<button type="button" role="tab" data-g="${gi}"><span data-gt="${gi}"></span><i>${count(gi)}</i></button>`).join('') + '</div>'
     + GROUPS.map((g, gi) => `<section data-g="${gi}"><h4><span data-gt="${gi}"></span>${span(gi)}</h4><div class="dn-grid">` + DEMOS.map((d, i) => d.group !== gi ? '' :
-    `<a class="dn-card${i === cur ? ' is-cur' : ''}" href="${href(d)}"><img src="${thumb(i)}" alt="" loading="lazy"><span><em>Demo ${i + 1}${d.ep ? ` · <span data-ep="${d.ep}"></span>` : ''}${i === cur ? ' · <span data-w="now"></span>' : ''}</em><b data-d="${i}"></b></span></a>`).join('') + '</div></section>').join('')
-    + '<p class="dn-foot"><a href="../../../credits.html">Credits · 権利表記</a> · voices, art, music, trademarks · © 2026 MoHeat Evo</p>';
+    `<a class="dn-card${i === cur ? ' is-cur' : ''}" href="${href(d)}"><img src="${thumb(i)}" alt="" loading="lazy"><span><em>Demo ${i + 1}${d.ep ? ` · <span data-ep="${d.ep}"></span>` : ''}</em><b data-d="${i}"></b>${i === cur ? '<small class="dn-now" data-w="now"></small>' : ''}</span></a>`).join('') + '</div></section>').join('')
+    + '<p class="dn-foot"><a href="../../../credits.html" data-w="credits"></a> · <span data-w="rights"></span> · © 2026 MoHeat Evo</p>';
   function paint() {   // texts in the display language; again whenever it changes
     for (const r of [nav, panel]) {
       r.querySelectorAll('[data-w]').forEach((e) => { e.textContent = pickT(W[e.dataset.w]); });
