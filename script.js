@@ -12,8 +12,24 @@ document.querySelectorAll('.td-item').forEach((item) => {
     document.querySelectorAll('.td-item').forEach((x) => x.classList.toggle('is-active', x === item));
     demoFrame.src = `${item.dataset.demo}?embed=1&autoplay=1`;   // chosen by a click → starts playing right away
     demoOpen.href = item.dataset.demo;
+    item.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
   });
 });
+// menu scroll buttons: vertical list on desktop, horizontal strip on tablet / phone
+const tdMenu = document.querySelector('.td-menu');
+const tdArrows = document.querySelectorAll('.td-scroll');
+const tdHorizontal = () => getComputedStyle(tdMenu).flexDirection === 'row';
+const tdUpdateArrows = () => {
+  const h = tdHorizontal(), pos = h ? tdMenu.scrollLeft : tdMenu.scrollTop;
+  const max = h ? tdMenu.scrollWidth - tdMenu.clientWidth : tdMenu.scrollHeight - tdMenu.clientHeight;
+  tdArrows[0].disabled = pos <= 2; tdArrows[1].disabled = pos >= max - 2;
+};
+tdArrows.forEach((b) => b.addEventListener('click', () => {
+  const h = tdHorizontal(), step = (h ? tdMenu.clientWidth : tdMenu.clientHeight) * .8 * (+b.dataset.dir);
+  tdMenu.scrollBy(h ? { left: step, behavior: 'smooth' } : { top: step, behavior: 'smooth' });
+}));
+tdMenu.addEventListener('scroll', tdUpdateArrows, { passive: true });
+addEventListener('resize', tdUpdateArrows); tdUpdateArrows();
 
 // Live device-output diagram: reads the embedded player's own thermal meters (same origin), i.e. exactly what is sent to the headset.
 const WARM = '255,99,69', COOL = '96,178,255';

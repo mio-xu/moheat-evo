@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261104-cards2" />
+  <link rel="stylesheet" href="styles.css?v=20261107-tdmenu" />
 </head>
 <body>
   <div class="noise"></div>
@@ -81,7 +81,10 @@
         </div>
 
         <div class="td-body">
+          <div class="td-menu-wrap">
+          <div class="td-menu-top"><span>9 demos</span><span class="td-arrows"><button class="td-scroll" type="button" data-dir="-1" aria-label="Previous demos">↑</button><button class="td-scroll" type="button" data-dir="1" aria-label="More demos">↓</button></span></div>
           <nav class="td-menu" aria-label="Choose a demo">
+            <p class="td-group">Short stories · 1–4</p>
             <button class="td-item is-active" type="button" data-demo="demos/Demo1_SnowFoxfire/">
               <img src="assets/images/demos/demo1.jpg" alt="" width="480" height="270" loading="lazy">
               <span class="td-item-text"><em>Demo 1 · ice &amp; fire</em><b>Whispers of Snow and Flame</b></span>
@@ -98,27 +101,29 @@
               <img src="assets/images/demos/demo4.jpg" alt="" width="480" height="270" loading="lazy">
               <span class="td-item-text"><em>Demo 4 · ambience</em><b>The Runaway Seasons Express</b></span>
             </button>
+            <p class="td-group">Nobunaga series · 5 episodes</p>
             <button class="td-item" type="button" data-demo="demos/Demo5_GifuCastle/">
               <img src="assets/images/demos/demo5.jpg" alt="" width="480" height="270" loading="lazy">
-              <span class="td-item-text"><em>Demo 5 · Gifu, 1569</em><b>Welcome to Nobunaga&#39;s Gifu Castle</b></span>
+              <span class="td-item-text"><em>Demo 5 · Ep 1 · Gifu, 1569</em><b>Welcome to Nobunaga&#39;s Gifu Castle</b></span>
             </button>
             <button class="td-item" type="button" data-demo="demos/Demo6_FutureWhisky/">
               <img src="assets/images/demos/demo6.jpg" alt="" width="480" height="270" loading="lazy">
-              <span class="td-item-text"><em>Demo 6 · whisky tasting</em><b>Future Whisky at Azuchi</b></span>
+              <span class="td-item-text"><em>Demo 6 · Ep 2 · Azuchi</em><b>Future Whisky at Azuchi</b></span>
             </button>
             <button class="td-item" type="button" data-demo="demos/Demo7_KyotoIzakaya/">
               <img src="assets/images/demos/demo7.jpg" alt="" width="480" height="270" loading="lazy">
-              <span class="td-item-text"><em>Demo 7 · Kyoto night</em><b>Two Warlords in a Kyoto Izakaya</b></span>
+              <span class="td-item-text"><em>Demo 7 · Ep 3 · Kyoto</em><b>Two Warlords in a Kyoto Izakaya</b></span>
             </button>
             <button class="td-item" type="button" data-demo="demos/Demo8_YamazakiDistillery/">
               <img src="assets/images/demos/demo8.jpg" alt="" width="480" height="270" loading="lazy">
-              <span class="td-item-text"><em>Demo 8 · distillery tour</em><b>Two Warlords at the Yamazaki Distillery</b></span>
+              <span class="td-item-text"><em>Demo 8 · Ep 4 · Yamazaki</em><b>Two Warlords at the Yamazaki Distillery</b></span>
             </button>
             <button class="td-item" type="button" data-demo="demos/Demo9_SengokuBanquet/">
               <img src="assets/images/demos/demo9.jpg" alt="" width="480" height="270" loading="lazy">
-              <span class="td-item-text"><em>Demo 9 · audio drama</em><b>The Last Banquet at Azuchi</b></span>
+              <span class="td-item-text"><em>Demo 9 · Ep 5 · Finale</em><b>The Last Banquet at Azuchi</b></span>
             </button>
           </nav>
+          </div>
 
           <div class="td-main">
             <div class="td-screen">
@@ -393,6 +398,6 @@
     </div>
   </dialog>
 
-  <script src="script.js?v=202610212202"></script>
+  <script src="script.js?v=20261107-tdmenu"></script>
 </body>
 </html>
