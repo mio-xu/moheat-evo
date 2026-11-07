@@ -69,7 +69,7 @@
   - 一个元素里写成「日本語 · English」的文字（互动卡片、`.ix-btn`、运行时改写的重玩按钮）→ 显示所选那一半；`#steps > li` 的「日本語 · <small>English</small>」同理。
   - 用 CSS `::before` 写的说话人标签（Demo20 スタッフ、Demo15/16 ばあば / じいじ）在 `subs.js` 的 `WHO` 表里翻译。
   - 默认英文：选择只在这次浏览中记住（sessionStorage），重新打开网站一律从英文开始（用户 2026-11-08）。
-  - 切换：舞台右上角的「字」按钮，**点一下换下一种语言**（用户不要下拉框），封面上也显示；Demo 1–9 右侧的 Subtitles 下拉框（多一个 Off）；或 `?sub=ja|en|zh`。存在 localStorage `moheat.sublang`，所有 Demo 共用。
+  - 切换：舞台右上角的🌐 语言按钮，**点一下换下一种语言**（用户不要下拉框），封面上也显示；Demo 1–9 右侧的 Subtitles 下拉框（多一个 Off）；或 `?sub=ja|en|zh`。存在 localStorage `moheat.sublang`，所有 Demo 共用。
 - **页面框架的共用词**放 `demos/shared/l10n_common.js`（`MOHEAT_L10N_COMMON.text.<lang>`）；页面上任何文字节点只要整句在表里就会被替换，页面改了文字（如连接状态）会重新翻译。
 - **翻译放在每个 Demo 自己的 `l10n.js`**（页面目录，或 `<base>` 指向的目录）：`window.MOHEAT_L10N = { langs, text: { zh: {…}, ja: {…}, en: {…} }, names, voice }`。
   - `text.zh`：「页面上显示的日文原文」→ 简体中文；`text.ja / text.en`：封面等原本日英混写的文字 → 只有该语言的版本（`""` = 隐藏）。key 必须和页面文字**一字不差**，用脚本从 `lines.js` / `media/data.js` / `main.js` / `index.html` 抽出来生成，不要手打。
@@ -377,7 +377,7 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 
 ### 7.3 UI 规范（所有 Demo 统一，用户 2026-11-08：今后的新 Demo 都按同样的 UI）
 
-整套界面由共用文件负责：`shared/series.css`（尺寸、一屏、右侧栏、封面字号）、`shared/nav.js`（顶栏的 Demo 切换、一屏测量）、`shared/subs.js`（显示语言、「字」按钮）、`shared/voice.js`（语音回答）、`shared/game.css`（游戏类的基础样式）、`shared/interact.js`（影片类的互动和进度卡片）。**新 Demo 只写自己的内容，不另做一套 UI。**
+整套界面由共用文件负责：`shared/series.css`（尺寸、一屏、右侧栏、封面字号）、`shared/nav.js`（顶栏的 Demo 切换、一屏测量）、`shared/subs.js`（显示语言、🌐 语言按钮）、`shared/voice.js`（语音回答）、`shared/game.css`（游戏类的基础样式）、`shared/interact.js`（影片类的互动和进度卡片）。**新 Demo 只写自己的内容，不另做一套 UI。**
 
 **1. 页面骨架（HTML 结构固定，class / id 不改名）**
 ```
@@ -388,12 +388,12 @@ header.bar
   #estop「■ STOP」
 main.layout
   section.stage-col
-    .stage#stage（16:9）  画面 canvas / video · 封面 .intro · 字幕 #subs · 回答 .choices / .act · 提示 #toast · 目标 .hud-goal（左上）· 右上 HUD（.hud-top：🔊 + 「字」+ ⛶ 全屏，shared/fullscreen.js 自动加，F 键切换）· 两侧冷热光晕 .glow
+    .stage#stage（16:9）  画面 canvas / video · 封面 .intro · 字幕 #subs · 回答 .choices / .act · 提示 #toast · 目标 .hud-goal（左上）· 右上 HUD（.hud-top：🔊 + 🌐+ ⛶ 全屏，shared/fullscreen.js 自动加，F 键切换）· 两侧冷热光晕 .glow
     .transport + .legend   只有影片类（时间轴 Demo）有
   aside.side（固定 3 张卡片，顺序不变）
     1 .card  Sounds around you        #radar（声源雷达）
     2 .card  Thermal output           #cmd + L/R cool / warm 四条表 + .note（一两句说明这个 Demo 的冷热来源）
-    3 .card  设置                      Intensity（+ 影片类的 Device lead）· Send to device —— **不放字幕下拉框**（只用舞台上的「字」按钮）
+    3 .card  设置                      Intensity（+ 影片类的 Device lead）· Send to device —— **不放字幕下拉框**（只用舞台上的🌐 语言按钮）
     **不显示进度**（用户 2026-11-08）：游戏类代码里的 `#steps` 可以照写（剧情代码会用到），含 `#steps` 的卡片由 series.css 统一隐藏；新 Demo 不必再做进度卡片。Demo23 的对话状态卡片不算进度。
 ```
 

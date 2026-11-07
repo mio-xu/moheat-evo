@@ -1,4 +1,4 @@
-// MoHeatFullscreen — a ⛶ button next to the 字 button on every demo's stage (user 2026-11-08: "增加全屏功能"). Loaded by nav.js.
+// MoHeatFullscreen — a ⛶ button next to the 🌐 language button on every demo's stage (user 2026-11-08: "增加全屏功能"). Loaded by nav.js.
 //   · tap ⛶ or press F: the page goes fullscreen and shows only the picture — the largest 16:9 that fits, black around it; a film
 //     demo's play bar (.transport) stays at the bottom. Esc / ⛶ / F again: back. Also inside the site's iframe (allow="fullscreen").
 //   · browsers without element fullscreen (iPhone Safari): the same picture-only layout fills the window instead.
@@ -40,7 +40,7 @@
   });
   addEventListener('resize', () => { if (root.classList.contains('mfs')) below(); });
 
-  function place(tries = 0) {   // next to the 字 button (shared/subs.js); its own corner button if there is none
+  function place(tries = 0) {   // next to the 🌐 language button (shared/subs.js); its own corner button if there is none
     const sub = document.querySelector('.stage .msub-btn:not(.mfs-btn)');
     if (!sub && tries < 20) { setTimeout(() => place(tries + 1), 150); return; }
     btn = document.createElement('button'); btn.type = 'button';

@@ -9,14 +9,14 @@
 //     (interact.js cards, .ix-btn) show the chosen part; the cover (.intro: title, tagline, chips, buttons, hint) from l10n.js.
 //   · data: <demo>/l10n.js — window.MOHEAT_L10N = { langs, text: { <lang>: { "<text as on the page>": "…" } },
 //     names: { "<ja name>": { <lang>: "…" } }, voice: { <lang>: { "<ja answer>": ["same meaning", …] } } }. Missing → English.
-//   · choice: the 字 button on the stage (each tap = next language), the demo's Subtitles select (Demo 1–9, + Off), ?sub=<lang>. Saved in sessionStorage
+//   · choice: the 🌐 language button on the stage (each tap = next language), the demo's Subtitles select (Demo 1–9, + Off), ?sub=<lang>. Saved in sessionStorage
 //     'moheat.sublang' (all demos, this visit only — a new visit starts in English); a demo without that language shows English. shared/voice.js listens in the same language.
 (() => {
   if (window.MoHeatSub) return;
   const QS = new URLSearchParams(location.search);
   if (QS.has('cover') || QS.has('render')) return;
   // ---------------------------------------------------------------- the language registry (the only place that knows languages)
-  // name: native name · short: label on the 字 button · bcp: lang attribute · speech: Web Speech recognition code (voice.js)
+  // name: native name · short: label on the 🌐 language button · bcp: lang attribute · speech: Web Speech recognition code (voice.js)
   // font: CSS font stack for this script (optional) · fallback: language used when a text has no translation (default English)
   const CJK_SC = '"PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", "Zen Maru Gothic", sans-serif';
   const LANGS = {
@@ -275,9 +275,9 @@
   html.msub-off #subs { display: none !important; }
   ${whoCss()}
   .msub-hud { position: absolute; top: 1.2cqw; right: 1.2cqw; z-index: 6; display: flex; gap: .6cqw; align-items: center; }
-  .msub-hud .ix-chip { position: static !important; }   /* Demo 1–9: interact.js's 参加モード chip sits next to the 字 button */
+  .msub-hud .ix-chip { position: static !important; }   /* Demo 1–9: interact.js's 参加モード chip sits next to the 🌐 language button */
   .stage:has(.intro:not(.hidden)) .msub-hud .ix-chip { display: none; }
-  .stage:has(.intro:not(.hidden)) .hud-top:has(.msub-btn) { display: flex !important; z-index: 30 !important; }   /* the 字 button stays on the cover */
+  .stage:has(.intro:not(.hidden)) .hud-top:has(.msub-btn) { display: flex !important; z-index: 30 !important; }   /* the 🌐 language button stays on the cover */
   .stage:has(.intro:not(.hidden)) .hud-top:has(.msub-btn) > :not(.msub-btn) { display: none !important; }
   .msub-hud { z-index: 30; }
   .msub-btn { cursor: pointer; border-radius: 999px; padding: .45cqw 1cqw; border: 1px solid rgba(255, 255, 255, .4); background: rgba(10, 8, 16, .6);
@@ -287,12 +287,12 @@
   @container (max-width: 620px) { .msub-btn:not(.hud-btn) { font-size: 2.4cqw; padding: 1cqw 2cqw; } }`;
   document.head.appendChild(css);
 
-  // ---------------------------------------------------------------- controls: the 字 button on the stage (each tap = next language)
+  // ---------------------------------------------------------------- controls: the 🌐 language button on the stage (each tap = next language)
   let btn = null, sel = null;
   const options = (withOff) => [...langs(), ...(withOff ? ['off'] : [])].map((l) => `<option value="${l}">${l === 'off' ? 'Off' : LANGS[l]?.name || l}</option>`).join('');
   function button() {
     const wrap = btn = document.createElement('button');
-    btn.type = 'button'; btn.className = 'msub-btn'; btn.title = 'Subtitles · 字幕 — tap for the next language';
+    btn.type = 'button'; btn.className = 'msub-btn'; btn.title = 'Language · 言語 · 语言 — tap for the next one';
     btn.addEventListener('click', (e) => { e.stopPropagation(); const L = langs(); set(L[(L.indexOf(lang) + 1) % L.length]); });
     const hud = document.querySelector('.stage .hud-top');
     if (hud) { btn.classList.add('hud-btn'); hud.prepend(btn); return; }
@@ -309,7 +309,7 @@
     root.classList.add('msub');
     for (const c of [...root.classList]) if (c.startsWith('msub-')) root.classList.remove(c);
     root.classList.add(`msub-${lang}`);
-    if (btn) btn.textContent = `字 ${lang === 'off' ? 'OFF' : LANGS[lang]?.short || lang}`;
+    if (btn) btn.textContent = `🌐 ${lang === 'off' ? 'OFF' : LANGS[lang]?.short || lang}`;   // globe = language (user: no 字)
     if (sel && sel.value !== lang) { sel.value = lang; sel.dispatchEvent(new Event('change')); }   // the demo re-renders its lines (ja + en for other languages)
     renderAll(); chrome(); root.lang = LANGS[lang]?.bcp || 'en';
     dispatchEvent(new CustomEvent('moheat:sublang', { detail: lang }));
