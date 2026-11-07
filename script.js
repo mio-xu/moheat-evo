@@ -9,7 +9,6 @@ const demoFrame = document.getElementById('demoFrame');
 const demoOpen = document.getElementById('demoOpen');
 document.querySelectorAll('.td-item').forEach((item) => {
   item.addEventListener('click', () => {
-    if (item.classList.contains('is-active')) return;
     document.querySelectorAll('.td-item').forEach((x) => x.classList.toggle('is-active', x === item));
     demoFrame.src = `${item.dataset.demo}?embed=1&autoplay=1`;   // chosen by a click → starts playing right away
     demoOpen.href = item.dataset.demo;
