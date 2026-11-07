@@ -256,6 +256,7 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 2. 写台词（ja + en）和冷热表（每个时刻：什么东西、在哪只耳朵、冷还是热、为什么成立）。
 3. **用户确认**：造型（设定图）。
 4. 声音试听 → **用户选** → 合成全部台词。
+   - 造型对比图、声音试听页一生成就**自动打开给用户看**（用户 2026-11-08）：`open -a Preview <对比图>` 并激活 Preview；试听页 `open tools/eleven/out/index.html`（或 Chrome 打开 `localhost:8765/tools/eleven/out/index.html`）。不要只给路径。
 5. 出静帧（网页 GPT Image 2）→ 检查人物一致性、构图方位 → 转成 `media/art/*.jpg`。
 6. 写页面 / 游戏 / 音频 → 自动通关测试（脚本自动点击，记录画面切换、`DUAL` 指令、报错）→ 封面 → 菜单 → commit + push。
 7. **用户试玩反馈** → 修改。
