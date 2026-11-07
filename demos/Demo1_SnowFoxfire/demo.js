@@ -409,6 +409,15 @@ function emit(st, t, dt) {
       if (cold && Math.random() < .08 * env) spawn({ kind: 'glint', x: mx, y: my, vx: vx * 1.1, vy: vy + (Math.random() - .5) * 60, size: 3 + Math.random() * 4, rot: Math.random() * 3, spin: 2, life: 0, max: .9, a: .9 });
     }
   }
+  const t1 = A.present[st.who][1];
+  if (t1 < A.duration && t > t1 - .35 && t < t1 + .3) {   // the goodbye: Koyuki melts into snowflakes, Homura into foxfire
+    const n = Math.ceil(dt * 160), R = 260 * st.s;
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * 7, r = R * Math.sqrt(Math.random()), x = st.x + Math.cos(a) * r, y = st.y + Math.sin(a) * r * 1.2;
+      if (st.who === 'K') spawn({ kind: Math.random() < .7 ? 'flake' : 'spark', x, y, vx: Math.cos(a) * 90, vy: -40 - Math.random() * 90, size: 6 + Math.random() * 14, rot: a, spin: 1.5, life: 0, max: 1.6 + Math.random() * .8, a: 1 });
+      else spawn({ kind: Math.random() < .35 ? 'wisp' : 'ember', x, y, vx: Math.cos(a) * 70, vy: -110 - Math.random() * 140, size: Math.random() < .35 ? 10 + Math.random() * 10 : 2 + Math.random() * 4, seed: Math.random() * 9, life: 0, max: 1.6 + Math.random() * .6, a: 1 });
+    }
+  }
   if (st.cue && st.cue.kind === 'magic' && t < st.cue.t + st.cue.dur) {
     const n = Math.ceil(dt * (st.cue.style === 'whoosh' ? 140 : 50));
     for (let i = 0; i < n; i++) {

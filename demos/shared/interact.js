@@ -20,7 +20,7 @@
       { t: 76.85, kind: 'choice', what: ['どっちが好き？', 'Which do you like better?'], options: ['❄ つめたい · Cool', '🔥 あったかい · Warm'],
         fb: [['小雪、うれしそう！', 'Koyuki is delighted!'], ['焔、うれしそう！', 'Homura is delighted!']] },
       { t: 129.95, kind: 'read', tag: '✨ いっしょに · Together', how: ['ふたりと一緒に、唱えてみて', 'Chant it with them'], what: ['雪と焔の、ないしょの魔法！', 'Our secret magic of snow and flame!'] },
-      { t: 149.65, kind: 'read', what: ['おやすみ、小雪、焔。', 'Good night, Koyuki, Homura.'] },
+      { t: 144.8, kind: 'read', what: ['うん、また遊ぼう！ おやすみ。', "Let's play again! Good night."] },
     ],
     Demo2_FanMeeting: [
       { t: 8.95, kind: 'read', what: ['うん、来たよ！', "Yep, I'm here!"] },
