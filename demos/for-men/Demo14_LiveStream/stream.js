@@ -49,7 +49,7 @@
 
   // ---------------------------------------------------------------- state
   const fresh = (ch) => ({ ch, started: true, t: 0, clock: 0, view: 'live', pos: { az: 0, dist: .9 }, lv: 0,
-    blow: 0, blowSide: 0, puffSide: 1, spicy: 0, fan: 0, window: 0, tea: 0, near: 0, ice: 0, iceSide: 0, towel: 0, mug: 0, puff: 0, aan: 0, treat: 0, treatK: 'h', rain: 0, blanket: 0, hands: 0, fade: 0, viewers: CH[ch].viewers });
+    blow: 0, blowSide: 0, puffSide: 1, spicy: 0, env: 0, mintLip: 0, bowl: 0, bottle: 0, fan: 0, window: 0, tea: 0, near: 0, ice: 0, iceSide: 0, towel: 0, mug: 0, puff: 0, aan: 0, treat: 0, treatK: 'h', rain: 0, blanket: 0, hands: 0, fade: 0, viewers: CH[ch].viewers });
   let S = { started: false, t: 0 }, run = 0, mode = 'title';   // title | lobby | live | ended
   function setStep(i) { S.step = i; $('steps').innerHTML = (S.ch ? CH[S.ch].steps : []).map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[0]} · <small>${s[1]}</small></li>`).join(''); }
 
@@ -147,6 +147,7 @@
     await sleep(.9); await say('m06'); await say('m07', .05);
     SND.fx.blow(s * 1.5, 2); S.blow = 1; S.blowSide = s; await sleep(2.4);
     react(['ぞわっ…', 'tingles!!', 'つめたっ', '💙💙💙', 'ear blowing best'], 4);
+    S.mintLip = 1;   // from now on her whispers carry a menthol breath
     await say('m08');
     await say('m09'); S.view = 'live'; at(0, .5); SND.fx.cloth(0, .4, .8); await sleep(.9);
     S.view = s < 0 ? 'lean_R' : 'lean_L'; at(-s * 1.45, .07); SND.fx.cloth(-s * 1.2, .35, .7); await sleep(.8);
@@ -216,8 +217,8 @@
     setStep(2); chat(pick(HANDLES), 'トッピングのスパチャできるよ〜', '');
     const g = await gift('ココアにトッピングを送ろう', 'Send Cocoa a topping', [['🍡', 'マシュマロ', 'Marshmallows', '¥300'], ['🍨', 'アイス', 'Ice cream', '¥500']]);
     await sleep(.6);
-    if (g === 0) { for (let i = 0; i < 3; i++) setTimeout(() => SND.fx.plop(rnd(-.1, .1)), i * 330); S.treatK = 'h'; S.treat = 1; await sleep(1); await say('c09m'); }
-    else { SND.fx.plop(0); S.treatK = 'c'; S.treat = 1; await sleep(.6); await say('c09i'); }
+    if (g === 0) { for (let i = 0; i < 3; i++) setTimeout(() => SND.fx.plop(rnd(-.1, .1)), i * 330); await sleep(1); await say('c09m'); }
+    else { SND.fx.plop(0); await sleep(.6); await say('c09i'); }
     SND.fx.stir(.1); await sleep(1.6);
     // rain → share the blanket → her hands warm your right ear
     setStep(3); S.rain = 1; SND.loop('rain', -1.3, 2.5)?.set(.22); await sleep(2.5);
@@ -242,33 +243,34 @@
 
   // ---------------------------------------------------------------- Hinata: super-spicy ramen challenge (the cat-ear mic = your head)
   async function hinataStory(my) {
-    S.view = 'live'; at(0, .85); setStep(0);
+    S.view = 'live'; at(0, .85); setStep(0); S.bowl = 1;
     await sleep(1.4); guard(my);
     await say('h01'); await say('h02');
     const a = await comment('ひなたを応援しよう', 'Cheer for Hinata', [['がんばれ！', 'You got this!'], ['ムリしないで', "Don't push yourself"]]);
     await sleep(.4); await say(a ? 'h03b' : 'h03a');
     setStep(1); await say('h04', .1);
-    S.view = 'eat'; SND.fx.slurp(0); S.spicy = .35; await sleep(1.3); SND.fx.slurp(.1); S.spicy = .55; await sleep(1.4);
+    S.view = 'eat'; SND.fx.slurp(0); await sleep(1.3); SND.fx.slurp(.1); await sleep(1.4);
     react(['いったー！', 'slurp ASMR 🍜', 'いい音', '顔赤くなってきた笑'], 3);
-    S.view = 'spicy'; S.spicy = .85; S.shy = 1; await say('h05'); await sleep(.6);
+    S.view = 'spicy'; S.shy = 1; await say('h05'); await sleep(.6);
     react(['がんばれ😂', 'MILK MILK', 'ギブ？', '水はダメらしい'], 4);
     // rescue Super Chat: milk (cool in front) or a desk fan (cool from the left)
     setStep(2);
     const g = await gift('ひなたをたすけよう', 'Rescue Hinata', [['🥛', '牛乳', 'Milk', '¥500'], ['🌀', '扇風機', 'Desk fan', '¥300']]);
     await sleep(.5); S.view = 'cool'; S.shy = 0;
-    if (g === 0) { SND.fx.gulp(0); S.treatK = 'c'; S.treat = 1; S.spicy = .4; await sleep(1.4); await say('h06m'); }
-    else { SND.loop('fan', -1.2, .8)?.set(.35); S.fan = 1; S.spicy = .4; await sleep(1.2); await say('h06f'); }
+    if (g === 0) { SND.fx.gulp(0); await sleep(1.4); SND.fx.taps(-1.45, 2); S.bottle = 1; await say('h06m'); }   // then the cold bottle on the mic's left ear
+    else { SND.loop('fan', -1.2, .8)?.set(.35); S.fan = 1; await sleep(1.2); await say('h06f'); }
     await sleep(1.2);
     // finish the bowl, then she fans you (left / right puffs)
     setStep(3); S.view = 'live'; await say('h07', .1);
-    S.view = 'eat'; S.spicy = .7; for (let i = 0; i < 3; i++) { SND.fx.slurp(rnd(-.1, .1)); await sleep(1.1); }
+    S.view = 'eat'; for (let i = 0; i < 3; i++) { SND.fx.slurp(rnd(-.1, .1)); await sleep(1.1); }
+    S.bowl = 0;   // bowl finished: no more steam
     S.view = 'live'; await say('h08');
     react(['完食おめでとう！！', 'GG 🎉', 'すごすぎ', '👏👏👏'], 5); hearts(8);
     if (S.fan) { SND.loop('fan')?.stop(); S.fan = 0; }
-    S.spicy = .3; await say('h09', .2);
+    await say('h09', .2);
     S.view = 'fan';
     for (let i = 0; i < 6; i++) { const sd = i % 2 ? 1 : -1; SND.fx.flap(sd * 1.3); S.puff = 1; S.puffSide = sd; await sleep(.55); }
-    S.spicy = 0; await sleep(.8);
+    await sleep(.8);
     react(['すずしい〜', 'fan ASMR lol', 'ぱたぱた'], 3);
     // a secret in your right ear
     setStep(4); S.view = 'whisper'; at(1.45, .08); SND.fx.cloth(1.2, .3, .6); await sleep(.9);
@@ -323,6 +325,10 @@
   function update(dt) {
     S.t += dt; if (!S.started) return;
     S.clock += dt; S.lv = SND.voiceLevel();
+    const vt = talking ? clamp((S.lv - .005) / .06) : 0;   // voice envelope (attack 0.06 s, release 0.3 s)
+    S.env += (vt - S.env) * (1 - Math.exp(-dt / (vt > S.env ? .06 : .3)));
+    if (S.towel > .55) S.towel = Math.max(.55, S.towel - dt / 160);   // the warm towel slowly cools a little
+    S.bottle = Math.max(0, S.bottle - dt / 7);
     S.blow = Math.max(0, S.blow - dt / 2.6);
     S.puff = Math.max(0, S.puff - dt / 1.1);
     S.treat = Math.max(0, S.treat - dt / 9);
@@ -330,49 +336,48 @@
     if (Math.random() < dt * .5) S.viewers += Math.round(rnd(-3, 6));
     bots(dt);
   }
+  // Thermal, two layers (firmware DUAL: cool and heat independent on each ear; user 2026-11-08: rich but plausible).
+  //  · VOICE: when she speaks right at an ear (≤ 25 cm), that ear warms with her loudness (0.1 + 0.8 × envelope); at her desk: none.
+  //  · AMBIENT: only things that really are warm or cold near the binaural mic (= your head): a mug, steam, a cold bottle, ice,
+  //    a towel, a blanket, a draft, a fan, a blown breath. Nothing for what only she feels (spicy food, a topping she tastes).
   function sources() {
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S.started) return out;
+    const v = S.view, P = S.pos;
+    if (talking && P.dist <= .25) add(P.az, 'h', (.1 + .8 * S.env) * (P.dist < .15 ? 1 : .6) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
     if (S.ch === 'mint') {
+      if (S.mintLip && talking && P.dist < .15 && Math.abs(P.az) > 1) add(P.az, 'c', .25 * S.env, '🌿');   // menthol breath: warm and cool at once
       if (S.blow > 0) add(S.blowSide * 1.5, 'c', .9 * Math.min(1, S.blow * 1.6), '💨');
-      if (S.ice) add(S.iceSide * 1.45, 'c', .62, '🧊');
-      if (S.towel) { add(-1.5, 'h', .7 * S.towel, '♨'); add(1.5, 'h', .7 * S.towel, '♨'); }
+      if (S.ice) add(S.iceSide * 1.45, 'c', .55, '🧊');
+      if (S.towel) { add(-1.5, 'h', .65 * S.towel, '♨'); add(1.5, 'h', .65 * S.towel, '♨'); }
     } else if (S.ch === 'hinata') {
-      if (S.spicy > 0) { add(-1.5, 'h', S.spicy * .8, '🌶'); add(1.5, 'h', S.spicy * .8, '🌶'); }
-      if (S.treat > 0) add(0, 'c', .7 * Math.min(1, S.treat * 2), '🥛');
-      if (S.fan) add(-1.2, 'c', .7, '🌀');
-      if (S.puff > 0) add(S.puffSide * 1.4, 'c', .75 * Math.min(1, S.puff * 1.8), '🪭');
-      if (S.near) add(1.45, 'h', .35, '💛');
+      if (S.bowl && /live|eat|spicy/.test(v)) add(0, 'h', .22, '🍜');   // steam of the hot bowl right next to the mic
+      if (S.bottle > 0) add(-1.45, 'c', .65 * Math.min(1, S.bottle * 1.5), '🥛');   // cold bottle pressed to the mic's left ear
+      if (S.fan) add(-1.2, 'c', .55, '🌀');
+      if (S.puff > 0) add(S.puffSide * 1.4, 'c', .7 * Math.min(1, S.puff * 1.8), '🪭');
     } else if (S.ch === 'luna') {
-      if (S.window) add(-1.4, 'c', .45, '🌙');
-      if (S.tea) add(0, 'h', .4, '🍵');
-      if (S.near) add(-1.45, 'h', .55 * S.near, '🖤');
+      if (S.window) add(-1.4, 'c', .4 * (.75 + .25 * Math.sin(S.t * 2 * Math.PI * .17)), '🌙');   // night wind, gusting with the wind sound
+      if (S.tea) add(0, 'h', .3 * S.tea, '🍵');
+      if (S.near) add(-1.45, 'h', .3 * S.near, '🖤');   // she sits right next to you
     } else {
-      if (S.mug && !S.blanket) add(0, 'h', .32, '☕');
-      if (S.puff > 0) add(1.35, 'c', .85 * Math.min(1, S.puff * 1.8), '💨');
-      if (S.aan) add(0, 'h', .55, '🥄');
-      if (S.treat > 0) add(0, S.treatK, (S.treatK === 'c' ? .62 : .5) * Math.min(1, S.treat * 2), S.treatK === 'c' ? '🍨' : '🍡');
-      if (S.rain && !S.blanket) add(-1.3, 'c', .22, '🌧');
-      if (S.blanket) { add(-1.5, 'h', .5, '🧣'); add(1.5, 'h', .5, '🧣'); add(-1, 'h', .35, '🔥'); }
-      if (S.hands) add(1.45, 'h', .85, '🤲');
+      if (S.mug && !S.blanket && /live|fufu|aan/.test(v)) add(v === 'fufu' ? 1.35 : 0, 'h', v === 'fufu' ? .3 : .25, '☕');
+      if (S.puff > 0) add(1.35, 'c', .8 * Math.min(1, S.puff * 1.8), '💨');   // her fu-fu: cool air, while the mug's steam stays warm
+      if (S.aan) add(0, 'h', .35, '🥄');
+      if (S.blanket) { add(-1.5, 'h', .5, '🧣'); add(1.5, 'h', .5, '🧣'); add(-1.2, 'h', .25, '🔥'); }
+      if (S.hands) add(1.45, 'h', .7, '🤲');
     }
-    if (talking && S.pos.dist < .2) add(S.pos.az, 'v', .5, '💬');   // her voice right at your ear (radar only)
     return out;
   }
-  const ear = { L: { mode: '', v: 0 }, R: { mode: '', v: 0 } };
+  const ear = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
   function thermal(dt) {
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
-    for (const s of src) { if (s.k === 'v') continue; const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
-    const th = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
-    for (const e of ['L', 'R']) {
-      const E = ear[e], hh = Math.min(1, sum[e].h), cc = Math.min(1, sum[e].c);
-      let m = E.mode;
-      if (!m) m = hh > cc ? 'h' : 'c'; else if (m === 'h' && cc > hh + .06) m = 'c'; else if (m === 'c' && hh > cc + .06) m = 'h';
-      if (m !== E.mode) { E.v = 0; E.mode = m; }
-      const target = m === 'h' ? Math.min(.9, hh) : cc, tau = target > E.v ? (m === 'h' ? .4 : .2) : .35;
-      E.v += (target - E.v) * (1 - Math.exp(-dt / tau)); th[e + m] = E.v;
+    for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
+    for (const e of ['L', 'R']) for (const k of ['c', 'h']) {   // each of the four channels on its own (DUAL)
+      const target = k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
+      const tau = target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
+      ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
     }
-    return { th, src };
+    return { th: { ...ear }, src };
   }
 
   // ---------------------------------------------------------------- drawing
@@ -465,9 +470,9 @@
   let lastSent = '', lastSendAt = 0, tripped = false, intensity = +store.get('asmr.intensity', 100) / 100;
   const device = MoHeatDevice.create({ select: $('portSelect'), addBtn: $('addPort'), connectBtn: $('connectBtn'), status: $('deviceStatus') }, { log: (l) => console.log('[MoHeat]', l), onConnect: () => { lastSent = ''; } });
   if (!MoHeatDevice.supported) $('deviceStatus').querySelector('span').textContent = 'Web Serial needs desktop Chrome / Edge';
-  function command(th) {
-    const part = (sd, c, h) => (c > OFF ? `${sd}C${Math.round(range.coolMin + c * (range.coolMax - range.coolMin))}` : h > OFF ? `${sd}H${Math.round(range.heatMin + h * (range.heatMax - range.heatMin))}` : `${sd}H0`);
-    return Math.max(th.Lc, th.Lh, th.Rc, th.Rh) <= OFF ? 'stop' : `${part('L', th.Lc, th.Lh)} ${part('R', th.Rc, th.Rh)}`;
+  function command(th) {   // DUAL: each ear's cool and heat set independently (firmware 2026-11-08)
+    const c = (v) => (v > OFF ? Math.round(range.coolMin + v * (range.coolMax - range.coolMin)) : 0), h = (v) => (v > OFF ? Math.round(range.heatMin + v * (range.heatMax - range.heatMin)) : 0);
+    return Math.max(th.Lc, th.Lh, th.Rc, th.Rh) <= OFF ? 'stop' : `DUAL LC${c(th.Lc)} LH${h(th.Lh)} RC${c(th.Rc)} RH${h(th.Rh)}`;
   }
   function stopOutput() { if (device.isConnected()) device.send('stop'); lastSent = 'stop'; }
   function emergencyStop() { tripped = !tripped; const b = $('estop'); if (tripped) { stopOutput(); b.textContent = '↺ Re-arm output'; b.classList.add('tripped'); } else { b.textContent = '■ STOP'; b.classList.remove('tripped'); lastSent = ''; } }
@@ -475,10 +480,10 @@
   $('intensity').value = Math.round(intensity * 100); $('intensityVal').textContent = `${Math.round(intensity * 100)}%`;
   $('intensity').addEventListener('input', (e) => { intensity = +e.target.value / 100; $('intensityVal').textContent = `${e.target.value}%`; store.set('asmr.intensity', +e.target.value); });
   const meterEls = Object.fromEntries(['Lc', 'Lh', 'Rc', 'Rh'].map((k) => [k, [$(`m${k}`), $(`v${k}`)]]));
-  let conflicts = 0, frames = 0, peak = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
+  let both = 0, frames = 0, peak = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
   function output(th, live) {
     const sc = Object.fromEntries(Object.entries(th).map(([k, v]) => [k, live && !tripped ? v * intensity : 0]));
-    if ((sc.Lc > OFF && sc.Lh > OFF) || (sc.Rc > OFF && sc.Rh > OFF)) conflicts++;
+    if ((sc.Lc > OFF && sc.Lh > OFF) || (sc.Rc > OFF && sc.Rh > OFF)) both++;   // the same ear warm and cool at once (allowed with DUAL)
     if (live) { frames++; for (const k in peak) peak[k] = Math.max(peak[k], sc[k]); }
     for (const [k, [bar, val]] of Object.entries(meterEls)) { bar.style.width = `${sc[k] * 100}%`; val.textContent = Math.round(sc[k] * 100); }
     const cmd = command(sc); $('cmd').textContent = cmd;
@@ -558,7 +563,7 @@
   }
   document.addEventListener('visibilitychange', () => { hidden = document.hidden; if (hidden) { stopOutput(); SND.ctx()?.suspend(); } else { last = performance.now(); SND.ctx()?.resume(); } });
   document.addEventListener('keydown', (e) => { if (e.code === 'Escape') emergencyStop(); });
-  window.STREAM = { get S() { return S; }, get mode() { return mode; }, goLive, conflicts: () => conflicts, frames: () => frames, peak: () => ({ ...peak }) };
+  window.STREAM = { get S() { return S; }, get mode() { return mode; }, goLive, both: () => both, frames: () => frames, peak: () => ({ ...peak }) };
   setStep(0); show('title');
   if (QS.has('cover')) { document.body.classList.add('cover-only'); artReady.then(drawCover); return; }
   const go = () => (ONE ? goLive(ONE) : goLobby());

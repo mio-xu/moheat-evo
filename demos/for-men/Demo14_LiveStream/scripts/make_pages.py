@@ -13,22 +13,22 @@ PAGES = {   # dir: channel, ja title (2 lines), en title, chips [(class, text)],
     'Demo14_LiveStream': ('mint', ('ミントの、', 'ささやき配信'), "Mint's Whisper Stream",
                           [('p', '🎧 ASMR live · Interactive'), ('k', '❄ 耳ふー · ear blowing'), ('h', '♨ タオル · warm towel')],
                           'Headphones on · comment and send a Super Chat from the chat · connect MoHeat Evo to feel her breath, the ice and the towel',
-                          "Her dummy head is your head: her mint breath and the glass of ice cool the ear she is at, the warm towel warms both. One mode per ear.",
+                          "DUAL, two layers: her whisper warms the ear she is at with its loudness (with mint balm on, a cool menthol breath at the same time); her fuu, the glass of ice and the warm towel are the room layer.",
                           'Mint is an original character · voice VOICEVOX:四国めたん · art made with Seedance', '#1a1530'),
     'Demo17_CocoaStream': ('cocoa', ('ココアの、', 'ほっこりカフェ配信'), "Cocoa's Cozy Café Stream",
                            [('p', '☕ café live · Interactive'), ('h', '☕ ココア · warm'), ('k', '💨 ふーふー · cool')],
                            'Headphones on · comment and send a Super Chat from the chat · connect MoHeat Evo to feel the cocoa, her fu-fu and the blanket',
-                           "Her bear mic is your head: the hot cocoa, the blanket and her hands are warm, her fu-fu blowing and an ice-cream topping are cool. One mode per ear.",
+                           "DUAL, two layers: her voice warms the ear she is close to; the hot mug and its steam, the shared blanket, the heater and her hands are warm, her fu-fu is a cool breath.",
                            'Cocoa is an original character · voice VOICEVOX:ユーレイちゃん · art made with Seedance', '#2a1a1c'),
     'Demo18_HinataStream': ('hinata', ('ひなたの、', '激辛チャレンジ配信'), "Hinata's Super-Spicy Challenge",
                             [('p', '🍜 game live · Interactive'), ('h', '🌶 激辛 · spicy'), ('k', '🥛 牛乳・うちわ · cool')],
                             'Headphones on · cheer her on and rescue her with a Super Chat · connect MoHeat Evo to feel the spice, the milk and her paper fan',
-                            "Her cat-ear mic is your head: the spicy ramen warms both ears, milk, the desk fan and her paper fan cool you down. One mode per ear.",
+                            "DUAL, two layers: her secret warms your right ear with her voice; the steaming bowl beside the mic is mildly warm, the cold milk bottle, the desk fan and her paper fan are cool.",
                             'Hinata is an original character · voice VOICEVOX:春日部つむぎ · art made with Seedance', '#1c1630'),
     'Demo19_LunaStream': ('luna', ('ルナの、', 'よふかし配信'), "Luna's Late-Night Stream",
                           [('p', '🌙 late-night live · Interactive'), ('k', '🌙 夜風 · night wind'), ('h', '🖤 となり · next to you')],
                           'Headphones on · talk with her in the chat and send a request · connect MoHeat Evo to feel the night wind, the tea and her by your side',
-                          "The night wind through the open window cools your left ear; hot tea and Luna sitting next to you on the left are warm. One mode per ear.",
+                          "DUAL, two layers: her whisper warms the ear she is at; the night wind from the window cools your left ear as it gusts, the hot tea and Luna sitting next to you are warm.",
                           'Luna is an original character · voice VOICEVOX:九州そら · art made with Seedance', '#12142a'),
 }
 ORDER = list(PAGES)
@@ -149,7 +149,7 @@ TEMPLATE = '''<!doctype html>
   <script src="lines.js?v=2"></script>
   <script src="audio.js?v=2"></script>
   <script src="media/art/faces.js?v=1"></script>
-  <script src="stream.js?v=3"></script>
+  <script src="stream.js?v=4"></script>
   <script src="../../shared/nav.js?v=6"></script>
 </body>
 </html>

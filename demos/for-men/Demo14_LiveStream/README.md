@@ -8,7 +8,13 @@
 | 19 | `demos/for-men/Demo19_LunaStream/` | ルナの、よふかし配信 · Luna's Late-Night Stream |
 
 You are a viewer in the streamer's live room: chat comments and Super Chats, she answers you. Her binaural mic is your head,
-so her voice, whispers and triggers come from her side, and the headphones answer per ear (one mode per ear, 0 same-ear conflicts).
+so her voice, whispers and triggers come from her side.
+
+**Thermal (firmware `DUAL`, cool and heat independent on each ear; user 2026-11-08: rich but plausible)** — two layers:
+- *voice*: when she speaks right at an ear (≤ 25 cm) that ear warms with her loudness (0.1 + 0.8 × envelope); at her desk: none;
+- *ambient*: only real warm / cold things next to the binaural mic (mug and steam, cold bottle, ice, towel, blanket, heater,
+  night wind gusting with the wind sound, desk fan, blown breath). Nothing for what only she feels (spicy food, a topping she tastes).
+Both layers can hit the same ear at once (Mint's menthol whisper, Cocoa's fu-fu next to the steaming mug). `STREAM.both()` counts those frames.
 This folder holds the shared code, art and voices; Demo 17/18/19 hold only `index.html` + `media/cover.jpg` and use
 `<base href="./">`; `<body data-ch="…">` picks the streamer. All four pages come from `scripts/make_pages.py`
 (edit there, not in the pages). The stream-end screen links to the next streamer (Mint → Cocoa → Hinata → Luna → Mint).
