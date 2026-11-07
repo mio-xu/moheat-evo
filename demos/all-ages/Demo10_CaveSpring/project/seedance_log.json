@@ -1,0 +1,82 @@
+{
+ "kohaku_base": {
+  "variant": 1,
+  "generation": "api_40fc83ccd219114cad34dcd3b6c131d1c1d919750b4f61134ad8decff9311c22",
+  "idempotency_key": "moheat-d10-kohaku-base-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/all-ages/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/all-ages/Demo10_CaveSpring/project/seedance_refs/kohaku_base_ref.jpg"
+  ]
+ },
+ "bg_hut_fire": {
+  "variant": 1,
+  "generation": "api_85ef6ae5c6c591c458578bcf3b94e2351642c099b5cfbaa07a4ded45f741ef6b",
+  "idempotency_key": "moheat-d10-bg-hut-fire-v1",
+  "ratio": "16:9",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/all-ages/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/all-ages/Demo10_CaveSpring/assets/art/bg_hut_night.png"
+  ]
+ },
+ "prop_gate_door": {
+  "variant": 1,
+  "generation": "api_4011bf972701745a78ed2592d0804ce1d3e1a5dc625815498bca1d29a2377362",
+  "idempotency_key": "moheat-d10-prop-gate-door-v1",
+  "ratio": "3:4",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/all-ages/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/all-ages/Demo10_CaveSpring/project/seedance_refs/prop_gate_door_ref.jpg"
+  ]
+ },
+ "kohaku_talk": {
+  "variant": 1,
+  "generation": "api_442843477c7c6b7728bf5c7217612d865ffcff84af5196c271af71e7ececd0d7",
+  "idempotency_key": "moheat-d10-kohaku-talk-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/all-ages/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/all-ages/Demo10_CaveSpring/assets/art/kohaku_base.png"
+  ]
+ },
+ "kohaku_blink": {
+  "variant": 1,
+  "generation": "api_190cb9ec86db31f25ae3018f701b4dd3a77154290e6990e6455f4d9350bfef5d",
+  "idempotency_key": "moheat-d10-kohaku-blink-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/all-ages/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/all-ages/Demo10_CaveSpring/assets/art/kohaku_base.png"
+  ]
+ },
+ "prop_candle": {
+  "variant": 1,
+  "generation": "api_3fc2d7d4938ada313e88ec3a6dec454a30276e67d0b1175e8b72e93b94b5a2dd",
+  "idempotency_key": "moheat-d10-prop-candle-v1",
+  "ratio": "9:16",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/all-ages/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/all-ages/Demo10_CaveSpring/project/seedance_refs/prop_candle_ref.jpg"
+  ]
+ },
+ "prop_hand_candle": {
+  "variant": 1,
+  "generation": "api_dd2c4b0c1346333fb49dfb613af653e6560168fab841dbab769ca1209b6b1525",
+  "idempotency_key": "moheat-d10-prop-hand-candle-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/all-ages/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/all-ages/Demo10_CaveSpring/project/seedance_refs/prop_hand_candle_ref.jpg"
+  ]
+ },
+ "kohaku_happy": {
+  "variant": 1,
+  "generation": "api_46400e44d3503ab2f2e250e25441723b34908d59a3d8af8bfc0a6c3ef704841e",
+  "idempotency_key": "moheat-d10-kohaku-happy-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/all-ages/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/all-ages/Demo10_CaveSpring/assets/art/kohaku_base.png"
+  ]
+ }
+}

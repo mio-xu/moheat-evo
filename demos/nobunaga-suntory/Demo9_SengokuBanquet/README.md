@@ -10,7 +10,7 @@ Subtitles: Japanese + English. The browser-rendered MP4 is the final film.
 
 ## Rebuild
 ```
-./build_all.sh                    # needs VOICEVOX (../../for-kids/Demo1_SnowFoxfire/start_voicevox.command)
+./build_all.sh                    # needs VOICEVOX (../../all-ages/Demo1_SnowFoxfire/start_voicevox.command)
 python3 scripts/render_mp4.py     # → video/final/final_banquet_150s.mp4 (≈10 min)
 ```
 | Step | Script | Output |

@@ -28,15 +28,15 @@
 index.html, styles.css, script.js        品牌官网（不要随意改动风格；商业文案简短）
 control.html/js, test.html/js, device.js 设备控制页、输出测试页、Web Serial 公共代码（所有 Demo 共用 device.js）
 arduino/MoHeatEvoArduino.ino             ESP32 固件（.gitignore 排除，仅本地）
-demos/for-kids/Demo1_SnowFoxfire/                 Demo 1《雪と狐火のひそひそ話》（原 `ASMR Demo/`）
-demos/for-men/Demo2_FanMeeting/                  Demo 2《キミだけのスペシャルファンミーティング》（原 `ASMR Demo 2/`）
-demos/for-men/Demo3_ShiningSmileConcert/         Demo 3《Shining Smile Melody — Ice & Fire Concert》
-demos/for-kids/Demo4_SeasonsExpress/              Demo 4《四季暴走列車 / The Runaway Seasons Express》（原 `Demo_SeasonsExpress/`）
+demos/all-ages/Demo1_SnowFoxfire/                 Demo 1《雪と狐火のひそひそ話》（原 `ASMR Demo/`）
+demos/all-ages/Demo2_FanMeeting/                  Demo 2《キミだけのスペシャルファンミーティング》（原 `ASMR Demo 2/`）
+demos/all-ages/Demo3_ShiningSmileConcert/         Demo 3《Shining Smile Melody — Ice & Fire Concert》
+demos/all-ages/Demo4_SeasonsExpress/              Demo 4《四季暴走列車 / The Runaway Seasons Express》（原 `Demo_SeasonsExpress/`）
 demos/nobunaga-suntory/Demo9_SengokuBanquet/              Demo 9《安土最後の酒宴》
 demos/nobunaga-suntory/Demo7_KyotoIzakaya/                Demo 7《信長と家康、京都の居酒屋へ》（完成）
 demos/nobunaga-suntory/Demo8_YamazakiDistillery/          Demo 8《信長と家康、山崎蒸溜所へ》（完成）
 demos/nobunaga-suntory/Demo5_GifuCastle/                   Demo 5《信長の岐阜城へようこそ》（完成）
-demos/for-kids/Demo10_CaveSpring/                 纯交互解谜《火をともして、ひみつの泉へ》（可玩，等 Seedance 背景）
+demos/all-ages/Demo10_CaveSpring/                 纯交互解谜《火をともして、ひみつの泉へ》（可玩，等 Seedance 背景）
 demos/healing/Demo11_Naomi/                      纯交互治愈小游戏《ナオミと、ふわふわの一日》（用户家的猫 Naomi，Seedance 美术）
 demos/for-women/Demo12_LateCall/                   纯交互深夜电话《もしもし、きこえる？》（原创男偶像 蓮，VOICEVOX:青山龍星）
 demos/healing/Demo15_FamilyCall/                 纯交互家庭电话《もしもし、おばあちゃん？》（外婆ハナ VOICEVOX:もち子さん，外公ゲン VOICEVOX:ちび式じい）
@@ -49,7 +49,7 @@ HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
 ```
 - 官网首页 “INTERACTIVE DEMO / Every whisper, felt.” 区：左侧封面菜单（`assets/images/demos/demoN.jpg`）切换右侧 iframe（`demos/<name>/?embed=1`，只显示画面和进度条；点选时加 `&autoplay=1` 直接播放），默认 Demo 1。播放器下方的“设备输出示意图”（左/右耳冷热 %、耳罩发光、设备指令）直接读取 iframe 里 Demo 自己的 `#vLc/#vLh/#vRc/#vRh/#cmd`（同源），与真机输出一致。现在有 Demo 1–5 共 5 项；新 Demo 完成后在 `index.html` 的 `.td-menu` 里加一项，缩略图用该 Demo 的 `media/cover.jpg` 缩到 480×270。每个 Demo 的 `index.html` 都要有 `?embed=1` 那段 script + style。
-- 2026-11-07 起所有 Demo 统一放在 `demos/DemoN_英文名/`。Demo 之间互相引用用同级路径（如 `demos/for-kids/Demo1_SnowFoxfire/tools`），播放器引用 `../../device.js`，`render_mp4.py` 的服务器根目录是仓库根。
+- 2026-11-07 起所有 Demo 统一放在 `demos/DemoN_英文名/`。Demo 之间互相引用用同级路径（如 `demos/all-ages/Demo1_SnowFoxfire/tools`），播放器引用 `../../device.js`，`render_mp4.py` 的服务器根目录是仓库根。
 每个 Demo 文件夹里都有自己的 `README.md`（运行方法、管线、交付物清单），本文件是总览和交接。
 
 ---
@@ -61,8 +61,8 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 | Python | 系统 `python3` 3.9；已有 numpy 2.0、scipy 1.13、matplotlib 3.9、Pillow 11。**没有** librosa / soundfile / torch / pyserial（Demo 3 的音乐分析特意只用 numpy/scipy）|
 | ffmpeg / ffprobe | 9.0（Homebrew）|
 | Chrome | `/Applications/Google Chrome.app`，headless 用于截图和逐帧渲染 MP4 |
-| Swift | `/usr/bin/swift`，`demos/for-kids/Demo1_SnowFoxfire/tools/lift_subject.swift` 用 macOS Vision 抠图（素材是绿底时可用）|
-| **VOICEVOX 引擎** | 0.26.1，`~/VOICEVOX-engine/engine`（3.9 GB，不在仓库里）。**agent 不能自己启动下载的二进制**（权限拦截），需要用户双击 `demos/for-kids/Demo1_SnowFoxfire/start_voicevox.command`。端口 `http://127.0.0.1:50021`。检查：`curl -s http://127.0.0.1:50021/version` |
+| Swift | `/usr/bin/swift`，`demos/all-ages/Demo1_SnowFoxfire/tools/lift_subject.swift` 用 macOS Vision 抠图（素材是绿底时可用）|
+| **VOICEVOX 引擎** | 0.26.1，`~/VOICEVOX-engine/engine`（3.9 GB，不在仓库里）。**agent 不能自己启动下载的二进制**（权限拦截），需要用户双击 `demos/all-ages/Demo1_SnowFoxfire/start_voicevox.command`。端口 `http://127.0.0.1:50021`。检查：`curl -s http://127.0.0.1:50021/version` |
 | 本地预览服务器 | 在仓库根目录 `python3 -m http.server 8765`，然后打开 `http://localhost:8765/demos/<Demo 文件夹>/`。各 Demo 的 `start_demo.command` 会自动做这件事 |
 | MP4 渲染端口 | Demo 1: 8766，Demo 2: 8767，Demo 3: 8768，Demo 9: 8769，Demo 4: 8770（`render_mp4.py` 自带服务器）|
 
@@ -73,7 +73,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 固件命令（115200 baud，每行一条）：`LC<35..80> RH<0..200>` 等，`L/R/B` + `C`(冷)/`H`(热) + PWM；`stop` 全关。**写同一侧的 C 会清掉 H，反之亦然**。
 - 默认 PWM 范围：冷 35–80，热 0–200（固件上限）。`test.html` 设置的范围保存在浏览器 localStorage（`moheat.range`），所有播放器共用。
 - 播放器：Web Serial（`device.js`），最多 10 条命令/秒，变化时才发；暂停/结束/切走页面/断开/Esc/STOP → `stop`。
-- 无浏览器播放：`python3 "demos/for-kids/Demo1_SnowFoxfire/tools/play_thermal_csv.py" --csv <csv> --audio <wav> --port /dev/cu.…`（需 `pip3 install pyserial`；`--dry-run` 可测试）。
+- 无浏览器播放：`python3 "demos/all-ages/Demo1_SnowFoxfire/tools/play_thermal_csv.py" --csv <csv> --audio <wav> --port /dev/cu.…`（需 `pip3 install pyserial`；`--dry-run` 可测试）。
 - CSV 统一格式：`time_s, L_cool, R_cool, L_heat, R_heat, *_pwm, command`，20 Hz，已含设备延迟补偿（冷提前 0.35 s，热提前 0.60 s）。
 
 ---
@@ -82,11 +82,11 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 
 **管线**：时间轴文件（台词/音效/位置关键帧）→ `build_audio.py`（配音、音效、HRTF 双耳渲染、母带）→ `thermal.py`（四通道 CSV）→ `export.py`（字幕 + `media/data.js`）→ 浏览器播放器 → `render_mp4.py`（headless Chrome 逐帧 → MP4）。
 
-- **双耳渲染**：`demos/for-kids/Demo1_SnowFoxfire/tools/build_audio.py::render()`，球形头模型（Brown–Duda ITD + 头影滤波）+ 近场 ILD + 房间混响，位置由时间轴模块的 `positions(times)` 提供（复用时把 `B.S` 替换成新 Demo 的时间轴模块）。
-- **冷热控制器**：`demos/for-kids/Demo1_SnowFoxfire/tools/thermal.py`：50 ms RMS → 噪声门 → 归一化 → 曲线 → hold/attack/release → 距离 → 左右权重 → 设备延迟 → 同侧仲裁 `resolve_ear` → 8 s 剂量限制 → PWM。Demo 2 的 `ear_weights` 更锐利（归一化到较近的耳朵）。
-- **美术处理**：`demos/for-kids/Demo1_SnowFoxfire/tools/prepare_art.py`：差分图对齐（缩放搜索 + 相位相关）→ 自动找脸部区域（眨眼/张嘴差异）→ **只合成脸部** → WebP（`media/art/` + `faces.json`）。手/道具也变化的差分要列入 `FULL_FRAME` 保留整张。
+- **双耳渲染**：`demos/all-ages/Demo1_SnowFoxfire/tools/build_audio.py::render()`，球形头模型（Brown–Duda ITD + 头影滤波）+ 近场 ILD + 房间混响，位置由时间轴模块的 `positions(times)` 提供（复用时把 `B.S` 替换成新 Demo 的时间轴模块）。
+- **冷热控制器**：`demos/all-ages/Demo1_SnowFoxfire/tools/thermal.py`：50 ms RMS → 噪声门 → 归一化 → 曲线 → hold/attack/release → 距离 → 左右权重 → 设备延迟 → 同侧仲裁 `resolve_ear` → 8 s 剂量限制 → PWM。Demo 2 的 `ear_weights` 更锐利（归一化到较近的耳朵）。
+- **美术处理**：`demos/all-ages/Demo1_SnowFoxfire/tools/prepare_art.py`：差分图对齐（缩放搜索 + 相位相关）→ 自动找脸部区域（眨眼/张嘴差异）→ **只合成脸部** → WebP（`media/art/` + `faces.json`）。手/道具也变化的差分要列入 `FULL_FRAME` 保留整张。
 - **播放器**（`demo.js`）：Live2D 风格（呼吸、说话弹动、条带网格摆动、镜像、交叉淡化）；按配音 RMS 切换眨眼/口型/表情帧；粒子特效；冷热边缘光晕、雷达、四通道表、时间轴；URL 参数：`?t=95` 定格预览、`?cover=1` 封面导出、`?render=1` 离线渲染。
-- **配音**：`demos/for-kids/Demo1_SnowFoxfire/tools/tts_voicevox.py`（`CAST` 配置、按表情选风格、停顿上限、音色 tone）；唱歌：Demo 2 `build_audio.py::sing()` 逐 mora 设定音高和时长。
+- **配音**：`demos/all-ages/Demo1_SnowFoxfire/tools/tts_voicevox.py`（`CAST` 配置、按表情选风格、停顿上限、音色 tone）；唱歌：Demo 2 `build_audio.py::sing()` 逐 mora 设定音高和时长。
 - **封面**：`?cover=1` 截图 → `media/cover.jpg`（分享图、MP4 开头 2–3 s 标题卡、MP4 内嵌缩略图）。
 
 ---
@@ -116,19 +116,19 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 改编号时对调了文件夹、全仓库文字引用、缩略图和官网菜单。Demo 6–8 和 Demo 5 用 `sengoku.py` 按 `Demo*_SengokuBanquet` 名称找安土酒宴的模块，不受影响；封面上的人物图路径已改为 `../Demo9_SengokuBanquet/`。
 - 以后改信长系列的台词，要先确认它和前后两部的承接不冲突。
 
-### Demo 1 · `demos/for-kids/Demo1_SnowFoxfire/` ✅ 完成
+### Demo 1 · `demos/all-ages/Demo1_SnowFoxfire/` ✅ 完成
 - 角色：小雪（冷）/ 小焰（热）；ChatGPT 美术在 `art/chatgpt/`，设定图 `art/Character.jpg`，房间背景 `room_bg`。
 - 配音：ずんだもん（两人用音高/风格区分）。字幕：日 + 英。
 - 重建：`./build_all.sh`（需 VOICEVOX）→ `python3 tools/render_mp4.py`。成品：`output/final_1080p.mp4`（本地）。
 
-### Demo 2 · `demos/for-men/Demo2_FanMeeting/` ✅ 完成
+### Demo 2 · `demos/all-ages/Demo2_FanMeeting/` ✅ 完成
 - 角色：星乃綾音（`A_` 前缀），ChatGPT 美术 `art/chatgpt/`（35 张），设定图 `art/A_Character.png`。
 - 热 = 绫音人声（含原创歌曲，VOICEVOX 逐音唱）随她的位置；冷 = 扇子/冰饮/冷气/魔法，各自独立位置。检查：左右同时异温 4 次、左右交替 17 次、同侧冲突 0（`output/thermal_checks.json`）。
 - 配音：ずんだもん 原声。字幕：日 + 英。萌妹音试听保留在 `output/audition/`（本地）。
 - 重建：`./build_all.sh` → `python3 tools/render_mp4.py`。成品：`output/final_1080p.mp4`。
 - 代码复用 Demo 1：`tools/demo1.py` 按路径加载（同名模块冲突，不能直接 import）。
 
-### Demo 3 · `demos/for-men/Demo3_ShiningSmileConcert/` ✅ 完成
+### Demo 3 · `demos/all-ages/Demo3_ShiningSmileConcert/` ✅ 完成
 - 真实歌曲 *Shining Smile Melody – Jpop*（ZTMusic, Pixabay），来源/许可/哈希见 `assets/music_original/SOURCE.md`；原曲 MP3 不提交。
 - 音乐分析（numpy/scipy）→ 88.2 BPM 半拍（≈176），剪辑 170.04 → 150.000 s（去掉 131.33–150.43 s 间奏 7 小节）。
 - 两种冷热模式：A 纯音乐、B 音乐 × 舞台位置（默认）。`scripts/check_sync.py` 全部通过。
@@ -136,7 +136,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 重建命令见 `README.md`；成品 `video/final/final_concert_150s.mp4`、`audio/final/final_stereo_150s.wav`（本地）。
 - 无歌词字幕（没有授权的歌词文本），只有段落标题（日/英）和片尾音乐署名。
 
-### Demo 4 · `demos/for-kids/Demo4_SeasonsExpress/` ✅ 完成 —《四季暴走列車 / The Runaway Seasons Express》
+### Demo 4 · `demos/all-ages/Demo4_SeasonsExpress/` ✅ 完成 —《四季暴走列車 / The Runaway Seasons Express》
 - **任务书要点**（用户提供的完整制作指令）：
   - 150 s，1920×1080，30 fps，48 kHz 双耳声。第一人称坐在魔法列车车厢里朝前看，**无角色、无台词、无旁白**。
   - 画风必须和 Demo 1–3 一致：可爱日系 2D、粉彩、赛璐璐。**不要浮世绘或金箔风**（那是 Demo 9 的风格）。
@@ -167,7 +167,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
     - `scripts/export.py` → `media/`；`scripts/render_mp4.py`（端口 8770）→ `video/final/final_seasons_express_150s.mp4`；`--at 10,30` 只渲染预览静帧。
     - 封面：`?cover=1` 截图 → `media/cover.jpg`（cover 模式不跑动画循环，headless 截图才不会卡住）。
   - **成品**：`video/final/final_seasons_express_150s.mp4`（本地，98 MB）：1920×1080、30 fps、4500 帧、48 kHz 双耳声，音画都是 150.000 s，内嵌封面。
-  - **文件夹整理**：已从根目录 `Demo_SeasonsExpress/` 移到 `demos/for-kids/Demo4_SeasonsExpress/`，根目录的临时兼容链接（`ASMR Demo`、`ASMR Demo 2`、`Demo3_ShiningSmileConcert`）已删除。
+  - **文件夹整理**：已从根目录 `Demo_SeasonsExpress/` 移到 `demos/all-ages/Demo4_SeasonsExpress/`，根目录的临时兼容链接（`ASMR Demo`、`ASMR Demo 2`、`Demo3_ShiningSmileConcert`）已删除。
     - `scripts/demo1.py` 会向上找到含 `device.js` 的仓库根，再在 `demos/` 或旧路径里找 Demo 1/2/3，所以以后再移动也能用。
     - 复用特效链接：`assets/reused_assets/*.png → ../../../Demo3_ShiningSmileConcert/assets/effects/`。
     - 官网菜单已加第 5 项（`assets/images/demos/demo4.jpg`）。
@@ -317,12 +317,12 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 
 | 文件 | 大小 | 重建 |
 |---|---|---|
-| `demos/for-kids/Demo1_SnowFoxfire/output/final_1080p.mp4`、`mix_48k.wav`、`stems/` | ~700 MB | `./build_all.sh` + `tools/render_mp4.py`（需 VOICEVOX）|
-| `demos/for-men/Demo2_FanMeeting/output/final_1080p.mp4`、`mix_48k.wav`、`stems/`、`audition/` | ~640 MB | 同上 |
-| `demos/for-men/Demo3_ShiningSmileConcert/video/final/final_concert_150s.mp4`、`audio/` | ~410 MB | README 中的命令（不需要 VOICEVOX）|
-| `demos/for-men/Demo3_ShiningSmileConcert/assets/music_original/*.mp3`、`music_edited/*.wav` | 5 MB + 43 MB | 原曲需从 Pixabay 手动下载（Cloudflare 拦截自动下载）|
+| `demos/all-ages/Demo1_SnowFoxfire/output/final_1080p.mp4`、`mix_48k.wav`、`stems/` | ~700 MB | `./build_all.sh` + `tools/render_mp4.py`（需 VOICEVOX）|
+| `demos/all-ages/Demo2_FanMeeting/output/final_1080p.mp4`、`mix_48k.wav`、`stems/`、`audition/` | ~640 MB | 同上 |
+| `demos/all-ages/Demo3_ShiningSmileConcert/video/final/final_concert_150s.mp4`、`audio/` | ~410 MB | README 中的命令（不需要 VOICEVOX）|
+| `demos/all-ages/Demo3_ShiningSmileConcert/assets/music_original/*.mp3`、`music_edited/*.wav` | 5 MB + 43 MB | 原曲需从 Pixabay 手动下载（Cloudflare 拦截自动下载）|
 | `demos/nobunaga-suntory/Demo9_SengokuBanquet/audio/`（选定声线试听、take 缓存、4 条干声 stem、mix）、`video/`（MP4、srt）| ~160 MB + ~520 MB | `./build_all.sh`（需 VOICEVOX）+ `scripts/render_mp4.py` |
-| `demos/for-kids/Demo4_SeasonsExpress/audio/`（16 条干声、双耳 stem、混音）、`video/`（MP4、预览帧）| ~250 MB + ~100 MB | `scripts/build_audio.py` + `scripts/render_mp4.py`（不需要 VOICEVOX）|
+| `demos/all-ages/Demo4_SeasonsExpress/audio/`（16 条干声、双耳 stem、混音）、`video/`（MP4、预览帧）| ~250 MB + ~100 MB | `scripts/build_audio.py` + `scripts/render_mp4.py`（不需要 VOICEVOX）|
 | `~/VOICEVOX-engine/` | 3.9 GB | 官方 release 0.26.1 macos-arm64 `.vvpp`（zip）解压 |
 
 ---
@@ -365,4 +365,4 @@ Covers, top bar and page titles carry **no demo number**, so a demo can be inser
 Demo10_CaveSpring now uses painted images (Demo 1–4 look) for all 4 scenes, Kohaku (4 face frames on one body) and 6 props.
 Generated through the seedance2-5.com API with **GPT Image 2** image-to-image (`scripts/seedance_images.py`, key in `~/.seedance_key`,
 backgrounds 2K / sprites 1K), processed by `scripts/prepare_art.py` → `media/art/*.webp` (raw PNGs git-ignored). Code drawing stays as fallback.
-Details in `demos/for-kids/Demo10_CaveSpring/README.md` (Painted art). Note: GPT Image 2 often paints a fake checkerboard instead of alpha → Vision lift.
+Details in `demos/all-ages/Demo10_CaveSpring/README.md` (Painted art). Note: GPT Image 2 often paints a fake checkerboard instead of alpha → Vision lift.

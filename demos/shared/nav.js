@@ -1,16 +1,16 @@
 // Demo switcher for the full demo pages (all MoHeat Evo demos load this). Adds a "Demos" panel and ‹ › buttons to the top bar.
 // Hidden in ?embed=1 (site menu) and ?cover=1 (cover export) — the bar is hidden there anyway. Add new demos to DEMOS.
 (() => {
-  const DEMOS = [   // folders: demos/<cat>/<dir>/ ; groups (in this order): 0 kids · 1 healing · 2 for him · 3 for her · 4 Nobunaga × Suntory
-    { cat: 'for-kids', dir: 'Demo1_SnowFoxfire', ja: '雪と狐火のひそひそ話', en: 'Whispers of Snow and Flame', group: 0 },
-    { cat: 'for-kids', dir: 'Demo4_SeasonsExpress', ja: '季節が暴走する魔法の列車', en: 'The Runaway Seasons Express', group: 0 },
-    { cat: 'for-kids', dir: 'Demo10_CaveSpring', ja: '火をともして、ひみつの泉へ', en: 'Kindle the Fire, Find the Hidden Spring', group: 0 },
+  const DEMOS = [   // folders: demos/<cat>/<dir>/ ; groups (in this order): 0 all ages · 1 healing · 2 for him · 3 for her · 4 Nobunaga × Suntory
+    { cat: 'all-ages', dir: 'Demo1_SnowFoxfire', ja: '雪と狐火のひそひそ話', en: 'Whispers of Snow and Flame', group: 0 },
+    { cat: 'all-ages', dir: 'Demo2_FanMeeting', ja: 'キミだけのスペシャルファンミーティング', en: 'Your Special Fan Meeting', group: 0 },
+    { cat: 'all-ages', dir: 'Demo3_ShiningSmileConcert', ja: '氷と炎の星光コンサート', en: 'Ice & Fire Concert', group: 0 },
+    { cat: 'all-ages', dir: 'Demo4_SeasonsExpress', ja: '季節が暴走する魔法の列車', en: 'The Runaway Seasons Express', group: 0 },
+    { cat: 'all-ages', dir: 'Demo10_CaveSpring', ja: '火をともして、ひみつの泉へ', en: 'Kindle the Fire, Find the Hidden Spring', group: 0 },
     { cat: 'healing', dir: 'Demo11_Naomi', ja: 'ナオミと、ふわふわの一日', en: 'A Fluffy Day with Naomi', group: 1 },
     { cat: 'healing', dir: 'Demo13_NaomiCam', ja: 'ナオミ、いまなにしてる？', en: "What's Naomi Up To? · Pet Cam", group: 1 },
     { cat: 'healing', dir: 'Demo15_FamilyCall', ja: 'もしもし、おばあちゃん？', en: 'Hello, Grandma? · A Call Home, Part 1', group: 1 },
     { cat: 'healing', dir: 'Demo16_FamilyCall2', ja: 'じいちゃんの、ゆきだるま', en: "Grandpa's Little Snowman · A Call Home, Part 2", group: 1 },
-    { cat: 'for-men', dir: 'Demo2_FanMeeting', ja: 'キミだけのスペシャルファンミーティング', en: 'Your Special Fan Meeting', group: 2 },
-    { cat: 'for-men', dir: 'Demo3_ShiningSmileConcert', ja: '氷と炎の星光コンサート', en: 'Ice & Fire Concert', group: 2 },
     { cat: 'for-men', dir: 'Demo14_LiveStream', ja: 'ミントの、ささやき配信', en: "Mint's Whisper Stream", group: 2 },
     { cat: 'for-men', dir: 'Demo17_CocoaStream', ja: 'ココアの、ほっこりカフェ配信', en: "Cocoa's Cozy Café Stream", group: 2 },
     { cat: 'for-men', dir: 'Demo18_HinataStream', ja: 'ひなたの、激辛チャレンジ配信', en: "Hinata's Super-Spicy Challenge", group: 2 },
@@ -22,7 +22,7 @@
     { cat: 'nobunaga-suntory', dir: 'Demo8_YamazakiDistillery', ja: '信長と家康、山崎蒸溜所へ', en: 'Two Warlords at the Yamazaki Distillery', group: 4, ep: 4 },
     { cat: 'nobunaga-suntory', dir: 'Demo9_SengokuBanquet', ja: '安土最後の酒宴', en: 'The Last Banquet at Azuchi', group: 4, ep: 5 },
   ];
-  const GROUPS = ['キッズ · For kids', '癒し · Healing', '男性向け · For him', '女性向け · For her', '信長シリーズ · Nobunaga Series'];   // numbers are the list order
+  const GROUPS = ['全年齢 · All ages', '癒し · Healing', '男性向け · For him', '女性向け · For her', '信長シリーズ · Nobunaga Series'];   // numbers are the list order
   const qs = new URLSearchParams(location.search);
   if (qs.has('embed') || qs.has('cover') || qs.has('render')) return;
   const bar = document.querySelector('header.bar'); if (!bar) return;

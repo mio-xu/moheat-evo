@@ -8,7 +8,7 @@ and — once it exists — assets/art/naomi_sit.png as the character sheet for e
 import json, os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STYLE = os.path.join(os.path.dirname(ROOT), '../for-kids/Demo10_CaveSpring', 'project', 'seedance_refs', 'style_board.jpg')
+STYLE = os.path.join(os.path.dirname(ROOT), '../all-ages/Demo10_CaveSpring', 'project', 'seedance_refs', 'style_board.jpg')
 PHOTOS = os.path.join(ROOT, 'project', 'seedance_refs', 'naomi_photos.jpg')
 ART = lambda n: os.path.join(ROOT, 'assets', 'art', n + '.png')
 

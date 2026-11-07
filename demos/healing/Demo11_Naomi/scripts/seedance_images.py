@@ -10,7 +10,7 @@ Key: ~/.seedance_key. Jobs: project/seedance_jobs.json (scripts/make_jobs.py). R
 import importlib.util, os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-spec = importlib.util.spec_from_file_location('d10_seedance', os.path.join(os.path.dirname(ROOT), '../for-kids/Demo10_CaveSpring', 'scripts', 'seedance_images.py'))
+spec = importlib.util.spec_from_file_location('d10_seedance', os.path.join(os.path.dirname(ROOT), '../all-ages/Demo10_CaveSpring', 'scripts', 'seedance_images.py'))
 m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
 m.JOBS = os.path.join(ROOT, 'project', 'seedance_jobs.json')
 m.OUT = os.path.join(ROOT, 'assets', 'art')

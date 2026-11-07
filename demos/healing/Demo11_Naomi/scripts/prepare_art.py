@@ -14,7 +14,7 @@ from PIL import Image, ImageFilter, ImageChops, ImageDraw
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC, DST = os.path.join(ROOT, 'assets', 'art'), os.path.join(ROOT, 'media', 'art')
-LIFT = os.path.join(os.path.dirname(ROOT), '../for-kids/Demo1_SnowFoxfire', 'tools', 'lift_subject.swift')
+LIFT = os.path.join(os.path.dirname(ROOT), '../all-ages/Demo1_SnowFoxfire', 'tools', 'lift_subject.swift')
 BGS = ['bg_room_morning', 'bg_room_day', 'bg_room_night']
 SPRITES = {'naomi_sit': 900, 'naomi_close': 1100, 'naomi_walk': 700, 'naomi_pounce': 900, 'naomi_eat': 700, 'naomi_loaf': 650,
            'naomi_belly': 700, 'naomi_sleep': 800, 'prop_bowl': 400}

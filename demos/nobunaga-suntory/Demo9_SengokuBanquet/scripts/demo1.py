@@ -1,6 +1,6 @@
 """Load Demo 1 modules by path (names collide with Demo 2's own tools). Demo 1 is never modified."""
 import importlib.util, os, sys
-D1_TOOLS = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "../for-kids/Demo1_SnowFoxfire", "tools")
+D1_TOOLS = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "../all-ages/Demo1_SnowFoxfire", "tools")
 
 
 def load(name):
