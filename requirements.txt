@@ -1,0 +1,3 @@
+# Python tools used by the demo scripts
+elevenlabs
+python-dotenv
