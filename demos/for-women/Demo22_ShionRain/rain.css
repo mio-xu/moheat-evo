@@ -1,0 +1,49 @@
+/* Shion's rainy night — on top of Demo 10's demo.css (by path): violet + platinum palette, choices, hold button, subtitles. */
+:root { --bg: #120e1a; --panel: #1a1624; --panel-2: #262035; --line: #3a3150; --gold: #d9c8ff; }
+.bar { background: #14101e; }
+.brand span { color: #c9b4ff; }
+.btn.primary { background: linear-gradient(135deg, #6b4fc9, #d6a6ff); }
+.vv { bottom: auto; top: .6cqw; }
+
+/* cover */
+.intro::before { background: linear-gradient(to right, rgba(16, 12, 26, .82), rgba(16, 12, 26, .5) 42%, rgba(16, 12, 26, 0) 62%); }
+body.cover-only .intro::before { background: linear-gradient(to right, rgba(16, 12, 26, .76), rgba(16, 12, 26, .38) 42%, rgba(16, 12, 26, 0) 60%); }
+body.cover-only .cover-copy { margin-top: 0 !important; }
+.intro .hero.a { position: absolute; width: 1px; height: 1px; }
+.intro h1 { background: linear-gradient(100deg, #efe6ff 0%, #ffffff 45%, #b89cff 100%); -webkit-background-clip: text; background-clip: text; }
+.intro .chip.p { background: rgba(170, 140, 255, .18); color: #f0e8ff; border-color: rgba(190, 160, 255, .55); }
+.intro .cleared { color: #f6f0ff; background: rgba(107, 79, 201, .3); border-color: rgba(190, 160, 255, .6); }
+
+/* subtitles (sizes from series.css) */
+.subs { position: absolute; z-index: 3; display: flex; justify-content: center; pointer-events: none; opacity: 0; transition: opacity .25s; }
+.subs.show { opacity: 1; }
+.subs .line { display: flex; flex-direction: column; align-items: center; background: rgba(16, 12, 26, .64); }
+.subs .ja { color: #fff; font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif; font-weight: 700; }
+.subs .en { color: #ddd3f2; font-family: Inter, sans-serif; }
+
+/* your turn: choices / action / hold */
+.choices, .act { position: absolute; left: 50%; bottom: 12cqw; transform: translate(-50%, .6cqw); z-index: 4; opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s; }
+.choices.show, .act.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.choices { display: flex; gap: 1.2cqw; }
+.ch, .act-btn { cursor: pointer; border-radius: 1.4cqw; border: 1px solid rgba(200, 180, 255, .55); background: rgba(24, 18, 38, .8); color: #fff; padding: 1cqw 2cqw;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background .15s, transform .15s; user-select: none; -webkit-user-select: none; touch-action: none; }
+.ch:hover, .act-btn:hover { background: rgba(107, 79, 201, .55); transform: translateY(-2px); }
+.ch b, .act-btn b { display: block; font: 700 clamp(11px, 1.6cqw, 26px)/1.3 "Zen Maru Gothic", "Noto Sans JP", sans-serif; }
+.ch span, .act-btn span { display: block; font: 500 clamp(9px, 1.05cqw, 16px)/1.3 Inter, sans-serif; color: #ddd3f2; }
+.act-btn { display: grid; grid-template-columns: auto auto; grid-template-rows: auto auto; column-gap: 1cqw; align-items: center; text-align: left; animation: nudge 1.6s ease-in-out infinite; }
+.act-btn i { grid-row: span 2; font-style: normal; font-size: clamp(18px, 2.6cqw, 40px); }
+.act-btn.hold { grid-template-rows: auto auto auto; }
+.act-btn.hold.down { background: rgba(107, 79, 201, .7); transform: scale(.97); }
+.act-btn .bar { grid-column: 2; display: block; height: .45cqw; min-height: 4px; margin-top: .5cqw; border-radius: 9px; background: rgba(255, 255, 255, .15); overflow: hidden; }
+.act-btn .bar u { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #c9b4ff, #f0d6ff); }
+@keyframes nudge { 50% { box-shadow: 0 0 1.6cqw rgba(190, 160, 255, .6); } }
+.stage:has(.intro:not(.hidden)) :is(.choices, .act, .subs, .hud-top) { display: none !important; }
+@container (max-width: 620px) {
+  .choices { flex-direction: column; bottom: 14cqw; } .ch b, .act-btn b { font-size: 3.2cqw; } .ch span, .act-btn span { font-size: 2.3cqw; }
+}
+
+/* muffled line under the dryer, aiming the dryer */
+.subs.muffled .ja { color: #b9b0cc; font-style: italic; }
+.subs.muffled .en { color: #9d94b3; }
+.act-btn.aim { cursor: default; pointer-events: none; grid-template-rows: auto auto auto; }
+.stage.aiming { cursor: ew-resize; touch-action: none; }

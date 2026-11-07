@@ -159,5 +159,18 @@
   "voice_id": "1UDxZiI0jgOqBg3Be8m1",
   "confirmed": "2026-11-08",
   "pick": "r1_a"
+ },
+ "shion": {
+  "name": "紫苑 Shion",
+  "demos": [
+   "for-women/Demo22_ShionRain"
+  ],
+  "persona": "27 岁，偶像团体键盘手；白金长发低马尾、右眼下泪痣、白丝衬衫大敞、偶尔戴眼镜；斯文败类・妩媚神秘：温柔有礼的敬语外表下藏着危险；雨夜他家，用吹风机帮你吹头发",
+  "description": "A Japanese man, 27, the keyboardist of an idol group. A smooth, low, velvety baritone, unhurried and elegant; soft-spoken and polite on the surface with a quiet, teasing danger underneath, a faint knowing smile in the voice. Calm, alluring and a little mysterious, never loud. Close up it drops into a slow, breathy, intimate murmur. Native Japanese speaker. Clean close-mic recording, no background noise.",
+  "sample": "[softly] …ずぶ濡れじゃないか。傘は？ [sighs softly] まったく…ほら、おいで。じっとして。風邪をひかれたら、僕が困る。 [chuckles softly] 髪、冷たいね。ちゃんと乾かそうか。熱かったら言って。 [whispers] …聞こえなかった？ じゃあ、もう一回だけ言うよ。こうして触れるの、ずっと我慢してたんだけどな。 [softly] 雨、止まなければいいのに。",
+  "compare": [],
+  "voice_id": "wrMX0OkmDIInpPC5f1Hx",
+  "confirmed": "2026-11-08",
+  "pick": "r1_c"
  }
 }

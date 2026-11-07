@@ -48,3 +48,5 @@ demos/for-women/Demo21_JinLounge/audio/
 # Local secrets written by `elevenlabs onboard`
 /.env.local
 /tools/eleven/out/
+demos/for-women/Demo22_ShionRain/assets/art/
+demos/for-women/Demo22_ShionRain/project/ref_url.json

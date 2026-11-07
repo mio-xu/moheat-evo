@@ -42,6 +42,7 @@ demos/healing/Demo11_Naomi/                      纯交互治愈小游戏《ナ�
 demos/for-women/Demo12_LateCall/                   纯交互深夜电话《もしもし、きこえる？》（原创男偶像 蓮，ElevenLabs）
 demos/for-women/Demo20_HinataHandshake/           纯交互握手会《あと10秒だけ、ね？》（原创男偶像 陽向，ElevenLabs）
 demos/for-women/Demo21_JinLounge/                 纯交互 VIP 休息室《俺だけ見てろ》（原创男偶像 迅，VOICEVOX:青山龍星，Seedance 动画）
+demos/for-women/Demo22_ShionRain/                 纯交互雨夜《雨が止むまで》（原创男偶像 紫苑，ElevenLabs，静帧版，动画待做）
 demos/healing/Demo15_FamilyCall/                 纯交互家庭电话《もしもし、おばあちゃん？》（外婆ハナ VOICEVOX:もち子さん，外公ゲン VOICEVOX:ちび式じい）
 demos/healing/Demo13_NaomiCam/                   Naomi 监控摄像头版《ナオミ、いまなにしてる？》（复用 Demo 11 美术和音频）
 demos/for-men/Demo14_LiveStream/                 女主播直播间 ①《ミントの、ささやき配信》（共用代码、美术、配音都在这里；详见该目录 README）
@@ -98,7 +99,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - **用户要求（2026-11-08）**：以前和新做的全部人声都用 ElevenLabs 重做，顺序 女性向 → 男性向 → 信长 → 其他；**每个角色先出试听、用户确认声音后才重做台词**，声音必须符合用户给的人设。
 - **参数**：`eleven_v4`，`language_code='ja'`，`stability 0.4`，`similarity_boost 0.8`，`seed 7`。v4 只认 stability / similarity（没有 style、speed、SSML），语气全靠**英文方括号标签** + 省略号。台词用**带汉字的日文原文**（不用 lines.js 第 4 列的假名读音）。不加 VOICEVOX 时代的 EQ / 气声 / 变调。
 - **标签约定**：每句写在 `ELEVEN = {id: '带标签台词'}` 里。人前甜 `[excited]` `[giggles]` `[surprised]`；撩 / 坏笑 `[playful]` `[chuckles softly]` `[laughs]`；**贴耳 `[whispers]`**；哈气 / 叹气 `[sighs softly]`；温柔 `[softly]` `[warmly]`；撒娇不满 `[pouting]`；好奇 `[curious]`。一句里可以换标签（如 `[laughs] あはは… [whispers] …かわいい`）。
-- **进度**：女性向完成：陽向（Demo20）、蓮 ren r1_c（Demo12）、迅 jin r1_a（Demo21）、握手会女工作人员 staff_f r1_a（Demo20）。男性向完成：ミント mint r1_a、ココア cocoa r1_a、ひなた hinata_s r1_b、ルナ luna r1_b（Demo14 `scripts/voice.py`：每人一个默认标签 + 耳语 `[whispers]` + 个别句 OVERRIDE）。紫苑还没有 Demo。信长系列：信長 nobunaga r1_a、家康 ieyasu r1_a；Demo 9 已重做（`scripts/voice.py::perform()` 换成 ElevenLabs，文本用 cue 的假名读音 `tts` + 情绪标签 `TAG`，**不再强制 150 s**（用户 2026-11-08）：台词按自然长度，`voice.py::retime()` 在会撞到下一句的地方把后面整体往后推，写 `audio/retime.json`；`banquet.py` 末尾用 `W()` 把所有时间（cue、环境音时长、场景、位置关键帧、DURATION）映射过去，`CUES0` / `DURATION0` 是剧本原时间；Demo 9 现在 151.1 s；之后 `./build_all.sh` + `render_mp4.py`，QA 全过）。下一步：用户确认 Demo 9 后做 Demo 5–8，再做其他 Demo。
+- **进度**：女性向完成：陽向（Demo20）、蓮 ren r1_c（Demo12）、迅 jin r1_a（Demo21）、握手会女工作人员 staff_f r1_a（Demo20）。男性向完成：ミント mint r1_a、ココア cocoa r1_a、ひなた hinata_s r1_b、ルナ luna r1_b（Demo14 `scripts/voice.py`：每人一个默认标签 + 耳语 `[whispers]` + 个别句 OVERRIDE）。紫苑 shion r1_c（Demo22）。信长系列：信長 nobunaga r1_a、家康 ieyasu r1_a；Demo 9 已重做（`scripts/voice.py::perform()` 换成 ElevenLabs，文本用 cue 的假名读音 `tts` + 情绪标签 `TAG`，**不再强制 150 s**（用户 2026-11-08）：台词按自然长度，`voice.py::retime()` 在会撞到下一句的地方把后面整体往后推，写 `audio/retime.json`；`banquet.py` 末尾用 `W()` 把所有时间（cue、环境音时长、场景、位置关键帧、DURATION）映射过去，`CUES0` / `DURATION0` 是剧本原时间；Demo 9 现在 151.1 s；之后 `./build_all.sh` + `render_mp4.py`，QA 全过）。下一步：用户确认 Demo 9 后做 Demo 5–8，再做其他 Demo。
 - **已有声音**：全部在 `tools/eleven/cast.json`（陽向 = `lODKQ6pXINFtajDz9nqR`；Demo20 试听时存下的 v1 / v3 没用上，名额满时可删，先问用户）。
 - **额度**：账号是 **Creator 档**（每月 12 万字符，30 个声音名额，可商用）；一轮试听 3 个预览，一个 Demo 全部台词约 500–1000 字符。
 - **坑**：`pcm_44100` / `pcm_48000` 要 Pro 账号，用 `pcm_24000`；页面署名写 `<角色> ElevenLabs`（VOICEVOX 角色仍写 `VOICEVOX:<名>`）。 Voice Design 会拒绝含真实人物名字的描述（信长、家康）：描述里写成"虚构的战国武将角色"。
@@ -385,6 +386,13 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 用户 2026-11-08 规则：**以后先用静态图做完游戏，Seedance 视频放在最后做。**
 - 另：Demo16_HandshakeEvent（未入 git）是我给春翔做的半成品，已交给另一个会话；那 6 段春翔动画（1464 credits）对方不用。
 - 下一集计划：紫苑（白金长发、白衬衫大敞、偶尔眼镜；VOICEVOX:青山龍星「s9」），雨夜他家，用吹风机帮你吹头发（暖风绕头）。造型图在 Demo16 的 `shion_v4_platinum.png`。
+
+### Demo22_ShionRain ✅ 可玩（静帧版）—《雨が止むまで / Until the Rain Stops》（纯交互，2026-11-08）
+- 男偶像系列第 3 人（最后一位）：**紫苑**，27 岁键盘手，斯文败类・妩媚神秘；造型 = 用户选的 `shion_v4_platinum.png`（复制为 `assets/art/ref_shion.png`）。
+- 声音：ElevenLabs，用户选 **shion r1_c**（`wrMX0OkmDIInpPC5f1Hx`），`scripts/voice.py` 每句带标签，贴耳 `[whispers]`。
+- 流程（约 1:45）：雨夜到他家门口（两耳湿冷）→ 进门 → 毛巾擦头（摩擦微暖 + 湿冷）→ 吹风机先左边，**拖动画面瞄准热风** → 他在风声里说了句听不清的话（字幕「ドライヤーの音で、よく聞こえない」）→ 关掉吹风机，选「なんて言ったの？」→ **左耳**重说 → 右边：热风**绕过后脑**转到右耳 → 冷风收尾 + 他在右耳边说话（同耳冷 + 暖，DUAL）→ 摘眼镜长按对视 → 沙发窗边二选一（回家 → 借伞"明天来还" / 留下 →「雨が止むまで」）→ 左耳「止まなければいいのに」。
+- 美术：Seedance **网页** GPT Image 2 图生图（API 上传 2026-11-08 再次限流），6 张 2K 静帧，每张 25 credits；提示词 `project/web_prompts.json`。右侧吹风画面 = 吹风静帧镜像。封面用开门图右移 + 左侧压暗。
+- 自动通关测试：1:44，0 报错。**动画（§4b，Seedance 2.5 Lite 1080p 首尾帧）尚未做**：用户要求时再做。
 
 ### Demo switcher (`demos/shared/nav.js`)
 Every full demo page loads `../shared/nav.js`, which adds ‹ ☰ Demos N/9 › to the top bar and a thumbnail panel of all demos (thumbs = `assets/images/demos/demoN.jpg`). `#demos` in the URL opens the panel. Hidden with `?embed`, `?cover`, `?render`. **A new demo must be added to the `DEMOS` list in nav.js.**
