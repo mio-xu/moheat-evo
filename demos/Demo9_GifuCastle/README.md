@@ -1,6 +1,11 @@
 # Demo 9 · 信長の岐阜城へようこそ — Welcome to Nobunaga's Gifu Castle
 
-**Status: 📝 planning.** The story, script and Seedance shot list are written. Waiting for the user's keyframes and Seedance clips.
+**Status: 📝 planning.** The story, script and Seedance shot list are written. **Picture plan changed on 2026-11-07:**
+- no Seedance clips; this is a browser animatic like Demo 1–6;
+- the two warlords reuse all of Demo 5's character art;
+- the user makes only new backgrounds and a few props (`ChatGPT素材命令.md`).
+
+Voices are generated (`scripts/make_voice.py`).
 
 ## The film
 - 150 s, binaural ASMR × thermal haptics, 1920×1080, 30 fps, 48 kHz.
