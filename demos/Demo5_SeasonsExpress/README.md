@@ -48,7 +48,7 @@ The player draws, back to front:
 **Shared timing:**
 - The train sways on every rail joint, using the same speed integral as the wheel clacks in the mix.
 - The station slides in as the train brakes (139–146 s).
-- 108.5–110.5 s is a power cut: a power-down sweep, the lamps die and the car goes dark, but the glass shows a starry sky streaming past. It is 2 s of total silence with all thermal channels at 0, then a power-up sweep. It used to be 4 s of black, which looked like the end of the film.
+- 108.5–110.5 s is a power cut: a power-down sweep, the lamps die and the car dims to about half, but the glass shows a bright blue-violet aurora night with stars streaming past (mean frame brightness ≈ 86/255, never black). It is 2 s of total silence with all thermal channels at 0, then a power-up sweep. It used to be 4 s of black, which looked like the end of the film.
 - Each window's season comes from `seasons.py` (`SEGMENTS` + `CHAOS`), the same table that places the sounds, so what you see on a side is what you hear and feel there.
 
 **Previews:** `python3 scripts/render_mp4.py --at 10,30,75` renders stills to `video/clips/preview/`.

@@ -71,7 +71,7 @@ const LOOKS = {
   lava: { layers: [['tunnel_lava_wall', 1.5]], glass: [], wx: 'embers', tint: '255,130,60' },
   steam: { layers: [['tunnel_lava_wall', 1.5]], glass: [['fog_overlay', .9, 'drift']], wx: 'embers', tint: '255,220,210' },
   tunnel_dark: { layers: [], glass: [], wx: 'tunnel_lights', tint: null, fill: '#17141f' },
-  dark: { layers: [], glass: [], wx: 'stars', tint: null, fill: '#070b22' },   // power cut: the car is dark, the stars keep streaming past
+  dark: { layers: [], glass: [], wx: 'stars', tint: '150,180,255', fill: '#24317e' },   // power cut: lamps off, a bright aurora night streams past (never black)
   spring: { layers: L3('spring'), glass: [], wx: 'petals', tint: '255,205,225' },
 };
 const CHAOS_LOOK = { winter: 'winter', summer: 'summer', lava: 'lava', ice: 'ice', storm: 'storm', steam: 'steam', spring: 'spring', dark: 'dark' };
@@ -131,10 +131,20 @@ function drawWeather(c, kind, box, t, dir, alpha) {
       c.save(); c.translate(x, y); c.rotate(t * (1 + hash(i)) + i); c.drawImage(IMG.fx_sakura_petal, -s / 2, -s / 2, s, s); c.restore();
     }
   } else if (kind === 'stars') {
-    const g = c.createLinearGradient(0, box.y0, 0, box.y1); g.addColorStop(0, '#0b1240'); g.addColorStop(1, '#1b1033');
+    const g = c.createLinearGradient(0, box.y0, 0, box.y1); g.addColorStop(0, '#2b3f9e'); g.addColorStop(.6, '#5a4aa8'); g.addColorStop(1, '#8a6ab8');
     c.fillStyle = g; c.fillRect(box.x0, box.y0, bw, bh);
-    for (let i = 0; i < 160; i++) {
-      const r = .8 + hash(i + 2) * 2.2, x = box.x0 + (((hash(i) * bw + dir * sp * (.15 + r * .25)) % bw) + bw) % bw, y = box.y0 + hash(i + 5) * bh;
+    c.save(); c.globalCompositeOperation = 'lighter';                         // aurora ribbons drifting with the train
+    for (let k = 0; k < 3; k++) {
+      const col = ['120,255,200', '255,150,230', '150,200,255'][k], y0 = box.y0 + bh * (.18 + k * .14);
+      c.beginPath(); c.moveTo(box.x0, y0);
+      for (let x = box.x0; x <= box.x1 + 20; x += 20) c.lineTo(x, y0 + Math.sin((x + dir * sp * .2) / 140 + k * 2 + t * .8) * 40);
+      c.lineTo(box.x1, y0 + 120); c.lineTo(box.x0, y0 + 120); c.closePath();
+      const ag = c.createLinearGradient(0, y0 - 40, 0, y0 + 120); ag.addColorStop(0, `rgba(${col},.45)`); ag.addColorStop(1, `rgba(${col},0)`);
+      c.fillStyle = ag; c.fill();
+    }
+    c.restore();
+    for (let i = 0; i < 200; i++) {
+      const r = 1 + hash(i + 2) * 2.6, x = box.x0 + (((hash(i) * bw + dir * sp * (.15 + r * .25)) % bw) + bw) % bw, y = box.y0 + hash(i + 5) * bh;
       c.fillStyle = `rgba(230,236,255,${.35 + .65 * (.5 + .5 * Math.sin(t * (2 + hash(i) * 4) + i))})`; c.beginPath(); c.arc(x, y, r, 0, 7); c.fill();
     }
   } else if (kind === 'tunnel_lights') {
@@ -326,13 +336,13 @@ function frame(t, dt) {
   drawWindow(c, 'L', t); drawWindow(c, 'R', t);
   drawDoorGlass(c, t);
   // power cut: the lamps die and the car goes dark (the windows stay lit by the stars, so the film clearly goes on)
-  const f = lampFlicker(t), dark = inSilence(t) ? 1 : (t >= A.silence[0] - .6 && t < A.silence[0]) || (t >= A.silence[1] && t < A.silence[1] + .8) ? (1 - f) * .75 : 0;
-  if (dark > 0) c.filter = `brightness(${(1 - .82 * dark).toFixed(3)}) saturate(${(1 - .4 * dark).toFixed(3)})`;
+  const f = lampFlicker(t), dark = inSilence(t) ? .62 : (t >= A.silence[0] - .6 && t < A.silence[0]) || (t >= A.silence[1] && t < A.silence[1] + .8) ? (1 - f) * .75 : 0;
+  if (dark > 0) c.filter = `brightness(${(1 - .75 * dark).toFixed(3)}) saturate(${(1 - .35 * dark).toFixed(3)})`;
   drawInterior(c, t);
   if (dark > 0) c.filter = 'none';
   windowSpill(c, t);
   lampGlow(c, t);
-  if (dark > 0) c.filter = `brightness(${(1 - .82 * dark).toFixed(3)})`;
+  if (dark > 0) c.filter = `brightness(${(1 - .75 * dark).toFixed(3)})`;
   drawClock(c, t);
   drawTableProps(c, t);
   if (dark > 0) c.filter = 'none';
