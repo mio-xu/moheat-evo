@@ -1,0 +1,1 @@
+window.REN_PATCHES = {"ren_call_talk_mouth": [1202, 334], "ren_call_blink_eyes": [1093, 162], "ren_call_shy_eyes": [1032, 134], "ren_close_talk_mouth": [1171, 484], "ren_door_talk_mouth": [851, 365]};

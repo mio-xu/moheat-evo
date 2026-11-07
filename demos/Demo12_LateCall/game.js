@@ -13,7 +13,8 @@
 
   // ---------------------------------------------------------------- art
   const IMG = {};
-  const NAMES = ['bg_room', 'bg_room_open', 'ren_call', 'ren_call_talk', 'ren_call_blink', 'ren_call_shy', 'ren_close', 'ren_close_talk', 'ren_door', 'ren_door_talk'];
+  const PATCH = window.REN_PATCHES || {};   // small face patches (mouth / eyes) laid over the base frame — scripts/prepare_art.py
+  const NAMES = ['bg_room', 'bg_room_open', 'ren_call', 'ren_close', 'ren_door', ...Object.keys(PATCH)];
   const artReady = Promise.all(NAMES.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/${n}.webp?v=1`; })));
 
   // ---------------------------------------------------------------- state
@@ -200,24 +201,32 @@
 
   // ---------------------------------------------------------------- drawing
   let blinkAt = 2, blinkUntil = 0, viewA = 'room', viewB = 'room', mix = 1;
-  function frame(view, t) {
-    const talk = talking && S.lv > .012, blink = t < blinkUntil;
-    if (view === 'room') return IMG[S.windowOpen ? 'bg_room_open' : 'bg_room'] || IMG.bg_room;
-    if (view === 'call') return (talk && IMG.ren_call_talk) || (S.shy && IMG.ren_call_shy) || (blink && IMG.ren_call_blink) || IMG.ren_call;
-    if (view === 'close') return (talk && IMG.ren_close_talk) || IMG.ren_close;
-    if (view === 'door' || view === 'hug') return (talk && IMG.ren_door_talk) || IMG.ren_door;
-    return null;
+  const FW = { mouth: 0, blink: 0, shy: 0 };       // patch weights, smoothed → the mouth and eyes fade, nothing jumps
+  const ease = (k, target, dt, up, down) => k + (target - k) * (1 - Math.exp(-dt / (target > k ? up : down)));
+  function faces(t, dt) {
+    const open = talking ? clamp((S.lv - .008) * 45) : 0;
+    FW.mouth = ease(FW.mouth, open, dt, .035, .07);
+    FW.shy = ease(FW.shy, S.shy ? 1 : 0, dt, .25, .35);
+    FW.blink = ease(FW.blink, t < blinkUntil && FW.shy < .3 ? 1 : 0, dt, .025, .05);
   }
+  const BASE = { call: 'ren_call', close: 'ren_close', door: 'ren_door', hug: 'ren_door' };
   function drawView(view, t, alpha) {
-    const im = frame(view, t); ctx.globalAlpha = alpha;
+    const name = view === 'room' ? (S.windowOpen ? 'bg_room_open' : 'bg_room') : BASE[view], im = IMG[name] || IMG.bg_room;
     const z = view === 'hug' ? 1.12 : view === 'close' ? 1.02 + .01 * Math.sin(t * .5) : 1.0 + .004 * Math.sin(t * .4);
-    if (im) ctx.drawImage(im, W / 2 - W * z / 2, H / 2 - H * z / 2 - (view === 'hug' ? 40 : 0), W * z, H * z);
-    else { ctx.fillStyle = view === 'room' ? '#1b1d36' : '#2a2650'; ctx.fillRect(0, 0, W, H); ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.font = '600 48px Inter'; ctx.textAlign = 'center'; ctx.fillText(view, W / 2, H / 2); }
+    const ox = W / 2 - W * z / 2, oy = H / 2 - H * z / 2 - (view === 'hug' ? 40 : 0);
+    ctx.globalAlpha = alpha;
+    if (!im) { ctx.fillStyle = '#1b1d36'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
+    ctx.drawImage(im, ox, oy, W * z, H * z);
+    const patch = (pn, w) => { const p = IMG[pn], at = PATCH[pn]; if (!p || !at || w < .01) return; ctx.globalAlpha = alpha * Math.min(1, w); ctx.drawImage(p, ox + at[0] * z, oy + at[1] * z, p.width * z, p.height * z); };
+    if (view === 'call') { patch('ren_call_shy_eyes', FW.shy); patch('ren_call_blink_eyes', FW.blink); patch('ren_call_talk_mouth', FW.mouth); }
+    if (view === 'close') patch('ren_close_talk_mouth', FW.mouth);
+    if (view === 'door' || view === 'hug') patch('ren_door_talk_mouth', FW.mouth);
     ctx.globalAlpha = 1;
   }
   let snow = [];
   function draw(t, dt) {
     if (t > blinkAt) { blinkUntil = t + .13; blinkAt = t + rnd(2.5, 5); }
+    faces(t, dt);
     if (S.view !== viewB) { viewA = viewB; viewB = S.view; mix = 0; }
     mix = Math.min(1, mix + dt / .6);
     if (mix < 1) drawView(viewA, t, 1);
@@ -317,7 +326,7 @@
     const im = IMG.ren_call; if (!im) { ctx.fillStyle = '#1b1d36'; ctx.fillRect(0, 0, W, H); return; }
     ctx.drawImage(im, 0, 0, W, H);
   }
-  window.CALL = { get S() { return S; }, thermal: () => thermal(.05), conflicts: () => conflicts };
+  window.CALL = { get S() { return S; }, FW, thermal: () => thermal(.05), conflicts: () => conflicts };
   setStep(0);
   if (QS.has('cover')) { document.body.classList.add('cover-only'); artReady.then(drawCover); return; }
   if (QS.has('autoplay')) { const ac = SND.init(); if (ac.state === 'running') start(); else ac.resume().then(() => { if (ac.state === 'running' && !S.started) start(); }).catch(() => {}); }

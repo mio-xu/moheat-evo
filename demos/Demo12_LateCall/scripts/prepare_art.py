@@ -1,11 +1,13 @@
-"""assets/art/*.png (Seedance, not in git) → media/art/*.webp (1920×1080).
+"""assets/art/*.png (Seedance, not in git) → media/art/*.webp (1920×1080) + small face PATCHES.
 
   python3 scripts/prepare_art.py
 
-Face frames (ren_call_talk/blink/shy, ren_close_talk, ren_door_talk) are aligned to their base with the Naomi demo's
-search (loaded by path) and only the face region is blended in, so switching frames never moves Ren or the background.
+The expression frames are separate drawings: the whole face differs a little (eyes, blush, hair strands). Swapping full frames
+makes the face jump, so only a small feathered patch is taken from each one — the mouth for talking, the eyes for blinking, eyes +
+cheeks for shy — each aligned to the base on its own (Naomi demo's search, loaded by path). The game draws the base and fades the
+patches in and out. Writes media/art/patches.json: {name: [x, y]} (top-left of the patch in the 1920×1080 frame).
 """
-import importlib.util, os
+import importlib.util, json, math, os
 from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -13,34 +15,58 @@ SRC, DST = os.path.join(ROOT, 'assets', 'art'), os.path.join(ROOT, 'media', 'art
 spec = importlib.util.spec_from_file_location('naomi_prep', os.path.join(os.path.dirname(ROOT), 'Demo11_Naomi', 'scripts', 'prepare_art.py'))
 NP = importlib.util.module_from_spec(spec); spec.loader.exec_module(NP)
 FULL = ['bg_room', 'bg_room_open', 'ren_call', 'ren_close', 'ren_door']
-FACES = {   # base: (variants, face box as fractions of 1920×1080)
-    'ren_call': (['talk', 'blink', 'shy'], (.52, .06, .80, .52)),
-    'ren_close': (['talk'], (.40, .08, .97, .92)),
-    'ren_door': (['talk'], (.36, .02, .60, .42)),
+# patch: (base, source frame, centre x, y, radius x, y, tilt in degrees) — measured on the 1920×1080 base
+PATCHES = {
+    'ren_call_talk_mouth': ('ren_call', 'ren_call_talk', 1305, 405, 85, 48, -12),
+    'ren_call_blink_eyes': ('ren_call', 'ren_call_blink', 1258, 272, 150, 62, -23),
+    'ren_call_shy_eyes': ('ren_call', 'ren_call_shy', 1250, 300, 185, 105, -23),
+    'ren_close_talk_mouth': ('ren_close', 'ren_close_talk', 1305, 568, 112, 56, -10),
+    'ren_door_talk_mouth': ('ren_door', 'ren_door_talk', 950, 432, 80, 46, -8),
 }
 has = lambda n: os.path.exists(os.path.join(SRC, n + '.png'))
 load = lambda n: Image.open(os.path.join(SRC, n + '.png')).convert('RGB').resize((1920, 1080), Image.LANCZOS)
+
+
+def ellipse_mask(size, cx, cy, rx, ry, deg, feather):
+    m = Image.new('L', size, 0); a = math.radians(deg)
+    pts = [(cx + rx * math.cos(t) * math.cos(a) - ry * math.sin(t) * math.sin(a), cy + rx * math.cos(t) * math.sin(a) + ry * math.sin(t) * math.cos(a))
+           for t in [i * 2 * math.pi / 72 for i in range(72)]]
+    ImageDraw.Draw(m).polygon(pts, fill=255)
+    return m.filter(ImageFilter.GaussianBlur(feather))
+
+
+def align_near(base, frame, box):
+    """the frames share the composition: search only ±48 px and ±5 % scale (a wide search can lock onto plain skin)."""
+    grid = lambda r, st: [(dy, dx) for dy in range(-r, r + 1, st) for dx in range(-r, r + 1, st)]
+    _, s0, dx0, dy0 = NP.search(base, frame, box, [.95 + i * .01 for i in range(11)], grid(48, 4), k=2)
+    best = NP.search(base, frame, box, [s0 - .005, s0, s0 + .005], [(dy0 + a, dx0 + b) for a, b in grid(4, 1)])
+    d, s, dx, dy = best
+    f = frame.resize((round(frame.width * s), round(frame.height * s)), Image.LANCZOS)
+    canvas = Image.new('RGBA', base.size, (0, 0, 0, 0)); canvas.paste(f, (-dx, -dy), f)
+    return canvas, best
 
 
 def main():
     os.makedirs(DST, exist_ok=True)
     for n in FULL:
         if has(n): load(n).save(os.path.join(DST, n + '.webp'), quality=86, method=6); print('full', n)
-    for base_name, (variants, fb) in FACES.items():
-        if not has(base_name): continue
-        base = load(base_name).convert('RGBA')
-        box = (round(1920 * fb[0]), round(1080 * fb[1]), round(1920 * fb[2]), round(1080 * fb[3]))
-        for v in variants:
-            n = f'{base_name}_{v}'
-            if not has(n): print('missing', n); continue
-            fr = load(n).convert('RGBA')
-            warped, best = NP.align(base, fr, box)
-            m = Image.new('L', base.size, 0)
-            ImageDraw.Draw(m).ellipse(box, fill=255)
-            m = m.filter(ImageFilter.GaussianBlur(28))
-            out = base.copy(); out.paste(warped.convert('RGB'), (0, 0), ImageChops.multiply(m, warped.getchannel('A')))
-            out.convert('RGB').save(os.path.join(DST, n + '.webp'), quality=86, method=6)
-            print('face', n, 'diff %.1f scale %.2f dx %d dy %d' % best)
+    for old in os.listdir(DST):                     # whole-frame face swaps from the first version
+        if old.endswith(('_talk.webp', '_blink.webp', '_shy.webp')): os.remove(os.path.join(DST, old))
+    meta, bases = {}, {}
+    for name, (bn, fn, cx, cy, rx, ry, deg) in PATCHES.items():
+        if not (has(bn) and has(fn)): print('missing', name); continue
+        base = bases.setdefault(bn, load(bn).convert('RGBA'))
+        pad = 1.6; box = (round(cx - rx * pad), round(cy - ry * pad), round(cx + rx * pad), round(cy + ry * pad))
+        warped, best = align_near(base, load(fn).convert('RGBA'), box)     # aligned on this region only, small range
+        feather = max(6, round(min(rx, ry) * .28))
+        m = ellipse_mask(base.size, cx, cy, rx - feather * .6, ry - feather * .6, deg, feather)
+        patch = warped.copy(); patch.putalpha(ImageChops.multiply(m, warped.getchannel('A')))
+        bb = m.point(lambda v: 255 if v > 2 else 0).getbbox()
+        patch.crop(bb).save(os.path.join(DST, name + '.webp'), quality=90, method=6, lossless=False)
+        meta[name] = [bb[0], bb[1]]
+        print('patch', name, bb, 'diff %.1f scale %.2f dx %d dy %d' % best)
+    json.dump(meta, open(os.path.join(DST, 'patches.json'), 'w'), indent=1)
+    open(os.path.join(DST, 'patches.js'), 'w').write('window.REN_PATCHES = ' + json.dumps(meta) + ';\n')
 
 
 if __name__ == '__main__':
