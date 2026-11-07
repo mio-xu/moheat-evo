@@ -34,7 +34,7 @@
     },
     luna: {
       name: '宵月ルナ', en: 'Yoizuki Luna', title: '深夜のおしゃべり配信 · Late-night chat', credit: 'ルナ VOICEVOX:九州そら', viewers: 1958, sc: 'luna',
-      art: ['luna_live', 'luna_live_talk', 'luna_live_blink', 'luna_window', 'luna_tea', 'luna_musicbox', 'luna_close', 'luna_bye'],
+      art: ['luna_live', 'luna_live_talk', 'luna_live_talk_s', 'luna_live_blink', 'luna_window', 'luna_window_talk', 'luna_tea', 'luna_tea_talk', 'luna_musicbox', 'luna_musicbox_talk', 'luna_close', 'luna_close_talk', 'luna_bye', 'luna_bye_talk'],
       steps: [['あいさつ', 'Say hi'], ['夜の風', 'Night wind'], ['リクエスト', 'Request'], ['となりで', 'Next to you'], ['夜明け前', 'Before dawn']],
       pool: ['こんばんは', 'ルナさんの声おちつく', 'night owl here 🦉', '眠れない夜', '雨やんだね', 'calm vibes', 'まだ仕事中…', 'その声ずるい', 'from overseas, hi', '月がきれい', '深夜の楽しみ', 'goodnight soon', 'ルナさん…'],
     },
@@ -376,28 +376,35 @@
   }
 
   // ---------------------------------------------------------------- drawing
-  // Face animation: 3 mouth shapes by voice level (held ≥ 70 ms so it never flickers) and a 4-step blink (half → closed → half).
-  // Frames only differ in the eyes OR the mouth (prepare_art.py), so her colour and hair never jump.
-  let blinkAt = 2, blinkT = -1, viewA = '', viewB = '', mix = 1, mouth = 0, mouthHold = 0;
+  let blinkAt = 2, blinkT = -1, viewA = '', viewB = '', mix = 1;
   const CHEEKS = { mint_live: [[505, 405], [690, 398], 46], cocoa_live: [[565, 425], [735, 418], 42], hinata_live: [[540, 400], [735, 388], 42], luna_live: [[492, 365], [662, 356], 38], cocoa_blanket: [[535, 420], [715, 412], 40], mint_lean_L: [[400, 505], [585, 500], 40], mint_lean_R: [[455, 500], [615, 492], 40] };   // soft blush spots (px in 1920×1080), drawn only when she is shy
+  // Face animation. The base / blink frame is drawn whole; the mouth is then redrawn on top inside its box only (talk frames
+  // equal their base outside the mouth — prepare_art.py), cross-faded by a smoothed "openness" that follows her voice level:
+  // 0 → closed (base), .5 → small mouth (talk_s), 1 → open (talk). So the mouth opens and closes softly, even mid-blink.
   function frame(view, t) {
     const base = `${S.ch}_${view}`, F = (k) => IMG[`${base}_${k}`];
     const bt = t - blinkT, half = F('half'), shut = F('blink');
     if (bt >= 0 && bt < .2 && shut) return bt < .05 || bt > .14 ? (half || IMG[base]) : shut;
-    if (mouth === 2) return F('talk') || F('talk_s') || IMG[base] || IMG[`${S.ch}_live`];
-    if (mouth === 1) return F('talk_s') || F('talk') || IMG[base] || IMG[`${S.ch}_live`];
     return IMG[base] || IMG[`${S.ch}_live`];
   }
+  let open = 0;
   function lipSync(t, dt) {
-    mouthHold -= dt; if (mouthHold > 0) return;
-    const a = talking ? S.lv : 0, m = a > .05 ? 2 : a > .014 ? 1 : 0;
-    if (m !== mouth) { mouth = m; mouthHold = .07; }
+    const target = talking ? clamp((S.lv - .006) / .05) : 0;
+    open += (target - open) * (1 - Math.exp(-dt / (target > open ? .045 : .075)));   // opens a bit faster than it closes
   }
   function drawView(view, t, alpha) {
     const im = frame(view, t); ctx.globalAlpha = alpha;
     const close = /lean|aan|fufu/.test(view), z = close ? 1.02 + .006 * Math.sin(t * .7) : 1 + .003 * Math.sin(t * .45);
-    if (im) ctx.drawImage(im, W / 2 - W * z / 2, H / 2 - H * z / 2, W * z, H * z);
+    const dx = W / 2 - W * z / 2, dy = H / 2 - H * z / 2;
+    if (im) ctx.drawImage(im, dx, dy, W * z, H * z);
     else { ctx.fillStyle = S.ch === 'mint' ? '#5b5596' : '#a0705a'; ctx.fillRect(0, 0, W, H); ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.font = '600 48px Inter'; ctx.textAlign = 'center'; ctx.fillText(`${S.ch} · ${view}`, W * .36, H / 2); }
+    const key = `${S.ch}_${view}`, box = (window.STREAM_MOUTHS || {})[key], small = IMG[`${key}_talk_s`], big = IMG[`${key}_talk`];
+    if (im && box && open > .02 && (small || big)) {
+      const mouth = (img, a) => { if (!img || a <= .01) return; const k = img.width / W, [x0, y0, x1, y1] = box;
+        ctx.globalAlpha = alpha * Math.min(1, a); ctx.drawImage(img, x0 * k, y0 * k, (x1 - x0) * k, (y1 - y0) * k, dx + x0 * z, dy + y0 * z, (x1 - x0) * z, (y1 - y0) * z); };
+      if (small && big) { mouth(small, open * 2); mouth(big, (open - .5) * 2); }
+      else mouth(small || big, open * (big ? 1.15 : 1));
+    }
     ctx.globalAlpha = 1;
   }
   let parts = [];

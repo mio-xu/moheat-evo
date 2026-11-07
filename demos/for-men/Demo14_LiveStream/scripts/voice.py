@@ -2,18 +2,18 @@
 """Streamer voices (the user's picks from the auditions; nobody shares a voice):
   Mint  m.. = VOICEVOX 四国めたん "m2": talk ささやき, whisper ヒソヒソ, pitch 0, intonation 1.00, speed 0.92 (whispers ×0.88)
   Cocoa c.. = VOICEVOX ユーレイちゃん "c2": talk 甘々, whisper ささやき, pitch 0, intonation 1.20, speed 1.00 (whispers ×0.88)
-  Hinata h.. = VOICEVOX 春日部つむぎ "h2"; Luna l.. = VOICEVOX 九州そら セクシー / ささやき "L4" (pitch −0.05, speed 0.93)
+  Hinata h.. = VOICEVOX 春日部つむぎ "h2"; Luna l.. = VOICEVOX 九州そら あまあま / ささやき "n5" (pitch −0.07, intonation 1.20, speed 0.94, formant ×0.96)
 Reads ../lines.js → media/voice/<id>.m4a (mono AAC, dry; placed live in the browser with HRTF) + media/voice.js.
 Only (re)synthesizes lines whose text or settings changed (cache: audio/voice_cache.json). Needs VOICEVOX on :50021."""
-import json, os, subprocess, tempfile, urllib.parse, urllib.request
+import json, math, os, subprocess, tempfile, urllib.parse, urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 API = 'http://127.0.0.1:50021'
-VOICE = {  # prefix: (speaker, talk style, whisper style, pitch, intonation, speed)
+VOICE = {  # prefix: (speaker, talk style, whisper style, pitch, intonation, speed[, formant k: <1 deeper timbre at the same pitch])
     'm': ('四国めたん', 'ささやき', 'ヒソヒソ', .00, 1.00, .92),
     'c': ('ユーレイちゃん', '甘々', 'ささやき', .00, 1.20, 1.00),
     'h': ('春日部つむぎ', 'ノーマル', None, .02, 1.30, 1.08),   # "h2"; no whisper style: whispers are slower, flatter and softer
-    'l': ('九州そら', 'セクシー', 'ささやき', -.05, 1.00, .93),   # round 2 "L4": low and mature
+    'l': ('九州そら', 'あまあま', 'ささやき', -.07, 1.20, .94, .96),   # round 3 "n5" (user: L4 sounded stiff): sweeter, more melody, a deeper timbre
 }
 src = open(os.path.join(ROOT, 'lines.js'), encoding='utf-8').read()
 LINES = json.loads(src[src.index('= {') + 2:src.rindex('}') + 1])
@@ -37,14 +37,14 @@ def dur(p):
 durs = {}
 for lid, v in LINES.items():
     if lid[0] not in VOICE: continue   # voice not picked yet
-    sp, st, wst, pitch, inton, speed = VOICE[lid[0]]
+    sp, st, wst, pitch, inton, speed, *kk = VOICE[lid[0]]; k = kk[0] if kk else 1.0
     style = v[2]; text = v[3] if len(v) > 3 else v[0]
-    key = f'{sp}|{text}|{style}|{pitch}|{inton}|{speed}'
+    key = f'{sp}|{st}|{text}|{style}|{pitch}|{inton}|{speed}' + (f'|k{k}' if k != 1.0 else '')
     m4a = os.path.join(out_dir, f'{lid}.m4a')
     if cache.get(lid) != key or not os.path.exists(m4a):
         w = style == 'w'
-        with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as f: f.write(tts(text, spk[sp][wst if w and wst else st], pitch, inton * (.85 if w and not wst else 1), speed * (.88 if w else 1))); wav = f.name
-        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', wav, '-ac', '1', '-af', ('volume=0.8,' if w and not wst else '') + 'loudnorm=I=-18:TP=-2', '-ar', '48000', '-c:a', 'aac', '-b:a', '112k', m4a], check=True)
+        with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as f: f.write(tts(text, spk[sp][wst if w and wst else st], pitch - math.log(k), inton * (.85 if w and not wst else 1), speed * (.88 if w else 1))); wav = f.name
+        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', wav, '-ac', '1', '-af', (f'asetrate={round(48000 * k)},aresample=48000,atempo={1 / k:.5f},' if k != 1.0 else '') + ('volume=0.8,' if w and not wst else '') + 'loudnorm=I=-18:TP=-2', '-ar', '48000', '-c:a', 'aac', '-b:a', '112k', m4a], check=True)
         os.remove(wav); cache[lid] = key; print('voiced', lid, text)
     durs[lid] = dur(m4a)
 for f in os.listdir(out_dir):

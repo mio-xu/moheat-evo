@@ -148,7 +148,8 @@ TEMPLATE = '''<!doctype html>
   <script src="../../../device.js?v=1"></script>
   <script src="lines.js?v=2"></script>
   <script src="audio.js?v=2"></script>
-  <script src="stream.js?v=2"></script>
+  <script src="media/art/faces.js?v=1"></script>
+  <script src="stream.js?v=3"></script>
   <script src="../../shared/nav.js?v=6"></script>
 </body>
 </html>

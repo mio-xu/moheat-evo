@@ -22,6 +22,11 @@ FACES = {   # base: (eyes box, mouth box) in 1920×1080 px. Talk frames blend ON
     'cocoa_live': ((525, 300, 760, 400), (605, 410, 740, 485)),
     'hinata_live': ((500, 245, 765, 375), (610, 395, 750, 470)),
     'luna_live': ((455, 238, 685, 345), (550, 372, 660, 435)),
+    'luna_window': ((515, 280, 750, 350), (615, 378, 725, 440)),
+    'luna_tea': ((470, 290, 720, 360), (565, 398, 670, 460)),
+    'luna_musicbox': ((440, 300, 700, 370), (555, 432, 665, 495)),
+    'luna_close': ((330, 380, 680, 520), (515, 468, 665, 555)),
+    'luna_bye': ((440, 300, 720, 370), (550, 385, 655, 448)),
     'mint_lean_L': ((360, 400, 610, 495), (465, 505, 585, 580)),
     'mint_lean_R': ((420, 395, 630, 480), (490, 500, 600, 560)),
     'mint_bye': ((420, 300, 720, 400), (540, 385, 650, 455)),
@@ -85,6 +90,12 @@ def main():
             print('face', n, 'diff %.1f scale %.2f dx %d dy %d' % best, 'mask %.1f%%' % (100 * sum(m.histogram()[128:]) / (1920 * 1080)))
 
 
+def faces_js():   # mouth boxes for the browser: talk frames equal their base outside the mouth, so stream.js redraws only this box
+    import json
+    out = {b: [m[0] - 30, m[1] - 30, m[2] + 30, m[3] + 30] for b, (e, m) in FACES.items()}
+    open(os.path.join(ROOT, 'media', 'art', 'faces.js'), 'w').write('window.STREAM_MOUTHS = ' + json.dumps(out) + ';\n')
+
+
 if __name__ == '__main__':
     import sys
-    boxes() if sys.argv[1:] == ['boxes'] else main()
+    boxes() if sys.argv[1:] == ['boxes'] else (main(), faces_js())

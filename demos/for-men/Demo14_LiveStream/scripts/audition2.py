@@ -8,7 +8,7 @@ import json, math, os, subprocess, tempfile, urllib.parse, urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 API = 'http://127.0.0.1:50021'
-OUT = os.path.join(ROOT, 'audio', 'audition', 'r2'); os.makedirs(OUT, exist_ok=True)
+OUT = os.path.join(ROOT, 'audio', 'audition', os.environ.get('ROUND', 'r2')); os.makedirs(OUT, exist_ok=True)
 MINT = ('こんばんは…ミントです。今日も、ねむれないひとのための、ささやき配信…はじめますね。', '…じゃあ、みぎのおみみから。…ふぅー。…つめたかった？')
 LUNA = ('…こんばんは。夜ふかしさん、いらっしゃい。今夜も、ゆっくりはなそうか。', '…ねえ。この配信、ほんとは、きみに会いたくて、つけてるの。')
 # (id, title, lines, speaker, talk style, whisper style|None, pitch, intonation, speed, formant k)
