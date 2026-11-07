@@ -1,6 +1,5 @@
 // Grandma Hana ('gm') + grandpa Gen ('gp'): id → [who, ja, en, TTS reading (optional)].
-// Voices (user's picks, scripts/voice.py): grandma = VOICEVOX:もち子さん のんびり "g3" (older: formant ×0.92, slow, slight tremor);
-// grandpa = VOICEVOX:ちび式じい "k1" (a little lower, steady). Soft countryside dialect.
+// Voices: ElevenLabs, user's picks hana r1_c / gen r1_a (tools/eleven/cast.json); tags in scripts/voice.py. Soft countryside dialect.
 window.FAMILY_LINES = {
   "g01": ["gm", "はいはい、もしもし〜？", "Yes, yes, hello?", "はいはい、もしもし〜？"],
   "g02": ["gm", "…あらまあ！ あんたかい！ まあまあ、元気にしとった？", "…Oh my! It's you! Well, well, have you been well?", "…あらまあ！ あんたかい！ まあまあ、げんきにしとった？"],

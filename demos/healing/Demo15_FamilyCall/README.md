@@ -4,7 +4,7 @@ The call is split into two episodes (2026-11-08): Part 1 here (call → grandpa 
 Part 2 is [`../Demo16_FamilyCall2/`](../Demo16_FamilyCall2/) (snowman → phone back to your ear → New Year → nobody hangs up). One `game.js` runs both (`PART`, from `<body data-part>` or `?part=`).
 
 An interactive phone call home to **grandma Hana and grandpa Gen** (original characters) in their snowy countryside house.
-No timeline, no MP4: their lines are VOICEVOX files played live through a phone filter (at your ear, or on speaker on the table);
+No timeline, no MP4: their lines are ElevenLabs files played live through a phone filter (at your ear, or on speaker on the table);
 room sounds are synthesized live with HRTF. Thermal (2026-11-08) has two layers sent with the firmware's `DUAL` command (cool and heat independent on each ear):
 a **voice layer** — the voice at the ear the receiver is pressed to warms that ear with its loudness (0.1 + 0.8 × envelope; shouting away from the phone ×0.35; none on speaker) —
 and an **ambient layer** — front door (left cool), scarf (both warm), snowman (right cool). `FAMILY.both()` counts frames with warm + cool on one ear.
@@ -22,8 +22,7 @@ and an **ambient layer** — front door (left cool), scarf (both warm), snowman 
 
 Files: `index.html`, `family.css` (+ Demo 10's `demo.css` and Demo 12's `call.css` by path), `game.js` (story, choices / mic / actions, thermal, device),
 `audio.js` (Demo 12's CallAudio copied and extended: speakerphone, dial / ringback / pickup, grandpa running through the phone, parcel sounds),
-`lines.js` (who / ja / en / reading). Voices: `scripts/voice.py` — grandma VOICEVOX:もち子さん のんびり (pitch −0.09, intonation 1.30, speed 0.86,
-formant ×0.92, slight tremor), grandpa VOICEVOX:ちび式じい (pitch −0.04, intonation 1.20, speed 0.90, formant ×0.95); auditions in `scripts/audition*.py`.
+`lines.js` (who / ja / en / reading). Voices: `scripts/voice.py` — ElevenLabs, the user's picks `hana r1_c` / `gen r1_a` (tools/eleven/cast.json; earlier VOICEVOX もち子さん / ちび式じい), tags per line.
 Art: Seedance GPT Image 2 in Demo 12's soft-cel style; design A chosen from 3 (`project/designs_contact.jpg`). On 2026-11-07 the API upload limit was
 reached, so most frames were made on the seedance2-5.com website with the same prompts (`project/web_prompts.json`). Raw PNGs in `assets/art/` (not in git)
 → `scripts/prepare_art.py` → `media/art/*.webp` + face patches (grandma / grandpa mouths, grandpa's blink).
