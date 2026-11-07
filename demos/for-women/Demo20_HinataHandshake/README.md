@@ -19,9 +19,10 @@ star stud earring, cream cable-knit cardigan), from `../Demo16_HandshakeEvent/as
 Files: `index.html` (+ Demo 10's `demo.css` and Demo 12's `call.css` by path, then `hs.css`), `game.js` (story, choices / mic / actions, thermal layers, device),
 `audio.js` (HRTF voices, synthesized hall: crowd, stage music, entrance draft, door, breath, timer), `lines.js` (ja / en / style / reading).
 
-Voice: `scripts/voice.py` — Hinata **VOICEVOX:暁記ミタマ**, the user's pick "m1" (2026-11-08, audition rounds 3–9 in Demo16_HandshakeEvent):
-base pitch −0.03, formant ×0.95, pauses ×1.4, close-mic EQ; s sweet = ノーマル (+0.02, ×1.25, ×1.04), t tease = ノーマル (0, ×1.15, ×0.96, breath 0.2),
-d dark at the ear = ささやき (−0.04, ×0.95, ×0.85, breath 0.5). Staff **VOICEVOX:春日部つむぎ**.
+Voice: `scripts/voice.py` — Hinata = **ElevenLabs** voice "v2" (the user's pick 2026-11-08 from `scripts/eleven_audition.py`, a Voice Design
+young male idol; earlier VOICEVOX:暁記ミタマ "m1"), `eleven_v4`, Japanese, delivery from audio tags per line (`[whispers]` at the ear, `[playful]`,
+`[giggles]` …). Key = `ELEVENLABS_API_KEY` in the repo's `.env.local` (gitignored; set up with `npx -y @elevenlabs/cli@latest onboard init`).
+Staff **VOICEVOX:春日部つむぎ**.
 
 Art: `scripts/seedance.py` (Seedance GPT Image 2, 2K 16:9). The upload API was rate-limited, so `hina_booth` is text-to-image and every other picture
 uses its generation URL as the reference (outputs: the new picture is the last one). Raw PNGs in `assets/art/` (not in git) →

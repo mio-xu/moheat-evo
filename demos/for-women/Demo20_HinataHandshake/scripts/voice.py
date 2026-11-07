@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 """Voices for Hinata's handshake event. Reads ../lines.js → media/voice/<id>.m4a (mono AAC) + media/voice.js (durations).
 
-Hinata = the user's pick "m1" (2026-11-08, audition rounds 3–9 in Demo16_HandshakeEvent): VOICEVOX:暁記ミタマ,
-base pitch −0.03, formant ×0.95 (a little more masculine), pauses ×1.4, close-mic EQ. Per line style:
-  s sweet (public)    ノーマル  pitch +0.02, intonation ×1.25, speed ×1.04
-  t teasing           ノーマル  pitch  0,    intonation ×1.15, speed ×0.96, breath 0.2
-  d dark (at the ear) ささやき  pitch −0.04, intonation ×0.95, speed ×0.85, breath 0.5
-Staff = VOICEVOX:春日部つむぎ ノーマル (plain). The tts / breath / save steps are m1's (copied from audition4.py, so this demo
-does not depend on that work folder). Only (re)synthesizes changed lines (cache: audio/voice_cache.json). Needs VOICEVOX on :50021."""
+Hinata = ElevenLabs voice "v2" (user's pick 2026-11-08 from scripts/eleven_audition.py: a Voice Design young male idol), eleven_v4,
+Japanese, stability 0.4 / similarity 0.8, fixed seed; delivery comes from the audio tags in ELEVEN below (sweet / teasing / whispers
+at the ear). Key = ELEVENLABS_API_KEY in the repo's .env.local. Staff = VOICEVOX:春日部つむぎ ノーマル (plain, needs VOICEVOX on :50021).
+The old VOICEVOX Hinata ("m1": 暁記ミタマ) settings are kept in MODES for reference.
+Only (re)synthesizes changed lines (cache: audio/voice_cache.json)."""
 import io, json, math, os, subprocess, tempfile, urllib.parse, urllib.request, wave
 import numpy as np
 from scipy.signal import butter, sosfilt
@@ -26,7 +24,45 @@ LINES = json.loads(src[src.index('= {') + 2:src.rindex('}') + 1])
 out_dir = os.path.join(ROOT, 'media', 'voice'); os.makedirs(out_dir, exist_ok=True)
 cache_p = os.path.join(ROOT, 'audio', 'voice_cache.json'); os.makedirs(os.path.dirname(cache_p), exist_ok=True)
 cache = json.load(open(cache_p)) if os.path.exists(cache_p) else {}
-SP = {s['name']: {t['name']: t['id'] for t in s['styles']} for s in json.loads(urllib.request.urlopen(f'{API}/speakers').read())}
+_sp = {}
+def SP(spk, style):
+    if not _sp: _sp.update({s['name']: {t['name']: t['id'] for t in s['styles']} for s in json.loads(urllib.request.urlopen(f'{API}/speakers').read())})
+    return _sp[spk][style]
+
+
+HINATA_VOICE, HINATA_MODEL, SEED = 'lODKQ6pXINFtajDz9nqR', 'eleven_v4', 7
+ELEVEN = {   # line id → text with eleven_v4 audio tags (ja text from lines.js)
+    'h01': '[surprised] 次の…あっ！ [excited] お姉さん、来てくれたんだ！',
+    'h02': '[giggles] えへへ、すっごく嬉しい！ はい、握手！',
+    'h03': '[curious] …あれ、手、冷たいね。[softly] 外、寒かった？',
+    'h04a': '[softly] ずっと並んでてくれたの？ …[warmly] じゃあ、俺があっためてあげる',
+    'h04b': '[chuckles softly] …ふふ、知ってる。[playful] じゃあ、ごほうびに、あっためてあげる',
+    'h05': '[sighs softly] はぁー……。[softly] …どう？ あったかい？',
+    'h06': '[pouting] えっ、もう？ やだなあ…',
+    'h07': '[whispers] …ねえ。さっき、他のメンバーの列にも並んでたでしょ',
+    'h08': '[whispers] …見てたよ。ステージの上から、ずーっと',
+    'h09a': '[laughs] あはは、慌てすぎ。[whispers] …かわいい',
+    'h09b': '[chuckles softly] …ふふ、素直。[softly] …いいよ、許してあげる',
+    'h10a': '[playful] …だーめ。[whispers] まだ、離してあげない',
+    'h10b': '[playful] あれ、手、離さないの？ [chuckles softly] …ふふ、お姉さんのほうが、離したくないんだ',
+    'h11': '[whispers] …次は、俺の列だけに並んでね',
+    'h12': '[whispers] 約束。…破ったら、また耳元で怒っちゃうから',
+    'h13': '[whispers] …ふふ。いい子',
+    'h14': '[excited] お姉さん、またね！ 絶対だよー！',
+}
+_el = []
+def eleven(text):
+    if not _el:
+        from dotenv import load_dotenv
+        load_dotenv(os.path.join(ROOT, '..', '..', '..', '.env.local'))
+        from elevenlabs import ElevenLabs
+        _el.append(ElevenLabs())
+    from elevenlabs import VoiceSettings
+    pcm = b''.join(_el[0].text_to_speech.convert(text=text, voice_id=HINATA_VOICE, model_id=HINATA_MODEL, language_code='ja', seed=SEED,
+                                                 output_format='pcm_24000', voice_settings=VoiceSettings(stability=.4, similarity_boost=.8)))
+    b = io.BytesIO()
+    with wave.open(b, 'wb') as w: w.setnchannels(1); w.setsampwidth(2); w.setframerate(24000); w.writeframes(pcm)
+    return b.getvalue()
 
 
 def tts(text, sid, pitch, inton, speed, pause):
@@ -68,18 +104,23 @@ def dur(p):
 durs = {}
 for lid, v in LINES.items():
     style = v[2]; text = v[3] if len(v) > 3 else v[0]
-    spk, vstyle, po, inton, speed, br = MODES[style]
     staff = style == 'staff'
-    key = json.dumps(['m1', text, style, BASE_PITCH, K, PAUSE, MODES[style]], ensure_ascii=False)
+    if staff:
+        key = json.dumps(['m1', text, style, BASE_PITCH, K, PAUSE, MODES[style]], ensure_ascii=False)
+    else:
+        if lid not in ELEVEN: raise SystemExit(f'{lid}: add its tagged text to ELEVEN')
+        key = json.dumps(['eleven', HINATA_VOICE, HINATA_MODEL, SEED, ELEVEN[lid]], ensure_ascii=False)
     dst = os.path.join(out_dir, lid + '.m4a')
     if cache.get(lid) != key or not os.path.exists(dst):
-        k = 1.0 if staff else K
-        w = tts(text, SP[spk][vstyle], (0 if staff else BASE_PITCH) + po - math.log(k), inton, speed, 1.0 if staff else PAUSE)
-        if br: w = breathe(w, br)
-        save(w, dst, k, not staff); cache[lid] = key; print('voiced', lid, text)
+        if staff:
+            spk, vstyle, po, inton, speed, br = MODES[style]
+            save(tts(text, SP(spk, vstyle), po, inton, speed, 1.0), dst, 1.0, False)
+        else:
+            save(eleven(ELEVEN[lid]), dst, 1.0, False)
+        cache[lid] = key; print('voiced', lid, text)
     durs[lid] = dur(dst)
 for f in os.listdir(out_dir):
     if f.endswith('.m4a') and f[:-4] not in LINES: os.remove(os.path.join(out_dir, f))
 json.dump(cache, open(cache_p, 'w'), ensure_ascii=False, indent=1)
-open(os.path.join(ROOT, 'media', 'voice.js'), 'w').write('window.HINA_VOICE = ' + json.dumps({'credit': 'VOICEVOX:暁記ミタマ, VOICEVOX:春日部つむぎ', 'dur': durs}) + ';\n')
+open(os.path.join(ROOT, 'media', 'voice.js'), 'w').write('window.HINA_VOICE = ' + json.dumps({'credit': 'Hinata: ElevenLabs, staff: VOICEVOX:春日部つむぎ', 'dur': durs}) + ';\n')
 print(len(durs), 'lines,', round(sum(durs.values()), 1), 's')
