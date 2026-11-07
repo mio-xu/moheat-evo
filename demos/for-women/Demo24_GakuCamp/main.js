@@ -1,4 +1,4 @@
-// 『ガクの、焚き火キャンプ配信 · Gaku's Campfire Stream』 — the for-women live-stream room (engine adapted from Demo 14's stream.js).
+// 『ガクの、焚き火キャンプ配信 · Gaku's Campfire Stream』 — the for-women live-stream room (engine adapted from Demo14_MintStream/main.js).
 // Gaku (26, original character): a strikingly handsome, cool and quiet solo-camping streamer who has no idea how good-looking he is.
 // His phone streams from a tripod at his eye level with a binaural mic clipped under it = YOUR head: the campfire is on your RIGHT, the cold lake wind comes from your LEFT.
 // Signature move: he sits down on your left to be your windbreak — the left ear's cold fades and his voice warms it instead.
