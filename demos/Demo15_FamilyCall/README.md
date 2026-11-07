@@ -5,7 +5,9 @@ Part 2 is [`../Demo16_FamilyCall2/`](../Demo16_FamilyCall2/) (snowman → phone 
 
 An interactive phone call home to **grandma Hana and grandpa Gen** (original characters) in their snowy countryside house.
 No timeline, no MP4: their lines are VOICEVOX files played live through a phone filter (at your ear, or on speaker on the table);
-room sounds are synthesized live with HRTF; the thermal output is computed live from the same directions. 0 same-ear conflicts (`FAMILY.conflicts()`).
+room sounds are synthesized live with HRTF. Thermal (2026-11-08) has two layers sent with the firmware's `DUAL` command (cool and heat independent on each ear):
+a **voice layer** — the voice at the ear the receiver is pressed to warms that ear with its loudness (0.1 + 0.8 × envelope; shouting away from the phone ×0.35; none on speaker) —
+and an **ambient layer** — front door (left cool), scarf (both warm), snowman (right cool). `FAMILY.both()` counts frames with warm + cool on one ear.
 
 **Play**: `python3 -m http.server 8765` at the repo root → `http://localhost:8765/demos/Demo15_FamilyCall/` (or `start_demo.command`). Headphones on; mic optional.
 

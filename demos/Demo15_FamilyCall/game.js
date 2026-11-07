@@ -3,7 +3,7 @@
 // the receiver, they end up sharing it cheek to cheek. Their parcel arrives mid-call: put them on speaker, open the door (cold on the
 // left), unwrap grandma's hand-knitted scarf (both ears warm) and grandpa's refrigerated mini snowman (press it to your right cheek:
 // right cool, left still warm). Phone back to your ear, a New Year promise, and neither side can hang up first.
-// Per ear only the stronger of heat / cool is sent (firmware: one mode per ear) → 0 same-ear conflicts (FAMILY.conflicts()).
+// Thermal: a voice layer (a voice at your ear warms it with its loudness) + an ambient layer, heat and cool independent per ear (firmware DUAL command).
 (() => {
   const $ = (id) => document.getElementById(id);
   const QS = new URLSearchParams(location.search);
@@ -48,7 +48,7 @@
   let talking = 0;
   async function say(id, far = false) {
     const my = run; const [who, ja, en] = LINES[id];
-    S.who = who; sub(ja, en, who); talking++;
+    S.who = who; S.far = far; sub(ja, en, who); talking++;
     await SND.say(id, 'phone', far ? .9 : 1.45, far);
     talking--; if (my !== run) throw new Error('stopped');
     await sleep(.3); sub('', '');
@@ -223,29 +223,32 @@
     }
     SND.tick(dt);
   }
-  function sources() {
-    const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
+  // Two layers, sent with the firmware's DUAL command (heat and cool are independent on each ear, 2026-11-08):
+  //  · VOICE: a voice right at your ear (the receiver pressed to it) warms that ear, following its loudness — louder = warmer,
+  //    a pause lets it ease off; a voice shouting away from the receiver is weak; on speaker (on the table) the voice is not close: no voice heat.
+  //  · AMBIENT: the world around you — the cold from the front door (left), grandma's scarf (both warm), grandpa's snowman (right cool).
+  //    Ambient cool and voice warmth can be on the same ear at the same time.
+  let vEnv = 0;
+  function layers(dt) {
+    const out = [], add = (az, k, s, icon, layer) => { if (s > .01) out.push({ az, k, s, icon, layer }); };
     if (!S.started) return out;
-    if (S.inCall && S.ear) add(S.ear * 1.45, 'h', .4 + clamp(S.lv * 6) * .2, '📱');
-    if (S.doorCold > 0) add(-1.0, 'c', .75 * S.doorCold, '🚪');
-    if (S.scarf > .01) { add(-1.3, 'h', .5 * S.scarf, '🧣'); add(1.3, 'h', .5 * S.scarf, '🧣'); }
-    if (S.snow > .01) add(1.45, 'c', .85 * S.snow, '⛄');
+    const lv = talking ? clamp((S.lv - .008) * 4.5) * (S.far ? .35 : 1) : 0;
+    vEnv += (lv - vEnv) * (1 - Math.exp(-dt / (lv > vEnv ? .06 : .3)));
+    if (S.inCall && S.ear && !S.speaker) add(S.ear * 1.45, 'h', .1 + .8 * vEnv, S.who === 'gp' ? '👴' : '👵', 'voice');   // the receiver itself is a little warm
+    if (S.doorCold > 0) add(-1.0, 'c', .75 * S.doorCold, '🚪', 'env');
+    if (S.scarf > .01) { add(-1.3, 'h', .45 * S.scarf, '🧣', 'env'); add(1.3, 'h', .45 * S.scarf, '🧣', 'env'); }
+    if (S.snow > .01) add(1.45, 'c', .85 * S.snow, '⛄', 'env');
     return out;
   }
-  const ear = { L: { mode: '', v: 0 }, R: { mode: '', v: 0 } };
+  const chan = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
   function thermal(dt) {
-    const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
-    for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
-    const th = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
-    for (const e of ['L', 'R']) {
-      const E = ear[e], hh = Math.min(1, sum[e].h), cc = Math.min(1, sum[e].c);
-      let mode = E.mode;
-      if (!mode) mode = hh > cc ? 'h' : 'c'; else if (mode === 'h' && cc > hh + .06) mode = 'c'; else if (mode === 'c' && hh > cc + .06) mode = 'h';
-      if (mode !== E.mode) { E.v = 0; E.mode = mode; }
-      const target = mode === 'h' ? Math.min(.9, hh) : cc, tau = target > E.v ? (mode === 'h' ? .4 : .2) : .35;
-      E.v += (target - E.v) * (1 - Math.exp(-dt / tau)); th[e + mode] = E.v;
+    const sum = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 }, src = layers(dt);
+    for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum['L' + s.k] += s.s * wL; sum['R' + s.k] += s.s * wR; }
+    for (const k of Object.keys(chan)) {
+      const target = Math.min(k[1] === 'h' ? .95 : 1, sum[k]);
+      chan[k] += (target - chan[k]) * (1 - Math.exp(-dt / (target > chan[k] ? .08 : .25)));   // the voice layer is already smoothed; keep this quick
     }
-    return { th, src };
+    return { th: { ...chan }, src };
   }
 
   // ---------------------------------------------------------------- drawing: base picture + small face patches faded in / out
@@ -314,9 +317,10 @@
     const cx = 240, cy = 220, R = 160; rc.clearRect(0, 0, 480, 420);
     rc.strokeStyle = 'rgba(255,255,255,.08)'; rc.lineWidth = 1.5; for (const r of [R * .5, R]) { rc.beginPath(); rc.arc(cx, cy, r, 0, 7); rc.stroke(); }
     rc.fillStyle = '#9a8a7a'; rc.font = '600 13px Inter'; rc.textAlign = 'center'; rc.fillText('front', cx, cy - R - 10); rc.fillText('L', cx - R - 18, cy + 5); rc.fillText('R', cx + R + 18, cy + 5);
-    for (const [e, sx] of [['L', -1], ['R', 1]]) {
-      const v = Math.max(th[e + 'c'], th[e + 'h']), col = th[e + 'c'] > th[e + 'h'] ? '79,179,255' : '255,122,69';
-      rc.fillStyle = v > .02 ? `rgba(${col},${.25 + .75 * v})` : '#33291f'; rc.beginPath(); rc.ellipse(cx + sx * 46, cy, 12, 24, 0, 0, 7); rc.fill();
+    for (const [e, sx] of [['L', -1], ['R', 1]]) {   // each ear: warm half on top, cool half below
+      const h = th[e + 'h'], c = th[e + 'c'];
+      rc.fillStyle = h > .02 ? `rgba(255,122,69,${.25 + .75 * h})` : '#33291f'; rc.beginPath(); rc.ellipse(cx + sx * 46, cy, 12, 24, 0, Math.PI, 2 * Math.PI); rc.fill();
+      rc.fillStyle = c > .02 ? `rgba(79,179,255,${.25 + .75 * c})` : '#33291f'; rc.beginPath(); rc.ellipse(cx + sx * 46, cy, 12, 24, 0, 0, Math.PI); rc.fill();
     }
     rc.fillStyle = '#463a2e'; rc.beginPath(); rc.arc(cx, cy, 40, 0, 7); rc.fill();
     rc.font = '26px sans-serif'; rc.textBaseline = 'middle';
@@ -330,9 +334,9 @@
   let lastSent = '', lastSendAt = 0, tripped = false, intensity = +store.get('asmr.intensity', 100) / 100;
   const device = MoHeatDevice.create({ select: $('portSelect'), addBtn: $('addPort'), connectBtn: $('connectBtn'), status: $('deviceStatus') }, { log: (l) => console.log('[MoHeat]', l), onConnect: () => { lastSent = ''; } });
   if (!MoHeatDevice.supported) $('deviceStatus').querySelector('span').textContent = 'Web Serial needs desktop Chrome / Edge';
-  function command(th) {
-    const part = (sd, c, h) => (c > OFF ? `${sd}C${Math.round(range.coolMin + c * (range.coolMax - range.coolMin))}` : h > OFF ? `${sd}H${Math.round(range.heatMin + h * (range.heatMax - range.heatMin))}` : `${sd}H0`);
-    return Math.max(th.Lc, th.Lh, th.Rc, th.Rh) <= OFF ? 'stop' : `${part('L', th.Lc, th.Lh)} ${part('R', th.Rc, th.Rh)}`;
+  function command(th) {   // DUAL: each ear's cool and heat are set independently (firmware 2026-11-08); old single-mode commands are not used here
+    const c = (v) => (v > OFF ? Math.round(range.coolMin + v * (range.coolMax - range.coolMin)) : 0), h = (v) => (v > OFF ? Math.round(range.heatMin + v * (range.heatMax - range.heatMin)) : 0);
+    return Math.max(th.Lc, th.Lh, th.Rc, th.Rh) <= OFF ? 'stop' : `DUAL LC${c(th.Lc)} LH${h(th.Lh)} RC${c(th.Rc)} RH${h(th.Rh)}`;
   }
   function stopOutput() { if (device.isConnected()) device.send('stop'); lastSent = 'stop'; }
   function emergencyStop() { tripped = !tripped; const b = $('estop'); if (tripped) { stopOutput(); b.textContent = '↺ Re-arm output'; b.classList.add('tripped'); } else { b.textContent = '■ STOP'; b.classList.remove('tripped'); lastSent = ''; } }
@@ -340,15 +344,16 @@
   $('intensity').value = Math.round(intensity * 100); $('intensityVal').textContent = `${Math.round(intensity * 100)}%`;
   $('intensity').addEventListener('input', (e) => { intensity = +e.target.value / 100; $('intensityVal').textContent = `${e.target.value}%`; store.set('asmr.intensity', +e.target.value); });
   const meterEls = Object.fromEntries(['Lc', 'Lh', 'Rc', 'Rh'].map((k) => [k, [$(`m${k}`), $(`v${k}`)]]));
-  let conflicts = 0;
+  let conflicts = 0, both = 0;   // conflicts: always 0 now (no single-mode arbitration); both: dual frames
   function output(th, live) {
     const sc = Object.fromEntries(Object.entries(th).map(([k, v]) => [k, live && !tripped ? v * intensity : 0]));
-    if ((sc.Lc > OFF && sc.Lh > OFF) || (sc.Rc > OFF && sc.Rh > OFF)) conflicts++;
+    if ((sc.Lc > OFF && sc.Lh > OFF) || (sc.Rc > OFF && sc.Rh > OFF)) both++;   // frames where an ear is warm and cool at once (allowed with DUAL)
     for (const [k, [bar, val]] of Object.entries(meterEls)) { bar.style.width = `${sc[k] * 100}%`; val.textContent = Math.round(sc[k] * 100); }
     const cmd = command(sc); $('cmd').textContent = cmd;
     for (const [e, el] of [['L', $('glowL')], ['R', $('glowR')]]) {
-      const c = sc[e + 'c'], h = sc[e + 'h'], v = Math.max(c, h), col = c > h ? '79,179,255' : '255,122,69';
-      el.style.opacity = v.toFixed(2); el.style.background = `linear-gradient(to ${e === 'L' ? 'right' : 'left'}, rgba(${col},.55), rgba(${col},0))`;
+      const c = sc[e + 'c'], h = sc[e + 'h'], dir = e === 'L' ? 'right' : 'left';
+      el.style.opacity = Math.max(c, h) > .01 ? 1 : 0;   // warm and cool drawn together (warm from the top, cool from the bottom)
+      el.style.background = `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 100%), linear-gradient(to ${dir}, rgba(255,122,69,${(.55 * h).toFixed(2)}), rgba(255,122,69,0)) top / 100% ${c > OFF ? 55 : 100}% no-repeat, linear-gradient(to ${dir}, rgba(79,179,255,${(.55 * c).toFixed(2)}), rgba(79,179,255,0)) bottom / 100% ${h > OFF ? 55 : 100}% no-repeat`;
     }
     if (!device.isConnected() || !$('sendOn').checked) return;
     const n = performance.now(); if (cmd !== lastSent && n - lastSendAt >= SEND_INTERVAL) { device.send(cmd); lastSent = cmd; lastSendAt = n; }
@@ -382,7 +387,7 @@
   function start() {
     SND.init(); ensureMic(); SND.loadVoices(Object.keys(LINES));
     S = fresh(); S.started = true; flakes = []; hearts = []; viewA = viewB = 'room'; mix = 1; $('cleared').hidden = true;
-    for (const e of ['L', 'R']) { ear[e].mode = ''; ear[e].v = 0; }
+    for (const k of Object.keys(chan)) chan[k] = 0; vEnv = 0;
     $('intro').classList.add('hidden');
     story();
   }
@@ -402,7 +407,7 @@
     }
     ctx.drawImage(coverCv, 0, 0);
   }
-  window.FAMILY = { get S() { return S; }, FW, thermal: () => thermal(.05), conflicts: () => conflicts };
+  window.FAMILY = { get S() { return S; }, FW, thermal: () => thermal(.05), conflicts: () => conflicts, both: () => both };
   setStep(0);
   if (QS.has('cover')) { document.body.classList.add('cover-only'); artReady.then(drawCover); return; }
   if (QS.has('autoplay')) { const ac = SND.init(); if (ac.state === 'running') start(); else ac.resume().then(() => { if (ac.state === 'running' && !S.started) start(); }).catch(() => {}); }

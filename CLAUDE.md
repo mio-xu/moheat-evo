@@ -11,4 +11,4 @@ Key rules (details in the handoff):
 - Character art comes from **ChatGPT prompt lists** that the user runs.
 - **Never modify earlier demos**: reuse art by symlink and code by import-by-path.
 - **Commit and push every change to `origin main`.** Large media stay out of git.
-- The device firmware allows **one mode per ear** (cool or heat). Every thermal CSV must have 0 same-ear conflicts.
+- Thermal output per ear: the old commands (`LC50 RH0`) are one mode per ear (cool or heat), and every old thermal CSV must keep 0 same-ear conflicts. Since 2026-11-08 the firmware (`arduino/`, local only) also takes `DUAL LC.. LH.. RC.. RH..`: cool and heat independent on the same ear. The user prefers new demos to use it: a voice close to your ear warms it with its loudness, and ambient warm / cool shows the surroundings.
