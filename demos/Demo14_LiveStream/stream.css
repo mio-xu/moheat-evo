@@ -7,11 +7,14 @@
 .stage:not(.on-air) .vv { display: none; }
 
 /* cover: two streamers, title in the middle */
-.intro::before { background: radial-gradient(ellipse 30% 60% at 50% 50%, rgba(18, 12, 38, .55), rgba(18, 12, 38, 0)); }
-.intro .cover-copy { max-width: 38cqw !important; }
+.intro::before { background: none; }
+.intro { align-items: flex-end !important; }
+.intro h1 span { display: inline !important; }
+.intro h1 { font-size: clamp(18px, 4.6cqw, 92px) !important; }
+.intro .cover-copy { max-width: 70cqw !important; margin: 0 auto 3.2cqw !important; }
 .intro h1 { background: linear-gradient(100deg, #c9fff1 0%, #ffffff 50%, #ffd0e2 100%); -webkit-background-clip: text; background-clip: text; }
 .intro .chip.p { background: rgba(180, 155, 255, .18); color: #e7deff; border-color: rgba(180, 155, 255, .55); }
-@container (max-width: 620px) { .intro .cover-copy { max-width: 46cqw !important; } .intro .cast { flex-wrap: wrap !important; } }
+@container (max-width: 620px) { .intro .cover-copy { max-width: 92cqw !important; margin-bottom: 2cqw !important; } }
 
 /* LIVE head */
 .live-head { position: absolute; left: 1.4cqw; top: 1.3cqw; z-index: 3; display: flex; align-items: center; gap: .7cqw; color: #fff; pointer-events: none;

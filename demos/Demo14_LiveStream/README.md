@@ -8,15 +8,27 @@ send chat comments and gift items (super-chat style), and the streamer reacts to
 Art style = Demo 12's soft-cel pick (`assets/art/ref_style3.png` → symlink to Demo 12's `style_3_softcel.png`).
 Art via Seedance API (`scripts/seedance.py`), voices via VOICEVOX (`scripts/audition.py` for the audition).
 
-## Streamers (design round 1)
+## Channels (final)
 
-| | Name | Feel | Stream | Thermal flavour | Voice candidates |
-|---|---|---|---|---|---|
-| A | 白深ミント Shiromi Mint | calm, sleepy, gentle | ASMR whisper stream, dummy-head mic | ear blowing / mint / ice = cool, one ear at a time | ユーレイちゃん, 四国めたん, 暁記ミタマ, 九州そら (ささやき) |
-| B | 火野ひなた Hino Hinata | genki gamer, loud, laughs a lot | spicy-ramen challenge + game | spicy = warm, fan / cold drink = cool | 満別花丸 元気, 春日部つむぎ, 雨晴はう, 櫻歌ミコ |
-| C | 宵月ルナ Yoizuki Luna | cool, mature, low voice | late-night singing & chat | night wind from the window = cool, a blanket = warm | 冥鳴ひまり, 夜語トバリ, 波音リツ, 四国めたん セクシー |
-| D | 甘音ココア Amane Cocoa | sweet, warm, a bit teasing | cosy café chat with hot cocoa | hot cocoa / heater = warm, fu-fu blowing = cool | 九州そら あまあま, ユーレイちゃん 甘々, 満別花丸 ぶりっ子, 四国めたん あまあま |
+| Channel | Feel | Voice (VOICEVOX) | Story · thermal |
+|---|---|---|---|
+| 白深ミント Mint | calm, sleepy, ASMR whisper | 四国めたん ささやき / ヒソヒソ | dummy head "みみくん": ear blowing with mint lip balm on the ear you pick (cool), ice Super Chat (cool, moves L→R), warm towel on both ears, a secret in each ear |
+| 甘音ココア Cocoa | sweet café chat | ユーレイちゃん 甘々 / ささやき | hot cocoa (warm), fu-fu blowing (cool right), "aah" (warm), topping Super Chat (marshmallow warm / ice cream cool), rain → shared blanket, her hands on your right ear (warm) |
+| 火野ひなた Hinata | genki gamer | 春日部つむぎ | spicy ramen challenge (warm, both ears), rescue Super Chat (milk = cool front / desk fan = cool left), paper-fan flaps L/R (cool), a secret at the right ear |
+| 宵月ルナ Luna | cool, mature, late night | 九州そら セクシー / ささやき (pitch −0.05) | night wind from the open window (cool left), music box or hot tea request (warm), she sits on your left (warm), a confession before dawn |
 
-ずんだもん is left out (Demo 1/2). Audition page: `audio/audition/index.html` (local only).
+No voice is shared. Lines: `lines.js` (ja + en); voices: `scripts/voice.py` → `media/voice/` (only changed lines are re-synthesized).
+
+## Files
+
+- `index.html`, `stream.css` (+ Demo 10's `demo.css` by path), `stream.js` (stories, chat, Super Chats, thermal, face animation), `audio.js` (HRTF + synthesized triggers), `lines.js`.
+- `?embed=1` site menu · `?cover=1` poster (`media/cover.jpg`) · `?auto=1` auto-picks every choice (testing). `window.STREAM.conflicts()` = same-ear conflict frames (0 in every channel).
+- Face animation: `scripts/prepare_art.py` blends only the eyes (blink / half) or only the mouth (talk / talk_s) of each extra frame into its base, using the eye and mouth boxes in `FACES`, so colour and hair never jump. Blush is a soft overlay drawn in `stream.js` (`CHEEKS`).
+
+## Art (Seedance, gpt-image-2, 16:9 2K)
+
+Prompts: `scripts/seedance.py` (`SCENES`). Raw PNGs in `assets/art/` stay out of git; `media/art/*.webp` are the game frames.
+- API: `python3 scripts/seedance.py scenes <names>`. The upload endpoint has a request-count limit (≈10 h reset) and accepts ≤5 files per request; external image URLs are refused.
+- Website (used on 2026-11-08 when the API upload was limited): prompts in `project/web_jobs.json`; on seedance2-5.com Image-to-Image upload the refs from `assets/art/web/`, paste the prompt, 16:9 + 2K, generate, Download; `scripts/web_take.py <name>` / `web_take_many.py <names…>` move the downloads into `assets/art/`. Then `python3 scripts/prepare_art.py`.
 
 Large media (`assets/art/`, `audio/`) stay out of git.

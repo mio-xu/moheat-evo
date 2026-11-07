@@ -10,6 +10,7 @@
     { dir: 'Demo11_Naomi', ja: 'ナオミと、ふわふわの一日', en: 'A Fluffy Day with Naomi', group: 0 },
     { dir: 'Demo12_LateCall', ja: 'もしもし、きこえる？', en: 'Can You Hear Me?', group: 0 },
     { dir: 'Demo13_NaomiCam', ja: 'ナオミ、いまなにしてる？', en: "What's Naomi Up To? · Pet Cam", group: 0 },
+    { dir: 'Demo14_LiveStream', ja: 'きみだけの、ひみつ配信', en: 'Just for You — a Secret Live Stream', group: 0 },
     { dir: 'Demo15_FamilyCall', ja: 'もしもし、おばあちゃん？', en: 'Hello, Grandma? · A Call Home, Part 1', group: 0 },
     { dir: 'Demo16_FamilyCall2', ja: 'じいちゃんの、ゆきだるま', en: "Grandpa's Little Snowman · A Call Home, Part 2", group: 0 },
     { dir: 'Demo5_GifuCastle', ja: '信長の岐阜城へようこそ', en: "Welcome to Nobunaga's Gifu Castle", group: 1, ep: 1 },

@@ -15,13 +15,13 @@
   const CH = {
     mint: {
       name: '白深ミント', en: 'Shiromi Mint', title: 'ねむれない夜の、ささやき配信 · Whisper ASMR', credit: 'ミント VOICEVOX:四国めたん', viewers: 3412, sc: 'mint',
-      art: ['mint_live', 'mint_live_talk', 'mint_live_blink', 'mint_lean_L', 'mint_lean_R', 'mint_ice', 'mint_towel', 'mint_bye'],
+      art: ['mint_live', 'mint_live_talk', 'mint_live_talk_s', 'mint_live_half', 'mint_live_blink', 'mint_lean_R_talk_s', 'mint_bye_talk', 'mint_lean_L', 'mint_lean_R', 'mint_ice', 'mint_towel', 'mint_bye'],
       steps: [['あいさつ', 'Say hi'], ['耳ふー', 'Ear blowing'], ['こおりのスパチャ', 'Ice Super Chat'], ['あったかタオル', 'Warm towel'], ['おやすみ', 'Good night']],
       pool: ['こんばんは〜', 'waiting for this all day', 'ねむれない…', 'ミントちゃん今日もかわいい', '耳ふーまだ？', 'ASMR time 😌', 'おふとん入った', '声がすき', 'mimi-kun!!', 'first time here too', 'ささやき助かる…', 'zzz', 'good night everyone', 'イヤホン準備OK🎧', 'so relaxing', 'あしたも仕事…', 'ミントの声で寝たい'],
     },
     cocoa: {
       name: '甘音ココア', en: 'Amane Cocoa', title: 'ほっこりカフェ配信 · Cozy café chat', credit: 'ココア VOICEVOX:ユーレイちゃん', viewers: 2876, sc: 'cocoa',
-      art: ['cocoa_live', 'cocoa_live_talk', 'cocoa_live_blink', 'cocoa_fufu', 'cocoa_aan', 'cocoa_blanket', 'cocoa_bye'],
+      art: ['cocoa_live', 'cocoa_live_talk', 'cocoa_live_talk_s', 'cocoa_live_half', 'cocoa_live_blink', 'cocoa_blanket_talk', 'cocoa_bye_talk', 'cocoa_fufu', 'cocoa_aan', 'cocoa_blanket', 'cocoa_bye'],
       steps: [['あいさつ', 'Say hi'], ['ふーふー＆あーん', 'Fu-fu & aah'], ['トッピング', 'Topping Super Chat'], ['ブランケット', 'Blanket'], ['またね', 'See you']],
       pool: ['ココアちゃん！', 'こんばんは〜☕', 'I brought my own cocoa', 'さむすぎる…', '配信まってた！', 'cute beret!!', 'あったまる〜', 'tea gang here 🍵', 'くまのマイクかわいい', 'ちょうど仕事おわった', 'cozy vibes ☕', 'マシュマロ派', '声あまい…', 'ふわふわ', 'hello hello', 'こたつから見てる'],
     },
@@ -379,7 +379,7 @@
   // Face animation: 3 mouth shapes by voice level (held ≥ 70 ms so it never flickers) and a 4-step blink (half → closed → half).
   // Frames only differ in the eyes OR the mouth (prepare_art.py), so her colour and hair never jump.
   let blinkAt = 2, blinkT = -1, viewA = '', viewB = '', mix = 1, mouth = 0, mouthHold = 0;
-  const CHEEKS = { mint_live: [[505, 405], [690, 398], 46] };   // soft blush spots (px in 1920×1080), drawn only when she is shy
+  const CHEEKS = { mint_live: [[505, 405], [690, 398], 46], cocoa_live: [[565, 425], [735, 418], 42], hinata_live: [[540, 400], [735, 388], 42], luna_live: [[492, 365], [662, 356], 38], cocoa_blanket: [[535, 420], [715, 412], 40], mint_lean_L: [[400, 505], [585, 500], 40], mint_lean_R: [[455, 500], [615, 492], 40] };   // soft blush spots (px in 1920×1080), drawn only when she is shy
   function frame(view, t) {
     const base = `${S.ch}_${view}`, F = (k) => IMG[`${base}_${k}`];
     const bt = t - blinkT, half = F('half'), shut = F('blink');
@@ -512,15 +512,18 @@
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
 
-  function drawCover() {   // Mint on the left, Cocoa on the right
+  function drawCover() {   // the four streamers side by side, faces in the upper half; the title sits below them
     ctx.fillStyle = '#231c3c'; ctx.fillRect(0, 0, W, H);
-    const a = IMG.mint_live, b = IMG.cocoa_live;
-    if (a) ctx.drawImage(a, 260 * a.width / W, 0, 960 * a.width / W, a.height, 0, 0, 960, H);
-    if (b) ctx.drawImage(b, 280 * b.width / W, 0, 960 * b.width / W, b.height, 960, 0, 960, H);
-    const g = ctx.createLinearGradient(0, 0, W, 0);
-    g.addColorStop(0, 'rgba(20,14,40,0)'); g.addColorStop(.33, 'rgba(20,14,40,.55)'); g.addColorStop(.5, 'rgba(20,14,40,.78)'); g.addColorStop(.67, 'rgba(20,14,40,.55)'); g.addColorStop(1, 'rgba(20,14,40,0)');
+    [['mint_live', 585], ['cocoa_live', 640], ['hinata_live', 630], ['luna_live', 570]].forEach(([n, cx], i) => {
+      const im = IMG[n]; if (!im) return; const k = im.width / W, sw = 480, sx = Math.max(0, Math.min(W - sw, cx - sw / 2));
+      ctx.drawImage(im, sx * k, 40 * k, sw * k, (H - 40) * k, i * 480, 0, 480, H - 40);
+      if (i) { ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fillRect(i * 480 - 1, 0, 2, H); }
+    });
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, 'rgba(20,14,40,0)'); g.addColorStop(.42, 'rgba(20,14,40,.05)'); g.addColorStop(.62, 'rgba(20,14,40,.72)'); g.addColorStop(1, 'rgba(20,14,40,.9)');
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
   }
+
 
   let last = performance.now(), hidden = false;
   function loop() {

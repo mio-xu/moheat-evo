@@ -19,8 +19,18 @@ FULL = ['mint_live', 'mint_lean_L', 'mint_lean_R', 'mint_ice', 'mint_towel', 'mi
 FACES = {   # base: (eyes box, mouth box) in 1920×1080 px. Talk frames blend ONLY the mouth, blink frames ONLY the eyes, so the
             # skin colour, blush and hair always stay those of the base frame. Boxes are checked with `prepare_art.py boxes`.
     'mint_live': ((450, 285, 715, 375), (550, 385, 660, 450)),
+    'cocoa_live': ((525, 300, 760, 400), (605, 410, 740, 485)),
+    'hinata_live': ((500, 245, 765, 375), (610, 395, 750, 470)),
+    'luna_live': ((455, 238, 685, 345), (550, 372, 660, 435)),
+    'mint_lean_L': ((360, 400, 610, 495), (465, 505, 585, 580)),
+    'mint_lean_R': ((420, 395, 630, 480), (490, 500, 600, 560)),
+    'mint_bye': ((420, 300, 720, 400), (540, 385, 650, 455)),
+    'cocoa_aan': ((550, 320, 810, 420), (610, 505, 745, 590)),
+    'cocoa_blanket': ((500, 320, 740, 400), (600, 455, 705, 520)),
+    'cocoa_bye': ((510, 320, 760, 405), (600, 420, 740, 520)),
 }
 KINDS = ['talk_s', 'talk', 'half', 'blink']
+SKIP = {'mint_lean_L_talk_s'}   # Seedance re-framed it (scale 1.08): the blended chin ghosts over the dummy head
 has = lambda n: os.path.exists(os.path.join(SRC, n + '.png'))
 load = lambda n: Image.open(os.path.join(SRC, n + '.png')).convert('RGB').resize((1920, 1080), Image.LANCZOS)
 
@@ -65,7 +75,7 @@ def main():
         box = (min(fb[0][0], fb[1][0]) - 80, min(fb[0][1], fb[1][1]) - 80, max(fb[0][2], fb[1][2]) + 80, max(fb[0][3], fb[1][3]) + 80)
         for v in KINDS:
             n = f'{base_name}_{v}'
-            if not has(n): continue
+            if not has(n) or n in SKIP: continue
             fr = load(n).convert('RGBA')
             warped, best = NP.align(base, fr, box)
             eyes, mouth = FACES[base_name]
