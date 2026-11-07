@@ -1,0 +1,47 @@
+{
+ "all_ok": true,
+ "no_cut_or_overlap": {
+  "problems": [],
+  "ok": true
+ },
+ "your_lines_text_only": {
+  "count": 9,
+  "ok": true
+ },
+ "subtitles_ja_en": {
+  "lines": 43,
+  "ok": true
+ },
+ "positions": {
+  "problems": [],
+  "ok": true
+ },
+ "heat_vs_voice": {
+  "heat_by_delivery": {
+   "say": 0.564,
+   "laugh": 0.705,
+   "whisper": 0.336
+  },
+  "correlation": {
+   "N": 0.997,
+   "I": 0.996
+  },
+  "ok": true
+ },
+ "left_right_alternation": {
+  "side_switches": 29,
+  "opposite_temps": 22,
+  "ok": true
+ },
+ "thermal": {
+  "rows": 3000,
+  "same_ear_conflicts": 0,
+  "ends_at_stop": true,
+  "ok": true
+ },
+ "mix": {
+  "sample_rate": "48000",
+  "duration_s": "150.000000",
+  "ok": true
+ }
+}
