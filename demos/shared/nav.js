@@ -12,12 +12,12 @@
     { dir: 'Demo8_YamazakiDistillery', ja: '信長と家康、山崎蒸溜所へ', en: 'Two Warlords at the Yamazaki Distillery', group: 1, ep: 4 },
     { dir: 'Demo9_SengokuBanquet', ja: '安土最後の酒宴', en: 'The Last Banquet at Azuchi', group: 1, ep: 5 },
   ];
-  const GROUPS = ['Short stories · 1–4', '信長シリーズ · Nobunaga Series'];
+  const GROUPS = ['Short stories', '信長シリーズ · Nobunaga Series'];   // numbers are the list order: insert a demo anywhere in DEMOS
   const qs = new URLSearchParams(location.search);
   if (qs.has('embed') || qs.has('cover') || qs.has('render')) return;
   const bar = document.querySelector('header.bar'); if (!bar) return;
   const cur = DEMOS.findIndex((d) => location.pathname.includes(`/${d.dir}/`));
-  const href = (d) => `../${d.dir}/`, thumb = (i) => `../../assets/images/demos/demo${i + 1}.jpg`;
+  const href = (d) => `../${d.dir}/`, thumb = (i) => `../../assets/images/demos/${DEMOS[i].dir}.jpg`;   // named by folder, so inserting a demo renames nothing
 
   const css = document.createElement('style');
   css.textContent = `
@@ -51,7 +51,8 @@
     + `<button type="button" aria-expanded="false" aria-haspopup="true">☰ <span class="dn-label">Demos&nbsp;</span>${cur + 1} / ${DEMOS.length}</button>`
     + `<a class="dn-step" href="${next ? href(next) : '#'}" title="${next ? 'Next: ' + next.en : ''}" aria-label="Next demo" ${next ? '' : 'aria-disabled="true"'}>›</a>`;
   const panel = document.createElement('div'); panel.className = 'dn-panel'; panel.hidden = true;
-  panel.innerHTML = GROUPS.map((g, gi) => `<h4>${g}</h4><div class="dn-grid">` + DEMOS.map((d, i) => d.group !== gi ? '' :
+  const span = (gi) => { const n = DEMOS.map((d, i) => (d.group === gi ? i + 1 : 0)).filter(Boolean); return gi === 0 ? ` · ${n[0]}–${n[n.length - 1]}` : ''; };
+  panel.innerHTML = GROUPS.map((g, gi) => `<h4>${g}${span(gi)}</h4><div class="dn-grid">` + DEMOS.map((d, i) => d.group !== gi ? '' :
     `<a class="dn-card${i === cur ? ' is-cur' : ''}" href="${href(d)}"><img src="${thumb(i)}" alt="" loading="lazy"><span><em>Demo ${i + 1}${d.ep ? ' · Ep ' + d.ep + ' / 5' : ''}${i === cur ? ' · now playing' : ''}</em><b>${d.ja}</b><small>${d.en}</small></span></a>`).join('') + '</div>').join('');
   const brand = bar.querySelector('.brand');
   (brand ? brand.after(nav) : bar.prepend(nav)); document.body.appendChild(panel);

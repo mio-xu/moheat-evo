@@ -5,6 +5,18 @@ const io = new IntersectionObserver((entries)=>{
 revealEls.forEach(el=>io.observe(el));
 
 // Interactive demo: the menu on the left swaps the embedded player (demos/<name>/?embed=1). Demo 1 is the default.
+// Numbers come from the menu order (insert a demo anywhere: everything after it renumbers itself); group labels get their range.
+(() => {
+  const items = [...document.querySelectorAll('.td-item')];
+  items.forEach((item, i) => { const em = item.querySelector('.td-item-text em'); if (em) em.textContent = `Demo ${i + 1} · ${em.textContent}`; });
+  const count = document.querySelector('.td-count'); if (count) count.textContent = `${items.length} demos`;
+  document.querySelectorAll('.td-group').forEach((g) => {
+    let n = g.nextElementSibling; const mine = [];
+    while (n && !n.classList.contains('td-group')) { if (n.classList.contains('td-item')) mine.push(items.indexOf(n) + 1); n = n.nextElementSibling; }
+    if (!mine.length) return;
+    g.textContent = g.dataset.unit ? `${g.dataset.name} · ${mine.length} ${g.dataset.unit}` : `${g.dataset.name} · ${mine[0]}–${mine[mine.length - 1]}`;
+  });
+})();
 const demoFrame = document.getElementById('demoFrame');
 const demoOpen = document.getElementById('demoOpen');
 document.querySelectorAll('.td-item').forEach((item) => {

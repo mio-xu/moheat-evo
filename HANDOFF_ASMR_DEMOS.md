@@ -305,3 +305,10 @@ Every full demo page waits for the viewer at hand-picked moments (cover toggle �
 
 ### Timeline drag (`demos/shared/scrub.js`)
 All nine pages load it (also in `?embed`): drag the timeline to scrub (mouse or touch). It replays each demo's own `click` seek at the pointer, pauses during the drag, resumes on release, shows a time bubble, and sets `window.MoHeatScrubbing` so interact.js opens no gate mid-drag.
+
+### No demo numbers on the pages (since 2026-11-07)
+Covers, top bar and page titles carry **no demo number**, so a demo can be inserted anywhere without touching the others.
+- Order = the `DEMOS` list in `demos/shared/nav.js` (switcher: "Demos N / M", ‹ ›) and the `.td-item` order in the site `index.html` (script.js writes "Demo N ·", the group ranges and "N demos").
+- Thumbnails are named by folder: `assets/images/demos/<DemoFolder>.jpg` (480×270 from `media/cover.jpg`). Folder names keep their old numbers as IDs only.
+- To insert a demo: add one entry to nav.js `DEMOS` and one `.td-item` in `index.html` at the wanted position, plus its thumbnail. Nothing else is renumbered.
+- Nobunaga covers keep 「第N話 · Ep. N / 5」 (episode within the series).

@@ -1,7 +1,7 @@
 """Cover: background = a rendered frame of the ice/lava tunnel (left ice, right lava), then the ?cover=1 page.
 
   python3 scripts/make_cover.py     (needs the repo-root server: python3 -m http.server 8765)
-Writes project/cover_bg.jpg, media/art/cover_bg.webp, media/cover.jpg and the site menu thumbnail assets/images/demos/demo4.jpg.
+Writes project/cover_bg.jpg, media/art/cover_bg.webp, media/cover.jpg and the site menu thumbnail assets/images/demos/Demo4_SeasonsExpress.jpg.
 """
 import os, shutil, subprocess, sys
 from PIL import Image
@@ -21,7 +21,7 @@ def main():
                     f"--screenshot={raw}", "http://localhost:8765/demos/Demo4_SeasonsExpress/index.html?cover=1"], check=True, capture_output=True)
     im = Image.open(raw).convert("RGB"); os.remove(raw)
     im.save(os.path.join(ROOT, "media", "cover.jpg"), quality=90)
-    im.resize((480, 270), Image.LANCZOS).save(os.path.join(SITE, "assets", "images", "demos", "demo4.jpg"), quality=84)
+    im.resize((480, 270), Image.LANCZOS).save(os.path.join(SITE, "assets", "images", "demos", "Demo4_SeasonsExpress.jpg"), quality=84)
     print("cover written")
 
 
