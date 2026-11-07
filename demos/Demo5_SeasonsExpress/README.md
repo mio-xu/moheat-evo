@@ -64,10 +64,11 @@ The player draws, back to front:
 - Winter lasts 12 s with no slow fade-in, and the train is 20 % faster in winter.
 - The player (`TW()` in demo.js) and the audio use the same remap.
 
-**Windows:** panorama windows.
-- The glass runs from 1.08 m to 4.3 m along the car and from −0.34 m to 0.95 m in height. A frame stays visible, and the curtains are tied back beside it.
-- The two windows cover most of the left and right of the frame.
-- The scenery is anchored to eye level: the layers' horizon (y≈590) sits at the vanishing point and is drawn at 1.05×. It is not scaled to the window size.
+**Car:** a panorama glass observation car (user, 2026-11-07).
+- Above the wooden wainscot and sill, the side walls and the whole arched roof are glass.
+- The glass is held by arched wooden ribs every 0.78 m, longitudinal brass bars and a roof spine that carries the lamps.
+- Each side's scenery fills its half of the frame, so the seasons are visible beside you and overhead.
+- The scenery is anchored to eye level: the layers' horizon (y≈590) sits at the vanishing point and is drawn at 1.05×.
 
 ## Pipeline
 ```

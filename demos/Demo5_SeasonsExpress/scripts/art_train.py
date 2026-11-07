@@ -2,7 +2,8 @@
 
   python3 scripts/art_train.py
 
-Writes train_interior_master.png (glass = #00FF00, as in the prompt list), train_interior_{day,dusk,night}.png
+Panorama observation car: above the wooden wainscot the side walls and the arched roof are glass, held by wooden ribs
+and brass bars. Writes train_interior_master.png (glass = #00FF00), train_interior_{day,dusk,night}.png
 (glass = transparent, ready to composite over the scrolling scenery), window_mask.png, window_geometry.json,
 seat_foreground.png, clock_face.png, clock_hands.png, lamp.png, table_props.png.
 """
@@ -19,7 +20,7 @@ W, H = 1536, 1024
 FOC, VX, VY = 610.0, 768.0, 418.0
 HW, FLOOR, CORN, PEAK = 1.3, -1.15, 1.14, 1.58        # half width, floor, cornice, ceiling peak (m, eye = 0)
 Z0, ZEND = 0.30, 5.6
-WIN = dict(z0=1.08, z1=4.3, y0=-0.34, y1=0.95, r=0.2, frame=0.08)   # panorama windows (user: windows too small, twice)
+# panorama glass car (user, 2026-11-07): side walls above the sill and the whole roof are glass
 LAMPS = (1.85, 3.45, 5.0)
 LINE = "#7a5446"
 # palette
@@ -50,27 +51,14 @@ def wall_pts(side, ab):            # side wall plane X = side*HW, (Z, Y)
 
 
 # ------------------------------------------------------------------ geometry pieces
-def ceiling():
-    xs = np.linspace(-HW, HW, 41)
-    near = [(x, arcY(x), Z0) for x in xs]; far = [(x, arcY(x), ZEND) for x in xs[::-1]]
-    out = P(poly(prs(near + far)), "url(#ceil)")
-    # panels between ribs: alternate light stripes
-    zs = np.arange(0.5, ZEND, 0.55)
-    for i in range(len(zs) - 1):
-        if i % 2: continue
-        a = [(x, arcY(x), zs[i]) for x in xs]; b = [(x, arcY(x), zs[i + 1]) for x in xs[::-1]]
-        out += P(poly(prs(a + b)), "#fff9ee", op=.55)
-    # ribs
-    for z in zs:
-        pts = prs([(x, arcY(x) - .01, z) for x in xs])
-        out += P(poly(pts, False), stroke=WOOD, sw=f(26 / z))
-        out += P(poly(pts, False), stroke=WOOD_L, sw=f(7 / z), op=.8)
-    # centre beam with little stars painted on
-    out += P(poly(prs([(-.12, PEAK - .005, Z0), (.12, PEAK - .005, Z0), (.12, PEAK - .005, ZEND), (-.12, PEAK - .005, ZEND)])), "#ffe7c2", op=.9)
-    for z in np.arange(0.7, ZEND, .55):
-        x, y = pr(0, PEAK - .01, z + .27)
-        out += star(x, y, 22 / z, "#ffd36e", LINE, 4 / z)
-    return out
+SILL = -0.36                      # glass starts above the wainscot / window sill
+RIBS = np.arange(0.62, ZEND - .05, .78)
+
+
+def arc_pts(z, n=31, y0=SILL):
+    """one rib: left wall bottom → up → over the arched roof → right wall bottom"""
+    xs = np.linspace(-HW, HW, n)
+    return [(-HW, y0, z), (-HW, CORN, z)] + [(x, arcY(x), z) for x in xs[1:-1]] + [(HW, CORN, z), (HW, y0, z)]
 
 
 def star(x, y, r, fill, stroke=None, sw=2):
@@ -82,76 +70,65 @@ def star(x, y, r, fill, stroke=None, sw=2):
     return P(smooth(pts, True, .15), fill, stroke, sw)
 
 
-def side_wall(side):
-    s = side
+def glass_panes():
+    """faint blue sheen + diagonal highlights on every pane (makes the glass read as glass over the scenery)"""
     out = ""
-    # upper cream wall and lower wainscot
-    up = wall_pts(s, [(Z0, -0.25), (ZEND, -0.25), (ZEND, CORN), (Z0, CORN)])
-    lo = wall_pts(s, [(Z0, FLOOR), (ZEND, FLOOR), (ZEND, -0.25), (Z0, -0.25)])
-    out += P(poly(up), "url(#wallup)") + P(poly(lo), "url(#wainscot)")
-    # wallpaper: tiny dotted flowers
-    for z in np.arange(0.75, ZEND - .2, .32):
-        for y in np.arange(-0.05, CORN - .05, .27):
-            if WIN["z0"] - .15 < z < WIN["z1"] + .15 and WIN["y0"] - .15 < y < WIN["y1"] + .15: continue
-            x0, y0 = pr(s * HW, y + (.13 if int(z / .32) % 2 else 0), z)
-            out += C(x0, y0, 7 / z, "#f6c9cf", op=.75) + C(x0, y0, 2.6 / z, "#fff7ef")
-    # wainscot panels
-    zs = np.arange(0.6, ZEND, .62)
-    for z in zs:
-        pan = wall_pts(s, rrect_plane(z + .05, z + .55, FLOOR + .18, -0.38, .06, 4))
-        out += P(poly(pan), WOOD_S, op=.45) + P(poly(pan), stroke=WOOD_L, sw=f(4 / z), op=.7)
-    # rails: brass rail at -0.25, wood cornice at CORN
-    for y, col, wdt in ((-0.25, BRASS, 13), (-0.21, "#fff1c4", 4), (CORN - .02, WOOD, 30), (CORN - .05, WOOD_L, 8)):
-        out += P(poly(wall_pts(s, [(Z0, y), (ZEND, y)]), False), stroke=col, sw=wdt / 2.2)
-    # sconce lamp between window and end wall
-    x, y = pr(s * HW, .45, 5.1)
-    out += E(x, y + 6, 13, 6, BRASS_S) + P(smooth([(x - 12, y), (x - 16, y - 26), (x, y - 34), (x + 16, y - 26), (x + 12, y)]), "#fff4c9", LINE, 2)
+    for a, b in zip(RIBS[:-1], RIBS[1:]):
+        for s_ in (-1, 1):
+            pane = prs([(s_ * HW, SILL, a), (s_ * HW, SILL, b), (s_ * HW, CORN, b), (s_ * HW, CORN, a)])
+            out += P(poly(pane), "#d9ecff", op=.07)
+            hl = prs([(s_ * HW, SILL + .25, a + .12), (s_ * HW, SILL + .45, a + .12), (s_ * HW, CORN - .1, b - .2), (s_ * HW, CORN - .3, b - .2)])
+            out += P(poly(hl), "#ffffff", op=.10)
+        xs = np.linspace(-HW, HW, 25)
+        roof = prs([(x, arcY(x), a) for x in xs] + [(x, arcY(x), b) for x in xs[::-1]])
+        out += P(poly(roof), "#d9ecff", op=.06)
+        hl = prs([(-.5, arcY(-.5), a + .1), (-.25, arcY(-.25), a + .1), (.45, arcY(.45), b - .15), (.2, arcY(.2), b - .15)])
+        out += P(poly(hl), "#ffffff", op=.08)
     return out
 
 
-def window(side):
-    s, w = side, WIN
-    fr = w["frame"]
-    outer = wall_pts(s, rrect_plane(w["z0"] - fr, w["z1"] + fr, w["y0"] - fr, w["y1"] + fr, w["r"] + fr))
-    inner = wall_pts(s, rrect_plane(w["z0"], w["z1"], w["y0"], w["y1"], w["r"]))
-    bev = wall_pts(s, rrect_plane(w["z0"] - fr * .45, w["z1"] + fr * .45, w["y0"] - fr * .45, w["y1"] + fr * .45, w["r"] + fr * .45))
-    out = P(poly(outer), WOOD, LINE, 3) + P(poly(bev), stroke=WOOD_L, sw=5, op=.9)
-    # sill (a little shelf that sticks out of the wall)
-    sill = prs([(s * HW, w["y0"] - fr, w["z0"] - .14), (s * HW, w["y0"] - fr, w["z1"] + .14),
-                (s * (HW - .1), w["y0"] - fr - .02, w["z1"] + .14), (s * (HW - .1), w["y0"] - fr - .02, w["z0"] - .14)])
+def lower_wall(side):
+    s = side
+    lo = wall_pts(s, [(Z0, FLOOR), (ZEND, FLOOR), (ZEND, SILL), (Z0, SILL)])
+    out = P(poly(lo), "url(#wainscot)")
+    for z in np.arange(0.6, ZEND, .62):
+        pan = wall_pts(s, rrect_plane(z + .05, z + .55, FLOOR + .18, SILL - .14, .06, 4))
+        out += P(poly(pan), WOOD_S, op=.45) + P(poly(pan), stroke=WOOD_L, sw=f(4 / z), op=.7)
+    # sill shelf along the whole glass wall (top face is visible from the seat)
+    sill = prs([(s * HW, SILL, Z0), (s * HW, SILL, ZEND), (s * (HW - .11), SILL, ZEND), (s * (HW - .11), SILL, Z0)])
     out += P(poly(sill), WOOD_L, LINE, 3)
-    # a tiny potted flower on the sill near the far end
-    x, y = pr(s * (HW - .06), w["y0"] - fr, w["z1"] + .02)
-    out += P(poly([(x - 9, y), (x + 9, y), (x + 7, y - 14), (x - 7, y - 14)]), "#f1a27e", LINE, 2)
-    for dx, dy, c in ((-6, -22, "#ff9fb5"), (6, -24, "#ffd36e"), (0, -30, "#ffb3c7")):
-        out += C(x + dx, y + dy, 6, c, LINE, 1.6)
-    out += C(x, y - 18, 4, "#7cc28a")
-    return out, inner, outer
+    out += P(poly(prs([(s * (HW - .11), SILL, Z0), (s * (HW - .11), SILL, ZEND)]), False), stroke=BRASS, sw=5)
+    for z in (1.5, 3.2, 4.9):                                            # little potted flowers on the sill
+        x, y = pr(s * (HW - .055), SILL, z); k = 1.8 / z
+        out += P(poly([(x - 9 * k, y), (x + 9 * k, y), (x + 7 * k, y - 14 * k), (x - 7 * k, y - 14 * k)]), "#f1a27e", LINE, 2)
+        for dx, dy, c in ((-6, -22, "#ff9fb5"), (6, -24, "#ffd36e"), (0, -30, "#ffb3c7")):
+            out += C(x + dx * k, y + dy * k, 6 * k, c, LINE, 1.6)
+    return out
 
 
-def curtains(side):
-    s, w = side, WIN
+def frame_ribs():
+    """the car's skeleton: longitudinal brass bars, roof spine, then the arched wooden ribs (far → near)"""
     out = ""
-    for zc, dirn in ((w["z0"] - .2, 1), (w["z1"] + .2, -1)):          # curtains tied back beside the frame, not over the glass
-        top = w["y1"] + w["frame"] + .04
-        z1 = zc + dirn * .2
-        pts = [(zc, top), (z1, top), (zc + dirn * .13, .32), (zc + dirn * .17, w["y0"] - .02), (zc, w["y0"] - .05)]
-        pp = wall_pts(s, [(a, b) for a, b in pts])
-        # draw slightly off the wall so it is in front of the frame
-        pp = [pr(s * (HW - .03), b, a) for a, b in pts]
-        out += P(smooth(pp, True, .35), "url(#curtain)", LINE, 3)
-        # folds
-        for t in (.3, .65):
-            a = [(zc + dirn * .24 * t, top), (zc + dirn * (.04 + .1 * t), .32), (zc + dirn * .1 * t, w["y0"])]
-            out += P(smooth([pr(s * (HW - .03), b, z) for z, b in a], False), stroke="#e79aae", sw=3, op=.8)
-        # tie-back ribbon
-        bx, by = pr(s * (HW - .035), .32, zc + dirn * .13)
-        out += E(bx, by, 12, 8, "#ffe08a", stroke=LINE, sw=2) + C(bx, by, 4, "#f2b84b")
-    # valance across the top
-    zz = np.linspace(w["z0"] - .2, w["z1"] + .2, 13)
-    top = w["y1"] + w["frame"] + .1
-    pts = [(s * (HW - .035), top, z) for z in zz] + [(s * (HW - .035), top - .12 - .04 * (i % 2), z) for i, z in enumerate(zz[::-1])]
-    out += P(smooth(prs(pts), True, .3), "url(#curtain)", LINE, 3)
+    for s_ in (-1, 1):                                                   # longitudinal bars
+        for y, col, w in ((CORN, BRASS, 8), (.42, BRASS, 4)):
+            out += P(poly(prs([(s_ * HW, y, Z0), (s_ * HW, y, ZEND)]), False), stroke=LINE, sw=w + 3)
+            out += P(poly(prs([(s_ * HW, y, Z0), (s_ * HW, y, ZEND)]), False), stroke=col, sw=w)
+        xr = s_ * .78
+        out += P(poly(prs([(xr, arcY(xr), Z0), (xr, arcY(xr), ZEND)]), False), stroke=LINE, sw=7)
+        out += P(poly(prs([(xr, arcY(xr), Z0), (xr, arcY(xr), ZEND)]), False), stroke=BRASS, sw=4)
+    spine = prs([(-.14, PEAK - .01, Z0), (.14, PEAK - .01, Z0), (.14, PEAK - .01, ZEND), (-.14, PEAK - .01, ZEND)])
+    out += P(poly(spine), WOOD, LINE, 3) + P(poly(prs([(0, PEAK - .012, Z0), (0, PEAK - .012, ZEND)]), False), stroke=WOOD_L, sw=4)
+    for z in RIBS[::-1]:
+        pts = prs(arc_pts(z))
+        out += P(poly(pts, False), stroke=LINE, sw=f(64 / z))
+        out += P(poly(pts, False), stroke=WOOD, sw=f(54 / z))
+        out += P(poly(pts, False), stroke=WOOD_L, sw=f(14 / z), op=.85)
+        for s_ in (-1, 1):                                               # brass rivets where rib meets bars
+            for y in (CORN, .42):
+                x, yy = pr(s_ * HW, y, z); out += C(x, yy, 6 / z, BRASS, LINE, 1.2 / z * 1.5)
+    for z in np.arange(0.9, ZEND, .78):                                  # little painted stars on the spine
+        x, y = pr(0, PEAK - .02, z + .39)
+        out += star(x, y, 18 / z, "#ffd36e", LINE, 3 / z)
     return out
 
 
@@ -324,29 +301,29 @@ def defs(scene="day"):
 
 
 def scene_svg(glass_green=False, lit=False, only=None):
-    body_back = ceiling() + floor() + side_wall(-1) + side_wall(1)
+    """panorama observation car: everything that is not drawn is glass (transparent)"""
+    body = (f'<rect width="{W}" height="{H}" fill="#00FF00"/>' if glass_green else "")
+    body += glass_panes() + floor() + lower_wall(-1) + lower_wall(1)
     ew, door_glass = end_wall()
-    body_back += ew
-    win = []
-    for s in (-1, 1):
-        w_svg, inner, outer = window(s); body_back += w_svg; win.append(inner)
+    body += ew
     cx, cy = pr(0, 1.07, ZEND)
     R = .3 * FOC / ZEND
-    body_back += clock_svg(cx, cy, R)
-    glass = [poly(g) for g in win] + [poly(door_glass)]
-    mask = ('<mask id="cut" maskUnits="userSpaceOnUse" x="0" y="0" width="1536" height="1024">'
-            f'<rect width="1536" height="1024" fill="white"/>{"".join(P(g, "black") for g in glass)}</mask>')
-    front = curtains(-1) + curtains(1)
+    body += clock_svg(cx, cy, R)
+    body += frame_ribs()
     for z in (4.45, 3.55, 2.65, 1.75):
-        front += seat(-1, z) + seat(1, z)
+        body += seat(-1, z) + seat(1, z)
     for z in sorted(LAMPS, reverse=True):
         x, y = pr(0, PEAK - .02, z); x2, y2 = pr(0, 1.18, z)
-        front += P(poly([(x, y), (x2, y2)], False), stroke=LINE, sw=f(10 / z))
-        front += lamp_svg(x2, y2, 0.1 * FOC / z, lit)
-    front += table()
-    green = "".join(P(g, "#00FF00") for g in glass) if glass_green else ""
-    body = f'<g mask="url(#cut)">{body_back}</g>{green}{front}'
+        body += P(poly([(x, y), (x2, y2)], False), stroke=LINE, sw=f(10 / z))
+        body += lamp_svg(x2, y2, 0.1 * FOC / z, lit)
+    body += table()
     if only == "table": body = table()
+    # for the player: each side's scenery fills its half of the frame (the glass is everywhere above the sill)
+    win = [[(0, 0), (W / 2, 0), (W / 2, 690), (0, 690)], [(W / 2, 0), (W, 0), (W, 690), (W / 2, 690)]]
+    green_door = P(poly(door_glass), "#00FF00") if glass_green else ""
+    mask = ('<mask id="cut" maskUnits="userSpaceOnUse" x="0" y="0" width="1536" height="1024">'
+            f'<rect width="1536" height="1024" fill="white"/>{P(poly(door_glass), "black")}</mask>')
+    body = f'<g mask="url(#cut)">{body}</g>{green_door}'
     return svg(W, H, body, defs() + mask), win, door_glass, (cx, cy, R)
 
 

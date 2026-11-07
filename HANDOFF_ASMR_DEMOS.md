@@ -177,7 +177,11 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
       - 教训：一个修改脚本里有多处 assert 时，前面失败会导致后面全部没写入；改完要 grep 确认。
     - **开头太慢太长**：所有时间按原任务书网格编写，再由 `seasons.tw()` 统一映射（`WARP_OLD → WARP_NEW`）：冬 20→12 s，多出的 8 s 分给隧道（+3）和乱季（+5），熄灯仍是 4 s（现在是 107.5–111.5 s），春天不变。播放器 `TW()`、`build_audio.py`、`check_sync.py` 用同一映射。冬天风雪不再淡入、列车快 20 %，封面只停 1.8 s，景色滚动速度 V 从 520 提到 660。
     - 新时间：冬 0–12、夏 12–37、暴雨 37–62、隧道 62–90（中性 73–77）、乱季 90–125、春 125–150。验收全部通过（12 次左右移动、9 段相反温度）。
-  - **Seedance（用户要求，2026-11-07）**：`Seedance素材命令.md` 里有 15 个图生视频镜头（S01–S15，每个 ≤10 s，熄灯段 107.5–111.5 s 不生成）。内容包括通用提示词、负面提示词、每个镜头左右窗的季节和事件时间，都与 `seasons.py` 一致。
+  - **全景玻璃车厢（用户要求，2026-11-07）**：`art_train.py` 改为观景车。
+    - 腰板（`SILL` −0.36）以上的侧墙和整个拱顶都是玻璃：木质拱肋（`RIBS` 间隔 0.78 m）、纵向黄铜横杆、车顶木梁挂吊灯，窗台上有小盆花；窗帘、壁灯、行李架都已去掉。
+    - 没画的地方就是透明玻璃。`window_geometry.json` 的 left/right_glass 现在是左右半个画面，播放器按半边铺景色，所以头顶也能看到天空和隧道顶。
+  - **Seedance 暂停**：用户说"先不管 Seedance"。`Seedance素材命令.md` 和 `project/seedance_refs/` 还是旧的大车窗版本，以后要用时需要按全景车厢重新生成首帧图，并把提示词里的 "two huge panoramic side windows" 改掉。
+  - **Seedance（用户要求，2026-11-07，已暂停）**：`Seedance素材命令.md` 里有 15 个图生视频镜头（S01–S15，每个 ≤10 s，熄灯段 107.5–111.5 s 不生成）。内容包括通用提示词、负面提示词、每个镜头左右窗的季节和事件时间，都与 `seasons.py` 一致。
     - 首帧和尾帧图：`scripts/make_seedance_refs.py` → `project/seedance_refs/S##_{start,end}.jpg`（播放器 `?clean=1` 干净渲染，`render_mp4.py --at … --clean`）。
     - 用户把生成的视频放进 `video/seedance/S01.mp4` … `S15.mp4` 之后：**下一步**写合成脚本，按时间轴剪辑和调速（24→30 fps），叠加 0–1.8 s 封面、场景标题、熄灯黑场和结尾卡，再与 `audio/final/final_binaural_150s.wav` 合成。冷热 CSV 不变。还要检查每个 clip 的左右季节是否画反。
   - **以后可选**：如果 ChatGPT 有额度，可按 `ChatGPT素材命令.md` 生成同名文件替换程序绘制的图，然后运行 `export.py` 和 `render_mp4.py`。

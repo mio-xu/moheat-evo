@@ -23,7 +23,7 @@ python3 scripts/make_style_sheet.py   # assets/style_sheet.png + storyboard/fram
 
 | File | What | Notes |
 |---|---|---|
-| `train_interior/train_interior_master.png` | Car interior, glass = #00FF00 | True one-point 3-D projection (f = 610, VP 768,418): arched ceiling with ribs, two big rounded windows with pink curtains, pink velvet seats with lace covers, mint carpet, end door with a round clock |
+| `train_interior/train_interior_master.png` | Panorama glass observation car, glass = #00FF00 | True one-point 3-D projection (f = 610, VP 768,418). Glass side walls and arched glass roof on wooden ribs and brass bars, wooden wainscot and sill with flower pots, pink velvet seats with lace covers, mint carpet, end door with a round clock |
 | `train_interior/train_interior_{day,dusk,night}.png` | Same, glass **transparent** | Lighting is a per-pixel tint plus lamp glow (`tint()` in art_train.py), so the composition is identical |
 | `train_interior/window_mask.png`, `window_geometry.json` | Glass mask and polygons | Left/right/door glass polygons, clock centre and radius, lamp positions, used by the player |
 | `train_interior/seat_foreground.png` | Near table alone | For a parallax / shake layer |
