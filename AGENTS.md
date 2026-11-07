@@ -12,5 +12,6 @@ Key rules (details in the handoff):
 - **Never modify earlier demos**: reuse art by symlink and code by import-by-path.
 - **Commit and push every change to `origin main`.** Large media stay out of git.
 - **Every demo page fits exactly one screen** on desktop and on phones / tablets in portrait and landscape, with the player as large as possible (shared `series.css` / `nav.js`, DEMO_DESIGN_GUIDE §7.1).
+- **Easy to change, maintain and use** (user, 2026-11-08; DEMO_DESIGN_GUIDE §14): shared code first (`demos/shared/`), content as data (`lines.js`, `l10n.js`, `LANGS`, `DEMOS`, `GATES`), repeated jobs as `tools/` scripts (`tools/web/bump.py` for `?v=` numbers, `tools/l10n/check_missing.js`), read-before-write, commit only your own changes and push right after staging. UI standard for every demo: §7.3.
 - **Keep the repo tidy** (user, 2026-11-08): new files follow the folder layout in `DEMO_DESIGN_GUIDE.md` §12; after each finished demo run `python3 tools/cleanup/audit.py` and, with the user's OK, move unneeded resources to the Trash (`--trash`).
 - The device firmware allows **one mode per ear** (cool or heat). Every thermal CSV must have 0 same-ear conflicts.

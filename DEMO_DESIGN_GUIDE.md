@@ -499,3 +499,18 @@ assets/images/demos/  官网菜单缩略图（按文件夹名命名）
 - **真实人物**：历史人物写明是虚构的角色；不用在世真人的名字、长相、声音。Voice Design 本来就会拒绝真名。
 - **第三方映像**（电视台报道等）：标注 © 和权利方；放进网站之前确认有转载许可。拿不到许可时，只链接官方来源。
 - **字体**：Google Fonts（SIL OFL 1.1），统一在 `credits.html` 里说明，单个 Demo 不用重复写。
+
+## 14. 让系统好改、好维护、好用（用户 2026-11-08）
+
+目标：任何人（包括之后的 Claude 会话）都能很快看懂、安全地改、一次改动全站生效。
+
+- **共用优先**：界面、显示语言、语音回答、互动卡片、一屏布局都在 `demos/shared/`（series.css · game.css · nav.js · subs.js · l10n_common.js · voice.js · interact.js）。修 bug、改样式先改共用文件，全站一起生效；Demo 自己只放内容（剧情 `main.js`、台词 `lines.js`、翻译 `l10n.js`、美术 / 声音）。同一段代码出现第二次，就搬进 shared 或 tools。
+- **数据和代码分开**：台词 → `lines.js` / `media/data.js`；翻译 → `l10n.js`（每个 Demo）+ `shared/l10n_common.js`（页面框架）；语言 → `subs.js` 的 `LANGS`；Demo 列表 → `nav.js` 的 `DEMOS`；互动门 → `interact.js` 的 `GATES`。改内容只改数据，不碰逻辑。
+- **固定工具代替临时脚本**（反复要做的事写成 `tools/` 下的脚本，并写进本规范）：
+  - `python3 tools/web/bump.py <改过的共用文件…>`：改 `?v=` 版本号（`--stage` 只暂存这次的改动，`--name l10n.js` 按文件名）。
+  - `node tools/l10n/check_missing.js <lang> [文件夹]`：列出没有翻译的字符串。
+  - `python3 tools/cleanup/audit.py`：清理报告。
+- **安全地改文件**：先读完再写（Python 里不要在同一行 `open(p, 'w').write(f(open(p).read()))`，打开写入时文件已被清空——2026-11-08 因此清空过一次 Demo24 的页面）；批量改动前先 `--dry` 看清单；改完 `node --check` 所有改过的 JS。
+- **多个会话同时工作**：只提交自己改的文件或改动（`git add <具体文件>`，或 `bump.py --stage`），**暂存后立刻 commit + push**（别的会话的 `git commit` 会把你暂存的改动一起提交）；改名、批量移动之前用 ListAgents 看看谁在工作，改完用 SendMessage 告诉它们新路径。
+- **写清楚**：规则写进本规范（是什么、为什么、怎么做）；用户交代的任务记进 `TASKS.md`；每个共用文件开头写用途和用法；文件名按 §12.1。
+- **改完就验证**：改了共用文件，至少看 3 个不同系列的 Demo（影片类、游戏类、直播间）× 三种语言；按 §7.3 的尺寸检查一屏和右侧栏；涉及语言的跑一次全页扫描（中文模式下画面上没有残留的日文 / 英文）。
