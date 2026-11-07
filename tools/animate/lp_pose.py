@@ -14,7 +14,7 @@ import os, sys, math, subprocess, argparse
 os.environ.setdefault("PYTORCH_ENABLE_MPS_FALLBACK", "1")
 LP = os.path.expanduser("~/ml/LivePortrait")
 CWD = os.getcwd()
-sys.argv = [sys.argv[0]] + [a if a.startswith("-") or a in ("stills", "talk", "idle") or a.replace(".", "").isdigit() else os.path.abspath(a) for a in sys.argv[1:]]
+sys.argv = [sys.argv[0]] + [a if a.startswith("-") or a in ("stills", "talk", "idle", "sprites") or a.replace(".", "").isdigit() else os.path.abspath(a) for a in sys.argv[1:]]
 sys.path.insert(0, LP)
 os.chdir(LP)  # model paths in the configs are relative
 
@@ -142,7 +142,7 @@ def audio_env(path, fps):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("mode", choices=["stills", "talk", "idle"])
+    ap.add_argument("mode", choices=["stills", "talk", "idle", "sprites"])
     ap.add_argument("paths", nargs="+")
     ap.add_argument("--sec", type=float, default=0)
     ap.add_argument("--fps", type=int, default=24)
@@ -161,6 +161,36 @@ def main():
         }
         for k, p in poses.items():
             save(f"{out}/{k}.jpg", pup.frame(**p)); print(k)
+        return
+
+    if a.mode == "sprites":
+        # VN-style 目パチ口パク as face patches: mouth levels × eye states, all on the neutral pose (= idle loop frame 0),
+        # cut to the area that actually changes, feathered so a patch blends into the frame under it.
+        atlas_p, meta_p = a.paths[1], a.paths[2]
+        LIPS, EYES = [0.0, 0.12, 0.25, 0.4], [1.0, 0.7, 0.0]
+        N = pup.frame().astype(np.int16)
+        cells = [[pup.frame(eye=e, lip=l) for l in LIPS] for e in EYES]
+        diff = np.zeros(N.shape[:2], bool)
+        for row in cells:
+            for c in row:
+                diff |= np.abs(c.astype(np.int16) - N).max(axis=2) > 6
+        diff = cv2.morphologyEx(diff.astype(np.uint8), cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
+        grown = cv2.dilate(diff, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (41, 41)))
+        ys, xs = np.where(grown > 0)
+        x0, y0, x1, y1 = xs.min(), ys.min(), xs.max() + 1, ys.max() + 1
+        x0 -= x0 % 2; y0 -= y0 % 2; x1 += x1 % 2; y1 += y1 % 2
+        feather = cv2.GaussianBlur(grown.astype(np.float32), (0, 0), 7)[y0:y1, x0:x1]
+        feather = (np.clip(feather * 1.6, 0, 1) * 255).astype(np.uint8)
+        w, h = x1 - x0, y1 - y0
+        from PIL import Image
+        atlas = Image.new("RGBA", (w * len(LIPS), h * len(EYES)))
+        for r, row in enumerate(cells):
+            for c, img in enumerate(row):
+                atlas.paste(Image.fromarray(np.dstack([img[y0:y1, x0:x1], feather])), (c * w, r * h))
+        atlas.save(atlas_p, quality=88, method=6)
+        import json
+        json.dump({"patch": [int(x0), int(y0), int(w), int(h)], "lips": LIPS, "eyes": EYES}, open(meta_p, "w"))
+        print("wrote", atlas_p, (x0, y0, w, h))
         return
 
     fps = a.fps

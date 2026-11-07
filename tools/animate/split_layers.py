@@ -25,6 +25,14 @@ if len(st) > 1:
     keep = 1 + np.argmax(st[1:, cv2.CC_STAT_AREA])
     blob = cv2.dilate((lab == keep).astype(np.uint8), np.ones((9, 9), np.uint8))
     alpha = (alpha * blob).astype(np.uint8)
+# dark clothes often come out half-transparent (the background would show through the jacket): the inside of the
+# silhouette is made solid, only a soft rim keeps the matte's own values (hair strands, fur collar)
+sil = (alpha > 24).astype(np.uint8)
+cnts, _ = cv2.findContours(sil, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+filled = np.zeros_like(sil); cv2.drawContours(filled, cnts, -1, 1, cv2.FILLED)
+core = cv2.erode(filled, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (13, 13)))
+core = cv2.GaussianBlur(core.astype(np.float32), (0, 0), 3) * 255
+alpha = np.maximum(alpha.astype(np.float32), core).astype(np.uint8)
 rgba = np.dstack([np.array(im), alpha])
 Image.fromarray(rgba).save(f"{a.out}/char.png")
 cv2.imwrite(f"{a.out}/mask.png", alpha)
