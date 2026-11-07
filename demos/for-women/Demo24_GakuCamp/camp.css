@@ -1,0 +1,23 @@
+/* Gaku's campfire stream — on top of Demo 14's stream.css (by path): ember amber + winter-night green / navy instead of lavender. */
+:root { --bg: #0f1517; --panel: #172024; --panel-2: #1f2b2f; --line: #31423f; --gold: #ffb870; }
+body { background: var(--bg); }
+.bar { background: #11191b; }
+.brand span { color: #ffb870; }
+.btn.primary { background: linear-gradient(135deg, #ffcf8a, #ff9a52 50%, #4fae8e); color: #1a1208; }
+.chat { background: linear-gradient(to right, rgba(10, 18, 20, .35), rgba(10, 18, 20, .74)); border-left-color: rgba(200, 230, 215, .15); }
+.chat-head { color: #cde3d8; }
+.chat-input.turn { background: rgba(32, 62, 54, .75); box-shadow: inset 0 0 0 1px rgba(150, 220, 190, .45); }
+.chip-c { border-color: rgba(190, 235, 215, .55); }
+.chip-c:hover { background: rgba(80, 170, 140, .45); }
+.chat-row .me, .chat-list li.you b { background: linear-gradient(135deg, #ffcf8a, #4fae8e); color: #10201a; }
+.chat-list li.sc.gaku { background: #ffb870; color: #2a1606; }
+.act-btn { border-color: rgba(190, 235, 215, .55); background: rgba(12, 22, 24, .8); }
+.act-btn:hover { background: rgba(60, 140, 115, .55); }
+.act-btn.hold { position: relative; overflow: hidden; }
+.act-btn.hold::after { content: ""; position: absolute; left: 0; bottom: 0; height: .35cqw; width: calc(var(--p, 0) * 100%); background: linear-gradient(90deg, #ffcf8a, #ff8a4a); }
+.subs .line { background: rgba(8, 14, 16, .62); }
+.subs .en { color: #d6e6de; }
+.ended { background: rgba(8, 14, 16, .78); }
+.e-sub { color: #ffd2a8; }
+body[data-ch="gaku"] .intro h1 { background-image: linear-gradient(100deg, #ffd9a0, #ffffff 55%, #a8e6cf); }
+.intro .chip.p { background: rgba(80, 170, 140, .2); color: #dff5ec; border-color: rgba(120, 210, 175, .55); }

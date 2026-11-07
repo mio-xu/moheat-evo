@@ -47,7 +47,41 @@ DESIGNS = {
                 "Upper body, centred.",
 }
 
-SCENES = {}   # game stills: written after the user picks the look
+GAKU = ("Gaku: the exact man from image 1 — sleek short black hair with a hidden deep-green inner colour at the nape and sides, "
+        "long-lashed cool dark-grey eyes, a thin silver chain necklace, a black aviator jacket with a fluffy cream shearling collar over a "
+        "black knit. 26, a solo winter-camping live streamer: extremely handsome, cool and quiet (kuudere), secretly gentle and shy.")
+STREAM = ("Composition for a live-stream frame: the camera is a small binaural microphone on a camp chair by the fire (the viewer's "
+          "head). Keep everything important in the LEFT three quarters of the picture; the right quarter is calm background (it will be "
+          "covered by the chat column). The lower 20% stays simple for subtitles.")
+CAMP = ("Background (the same campsite as image 1): a winter lakeside campsite at night — the campfire in a ring of stones just RIGHT of "
+        "centre casting warm amber light on him from the right, the canvas tent glowing behind, dark snowy pine trees, a dark blue lake "
+        "on the left, light snow on the ground and a starry navy sky; cold blue moonlight from the LEFT.")
+SCENES = {
+    'gaku_live': [GAKU, "He sits on a low camp stool about one metre in front of the camera, slightly left of centre, leaning forward with "
+                  "his forearms on his knees, looking straight into the camera with a cool, calm face and the faintest smile. Upper body.", CAMP, STREAM, WIDE],
+    'gaku_log': [GAKU, "He crouches beside the campfire (right of centre), placing a split log on the fire with one hand, sparks rising; "
+                 "he turns his face toward the camera with a quiet look. The fire burns brighter, strong warm light on his face.", CAMP, STREAM, WIDE],
+    'gaku_left': [GAKU, "Very close: he has sat down right next to the camera on its LEFT side to block the cold wind from the lake. His "
+                  "face and shoulder are large in the LEFT half of the frame, turned three-quarters toward the camera, looking at it "
+                  "from very near with a gentle, slightly shy expression, his shearling collar filling the left edge. Behind him the "
+                  "dark lake; the campfire glows at the right of centre.", CAMP, STREAM, WIDE],
+    'gaku_coffee': [GAKU, "Close, in front of the camera: he holds a steaming black enamel camp mug of hot coffee right in front of the "
+                    "camera with both hands, soft white steam rising across the frame, his face just behind the mug looking at the camera "
+                    "with a small, shy smile. A black camp kettle on the stones by the fire.", CAMP, STREAM, WIDE],
+    'gaku_imo': [GAKU, "Close, in front of the camera, slightly to the right: he holds a roasted sweet potato wrapped in foil, broken in "
+                 "half to show the golden steaming inside, offering it toward the camera, soft steam rising; his face looking at the "
+                 "camera with a rare, warm little smile.", CAMP, STREAM, WIDE],
+    'gaku_blanket': [GAKU, "Snow is falling softly. Close in front of the camera, he leans over it and drapes a thick grey wool blanket over "
+                     "the camera — the blanket's soft edge hangs across the top of the frame, his arms reach in from both sides holding it, "
+                     "snowflakes on his black hair and collar, looking down into the camera with a tender, quiet look. The campfire "
+                     "is lower now, glowing embers.", CAMP, STREAM, WIDE],
+    'gaku_whisper_R': [GAKU, "Very close: he leans in toward the camera's RIGHT ear to whisper. His face is large just right of centre "
+                       "(between 40% and 75% of the width), turned three-quarters, eyes half closed, lips near the ear, a few snowflakes "
+                       "in his hair; the left half shows the softly blurred snowy lake at night. Intimate and quiet.", STREAM, WIDE],
+    'gaku_bye': [GAKU, "Snow falling softly, the campfire burned down to warm embers. He sits on the camp stool about one metre in front "
+                 "of the camera, slightly left of centre, raising one hand in a small, awkward wave goodbye, a shy, warm smile, a grey "
+                 "wool blanket over his shoulders.", CAMP, STREAM, WIDE],
+}
 
 
 def upload_once(path, cache):

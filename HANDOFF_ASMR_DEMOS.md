@@ -397,6 +397,14 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 动画（§4b）：15 段 Seedance 2.5 Lite 1080p 首尾帧（960 credits，网页端）：每个画面一段说话循环，吹风 / 眼镜 / 窗边再加安静循环，6 段过渡（门口→毛巾→吹风→左耳→右侧吹风（镜像帧）→眼镜→窗边）；右侧吹风循环 = 左侧镜像。`scripts/prepare_video.py`（Demo20 版，静帧用 media/art JPG）。网页上传小坑：同一 file input 连续上传要先把 `input.value=''`，否则每隔一次不生效；生图页提交后比例会被重置成 Auto，每次都要确认 16:9。
 - 自动通关测试（带动画）：2:25，0 报错。
 
+### Demo24_GakuCamp ✅ 可玩（静帧版）—《ガクの、焚き火キャンプ配信 / Gaku's Campfire Stream》（女性向直播间，2026-11-08）
+- 用户要求：女性向加一个男主播直播间，人设、外表要和其他男角色拉开；**要帅哥人设**（第一版"粗犷大哥哥"被否）。原创角色 **月嶋ガク**，26 岁冬季单人露营主播，颜值天花板、高冷话少（クーデレ）、对自己的帅没自觉。造型 = 用户选的 **C**（黑短发 + 深绿内层挑染、银链、黑色羊毛领飞行员夹克，`project/designs_contact.jpg`）。
+- 声音：ElevenLabs **gaku r2_a**（`rR0Ih88ACkRAdbFhLe7c`；r1 是作废的大哥哥人设）。`scripts/voice.py`（Demo14 版，单角色）。
+- 直播 UI 用 Demo14 的 `stream.css`（按路径）+ 自己的 `camp.css`；`audio.js` 是 Demo14 的拷贝加篝火 / 湖风 / 雪地脚步 / 加柴 / 锡纸；`game.js` 单角色版 stream.js。
+- 流程（约 2:15）：开播打招呼 → 加柴（右暖）→ "冷吗" → **招牌：坐到你左边当风墙**（左冷消失、换成他声音的暖）→ Super Chat 咖啡 / 烤红薯（前方暖）→ 下雪（两耳轻冷）→ 毯子盖住麦克风（两耳暖、风没了）→ 右耳贴耳 + 长按「まだ見てる」→ 道别（毯子拿回去）。DUAL 两层；冷热表在 README。
+- 美术：8 张静帧，Seedance **网页** GPT Image 2（API 上传 2026-11-08 又被限流约 5 h，`/images` 也排队 429）。造型选项先用 3 号柔和赛璐璐风格图做参考（Demo12 `style_3_softcel.png`）。共 300 credits（造型 4 张 + 场景 8 张）。注意：同一个账号的网页历史里有别的会话的图，按提示词内容认图再下载；Downloads 里也会混进别人的文件。
+- 自动通关：两条分支都跑过（`?auto=1` / `?auto=1&alt=1`），0 报错。已加入 nav.js（女性向最后）、官网菜单、credits.html。动画（§4b）还没做，等用户反馈。
+
 ### Demo23_NobunagaTalk ✅ 可玩（本机专用）—《信長と、語らう / Talk with Nobunaga》实时 AI 对话（2026-11-08）
 - 用户要求：不是固定台词，能对用户说的话做出反应；讲完等用户讲；本机版 + 限额不许超；可选 信長 / 家康 / 三人で、可选场所（5 个：岐阜城天守夕暮れ、茶室囲炉裏、京都居酒屋、山崎蒸溜所、安土月夜の宴）；角色先按场所开话题；约 2 分钟由角色收尾；角色要走动（不在一个位置讲话）让冷热变化。
 - 架构：`server.py`（端口 8771，持有 key，执行 `limits.json`）+ ElevenLabs **text-only agent**（`agent.json`，LLM claude-sonnet-5-5，prompt 每次在 `scenes.js` 生成后 override）+ 浏览器语音识别 + 每句 ElevenLabs v4 TTS → 每个角色独立 HRTF。细节见该目录 README。

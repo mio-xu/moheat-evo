@@ -1,0 +1,31 @@
+// Gaku's lines: id → [ja, en, style ('n' = talk, 'w' = close whisper)]. Voice: ElevenLabs gaku r2_a (user's pick, tools/eleven/cast.json)
+// → scripts/voice.py (audio tags there) → media/voice/<id>.m4a.
+window.STREAM_LINES = {
+  "g01": ["…あ。もう、映ってる？", "…Oh. Am I live already?", "n"],
+  "g02": ["…こんばんは。岳です。今日も、湖のそばで、焚き火してる", "…Good evening. I'm Gaku. A campfire by the lake again tonight.", "n"],
+  "g03": ["…顔の話は、いいって。…焚き火、見てくれ", "…Enough about my face. …Watch the fire.", "n"],
+  "g04a": ["…はじめまして。…ゆっくりしてって", "…Nice to meet you. …Make yourself at home.", "n"],
+  "g04b": ["…こんばんは。…来てくれて、ありがと", "…Evening. …Thanks for coming.", "n"],
+  "g05": ["…火、ちょっと足すな", "…Let me add some wood.", "n"],
+  "g06": ["…パチパチいってるの、聞こえるか？ マイク、火のすぐそばに置いてる", "…Hear it crackle? The mic is right next to the fire.", "n"],
+  "g07": ["…寒くないか？", "…Aren't you cold?", "n"],
+  "g08a": ["…そっか。…風、湖のほうから来てるもんな", "…Yeah. …The wind's coming off the lake.", "n"],
+  "g08b": ["…よかった。…でも、左、風あたってるだろ", "…Good. …But the wind's hitting your left side, isn't it?", "n"],
+  "g09": ["…ちょっと、待ってろ", "…Hang on a sec.", "n"],
+  "g10": ["…ほら。俺が、壁になるから", "…There. I'll be your wall.", "n"],
+  "g11": ["…これで、寒くないだろ", "…You're not cold now, right?", "w"],
+  "g12a": ["…べつに。…風よけ、なだけ", "…It's nothing. …I'm just blocking the wind.", "w"],
+  "g12b": ["…近いか。…悪い。…でも、どかない", "…Too close? …Sorry. …But I'm not moving.", "w"],
+  "g13c": ["…スパチャ、ありがと。…コーヒーな。ちょうど、お湯わいてる", "…Thanks for the Super Chat. …Coffee, then. The water's just boiled.", "n"],
+  "g14c": ["…ほら。湯気、マイクにあたってるだろ。…あったかいか？", "…Here. The steam's reaching the mic, right? …Warm?", "n"],
+  "g13i": ["…スパチャ、ありがと。…焼き芋？ ちょうど、火のなかに入れてた", "…Thanks for the Super Chat. …Sweet potato? I've got one in the fire right now.", "n"],
+  "g14i": ["…ほら、半分。…熱いから、気をつけろ", "…Here, half for you. …It's hot, careful.", "n"],
+  "g15": ["…ひとりキャンプなのに、…ひとりじゃないみたいだ", "…It's a solo camp, but… it doesn't feel like I'm alone.", "n"],
+  "g16": ["…雪だ", "…Snow.", "n"],
+  "g17": ["…マイク、濡れるな。…これ、かけとく", "…The mic will get wet. …I'll put this over it.", "n"],
+  "g18": ["…あったかいか？ …俺の、ブランケット", "…Warm? …That's my blanket.", "w"],
+  "g19": ["…コメント、ゆっくりになってきたな。…みんな、ねむいか", "…The chat's slowing down. …Getting sleepy, everyone?", "n"],
+  "g20": ["…なあ。配信、切るの…もうちょっとだけ、待ってくれるか", "…Hey. Could you wait… just a little longer before I end the stream?", "w"],
+  "g21": ["…顔、顔って言われるけどさ。…ほんとは、声、聞いてほしかった。…お前に", "…Everyone keeps talking about my face. …But I really wanted you to hear my voice. …You.", "w"],
+  "g22": ["…じゃあ、おやすみ。…また、焚き火の夜に", "…Good night, then. …See you on another campfire night.", "n"]
+};
