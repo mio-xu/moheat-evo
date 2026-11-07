@@ -151,6 +151,8 @@ function wisp(ctx, x, y, r, alpha, t) {
 // ---------------------------------------------------------------- particles (breath, magic)
 let parts = [];
 function spawn(o) { if (parts.length < 900) parts.push(o); }
+const LAST_OUT = Math.max(...Object.values(A.present).map((p) => p[1]));   // after the last one vanishes every light effect fades out
+let fxFade = 1;
 function updateParts(dt) {
   for (const q of parts) { q.life += dt; if (q.seed !== undefined && (q.kind === 'frost' || q.kind === 'haze')) { q.vx += Math.sin(q.life * 5 + q.seed) * 40 * dt; q.vy += Math.cos(q.life * 4 + q.seed) * 30 * dt + (q.kind === 'haze' ? -20 : 12) * dt; } q.x += q.vx * dt; q.y += q.vy * dt; q.vx *= 1 - 1.4 * dt; q.vy *= 1 - 1.4 * dt; if (q.spin) q.rot += q.spin * dt; if (q.grow) q.size += q.grow * dt; }
   parts = parts.filter((q) => q.life < q.max);
@@ -158,7 +160,7 @@ function updateParts(dt) {
 function drawParts(ctx) {
   ctx.save(); ctx.globalCompositeOperation = 'lighter';
   for (const q of parts) {
-    const k = q.life / q.max, a = Math.sin(Math.PI * Math.min(1, k * 1.2)) * q.a;
+    const k = q.life / q.max, a = Math.sin(Math.PI * Math.min(1, k * 1.2)) * q.a * fxFade;
     if (q.kind === 'frost' || q.kind === 'haze') {
       const fa = q.a * Math.min(1, k * 2.6) * Math.pow(1 - k, 1.3);
       ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(Math.atan2(q.vy, q.vx)); ctx.scale(1.9, 1);
@@ -447,7 +449,7 @@ function jointMagic(ctx, t) {
 
 function thermalEdges(ctx, th) {
   for (const [side, c, h] of [[-1, th.Lc, th.Lh], [1, th.Rc, th.Rh]]) {
-    const v = Math.max(c, h); if (v < .02) continue;
+    const v = Math.max(c, h) * fxFade; if (v < .02) continue;
     const col = c >= h ? '70,170,255' : '255,110,50';
     const x0 = side < 0 ? 0 : W, x1 = side < 0 ? 520 : W - 520;
     const g = ctx.createLinearGradient(x0, 0, x1, 0);
@@ -457,6 +459,7 @@ function thermalEdges(ctx, th) {
 }
 
 function offscreenHint(ctx, st) {
+  if (st.t > A.present[st.who][1] + .3) return;   // gone: no edge arrow
   const absAz = Math.abs(st.az); if (absAz < 105) return;
   const a = clamp((absAz - 105) / 15, 0, 1) * clamp((5 - st.d) / 1.5, 0, 1);
   const sd = Math.sign(st.az) || 1, x = sd < 0 ? 60 : W - 60, p = PAL[st.who];
@@ -473,6 +476,7 @@ const cv = $('scene'), ctx = cv.getContext('2d');
 let camYaw = 0, lastT = 0, lastFrame = performance.now();
 
 function frame(t, dt) {
+  { const k = clamp((t - LAST_OUT - .2) / .45, 0, 1); fxFade = LAST_OUT < A.duration ? 1 - k * k * (3 - 2 * k) : 1; }   // clean empty room on the last frames
   const states = ['K', 'H'].map((w) => charState(w, t)).filter(Boolean);
   // camera follows whoever is speaking, a little
   let target = 0, wsum = 0;
