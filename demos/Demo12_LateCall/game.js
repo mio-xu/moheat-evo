@@ -212,12 +212,15 @@
   const BASE = { call: 'ren_call', close: 'ren_close', door: 'ren_door', hug: 'ren_door' };
   // ---- animated loops (Seedance video, first frame = last frame = the still) — used whenever loaded, else still + face patches
   const CLIP_NAMES = ['v_call_idle', 'v_call_talk', 'v_call_shy', 'v_close_whisper', 'v_door_idle', 'v_door_talk', 'v_room_open'];
-  const CLIP = {};
+  const CLIP = {}, POSTER = {};
   if (!QS.has('stills')) for (const n of CLIP_NAMES) {
     const v = document.createElement('video'); Object.assign(v, { muted: true, loop: true, playsInline: true, preload: 'auto', src: `media/video/${n}.mp4?v=1` });
     v.setAttribute('playsinline', ''); v.addEventListener('error', () => { delete CLIP[n]; }); CLIP[n] = v;
+    v.addEventListener('loadeddata', () => { if (POSTER[n]) return; const c = document.createElement('canvas'); c.width = v.videoWidth; c.height = v.videoHeight; c.getContext('2d').drawImage(v, 0, 0); POSTER[n] = c; }, { once: true });
   }
-  const clipOK = (n) => n && CLIP[n] && CLIP[n].readyState >= 2;
+  // a view that has any clip never goes back to the still (colours differ a little): a missing clip → that view's clip, frozen on its first frame
+  const VIEW_CLIPS = { call: ['v_call_talk', 'v_call_idle', 'v_call_shy'], close: ['v_close_whisper'], door: ['v_door_talk', 'v_door_idle'], hug: ['v_door_talk', 'v_door_idle'], room: ['v_room_open'] };
+  const clipOK = (n) => n && (n.startsWith('poster:') ? !!POSTER[n.slice(7)] : CLIP[n] && CLIP[n].readyState >= 2);
   function wantClip(view) {
     if (view === 'call') return talking ? (S.shy ? 'v_call_shy' : 'v_call_talk') : 'v_call_idle';
     if (view === 'close') return 'v_close_whisper';
@@ -230,7 +233,11 @@
     const used = new Set();
     for (const view of new Set([viewA, viewB])) {
       const st = VS[view] || (VS[view] = { cur: null, prev: null, k: 1 }), want = wantClip(view);
-      if (want && !clipOK(want)) { st.cur = null; st.prev = null; st.k = 1; }   // clip missing → still + face patches
+      if (want && !clipOK(want)) {
+        const sib = (VIEW_CLIPS[view] || []).find((c) => POSTER[c]);
+        const alt = sib ? 'poster:' + sib : null;                 // frozen first frame of a sibling clip, else the still + patches
+        if (alt !== st.cur) { st.prev = st.cur; st.cur = alt; st.k = alt && st.prev ? 0 : 1; }
+      }
       else if (want !== st.cur && clipOK(want)) {
         st.prev = st.cur; st.cur = want; st.k = 0;
         if (want === 'v_call_shy') CLIP[want].currentTime = 0;   // the shy glance plays from its start
@@ -243,8 +250,9 @@
     }
   }
   function drawClip(n, ox, oy, z, a) {
-    const v = CLIP[n]; if (!clipOK(n)) return false;
-    const h = W * z * v.videoHeight / v.videoWidth;          // fill the width, centre vertically
+    if (!clipOK(n)) return false;
+    const v = n.startsWith('poster:') ? POSTER[n.slice(7)] : CLIP[n], vw = v.videoWidth || v.width, vh = v.videoHeight || v.height;
+    const h = W * z * vh / vw;          // fill the width, centre vertically
     ctx.globalAlpha = a; ctx.drawImage(v, ox, oy + (H * z - h) / 2, W * z, h); return true;
   }
   function drawView(view, t, alpha) {
