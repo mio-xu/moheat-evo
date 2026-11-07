@@ -13,8 +13,9 @@ Hinata / Luna) in look (silver-white side ponytail, white-to-crimson camellia fu
 
 ## Thermal (firmware DUAL)
 - Voice: always warm at the ear she speaks at, `(0.1 + 0.8 × level)` × distance (ear 1 / ≤ 50 cm 0.6 / further 0.28), × 0.5 in front.
-- Ambient: winter air (cool 0.24 both ears; less on the bonfire side; almost gone under the stole), gusts that move across the head (cool 0.6), bonfire left (warm 0.5, flicker), amazake cup at the right cheek (warm 0.65), steam of her cup (0.12), her face a hand's width away (≤ 0.35), fur stole (warm 0.28 both).
-- Not heated: her blush, her burnt tongue.
+- Ambient: winter air (cool 0.24 both ears; less on the bonfire side; × 0.6 under the main hall's eaves while you pray; almost gone under the stole), gusts that move across the head (cool 0.6), bonfire left (warm 0.5, flicker), amazake cup at the right cheek (warm 0.65, 0.33 while she eases it off to sip), her face a hand's width away (≤ 0.35, until she steps back), fur stole (insulation + her body on your left: warm 0.3 left / 0.12 right).
+- Timed to the picture: bonfire, cup, face and stole start / stop when their transition clip starts (`go(name, view, onStart)`), together with their sounds.
+- Not heated: her blush, her burnt tongue, the steam of her own cup (45 cm away), the food stalls (metres away). Review 2026-11-08 (user): steam heat removed, stole made asymmetric, bonfire / stole / face timing fixed, less wind chill under the eaves.
 
 ## Files
 - `index.html`, `date.css` (+ Demo10 `demo.css`, `shared/series.css`), `game.js`, `audio.js` (HRTF + synthesized shrine ambience), `lines.js` (ja + en).

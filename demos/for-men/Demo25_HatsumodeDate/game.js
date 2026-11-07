@@ -20,7 +20,7 @@
   const artReady = Promise.all(VIEWS.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/tsubaki_${n}.jpg?v=1`; })));
 
   // ---------------------------------------------------------------- state
-  const fresh = () => ({ started: false, t: 0, clock: 0, view: 'torii', cold: 1, fire: 0, cup: 0, steam: 0, near: 0, nearAz: 1.2, stole: 0, gust: null,
+  const fresh = () => ({ started: false, t: 0, clock: 0, view: 'torii', cold: 1, fire: 0, cup: 0, near: 0, nearAz: 1.2, stole: 0, gust: null,
     count: null, slip: null, fade: 0, lv: 0, pos: { az: 0, dist: .8 }, wish: 0 });
   let S = fresh(), run = 0;
   const STEPS = [['torii', '鳥居の前で', 'At the torii'], ['stall', '屋台と甘酒', 'Stalls & amazake'], ['fire', '焚き火', 'The bonfire'],
@@ -132,31 +132,30 @@
       await say(b ? 't08b' : 't08a', CLOSE);
       SND.fx.coin(.3); await sleep(.8);
       await go('t_stall_amazake', 'amazake'); await sleep(.2);
-      S.cup = 1; S.steam = 1; SND.fx.rustle(.9, .25);
+      S.cup = 1; SND.fx.rustle(.9, .25);
       await say('t09', CHEEK_R);
-      await sleep(.9); S.cup = 0;
+      await sleep(.9); S.cup = .5;   // she eases it off your cheek a little (still in the picture)
       SND.fx.sip(.3, .45);
       await say('t10', { az: .3, dist: .45 });
-      S.steam = 0;
 
       // 3 · the bonfire on your left; the crowd pushes her to your right ear
-      setStep(2); const fire = SND.loop('fire'); fire?.at(-1.0, 1.4); fire?.set(.55, 1.2);
-      await go('t_amazake_fire', 'fire'); await sleep(.4); alive(my);
+      setStep(2); const fire = SND.loop('fire'); fire?.at(-1.0, 1.4);
+      await go('t_amazake_fire', 'fire', () => { S.cup = 0; S.fire = 1; fire?.set(.55, 1.2); }); await sleep(.4); alive(my);
       await say('t11', RIGHT);
       crowd?.set(.6, .5); crowd?.at(1.8, 1.2); SND.fx.rustle(1.4, .3); await sleep(.4);
       await go('t_fire_close', 'close'); S.near = 1; S.nearAz = 1.3;
       await say('t12', RIGHT_EAR);
       await hold('🤝', '支えてあげる（長押し）', 'Steady her (press and hold)', 2.8, (down, k) => { S.near = 1 + .4 * (down ? k : 0); });
-      crowd?.set(.32, 1); crowd?.at(Math.PI, 3); S.near = 0;
+      crowd?.set(.32, 1); crowd?.at(Math.PI, 3); S.near = 1;   // still pressed against you until she steps back
 
       // 4 · the prayer: coin, the bell rope, two bows two claps, hold your hands together
-      setStep(3); fire?.set(0, 1.5); SND.fx.geta(.4, -.6, 6, .3); await go('t_close_pray', 'pray'); fire?.stop(); await sleep(.2);
+      setStep(3); await go('t_close_pray', 'pray', () => { S.near = 0; S.fire = 0; fire?.set(0, 1.5); SND.fx.geta(.4, -.6, 6, .3); }); fire?.stop(); await sleep(.2);
       await action('🪙', 'お賽銭を入れる', 'Toss in a coin'); SND.fx.coin(0); await sleep(.6);
       await taps('🔔', '鈴を鳴らす（タップ）', 'Ring the shrine bell (tap)', 3, () => SND.fx.suzu(0));
       await sleep(.4); for (let i = 0; i < 2; i++) { SND.fx.clap(-.8, .5); SND.fx.clap(0, .3); await sleep(.55); }
-      crowd?.set(.12, 1.5); wind?.set(.12, 1.5);
+      crowd?.set(.12, 1.5); wind?.set(.12, 1.5); S.cold = .6;
       await hold('🙏', '手を合わせて、お願いする（長押し）', 'Hands together, make a wish (press and hold)', 3.5);
-      crowd?.set(.3, 1.5); wind?.set(.25, 1.5); await sleep(.3);
+      crowd?.set(.3, 1.5); wind?.set(.25, 1.5); S.cold = 1; await sleep(.3);
       await say('t14', LEFT);
       S.wish = await choice([['…秘密', '…It\'s a secret'], ['椿さんと、また来られますように', 'That I can come here with you again']]);
       await say(S.wish ? 't15b' : 't15a', LEFT);
@@ -170,9 +169,9 @@
       await say(c ? 't17b' : 't17a', CLOSE);
       SND.fx.paper(-.3, .5); await sleep(.5);
       await gust(-1.6, 1.6, 3.6, 1);
-      SND.fx.rustle(-1.1, .25); await go('t_omikuji_stole', 'stole');
+      await go('t_omikuji_stole', 'stole', () => { SND.fx.rustle(-1.1, .25); S.stole = 1; });
       await say('t18', { az: -.7, dist: .3 });
-      S.stole = 1; SND.fx.rustle(0, .15); await sleep(1);
+      SND.fx.rustle(0, .15); await sleep(1);
       S.near = 1; S.nearAz = -1.3;
       await say(S.wish ? 't19b' : 't19a', LEFT_EAR);
       await sleep(2); S.fade = 1; crowd?.set(.15, 2); wind?.set(.1, 2); setTimeout(() => SND.fx.bell(.7), 600); await sleep(3.2); alive(my); finish();
@@ -180,12 +179,12 @@
   }
 
   // ---------------------------------------------------------------- per-frame state + thermal
-  let fireK = 0, cupK = 0, stoleK = 0, nearK = 0, steamK = 0;
+  let fireK = 0, cupK = 0, stoleK = 0, nearK = 0, coldK = 1;
   function update(dt) {
     S.t += dt; if (!S.started) return;
     S.clock += dt; S.lv = SND.voiceLevel();
-    fireK += ((S.view === 'fire' || S.view === 'close' ? 1 : 0) - fireK) * (1 - Math.exp(-dt / 1.2));
-    cupK += (S.cup - cupK) * (1 - Math.exp(-dt / .3)); steamK += (S.steam - steamK) * (1 - Math.exp(-dt / .6));
+    fireK += (S.fire - fireK) * (1 - Math.exp(-dt / 1.2));
+    cupK += (S.cup - cupK) * (1 - Math.exp(-dt / .3)); coldK += (S.cold - coldK) * (1 - Math.exp(-dt / 1.5));
     stoleK += (S.stole - stoleK) * (1 - Math.exp(-dt / 1)); nearK += ((S.near ? S.near : 0) - nearK) * (1 - Math.exp(-dt / .4));
     if (S.slip) S.slip.k = Math.min(1, S.slip.k + dt / .5);
   }
@@ -194,21 +193,22 @@
   //    50 cm, × 0.28 further; halved when she is straight in front.
   //  · AMBIENT (all real things next to your ears): the winter night air (mild cool on both ears — less on the side facing the
   //    bonfire, and almost none once the fur stole is round your neck), gusts that sweep across your head, the bonfire on your left,
-  //    the hot amazake cup pressed to your right cheek, the steam of her cup in front of you, her face a hand's width from your ear,
-  //    the fur stole round both of you. Nothing for what only she feels (her tongue burnt on the amazake, her blush).
+  //    the hot amazake cup pressed to your right cheek, her face a hand's width from your ear, the fur stole round both of you
+  //    (insulation + her body on your left: left warmer). Under the main hall's eaves the wind chill drops. Timed to the picture: each
+  //    source starts when its transition clip starts (go(..., onStart)). Not heated: her blush, her burnt tongue, the steam of her
+  //    own cup (45 cm away), the food stalls (metres away).
   function sources() {
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S.started) return out;
     const P = S.pos;
     if (talking) add(P.az, 'h', (.1 + .8 * clamp(S.lv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
-    const air = .24 * S.cold * (1 - .85 * stoleK);
+    const air = .24 * coldK * (1 - .85 * stoleK);
     add(-1.5, 'c', air * (1 - .75 * fireK), '❄️'); add(1.5, 'c', air, '❄️');
     if (S.gust) add(S.gust.az, 'c', .6 * S.gust.k * (1 - .5 * stoleK), '🌬');
     if (fireK > .02) add(-1.1, 'h', .5 * fireK * (.88 + .12 * Math.sin(S.t * 7.3) * Math.sin(S.t * 3.1)), '🔥');
     if (cupK > .02) add(1.3, 'h', .65 * cupK, '🍵');
-    if (steamK > .02) add(.2, 'h', .12 * steamK, '♨');
     if (nearK > .5) add(S.nearAz, 'h', .15 + .2 * clamp(nearK - 1, 0, .4) / .4, '🤍');
-    if (stoleK > .02) { add(-1.5, 'h', .28 * stoleK, '🧣'); add(1.5, 'h', .28 * stoleK, '🧣'); }
+    if (stoleK > .02) { add(-1.5, 'h', .3 * stoleK, '🧣'); add(1.5, 'h', .12 * stoleK, '🧣'); }   // fur keeps the warmth in; she leans on your left
     return out;
   }
   const ear = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
@@ -239,10 +239,10 @@
   const clipOK = (n) => n && CLIP[n] && CLIP[n].readyState >= 2;
   let cur = null, curView = null, pending = null;
   const loopFor = (view) => 'v_' + view;
-  function go(name, view) {   // a one-shot transition at the next clip end, then continue in `view`
-    if (!clipOK(name) || !cur) { S.view = view; return sleep(.6); }
+  function go(name, view, onStart) {   // a one-shot transition at the next clip end, then continue in `view`; onStart() when the transition starts
+    if (!clipOK(name) || !cur) { onStart?.(); S.view = view; return sleep(.6); }
     const my = run;
-    return new Promise((done, fail) => { pending = { name, view, done: () => (my === run ? done() : fail(new Error('stopped'))), started: false }; });
+    return new Promise((done, fail) => { pending = { name, view, onStart, done: () => (my === run ? done() : fail(new Error('stopped'))), started: false }; });
   }
   function playClip(name, view) { const v = CLIP[name]; cur = name; curView = view; v.currentTime = 0; v.play().catch(() => {}); }
   function startLoop() { const w = loopFor(S.view); if (clipOK(w)) playClip(w, S.view); else cur = null; }
@@ -253,7 +253,7 @@
     const v = CLIP[cur];
     if (!v.ended && v.currentTime < v.duration - .03) return;   // mid-clip: never switch
     if (ONCE.has(cur) && pending && pending.started) { const p = pending; pending = null; S.view = curView; viewA = viewB = curView; mix = 1; p.done(); }
-    if (pending && !pending.started) { pending.started = true; playClip(pending.name, pending.view); return; }
+    if (pending && !pending.started) { pending.started = true; pending.onStart?.(); playClip(pending.name, pending.view); return; }
     startLoop();
   }
   function drawClip(view, alpha) {
@@ -383,7 +383,7 @@
   }
   function start() {
     SND.init(); SND.loadVoices(Object.keys(LINES));
-    S = fresh(); S.started = true; viewA = viewB = 'torii'; mix = 1; cur = null; pending = null; fireK = cupK = stoleK = nearK = steamK = 0; $('cleared').hidden = true;
+    S = fresh(); S.started = true; viewA = viewB = 'torii'; mix = 1; cur = null; pending = null; fireK = cupK = stoleK = nearK = 0; coldK = 1; $('cleared').hidden = true;
     $('intro').classList.add('hidden'); window.TSUBAKI.done = false;
     story();
   }
