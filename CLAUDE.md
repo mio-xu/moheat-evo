@@ -2,7 +2,7 @@
 
 This repo is the public GitHub Pages site for MoHeat Evo (thermal headphones) **and** the production workspace of the thermal-haptic ASMR demo series.
 
-**Before working on any demo, read [`HANDOFF_ASMR_DEMOS.md`](HANDOFF_ASMR_DEMOS.md)**: it covers the user's standing rules, the environment, the device protocol, the shared pipeline, the status of Demo 1–4 and the next steps.
+**Before making or updating any demo, read [`DEMO_DESIGN_GUIDE.md`](DEMO_DESIGN_GUIDE.md)** (the reusable design rules: story shape, DUAL thermal layers, voice, art, animation, layout, workflow, checklist) **and [`HANDOFF_ASMR_DEMOS.md`](HANDOFF_ASMR_DEMOS.md)**: it covers the user's standing rules, the environment, the device protocol, the shared pipeline, the status of Demo 1–4 and the next steps.
 
 Key rules (details in the handoff):
 - Talk to the user in **Chinese**.

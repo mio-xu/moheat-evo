@@ -1,6 +1,7 @@
 # MoHeat Evo — 冷热触觉 ASMR Demo 系列：交接文档 / Handoff
 
 > 写给接手的 agent（Claude Code、Codex 等）和项目负责人。**先读完"必须遵守的约定"再动手。**
+> **设计总则**（做新 Demo / 更新旧 Demo 的可复用标准：结构、冷热双层、声音、美术、动画、版式、流程、验收清单）见 [`DEMO_DESIGN_GUIDE.md`](DEMO_DESIGN_GUIDE.md)。
 > 最后更新：2026-11-07（Demo 4 / Demo 9 已按用户要求互换编号：四季列车 = Demo 4，安土酒宴 = Demo 9）。状态：Demo 1–5 全部完成。Demo 4（四季列车）：程序绘制美术、16 条合成音轨、冷热 CSV、同步报告、播放器、MP4；Demo 9（安土酒宴）可选补 3 张道具图。
 
 ---
