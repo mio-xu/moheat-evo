@@ -41,6 +41,7 @@ demos/all-ages/Demo10_CaveSpring/                 纯交互解谜《火をとも
 demos/healing/Demo11_Naomi/                      纯交互治愈小游戏《ナオミと、ふわふわの一日》（用户家的猫 Naomi，Seedance 美术）
 demos/for-women/Demo12_LateCall/                   纯交互深夜电话《もしもし、きこえる？》（原创男偶像 蓮，VOICEVOX:青山龍星）
 demos/for-women/Demo20_HinataHandshake/           纯交互握手会《あと10秒だけ、ね？》（原创男偶像 陽向，ElevenLabs）
+demos/for-women/Demo21_JinLounge/                 纯交互 VIP 休息室《俺だけ見てろ》（原创男偶像 迅，VOICEVOX:青山龍星，Seedance 动画）
 demos/healing/Demo15_FamilyCall/                 纯交互家庭电话《もしもし、おばあちゃん？》（外婆ハナ VOICEVOX:もち子さん，外公ゲン VOICEVOX:ちび式じい）
 demos/healing/Demo13_NaomiCam/                   Naomi 监控摄像头版《ナオミ、いまなにしてる？》（复用 Demo 11 美术和音频）
 demos/for-men/Demo14_LiveStream/                 女主播直播间 ①《ミントの、ささやき配信》（共用代码、美术、配音都在这里；详见该目录 README）
@@ -372,6 +373,16 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 带动画循环（requestAnimationFrame）的播放器用 headless `--screenshot --virtual-time-budget` 会卡住：预览静帧用 `render_mp4.py --at …`，封面页的 cover 模式不要启动动画循环。
 - headless 截图前确认 8765 服务器在运行（`curl localhost:8765`），否则截图静默失败。
 - `.DS_Store`、`__pycache__` 提交前删掉。
+
+### Demo21_JinLounge ✅ 可玩 —《俺だけ見てろ / Look Only at Me》（纯交互，2026-11-08）
+- 男偶像系列第 2 人（同系列：Demo12 蓮、Demo20 陽向/春翔 另一会话）。**原创角色「迅」**：红发、霸道直接/邪魅狂狷（道明寺型富二代 rapper），黑皮衣 + 敞开黑衬衫 + 偶尔戴墨镜（用户选的 v3 造型）。
+- 声音：VOICEVOX:青山龍星 不機嫌，用户选「j6」：pitch −0.02、intonation 1.20、speed 0.90、停顿 ×1.4，耳边句用 囁き + 轻呼吸。`scripts/voice.py`。
+- 流程（约 65 s）：演唱会后被叫到休息室 → 「近づく」→ 冰罐贴右脸（右凉）→ 「今日のライブ、どこ見てた？」二选一 → 抓手腕 → 摘墨镜「目、逸らすな」长按对视（脸贴近：两耳微热 + 心跳）→ 右耳「…今日はもう、帰さねえから」（右热）→ 皮衣披上（两耳热）→「…冗談だ。送ってく。…半分はな。」
+- 热：DUAL 两层（他的声音按响度暖说话那侧耳朵 + 真实冷热物体）；不再给"抓手腕"加热（不在耳边）。
+- 美术：Seedance 网页 GPT Image 2（3 号柔和赛璐璐）6 张场景；动画：Seedance 2.0 Pro 首尾帧同图 4 s × 6（1464 credits）→ ping-pong 压缩。
+- 用户 2026-11-08 规则：**以后先用静态图做完游戏，Seedance 视频放在最后做。**
+- 另：Demo16_HandshakeEvent（未入 git）是我给春翔做的半成品，已交给另一个会话；那 6 段春翔动画（1464 credits）对方不用。
+- 下一集计划：紫苑（白金长发、白衬衫大敞、偶尔眼镜；VOICEVOX:青山龍星「s9」），雨夜他家，用吹风机帮你吹头发（暖风绕头）。造型图在 Demo16 的 `shion_v4_platinum.png`。
 
 ### Demo switcher (`demos/shared/nav.js`)
 Every full demo page loads `../shared/nav.js`, which adds ‹ ☰ Demos N/9 › to the top bar and a thumbnail panel of all demos (thumbs = `assets/images/demos/demoN.jpg`). `#demos` in the URL opens the panel. Hidden with `?embed`, `?cover`, `?render`. **A new demo must be added to the `DEMOS` list in nav.js.**

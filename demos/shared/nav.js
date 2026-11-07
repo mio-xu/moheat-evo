@@ -17,6 +17,7 @@
     { cat: 'for-men', dir: 'Demo19_LunaStream', ja: 'ルナの、よふかし配信', en: "Luna's Late-Night Stream", group: 2 },
     { cat: 'for-women', dir: 'Demo12_LateCall', ja: 'もしもし、きこえる？', en: 'Can You Hear Me?', group: 3 },
     { cat: 'for-women', dir: 'Demo20_HinataHandshake', ja: 'あと10秒だけ、ね？', en: 'Just Ten More Seconds?', group: 3 },
+    { cat: 'for-women', dir: 'Demo21_JinLounge', ja: '俺だけ見てろ', en: 'Look Only at Me', group: 3 },
     { cat: 'nobunaga-suntory', dir: 'Demo5_GifuCastle', ja: '信長の岐阜城へようこそ', en: "Welcome to Nobunaga's Gifu Castle", group: 4, ep: 1 },
     { cat: 'nobunaga-suntory', dir: 'Demo6_FutureWhisky', ja: '未来の酒と、安土の夜', en: 'Future Whisky at Azuchi', group: 4, ep: 2 },
     { cat: 'nobunaga-suntory', dir: 'Demo7_KyotoIzakaya', ja: '信長と家康、京都の居酒屋へ', en: 'Two Warlords in a Kyoto Izakaya', group: 4, ep: 3 },

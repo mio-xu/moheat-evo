@@ -43,5 +43,7 @@ demos/for-women/Demo16_HandshakeEvent/audio/
 demos/for-women/Demo20_HinataHandshake/assets/
 demos/for-women/Demo20_HinataHandshake/audio/
 demos/for-women/Demo20_HinataHandshake/project/gen_*.log
+demos/for-women/Demo21_JinLounge/assets/
+demos/for-women/Demo21_JinLounge/audio/
 # Local secrets written by `elevenlabs onboard`
 /.env.local
