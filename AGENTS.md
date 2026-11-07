@@ -6,7 +6,7 @@ This repo is the public GitHub Pages site for MoHeat Evo (thermal headphones) **
 
 Key rules (details in the handoff):
 - Talk to the user in **Chinese**.
-- Subtitles are **Japanese + English only** (no Chinese).
+- Subtitles: the viewer picks **English (default) / 日本語 / 中文**, one language at a time, same size (user, 2026-11-08); answer buttons / prompts switch too, and voice answers are judged in that language (close in meaning passes). All through `demos/shared/subs.js` + each demo's `subs_zh.js` (DEMO_DESIGN_GUIDE §2.2). Story text is still written in Japanese + English; Chinese is added in `subs_zh.js`.
 - **Seedance only when the user asks**: for Demo 1–3 and Demo 9 the browser-rendered MP4 is the final film. For Demo 4 (Seasons Express) the user asked (2026-11-07) for Seedance prompts (`demos/all-ages/Demo4_SeasonsExpress/Seedance素材命令.md`); the browser MP4 stays the current film until the clips arrive.
 - **Images and video: Seedance, API first** (`~/.seedance_key`); if the API is unavailable (upload 429 / long Retry-After, 401) switch at once to the seedance2-5.com website via Chrome (user, 2026-11-08). Details and the credit / token-saving checklist for video: `DEMO_DESIGN_GUIDE.md` §5.3 and §6.1. (Earlier art came from ChatGPT prompt lists the user ran.)
 - **Never modify earlier demos**: reuse art by symlink and code by import-by-path.

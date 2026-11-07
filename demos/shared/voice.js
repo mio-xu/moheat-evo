@@ -1,10 +1,11 @@
 // MoHeatVoice — answer by VOICE in every demo with dialogue (DEMO_DESIGN_GUIDE §2.1, user 2026-11-08).
-// The browser's speech recognition (Web Speech API, ja-JP; en-US when the browser language is English or ?vlang=en-US)
+// The browser's speech recognition (Web Speech API) in the subtitle language (shared/subs.js: en-US default / ja-JP / zh-CN; ?vlang= overrides)
 // listens only while it is your turn, and the words you say are matched against the answers on screen:
 //   · auto mode: any visible answer button — .ch (choices) · .act-btn (actions, not the press-and-hold ones) · .chip-c (chat /
 //     gift chips) · #micGate button ("say …" gates) · [data-voice] — is picked by saying it; the button is then clicked, so the
 //     demo's own code runs exactly as for a tap. Extra words for a button: data-voice="word|word".
 //   · API (interact.js, Demo 1–9): MoHeatVoice.listen({ phrases: [[ja, en, …], …], single, lenient, anchor, onHit, onHeard }).
+// Every answer also matches its 中文 and the paraphrases in <demo>/subs_zh.js (MOHEAT_VOICE), so an answer close in meaning passes.
 // Matching: kana-folded character bigrams (said ⊇ answer → 1), a small kana ↔ kanji table, ordinals (「1番」「ふたつめ」, first /
 // second) for choices, yes / OK for a single action. A single line / action is accepted after 2 tries that were heard but not
 // matched but came close (recognition of short lines is not perfect, the demo must never get stuck; unrelated talk in the room
@@ -17,7 +18,10 @@
   const QS = new URLSearchParams(location.search);
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   const OFF = QS.has('cover') || QS.has('render') || QS.has('auto');
-  const LANG = QS.get('vlang') || (/^en/i.test(navigator.language || '') ? 'en-US' : 'ja-JP');
+  // listening language = the subtitle language (shared/subs.js: EN default / 日本語 / 中文; user 2026-11-08), ?vlang= overrides
+  const subLang = () => { if (window.MoHeatSub) return window.MoHeatSub.lang; try { return localStorage.getItem('moheat.sublang') || 'en'; } catch { return 'en'; } };
+  const LANG = () => QS.get('vlang') || ({ en: 'en-US', ja: 'ja-JP', zh: 'zh-CN' })[subLang()] || 'ja-JP';
+  const T = (ja, en, zh) => ({ ja, en, zh })[subLang()] || en;   // pill texts in the chosen language
   const store = { get: (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : v === '1'; } catch { return d; } },
     set: (k, v) => { try { localStorage.setItem(k, v ? '1' : '0'); } catch {} } };
   let enabled = store.get('moheat.voice', true);
@@ -53,12 +57,20 @@
     const A = grams(p), B = grams(h), n = overlap(A, B);
     return Math.max(2 * n / (A.length + B.length), .85 * n / A.length);
   }
-  const prep = (phrase) => variants(norm(phrase)).filter(Boolean);
-  const score = (heard, preps) => { const h = norm(heard); let s = 0; for (const p of preps) s = Math.max(s, sim1(h, p)); return s; };
+  // English: also word by word (stems + a few synonyms), so a paraphrase with the same key words passes
+  const STOP = new Set('i a an the to of is am are was were be it its that this so and or just do did really very me my'.split(' '));
+  const WSYN = { look: 'see', watch: 'see', stare: 'see', saw: 'see', seen: 'see', closer: 'near', close: 'near', come: 'near', hot: 'warm', cozy: 'warm', cool: 'cold', chilly: 'cold', freezing: 'cold',
+    thanks: 'thank', yeah: 'yes', yep: 'yes', okay: 'yes', ok: 'yes', sure: 'yes', hi: 'hello', hey: 'hello', bye: 'goodbye', night: 'goodnight', love: 'like', adore: 'like', beautiful: 'pretty', lovely: 'pretty', cute: 'pretty', stay: 'remain', more: 'longer' };
+  const stem = (w) => { w = w.replace(/'s$/, ''); w = WSYN[w] || w; if (w.length > 4) w = w.replace(/(ing|ed|es|s)$/, ''); return WSYN[w] || w; };
+  const words = (t) => (String(t || '').toLowerCase().match(/[a-z']+/g) || []).filter((w) => !STOP.has(w)).map(stem);
+  const wsim = (heard, W) => { const H = new Set(words(heard)); if (!H.size || !W.length) return 0; const n = W.filter((w) => H.has(w)).length; return Math.min(1, n / W.length) * (W.length === 1 ? .8 : 1); };
+  const prep = (phrase) => { const out = variants(norm(phrase)).filter(Boolean); const W = /[a-z]{2}/i.test(phrase) ? words(phrase) : []; if (W.length) out.push({ W }); return out; };
+  const score = (heard, preps) => { const h = norm(heard); let s = 0; for (const p of preps) s = Math.max(s, typeof p === 'string' ? sim1(h, p) : wsim(heard, p.W)); return s; };
   const ORD = [/(^|[^0-9])1(番|ばん|つめ|つ目|個目|st)|一番目|一つ目|ひとつめ|いちばんめ|最初|さいしょ|first|ファースト|^いち$|^one$/,
     /(^|[^0-9])2(番|ばん|つめ|つ目|個目|nd)|二番|二つ目|ふたつめ|にばんめ|second|^に$|^two$/,
     /(^|[^0-9])3(番|ばん|つめ|つ目|個目|rd)|三番|三つ目|みっつめ|third/, /(^|[^0-9])4(番|ばん|つめ|つ目|個目|th)|四番|四つ目|よっつめ|fourth/];
-  const YES = /^(はい|うん|ええ|おっけ|ok|okay|yes|yeah|いいよ|よし|go|いく|いこう|了解|りょうかい|お願い|おねがい)/;
+  const YES = /^(はい|うん|ええ|おっけ|ok|okay|yes|yeah|yep|sure|alright|letsgo|いいよ|よし|go|いく|いこう|了解|りょうかい|お願い|おねがい|好|行|嗯|对|是|可以|没问题|走|来吧|开始)/;
+  const ORD_ZH = [/第一|一号|选一|^一$/, /第二|二号|选二|^二$/, /第三|三号|选三|^三$/, /第四|四号|选四|^四$/];
 
   // ---------------------------------------------------------------- pill (status + what was heard), anchored above the answers
   const css = document.createElement('style');
@@ -112,7 +124,7 @@
   const micAllowed = () => { const m = document.getElementById('micOn'); return !m || m.checked; };
   const active = () => !OFF && enabled && !denied && micAllowed();
   function make() {
-    const r = new SR(); r.continuous = true; r.interimResults = true; r.maxAlternatives = 4; r.lang = LANG;
+    const r = new SR(); r.continuous = true; r.interimResults = true; r.maxAlternatives = 4; r.lang = LANG();
     r.onstart = () => { netFails = 0; };
     r.onresult = (e) => {
       if (!sess || sess.done) return;
@@ -132,27 +144,29 @@
   }
   function startRec() {
     if (!active() || recOn || !sess || sess.done) return;
-    rec = rec || make();
+    rec = rec || make(); rec.lang = LANG();
     try { rec.start(); recOn = true; } catch { /* still ending: onend restarts it */ }
   }
   function stopRec() { if (rec && recOn) { try { rec.abort(); } catch {} } }
 
   // ---------------------------------------------------------------- a listening session = one "your turn"
-  const hint = (s) => (s.single ? '🎙 声でもOK · Or say it' : '🎙 声で答えてOK · Answer by voice');
-  function idle() { if (sess) showPill(active() ? '' : 'off', active() ? hint(sess) : '🎙 OFF · タップで声入力 · Tap for voice', sess.anchor()); }
+  const hint = (s) => (s.single ? T('🎙 声でもOK', '🎙 Or say it', '🎙 也可以直接说') : T('🎙 声で答えてOK', '🎙 Answer by voice', '🎙 可以用说的回答'));
+  function idle() { if (sess) showPill(active() ? '' : 'off', active() ? hint(sess) : T('🎙 OFF · タップで声入力', '🎙 OFF · Tap for voice', '🎙 OFF · 点击开启语音'), sess.anchor()); }
   function begin(o) {
     end();
-    sess = { ...o, preps: o.phrases.map((ph) => ph.flatMap(prep)), fails: 0, done: false, anchor: o.anchor || (() => []) };
+    sess = { ...o, preps: o.phrases.map((ph) => expand(ph).flatMap(prep)), fails: 0, done: false, anchor: o.anchor || (() => []) };
     if (OFF) { sess = null; return null; }
     if (!SR) { notice(o); return sess; }
     idle(); startRec();
     return sess;
   }
+  // every answer also matches its Chinese and the paraphrases in <demo>/subs_zh.js (MOHEAT_VOICE): close in meaning = a pass
+  const expand = (ph) => { const out = [...ph]; for (const p of ph) for (const v of (window.MoHeatSub?.voice(p) || [])) if (!out.includes(v)) out.push(v); return out; };
   function end() { if (sess) { sess.done = true; sess = null; } stopRec(); hidePill(); }
   let noticed = false;
   function notice(o) {   // once: this browser has no speech recognition
     if (noticed || OFF) return; noticed = true;
-    const els = (o.anchor || (() => []))(); showPill('off', '🎙 音声入力は Chrome / Edge / Safari で · Voice input: Chrome, Edge or Safari', els);
+    const els = (o.anchor || (() => []))(); showPill('off', T('🎙 音声入力は Chrome / Edge / Safari で', '🎙 Voice input: Chrome, Edge or Safari', '🎙 语音输入请用 Chrome / Edge / Safari'), els);
     pillTimer = setTimeout(hidePill, 4500);
   }
   function judge(alts, final) {
@@ -162,15 +176,15 @@
     const order = sc.map((v, i) => [v, i]).sort((a, b) => b[0] - a[0]);
     const [s1, i1] = order[0], s2 = order[1] ? order[1][0] : 0;
     let pick = -1;
-    if (s.single) { if (s1 >= (final ? .34 : .62) || (final && YES.test(norm(heard)))) pick = 0; }
-    else if (final ? (s1 >= .3 && s1 - s2 >= .1 && s1 >= 1.4 * s2) : (s1 >= .62 && s1 - s2 >= .25)) pick = i1;
-    if (pick < 0 && final && !s.single) { const o = ORD.findIndex((re, k) => k < sc.length && alts.some((a) => re.test(norm(a)))); if (o >= 0) pick = o; }
+    if (s.single) { if (s1 >= (final ? .28 : .6) || (final && YES.test(norm(heard)))) pick = 0; }
+    else if (final ? (s1 >= .25 && s1 - s2 >= .08 && s1 >= 1.3 * s2) : (s1 >= .6 && s1 - s2 >= .25)) pick = i1;
+    if (pick < 0 && final && !s.single) { const o = [ORD, ORD_ZH].map((L) => L.findIndex((re, k) => k < sc.length && alts.some((a) => re.test(norm(a))))).find((x) => x >= 0); if (o >= 0) pick = o; }
     if (pick < 0 && final && s1 >= .12) {   // a near miss (unrelated talk in the room does not count)
       s.fails++;
-      if (s.single && s.lenient !== false && s.fails >= 2) pick = 0;
+      if (s.single && s.lenient !== false && (s.fails >= 2 || s1 >= .2)) pick = 0;
     }
     if (pick >= 0) { hit(pick, heard); return; }
-    showPill(final ? 'retry' : '', final ? `🤔「${heard}」 もう一度 · Try again` : `「${heard}」`, s.anchor());
+    showPill(final ? 'retry' : '', final ? `🤔「${heard}」 ${T('もう一度', 'Try again', '再说一次')}` : `「${heard}」`, s.anchor());
   }
   function hit(i, heard) {
     const s = sess; s.done = true; stopRec();
@@ -180,7 +194,7 @@
   }
 
   // ---------------------------------------------------------------- auto mode: answer buttons on the page
-  const SEL = '.ch, .act-btn:not(.hold), .chip-c, #micGate button, [data-voice]';
+  const SEL = '.ch, .act-btn:not(.hold), .chip-c, #micGate button, .ix-cheer button, [data-voice]';
   const visible = (el) => {
     if (!el.isConnected || el.disabled || el.closest('.ix-card, .intro:not(.hidden), [hidden]')) return false;
     const q = el.getBoundingClientRect(); if (q.width < 2 || q.height < 2) return false;
@@ -190,7 +204,7 @@
     return true;
   };
   function phrasesOf(el) {
-    const out = [], b = el.querySelector('b'), sp = el.querySelector('span');
+    const out = [], b = el.querySelector('b:not(.one)'), sp = el.querySelector('span:not(.one)');   // .one = shared/subs.js's shown language
     if (b) out.push(b.textContent); if (sp && sp !== b) out.push(sp.textContent);
     if (!b && !sp) out.push(...el.textContent.split(/\s[·・]\s/));
     if (el.dataset.voice) out.push(...el.dataset.voice.split('|'));
@@ -201,7 +215,7 @@
     if (manual) return;
     const els = OFF ? [] : [...document.querySelectorAll(SEL)].filter(visible);
     if (!els.length) { if (autoSig) { autoSig = ''; autoEls = []; end(); } return; }
-    const sig = els.map((e) => e.textContent).join('|');
+    const sig = els.map((e) => e.dataset.voice || [...e.querySelectorAll(':scope > b:not(.one), :scope > span:not(.one)')].map((x) => x.textContent).join('/') || e.textContent).join('|');
     if (sig !== autoSig) {
       autoSig = sig; autoEls = els;
       begin({ phrases: els.map(phrasesOf), single: els.length === 1, lenient: true, anchor: () => autoEls.filter((e) => e.isConnected), onHit: (i) => els[i]?.click() });
@@ -209,6 +223,7 @@
     } else if (pill) place(autoEls);
   }
   setInterval(scan, 250);
+  addEventListener('moheat:sublang', () => { if (rec && recOn && rec.lang !== LANG()) stopRec(); /* onend restarts in the new language */ if (sess) idle(); });
   addEventListener('keydown', (e) => {   // 1–4 pick an answer, Enter a single action (not while typing)
     if (e.repeat || e.metaKey || e.ctrlKey || e.altKey || /input|textarea|select/i.test(e.target.tagName) || e.target.isContentEditable) return;
     const els = manual ? (sess?.els || []) : autoEls.filter((x) => x.isConnected);
