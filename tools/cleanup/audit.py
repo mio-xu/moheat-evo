@@ -84,6 +84,7 @@ if '--trash' in args:
     trash = os.path.expanduser('~/.Trash'); stamp = time.strftime('%Y%m%d-%H%M%S')
     for c in cats:
         for p in collect(c):
+            if not os.path.exists(p): continue   # already moved with its parent folder
             dst = os.path.join(trash, f'moheat-{stamp}-' + os.path.relpath(p, REPO).replace('/', '__'))
             shutil.move(p, dst)
         print('trashed', c)

@@ -343,7 +343,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - **2026-11-08 用户说太长，拆成两集**（同一通电话）：第 1 集 = 本文件夹（打电话 → 外公抢听筒 → 包裹 → 开门 → 围巾，结尾外公"看看我的蓝箱子"→「つづく」，约 2:50）；第 2 集 = `demos/healing/Demo16_FamilyCall2/`《じいちゃんの、ゆきだるま》（开场围巾已围着、免提 → 小雪人 → 听筒回耳边 → 过年 → 不肯先挂，约 2:05）。Demo16 文件夹只有页面和封面：`<base href="../Demo15_FamilyCall/">` + `<body data-part="2">`，代码/美术/配音全用第 1 集的（`game.js` 里 `PART`）。两集都已加入 `nav.js` 和官网菜单（缩略图按文件夹命名）。
 
 ### Demo20_HinataHandshake ✅ 可玩 —《あと10秒だけ、ね？ / Just Ten More Seconds?》（纯交互握手会，2026-11-08）
-- 女性向男偶像系列第一位：**陽向**（19 岁，年下・腹黑：人前甜、耳边黑）。造型 = 用户定的粉毛设定图（`Demo16_HandshakeEvent/assets/art/hinata_pink_sheet.png`，复制为 `assets/art/ref_hinata.png`）。`Demo16_HandshakeEvent/` 是三位男偶像的设计/试听工作区（未进 git），不要删。
+- 女性向男偶像系列第一位：**陽向**（19 岁，年下・腹黑：人前甜、耳边黑）。造型 = 用户定的粉毛设定图（`Demo16_HandshakeEvent/assets/art/hinata_pink_sheet.png`，复制为 `assets/art/ref_hinata.png`）。`Demo16_HandshakeEvent/`（三位男偶像的设计 / 试听工作区，未进 git）在三位都做完后，于 2026-11-08 经用户同意移到了废纸篓。
 - **其余两位**：迅 = 用户选 **v2 造型（红发、墨镜推在头上、黑皮衣/黑衬衫、戒指，`project/shion_jin_v2.jpg` 右图 / `assets/art/jin_sheet_v2.png`）**，声线 雀松朱司（ツンデレ）；第三位（湊 / 紫苑）造型未定。每位一个独立 demo 文件夹。
 - 声音（2026-11-08 再改）：陽向 = **ElevenLabs 试听 v2**（`lODKQ6pXINFtajDz9nqR`，见 §4 配音标准；之前是 VOICEVOX:暁記ミタマ「m1」）；工作人员 VOICEVOX:春日部つむぎ。`scripts/voice.py`，试听 `scripts/eleven_audition.py`。
 - 动画 v2（2026-11-08，用户嫌第一版画质低、衔接不顺 → 定下 §4b 标准）：11 段 Seedance 2.5 Lite 1080p（5 循环 + 6 段一次性：握手台→握手、哈气、握手→左耳、左耳→握手、握手→右耳、右耳→挥手），约 704 credits。只在片段结尾切换。
