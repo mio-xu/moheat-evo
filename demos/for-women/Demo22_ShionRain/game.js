@@ -116,13 +116,13 @@
       await action('🚪', '部屋に入る', 'Step inside');
       SND.fx.steps(0); SND.fx.door(Math.PI); rain?.set(.18, .4); rain?.tone(1300); rain?.at(1.0, 4); await sleep(1);
       // the towel
-      setStep(1); S.view = 'towel'; S.near = .7; SND.fx.rustle(0, .2); await sleep(.4);
+      setStep(1); S.near = .7; await go('t_door_towel', 'towel'); SND.fx.rustle(0, .2); await sleep(.4);
       SND.loop('rub')?.set(.5); S.rub = 1;
       await say('s02', CLOSE);
       SND.loop('rub')?.set(0); S.rub = 0; S.wet = .7;
       await say('s03', CLOSE);
       // the hair dryer: left side first, then you aim it
-      setStep(2); S.view = 'dryer'; S.near = .4; SND.fx.steps(.3); await sleep(.8);
+      setStep(2); S.near = .4; SND.fx.steps(.3); await go('t_towel_dryer', 'dryer'); await sleep(.3);
       await say('s04', { az: .3, dist: .5 });
       dryerOn(-1.3); await sleep(2);
       await aim(6);
@@ -132,10 +132,10 @@
       await say('s06', CLOSE);
       await choice([['…なんて言ったの？', '…What did you say?'], ['もう一回、言って', 'Say it again']]);
       // he repeats it at your left ear
-      setStep(3); S.view = 'whisper'; S.near = .3; SND.fx.rustle(-1.2, .25); await sleep(.6);
+      setStep(3); S.near = .3; await go('t_dryer_whisper', 'whisper'); SND.fx.rustle(-1.2, .25); await sleep(.6);
       S.ear = 1; await say('s07', LEFT_EAR); S.ear = .3; await sleep(.8); S.ear = 0;
       // the other side: the warm air circles round the back of your head to your right ear, then cool air to finish
-      S.view = 'dryerR'; await say('s08', { az: -.3, dist: .5 });
+      await go('t_whisper_dryer_r', 'dryerR'); await say('s08', { az: -.3, dist: .5 });
       await action('↪', '右を向く', 'Turn your head');
       dryerOn(-1.3); await circle(-1.3, -Math.PI + .2, 2.4); S.dryer.az = Math.PI - .2; S.dryer.target = Math.PI - .2; await circle(Math.PI - .2, 1.3, 2.4);
       await sleep(2.5); S.wet = 0;
@@ -144,12 +144,12 @@
       S.dryer.target = .6; await say('s09', { az: .9, dist: .3 });   // close to your right ear, under the cool air
       dryerOff(); await sleep(.8);
       // the glasses
-      setStep(4); S.view = 'glasses'; S.near = 1;
+      setStep(4); await go('t_dryer_r_glasses', 'glasses'); S.near = 1;
       await say('s10', CLOSE);
       await hold('👀', '見つめ返す（長押し）', 'Look back at him (press and hold)', 2.5, (down, k) => { S.near = 1 + .4 * (down ? k : 0); });
       SND.fx.click(.2, .4); await sleep(.6);
       // beside you on the sofa, the rain on the window
-      S.view = 'window'; S.near = 0; rain?.set(.3, .8); await sleep(1);
+      S.near = 0; rain?.set(.3, .8); await go('t_glasses_window', 'window'); await sleep(.4);
       await say('s11', BESIDE_L);
       const a = await choice([['…そろそろ帰らなきゃ', '…I should go home'], ['…もう少しだけ、いてもいい？', '…Can I stay a little longer?']]);
       await say(a ? 's12b' : 's12a', BESIDE_L);
@@ -196,17 +196,63 @@
 
   // ---------------------------------------------------------------- drawing: stills with a slow breathing drift, cross-fades between views
   let viewA = 'door', viewB = 'door', mix = 1;
+  // ---- animation (handoff §4b, as Demo20): Seedance 2.5 Lite 1080p clips whose first and last frames are EXACTLY the stills
+  // (scripts/prepare_video.py), so clips are only switched at a clip's end — a hard cut between identical frames, no ghosting.
+  // Loops: one per view (dryer / glasses / window also a quiet one while he is silent); the right-side dryer loops are the left
+  // ones mirrored. Transitions: one per cut, asked for with go(); it starts when the current loop reaches its end. ?stills = no video.
+  const CLIP_NAMES = ['v_door', 'v_towel', 'v_dryer', 'v_dryer_idle', 'v_whisper', 'v_glasses', 'v_glasses_idle', 'v_window', 'v_window_idle',
+    't_door_towel', 't_towel_dryer', 't_dryer_whisper', 't_whisper_dryer_r', 't_dryer_r_glasses', 't_glasses_window'];
+  const ONCE = new Set(CLIP_NAMES.filter((n) => n.startsWith('t_')));
+  const CLIP = {};
+  if (!QS.has('stills')) for (const n of CLIP_NAMES) {
+    const v = document.createElement('video'); Object.assign(v, { muted: true, loop: false, playsInline: true, preload: 'auto', src: `media/video/${n}.mp4?v=1` });
+    v.setAttribute('playsinline', ''); v.addEventListener('error', () => { delete CLIP[n]; }); CLIP[n] = v;
+  }
+  const clipOK = (n) => n && CLIP[n] && CLIP[n].readyState >= 2;
+  let cur = null, curView = null, pending = null;
+  function loopFor(view) {
+    const quiet = !talking;
+    if (view === 'dryer' || view === 'dryerR') return quiet ? 'v_dryer_idle' : 'v_dryer';
+    if (view === 'glasses') return quiet ? 'v_glasses_idle' : 'v_glasses';
+    if (view === 'window') return quiet ? 'v_window_idle' : 'v_window';
+    return { door: 'v_door', towel: 'v_towel', whisper: 'v_whisper' }[view] || null;
+  }
+  function go(name, view) {   // a one-shot transition at the next clip end, then continue in `view`
+    if (!clipOK(name) || !cur) { S.view = view; return Promise.resolve(); }
+    const my = run;
+    return new Promise((done, fail) => { pending = { name, view, done: () => (my === run ? done() : fail(new Error('stopped'))), started: false }; });
+  }
+  function playClip(name, view) { const v = CLIP[name]; cur = name; curView = view; v.currentTime = 0; v.play().catch(() => {}); }
+  function startLoop() { const w = loopFor(S.view); if (w && clipOK(w)) playClip(w, S.view); else cur = null; }
+  function clips() {
+    if (QS.has('stills')) return;
+    if (!cur) { startLoop(); return; }
+    if (!ONCE.has(cur) && curView !== S.view && !pending) { startLoop(); return; }
+    const v = CLIP[cur];
+    if (!v.ended && v.currentTime < v.duration - .03) return;   // mid-clip: never switch
+    if (ONCE.has(cur) && pending && pending.started) { const p = pending; pending = null; S.view = curView; viewA = viewB = curView; mix = 1; p.done(); }
+    if (pending && !pending.started) { pending.started = true; playClip(pending.name, pending.view); return; }
+    startLoop();
+  }
+  function drawClip(view, alpha) {
+    if (!(cur && clipOK(cur) && (view === curView || (view === S.view && ONCE.has(cur))))) return false;
+    ctx.save(); if (curView === 'dryerR' && !ONCE.has(cur)) { ctx.translate(W, 0); ctx.scale(-1, 1); }
+    ctx.globalAlpha = alpha; ctx.drawImage(CLIP[cur], 0, 0, W, H); ctx.restore(); ctx.globalAlpha = 1; return true;
+  }
   function drawView(view, alpha, t) {
+    if (drawClip(view, alpha)) return;
+    const exact = !QS.has('stills') && Object.keys(CLIP).length > 0;   // with video the still must match the clips' frames exactly (no drift)
     const mirror = view === 'dryerR', im = IMG[mirror ? 'dryer' : view];
     ctx.globalAlpha = alpha;
     if (!im) { ctx.fillStyle = '#16121e'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
-    const z = 1.02 + .008 * Math.sin(t * 1.1) + (view === 'glasses' ? .03 * clamp(S.near - 1, 0, .4) / .4 : 0), dh = W * im.height / im.width;
-    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(mirror ? -z : z, z); ctx.drawImage(im, -W / 2, -dh / 2 + 4 * Math.sin(t * .9), W, dh); ctx.restore();
+    const z = exact ? 1 : 1.02 + .008 * Math.sin(t * 1.1) + (view === 'glasses' ? .03 * clamp(S.near - 1, 0, .4) / .4 : 0), dh = W * im.height / im.width;
+    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(mirror ? -z : z, z); ctx.drawImage(im, -W / 2, -dh / 2 + (exact ? 0 : 4 * Math.sin(t * .9)), W, dh); ctx.restore();
     ctx.globalAlpha = 1;
   }
   const drops = Array.from({ length: 70 }, () => ({ x: Math.random() * W, y: Math.random() * H, v: 900 + Math.random() * 700, l: 20 + Math.random() * 30 }));
   function draw(t, dt) {
     if (S.view !== viewB) { viewA = viewB; viewB = S.view; mix = 0; }
+    clips();
     mix = Math.min(1, mix + dt / .6);
     if (mix < 1) drawView(viewA, 1, t);
     drawView(viewB, mix < 1 ? mix : 1, t);
@@ -293,7 +339,7 @@
   }
   function start() {
     SND.init(); SND.loadVoices(Object.keys(LINES));
-    S = fresh(); S.started = true; viewA = viewB = 'door'; mix = 1; $('cleared').hidden = true;
+    S = fresh(); S.started = true; viewA = viewB = 'door'; mix = 1; cur = null; pending = null; $('cleared').hidden = true;
     $('intro').classList.add('hidden');
     story();
   }

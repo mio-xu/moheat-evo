@@ -1,0 +1,84 @@
+{
+ "model": "Seedance 2.5 Lite",
+ "resolution": "1080p",
+ "duration_s": 4,
+ "mode": "First & Last Frame",
+ "frames": "assets/frames/<name>.jpg (shion_dryer_r = shion_dryer mirrored)",
+ "clips": {
+  "v_door": {
+   "first": "shion_door",
+   "last": "shion_door",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Shion: long platinum-blonde hair in a low ponytail, calm grey-violet eyes, a beauty mark under his right eye, an open white silk shirt.\n\nLeaning on the door frame, he talks softly to the viewer with a slightly amused, worried smile: natural mouth movement as if speaking Japanese, a small tilt of the head, one slow blink, rain falls and glistens at the dark edges of the frame, a few strands of his hair move. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_towel": {
+   "first": "shion_towel",
+   "last": "shion_towel",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Shion: long platinum-blonde hair in a low ponytail, calm grey-violet eyes, a beauty mark under his right eye, an open white silk shirt.\n\nHe gently rubs the towel over the viewer's head with both hands while talking to her tenderly: his forearms move slowly in small circles, the towel edges sway, natural mouth movement as if speaking Japanese, a soft teasing smile, one slow blink. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_dryer": {
+   "first": "shion_dryer",
+   "last": "shion_dryer",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Shion: long platinum-blonde hair in a low ponytail, calm grey-violet eyes, a beauty mark under his right eye, an open white silk shirt.\n\nHe keeps drying the viewer's hair and talks to her: the hair dryer sways slowly side to side, his other hand combs through her hair with his fingers, strands of hair flutter in the warm air, natural mouth movement as if speaking Japanese, a relaxed fond smile, one blink. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_dryer_idle": {
+   "first": "shion_dryer",
+   "last": "shion_dryer",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Shion: long platinum-blonde hair in a low ponytail, calm grey-violet eyes, a beauty mark under his right eye, an open white silk shirt.\n\nHe quietly dries the viewer's hair, mouth closed in a relaxed fond smile: the hair dryer sways slowly side to side, his other hand combs through her hair, strands flutter in the warm air, slow breathing, one slow blink. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_whisper": {
+   "first": "shion_whisper",
+   "last": "shion_whisper",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Shion: long platinum-blonde hair in a low ponytail, calm grey-violet eyes, a beauty mark under his right eye, an open white silk shirt.\n\nVery close at the viewer's left ear he whispers softly: lips moving gently as he whispers, slow half-lidded blinks, slow breathing, a strand of his long hair sways slightly, rain runs down the window behind. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_glasses": {
+   "first": "shion_glasses",
+   "last": "shion_glasses",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Shion: long platinum-blonde hair in a low ponytail, calm grey-violet eyes, a beauty mark under his right eye, an open white silk shirt.\n\nKneeling in front of the viewer and holding his half-lowered glasses, he talks to her in a low, gentle voice: natural mouth movement as if speaking Japanese, half-lidded eyes on hers, a slow blink, a faint smile, the lamp light flickers softly. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_glasses_idle": {
+   "first": "shion_glasses",
+   "last": "shion_glasses",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Shion: long platinum-blonde hair in a low ponytail, calm grey-violet eyes, a beauty mark under his right eye, an open white silk shirt.\n\nKneeling in front of the viewer, he silently holds her gaze, mouth closed in a quiet gentle smile: slow breathing, a very slow blink, his eyes soften, the lamp light flickers softly. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_window": {
+   "first": "shion_window",
+   "last": "shion_window",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Shion: long platinum-blonde hair in a low ponytail, calm grey-violet eyes, a beauty mark under his right eye, an open white silk shirt.\n\nSitting beside the viewer on the sofa, he talks to her softly with a warm inviting smile: natural mouth movement as if speaking Japanese, a small tilt of his head, the glasses swing slightly in his fingers, one blink, rain runs down the window glass behind them. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_window_idle": {
+   "first": "shion_window",
+   "last": "shion_window",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Shion: long platinum-blonde hair in a low ponytail, calm grey-violet eyes, a beauty mark under his right eye, an open white silk shirt.\n\nSitting beside the viewer on the sofa, he quietly waits for her answer, mouth closed in a soft smile: slow breathing, a slow blink, the glasses swing slightly in his fingers, rain runs down the window glass behind them. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_door_towel": {
+   "first": "shion_door",
+   "last": "shion_towel",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Shion: long platinum-blonde hair in a low ponytail, calm grey-violet eyes, a beauty mark under his right eye, an open white silk shirt.\n\nHe steps toward the viewer from the doorway, unfolds the white towel and gently drapes it over her head with both hands, ending close in front of her inside his warm apartment. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_towel_dryer": {
+   "first": "shion_towel",
+   "last": "shion_dryer",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Shion: long platinum-blonde hair in a low ponytail, calm grey-violet eyes, a beauty mark under his right eye, an open white silk shirt.\n\nHe lifts the towel away from the viewer's head, picks up a white hair dryer and starts drying the left side of her hair, his other hand combing through it. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_dryer_whisper": {
+   "first": "shion_dryer",
+   "last": "shion_whisper",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Shion: long platinum-blonde hair in a low ponytail, calm grey-violet eyes, a beauty mark under his right eye, an open white silk shirt.\n\nHe lowers the hair dryer out of frame, takes off his glasses and leans in close to the viewer's left ear, his face ending large on the left side of the frame. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_whisper_dryer_r": {
+   "first": "shion_whisper",
+   "last": "shion_dryer_r",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Shion: long platinum-blonde hair in a low ponytail, calm grey-violet eyes, a beauty mark under his right eye, an open white silk shirt.\n\nHe leans back from the viewer's ear with a small smile, puts his glasses back on, picks up the hair dryer and moves to dry the right side of her hair. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_dryer_r_glasses": {
+   "first": "shion_dryer_r",
+   "last": "shion_glasses",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Shion: long platinum-blonde hair in a low ponytail, calm grey-violet eyes, a beauty mark under his right eye, an open white silk shirt.\n\nHe switches off the hair dryer and puts it down, then kneels in front of the viewer at eye level and slowly starts to take off his glasses. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_glasses_window": {
+   "first": "shion_glasses",
+   "last": "shion_window",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Shion: long platinum-blonde hair in a low ponytail, calm grey-violet eyes, a beauty mark under his right eye, an open white silk shirt.\n\nHe stands up and sits down beside the viewer on the sofa on her left, turning toward her, his glasses now hanging from his fingers, the rainy window behind them. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  }
+ }
+}

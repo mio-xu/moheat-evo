@@ -3,7 +3,7 @@
 An interactive scene with **Shion (紫苑)**, an original character: the soft-spoken, elegant and quietly dangerous keyboardist of the
 idol group (long platinum hair in a low ponytail, beauty mark, open white silk shirt, glasses sometimes). Third of the male idols
 (Demo20 Hinata, Demo21 Jin). A rainy night: you arrive at his flat soaked, he towels your hair, then dries it with a hair dryer.
-No timeline: his ElevenLabs lines play live with HRTF, room sounds are synthesized, thermal (firmware **DUAL**) is computed live. About 1:45.
+No timeline: his ElevenLabs lines play live with HRTF, room sounds are synthesized, thermal (firmware **DUAL**) is computed live. About 2:25.
 
 **Play**: `python3 -m http.server 8765` at the repo root → `http://localhost:8765/demos/for-women/Demo22_ShionRain/`. Headphones on.
 `?cover` = cover only, `?autoplay`, `?embed=1` = stage only (site menu).
@@ -22,4 +22,9 @@ Files: `index.html`, `rain.css` (+ Demo 10's `demo.css` and `../../shared/series
 Voice: `scripts/voice.py` — ElevenLabs, the user's pick `shion r1_c` (tools/eleven/cast.json), audio tags per line.
 Art: Seedance web, GPT Image 2 image-to-image from the user's sheet `shion_v4_platinum.png` (prompts: `project/web_prompts.json`,
 `scripts/seedance.py`; raw PNGs in `assets/art/`, not in git) → `scripts/prepare_art.sh` → `media/art/shion_*.jpg`. The right-side
-dryer view is the dryer still mirrored. Stills only for now; Seedance animation is the last step (handoff §4b).
+dryer view is the dryer still mirrored.
+Animation (handoff §4b): 15 Seedance 2.5 Lite 1080p clips, First & Last Frame = the stills (`assets/frames/`, prompts in
+`project/web_video_prompts.json`): talk loops for every view, quiet loops for the dryer / glasses / window, a transition for every cut
+(door→towel→dryer→left ear→right-side dryer (mirrored frame)→glasses→window); the right-side dryer loops are the left ones mirrored.
+`scripts/prepare_video.py` snaps every clip's first / last frame onto its still → `media/video/*.mp4`; the player switches clips only
+at a clip's end (`go()`). `?stills` = no video. Auto run 2:25, 0 errors.

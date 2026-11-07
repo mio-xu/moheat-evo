@@ -42,7 +42,7 @@ demos/healing/Demo11_Naomi/                      纯交互治愈小游戏《ナ�
 demos/for-women/Demo12_LateCall/                   纯交互深夜电话《もしもし、きこえる？》（原创男偶像 蓮，ElevenLabs）
 demos/for-women/Demo20_HinataHandshake/           纯交互握手会《あと10秒だけ、ね？》（原创男偶像 陽向，ElevenLabs）
 demos/for-women/Demo21_JinLounge/                 纯交互 VIP 休息室《俺だけ見てろ》（原创男偶像 迅，VOICEVOX:青山龍星，Seedance 动画）
-demos/for-women/Demo22_ShionRain/                 纯交互雨夜《雨が止むまで》（原创男偶像 紫苑，ElevenLabs，静帧版，动画待做）
+demos/for-women/Demo22_ShionRain/                 纯交互雨夜《雨が止むまで》（原创男偶像 紫苑，ElevenLabs，Seedance 动画）
 demos/healing/Demo15_FamilyCall/                 纯交互家庭电话《もしもし、おばあちゃん？》（外婆ハナ VOICEVOX:もち子さん，外公ゲン VOICEVOX:ちび式じい）
 demos/healing/Demo13_NaomiCam/                   Naomi 监控摄像头版《ナオミ、いまなにしてる？》（复用 Demo 11 美术和音频）
 demos/for-men/Demo14_LiveStream/                 女主播直播间 ①《ミントの、ささやき配信》（共用代码、美术、配音都在这里；详见该目录 README）
@@ -387,12 +387,14 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 另：Demo16_HandshakeEvent（未入 git）是我给春翔做的半成品，已交给另一个会话；那 6 段春翔动画（1464 credits）对方不用。
 - 下一集计划：紫苑（白金长发、白衬衫大敞、偶尔眼镜；VOICEVOX:青山龍星「s9」），雨夜他家，用吹风机帮你吹头发（暖风绕头）。造型图在 Demo16 的 `shion_v4_platinum.png`。
 
-### Demo22_ShionRain ✅ 可玩（静帧版）—《雨が止むまで / Until the Rain Stops》（纯交互，2026-11-08）
+### Demo22_ShionRain ✅ 可玩—《雨が止むまで / Until the Rain Stops》（纯交互，2026-11-08）
 - 男偶像系列第 3 人（最后一位）：**紫苑**，27 岁键盘手，斯文败类・妩媚神秘；造型 = 用户选的 `shion_v4_platinum.png`（复制为 `assets/art/ref_shion.png`）。
 - 声音：ElevenLabs，用户选 **shion r1_c**（`wrMX0OkmDIInpPC5f1Hx`），`scripts/voice.py` 每句带标签，贴耳 `[whispers]`。
 - 流程（约 1:45）：雨夜到他家门口（两耳湿冷）→ 进门 → 毛巾擦头（摩擦微暖 + 湿冷）→ 吹风机先左边，**拖动画面瞄准热风** → 他在风声里说了句听不清的话（字幕「ドライヤーの音で、よく聞こえない」）→ 关掉吹风机，选「なんて言ったの？」→ **左耳**重说 → 右边：热风**绕过后脑**转到右耳 → 冷风收尾 + 他在右耳边说话（同耳冷 + 暖，DUAL）→ 摘眼镜长按对视 → 沙发窗边二选一（回家 → 借伞"明天来还" / 留下 →「雨が止むまで」）→ 左耳「止まなければいいのに」。
 - 美术：Seedance **网页** GPT Image 2 图生图（API 上传 2026-11-08 再次限流），6 张 2K 静帧，每张 25 credits；提示词 `project/web_prompts.json`。右侧吹风画面 = 吹风静帧镜像。封面用开门图右移 + 左侧压暗。
-- 自动通关测试：1:44，0 报错。**动画（§4b，Seedance 2.5 Lite 1080p 首尾帧）尚未做**：用户要求时再做。
+- 用户试过"重新打光"（以迅的静帧为光影参考重绘 6 张）后决定**保留原版静帧**（2026-11-08）。
+- 动画（§4b）：15 段 Seedance 2.5 Lite 1080p 首尾帧（960 credits，网页端）：每个画面一段说话循环，吹风 / 眼镜 / 窗边再加安静循环，6 段过渡（门口→毛巾→吹风→左耳→右侧吹风（镜像帧）→眼镜→窗边）；右侧吹风循环 = 左侧镜像。`scripts/prepare_video.py`（Demo20 版，静帧用 media/art JPG）。网页上传小坑：同一 file input 连续上传要先把 `input.value=''`，否则每隔一次不生效；生图页提交后比例会被重置成 Auto，每次都要确认 16:9。
+- 自动通关测试（带动画）：2:25，0 报错。
 
 ### Demo23_NobunagaTalk ✅ 可玩（本机专用）—《信長と、語らう / Talk with Nobunaga》实时 AI 对话（2026-11-08）
 - 用户要求：不是固定台词，能对用户说的话做出反应；讲完等用户讲；本机版 + 限额不许超；可选 信長 / 家康 / 三人で、可选场所（5 个：岐阜城天守夕暮れ、茶室囲炉裏、京都居酒屋、山崎蒸溜所、安土月夜の宴）；角色先按场所开话题；约 2 分钟由角色收尾；角色要走动（不在一个位置讲话）让冷热变化。
