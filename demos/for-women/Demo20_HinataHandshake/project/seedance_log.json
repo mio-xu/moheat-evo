@@ -1,0 +1,42 @@
+{
+ "hina_booth": {
+  "generation": "api_e5f0ff6e9f11aa905d50290436b9d02515be0d0ea83714f1e7c9bb25a65c8dcb",
+  "idempotency_key": "moheat-d20-hina-booth-v1"
+ },
+ "bg_queue": {
+  "generation": "api_812fc7f198c863ca1b4e91af972054592d4da9fd4f94b0cc15a0b6db823640f2",
+  "idempotency_key": "moheat-d20-bg-queue-v1"
+ },
+ "hina_hands": {
+  "generation": "api_87ec8d6ee5328143f6c08c786e8ed53280001a0ab81a435191d15a5d51a04dee",
+  "idempotency_key": "moheat-d20-hina_hands-v2"
+ },
+ "hina_lean": {
+  "generation": "api_ab4a96b1672053faecaa0747baac9949c9f4ec046e8219a9d6c1e906ab0f2d0d",
+  "idempotency_key": "moheat-d20-hina-lean-v1"
+ },
+ "hina_wave": {
+  "generation": "api_49453dcde44df3ee7bf44858e7fe403d93c3c88b32226445e308d15f58a845ce",
+  "idempotency_key": "moheat-d20-hina-wave-v1"
+ },
+ "hina_booth_quiet": {
+  "generation": "api_ba15f76b1293e8607af936806eb248494dd361ede0ad812bc72582519327eab6",
+  "idempotency_key": "moheat-d20-hina-booth-quiet-v1"
+ },
+ "hina_booth_blink": {
+  "generation": "api_c69878705afe8cffe53606b8960e9d559d5ca29e14db63d8b83a5ea403c8d0c2",
+  "idempotency_key": "moheat-d20-hina-booth-blink-v1"
+ },
+ "hina_lean_talk": {
+  "generation": "api_d39340e5cb0e38d16e1ee1e72f955bb6c5fdb68bbc8dce36a60bc2d6f497bff6",
+  "idempotency_key": "moheat-d20-hina-lean-talk-v1"
+ },
+ "hina_wave_talk": {
+  "generation": "api_75724a81d9f38da0b19867e015fd9c4b00307d9827314d1d8bd687be4c539d03",
+  "idempotency_key": "moheat-d20-hina-wave-talk-v1"
+ },
+ "hina_hands_talk": {
+  "generation": "api_2f3e81ed7b2e01195f8d3ba232508e295f2656f747964aaab1800d7cc1f4fdb9",
+  "idempotency_key": "moheat-d20-hina_hands_talk-v2"
+ }
+}

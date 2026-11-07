@@ -39,6 +39,7 @@ demos/nobunaga-suntory/Demo5_GifuCastle/                   Demo 5《信長の岐
 demos/all-ages/Demo10_CaveSpring/                 纯交互解谜《火をともして、ひみつの泉へ》（可玩，等 Seedance 背景）
 demos/healing/Demo11_Naomi/                      纯交互治愈小游戏《ナオミと、ふわふわの一日》（用户家的猫 Naomi，Seedance 美术）
 demos/for-women/Demo12_LateCall/                   纯交互深夜电话《もしもし、きこえる？》（原创男偶像 蓮，VOICEVOX:青山龍星）
+demos/for-women/Demo20_HinataHandshake/           纯交互握手会《あと10秒だけ、ね？》（原创男偶像 陽向，VOICEVOX:白上虎太郎）
 demos/healing/Demo15_FamilyCall/                 纯交互家庭电话《もしもし、おばあちゃん？》（外婆ハナ VOICEVOX:もち子さん，外公ゲン VOICEVOX:ちび式じい）
 demos/healing/Demo13_NaomiCam/                   Naomi 监控摄像头版《ナオミ、いまなにしてる？》（复用 Demo 11 美术和音频）
 demos/for-men/Demo14_LiveStream/                 女主播直播间 ①《ミントの、ささやき配信》（共用代码、美术、配音都在这里；详见该目录 README）
@@ -312,6 +313,14 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 表情：`scripts/prepare_art.py`（按路径用 Demo 12 的函数）切口型/眨眼小块；外公说话帧生成时被放大了，用眼睛和鼻子区域求缩放（0.87）再切嘴；眨眼用固定偏移（局部搜索会漂）。
 - **冷热改为双层 + DUAL（2026-11-08）**：人声层 = 听筒贴耳时这只耳朵的热度 = 0.1 + 0.8 × 声音包络（起 0.06 s / 落 0.3 s；对着别处喊的句子 ×0.35；免提时没有人声热）；环境层 = 门（左凉）、围巾（两侧暖）、雪人（右凉）。每只耳朵冷、热各自计算，发 `DUAL …`。`FAMILY.both()` = 同耳冷热同时出现的帧数。
 - **2026-11-08 用户说太长，拆成两集**（同一通电话）：第 1 集 = 本文件夹（打电话 → 外公抢听筒 → 包裹 → 开门 → 围巾，结尾外公"看看我的蓝箱子"→「つづく」，约 2:50）；第 2 集 = `demos/healing/Demo16_FamilyCall2/`《じいちゃんの、ゆきだるま》（开场围巾已围着、免提 → 小雪人 → 听筒回耳边 → 过年 → 不肯先挂，约 2:05）。Demo16 文件夹只有页面和封面：`<base href="../Demo15_FamilyCall/">` + `<body data-part="2">`，代码/美术/配音全用第 1 集的（`game.js` 里 `PART`）。两集都已加入 `nav.js` 和官网菜单（缩略图按文件夹命名）。
+
+### Demo20_HinataHandshake ✅ 可玩 —《あと10秒だけ、ね？ / Just Ten More Seconds?》（纯交互握手会，2026-11-08）
+- 女性向男偶像系列第一位：**陽向**（19 岁，年下・腹黑：人前甜、耳边黑）。造型 = 用户定的粉毛设定图（`Demo16_HandshakeEvent/assets/art/hinata_pink_sheet.png`，复制为 `assets/art/ref_hinata.png`）。`Demo16_HandshakeEvent/` 是三位男偶像的设计/试听工作区（未进 git），不要删。
+- **其余两位**：迅 = 用户选 **v2 造型（红发、墨镜推在头上、黑皮衣/黑衬衫、戒指，`project/shion_jin_v2.jpg` 右图 / `assets/art/jin_sheet_v2.png`）**，声线 雀松朱司（ツンデレ）；第三位（湊 / 紫苑）造型未定。每位一个独立 demo 文件夹。
+- 声音：陽向 **VOICEVOX:白上虎太郎 ふつう**，试听第 2 轮 v4「ギャップ強め」（intonation ×1.15）+ 每句风格 s 甜 / t 撩 / d 耳边黑；工作人员 VOICEVOX:春日部つむぎ。`scripts/voice.py`。
+- 流程：冬天会场排队（右边自动门 → 右凉 + 开门时一阵冷风）→ 握手 → 「手好冰」→ 他对你手哈气（两耳暖的一波）→ 工作人员「快到时间了」→ 凑到**左耳**「你刚才也去排别人的队了吧…我都看见了」（左耳热跟着声音）→ 时间到他不放手（计时器变成"延長 +0:xx"）→ **右耳**「下次只排我的队，约好了」+ 有人进门的冷风（右耳同时暖 + 凉，DUAL）→ 说「約束する」（麦克风或按钮）→ 挥手再见。自动通关约 1:40，0 报错。
+- 冷热：DUAL，三层 = 人声（离哪只耳朵近就暖哪只，跟响度）、哈气、门口冷风。牵手本身不加热（物理上不合理）。
+- 美术：Seedance GPT Image 2（`scripts/seedance.py`）。**2026-11-08 上传接口被限流（Retry-After ≈ 8 h）**：锚点图 `hina_booth` 用文生图，其余用锚点的生成链接当参考（不用上传）。注意：**生成记录约 10 分钟后 GET 返回 503**，差分必须紧跟底图生成；用别的生成的 outputs[0] 代替锚点不可靠（握手台的两张差分因此取错了画面，已弃用，握手台没有口型/眨眼）。右耳的画面 = 左耳画面镜像。
 
 ## 6. 本地未提交的大文件（仅在本机，可用脚本重建）
 

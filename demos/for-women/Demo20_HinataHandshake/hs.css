@@ -1,0 +1,23 @@
+/* Hinata's handshake event — on top of Demo 10's demo.css and Demo 12's call.css (both by path): candy pink / lavender palette. */
+:root { --bg: #1e1424; --panel: #2a1d31; --panel-2: #36263e; --line: #4a3655; --gold: #ffb3d4; }
+.bar { background: #22162a; }
+.brand span { color: #ff9cc8; }
+.btn.primary { background: linear-gradient(135deg, #ff8fc0, #b79bff); }
+
+.intro::before { background: linear-gradient(to right, rgba(40, 18, 44, .8), rgba(40, 18, 44, .5) 40%, rgba(40, 18, 44, 0) 60%); }
+body.cover-only .intro::before { background: linear-gradient(to right, rgba(40, 18, 44, .74), rgba(40, 18, 44, .4) 40%, rgba(40, 18, 44, 0) 58%); }
+.intro h1 { background: linear-gradient(100deg, #ffd3e6 0%, #ffffff 45%, #ffb0d2 100%); -webkit-background-clip: text; background-clip: text; }
+.intro .chip.p { background: rgba(255, 150, 200, .18); color: #ffe3f0; border-color: rgba(255, 160, 205, .55); }
+
+/* staff lines: smaller, grey, like an announcement */
+.subs[data-who="staff"] .line { background: rgba(30, 30, 36, .55); }
+.subs[data-who="staff"] .ja { color: #d8d8e0; font-weight: 500; }
+.subs[data-who="staff"] .ja::before { content: "スタッフ  "; color: #9a9aa8; font-size: .7em; }
+
+/* handshake timer (reuses Demo 12's .call-pill) */
+.call-pill .dot { background: #ff8fc0; box-shadow: 0 0 .6cqw #ff8fc0; }
+.call-pill.over { border-color: rgba(255, 120, 170, .8); background: rgba(70, 16, 44, .7); }
+.call-pill.over span { color: #ffb0d2; }
+.call-pill.over .dot { animation: blink .8s steps(2) infinite; }
+@keyframes blink { 50% { opacity: .2; } }
+.ch:hover, .act-btn:hover, .mic-gate button:hover { background: rgba(230, 110, 170, .5); }
