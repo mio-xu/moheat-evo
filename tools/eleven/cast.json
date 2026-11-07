@@ -271,7 +271,10 @@
   "persona": "26 岁，冬季单人露营主播，「颜值天花板」：黑发、五官精致的偶像级帅哥，弹幕全在刷他的脸；本人高冷话少（クーデレ），对自己的帅完全没自觉，其实温柔又笨拙，被夸会小声害羞；深夜湖边篝火直播",
   "description": "A Japanese man, 26, a strikingly handsome, cool and quiet live streamer. A clear, low, smooth young baritone, calm and a little aloof, with an attractive airy softness; speaks slowly with few words and short pauses, unbothered and understated, then suddenly gentle and shy with a soft breathy laugh. Not husky, not old, not flirty or showy. Close up it becomes a low, soft, intimate whisper. Native Japanese speaker. Clean close-mic recording, no background noise.",
   "sample": "[softly] …あ、もう映ってる？ …こんばんは。岳です。 [chuckles softly] …顔の話はいいって。今日も、湖のそばで焚き火してる。 …寒くないか？ 風、こっちから来るだろ。…ほら、俺が壁になるから。 [sighs softly] 火、ちょっと足すな。…パチパチいってるの、聞こえる？ [whispers] …しゃべるの、得意じゃないんだけどさ。…お前が見てると、なんか、続けたくなる。 [softly] …もうちょっとだけ、ここにいろよ。",
-  "compare": []
+  "compare": [],
+  "voice_id": "rR0Ih88ACkRAdbFhLe7c",
+  "confirmed": "2026-11-08",
+  "pick": "r2_a"
  },
  "tsubaki": {
   "name": "白銀椿 Tsubaki",
@@ -281,7 +284,10 @@
   "persona": "约会①（男性向）：20 岁老字号旅馆的大小姐，端庄有礼、说话用敬语，但不谙世事的天然呆；人生第一次挤人潮的初诣、第一次逛小吃摊，好奇又容易害羞",
   "description": "A Japanese woman of twenty, a well-bred young lady from an old traditional family. Clear, bright, refined light soprano; elegant and polite with a gentle, graceful lilt, slightly airy and innocent, curious and easily delighted, a little shy; she giggles softly behind her hand. Close to the ear she becomes a soft, breathy whisper. Native Japanese speaker. Clean close-mic recording, no background noise.",
   "sample": "[softly] あけましておめでとうございます。 [giggles] …ふふ、こうして人混みの初詣に来るのは、生まれて初めてなんです。 [curious] あっ、あれは何でしょう？ りんご飴…？ まあ、立ったまま食べてもよろしいの？ [whispers] …今日は、あなたと来られて、本当によかった。",
-  "compare": []
+  "compare": [],
+  "voice_id": "ydtidqvCazlHO8YgKhfx",
+  "confirmed": "2026-11-08",
+  "pick": "r1_b"
  },
  "kainushi": {
   "name": "飼い主 Kainushi",
@@ -291,6 +297,9 @@
   "compare": [],
   "demos": [
    "healing/Demo26_NekoNiNatta"
-  ]
+  ],
+  "voice_id": "Qey7kdhUoCmL00JnjtZj",
+  "confirmed": "2026-11-08",
+  "pick": "r1_a"
  }
 }
