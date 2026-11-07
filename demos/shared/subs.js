@@ -162,7 +162,7 @@
   }
 
   // the cover: every text in .intro that l10n.js translates ("" = hidden); the title shrinks when the new text is longer
-  const COVER = '.intro h1, .intro p:not(.draft):not(.cleared):not(.dn-rights), .intro .chip, .intro button:not(.opt):not(.msub-lang), .intro .opt:not(:has(small))';
+  const COVER = '.intro h1, .intro p:not(.draft):not(.cleared):not(.dn-rights), .intro .chip, .intro button:not(.opt):not(.msub-lang):not(.mtc-btn), .intro .opt:not(:has(small))';
   const units = (s) => [...s].reduce((n, c) => n + (/[　-鿿가-힯＀-￯]/.test(c) ? 1 : c === ' ' ? .3 : .56), 0);
   function cover(el) {
     if (el.closest('.ix-toggle') || el.querySelector(COVER)) return;   // a box of chips: the chips themselves

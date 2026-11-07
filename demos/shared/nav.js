@@ -43,7 +43,7 @@
   const GROUPS = ['全年齢 · All ages', '癒し · Healing', '男性向け · For him', '女性向け · For her', '信長シリーズ · Nobunaga Series'];   // numbers are the list order
   const qs = new URLSearchParams(location.search);
   { const me = document.currentScript?.src;   // subtitle language EN / 日本語 / 中文 (also in ?embed): shared/subs.js next to this file
-    if (me && !window.MoHeatSub && !qs.has('cover') && !qs.has('render')) for (const f of ['subs.js?v=12', 'fullscreen.js?v=3', 'guide.js?v=3']) {   // display language + ⛶ fullscreen + first-visit guide (tools/web/bump.py updates these numbers)
+    if (me && !window.MoHeatSub && !qs.has('cover') && !qs.has('render')) for (const f of ['subs.js?v=13', 'fullscreen.js?v=3', 'guide.js?v=4', 'thermocheck.js?v=1']) {   // display language + ⛶ fullscreen + first-visit guide + 🌡 thermal check (tools/web/bump.py updates these numbers)
       const s = document.createElement('script'); s.src = me.replace(/nav\.js(\?.*)?$/, f); s.async = false; document.head.appendChild(s); } }
   if (qs.has('embed') || qs.has('cover') || qs.has('render')) return;
   // one screen: measure the bar and what sits below the stage, series.css sizes the stage and the side panel from these

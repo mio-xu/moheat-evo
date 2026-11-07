@@ -122,8 +122,11 @@ window.MoHeatDevice = (() => {
       ui.addBtn.disabled = ui.connectBtn.disabled = true;
     }
 
-    return { send, isConnected: () => !!writer };
+    const inst = { send, isConnected: () => !!writer };
+    api.current = inst;   // the page's device, for shared tools such as demos/shared/thermocheck.js (left / right · warm / cool check)
+    return inst;
   }
 
-  return { create, supported };
+  const api = { create, supported, current: null };
+  return api;
 })();
