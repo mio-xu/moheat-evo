@@ -116,7 +116,7 @@ def ice_crack_event(scale=1.0):
 
 def ice_cracking():
     x = np.zeros(N)
-    rate = lambda t: .9 if t < 20 else 3.0 if t < 100 else 4.0
+    rate = lambda t: 1.2 if t < S.tw(20) else 3.0 if t < S.tw(100) else 4.0
     for t in poisson(rate):
         B.place(x, t, ice_crack_event(rng.uniform(.5, 1.0)))
     return x
@@ -219,7 +219,7 @@ SPEED_END = (139.0, 146.0)          # the train brakes into the spring station
 def speed(t):
     t = np.asarray(t, float)
     a, b = SPEED_END
-    return np.clip((b - t) / (b - a), 0, 1) ** 1.3 * (1 + .25 * ((t > 95) & (t < 125)))   # faster during the chaos
+    return np.clip((b - t) / (b - a), 0, 1) ** 1.3 * (1 + .25 * ((t > S.tw(95)) & (t < S.tw(125))) + .2 * (t < S.tw(20)))   # faster in winter and the chaos
 
 
 def train_wheels():
@@ -250,7 +250,7 @@ def train_interior():
 
 NOTE = lambda m: 440 * 2 ** ((m - 69) / 12)
 MUSIC = [  # t0, t1, bpm, chord progression (MIDI chords), notes per beat
-    (0, 20, 76, [[57, 60, 64, 69], [53, 57, 60, 65], [55, 59, 62, 67], [52, 57, 60, 64]], 1),         # winter: A minor, celesta
+    (0, 20, 96, [[57, 60, 64, 69], [53, 57, 60, 65], [55, 59, 62, 67], [52, 57, 60, 64]], 2),         # winter: A minor, celesta (brisk opening)
     (20, 45, 100, [[50, 54, 57, 62], [55, 59, 62, 67], [47, 50, 54, 59], [57, 61, 64, 69]], 2),        # summer: D major
     (45, 70, 84, [[50, 53, 57, 62], [46, 50, 53, 58], [48, 52, 55, 60], [45, 49, 52, 57]], 1),          # storm: D minor
     (70, 95, 70, [[48, 52, 56, 60], [50, 54, 58, 62], [46, 50, 54, 58], [52, 56, 60, 64]], 1),          # tunnel: whole-tone
@@ -262,6 +262,7 @@ MUSIC = [  # t0, t1, bpm, chord progression (MIDI chords), notes per beat
 def background_music():
     x = np.zeros(N)
     for t0, t1, bpm, prog, sub in MUSIC:
+        t0, t1 = S.tw(t0), S.tw(t1)
         beat = 60 / bpm; bar = beat * 4; k = 0
         t = t0
         while t < min(t1, 146.5):

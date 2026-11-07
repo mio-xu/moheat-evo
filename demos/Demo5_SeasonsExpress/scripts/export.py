@@ -27,7 +27,8 @@ def art():
             if im.mode not in ("RGBA", "RGB"): im = im.convert("RGBA")
             if f.startswith("fx_"): im = im.resize((256, 256), Image.LANCZOS)              # sprites are drawn ≤ 180 px
             im.save(os.path.join(ART, f[:-4] + ".webp"), quality=86, method=5); n += 1
-    Image.open(os.path.join(ROOT, "storyboard", "frames", "summer.jpg")).save(os.path.join(ART, "cover_bg.webp"), quality=84)
+    bg = os.path.join(ROOT, "project", "cover_bg.jpg")                  # made by make_cover.py (ice/lava tunnel frame)
+    Image.open(bg if os.path.exists(bg) else os.path.join(ROOT, "storyboard", "frames", "summer.jpg")).save(os.path.join(ART, "cover_bg.webp"), quality=86)
     return sorted(x[:-5] for x in os.listdir(ART) if x.endswith(".webp")), n
 
 
@@ -43,6 +44,7 @@ def main():
             for te, _, g in s["events"]: e = np.maximum(e, g * np.clip(1 - np.abs(t - te - .5) / 1.2, 0, 1))
         sources[name] = dict(role=s["role"], icon=ICONS[name], d=s["d"], env=np.round(e, 2).tolist(), az=np.round(S.azimuth(name, t)).tolist())
     anim = dict(duration=S.DURATION, fps=S.FPS, silence=list(S.SILENCE), tunnelSwap=list(S.TUNNEL_SWAP),
+                warp=dict(old=S.WARP_OLD, new=S.WARP_NEW),
                 segments=[dict(t0=a, t1=b, key=k, ja=ja, en=en, left=l, right=r) for a, b, k, ja, en, l, r in S.SEGMENTS],
                 chaos=[dict(t0=a, t1=b, left=l, right=r) for a, b, l, r in S.CHAOS], cues=S.VISUAL_CUES,
                 radarRate=RADAR_RATE, sources=sources,

@@ -13,42 +13,42 @@
   {
    "check": "≥ 4 clear left/right environment moves",
    "ok": true,
-   "detail": "10 moves: cool L→R @ 59.0→62.0 s, cool R→L @ 70.8→71.2 s, cool L→R @ 81.2→83.2 s, heat R→L @ 81.3→82.7 s, cool R→L @ 94.4→94.8 s, heat L→R @ 94.5→97.2 s, cool L→R @ 100.2→101.1 s, heat R→L @ 100.6→101.0 s, heat L→R @ 109.7→114.0 s, heat R→L @ 115.5→116.2 s"
+   "detail": "12 moves: cool L→R @ 51.0→54.0 s, cool R→L @ 63.0→63.5 s, cool L→R @ 74.3→77.0 s, heat R→L @ 74.6→76.3 s, cool R→L @ 89.3→89.8 s, heat L→R @ 89.3→92.7 s, cool L→R @ 95.8→97.0 s, heat R→L @ 96.6→97.0 s, heat L→R @ 106.9→111.7 s, heat R→L @ 113.5→114.3 s, cool R→L @ 118.7→120.6 s, heat L→R @ 118.9→120.5 s"
   },
   {
    "check": "Rain cooling travels left → right (storm)",
    "ok": true,
-   "detail": "R−L cooling 46–54 s -0.79, 64–69 s +0.78"
+   "detail": "R−L cooling 38–46 s -0.78, 56–61 s +0.78"
   },
   {
    "check": "≥ 2 moments of opposite temperatures left vs right",
    "ok": true,
-   "detail": "7 segments ≥ 1 s: 19.4–28.4, 43.4–57.8, 71.2–81.0, 83.2–94.2, 97.2–100.0, 101.1–109.5, 116.2–119.8"
+   "detail": "9 segments ≥ 1 s: 10.7–20.4, 35.3–49.8, 63.5–74.0, 77.0–89.0, 92.8–95.5, 97.0–105.0, 105.2–106.7, 114.3–118.5, 120.5–121.7"
   },
   {
    "check": "Clear ice/fire reversal in the tunnel",
    "ok": true,
-   "detail": "72.5–79.5 s: L cool 0.79 / R heat 0.83; neutral 81.2–82.4 s total 0.19; 84–92.5 s: L heat 0.84 / R cool 0.78"
+   "detail": "64.8–72.6 s: L cool 0.79 / R heat 0.83; neutral 74.5–75.9 s total 0.15; 77.7–87.2 s: L heat 0.84 / R cool 0.78"
   },
   {
    "check": "Silent segment: audio silent and all four channels exactly 0",
    "ok": true,
-   "detail": "110–114 s: max output 0.0, commands ['stop'], audio -240 dBFS"
+   "detail": "108–112 s: max output 0.0, commands ['stop'], audio -240 dBFS"
   },
   {
    "check": "Calm spring ending, everything 0 at 150 s",
    "ok": true,
-   "detail": "126–150 s: no cooling, max heat 0.26, max step 0.031/frame; audio -26.3 dBFS vs chaos -21.3 dBFS; last command 'stop'"
+   "detail": "126–150 s: no cooling, max heat 0.26, max step 0.030/frame; audio -27.9 dBFS vs chaos -22.3 dBFS; last command 'stop'"
   },
   {
    "check": "Each driving sound is heard on the side it heats/cools (binaural ILD > 3 dB)",
    "ok": true,
-   "detail": "winter_wind 3–18 s L (+8.9 dB), tropical_rain 47–54 s L (+13.4 dB), tropical_rain 66.5–68.5 s R (-13.3 dB), summer_breeze 24–42 s R (-16.2 dB), fire_crackling 73–79 s R (-13.3 dB), fire_crackling 85–92 s L (+13.7 dB), ice_cracking 73–79 s L (+16.1 dB), ice_cracking 85–92 s R (-16.2 dB), lava 73–79 s R (-13.4 dB), lava 85–92 s L (+13.7 dB), fire_crackling 98.5–100.5 s R (-13.2 dB), steam 101.2–102.5 s L (+21.0 dB), winter_wind 116.5–118.5 s R (-9.0 dB)"
+   "detail": "winter_wind 1.8–10.8 s L (+8.9 dB), tropical_rain 39–46 s L (+13.4 dB), tropical_rain 58.5–60.5 s R (-13.2 dB), summer_breeze 16–34 s R (-16.3 dB), fire_crackling 65.4–72.1 s R (-13.3 dB), fire_crackling 78.8–86.6 s L (+13.6 dB), ice_cracking 65.4–72.1 s L (+15.9 dB), ice_cracking 78.8–86.6 s R (-16.1 dB), lava 65.4–72.1 s R (-13.1 dB), lava 78.8–86.6 s L (+13.6 dB), fire_crackling 94.1–96.4 s R (-13.6 dB), steam 97.2–98.8 s L (+20.9 dB), winter_wind 114.6–117 s R (-9.1 dB)"
   },
   {
    "check": "Thermal leads the sound by the device latency (cool 0.35 s, heat 0.60 s)",
    "ok": true,
-   "detail": "L cool: lead 0.25 s (r = 0.972); R heat: lead 0.60 s (r = 0.958)"
+   "detail": "L cool: lead 0.25 s (r = 0.976); R heat: lead 0.60 s (r = 0.959)"
   },
   {
    "check": "Music / train / waves / thunder / birds never drive thermal",
@@ -58,92 +58,110 @@
  ],
  "moves": [
   [
-   58.95,
-   61.95,
+   50.95,
+   54.05,
    "cool L→R"
   ],
   [
-   70.8,
-   71.2,
+   62.95,
+   63.5,
    "cool R→L"
   ],
   [
-   81.15,
-   83.2,
+   74.3,
+   76.95,
    "cool L→R"
   ],
   [
-   81.3,
-   82.7,
+   74.6,
+   76.35,
    "heat R→L"
   ],
   [
-   94.4,
-   94.8,
+   89.3,
+   89.75,
    "cool R→L"
   ],
   [
-   94.45,
-   97.25,
+   89.35,
+   92.7,
    "heat L→R"
   ],
   [
-   100.25,
-   101.1,
+   95.8,
+   97.05,
    "cool L→R"
   ],
   [
-   100.6,
-   101.0,
+   96.6,
+   97.0,
    "heat R→L"
   ],
   [
-   109.65,
-   114.0,
+   106.9,
+   111.65,
    "heat L→R"
   ],
   [
-   115.55,
-   116.2,
+   113.45,
+   114.35,
    "heat R→L"
+  ],
+  [
+   118.65,
+   120.6,
+   "cool R→L"
+  ],
+  [
+   118.9,
+   120.5,
+   "heat L→R"
   ]
  ],
  "opposite_segments": [
   [
-   19.35,
-   28.4
+   10.65,
+   20.4
   ],
   [
-   43.35,
-   57.8
+   35.3,
+   49.75
   ],
   [
-   71.25,
-   81.0
+   63.5,
+   74.05
   ],
   [
-   83.25,
-   94.15
+   77.0,
+   89.05
   ],
   [
-   97.25,
-   100.0
+   92.75,
+   95.55
   ],
   [
-   101.1,
-   109.45
+   97.05,
+   105.05
   ],
   [
-   116.2,
-   119.85
+   105.15,
+   106.65
+  ],
+  [
+   114.35,
+   118.55
+  ],
+  [
+   120.55,
+   121.7
   ]
  ],
  "positions": [
   {
    "source": "winter_wind",
    "window": [
-    3,
-    18
+    1.8,
+    10.8
    ],
    "expected": "L",
    "ild_db": 8.9,
@@ -152,8 +170,8 @@
   {
    "source": "tropical_rain",
    "window": [
-    47,
-    54
+    39,
+    46
    ],
    "expected": "L",
    "ild_db": 13.4,
@@ -162,122 +180,122 @@
   {
    "source": "tropical_rain",
    "window": [
-    66.5,
-    68.5
-   ],
-   "expected": "R",
-   "ild_db": -13.3,
-   "ok": true
-  },
-  {
-   "source": "summer_breeze",
-   "window": [
-    24,
-    42
-   ],
-   "expected": "R",
-   "ild_db": -16.2,
-   "ok": true
-  },
-  {
-   "source": "fire_crackling",
-   "window": [
-    73,
-    79
-   ],
-   "expected": "R",
-   "ild_db": -13.3,
-   "ok": true
-  },
-  {
-   "source": "fire_crackling",
-   "window": [
-    85,
-    92
-   ],
-   "expected": "L",
-   "ild_db": 13.7,
-   "ok": true
-  },
-  {
-   "source": "ice_cracking",
-   "window": [
-    73,
-    79
-   ],
-   "expected": "L",
-   "ild_db": 16.1,
-   "ok": true
-  },
-  {
-   "source": "ice_cracking",
-   "window": [
-    85,
-    92
-   ],
-   "expected": "R",
-   "ild_db": -16.2,
-   "ok": true
-  },
-  {
-   "source": "lava",
-   "window": [
-    73,
-    79
-   ],
-   "expected": "R",
-   "ild_db": -13.4,
-   "ok": true
-  },
-  {
-   "source": "lava",
-   "window": [
-    85,
-    92
-   ],
-   "expected": "L",
-   "ild_db": 13.7,
-   "ok": true
-  },
-  {
-   "source": "fire_crackling",
-   "window": [
-    98.5,
-    100.5
+    58.5,
+    60.5
    ],
    "expected": "R",
    "ild_db": -13.2,
    "ok": true
   },
   {
-   "source": "steam",
+   "source": "summer_breeze",
    "window": [
-    101.2,
-    102.5
+    16,
+    34
+   ],
+   "expected": "R",
+   "ild_db": -16.3,
+   "ok": true
+  },
+  {
+   "source": "fire_crackling",
+   "window": [
+    65.4,
+    72.1
+   ],
+   "expected": "R",
+   "ild_db": -13.3,
+   "ok": true
+  },
+  {
+   "source": "fire_crackling",
+   "window": [
+    78.8,
+    86.6
    ],
    "expected": "L",
-   "ild_db": 21.0,
+   "ild_db": 13.6,
+   "ok": true
+  },
+  {
+   "source": "ice_cracking",
+   "window": [
+    65.4,
+    72.1
+   ],
+   "expected": "L",
+   "ild_db": 15.9,
+   "ok": true
+  },
+  {
+   "source": "ice_cracking",
+   "window": [
+    78.8,
+    86.6
+   ],
+   "expected": "R",
+   "ild_db": -16.1,
+   "ok": true
+  },
+  {
+   "source": "lava",
+   "window": [
+    65.4,
+    72.1
+   ],
+   "expected": "R",
+   "ild_db": -13.1,
+   "ok": true
+  },
+  {
+   "source": "lava",
+   "window": [
+    78.8,
+    86.6
+   ],
+   "expected": "L",
+   "ild_db": 13.6,
+   "ok": true
+  },
+  {
+   "source": "fire_crackling",
+   "window": [
+    94.1,
+    96.4
+   ],
+   "expected": "R",
+   "ild_db": -13.6,
+   "ok": true
+  },
+  {
+   "source": "steam",
+   "window": [
+    97.2,
+    98.8
+   ],
+   "expected": "L",
+   "ild_db": 20.9,
    "ok": true
   },
   {
    "source": "winter_wind",
    "window": [
-    116.5,
-    118.5
+    114.6,
+    117
    ],
    "expected": "R",
-   "ild_db": -9.0,
+   "ild_db": -9.1,
    "ok": true
   }
  ],
  "lags": {
   "L_cool": {
    "lag_s": 0.25,
-   "corr": 0.972
+   "corr": 0.976
   },
   "R_heat": {
    "lag_s": 0.6,
-   "corr": 0.958
+   "corr": 0.959
   }
  },
  "all_pass": true

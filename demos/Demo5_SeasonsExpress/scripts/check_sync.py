@@ -77,7 +77,7 @@ def main():
     check("≥ 4 clear left/right environment moves", len(moves) >= 4, f"{len(moves)} moves: " + ", ".join(f"{m[2]} @ {m[0]:.1f}→{m[1]:.1f} s" for m in moves))
     # rain sweeps L→R: centre of cooling moves across
     cb = lambda a, b: float(np.mean((Rc - Lc)[win(t, a, b)]))
-    check("Rain cooling travels left → right (storm)", cb(46, 54) < -.3 and cb(64, 69) > .3, f"R−L cooling 46–54 s {cb(46, 54):+.2f}, 64–69 s {cb(64, 69):+.2f}")
+    check("Rain cooling travels left → right (storm)", cb(38, 46) < -.3 and cb(56, 61) > .3, f"R−L cooling 38–46 s {cb(38, 46):+.2f}, 56–61 s {cb(56, 61):+.2f}")
 
     # 2 simultaneous opposite temperatures
     opp = segments(((Lc > .25) & (Rh > .25)) | ((Lh > .25) & (Rc > .25)), t, 1.0)
@@ -85,12 +85,12 @@ def main():
 
     # 3 ice / fire reversal
     m = lambda v, a, b: float(np.mean(v[win(t, a, b)]))
-    pre = m(Lc, 72.5, 79.5) > .3 and m(Rh, 72.5, 79.5) > .3
-    neu = m(L + R, 81.2, 82.4) < .2
-    post = m(Lh, 84, 92.5) > .3 and m(Rc, 84, 92.5) > .3
+    pre = m(Lc, 64.8, 72.6) > .3 and m(Rh, 64.8, 72.6) > .3
+    neu = m(L + R, 74.5, 75.9) < .2
+    post = m(Lh, 77.7, 87.2) > .3 and m(Rc, 77.7, 87.2) > .3
     check("Clear ice/fire reversal in the tunnel", pre and neu and post,
-          f"72.5–79.5 s: L cool {m(Lc, 72.5, 79.5):.2f} / R heat {m(Rh, 72.5, 79.5):.2f}; neutral 81.2–82.4 s total {m(L + R, 81.2, 82.4):.2f}; "
-          f"84–92.5 s: L heat {m(Lh, 84, 92.5):.2f} / R cool {m(Rc, 84, 92.5):.2f}")
+          f"64.8–72.6 s: L cool {m(Lc, 64.8, 72.6):.2f} / R heat {m(Rh, 64.8, 72.6):.2f}; neutral 74.5–75.9 s total {m(L + R, 74.5, 75.9):.2f}; "
+          f"77.7–87.2 s: L heat {m(Lh, 77.7, 87.2):.2f} / R cool {m(Rc, 77.7, 87.2):.2f}")
 
     # 4 silence = zero
     a, b = S.SILENCE
@@ -109,14 +109,14 @@ def main():
         float(np.abs(np.diff(Lh[sp])).max()) < .05 and rows[-1]["command"] == "stop"
     check("Calm spring ending, everything 0 at 150 s", calm,
           f"126–150 s: no cooling, max heat {max(Lh[sp].max(), Rh[sp].max()):.2f}, max step {np.abs(np.diff(Lh[sp])).max():.3f}/frame; "
-          f"audio {rms(126, 146):.1f} dBFS vs chaos {rms(95, 110):.1f} dBFS; last command '{rows[-1]['command']}'")
+          f"audio {rms(126, 146):.1f} dBFS vs chaos {rms(90, 107.5):.1f} dBFS; last command '{rows[-1]['command']}'")
 
     # 6 sound position == thermal side (binaural ILD of the driving stems)
     pos = []
-    for name, a_, b_, want in (("winter_wind", 3, 18, "L"), ("tropical_rain", 47, 54, "L"), ("tropical_rain", 66.5, 68.5, "R"),
-                               ("summer_breeze", 24, 42, "R"), ("fire_crackling", 73, 79, "R"), ("fire_crackling", 85, 92, "L"),
-                               ("ice_cracking", 73, 79, "L"), ("ice_cracking", 85, 92, "R"), ("lava", 73, 79, "R"), ("lava", 85, 92, "L"),
-                               ("fire_crackling", 98.5, 100.5, "R"), ("steam", 101.2, 102.5, "L"), ("winter_wind", 116.5, 118.5, "R")):
+    for name, a_, b_, want in (("winter_wind", 1.8, 10.8, "L"), ("tropical_rain", 39, 46, "L"), ("tropical_rain", 58.5, 60.5, "R"),
+                               ("summer_breeze", 16, 34, "R"), ("fire_crackling", 65.4, 72.1, "R"), ("fire_crackling", 78.8, 86.6, "L"),
+                               ("ice_cracking", 65.4, 72.1, "L"), ("ice_cracking", 78.8, 86.6, "R"), ("lava", 65.4, 72.1, "R"), ("lava", 78.8, 86.6, "L"),
+                               ("fire_crackling", 94.1, 96.4, "R"), ("steam", 97.2, 98.8, "L"), ("winter_wind", 114.6, 117, "R")):
         d = ild(name, a_, b_); ok = (d > 3) if want == "L" else (d < -3)
         pos.append(dict(source=name, window=[a_, b_], expected=want, ild_db=round(d, 1), ok=ok))
     check("Each driving sound is heard on the side it heats/cools (binaural ILD > 3 dB)", all(p["ok"] for p in pos),
@@ -150,15 +150,15 @@ def write_md(res):
     for i, c in enumerate(res["checks"], 1):
         L.append(f"| {i} | {c['check']} | {'✅ PASS' if c['ok'] else '❌ FAIL'} | {c['detail']} |")
     L += ["", "## Timeline (sound → thermal)", "", "| Time (s) | Scene | Left ear | Right ear |", "|---|---|---|---|"]
-    for row in (("0–20", "Winter forest", "cool: wind, snow, ice cracks", "—"),
-                ("20–45", "Summer coast", "cool fading (designed: melting frost)", "heat: summer breeze + designed sunlight"),
-                ("45–70", "Tropical downpour", "cool: rain + drops (until ≈ 60 s)", "heat: designed sunlight → cool as the rain sweeps right"),
-                ("70–80", "Tunnel: ice left / lava right", "cool: ice cracks + icy wind", "heat: fire + lava"),
-                ("80–83", "Tunnel: neutral", "—", "—"),
-                ("83–95", "Tunnel reversed", "heat: fire + lava + steam", "cool: ice cracks + icy wind"),
-                ("95–110", "Seasons out of control", "cool → heat (steam, breeze, lava)", "heat (fire) → cool (rain, ice) → cool (wind)"),
-                ("110–114", "Blackout", "**0**", "**0**"),
-                ("114–125", "Out of control (2)", "heat: fire, then cool: ice", "heat: steam, then cool: wind, then heat: breeze"),
+    for row in (("0–12", "Winter forest", "cool: wind, snow, ice cracks", "—"),
+                ("12–37", "Summer coast", "cool fading (designed: melting frost)", "heat: summer breeze + designed sunlight"),
+                ("37–62", "Tropical downpour", "cool: rain + drops (until ≈ 55 s)", "heat: designed sunlight → cool as the rain sweeps right"),
+                ("62–73", "Tunnel: ice left / lava right", "cool: ice cracks + icy wind", "heat: fire + lava"),
+                ("73–77", "Tunnel: neutral", "—", "—"),
+                ("77–90", "Tunnel reversed", "heat: fire + lava + steam", "cool: ice cracks + icy wind"),
+                ("90–107.5", "Seasons out of control", "cool → heat (steam, breeze, lava)", "heat (fire) → cool (rain, ice) → cool (wind)"),
+                ("107.5–111.5", "Blackout", "**0**", "**0**"),
+                ("111.5–125", "Out of control (2)", "heat: fire, then cool: ice", "heat: steam, then cool: wind, then heat: breeze"),
                 ("125–150", "Cherry blossom station", "gentle warmth (spring breeze) → 0", "gentle warmth → 0")):
         L.append("| " + " | ".join(row) + " |")
     L += ["", "Designed (not audio-derived) envelopes: `sunlight_right`, `frost_residual_left` — see `thermal/thermal_mapping_config.json`.",

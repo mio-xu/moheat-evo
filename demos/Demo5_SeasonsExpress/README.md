@@ -1,4 +1,4 @@
-# Demo 5 · 四季暴走列車 / The Runaway Seasons Express
+# Demo 5 · The Runaway Seasons Express（季節が、暴走する。）
 
 You sit in a magic train car and face forward for 150 s. Outside the left and right windows the seasons run wild:
 - winter;
@@ -48,12 +48,23 @@ The player draws, back to front:
 **Shared timing:**
 - The train sways on every rail joint, using the same speed integral as the wheel clacks in the mix.
 - The station slides in as the train brakes (139–146 s).
-- 110–114 s goes dark with the lamps dying and flickering back.
+- 107.5–111.5 s goes dark with the lamps dying and flickering back.
 - Each window's season comes from `seasons.py` (`SEGMENTS` + `CHAOS`), the same table that places the sounds, so what you see on a side is what you hear and feel there.
 
 **Previews:** `python3 scripts/render_mp4.py --at 10,30,75` renders stills to `video/clips/preview/`.
 
-**Cover:** `?cover=1` gives the cover page, saved as `media/cover.jpg`.
+**Cover:** `python3 scripts/make_cover.py` (the 8765 server must be running).
+- The background is a rendered frame at 68 s: ice tunnel on the left, lava on the right.
+- On top: the Japanese tagline in kana, 「季節が、暴走する。」, and a big English title.
+- The cover is also the film's first 1.8 s.
+- Outputs: `media/cover.jpg` and the site menu thumbnail `assets/images/demos/demo5.jpg`.
+
+**Pacing:**
+- All times are authored on the brief's grid and remapped once by `seasons.tw()`.
+- Winter lasts 12 s with no slow fade-in, and the train is 20 % faster in winter.
+- The player (`TW()` in demo.js) and the audio use the same remap.
+
+**Windows:** large (glass from 1.22 m to 3.75 m along the car and from −0.24 m to 0.88 m in height), with the curtains tied back beside the frames.
 
 ## Pipeline
 ```
@@ -79,8 +90,8 @@ Play on the device without a browser:
 | winter_wind, snow, ice_cracking, tropical_rain, water_drops | summer_breeze, fire_crackling, lava, steam, spring_breeze (weight 0.22) | ocean_waves, thunder, birds, train_wheels, train_interior, background_music |
 
 Silent visuals use **designed envelopes**, marked `audio_derived: false` in the config:
-- `sunlight_right`: sunshine through the right window, 22–60 s.
-- `frost_residual_left`: melting frost on the left window, 19–31 s.
+- `sunlight_right`: sunshine through the right window, 13–52 s.
+- `frost_residual_left`: melting frost on the left window, 11–23 s.
 
 ## Thermal
 The thermal controller works in this order:
@@ -91,16 +102,16 @@ The thermal controller works in this order:
 5. Device lead: cool 0.35 s, heat 0.60 s.
 6. Per-ear arbitration ensures that **each ear is only cooling or heating at any moment**.
 7. Dose limit: 8 s window, 0.85 maximum.
-8. 110–114 s is forced to exactly 0, then PWM conversion (cool 35–80, heat 0–200).
+8. The blackout (107.5–111.5 s) is forced to exactly 0, then PWM conversion (cool 35–80, heat 0–200).
 
 ## Acceptance (analysis/synchronization_report.md)
 | Check | Result |
 |---|---|
-| ≥ 4 clear left/right moves | 10 |
-| ≥ 2 opposite-temperature moments | 7 segments |
+| ≥ 4 clear left/right moves | 12 |
+| ≥ 2 opposite-temperature moments | 9 segments |
 | Ice/fire reversal | L cool / R heat, then a neutral gap, then L heat / R cool |
 | Silent segment | Audio −∞ dB and all channels 0 |
-| Spring ending | Calm (heat ≤ 0.27, no cooling) and 0 at 150 s |
+| Spring ending | Calm (heat ≤ 0.26, no cooling) and 0 at 150 s |
 | Same-ear conflicts | 0 |
 | Every driving sound is lateralised to the side it heats or cools | ILD > 3 dB, 1.5 kHz+ |
 

@@ -13,13 +13,24 @@ import numpy as np
 DURATION, SR, RATE, FPS = 150.0, 48000, 20, 30
 SILENCE = (110.0, 114.0)                    # everything (sound, music, train, thermal) is exactly zero
 
+# Pacing (2026-11-07, user feedback "the opening is too slow and too long"): every time below is AUTHORED on the
+# original brief's grid (winter 0–20, summer 20–45, …) and remapped once at import by tw(): winter 20 → 12 s,
+# the 8 s go to the tunnel (+3) and the chaos (+5); the 4 s blackout and the spring ending keep their length.
+WARP_OLD = [0, 20, 45, 70, 95, 110, 114, 125, 150]
+WARP_NEW = [0, 12, 37, 62, 90, 107.5, 111.5, 125, 150]
+
+
+def tw(x):
+    """authored (brief) time → film time"""
+    return float(np.interp(x, WARP_OLD, WARP_NEW))
+
 SEGMENTS = [  # t0, t1, id, Japanese title, English title, left window, right window
     (0, 20, "winter", "冬の雪林", "Winter Forest", "winter", "winter"),
     (20, 45, "summer", "真夏の海岸", "Summer Coast", "winter_thaw", "summer"),
     (45, 70, "storm", "熱帯のスコール", "Tropical Downpour", "storm", "rainforest_sun"),
     (70, 95, "tunnel", "氷と炎のトンネル", "Tunnel of Ice & Fire", "ice", "lava"),
     (95, 125, "chaos", "季節の暴走", "Seasons Out of Control", "chaos", "chaos"),
-    (125, 150, "spring", "春の桜駅", "Cherry Blossom Station", "spring", "spring"),
+    (125, 150, "spring", "春のさくら駅", "Cherry Blossom Station", "spring", "spring"),
 ]
 # the tunnel swaps sides at 80–83 (neutral) → 83–95 left = lava, right = ice
 TUNNEL_SWAP = (80.0, 83.0)
@@ -32,10 +43,10 @@ def T(t0, t1, fi=1.0, fo=1.0, g=1.0): return (t0, t1, fi, fo, g)
 
 # name: role (cool / heat / none), thermal weight, envelope, azimuth keyframes, distance (m), mix level (dBFS, active RMS)
 SOURCES = {
-    "winter_wind":    dict(role="cool", w=1.00, env=[T(0, 19.5, 2, 3), T(72, 79.3, .8, 1.2, .55), T(84.0, 93, .8, 1.0, .55),
+    "winter_wind":    dict(role="cool", w=1.00, env=[T(0, 19.5, .5, 2), T(72, 79.3, .8, 1.2, .55), T(84.0, 93, .8, 1.0, .55),
                                                    T(95, 98.2, .4, .8), T(108.5, 110, .3, .02, .9), T(116, 119.2, .4, .8)],
                            az=[(0, L), (81.6, L), (82.3, R), (94.1, R), (94.5, L), (100, L), (108, R)], d=1.3, mix=-17),
-    "snow":           dict(role="cool", w=.60, env=[T(.5, 19, 2, 3, .9), T(95, 98.2, .5, .8, .8)],
+    "snow":           dict(role="cool", w=.60, env=[T(0, 19, .6, 2, .9), T(95, 98.2, .5, .8, .8)],
                            az=[(0, -62)], d=1.1, mix=-27),
     "ice_cracking":   dict(role="cool", w=.90, env=[T(3, 19, 1, 1), T(72, 79.3, .5, .8), T(84.0, 93, .5, .8), T(104, 107, .2, .3), T(120, 122, .2, .4)],
                            az=[(0, -76), (81.6, -76), (82.3, 76), (119.5, 76), (119.8, -76)], d=.9, mix=-23),
@@ -85,6 +96,19 @@ CHAOS = [  # t0, t1, left, right
     (110.0, 114.0, "dark", "dark"), (114.0, 116.0, "spring", "steam"), (116.0, 119.0, "lava", "winter"),
     (119.0, 122.5, "ice", "summer"), (122.5, 125.0, "spring", "spring"),
 ]
+
+
+# ---------------------------------------------------------------- remap everything authored above onto the film grid
+SILENCE = (tw(SILENCE[0]), tw(SILENCE[1]))
+TUNNEL_SWAP = (tw(TUNNEL_SWAP[0]), tw(TUNNEL_SWAP[1]))
+SEGMENTS = [(tw(a), tw(b)) + tuple(r) for a, b, *r in SEGMENTS]
+for _s in SOURCES.values():
+    if "env" in _s: _s["env"] = [(round(tw(a), 3), round(tw(b), 3), fi, fo, g) for a, b, fi, fo, g in _s["env"]]
+    if _s.get("az"): _s["az"] = [(round(tw(a), 3), v) for a, v in _s["az"]]
+    if "events" in _s: _s["events"] = [(round(tw(a), 3), v, g) for a, v, g in _s["events"]]
+for _d in DESIGNED.values(): _d["keys"] = [(round(tw(a), 3), v) for a, v in _d["keys"]]
+for _c in VISUAL_CUES: _c["t"] = round(tw(_c["t"]), 3)
+CHAOS = [(round(tw(a), 3), round(tw(b), 3), l_, r_) for a, b, l_, r_ in CHAOS]
 
 
 def env(name, t):

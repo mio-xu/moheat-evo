@@ -6,6 +6,8 @@
 
 const W = 1920, H = 1080;
 const D = window.DEMO_DATA, A = D.anim, G = D.geo;
+// authored (brief) time → film time, same remap as seasons.tw() (winter shortened to 12 s)
+const TW = (x) => { const o = A.warp.old, n = A.warp.new; for (let i = 1; i < o.length; i++) if (x <= o[i]) return n[i - 1] + (x - o[i - 1]) * (n[i] - n[i - 1]) / (o[i] - o[i - 1]); return n[n.length - 1]; };
 const $ = (id) => document.getElementById(id);
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const lerp = (a, b, k) => a + (b - a) * k;
@@ -31,11 +33,11 @@ const segAt = (t) => A.segments.find((s) => t >= s.t0 && t < s.t1) || A.segments
 const inSilence = (t) => t >= A.silence[0] && t < A.silence[1];
 
 // train speed (same law as build_audio.py: faster in the chaos, brakes into the station 139–146 s) and its integral
-const speed = (t) => Math.pow(clamp((146 - t) / 7, 0, 1), 1.3) * (t > 95 && t < 125 ? 1.25 : 1);
+const speed = (t) => Math.pow(clamp((146 - t) / 7, 0, 1), 1.3) * (1 + (t > TW(95) && t < TW(125) ? .25 : 0) + (t < TW(20) ? .2 : 0));
 const POS = (() => { const r = 100, n = Math.ceil(A.duration * r) + 2, p = new Float64Array(n); for (let i = 1; i < n; i++) p[i] = p[i - 1] + speed((i - .5) / r) / r; return p; })();
 const posAt = (t) => sample(POS, 100, clamp(t, 0, A.duration));
 // clock: one gentle hour over the film, spinning forward in the chaos, backwards after the blackout, frozen in the dark
-const clockRate = (t) => (t >= 95 && t < 110 ? 40 : t >= 110 && t < 114 ? 0 : t >= 114 && t < 122 ? -36 : .4);
+const clockRate = (t) => (t >= TW(95) && t < TW(110) ? 40 : t >= TW(110) && t < TW(114) ? 0 : t >= TW(114) && t < TW(122) ? -36 : .4);
 const CLK = (() => { const r = 50, n = Math.ceil(A.duration * r) + 2, p = new Float64Array(n); for (let i = 1; i < n; i++) p[i] = p[i - 1] + clockRate((i - .5) / r) / r; return p; })();
 const clockMin = (t) => 9 * 60 + sample(CLK, 50, clamp(t, 0, A.duration));
 
@@ -55,7 +57,7 @@ const DOOR = G.door_glass.map(P);
 const CLOCK = { x: G.clock.cx * IS, y: G.clock.cy * IS + IOY, r: G.clock.r * IS };
 
 // ---------------------------------------------------------------- window "looks"
-const V = 520;   // px/s of the near layer at full speed (far 0.12×, mid 0.45×, near 1.2×)
+const V = 660;   // px/s of the near layer at full speed (far 0.12×, mid 0.45×, near 1.2×)
 const L3 = (s, far = `${s}_far`) => [[far, .12], [`${s}_mid`, .45], [`${s}_near`, 1.2]];
 const LOOKS = {
   winter: { layers: L3('winter'), glass: [['frost_corner', .85]], wx: 'snow', tint: '170,210,255' },
@@ -75,8 +77,9 @@ const CHAOS_LOOK = { winter: 'winter', summer: 'summer', lava: 'lava', ice: 'ice
 // per-side list of [t, look, fade seconds]
 const TRACK = { L: [[0, 'winter', 0], [20, 'winter_thaw', 0], [45, 'storm', 2.5], [63, 'after_rain', 3], [70, 'ice', .7], [80, 'tunnel_dark', .6], [83, 'lava', .6]],
                 R: [[0, 'winter', 0], [20, 'summer', 2.0], [45, 'rainforest_sun', 2.5], [57, 'storm', 4], [70, 'lava', .7], [80, 'tunnel_dark', .6], [83, 'ice', .6]] };
-for (const c of A.chaos) { TRACK.L.push([c.t0, CHAOS_LOOK[c.left], c.t0 === 95 ? .8 : .3]); TRACK.R.push([c.t0, CHAOS_LOOK[c.right], c.t0 === 95 ? .8 : .3]); }
-for (const s of ['L', 'R']) { TRACK[s].push([125, 'spring', 2]); TRACK[s].sort((a, b) => a[0] - b[0]); }
+for (const s of ['L', 'R']) TRACK[s] = TRACK[s].map(([t, k, f]) => [TW(t), k, f]);   // authored on the brief grid
+for (const c of A.chaos) { TRACK.L.push([c.t0, CHAOS_LOOK[c.left], c.t0 === A.chaos[0].t0 ? .8 : .3]); TRACK.R.push([c.t0, CHAOS_LOOK[c.right], c.t0 === A.chaos[0].t0 ? .8 : .3]); }
+for (const s of ['L', 'R']) { TRACK[s].push([TW(125), 'spring', 2]); TRACK[s].sort((a, b) => a[0] - b[0]); }
 function lookAt(side, t) {
   const tr = TRACK[side]; let i = 0;
   for (let k = 0; k < tr.length; k++) if (tr[k][0] <= t) i = k;
@@ -183,16 +186,18 @@ function drawWindow(c, side, t) {
 // ---------------------------------------------------------------- interior
 function lightWeights(t) {
   const w = { day: 0, dusk: 0, night: 0 };
-  if (t < 45) w.day = 1; else if (t < 48) { w.dusk = smooth((t - 45) / 3); w.day = 1 - w.dusk; }
-  else if (t < 68) w.dusk = 1; else if (t < 71) { w.night = smooth((t - 68) / 3); w.dusk = 1 - w.night; }
-  else if (t < 122) w.night = 1; else if (t < 127) { w.day = smooth((t - 122) / 5); w.night = 1 - w.day; } else w.day = 1;
+  const a = TW(45), b = TW(68), c = TW(122);
+  if (t < a) w.day = 1; else if (t < a + 3) { w.dusk = smooth((t - a) / 3); w.day = 1 - w.dusk; }
+  else if (t < b) w.dusk = 1; else if (t < b + 3) { w.night = smooth((t - b) / 3); w.dusk = 1 - w.night; }
+  else if (t < c) w.night = 1; else if (t < c + 5) { w.day = smooth((t - c) / 5); w.night = 1 - w.day; } else w.day = 1;
   return w;
 }
 function lampFlicker(t) {   // 1 = lamps normal; chaos flicker; 0 in the blackout
   if (inSilence(t)) return 0;
-  if (t >= 109.4 && t < 110) return hash(Math.floor(t * 18)) > .5 ? .25 : .9;
-  if (t >= 114 && t < 114.8) return hash(Math.floor(t * 14) + 7) > .45 ? 1 : .2;
-  if (t >= 95 && t < 125) return .82 + .18 * (hash(Math.floor(t * 7)) > .2 ? 1 : .2);
+  const s0 = A.silence[0], s1 = A.silence[1];
+  if (t >= s0 - .6 && t < s0) return hash(Math.floor(t * 18)) > .5 ? .25 : .9;
+  if (t >= s1 && t < s1 + .8) return hash(Math.floor(t * 14) + 7) > .45 ? 1 : .2;
+  if (t >= TW(95) && t < TW(125)) return .82 + .18 * (hash(Math.floor(t * 7)) > .2 ? 1 : .2);
   return 1;
 }
 function drawInterior(c, t) {
@@ -275,14 +280,14 @@ function emitFx(t, dt) {
     cueDone.add(q.t);
     for (let i = 0; i < 14; i++) { const [x, y] = winPt(q.side); spawn({ img: 'fx_steam', x, y, vx: (q.side === 'L' ? 1 : -1) * (80 + Math.random() * 160), vy: -30 - Math.random() * 50, size: 160 + Math.random() * 120, grow: 1.2, rot: Math.random() * 6, spin: .3, life: 0, max: 2.4, a: .55 }); }
   }
-  for (const s of [95, 114.3]) if (t >= s && !cueDone.has(s) && t < s + .5) {   // the seasons swirl when control is lost
+  for (const s of [TW(95), TW(114.3)]) if (t >= s && !cueDone.has(s) && t < s + .5) {   // the seasons swirl when control is lost
     cueDone.add(s); spawn({ img: 'fx_season_swirl', x: W / 2, y: 330, vx: 0, vy: 0, size: 300, grow: 1.4, rot: 0, spin: 4, life: 0, max: 2.4, a: .9, add: true });
   }
   const seg = segAt(t).key, R = (rate) => Math.random() < dt * rate;
   if (seg === 'spring' && t > 126 && R(4)) { const [x, y] = winPt(Math.random() < .5 ? 'L' : 'R'); spawn({ img: 'fx_sakura_petal', x, y, vx: (x < W / 2 ? 1 : -1) * (60 + Math.random() * 90), vy: 30 + Math.random() * 40, size: 26 + Math.random() * 18, rot: Math.random() * 6, spin: 2, life: 0, max: 6, a: .95 }); }
   if (seg === 'winter' && R(1.6)) { const [x, y] = winPt('L'); spawn({ img: 'fx_snowflake', x, y, vx: 40 + Math.random() * 60, vy: 40, size: 24 + Math.random() * 20, rot: 0, spin: 1, life: 0, max: 3, a: .7, add: true }); }
-  if (seg === 'tunnel' && !(t > 80 && t < 83)) {
-    const iceSide = t < 81.5 ? 'L' : 'R', fireSide = t < 81.5 ? 'R' : 'L';
+  if (seg === 'tunnel' && !(t > A.tunnelSwap[0] && t < A.tunnelSwap[1])) {
+    const mid = (A.tunnelSwap[0] + A.tunnelSwap[1]) / 2, iceSide = t < mid ? 'L' : 'R', fireSide = t < mid ? 'R' : 'L';
     if (R(3)) { const [x, y] = winPt(iceSide); spawn({ img: Math.random() < .5 ? 'fx_ice_crystal' : 'fx_snowflake', x, y, vx: (iceSide === 'L' ? 1 : -1) * (60 + Math.random() * 80), vy: 20, size: 30 + Math.random() * 30, rot: 0, spin: 1.5, life: 0, max: 2, a: .8, add: true }); }
     if (R(3)) { const [x, y] = winPt(fireSide); spawn({ img: Math.random() < .5 ? 'fx_flame' : 'fx_lava_bubble', x, y: y + 60, vx: (fireSide === 'L' ? 1 : -1) * (40 + Math.random() * 60), vy: -70, size: 30 + Math.random() * 26, rot: 0, life: 0, max: 1.4, a: .8, add: true }); }
   }
@@ -318,7 +323,7 @@ function frame(t, dt) {
   emitFx(t, dt); updateParts(dt); drawParts(c);
   c.restore();
   // blackout: the lamps die, total silence, then they flicker back
-  const f = lampFlicker(t), dark = inSilence(t) ? 1 : (t >= 109.4 && t < 110) || (t >= 114 && t < 114.8) ? (1 - f) * .75 : 0;
+  const f = lampFlicker(t), dark = inSilence(t) ? 1 : (t >= A.silence[0] - .6 && t < A.silence[0]) || (t >= A.silence[1] && t < A.silence[1] + .8) ? (1 - f) * .75 : 0;
   if (dark > 0) { c.fillStyle = `rgba(2,2,6,${inSilence(t) ? .97 : dark})`; c.fillRect(0, 0, W, H); }
   const th = thermalAt(t + offsetMs / 1000);
   thermalEdges(c, th);
@@ -450,7 +455,7 @@ function loop() {
 
 // ---------------------------------------------------------------- offline render (scripts/render_mp4.py)
 function titleCard(c, t) {
-  const si = A.segments.indexOf(segAt(t)), s = A.segments[si], age = si === 0 ? t - 2.6 : t - s.t0;
+  const si = A.segments.indexOf(segAt(t)), s = A.segments[si], age = si === 0 ? t - 1.8 : t - s.t0;
   if (age >= 0 && age < 3.4) {
     c.globalAlpha = clamp(Math.min(age / .5, (3.4 - age) / .6), 0, 1);
     c.fillStyle = 'rgba(40,20,40,.5)'; c.fillRect(70, 60, 660, 96); c.fillStyle = '#ffb3cf'; c.fillRect(70, 60, 5, 96);
@@ -460,7 +465,7 @@ function titleCard(c, t) {
   if (t > 146) {
     c.globalAlpha = clamp((t - 146) / .8, 0, 1); c.textAlign = 'center';
     c.fillStyle = 'rgba(40,20,40,.45)'; c.fillRect(W / 2 - 430, H / 2 - 92, 860, 150);
-    c.fillStyle = '#fff'; c.font = '700 54px "Zen Maru Gothic", sans-serif'; c.fillText('終点・桜駅', W / 2, H / 2 - 18);
+    c.fillStyle = '#fff'; c.font = '700 54px "Zen Maru Gothic", sans-serif'; c.fillText('終点・さくら駅', W / 2, H / 2 - 18);
     c.fillStyle = '#f7dceb'; c.font = '500 28px Inter, sans-serif'; c.fillText('Last stop — Cherry Blossom Station', W / 2, H / 2 + 30); c.globalAlpha = 1;
   }
 }
@@ -476,7 +481,7 @@ async function renderAll() {
     const t = i / fps;
     if (AT) { reset(); for (let k = 45; k > 0; k--) frame(Math.max(0, t - k / fps), 1 / fps); }   // warm up particles
     frame(t, 1 / fps);
-    if (t < 2.6 && cover.naturalWidth) { ctx.globalAlpha = t < 1.8 ? 1 : (2.6 - t) / .8; ctx.drawImage(cover, 0, 0, W, H); ctx.globalAlpha = 1; }
+    if (t < 1.8 && cover.naturalWidth) { ctx.globalAlpha = t < 1.2 ? 1 : (1.8 - t) / .6; ctx.drawImage(cover, 0, 0, W, H); ctx.globalAlpha = 1; }
     if (!inSilence(t)) titleCard(ctx, t);
     const blob = await new Promise((r) => cv.toBlob(r, 'image/jpeg', .92));
     await fetch(`/frame/${String(i).padStart(5, '0')}.jpg`, { method: 'PUT', body: blob });

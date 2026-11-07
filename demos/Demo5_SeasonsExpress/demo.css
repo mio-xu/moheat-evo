@@ -155,3 +155,29 @@ body.cover-only .cover-copy { max-width: 44%; }
 .chip.s { background: rgba(255,190,215,.18); color: #ffe0ec; border: 1px solid rgba(255,190,215,.45); }
 body.cover-only .intro h1 { font-size: 132px; }
 body.cover-only .cover-copy { max-width: 80%; }
+
+/* Demo 5 cover v2: ice vs fire, sharp, Japanese tagline with kana + big English title */
+.cover-bg { inset: -4%; filter: saturate(1.25) contrast(1.08) brightness(.82); transform: scale(1.04); }
+.intro::before { background:
+  radial-gradient(ellipse 38% 85% at 4% 50%, rgba(80,180,255,.62), transparent 70%),
+  radial-gradient(ellipse 38% 85% at 96% 50%, rgba(255,110,40,.62), transparent 70%),
+  radial-gradient(ellipse 55% 48% at 50% 54%, rgba(12,6,24,.72), transparent 75%),
+  linear-gradient(to bottom, rgba(10,5,20,.25), rgba(10,5,20,.55)) !important; }
+.cover-streaks { position: absolute; inset: 0; z-index: 2; pointer-events: none; mix-blend-mode: screen; opacity: .55;
+  background:
+    repeating-linear-gradient(100deg, transparent 0 46px, rgba(170,225,255,.22) 47px 49px, transparent 50px 140px) left / 50% 100% no-repeat,
+    repeating-linear-gradient(80deg, transparent 0 52px, rgba(255,190,120,.22) 53px 55px, transparent 56px 150px) right / 50% 100% no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, #000 0, transparent 32%, transparent 68%, #000 100%); mask-image: linear-gradient(90deg, #000 0, transparent 32%, transparent 68%, #000 100%); }
+.cover-copy { max-width: 86%; gap: 8px; align-items: center; text-align: center; margin: 0; }
+.intro .jp { margin: 0; font-family: "Dela Gothic One", "Zen Maru Gothic", sans-serif; font-size: clamp(22px, 3.6vw, 58px); color: #fff; letter-spacing: .06em;
+  text-shadow: 0 0 18px rgba(255,255,255,.35), -6px 0 26px rgba(90,180,255,.7), 6px 0 26px rgba(255,120,50,.7); }
+.intro h1 { display: flex; flex-direction: column; align-items: center; white-space: nowrap; font-family: Inter, sans-serif; font-weight: 900; font-style: italic;
+  letter-spacing: -.02em; line-height: .92; font-size: clamp(30px, 6.6vw, 112px); background: none; color: #fff; filter: none; -webkit-background-clip: border-box; background-clip: border-box; }
+.intro h1 span { display: block; padding: 0 .08em; -webkit-background-clip: text; background-clip: text; color: transparent; }
+.intro h1 .ice { background-image: linear-gradient(95deg, #7fd0ff 0%, #e9f8ff 55%, #ffffff 100%); filter: drop-shadow(0 0 22px rgba(90,180,255,.75)) drop-shadow(0 6px 0 rgba(10,30,70,.6)); }
+.intro h1 .fire { background-image: linear-gradient(95deg, #ffffff 0%, #ffe0a0 40%, #ff8a3a 100%); filter: drop-shadow(0 0 22px rgba(255,120,40,.75)) drop-shadow(0 6px 0 rgba(70,20,10,.6)); }
+.intro .kicker { color: #fff; opacity: .85; font-weight: 700; }
+body.cover-only .intro h1 { font-size: 150px; }
+body.cover-only .intro .jp { font-size: 72px; }
+body.cover-only .cover-copy { max-width: 92%; gap: 14px; }
+body.cover-only .intro .cast { margin-top: 14px; }

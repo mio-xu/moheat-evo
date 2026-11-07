@@ -137,9 +137,9 @@ def window(side):
 def curtains(side):
     s, w = side, WIN
     out = ""
-    for zc, dirn in ((w["z0"] - .02, 1), (w["z1"] + .02, -1)):
+    for zc, dirn in ((w["z0"] - .2, 1), (w["z1"] + .2, -1)):          # curtains tied back beside the frame, not over the glass
         top = w["y1"] + w["frame"] + .04
-        z1 = zc + dirn * .24
+        z1 = zc + dirn * .2
         pts = [(zc, top), (z1, top), (zc + dirn * .13, .32), (zc + dirn * .17, w["y0"] - .02), (zc, w["y0"] - .05)]
         pp = wall_pts(s, [(a, b) for a, b in pts])
         # draw slightly off the wall so it is in front of the frame
@@ -153,8 +153,8 @@ def curtains(side):
         bx, by = pr(s * (HW - .035), .32, zc + dirn * .13)
         out += E(bx, by, 12, 8, "#ffe08a", stroke=LINE, sw=2) + C(bx, by, 4, "#f2b84b")
     # valance across the top
-    zz = np.linspace(w["z0"] - .08, w["z1"] + .08, 13)
-    top = w["y1"] + w["frame"] + .06
+    zz = np.linspace(w["z0"] - .2, w["z1"] + .2, 13)
+    top = w["y1"] + w["frame"] + .1
     pts = [(s * (HW - .035), top, z) for z in zz] + [(s * (HW - .035), top - .12 - .04 * (i % 2), z) for i, z in enumerate(zz[::-1])]
     out += P(smooth(prs(pts), True, .3), "url(#curtain)", LINE, 3)
     return out
