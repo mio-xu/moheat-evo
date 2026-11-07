@@ -232,7 +232,9 @@
   "description": "A gentle snow spirit girl in a fantasy ASMR story, looking like a young woman. Soft, clear, airy and breathy voice, quiet and a little shy with a mischievous smile; slow pace; when she whispers at your ear it is almost only breath, cool and delicate. Native Japanese speaker. Clean close-mic ASMR recording, no background noise.",
   "sample": "[softly] こんばんは…。あ、まだ起きてたんだ。雪の音がきれいで…遊びに来ちゃった。わたし、小雪。雪女なの。 [whispers] ねえ…こっちの耳、ちょっと貸して？ [blows softly] ふぅー…。 [giggles softly] ふふっ…つめたかった？ じゃあ…次はどっちから来るか、当ててみて。 [whispers] …こっちでした。",
   "compare": [],
-  "voice_id": null
+  "voice_id": "H3Ypqqga9vocRHHJBe4D",
+  "confirmed": "2026-11-08",
+  "pick": "r1_b"
  },
  "homura": {
   "name": "焔 Homura",
@@ -243,7 +245,9 @@
   "description": "A foxfire spirit girl in a fantasy ASMR story, looking like a young woman. Bright, lively, energetic and playful voice, fast-paced, a cheeky prankster who is competitive but kind; near your ear she drops into a soft, warm, smiling whisper. Native Japanese speaker. Clean close-mic ASMR recording, no background noise.",
   "sample": "[excited] ちょっとちょっと〜！ 小雪ばっかりずるいよ！ はいはい、ちょっと詰めて〜。 [whispers] はじめまして。わたしは焔。狐火の精だよ。 [playful] ほら、あったかいでしょ？ 冷えた耳は、わたしがあっためてあげる！ [laughs] あははっ、小雪の顔、まっかだよ〜！ [whispers] …ねえ、こっちの耳も、ちょうだい？",
   "compare": [],
-  "voice_id": null
+  "voice_id": "bcDrwll7LWOQ3rPALZGg",
+  "confirmed": "2026-11-08",
+  "pick": "r1_c"
  },
  "ayane": {
   "name": "星乃綾音 Ayane",
@@ -255,6 +259,8 @@
   "description": "A Japanese pop idol girl, a young woman around 20. Bright, sweet, sparkling and friendly voice, energetic and warm with a smile in every line, sometimes shy and teasing; at your ear she whispers softly and sweetly. Native Japanese speaker. Clean close-mic recording, no background noise.",
   "sample": "[excited] はーい！ みんな、おまたせ〜！ …あれ？ もう来てくれてたの？ [giggles] えへへ、うれしいな。今日はキミだけの、特別なファンミーティングだよ！ [whispers] じつはね…今日のステージ、すっごく緊張してたの。でも、キミの顔を見たら…ぜんぶ忘れちゃった。 [cheerful] パタパタ〜。すずしい？",
   "compare": [],
-  "voice_id": null
+  "voice_id": "wQ9qNqV0WvqsxJ6OYIfl",
+  "confirmed": "2026-11-08",
+  "pick": "r1_a"
  }
 }
