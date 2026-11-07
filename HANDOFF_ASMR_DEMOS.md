@@ -207,7 +207,13 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 每个文件夹里有：`README.md`（剧情、角色位置、冷热来源、管线）、`storyboard/script_150s.md`（日英台词 + 时间 + 冷热）、`Seedance素材命令.md`（Demo 7 有 14 个镜头 K01–K14，Demo 8 有 12 个镜头 Y01–Y12）。
 - 画面由用户制作：先用 ChatGPT 或任意生图工具做关键帧（以 Demo 5 的 `N_Character.png` / `I_Character.png` 和表情、姿势图为人物参考），再用 Seedance 图生视频。交付位置：`assets/keyframes/`、`video/seedance/`。
 - 声音和冷热沿用前几个 Demo：信长在左前（声音 → 左耳热），家康在右前（→ 右耳热），声线锁定；"你"的台词只出字幕。冷热来源：Demo 7 是冰啤酒、嗨棒冰块、鸭川夜风 / 炭火、热燗、关东煮；Demo 8 是晨雾、熟成库、泉水、冰块 / 发酵桶蒸汽、铜制蒸馏器。
-- **下一步**：等用户确认剧本 → 写 `scripts/izakaya.py` / `yamazaki.py` 时间轴 → 配音（需要用户启动 VOICEVOX）→ 拿到 clip 后按台词剪辑，合成双耳音频和冷热，生成 MP4 和播放器。
+- **2026-11-07 进展**：
+  - **桌面素材包** `~/Desktop/MoHeat_Demo7-9_Seedance素材/`（`demos/Demo7_KyotoIzakaya/scripts/make_seedance_kit.py` 生成，直接读三份 `Seedance素材命令.md`）。每个镜头一个文件夹：放好要上传的参考图（硬链接）、完整的关键帧 prompt、Seedance 动作 prompt 和负面 prompt；`index.html` 一页列出所有镜头，带复制按钮、"已完成"勾选和参考图缩略图。
+  - 用户把关键帧存成 `<镜头号>_关键帧.png`、视频存成 `<镜头号>.mp4`，放回同一个镜头文件夹。之后从桌面收素材。
+  - **台词表已写成代码**：`scripts/izakaya.py`（Demo 7，23 句配音）、`yamazaki.py`（Demo 8，20 句）、`gifu.py`（Demo 9，15 句），格式和 Demo 6 一样（`cues_common.py`）。
+  - **配音已生成**：`scripts/make_voice.py` 按名称找到安土酒宴的 `voice.perform`，用锁定声线每句 3 个候选，写入 `audio/takes/` 和 `takes.json`（时长）。试听文件复制到桌面素材包的 `配音试听/`，每个 Demo 有一份 `00_台词连播_*.m4a`。
+  - 草稿时间偏短：不少句子比预留时间长（例如 Demo 9 家康第二句 10 s），正式时间轴要按 `takes.json` 的实际时长重排，150 s 里可能要删减或合并台词。
+- **下一步**：用户听配音、挑候选或改台词 → 按实际时长排正式时间轴 → 配音（需要用户启动 VOICEVOX）→ 拿到 clip 后按台词剪辑，合成双耳音频和冷热，生成 MP4 和播放器。
 - Seedance 的口型不会和配音对上：长台词剪在说话镜头上，耳语用遮嘴或侧脸构图。
 - Demo 8 涉及三得利商标：AI 画面里不出现可读的商标，酒瓶用 Demo 6 的真实图合成；公开前需向三得利确认。
 
