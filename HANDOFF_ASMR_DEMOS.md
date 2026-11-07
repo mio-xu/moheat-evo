@@ -32,12 +32,11 @@ demos/Demo1_SnowFoxfire/                 Demo 1《雪と狐火のひそひそ話
 demos/Demo2_FanMeeting/                  Demo 2《キミだけのスペシャルファンミーティング》（原 `ASMR Demo 2/`）
 demos/Demo3_ShiningSmileConcert/         Demo 3《Shining Smile Melody — Ice & Fire Concert》
 demos/Demo4_SengokuBanquet/              Demo 4《安土最後の酒宴》
-Demo_SeasonsExpress/                     Demo 5《四季暴走列車》（另一个会话制作中，做完后移到 demos/Demo5_SeasonsExpress/）
-ASMR Demo, ASMR Demo 2, Demo3_ShiningSmileConcert   ← 临时兼容符号链接（指向 demos/），只为 Demo 5 的旧路径；Demo 5 迁移后删除
+demos/Demo5_SeasonsExpress/              Demo 5《四季暴走列車 / The Runaway Seasons Express》（原 `Demo_SeasonsExpress/`）
 HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
 ```
-- 官网首页 “INTERACTIVE DEMO / Every whisper, felt.” 区：左侧封面菜单（`assets/images/demos/demoN.jpg`）切换右侧 iframe（`demos/<name>/?embed=1`，只显示画面和进度条），默认 Demo 1。新 Demo 完成后在 `index.html` 的 `.td-menu` 里加一项。
+- 官网首页 “INTERACTIVE DEMO / Every whisper, felt.” 区：左侧封面菜单（`assets/images/demos/demoN.jpg`）切换右侧 iframe（`demos/<name>/?embed=1`，只显示画面和进度条），默认 Demo 1。现在有 Demo 1–5 共 5 项；新 Demo 完成后在 `index.html` 的 `.td-menu` 里加一项，缩略图用该 Demo 的 `media/cover.jpg` 缩到 480×270。每个 Demo 的 `index.html` 都要有 `?embed=1` 那段 script + style。
 - 2026-11-07 起所有 Demo 统一放在 `demos/DemoN_英文名/`。Demo 之间互相引用用同级路径（如 `demos/Demo1_SnowFoxfire/tools`），播放器引用 `../../device.js`，`render_mp4.py` 的服务器根目录是仓库根。
 每个 Demo 文件夹里都有自己的 `README.md`（运行方法、管线、交付物清单），本文件是总览和交接。
 
@@ -53,7 +52,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 | Swift | `/usr/bin/swift`，`demos/Demo1_SnowFoxfire/tools/lift_subject.swift` 用 macOS Vision 抠图（素材是绿底时可用）|
 | **VOICEVOX 引擎** | 0.26.1，`~/VOICEVOX-engine/engine`（3.9 GB，不在仓库里）。**agent 不能自己启动下载的二进制**（权限拦截），需要用户双击 `demos/Demo1_SnowFoxfire/start_voicevox.command`。端口 `http://127.0.0.1:50021`。检查：`curl -s http://127.0.0.1:50021/version` |
 | 本地预览服务器 | 在仓库根目录 `python3 -m http.server 8765`，然后打开 `http://localhost:8765/demos/<Demo 文件夹>/`。各 Demo 的 `start_demo.command` 会自动做这件事 |
-| MP4 渲染端口 | Demo 1: 8766，Demo 2: 8767，Demo 3: 8768，Demo 4: 8769（`render_mp4.py` 自带服务器）|
+| MP4 渲染端口 | Demo 1: 8766，Demo 2: 8767，Demo 3: 8768，Demo 4: 8769，Demo 5: 8770（`render_mp4.py` 自带服务器）|
 
 ---
 
@@ -135,7 +134,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
   - QA `scripts/check_sync.py` → `analysis/qa_report.json` 全部通过。一键重建 `./build_all.sh`。
 - **可选后续**：用户试听 `audio/takes/` 后换 take；补 3 张道具图后重跑 build + 渲染。
 
-### Demo 5 · `Demo_SeasonsExpress/` ✅ 完成 —《四季暴走列車 / The Runaway Seasons Express》
+### Demo 5 · `demos/Demo5_SeasonsExpress/` ✅ 完成 —《四季暴走列車 / The Runaway Seasons Express》
 - **任务书要点**（用户提供的完整制作指令）：
   - 150 s，1920×1080，30 fps，48 kHz 双耳声。第一人称坐在魔法列车车厢里朝前看，**无角色、无台词、无旁白**。
   - 画风必须和 Demo 1–3 一致：可爱日系 2D、粉彩、赛璐璐。**不要浮世绘或金箔风**（那是 Demo 4 的风格）。
@@ -165,12 +164,12 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
     - 列车晃动和车轮声使用同一个速度积分；樱花站随刹车滑入；110–114 s 熄灯。
     - `scripts/export.py` → `media/`；`scripts/render_mp4.py`（端口 8770）→ `video/final/final_seasons_express_150s.mp4`；`--at 10,30` 只渲染预览静帧。
     - 封面：`?cover=1` 截图 → `media/cover.jpg`（cover 模式不跑动画循环，headless 截图才不会卡住）。
-- **美术（原计划）**：`ChatGPT素材命令.md`（车厢主图的窗玻璃用 #00FF00 填满 → 抠出窗户遮罩；窗外每个季节分远/中/近三层，可无缝横向滚动；霜花、雨滴等玻璃层；特效小图）。复用 Demo 3 的 fx_snowflake / fx_ice_crystal / fx_flame / fx_star。
-- **计划**：
-  - 播放器沿用 Demo 3 结构：车厢前景固定，左右窗遮罩后面滚动视差景色，叠加玻璃层和粒子；列车有轻微晃动；时钟指针由程序绘制。
-  - 环境音由程序合成（风、雨、火等），双耳渲染沿用 Demo 1。
-  - thermal 用"环境音轨 RMS + 设计包络"，按每个声源的位置分到左右，再经 Demo 1 的仲裁、限幅和延迟补偿。
-  - 同步报告参考 Demo 3 的 `check_sync.py`。
+  - **成品**：`video/final/final_seasons_express_150s.mp4`（本地，98 MB）：1920×1080、30 fps、4500 帧、48 kHz 双耳声，音画都是 150.000 s，内嵌封面。
+  - **文件夹整理**：已从根目录 `Demo_SeasonsExpress/` 移到 `demos/Demo5_SeasonsExpress/`，根目录的临时兼容链接（`ASMR Demo`、`ASMR Demo 2`、`Demo3_ShiningSmileConcert`）已删除。
+    - `scripts/demo1.py` 会向上找到含 `device.js` 的仓库根，再在 `demos/` 或旧路径里找 Demo 1/2/3，所以以后再移动也能用。
+    - 复用特效链接：`assets/reused_assets/*.png → ../../../Demo3_ShiningSmileConcert/assets/effects/`。
+    - 官网菜单已加第 5 项（`assets/images/demos/demo5.jpg`）。
+  - **以后可选**：如果 ChatGPT 有额度，可按 `ChatGPT素材命令.md` 生成同名文件替换程序绘制的图，然后运行 `export.py` 和 `render_mp4.py`。
 
 ---
 
@@ -183,6 +182,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 | `demos/Demo3_ShiningSmileConcert/video/final/final_concert_150s.mp4`、`audio/` | ~410 MB | README 中的命令（不需要 VOICEVOX）|
 | `demos/Demo3_ShiningSmileConcert/assets/music_original/*.mp3`、`music_edited/*.wav` | 5 MB + 43 MB | 原曲需从 Pixabay 手动下载（Cloudflare 拦截自动下载）|
 | `demos/Demo4_SengokuBanquet/audio/`（选定声线试听、take 缓存、4 条干声 stem、mix）、`video/`（MP4、srt）| ~160 MB + ~520 MB | `./build_all.sh`（需 VOICEVOX）+ `scripts/render_mp4.py` |
+| `demos/Demo5_SeasonsExpress/audio/`（16 条干声、双耳 stem、混音）、`video/`（MP4、预览帧）| ~250 MB + ~100 MB | `scripts/build_audio.py` + `scripts/render_mp4.py`（不需要 VOICEVOX）|
 | `~/VOICEVOX-engine/` | 3.9 GB | 官方 release 0.26.1 macos-arm64 `.vvpp`（zip）解压 |
 
 ---
@@ -194,5 +194,6 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - `render_mp4.py` 内嵌封面缩略图要单独一遍 ffmpeg（1 帧的封面流会让 `-shortest` 把视频截短）。
 - `prepare_art.py` 只合成脸部；手/道具也变化的差分（如 `A_ear_fan`）要放进 `FULL_FRAME`。
 - 半身像只在身体能延伸出画面底部时使用（`bustReachesBottom`），否则用全身图，避免露出截断。
+- 带动画循环（requestAnimationFrame）的播放器用 headless `--screenshot --virtual-time-budget` 会卡住：预览静帧用 `render_mp4.py --at …`，封面页的 cover 模式不要启动动画循环。
 - headless 截图前确认 8765 服务器在运行（`curl localhost:8765`），否则截图静默失败。
 - `.DS_Store`、`__pycache__` 提交前删掉。

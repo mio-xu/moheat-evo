@@ -7,7 +7,7 @@ Deterministic: headless Chrome steps the timeline frame by frame.
 import http.server, os, shutil, subprocess, sys, threading, time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SITE = os.path.dirname(ROOT)
+SITE = os.path.dirname(os.path.dirname(ROOT))   # repo root (device.js)
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 PORT = 8770
 done = threading.Event()
@@ -29,7 +29,7 @@ class H(http.server.SimpleHTTPRequestHandler):
 def run_chrome(query, total):
     srv = http.server.ThreadingHTTPServer(("127.0.0.1", PORT), H)
     threading.Thread(target=srv.serve_forever, daemon=True).start()
-    url = f"http://127.0.0.1:{PORT}/Demo_SeasonsExpress/index.html?{query}"
+    url = f"http://127.0.0.1:{PORT}/demos/Demo5_SeasonsExpress/index.html?{query}"
     prof = os.path.join(ROOT, "video", "clips", ".chrome")
     chrome = subprocess.Popen([CHROME, "--headless=new", "--hide-scrollbars", "--window-size=1920,1080", "--autoplay-policy=no-user-gesture-required",
                                "--user-data-dir=" + prof, url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

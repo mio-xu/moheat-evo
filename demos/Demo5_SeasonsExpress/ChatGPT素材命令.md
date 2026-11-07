@@ -4,7 +4,7 @@
 
 我会把素材分层合成动画：车厢固定在前景；窗外的景色在窗户遮罩后面横向滚动（视差）；霜花、雨滴、热浪、花瓣等效果叠在玻璃和车厢里。所以素材必须**分开生成、构图一致**。
 
-生成好的图按下表的文件夹放进 `Demo_SeasonsExpress/assets/` 下，然后告诉我。
+生成好的图按下表的文件夹放进 `demos/Demo5_SeasonsExpress/assets/` 下，然后告诉我。
 
 > **2026-11-07 更新**：ChatGPT 没有额度，所有素材已经由代码生成（`scripts/art_train.py`、`scripts/art_scenery.py`，说明见 `storyboard/visual_prompts.md`）。下面的命令保留作备用：以后用 ChatGPT 生成同名文件可以直接替换。
 
@@ -13,9 +13,9 @@
 ## 画风（最重要）：必须和 Demo 1–3 是同一个动画世界
 
 **每次新对话先上传这 3 张参考图**：
-- `ASMR Demo/art/chatgpt/room_bg.png`（Demo 1 雪夜和室）
-- `ASMR Demo 2/art/chatgpt/stage_bg.png`（Demo 2 见面会舞台）
-- `Demo3_ShiningSmileConcert/assets/new_stage/concert_stage_base.png`（Demo 3 演唱会舞台）
+- `demos/Demo1_SnowFoxfire/art/chatgpt/room_bg.png`（Demo 1 雪夜和室）
+- `demos/Demo2_FanMeeting/art/chatgpt/stage_bg.png`（Demo 2 见面会舞台）
+- `demos/Demo3_ShiningSmileConcert/assets/new_stage/concert_stage_base.png`（Demo 3 演唱会舞台）
 
 然后发下面这段（**通用规则**）：
 

@@ -41,8 +41,18 @@ assets/
 - A raw command box sends any firmware line (`BH100`, `ID:6`, `stop`).
 - Both pages share the serial connection code in `device.js`.
 
-## ASMR demo
-`demos/Demo1_SnowFoxfire/` — *雪と狐火のひそひそ話 / Whispers of Snow and Flame*: 150 s binaural ASMR story whose two characters drive MoHeat Evo (Koyuki → cooling, Homura → warming; left/right follows where they are). Open `demos/Demo1_SnowFoxfire/index.html` (or `start_demo.command`), connect the device, play. Pipeline, thermal mapping, deliverables and manual steps: `demos/Demo1_SnowFoxfire/README.md`.
+## Thermal ASMR demos (`demos/`)
+Each demo is a 150 s binaural film whose sounds drive MoHeat Evo (cooling / warming, left / right). Open a demo's `index.html` (or double-click its `start_demo.command`), connect the device and play. Each folder has its own `README.md`; the overall state and rules are in `HANDOFF_ASMR_DEMOS.md`.
+
+| Folder | Demo |
+|---|---|
+| `demos/Demo1_SnowFoxfire/` | 雪と狐火のひそひそ話 / Whispers of Snow and Flame |
+| `demos/Demo2_FanMeeting/` | キミだけのスペシャルファンミーティング / Your Special Fan Meeting |
+| `demos/Demo3_ShiningSmileConcert/` | Shining Smile Melody — Ice & Fire Concert |
+| `demos/Demo4_SengokuBanquet/` | 安土最後の酒宴 / The Last Banquet at Azuchi |
+| `demos/Demo5_SeasonsExpress/` | 四季暴走列車 / The Runaway Seasons Express |
+
+The home page's interactive demo section embeds them (`?embed=1`) with covers from `assets/images/demos/`.
 
 ## Publishing updates
 ```bash

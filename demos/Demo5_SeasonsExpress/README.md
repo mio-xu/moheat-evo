@@ -13,7 +13,7 @@ There are no characters and no dialogue. **The temperature in each ear comes fro
 Spec: 150 s · 1920×1080 · 30 fps · 48 kHz binaural · thermal CSV at 20 Hz (3000 rows).
 
 ## Run it
-- Double-click `start_demo.command`, or open `index.html`, or visit `https://moheat-evo.github.io/Demo_SeasonsExpress/`.
+- Double-click `start_demo.command`, or open `index.html`, or visit `https://moheat-evo.github.io/demos/Demo5_SeasonsExpress/`.
 - Connect MoHeat Evo (top right, Chrome / Edge), press **Start**.
 - Keys: `Space` play/pause, `←/→` ±5 s, `Esc` emergency stop.
 - Final film: `video/final/final_seasons_express_150s.mp4` (local, rebuild with `scripts/render_mp4.py`).
@@ -70,7 +70,7 @@ Full rebuild (assets + audio ≈ 1 min, MP4 ≈ 10 min; no VOICEVOX needed):
 `python3 scripts/art_train.py && python3 scripts/art_scenery.py && python3 scripts/make_style_sheet.py && python3 scripts/build_audio.py && python3 scripts/thermal.py && python3 scripts/check_sync.py && python3 scripts/export.py && python3 scripts/render_mp4.py`
 
 Play on the device without a browser:
-`python3 "../ASMR Demo/tools/play_thermal_csv.py" --csv thermal/thermal_4ch.csv --audio audio/final/final_binaural_150s.wav --port /dev/cu.…`
+`python3 ../Demo1_SnowFoxfire/tools/play_thermal_csv.py --csv thermal/thermal_4ch.csv --audio audio/final/final_binaural_150s.wav --port /dev/cu.…`
 
 ## Audio stems (all synthesised, seeded)
 
