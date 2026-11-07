@@ -37,6 +37,7 @@ window.MOHEAT_L10N = {
    "小雪、そばにいて": "小雪，陪着我",
    "焔、そばにいて": "小焰，陪着我",
    "「おやすみ」と言う": "说「晚安」",
+   "ふたりの、こもりうた": "两个人的摇篮曲",
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · 双耳ASMR × 冷热触感",
    "A Lullaby for Two — Koyuki and Homura put you to sleep on a snowy night": "雪夜里，小雪和小焰来哄你入睡",
    "🌙 寝かしつけ勝負 · Interactive": "🌙 哄睡大比拼 · 互动",
@@ -61,6 +62,7 @@ window.MOHEAT_L10N = {
    "Koyuki left · Homura right": "小雪在左 · 小焰在右"
   },
   "ja": {
+   "ふたりの、こもりうた": "ふたりの、こもりうた",
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
    "A Lullaby for Two — Koyuki and Homura put you to sleep on a snowy night": "雪の夜、小雪と焔があなたを寝かしつけ",
    "🌙 寝かしつけ勝負 · Interactive": "🌙 寝かしつけ勝負 · インタラクティブ",
@@ -85,6 +87,7 @@ window.MOHEAT_L10N = {
    "Koyuki left · Homura right": "小雪は左 · 焔は右"
   },
   "en": {
+   "ふたりの、こもりうた": "A Lullaby for Two",
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
    "A Lullaby for Two — Koyuki and Homura put you to sleep on a snowy night": "Koyuki and Homura put you to sleep on a snowy night",
    "🌙 寝かしつけ勝負 · Interactive": "🌙 The bedtime contest · Interactive",

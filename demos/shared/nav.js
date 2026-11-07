@@ -33,7 +33,6 @@
   const HIST = 'Oda Nobunaga and Tokugawa Ieyasu are portrayed as fictional characters', ADULT = 'お酒は20歳になってから · 20+ only';
   const RIGHTS = {
     Demo01_SnowFoxfire: 'Art: ChatGPT (OpenAI) · original characters', Demo02_FanMeeting: 'Art: ChatGPT (OpenAI) · original character and song',
-    Demo28_SnowFoxLullaby: 'Art: ChatGPT (OpenAI), from Whispers of Snow and Flame · original characters',
     Demo05_GifuCastle: `${HIST} · art: ChatGPT (OpenAI)`,
     Demo06_FutureWhisky: `${HIST} · Suntory, Yamazaki, Hibiki and Hakushu (names and bottle designs) are trademarks of Suntory Holdings Limited · ${ADULT}`,
     Demo07_KyotoIzakaya: `${HIST} · art: ChatGPT (OpenAI) · ${ADULT}`,

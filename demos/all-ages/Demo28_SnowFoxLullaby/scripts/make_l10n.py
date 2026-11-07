@@ -25,6 +25,7 @@ BUTTONS = [   # ja (as in main.js), zh, voice phrasings (None = a hold button: n
     ('「おやすみ」と言う', '说「晚安」', ['晚安', '晚安啦', 'good night', 'goodnight', 'night night', 'おやすみ', 'おやすみなさい']),
 ]
 PAGE = [   # text on the page → zh, ja, en ("" = hide in that language)
+    ('ふたりの、こもりうた', '两个人的摇篮曲', 'ふたりの、こもりうた', 'A Lullaby for Two'),   # the cover title (h1)
     ('MoHeat Evo · Binaural ASMR × Thermal Haptics', 'MoHeat Evo · 双耳ASMR × 冷热触感', 'MoHeat Evo · バイノーラルASMR × 温冷ハプティクス', 'MoHeat Evo · Binaural ASMR × Thermal Haptics'),
     ('A Lullaby for Two — Koyuki and Homura put you to sleep on a snowy night', '雪夜里，小雪和小焰来哄你入睡', '雪の夜、小雪と焔があなたを寝かしつけ', 'Koyuki and Homura put you to sleep on a snowy night'),
     ('🌙 寝かしつけ勝負 · Interactive', '🌙 哄睡大比拼 · 互动', '🌙 寝かしつけ勝負 · インタラクティブ', '🌙 The bedtime contest · Interactive'),
