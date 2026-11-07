@@ -558,4 +558,6 @@ assets/images/demos/  官网菜单缩略图（按文件夹名命名）
 - **安全地改文件**：先读完再写（Python 里不要在同一行 `open(p, 'w').write(f(open(p).read()))`，打开写入时文件已被清空——2026-11-08 因此清空过一次 Demo24 的页面）；批量改动前先 `--dry` 看清单；改完 `node --check` 所有改过的 JS。
 - **多个会话同时工作**：只提交自己改的文件或改动（`git add <具体文件>`，或 `bump.py --stage`），**暂存后立刻 commit + push**（别的会话的 `git commit` 会把你暂存的改动一起提交）；改名、批量移动之前用 ListAgents 看看谁在工作，改完用 SendMessage 告诉它们新路径。
 - **写清楚**：规则写进本规范（是什么、为什么、怎么做）；用户交代的任务记进 `TASKS.md`；每个共用文件开头写用途和用法；文件名按 §12.1。
+- **改名 / 移动文件夹**：除了文本里的路径，**符号链接的目标也要改**（旧 Demo 用符号链接共用美术；2026-11-08 改名后 39 个链接断掉，GitHub Pages 打包失败，网站有一段时间没有更新）。改完 `find demos -xtype l` 应该没有输出。
+- **推送后看网站有没有真的更新**：`gh api repos/moheat-evo/moheat-evo.github.io/pages/builds/latest --jq .status` 应该是 `built`（`errored` = 打包失败，网站停在旧版本，用 `gh run view <id> --log-failed` 看原因）。
 - **改完就验证**：改了共用文件，至少看 3 个不同系列的 Demo（影片类、游戏类、直播间）× 三种语言；按 §7.3 的尺寸检查一屏和右侧栏；涉及语言的跑一次全页扫描（中文模式下画面上没有残留的日文 / 英文）。
