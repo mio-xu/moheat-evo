@@ -186,7 +186,7 @@
       if (petZone(x, y)) ptr.strokeV = Math.min(1, ptr.strokeV * .7 + .3 * clamp(d / dt / 900));      // slow, gentle strokes count the most
     }
     ptr.over = S.started && (petZone(x, y) || (S.step === 'poke' && inRect(x, y, .05, .05, .95, 1)));
-    stage.classList.toggle('pointer', ptr.over); stage.classList.toggle('wanding', S.started && S.step === 'play');
+    stage.classList.toggle('pointer', ptr.over);
     ptr.x = x; ptr.y = y; ptr.lastT = n;
   });
   const up = (e) => {
@@ -197,7 +197,7 @@
   cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', () => { ptr.down = false; });
 
   // the wand tip follows the pointer, kept inside the picture so the feather (hanging below it) never leaves the screen
-  function aimWand(x, y) { wand.seen = true; wand.px = clamp(x, 140, 1780); wand.py = clamp(y, 120, 720); }
+  function aimWand(x, y) { wand.seen = true; wand.px = clamp(x, 140, 1780); wand.py = clamp(y, 120, 760); }
   function tap(x, y) {
     if (!S.started || S.done || fading) return;
     if (S.step === 'pet' && N.show && inRect(x, y, .35, .3, .65, .62)) {           // touch noses → she boops back: a cold little dot
@@ -366,10 +366,10 @@
   }
   // the teaser wand: the stick follows your pointer, the feather swings on a string beneath it
   function tickWand(dt) {
-    if (!wand.seen) { wand.px = clamp(N.x + 330, 300, 1700) + Math.sin(S.t * 1.3) * 120; wand.py = 470 + Math.sin(S.t * 2.1) * 50; }
+    if (!wand.seen) { wand.px = 1300 + Math.sin(S.t * 1.3) * 160; wand.py = 520 + Math.sin(S.t * 2.1) * 50; }
     const ox = wand.x, oy = wand.y;
     wand.x += (wand.px - wand.x) * (1 - Math.exp(-dt / .06)); wand.y += (wand.py - wand.y) * (1 - Math.exp(-dt / .06));
-    const ax = (wand.x - wand.fx) * 40 - wand.vx * 4, ay = (wand.y + 110 - wand.fy) * 40 - wand.vy * 4 + 300;
+    const ax = (wand.x - wand.fx) * 40 - wand.vx * 4, ay = (wand.y + 150 - wand.fy) * 40 - wand.vy * 4 + 300;
     wand.vx += ax * dt; wand.vy += ay * dt; wand.fx += wand.vx * dt; wand.fy += wand.vy * dt;
     const sp = Math.hypot(wand.x - ox, wand.y - oy) / dt;
     wand.speed += (sp - wand.speed) * (1 - Math.exp(-dt / .12));
@@ -448,28 +448,20 @@
   }
   function drawWand(c, t) {
     if (S.step !== 'play') return;
-    const tipX = wand.x, tipY = wand.y, ox = Math.min(W + 60, tipX + 900), oy = H + 80;   // the stick comes in from the bottom right
+    const tipX = wand.x, tipY = wand.y;
     c.save(); c.lineCap = 'round';
-    const stick = (col, lw, dy = 0) => { c.strokeStyle = col; c.lineWidth = lw; c.beginPath(); c.moveTo(ox, oy); c.quadraticCurveTo((ox + tipX) / 2, (oy + tipY) / 2 - 50 + dy, tipX, tipY + dy); c.stroke(); };
-    stick('rgba(60,30,40,.35)', 24); stick('#b9844c', 16); stick('#f1cf9c', 5, -4);
-    c.strokeStyle = '#7a3d5c'; c.lineWidth = 4; c.beginPath(); c.moveTo(tipX, tipY); c.quadraticCurveTo((tipX + wand.fx) / 2, Math.max(tipY, wand.fy) + 14, wand.fx, wand.fy); c.stroke();
-    c.translate(wand.fx, wand.fy); c.rotate(Math.atan2(wand.vx, 600));
-    if (!wand.seen || S.st < 3) {   // "here!": a pulsing ring until you take the wand
-      const k = (t * 1.4) % 1; c.strokeStyle = `rgba(255,120,170,${1 - k})`; c.lineWidth = 6; c.beginPath(); c.arc(0, 60, 90 + 80 * k, 0, 7); c.stroke();
+    c.strokeStyle = '#c99a62'; c.lineWidth = 12; c.beginPath(); c.moveTo(W + 40, H + 60); c.quadraticCurveTo((W + tipX) / 2, (H + tipY) / 2 - 40, tipX, tipY); c.stroke();
+    c.strokeStyle = '#f2d7b0'; c.lineWidth = 4; c.beginPath(); c.moveTo(W + 40, H + 60); c.quadraticCurveTo((W + tipX) / 2, (H + tipY) / 2 - 44, tipX, tipY - 3); c.stroke();
+    c.strokeStyle = 'rgba(255,255,255,.85)'; c.lineWidth = 2.5; c.beginPath(); c.moveTo(tipX, tipY); c.quadraticCurveTo((tipX + wand.fx) / 2, Math.max(tipY, wand.fy) + 10, wand.fx, wand.fy); c.stroke();
+    const sway = Math.atan2(wand.vx, 600);
+    c.translate(wand.fx, wand.fy); c.rotate(sway);
+    for (let i = 0; i < 7; i++) {   // feathers
+      const a = -Math.PI / 2 + (i - 3) * .32 + Math.sin(t * 6 + i) * .06;
+      c.save(); c.rotate(a + Math.PI / 2); c.fillStyle = i % 2 ? '#ffd1e3' : '#fff4f8';
+      c.beginPath(); c.ellipse(0, 46, 13, 46, 0, 0, 7); c.fill(); c.strokeStyle = 'rgba(230,120,160,.5)'; c.lineWidth = 2; c.beginPath(); c.moveTo(0, 6); c.lineTo(0, 88); c.stroke(); c.restore();
     }
-    c.shadowColor = 'rgba(255,90,150,.75)'; c.shadowBlur = 26;
-    for (let i = 0; i < 7; i++) {   // feathers hanging from the pom-pom
-      const a = (i - 3) * .3 + Math.sin(t * 7 + i) * .08 - Math.atan2(wand.vx, 900) * .8;
-      c.save(); c.rotate(a);
-      c.fillStyle = ['#ff5f9e', '#ffffff', '#ff9cc4', '#b58cff'][i % 4]; c.strokeStyle = '#8c2f5c'; c.lineWidth = 3;
-      c.beginPath(); c.ellipse(0, 62, 16, 62, 0, 0, 7); c.fill(); c.stroke();
-      c.strokeStyle = 'rgba(140,47,92,.55)'; c.lineWidth = 2.5; c.beginPath(); c.moveTo(0, 10); c.lineTo(0, 118); c.stroke();
-      c.restore();
-    }
-    c.shadowBlur = 0;
-    c.fillStyle = '#ff4f93'; c.strokeStyle = '#8c2f5c'; c.lineWidth = 4; c.beginPath(); c.arc(0, 0, 28, 0, 7); c.fill(); c.stroke();
-    c.fillStyle = 'rgba(255,255,255,.6)'; c.beginPath(); c.arc(-10, -10, 10, 0, 7); c.fill();
-    c.fillStyle = '#ffd04d'; c.strokeStyle = '#a8761c'; c.lineWidth = 3; c.beginPath(); c.arc(0, -34, 14, 0, 7); c.fill(); c.stroke(); c.fillStyle = '#7a5410'; c.fillRect(-8, -31, 16, 3);
+    c.fillStyle = '#ff9ec3'; c.beginPath(); c.arc(0, 0, 22, 0, 7); c.fill();
+    c.fillStyle = '#ffd36e'; c.beginPath(); c.arc(0, -24, 11, 0, 7); c.fill(); c.fillStyle = '#c8952e'; c.fillRect(-6, -21, 12, 2.5);
     c.restore();
   }
   function drawBowl(c) {

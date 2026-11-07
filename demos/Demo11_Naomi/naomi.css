@@ -28,4 +28,3 @@ body.cover-only .cover-copy { margin-top: 0 !important; }
 .blow.call .mic i { background: #ff9ec3; }
 .hud-goal { border-left-color: #ff9ec3; }
 .hud-goal small { color: #ffb3cf; }
-.stage.wanding > canvas#scene { cursor: none; }   /* the wand is the cursor */
