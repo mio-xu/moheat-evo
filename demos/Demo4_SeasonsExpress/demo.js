@@ -71,7 +71,7 @@ const LOOKS = {
   lava: { layers: [['tunnel_lava_wall', 1.5]], glass: [], wx: 'embers', tint: '255,130,60' },
   steam: { layers: [['tunnel_lava_wall', 1.5]], glass: [['fog_overlay', .9, 'drift']], wx: 'embers', tint: '255,220,210' },
   tunnel_dark: { layers: [], glass: [], wx: 'tunnel_lights', tint: null, fill: '#17141f' },
-  dark: { layers: [], glass: [], wx: 'stars', tint: '150,180,255', fill: '#24317e' },   // power cut: lamps off, a bright aurora night streams past (never black)
+  dark: { layers: [['night_aurora_far', .15]], glass: [], wx: 'stars', tint: '150,180,255', fill: '#24317e' },   // power cut: lamps off, a bright aurora night streams past (never black)
   spring: { layers: L3('spring'), glass: [], wx: 'petals', tint: '255,205,225' },
 };
 const CHAOS_LOOK = { winter: 'winter', summer: 'summer', lava: 'lava', ice: 'ice', storm: 'storm', steam: 'steam', spring: 'spring', dark: 'dark' };
@@ -91,9 +91,13 @@ const evalA = (v, t) => (typeof v === 'function' ? v(t) : v);
 
 function drawLayer(c, name, box, f, dir, t, k, top) {
   if (!ok(name)) return;
-  const lw = 1536 * k, lh = 1024 * k;
-  let off = (dir * posAt(t) * V * f) % lw; if (off > 0) off -= lw;
-  for (let x = box.x0 + off - lw * (dir < 0 ? 0 : 0); x < box.x1 + lw; x += lw) c.drawImage(IMG[name], Math.round(x), top, Math.ceil(lw) + 1, lh);
+  const lw = 1536 * k, lh = 1024 * k, shift = dir * posAt(t) * V * f;
+  // mirror tiling: every other copy is flipped, so the edges always meet pixel-for-pixel (no seam, no cross-fade ghosting)
+  for (let i = Math.floor((box.x0 - shift) / lw) - 1, x = shift + i * lw; x < box.x1 + lw; i++, x = shift + i * lw) {
+    if (x + lw < box.x0 - 2) continue;
+    if (i % 2 === 0) c.drawImage(IMG[name], Math.round(x), top, Math.ceil(lw) + 1, lh);
+    else { c.save(); c.translate(Math.round(x + lw), top); c.scale(-1, 1); c.drawImage(IMG[name], 0, 0, Math.ceil(lw) + 1, lh); c.restore(); }
+  }
 }
 function drawWeather(c, kind, box, t, dir, alpha) {
   if (!kind) return;
@@ -123,7 +127,7 @@ function drawWeather(c, kind, box, t, dir, alpha) {
       c.fillStyle = `rgba(255,${170 + hash(i) * 70 | 0},90,${.85 * (.4 + .6 * hash(i + 1))})`; c.beginPath(); c.arc(x, y, 2 + hash(i + 2) * 3, 0, 7); c.fill();
     }
   } else if (kind === 'sun') {
-    if (ok('fx_sun_glare')) { c.globalCompositeOperation = 'lighter'; c.globalAlpha = alpha * (.45 + .1 * Math.sin(t * 2)); const s = bh * 1.1; c.drawImage(IMG.fx_sun_glare, box.x1 - s * .75, box.y0 - s * .35, s, s); }
+    if (ok('fx_sun_glare')) { c.globalCompositeOperation = 'screen'; c.globalAlpha = alpha * (.22 + .05 * Math.sin(t * 2)); const s = bh * 1.1; c.drawImage(IMG.fx_sun_glare, box.x1 - s * .75, box.y0 - s * .35, s, s); }
   } else if (kind === 'petals') {
     for (let i = 0; i < 30; i++) {
       if (!ok('fx_sakura_petal')) break;
@@ -131,10 +135,11 @@ function drawWeather(c, kind, box, t, dir, alpha) {
       c.save(); c.translate(x, y); c.rotate(t * (1 + hash(i)) + i); c.drawImage(IMG.fx_sakura_petal, -s / 2, -s / 2, s, s); c.restore();
     }
   } else if (kind === 'stars') {
-    const g = c.createLinearGradient(0, box.y0, 0, box.y1); g.addColorStop(0, '#2b3f9e'); g.addColorStop(.6, '#5a4aa8'); g.addColorStop(1, '#8a6ab8');
-    c.fillStyle = g; c.fillRect(box.x0, box.y0, bw, bh);
-    c.save(); c.globalCompositeOperation = 'lighter';                         // aurora ribbons drifting with the train
-    for (let k = 0; k < 3; k++) {
+    const painted = ok('night_aurora_far');                                   // the painted aurora layer is already drawn underneath
+    if (!painted) { const g = c.createLinearGradient(0, box.y0, 0, box.y1); g.addColorStop(0, '#2b3f9e'); g.addColorStop(.6, '#5a4aa8'); g.addColorStop(1, '#8a6ab8');
+      c.fillStyle = g; c.fillRect(box.x0, box.y0, bw, bh); }
+    c.save(); c.globalCompositeOperation = 'lighter';                         // aurora ribbons drifting with the train (procedural fallback)
+    for (let k = 0; k < (painted ? 0 : 3); k++) {
       const col = ['120,255,200', '255,150,230', '150,200,255'][k], y0 = box.y0 + bh * (.18 + k * .14);
       c.beginPath(); c.moveTo(box.x0, y0);
       for (let x = box.x0; x <= box.x1 + 20; x += 20) c.lineTo(x, y0 + Math.sin((x + dir * sp * .2) / 140 + k * 2 + t * .8) * 40);
@@ -170,7 +175,7 @@ function drawLook(c, key, side, t, alpha) {
   drawWeather(c, L.wx, box, t, dir, alpha * gust(L.wx, t));
   for (const [name, a0, mode] of L.glass) {
     const a = evalA(a0, t) * alpha; if (a <= .01 || !ok(name)) continue;
-    c.save(); c.globalAlpha = a; if (name === 'heat_haze_overlay') c.globalCompositeOperation = 'lighter';
+    c.save(); c.globalAlpha = a; if (name === 'heat_haze_overlay') { c.globalCompositeOperation = 'screen'; c.globalAlpha = a * .4; }   // the painted haze is dense: soft screen, not additive
     const bw = box.x1 - box.x0;
     if (mode === 'drip') { const o = (t * 45) % bh; c.drawImage(IMG[name], box.x0, box.y0 + o - bh, bw, bh); c.drawImage(IMG[name], box.x0, box.y0 + o, bw, bh); }
     else if (mode === 'drift') { const o = Math.sin(t * .7) * 40; c.drawImage(IMG[name], box.x0 - 60 + o, box.y0 - 30, bw + 120, bh + 60); }
@@ -184,7 +189,8 @@ function drawStation(c, box, t, k, top) {
   const lw = 1536 * k, remaining = posAt(146) - posAt(t), cx = (box.x0 + box.x1) / 2;
   const x = cx - 1000 * k - remaining * V * 1.2;
   c.save(); c.globalAlpha *= smooth((t - 138.5) / 1.2);
-  c.drawImage(IMG.spring_station, x, top + 120 * k, lw, 1024 * k); c.drawImage(IMG.spring_station, x - lw, top + 120 * k, lw, 1024 * k);
+  c.drawImage(IMG.spring_station, x, top + 120 * k, lw, 1024 * k);
+  c.save(); c.translate(x, top + 120 * k); c.scale(-1, 1); c.drawImage(IMG.spring_station, 0, 0, lw, 1024 * k); c.restore();   // mirrored lead-in, seamless
   c.restore();
 }
 function lightning(side, t) {

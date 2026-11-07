@@ -19,7 +19,7 @@ Spec: 150 s · 1920×1080 · 30 fps · 48 kHz binaural · thermal CSV at 20 Hz (
 - Final film: `video/final/final_seasons_express_150s.mp4` (local, rebuild with `scripts/render_mp4.py`).
 
 ## Status
-- ✅ Art (procedural, see `storyboard/visual_prompts.md`)
+- ✅ Art: the regenerated art pack (`project/generated_art/`, 37 PNGs) installed by `scripts/import_generated_art.py` (2026-11-07)
 - ✅ 16 audio stems + binaural mix
 - ✅ Thermal CSV
 - ✅ Sync report (all checks pass)
@@ -27,6 +27,9 @@ Spec: 150 s · 1920×1080 · 30 fps · 48 kHz binaural · thermal CSV at 20 Hz (
 - ✅ MP4 (`scripts/render_mp4.py`)
 
 ## Player
+Scenery layers are **mirror-tiled** (every other copy flipped) so the painted layers scroll without a seam; the painted heat
+haze and sun glare are blended with `screen` at reduced strength; the power cut shows the painted aurora (`night_aurora_far`).
+
 The player draws, back to front:
 1. Each window, clipped to its glass polygon from `window_geometry.json`.
    - Parallax scenery: far 0.12×, mid 0.45×, near 1.2× of the train speed. The tunnel walls move at 1.5×.
@@ -72,7 +75,8 @@ The player draws, back to front:
 
 ## Pipeline
 ```
-scripts/art_train.py, art_scenery.py, make_style_sheet.py  ──► assets/**  (+ style_sheet.png, storyboard/frames/)
+project/generated_art/ ──► scripts/import_generated_art.py ──► assets/**  (green glass keyed, window_mask + window_geometry re-measured)
+   (the old procedural generators art_train.py / art_scenery.py are no longer run: they would overwrite the new art)
 scripts/seasons.py      timeline: scenes, 16 sources (envelope, azimuth, distance, thermal role), designed envelopes, silence gap
 scripts/build_audio.py  ──► audio/source_stems/*.wav (dry), audio/spatialized/*_binaural.wav, audio/final/final_binaural_150s.wav, mix.m4a
 scripts/thermal.py      ──► thermal/thermal_4ch.csv, thermal/thermal_mapping_config.json, analysis/audio_features.csv,
@@ -82,7 +86,7 @@ scripts/export.py       ──► media/art/*.webp, media/data.js, media/mix.m4a
 scripts/render_mp4.py   ──► video/final/final_seasons_express_150s.mp4
 ```
 Full rebuild (assets + audio ≈ 1 min, MP4 ≈ 10 min; no VOICEVOX needed):
-`python3 scripts/art_train.py && python3 scripts/art_scenery.py && python3 scripts/make_style_sheet.py && python3 scripts/build_audio.py && python3 scripts/thermal.py && python3 scripts/check_sync.py && python3 scripts/export.py && python3 scripts/render_mp4.py`
+`python3 scripts/import_generated_art.py && python3 scripts/build_audio.py && python3 scripts/thermal.py && python3 scripts/check_sync.py && python3 scripts/export.py && python3 scripts/render_mp4.py`
 
 Play on the device without a browser:
 `python3 ../Demo1_SnowFoxfire/tools/play_thermal_csv.py --csv thermal/thermal_4ch.csv --audio audio/final/final_binaural_150s.wav --port /dev/cu.…`
