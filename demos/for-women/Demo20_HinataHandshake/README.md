@@ -28,8 +28,10 @@ Art: `scripts/seedance.py` (Seedance GPT Image 2, 2K 16:9). The upload API was r
 uses its generation URL as the reference (outputs: the new picture is the last one). Raw PNGs in `assets/art/` (not in git) →
 `scripts/prepare_art.py` (patch positions in `project/patches.json`) → `media/art/*.webp`. The right-ear lean is the left one mirrored.
 
-Animation: 8 Seedance 2.5 Lite clips (720p, first + last frame = the stills above), made on the seedance2-5.com web page (Image to Video →
-First & Last Frame) except `v_take_hand` (API). Loops (first = last = one still): `v_booth_talk`, `v_hands_talk`, `v_hands_idle`, `v_hands_breath`,
-`v_lean_whisper` (mirrored for the right ear), `v_wave`; transitions played once: `v_take_hand` (booth → hands), `v_lean_in` (hands → left ear).
-Raw downloads in `assets/video/` (not in git) → `scripts/prepare_video.py` → `media/video/*.mp4` (1280×720; loops rebuilt so the loop point is
-seamless: the model's last frame drifts a little in tone). `?stills` = the old stills + mouth patches.
+Animation (v2, 2026-11-08, handoff §4b): 11 Seedance 2.5 Lite **1080p** clips, First & Last Frame = the stills (web page; prompts and frames in
+`project/web_video_prompts.json`). Loops: `v_booth_talk`, `v_hands_talk`, `v_hands_idle` (only while he waits for your answer), `v_lean_whisper`
+(mirrored for the right ear), `v_wave`. One-shots, each from one still to the next: `v_take_hand` (booth→hands), `v_hands_breath`, `v_lean_in`
+(→left ear), `v_lean_back` (→hands), `v_lean_in_r` (→right ear, last frame = the mirrored lean still), `v_leave` (→wave).
+`scripts/prepare_video.py`: per clip, position + colour drift corrected and the first / last frames blended onto the stills (exact), 1920×1080.
+`game.js` switches clips only at a clip's end (identical frames → hard cut); `go(clip, view)` queues a transition for the next end.
+Raw downloads in `assets/video/` (not in git). `?stills` = stills + mouth patches.

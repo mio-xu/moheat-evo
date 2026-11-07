@@ -344,7 +344,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 女性向男偶像系列第一位：**陽向**（19 岁，年下・腹黑：人前甜、耳边黑）。造型 = 用户定的粉毛设定图（`Demo16_HandshakeEvent/assets/art/hinata_pink_sheet.png`，复制为 `assets/art/ref_hinata.png`）。`Demo16_HandshakeEvent/` 是三位男偶像的设计/试听工作区（未进 git），不要删。
 - **其余两位**：迅 = 用户选 **v2 造型（红发、墨镜推在头上、黑皮衣/黑衬衫、戒指，`project/shion_jin_v2.jpg` 右图 / `assets/art/jin_sheet_v2.png`）**，声线 雀松朱司（ツンデレ）；第三位（湊 / 紫苑）造型未定。每位一个独立 demo 文件夹。
 - 声音（2026-11-08 再改）：陽向 = **ElevenLabs 试听 v2**（`lODKQ6pXINFtajDz9nqR`，见 §4 配音标准；之前是 VOICEVOX:暁記ミタマ「m1」）；工作人员 VOICEVOX:春日部つむぎ。`scripts/voice.py`，试听 `scripts/eleven_audition.py`。
-- 动画（2026-11-08）：8 段 Seedance 2.5 Lite（网页 Image to Video → First & Last Frame，首尾帧 = demo 静帧）：6 段循环 + 2 段过渡（握手台→握手、握手→左耳）。`scripts/prepare_video.py` 重建循环接缝（模型尾帧色调会漂）。
+- 动画 v2（2026-11-08，用户嫌第一版画质低、衔接不顺 → 定下 §4b 标准）：11 段 Seedance 2.5 Lite 1080p（5 循环 + 6 段一次性：握手台→握手、哈气、握手→左耳、左耳→握手、握手→右耳、右耳→挥手），约 704 credits。只在片段结尾切换。
 - 曾与另一个会话撞车（Demo16_HandshakeEvent 里的 Haruto，同一粉毛角色）：用户决定保留 Demo20，那边改去做迅。
 - 流程：冬天会场排队（右边自动门 → 右凉 + 开门时一阵冷风）→ 握手 → 「手好冰」→ 他对你手哈气（两耳暖的一波）→ 工作人员「快到时间了」→ 凑到**左耳**「你刚才也去排别人的队了吧…我都看见了」（左耳热跟着声音）→ 时间到他不放手（计时器变成"延長 +0:xx"）→ **右耳**「下次只排我的队，约好了」+ 有人进门的冷风（右耳同时暖 + 凉，DUAL）→ 说「約束する」（麦克风或按钮）→ 挥手再见。自动通关约 1:40，0 报错。
 - 冷热：DUAL，三层 = 人声（离哪只耳朵近就暖哪只，跟响度）、哈气、门口冷风。牵手本身不加热（物理上不合理）。

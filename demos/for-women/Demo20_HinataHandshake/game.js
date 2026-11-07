@@ -119,31 +119,31 @@
       // the handshake: his warm hands (both ears, mild)
       await action('🤝', '手をにぎる', 'Take his hand', { x0: 600, x1: 1100, y0: 540, y1: 1080 });
       SND.fx.clasp(); S.hold = 1; S.shake = S.clock; setStep(2);
-      await playOnce('v_take_hand', 'booth');   // he takes your hand (booth → hands), then the hands loop fades in over its last frame
-      handOver('v_take_hand', 'hands');
+      await go('v_take_hand', 'hands');   // he takes your hand (booth → hands)
       await sleep(.3);
       await say('h03');
       const a = await choice([['ずっと並んでたから', 'I was in line for ages'], ['陽向くんに、会いたくて', 'I just wanted to see you']]);
       await say(a ? 'h04b' : 'h04a');
-      S.breathing = 1; SND.fx.breath(0, .3, 1.9); S.breath = 1; await sleep(.1);
-      await say('h05'); S.breathing = 0;
+      let h5 = null;   // he blows on your hands: the breath clip, the breath sound and his line start together
+      await go('v_hands_breath', 'hands', () => { SND.fx.breath(0, .3, 1.9); S.breath = 1; h5 = say('h05'); });
+      await h5;
       SND.fx.timer(); await staff('s02');
       await say('h06');
       // he leans to your LEFT ear: the dark side
-      setStep(3); await playOnce('v_lean_in', 'hands'); handOver('v_lean_in', 'leanL'); SND.fx.rustle(-1.1, .3); SND.loop('heart', 0, .3)?.set(.35); S.heart = 1;
+      setStep(3); await go('v_lean_in', 'leanL'); SND.fx.rustle(-1.1, .3); SND.loop('heart', 0, .3)?.set(.35); S.heart = 1;
       SND.loop('crowd')?.set(.12); SND.loop('music')?.set(.15);
       await sleep(.9);
       await say('h07'); await say('h08');
       const b = await choice([['ち、ちがうの！', "N-no, it's not like that!"], ['…ごめんね', '…Sorry']]);
       await say(b ? 'h09b' : 'h09a');
       // time's up — but he does not let go
-      S.view = 'hands'; setStep(4); SND.loop('heart')?.set(.15);
+      await go('v_lean_back', 'hands'); setStep(4); SND.loop('heart')?.set(.15);
       SND.fx.timer(); await staff('s03');
       const c = await choice([['手をはなす', 'Let go'], ['…もうちょっとだけ', '…Just a little longer']]);
       if (c === 0) { SND.fx.rustle(0, .45); S.hold = .3; await sleep(.5); SND.fx.clasp(); S.hold = 1; await say('h10a'); }
       else await say('h10b');
       // his RIGHT ear promise — and someone comes in through the doors on your right: warm voice + cold gust on the same ear
-      S.view = 'leanR'; SND.fx.rustle(1.1, .3); SND.loop('heart')?.set(.35);
+      await go('v_lean_in_r', 'leanR'); SND.fx.rustle(1.1, .3); SND.loop('heart')?.set(.35);
       await sleep(.8);
       await say('h11'); door(); await sleep(.3); await say('h12');
       await speak('「約束する」と言ってみて', 'Tell him "I promise"', '🤙 約束する', 'I promise');
@@ -151,7 +151,7 @@
       // bye
       setStep(5); SND.loop('heart')?.stop(); S.heart = 0;
       SND.fx.timer(); await staff('s04');
-      S.hold = 0; SND.fx.rustle(0, .5); SND.fx.steps(0, 0, 3, .8); S.view = 'wave'; S.shake = null;
+      S.hold = 0; SND.fx.rustle(0, .5); SND.fx.steps(0, 0, 3, .8); await go('v_leave', 'wave'); S.shake = null;
       SND.loop('crowd')?.set(.3); SND.loop('music')?.set(.35); S.draft = .3;
       await sleep(1.1); await say('h14');
       await sleep(2.4); SND.fx.chime();
@@ -208,58 +208,52 @@
     FW.mouth = ease(FW.mouth, open, dt, .035, .07);
     FW.blink = ease(FW.blink, t < blinkUntil && !talking ? 1 : 0, dt, .025, .05);
   }
-  // ---- animation (Seedance first+last-frame clips, first frame = the still; loops end on it too) — used when loaded,
-  // else the still + mouth patches. Transitions (take hand, lean in) play once; per view the loop follows talking / breathing.
-  const CLIP_NAMES = ['v_booth_talk', 'v_take_hand', 'v_hands_talk', 'v_hands_idle', 'v_hands_breath', 'v_lean_in', 'v_lean_whisper', 'v_wave'];
+  // ---- animation (handoff §4b): every clip starts and ends EXACTLY on a still (scripts/prepare_video.py), so clips are only ever
+  // switched at a clip's end — a hard cut between two identical frames, no cross-fade, no ghosting. Loops: one per view (hands: talk /
+  // quiet / breath). Transitions: one per cut (booth→hands, hands→left ear, left ear→hands, hands→right ear, right ear→wave);
+  // the story asks for one with go() and it starts when the current loop reaches its end. ?stills = stills + mouth patches.
+  const CLIP_NAMES = ['v_booth_talk', 'v_take_hand', 'v_hands_talk', 'v_hands_idle', 'v_hands_breath', 'v_lean_in', 'v_lean_whisper', 'v_lean_back', 'v_lean_in_r', 'v_leave', 'v_wave'];
   const CLIP = {};
   if (!QS.has('stills')) for (const n of CLIP_NAMES) {
-    const v = document.createElement('video'); Object.assign(v, { muted: true, loop: !['v_take_hand', 'v_lean_in'].includes(n), playsInline: true, preload: 'auto', src: `media/video/${n}.mp4?v=1` });
+    const v = document.createElement('video'); Object.assign(v, { muted: true, loop: false, playsInline: true, preload: 'auto', src: `media/video/${n}.mp4?v=2` });
     v.setAttribute('playsinline', ''); v.addEventListener('error', () => { delete CLIP[n]; }); CLIP[n] = v;
   }
   const clipOK = (n) => n && CLIP[n] && CLIP[n].readyState >= 2;
-  let trans = null;      // { name, view } — a one-shot transition drawn instead of that view
-  function playOnce(name, view) {
-    const v = CLIP[name]; if (!v || QS.has('stills')) return Promise.resolve();
-    return new Promise((res) => {
-      const go = () => { v.currentTime = 0; trans = { name, view, k: 0 }; v.play().catch(() => {}); const end = () => { v.removeEventListener('ended', end); trans = null; res(); }; v.addEventListener('ended', end); setTimeout(() => { if (trans && trans.name === name) end(); }, 9000); };
-      if (v.readyState >= 2) go(); else { const t0 = performance.now(); const wait = () => (v.readyState >= 2 ? go() : performance.now() - t0 > 1500 ? res() : setTimeout(wait, 50)); wait(); }
-    });
-  }
-  function handOver(clip, view) {   // after a transition: switch to the new view without a view crossfade; its loop fades in over the clip's last frame
-    S.view = view; viewA = viewB = view; mix = 1;
-    if (clipOK(clip)) VS[view] = { cur: clip, prev: null, k: 1 };
-  }
-  function wantClip(view) {
-    if (trans && trans.view === view) return trans.name;
+  const MIRROR = { leanR: ['v_lean_whisper'] };   // the right-ear loop = the left one mirrored (its still is the mirrored still)
+  let cur = null, curView = null, pending = null;  // pending: { name, view, done } — a transition waiting for the loop's end
+  const listening = () => !talking && ['choices', 'act', 'micGate'].some((id) => $(id).classList.contains('show'));
+  function loopFor(view) {
     if (view === 'booth') return 'v_booth_talk';
-    if (view === 'hands') return S.breathing ? 'v_hands_breath' : talking ? 'v_hands_talk' : 'v_hands_idle';
+    if (view === 'hands') return listening() ? 'v_hands_idle' : 'v_hands_talk';   // quiet only while he waits for your answer
     if (view === 'leanL' || view === 'leanR') return 'v_lean_whisper';
     if (view === 'wave') return 'v_wave';
     return null;
   }
-  const VS = {};   // per view: current clip, previous clip, crossfade
-  function clips(dt) {
-    const used = new Set();
-    for (const view of new Set([viewA, viewB])) {
-      const st = VS[view] || (VS[view] = { cur: null, prev: null, k: 1 }), want = wantClip(view);
-      if (want !== st.cur && clipOK(want)) {
-        st.prev = st.cur; st.cur = want; st.k = st.prev ? 0 : 1;
-        if (want === 'v_hands_breath') CLIP[want].currentTime = 0;
-      }
-      st.k = Math.min(1, st.k + dt / (st.prev && st.prev.startsWith('v_take') || st.prev === 'v_lean_in' ? .4 : .3));
-      if (st.cur) used.add(st.cur); if (st.prev && st.k < 1) used.add(st.prev);
-    }
-    for (const [n, v] of Object.entries(CLIP)) {
-      if (used.has(n)) { if (v.paused && !v.ended) v.play().catch(() => {}); } else if (!v.paused && !(trans && trans.name === n)) v.pause();
-    }
+  function go(name, view, onStart) {   // play a one-shot clip at the next clip end (onStart when it begins), then continue in `view`
+    if (!clipOK(name) || !cur) { S.view = view; onStart && onStart(); return Promise.resolve(); }
+    return new Promise((done) => { pending = { name, view, done, onStart, started: false }; });
   }
+  function playClip(name, view) {
+    const v = CLIP[name]; cur = name; curView = view; v.currentTime = 0; v.play().catch(() => {});
+  }
+  function startLoop() { const w = loopFor(S.view); if (w && clipOK(w)) playClip(w, S.view); else cur = null; }
+  function clips() {
+    if (QS.has('stills')) return;
+    if (!cur) { startLoop(); return; }
+    if (!ONCE.has(cur) && curView !== S.view && !pending) { startLoop(); return; }   // the story changed view without a clip: the view cross-fade covers it
+    const v = CLIP[cur];
+    if (!v.ended && v.currentTime < v.duration - .03) return;                          // mid-clip: never switch
+    if (ONCE.has(cur) && pending && pending.started) {                                 // a one-shot clip just ended on its last still
+      const p = pending; pending = null; S.view = curView; viewA = viewB = curView; mix = 1; p.done();
+    }
+    if (pending && !pending.started) { pending.started = true; playClip(pending.name, pending.view); pending.onStart && pending.onStart(); return; }
+    startLoop();
+  }
+  const ONCE = new Set(['v_take_hand', 'v_lean_in', 'v_lean_back', 'v_lean_in_r', 'v_leave', 'v_hands_breath']);
   function drawView(view, t, alpha) {
-    const st = VS[view];
-    if (st && st.cur && clipOK(st.cur)) {              // animated: the clip fills the frame (its first frame = the still)
-      const z = 1.0 + .003 * Math.sin(t * .45), ox = W / 2 - W * z / 2, oy = H / 2 - H * z / 2;
-      ctx.save(); if (view === 'leanR') { ctx.translate(W, 0); ctx.scale(-1, 1); }
-      const dc = (n, a) => { ctx.globalAlpha = a; ctx.drawImage(CLIP[n], ox, oy, W * z, H * z); };
-      if (st.prev && st.k < 1 && clipOK(st.prev)) { dc(st.prev, alpha); dc(st.cur, alpha * st.k); } else dc(st.cur, alpha);
+    if (cur && clipOK(cur) && (view === curView || view === S.view && ONCE.has(cur))) {
+      ctx.save(); if ((MIRROR[curView] || []).includes(cur)) { ctx.translate(W, 0); ctx.scale(-1, 1); }
+      ctx.globalAlpha = alpha; ctx.drawImage(CLIP[cur], 0, 0, W, H);
       ctx.restore(); ctx.globalAlpha = 1; return;
     }
     drawStill(view, t, alpha);
@@ -392,7 +386,7 @@
     const im = IMG.hina_booth; if (!im) { ctx.fillStyle = '#2a2140'; ctx.fillRect(0, 0, W, H); return; }
     ctx.drawImage(im, 0, 0, W, H);
   }
-  window.HINA = { get S() { return S; }, FW, get trans() { return trans; }, CLIP, thermal: () => thermal(.05), both: () => both, skip: (v) => { S.view = v; } };
+  window.HINA = { get S() { return S; }, FW, get cur() { return cur; }, CLIP, thermal: () => thermal(.05), both: () => both, skip: (v) => { S.view = v; } };
   setStep(0);
   if (QS.has('cover')) { document.body.classList.add('cover-only'); artReady.then(drawCover); return; }
   if (QS.has('autoplay')) { const ac = SND.init(); if (ac.state === 'running') start(); else ac.resume().then(() => { if (ac.state === 'running' && !S.started) start(); }).catch(() => {}); }
