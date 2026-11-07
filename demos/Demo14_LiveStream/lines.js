@@ -1,6 +1,7 @@
 // Streamer lines: id → [ja, en, style ('n' = talk, 'w' = close whisper), TTS reading (optional)].
 // Mint  (m..): VOICEVOX:四国めたん  — user's pick "m2": talk ささやき, whisper ヒソヒソ, intonation 1.00, speed 0.92 (whispers ×0.88).
 // Cocoa (c..): VOICEVOX:ユーレイちゃん — user's pick "c2": talk 甘々, whisper ささやき, intonation 1.20, speed 1.00 (whispers ×0.88).
+// Hinata (h..): VOICEVOX:春日部つむぎ "h2" · Luna (l..): VOICEVOX:九州そら セクシー / ささやき "L4" (scripts/voice.py).
 window.STREAM_LINES = {
   "m01": ["…こんばんは。ミントです", "…Good evening. It's Mint.", "n", "…こんばんは。ミントです"],
   "m02": ["今夜も、ねむれない人のための、ささやき配信…はじめますね", "Tonight again, a whisper stream for everyone who can't sleep… let's begin.", "n", "こんやも、ねむれないひとのための、ささやきはいしん…はじめますね"],
@@ -41,5 +42,33 @@ window.STREAM_LINES = {
   "c13": ["…みぎのおみみ、ちょっと、つめたいね。…てで、あっためてあげる", "…Your right ear is a little cold. …Let me warm it with my hands.", "w"],
   "c14": ["…ないしょだけどね。きみがきてくれると、いちばんうれしいの", "…It's a secret, but… I'm happiest when you come.", "w"],
   "c15": ["…あ、もうこんなじかん！ きょうも、きてくれて、ありがとう！", "…Oh, look at the time! Thank you for coming today!", "n"],
-  "c16": ["あったかくして、ねてね。…またあしたね、ばいばーい！", "Stay warm and sleep well. …See you tomorrow, bye-bye!", "n"]
+  "c16": ["あったかくして、ねてね。…またあしたね、ばいばーい！", "Stay warm and sleep well. …See you tomorrow, bye-bye!", "n"],
+
+  "h01": ["おっはひな〜！ ひなたの激辛チャレンジ配信、はじまるよっ！", "Hi-hina! Hinata's super-spicy challenge stream is starting!", "n", "おっはひな〜！ ひなたの、げきからチャレンジはいしん、はじまるよっ！"],
+  "h02": ["きょうのラーメンは…なんと、辛さレベル10！ みんな、応援よろしくっ！", "Today's ramen is… spice level 10! Cheer me on, everyone!", "n", "きょうのラーメンは…なんと、からさレベルじゅう！ みんな、おうえんよろしくっ！"],
+  "h03a": ["ありがと〜！ ひなた、がんばっちゃう！", "Thank you! I'm gonna do my best!", "n"],
+  "h03b": ["えへへ、やさしい〜。でも、やるって決めたからっ！", "Hehe, you're sweet. But I already decided to do it!", "n", "えへへ、やさしい〜。でも、やるってきめたからっ！"],
+  "h04": ["いっただっきまーす！", "Itadakimasu!", "n"],
+  "h05": ["…からっ！ からいからい！ 口から火が出そうっ！", "…Hot! Hot hot hot! Fire's coming out of my mouth!", "n", "…からっ！ からいからい！ くちから、ひがでそうっ！"],
+  "h06m": ["牛乳！ たすかる〜！ …ぷはーっ、ひんやり〜", "Milk! You saved me! …Pwah, so cool~", "n", "ぎゅうにゅう！ たすかる〜！ …ぷはーっ、ひんやり〜"],
+  "h06f": ["扇風機！ ありがと〜！ …あ〜、風きもちいい〜", "A fan! Thank you! …Ahh, the breeze feels so good~", "n", "せんぷうき！ ありがと〜！ …あ〜、かぜ、きもちいい〜"],
+  "h07": ["よーし、残り、いっきにいくよ！", "Okay, the rest in one go!", "n", "よーし、のこり、いっきにいくよ！"],
+  "h08": ["…完食〜っ！ やったぁ！ みんなのおかげだよ〜！", "…All gone! I did it! It's all thanks to you guys!", "n", "…かんしょく〜っ！ やったぁ！ みんなのおかげだよ〜！"],
+  "h09": ["おれいに、ひなたがあおいであげる！ …ぱたぱた〜", "As thanks, I'll fan you! …Flap flap~", "n"],
+  "h10": ["…えへへ、ここだけのはなしね。ほんとは、ちょっとだけ緊張してたんだ", "…Hehe, just between us. I was actually a little nervous.", "w", "…えへへ、ここだけのはなしね。ほんとは、ちょっとだけ、きんちょうしてたんだ"],
+  "h11": ["…でも、きみがいたから、がんばれた。…ないしょだよ？", "…But I could do it because you were here. …It's a secret, okay?", "w"],
+  "h12": ["きょうもありがと〜！ おつひな〜！ またねっ！", "Thanks for today! Otsu-hina! See you!", "n"],
+
+  "l01": ["…こんばんは。夜ふかしさん、いらっしゃい", "…Good evening. Welcome, fellow night owl.", "n", "…こんばんは。よふかしさん、いらっしゃい"],
+  "l02": ["今夜は雨上がり。…窓、すこし開けてるの。風、きこえる？", "The rain just stopped tonight. …I left the window open a little. Can you hear the wind?", "n", "こんやは、あめあがり。…まど、すこしあけてるの。かぜ、きこえる？"],
+  "l03": ["…ふふ。夜の風って、すき。…でも、冷えすぎないでね", "…Heh. I love the night wind. …But don't get too cold.", "n", "…ふふ。よるのかぜって、すき。…でも、ひえすぎないでね"],
+  "l04": ["…リクエスト、なにかある？", "…Any requests?", "n"],
+  "l05m": ["…オルゴールね。…じゃあ、目をとじて", "…The music box, then. …Close your eyes.", "w", "…オルゴールね。…じゃあ、めをとじて"],
+  "l05t": ["…ホットティー？ いいね。いっしょに、のもうか", "…Hot tea? Nice. Let's drink it together.", "n"],
+  "l06": ["…窓、しめるね。…となり、きてもいい？", "…I'll close the window. …Can I come sit next to you?", "n", "…まど、しめるね。…となり、きてもいい？"],
+  "l07": ["…きょう、なにかあった？ 話して。ちゃんと、きいてるから", "…Did something happen today? Tell me. I'm listening.", "w", "…きょう、なにかあった？ はなして。ちゃんと、きいてるから"],
+  "l08a": ["…そっか。おつかれさま。…きょうは、もうがんばらなくていいよ", "…I see. You did well. …You don't have to try anymore today.", "w"],
+  "l08b": ["…ほんと？ よかった。…きみがうれしいと、わたしもうれしい", "…Really? I'm glad. …When you're happy, so am I.", "w"],
+  "l09": ["…ねえ。この配信、ほんとは、きみに会いたくて、つけてるの", "…Hey. The truth is, I start this stream because I want to see you.", "w", "…ねえ。このはいしん、ほんとは、きみにあいたくて、つけてるの"],
+  "l10": ["…そろそろ、夜があけるね。おやすみ、夜ふかしさん", "…Dawn's almost here. Good night, night owl.", "n", "…そろそろ、よるがあけるね。おやすみ、よふかしさん"]
 };

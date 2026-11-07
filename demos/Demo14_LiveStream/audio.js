@@ -89,6 +89,20 @@ window.StreamAudio = (() => {
       const o = add(new OscillatorNode(ac, { frequency: 100, type: 'triangle' })), og = ac.createGain(); og.gain.value = .05; o.connect(og).connect(g); o.start();
       const lp = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 500, Q: .4 }); add(noiseSrc()).connect(lp).connect(g);
     }
+    if (kind === 'fan') {   // a small desk fan: motor hum + airy blade noise
+      const o = add(new OscillatorNode(ac, { frequency: 118, type: 'sawtooth' })), lp0 = new BiquadFilterNode(ac, { type: 'lowpass', frequency: 300 }), og = ac.createGain(); og.gain.value = .05; o.connect(lp0).connect(og).connect(g); o.start();
+      const bp = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 1100, Q: .5 }), am = ac.createGain(); add(noiseSrc()).connect(bp).connect(am).connect(g);
+      const lfo = add(new OscillatorNode(ac, { frequency: 22 })), lg = ac.createGain(); lg.gain.value = .25; am.gain.value = .75; lfo.connect(lg).connect(am.gain); lfo.start();
+    }
+    if (kind === 'wind') {  // night wind through the open window
+      const bp = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 500, Q: .7 }); add(noiseSrc()).connect(bp).connect(g);
+      const lfo = add(new OscillatorNode(ac, { frequency: .17 })), lg = ac.createGain(); lg.gain.value = 260; lfo.connect(lg).connect(bp.frequency); lfo.start();
+    }
+    if (kind === 'musicbox') {   // a small original lullaby on a music box (comb + tines), looping
+      const mel = [76, 79, 81, 79, 76, 74, 72, 74, 76, 79, 76, 72, 74, 72, 69, 72];
+      let i = 0; const iv = setInterval(() => { if (!ac) return; const f = 440 * Math.pow(2, (mel[i % mel.length] - 69) / 12); tone(g, f, 1.6, .12); tone(g, f * 3.01, .5, .02); if (i % 4 === 0) tone(g, f / 2, 1.8, .05); i++; }, 520);
+      nodes.push({ stop: () => clearInterval(iv), disconnect() {} });
+    }
     if (kind === 'heart') { const iv = setInterval(() => { if (!ac) return; tone(g, 54, .14, .9); tone(g, 49, .16, .6, .26); }, 950); nodes.push({ stop: () => clearInterval(iv), disconnect() {} }); }
     const L = { g, p, set: (v, a = az, d = dist) => { g.gain.setTargetAtTime(v, ac.currentTime, .3); place(p, a, d); }, stop: () => { g.gain.setTargetAtTime(0, ac.currentTime, .4); setTimeout(() => { for (const n of nodes) try { n.stop(); n.disconnect(); } catch {} g.disconnect(); }, 1800); delete loops[kind]; } };
     loops[kind] = L; return L;
@@ -118,6 +132,13 @@ window.StreamAudio = (() => {
     sip: (az = 0) => shot(az, .3, .05, (o) => { swell(o, .5, .25, 1800, 2, 'bandpass', 0, .7); burst(o, .03, .25, 700, 'bandpass', 3, .55); }, .8),
     plop: (az = 0) => shot(az, .35, .1, (o) => { tone(o, 520, .12, .3, 0, 'sine', 170); burst(o, .04, .2, 1200, 'bandpass', 2, .02); }, .3),
     taps: (az, n = 3) => { for (let i = 0; i < n; i++) setTimeout(() => shot(az, .08, .02, (o) => burst(o, .03, .35, 600, 'lowpass', .7), .2), i * 180); },
+    // Hinata: noodle slurp, a gulp of milk, a paper fan
+    slurp: (az = 0) => shot(az, .3, .05, (o, t) => { const f = swell(o, 1.1, .35, 1500, 1.2, 'bandpass', 0, .5); f.frequency.setValueAtTime(900, t); f.frequency.linearRampToValueAtTime(2600, t + 1); for (let i = 0; i < 6; i++) burst(o, .03, .18, rnd(700, 1600), 'bandpass', 3, .1 + i * .14); }, 1.2),
+    gulp: (az = 0) => { for (let i = 0; i < 3; i++) setTimeout(() => shot(az, .3, .05, (o) => { tone(o, 210, .12, .25, 0, 'sine', 120); burst(o, .05, .12, 500, 'lowpass', .7); }, .3), i * 420); },
+    flap: (az) => shot(az, .25, .03, (o) => { swell(o, .35, .5, 700, .5, 'bandpass', 0, .35); burst(o, .02, .15, 2500, 'bandpass', 2, .1); }, .5),
+    // Luna: window sliding, a cup on a saucer
+    slide: (az = -1.3, open = true) => shot(az, 1.4, .3, (o, t) => { const f = swell(o, .8, .35, open ? 500 : 650, 3, 'bandpass', 0, .5); f.frequency.linearRampToValueAtTime(open ? 750 : 450, t + .8); burst(o, .04, .5, 900, 'bandpass', 2, .82); }, 1),
+    saucer: (az = .1) => shot(az, .4, .1, (o) => { tone(o, 2900, .3, .08); tone(o, 4700, .2, .03); burst(o, .02, .25, 3000, 'bandpass', 2); }, .5),
     // stream UI (not spatial)
     pop: () => ac && tone(ui, 1320, .08, .06, 0, 'sine', 1760),
     you: () => ac && (tone(ui, 990, .1, .09), tone(ui, 1480, .14, .08, .07)),

@@ -13,7 +13,9 @@ SRC, DST = os.path.join(ROOT, 'assets', 'art'), os.path.join(ROOT, 'media', 'art
 spec = importlib.util.spec_from_file_location('naomi_prep', os.path.join(os.path.dirname(ROOT), 'Demo11_Naomi', 'scripts', 'prepare_art.py'))
 NP = importlib.util.module_from_spec(spec); spec.loader.exec_module(NP)
 FULL = ['mint_live', 'mint_lean_L', 'mint_lean_R', 'mint_ice', 'mint_towel', 'mint_bye',
-        'cocoa_live', 'cocoa_fufu', 'cocoa_aan', 'cocoa_blanket', 'cocoa_bye']
+        'cocoa_live', 'cocoa_fufu', 'cocoa_aan', 'cocoa_blanket', 'cocoa_bye',
+        'hinata_live', 'hinata_eat', 'hinata_spicy', 'hinata_cool', 'hinata_fan', 'hinata_whisper', 'hinata_bye',
+        'luna_live', 'luna_window', 'luna_tea', 'luna_musicbox', 'luna_close', 'luna_bye']
 FACES = {   # base: (eyes box, mouth box) in 1920×1080 px. Talk frames blend ONLY the mouth, blink frames ONLY the eyes, so the
             # skin colour, blush and hair always stay those of the base frame. Boxes are checked with `prepare_art.py boxes`.
     'mint_live': ((450, 285, 715, 375), (550, 385, 660, 450)),

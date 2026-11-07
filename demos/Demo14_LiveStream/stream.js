@@ -25,18 +25,30 @@
       steps: [['あいさつ', 'Say hi'], ['ふーふー＆あーん', 'Fu-fu & aah'], ['トッピング', 'Topping Super Chat'], ['ブランケット', 'Blanket'], ['またね', 'See you']],
       pool: ['ココアちゃん！', 'こんばんは〜☕', 'I brought my own cocoa', 'さむすぎる…', '配信まってた！', 'cute beret!!', 'あったまる〜', 'tea gang here 🍵', 'くまのマイクかわいい', 'ちょうど仕事おわった', 'cozy vibes ☕', 'マシュマロ派', '声あまい…', 'ふわふわ', 'hello hello', 'こたつから見てる'],
     },
+    hinata: {
+      name: '火野ひなた', en: 'Hino Hinata', title: '激辛チャレンジ配信 · Super-spicy challenge', credit: 'ひなた VOICEVOX:春日部つむぎ', viewers: 4105, sc: 'hinata',
+      art: ['hinata_live', 'hinata_live_talk', 'hinata_live_blink', 'hinata_eat', 'hinata_spicy', 'hinata_cool', 'hinata_fan', 'hinata_whisper', 'hinata_bye'],
+      steps: [['あいさつ', 'Say hi'], ['激辛ラーメン', 'Spicy ramen'], ['たすけて！スパチャ', 'Rescue Super Chat'], ['完食＆うちわ', 'All gone & fan'], ['ないしょ話', 'A secret']],
+      pool: ['おっはひな〜！', 'レベル10はやばい', 'spicy queen 🌶', 'がんばれー！', 'もう汗かいてる笑', 'I could never', 'ひなたちゃん元気すぎ', '辛いの苦手…', 'w w w', 'let\'s gooo', '牛乳用意して', 'ラーメンおいしそう', 'fang cute', '応援してる！'],
+    },
+    luna: {
+      name: '宵月ルナ', en: 'Yoizuki Luna', title: '深夜のおしゃべり配信 · Late-night chat', credit: 'ルナ VOICEVOX:九州そら', viewers: 1958, sc: 'luna',
+      art: ['luna_live', 'luna_live_talk', 'luna_live_blink', 'luna_window', 'luna_tea', 'luna_musicbox', 'luna_close', 'luna_bye'],
+      steps: [['あいさつ', 'Say hi'], ['夜の風', 'Night wind'], ['リクエスト', 'Request'], ['となりで', 'Next to you'], ['夜明け前', 'Before dawn']],
+      pool: ['こんばんは', 'ルナさんの声おちつく', 'night owl here 🦉', '眠れない夜', '雨やんだね', 'calm vibes', 'まだ仕事中…', 'その声ずるい', 'from overseas, hi', '月がきれい', '深夜の楽しみ', 'goodnight soon', 'ルナさん…'],
+    },
   };
   const HANDLES = ['ねこまる', 'yuki_88', 'とうふ', 'Kai', 'ほしぞら', 'mochi', 'ぬい', 'Leo', 'さくら餅', 'night_owl', 'くま吉', 'Rin', 'ぽてと', 'ami', 'しろくま', 'Sora', 'みかん', 'tomo'];
   const HCOL = ['#ffb3d1', '#a8e6cf', '#ffd59e', '#b8c6ff', '#e0b3ff', '#9fe3ff', '#ffc4a8'];
 
   // ---------------------------------------------------------------- art
   const IMG = {};
-  const ALL = [...CH.mint.art, ...CH.cocoa.art];
+  const ALL = Object.values(CH).flatMap((c) => c.art);
   const artReady = Promise.all(ALL.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/${n}.webp?v=1`; })));
 
   // ---------------------------------------------------------------- state
   const fresh = (ch) => ({ ch, started: true, t: 0, clock: 0, view: 'live', pos: { az: 0, dist: .9 }, lv: 0,
-    blow: 0, blowSide: 0, ice: 0, iceSide: 0, towel: 0, mug: 0, puff: 0, aan: 0, treat: 0, treatK: 'h', rain: 0, blanket: 0, hands: 0, fade: 0, viewers: CH[ch].viewers });
+    blow: 0, blowSide: 0, puffSide: 1, spicy: 0, fan: 0, window: 0, tea: 0, near: 0, ice: 0, iceSide: 0, towel: 0, mug: 0, puff: 0, aan: 0, treat: 0, treatK: 'h', rain: 0, blanket: 0, hands: 0, fade: 0, viewers: CH[ch].viewers });
   let S = { started: false, t: 0 }, run = 0, mode = 'title';   // title | lobby | live | ended
   function setStep(i) { S.step = i; $('steps').innerHTML = (S.ch ? CH[S.ch].steps : []).map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[0]} · <small>${s[1]}</small></li>`).join(''); }
 
@@ -227,11 +239,81 @@
     await endStream(my, '☕ またあしたね · See you tomorrow');
   }
 
+  // ---------------------------------------------------------------- Hinata: super-spicy ramen challenge (the cat-ear mic = your head)
+  async function hinataStory(my) {
+    S.view = 'live'; at(0, .85); setStep(0);
+    await sleep(1.4); guard(my);
+    await say('h01'); await say('h02');
+    const a = await comment('ひなたを応援しよう', 'Cheer for Hinata', [['がんばれ！', 'You got this!'], ['ムリしないで', "Don't push yourself"]]);
+    await sleep(.4); await say(a ? 'h03b' : 'h03a');
+    setStep(1); await say('h04', .1);
+    S.view = 'eat'; SND.fx.slurp(0); S.spicy = .35; await sleep(1.3); SND.fx.slurp(.1); S.spicy = .55; await sleep(1.4);
+    react(['いったー！', 'slurp ASMR 🍜', 'いい音', '顔赤くなってきた笑'], 3);
+    S.view = 'spicy'; S.spicy = .85; S.shy = 1; await say('h05'); await sleep(.6);
+    react(['がんばれ😂', 'MILK MILK', 'ギブ？', '水はダメらしい'], 4);
+    // rescue Super Chat: milk (cool in front) or a desk fan (cool from the left)
+    setStep(2);
+    const g = await gift('ひなたをたすけよう', 'Rescue Hinata', [['🥛', '牛乳', 'Milk', '¥500'], ['🌀', '扇風機', 'Desk fan', '¥300']]);
+    await sleep(.5); S.view = 'cool'; S.shy = 0;
+    if (g === 0) { SND.fx.gulp(0); S.treatK = 'c'; S.treat = 1; S.spicy = .4; await sleep(1.4); await say('h06m'); }
+    else { SND.loop('fan', -1.2, .8)?.set(.35); S.fan = 1; S.spicy = .4; await sleep(1.2); await say('h06f'); }
+    await sleep(1.2);
+    // finish the bowl, then she fans you (left / right puffs)
+    setStep(3); S.view = 'live'; await say('h07', .1);
+    S.view = 'eat'; S.spicy = .7; for (let i = 0; i < 3; i++) { SND.fx.slurp(rnd(-.1, .1)); await sleep(1.1); }
+    S.view = 'live'; await say('h08');
+    react(['完食おめでとう！！', 'GG 🎉', 'すごすぎ', '👏👏👏'], 5); hearts(8);
+    if (S.fan) { SND.loop('fan')?.stop(); S.fan = 0; }
+    S.spicy = .3; await say('h09', .2);
+    S.view = 'fan';
+    for (let i = 0; i < 6; i++) { const sd = i % 2 ? 1 : -1; SND.fx.flap(sd * 1.3); S.puff = 1; S.puffSide = sd; await sleep(.55); }
+    S.spicy = 0; await sleep(.8);
+    react(['すずしい〜', 'fan ASMR lol', 'ぱたぱた'], 3);
+    // a secret in your right ear
+    setStep(4); S.view = 'whisper'; at(1.45, .08); SND.fx.cloth(1.2, .3, .6); await sleep(.9);
+    S.near = 1; S.shy = 1; await say('h10', .3); await say('h11', .8); S.near = 0; S.shy = 0;
+    S.view = 'bye'; at(0, .85); await sleep(.6);
+    react(['おつひな〜！', 'otsu-hina!', 'またね〜', '💛💛'], 4);
+    await say('h12', 1);
+    await endStream(my, '🌶 おつひな〜 · Great job, Hinata!');
+  }
+
+  // ---------------------------------------------------------------- Luna: late-night chat by the window (her studio mic; she moves next to you)
+  async function lunaStory(my) {
+    S.view = 'live'; at(0, .9); setStep(0); S.window = 1;
+    SND.loop('wind', -1.35, 2)?.set(.22);
+    await sleep(1.6); guard(my);
+    await say('l01');
+    setStep(1); S.view = 'window'; await sleep(.4); await say('l02');
+    const a = await comment('ルナにこたえよう', 'Answer Luna', [['きこえるよ', 'I can hear it'], ['すずしい…', 'So cool…']]);
+    react(['夜風いいね', 'the wind ASMR', 'ひだり耳すずしい'], 3);
+    await sleep(.6); await say('l03');
+    setStep(2); S.view = 'live'; await say('l04');
+    const g = await gift('ルナにリクエストを送ろう', 'Send Luna a request', [['🎵', 'オルゴール', 'Music box', '¥300'], ['🍵', 'ホットティー', 'Hot tea', '¥500']]);
+    await sleep(.6);
+    if (g === 0) { S.view = 'musicbox'; at(.15, .5); await say('l05m', .4); SND.loop('musicbox', .2, .6)?.set(.5); await sleep(14); SND.loop('musicbox')?.stop(); await sleep(1.4); }
+    else { S.view = 'tea'; at(0, .5); SND.fx.pour(.15); await sleep(2.8); S.tea = 1; await say('l05t'); SND.fx.sip(0); await sleep(1.2); SND.fx.saucer(.1); await sleep(1.5); }
+    react(['しあわせ…', 'so peaceful', 'ねむくなってきた'], 3);
+    // she closes the window and sits next to you (left)
+    setStep(3); S.view = 'live'; at(0, .9); await say('l06', .2);
+    SND.fx.slide(-1.35, false); S.window = 0; SND.loop('wind')?.stop(); await sleep(1.2);
+    SND.fx.cloth(-.8, .6, 1); await sleep(.6); S.view = 'close'; at(-1.45, .08); S.near = 1; await sleep(1);
+    await say('l07');
+    const b = await comment('ルナにこたえよう', 'Answer Luna', [['つかれた…', "I'm tired…"], ['いいことあった', 'Something good happened']]);
+    await sleep(.8); await say(b ? 'l08b' : 'l08a', .8);
+    S.shy = 1; await say('l09', 1.2); S.shy = 0;
+    react(['…', 'ずるい', 'my heart 🌙', 'ルナさん…'], 3);
+    setStep(4); S.view = 'bye'; at(0, .9); S.near = .5; await sleep(.8);
+    await say('l10', 1);
+    react(['おやすみ', 'good night Luna', '🌙🌙'], 3);
+    await endStream(my, '🌙 おやすみ、夜ふかしさん · Good night');
+  }
+
   async function endStream(my, msg) {
     guard(my);
     S.fade = 1; SND.fx.end(); await sleep(2.6); guard(my);
     mode = 'ended'; SND.stopLoops(); S.started = false; stopOutput(); sub('', '');
-    const other = S.ch === 'mint' ? 'cocoa' : 'mint';
+    const order = Object.keys(CH), other = order[(order.indexOf(S.ch) + 1) % order.length];
     $('endedSub').textContent = msg;
     $('nextBtn').textContent = `▶ ${CH[other].name}の配信へ · ${CH[other].en}`; $('nextBtn').onclick = () => goLive(other);
     $('ended').classList.add('show');
@@ -244,6 +326,7 @@
     S.blow = Math.max(0, S.blow - dt / 2.6);
     S.puff = Math.max(0, S.puff - dt / 1.1);
     S.treat = Math.max(0, S.treat - dt / 9);
+    if (S.ch === 'luna' && S.tea) S.tea = Math.max(0, S.tea - dt / 40);
     if (Math.random() < dt * .5) S.viewers += Math.round(rnd(-3, 6));
     bots(dt);
   }
@@ -254,6 +337,16 @@
       if (S.blow > 0) add(S.blowSide * 1.5, 'c', .9 * Math.min(1, S.blow * 1.6), '💨');
       if (S.ice) add(S.iceSide * 1.45, 'c', .62, '🧊');
       if (S.towel) { add(-1.5, 'h', .7 * S.towel, '♨'); add(1.5, 'h', .7 * S.towel, '♨'); }
+    } else if (S.ch === 'hinata') {
+      if (S.spicy > 0) { add(-1.5, 'h', S.spicy * .8, '🌶'); add(1.5, 'h', S.spicy * .8, '🌶'); }
+      if (S.treat > 0) add(0, 'c', .7 * Math.min(1, S.treat * 2), '🥛');
+      if (S.fan) add(-1.2, 'c', .7, '🌀');
+      if (S.puff > 0) add(S.puffSide * 1.4, 'c', .75 * Math.min(1, S.puff * 1.8), '🪭');
+      if (S.near) add(1.45, 'h', .35, '💛');
+    } else if (S.ch === 'luna') {
+      if (S.window) add(-1.4, 'c', .45, '🌙');
+      if (S.tea) add(0, 'h', .4, '🍵');
+      if (S.near) add(-1.45, 'h', .55 * S.near, '🖤');
     } else {
       if (S.mug && !S.blanket) add(0, 'h', .32, '☕');
       if (S.puff > 0) add(1.35, 'c', .85 * Math.min(1, S.puff * 1.8), '💨');
@@ -409,7 +502,7 @@
     stage.dataset.ch = ch; show('live');
     SND.loop('room', 0, 3)?.set(.05);
     for (let i = 0; i < 5; i++) chat(pick(HANDLES), pick(CH[ch].pool));
-    (ch === 'mint' ? mintStory : cocoaStory)(my).catch((e) => { if (e.message !== 'stopped') console.error(e); });
+    ({ mint: mintStory, cocoa: cocoaStory, hinata: hinataStory, luna: lunaStory })[ch](my).catch((e) => { if (e.message !== 'stopped') console.error(e); });
   }
   document.querySelectorAll('.ch-card').forEach((b) => b.addEventListener('click', () => goLive(b.dataset.ch)));
   $('startBtn').addEventListener('click', () => { SND.init(); goLobby(); });

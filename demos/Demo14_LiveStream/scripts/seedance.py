@@ -52,7 +52,7 @@ def design(names):
 
 # ---------------------------------------------------------------- the stream frames (user's picks: Mint + Cocoa), 16:9 at 2K
 DES = {'mint': os.path.join(m.OUT, 'design_A_mint.png'), 'cocoa': os.path.join(m.OUT, 'design_D_cocoa.png')}
-LOOK2 = ("Image 1 is the ART STYLE reference only (do not draw that man). Image 2 is the CHARACTER reference: keep this exact woman "
+LOOK2 = ("Image 1 is the ART STYLE reference only (do not copy its person or room). Image 2 is the CHARACTER reference: keep this exact woman "
          "(face, hair, eyes, outfit, room). Art style EXACTLY like image 1: soft modern cel animation with a light, airy palette, thin "
          "coloured lineart (dark lavender instead of black), flat pastel colours with one soft-edged but still flat shadow tone, simple "
          "clean backgrounds with a few round lights. Hand-drawn feel, NOT glossy. Realistic adult proportions (not chibi).")
@@ -94,30 +94,96 @@ FX = {
     'half': "eyelids half closed (halfway through a blink), mouth unchanged.",
     'blink': "both eyes fully closed (relaxed), mouth unchanged.",
 }
-for base, kinds in {'mint_live': ['talk_s', 'half'], 'cocoa_live': ['talk_s', 'half'],
-                    'mint_lean_L': ['talk_s', 'blink'], 'mint_lean_R': ['talk_s', 'blink'], 'mint_ice': ['talk', 'blink'], 'mint_towel': ['talk', 'blink'], 'mint_bye': ['talk'],
-                    'cocoa_fufu': ['blink'], 'cocoa_aan': ['talk_s', 'blink'], 'cocoa_blanket': ['talk', 'blink'], 'cocoa_bye': ['talk', 'blink']}.items():
+for base, kinds in {'mint_live': ['talk_s', 'half'], 'cocoa_live': ['talk_s', 'half'], 'mint_lean_L': ['talk_s'], 'mint_lean_R': ['talk_s'],
+                    'mint_bye': ['talk'], 'cocoa_aan': ['talk_s'], 'cocoa_blanket': ['talk'], 'cocoa_bye': ['talk']}.items():
     for k in kinds:
         SCENES[f'{base}_{k}'] = (base.split('_')[0], [base], [FACE2 + FX[k] + KEEP])
 
 
+# ---------------------------------------------------------------- round 3: the other two streamers (user: make them too)
+DES.update({'hinata': os.path.join(m.OUT, 'design_B_hinata.png'), 'luna': os.path.join(m.OUT, 'design_C_luna.png')})
+HINATA = ("Hinata: bright orange short bob with one small side ponytail tied with a red ribbon, sparkling golden eyes, a tiny fang, a "
+          "red-and-white zip hoodie jacket, a white gaming headset around her neck. Her room: pastel desk lights, a gaming chair, plushies.")
+LUNA = ("Luna: long straight black hair with deep blue inner-colour streaks, dark sapphire eyes with long lashes, a thin black choker, a "
+        "small crescent-moon earring, a black off-shoulder knit top. Her room: dark, moonlight from a window, a small blue lamp, a studio "
+        "condenser microphone with a round pop filter.")
+CAT = ("In the lower foreground, seen from BEHIND, stands her binaural microphone shaped like a white cat head with two big cat-ear mics, "
+       "its back towards us, so its LEFT ear is on the left side of the picture and its RIGHT ear on the right side.")
+SCENES.update({
+    'hinata_live': ('hinata', [], [HINATA, CAT, "A big bowl of very spicy red ramen with steam on the desk in front of her. She holds chopsticks up and grins at the camera, full of energy, mouth closed in a big smile.", CAM]),
+    'hinata_live_talk': ('hinata', ['hinata_live'], [FACE2 + "mouth wide open, cheerfully talking, eyes unchanged." + " Keep her skin colour and hair EXACTLY the same."]),
+    'hinata_live_blink': ('hinata', ['hinata_live'], [FACE2 + "both eyes closed in a happy curved smile, mouth unchanged." + " Keep her skin colour and hair EXACTLY the same."]),
+    'hinata_eat': ('hinata', ['hinata_live'], [HINATA, CAT, "She slurps a big mouthful of red ramen noodles with her chopsticks, eyes squeezed shut with determination, steam rising.", CAM]),
+    'hinata_spicy': ('hinata', ['hinata_live'], [HINATA, CAT, "Too spicy! She sticks her tongue out and fans her mouth with one hand, a few sweat drops, teary eyes, a funny panicked face; only a light pink on her cheeks (NOT a red face).", CAM]),
+    'hinata_cool': ('hinata', ['hinata_live'], [HINATA, CAT, "Relief: a small desk fan beside her blows her hair back, she holds a cold glass bottle of milk and smiles blissfully with closed eyes.", CAM]),
+    'hinata_fan': ('hinata', ['hinata_live'], [HINATA, CAT, "She leans forward and fans the cat-ear microphone (and the viewer) with a round paper uchiwa fan, playful wink.", CAM]),
+    'hinata_whisper': ('hinata', ['hinata_live'], [HINATA, CAT, "She leans in close to the cat mic's RIGHT ear (right-centre of the picture), one hand cupped beside her mouth, whispering a secret with a shy smile.", CAM]),
+    'hinata_bye': ('hinata', ['hinata_live'], [HINATA, CAT, "She waves goodbye with both hands and a huge grin, the empty ramen bowl on the desk.", CAM]),
+    'luna_live': ('luna', [], [LUNA, "She sits behind her studio microphone, chin resting lightly on one hand, looking at the camera with a calm, mature small smile, mouth closed.", CAM]),
+    'luna_live_talk': ('luna', ['luna_live'], [FACE2 + "lips parted, softly talking, eyes unchanged." + " Keep her skin colour and hair EXACTLY the same."]),
+    'luna_live_blink': ('luna', ['luna_live'], [FACE2 + "eyes gently closed, mouth unchanged." + " Keep her skin colour and hair EXACTLY the same."]),
+    'luna_window': ('luna', ['luna_live'], [LUNA, "She sits by the half-open window on the LEFT side of the picture, the night wind lifting the curtain and her hair, moonlight on her face, looking at the camera.", CAM]),
+    'luna_tea': ('luna', ['luna_live'], [LUNA, "She holds a cup of hot black tea with gentle steam in both hands near the microphone, a soft warm smile.", CAM]),
+    'luna_musicbox': ('luna', ['luna_live'], [LUNA, "She opens a small antique music box on the desk with a little dancing figure, eyes lowered tenderly, moonlight.", CAM]),
+    'luna_close': ('luna', ['luna_live'], [LUNA, "Intimate close-up: she leans in very close to the camera from the LEFT side, as if whispering into the viewer's left ear, half-lidded eyes, hair falling forward.", CAM]),
+    'luna_bye': ('luna', ['luna_live'], [LUNA, "Before dawn, the sky outside a little lighter. Wrapped in a dark blanket, she waves a small goodbye with a gentle sleepy smile.", CAM]),
+})
+
+
+UPLOADS = os.path.join(ROOT, 'project', 'upload_cache.json')
+
+
+def lib_url(name):   # the image as already generated in this account's library (signed output URL), if the API serves it
+    logs = [m.LOG, os.path.join(os.path.dirname(ROOT), 'Demo12_LateCall', 'project', 'seedance_log.json')]
+    for l in logs:
+        if os.path.exists(l) and name in json.load(open(l)):
+            try: return m.unwrap(m.call('GET', f"/generations/{json.load(open(l))[name]['generation']}", tries=3))['outputs'][0]['url']
+            except SystemExit: return None
+    return None
+
+
+def out_url(name):
+    """Reference image → the library copy of a generated image, else an upload (cached; max 5 files per upload request)."""
+    u = lib_url(name)
+    if u: return u
+    cache = json.load(open(UPLOADS)) if os.path.exists(UPLOADS) else {}
+    if name not in cache: preupload([name]); cache = json.load(open(UPLOADS))
+    return cache[name]
+
+
+def preupload(names):   # uploads only what the library cannot serve, 5 files per request
+    cache = json.load(open(UPLOADS)) if os.path.exists(UPLOADS) else {}
+    todo = [n for n in names if n not in cache and os.path.exists(os.path.join(m.OUT, n + '.png')) and not lib_url(n)]
+    for i in range(0, len(todo), 5):
+        chunk = todo[i:i + 5]
+        for n, u in zip(chunk, m.upload([os.path.join(m.OUT, n + '.png') for n in chunk])): cache[n] = u
+        json.dump(cache, open(UPLOADS, 'w'), indent=1); print('uploaded', chunk, flush=True)
+
+
 def scenes(names):
+    import time
     print('balance:', m.unwrap(m.call('GET', '/credits/balance')))
+    bases = {e for n in names for e in SCENES[n][1]} | {'mint_live', 'design_A_mint', 'design_B_hinata', 'design_C_luna', 'design_D_cocoa'}
+    preupload(sorted(bases))
     log = json.load(open(m.LOG)) if os.path.exists(m.LOG) else {}
     for name in names:
         dst = os.path.join(m.OUT, name + '.png')
         if os.path.exists(dst): print('exists', name); continue
         char, extra, parts = SCENES[name]
-        paths = [REF, DES[char]] + [os.path.join(m.OUT, e + '.png') for e in extra]
-        urls = m.upload(paths)
+        refs = ['mint_live', {'mint': 'design_A_mint', 'cocoa': 'design_D_cocoa', 'hinata': 'design_B_hinata', 'luna': 'design_C_luna'}[char]] + extra   # mint_live = the same soft-cel style
         lead = [LOOK2] + (["Image 3 shows her in this scene (same room, same camera): keep the room and camera the same."] if extra and not parts[0].startswith('Image 3') else [])
-        body = {'model': 'gpt-image-2', 'mode': 'image-to-image', 'prompt': '\n\n'.join(lead + parts + [AVOID]),
-                'inputs': [{'type': 'image', 'url': u} for u in urls], 'parameters': {'resolution': '2K', 'aspect_ratio': '16:9'}, 'max_cost_credits': 40}
         idem = f'moheat-d14-{name}-v1'.replace('_', '-')
-        g = m.unwrap(m.call('POST', '/images', body, {'Idempotency-Key': idem}))
-        print(f'[{name}] generation {g["id"]} cost {g.get("credits")}', flush=True)
-        log[name] = {'generation': g['id'], 'idempotency_key': idem}; json.dump(log, open(m.LOG, 'w'), indent=1)
-        m.wait_save(g['id'], dst, name)
+        for attempt in range(8):   # a transient 503 must not end the whole batch (the idempotency key makes retries free)
+            try:
+                urls = [out_url(r) for r in refs]
+                body = {'model': 'gpt-image-2', 'mode': 'image-to-image', 'prompt': '\n\n'.join(lead + parts + [AVOID]),
+                        'inputs': [{'type': 'image', 'url': u} for u in urls], 'parameters': {'resolution': '2K', 'aspect_ratio': '16:9'}, 'max_cost_credits': 40}
+                g = m.unwrap(m.call('POST', '/images', body, {'Idempotency-Key': idem}, tries=10))
+                print(f'[{name}] generation {g["id"]} cost {g.get("credits")}', flush=True)
+                log[name] = {'generation': g['id'], 'idempotency_key': idem}; json.dump(log, open(m.LOG, 'w'), indent=1)
+                m.wait_save(g['id'], dst, name); break
+            except SystemExit as e:
+                print('  retry job', name, str(e)[:160], flush=True); time.sleep(60)
     print('balance:', m.unwrap(m.call('GET', '/credits/balance')))
 
 

@@ -26,5 +26,13 @@
  "mint_live_blink": {
   "generation": "api_206fc7bdc7a842ccca56f3ca244e74c4a0bab78596c7964227021a79f6638314",
   "idempotency_key": "moheat-d14-mint-live-blink-v1"
+ },
+ "cocoa_live": {
+  "generation": "api_748040401dd5118b0745ee159b7dca0ce2d0440c006f59a8a51328efe2033763",
+  "idempotency_key": "moheat-d14-cocoa-live-v1"
+ },
+ "mint_lean_L": {
+  "generation": "api_c3bfd1d55367d45a73af626da4d95fea9c1a1fa794c0a652461bc51db06a5470",
+  "idempotency_key": "moheat-d14-mint-lean-L-v1"
  }
 }
