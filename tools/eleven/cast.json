@@ -120,5 +120,40 @@
   "voice_id": "1blqWrqFcJagS9nJcCXc",
   "confirmed": "2026-11-08",
   "pick": "r1_b"
+ },
+ "nobunaga": {
+  "name": "織田信長 Oda Nobunaga",
+  "demos": [
+   "nobunaga-suntory/Demo5_GifuCastle",
+   "nobunaga-suntory/Demo6_FutureWhisky",
+   "nobunaga-suntory/Demo7_KyotoIzakaya",
+   "nobunaga-suntory/Demo8_YamazakiDistillery",
+   "nobunaga-suntory/Demo9_SengokuBanquet"
+  ],
+  "persona": "信长：低沉、有威严、有魅力的战国霸主，会豪爽大笑，也会压低声音贴耳说话；要贴合历史人设，要够低（之前用户说\"不够低\"）",
+  "description": "Oda Nobunaga, the Japanese warlord, a man in his late forties. Deep, low, commanding bass-baritone with great presence and charisma; proud, bold and theatrical, speaking old samurai Japanese; bursts into big hearty laughter, but can also drop to a low, intimate, conspiratorial murmur. Native Japanese speaker. Clean close-mic recording, no background noise.",
+  "sample": "[proudly] おお、来たか。待ちかねたぞ。さあ、そこへ座れ。今宵は、わしの宴じゃ。 [excited] よし、皆で飲もうぞ！ 乾杯じゃ！ [laughs heartily] はっはっは！ [whispers] …近う寄れ。そなたにだけ、教えてやろう。わしはな、この国の、その先を見ておる。 [chuckles softly] ふっふっふ…",
+  "compare": [
+   "demos/nobunaga-suntory/Demo9_SengokuBanquet/audio/takes/01_N_proud_t0.wav",
+   "demos/nobunaga-suntory/Demo9_SengokuBanquet/audio/takes/11_N_laugh_t0.wav"
+  ],
+  "voice_id": null
+ },
+ "ieyasu": {
+  "name": "徳川家康 Tokugawa Ieyasu",
+  "demos": [
+   "nobunaga-suntory/Demo5_GifuCastle",
+   "nobunaga-suntory/Demo6_FutureWhisky",
+   "nobunaga-suntory/Demo7_KyotoIzakaya",
+   "nobunaga-suntory/Demo8_YamazakiDistillery",
+   "nobunaga-suntory/Demo9_SengokuBanquet"
+  ],
+  "persona": "家康：比信长更年长、更苍老；中低音、温和沉稳、语气柔和恭敬，会轻轻\"ほっほっほ\"地笑，悄悄话时慈祥",
+  "description": "Tokugawa Ieyasu, the Japanese warlord, an older man around sixty. Mellow, low, warm and slightly aged voice with a little gravel; calm, patient, polite and gentle, speaking old samurai Japanese courteously; soft kindly chuckle; when he whispers he sounds fatherly and wise. Native Japanese speaker. Clean close-mic recording, no background noise.",
+  "sample": "[politely] ようこそ、お越しくだされた。この家康、今宵はお相伴つかまつる。まずは熱燗を一献。…湯気が、立っておりましょう。 [chuckles softly] ほっほっほ。 [whispers] …信長様は、ああ見えて寂しがりでな。今宵は、ゆるりと付き合うてくだされ。 [calmly] ご案じなさるな。ただの夜風にござる。",
+  "compare": [
+   "demos/nobunaga-suntory/Demo9_SengokuBanquet/audio/takes/03_I_polite_t0.wav"
+  ],
+  "voice_id": null
  }
 }
