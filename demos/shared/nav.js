@@ -15,6 +15,7 @@
     { cat: 'for-men', dir: 'Demo17_CocoaStream', ja: 'ココアの、ほっこりカフェ配信', en: "Cocoa's Cozy Café Stream", group: 2 },
     { cat: 'for-men', dir: 'Demo18_HinataStream', ja: 'ひなたの、激辛チャレンジ配信', en: "Hinata's Super-Spicy Challenge", group: 2 },
     { cat: 'for-men', dir: 'Demo19_LunaStream', ja: 'ルナの、よふかし配信', en: "Luna's Late-Night Stream", group: 2 },
+    { cat: 'for-men', dir: 'Demo25_HatsumodeDate', ja: 'はじめての、初詣デート', en: 'My First Hatsumode', group: 2 },
     { cat: 'for-women', dir: 'Demo12_LateCall', ja: 'もしもし、きこえる？', en: 'Can You Hear Me?', group: 3 },
     { cat: 'for-women', dir: 'Demo20_HinataHandshake', ja: 'あと10秒だけ、ね？', en: 'Just Ten More Seconds?', group: 3 },
     { cat: 'for-women', dir: 'Demo21_JinLounge', ja: '俺だけ見てろ', en: 'Look Only at Me', group: 3 },

@@ -405,6 +405,13 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 美术：8 张静帧，Seedance **网页** GPT Image 2（API 上传 2026-11-08 又被限流约 5 h，`/images` 也排队 429）。造型选项先用 3 号柔和赛璐璐风格图做参考（Demo12 `style_3_softcel.png`）。共 300 credits（造型 4 张 + 场景 8 张）。注意：同一个账号的网页历史里有别的会话的图，按提示词内容认图再下载；Downloads 里也会混进别人的文件。
 - 自动通关：两条分支都跑过（`?auto=1` / `?auto=1&alt=1`），0 报错。已加入 nav.js（女性向最后）、官网菜单、credits.html。动画（§4b）还没做，等用户反馈。
 
+### Demo25_HatsumodeDate ✅ 可玩 —《はじめての、初詣デート / My First Hatsumode》（男性向约会，纯交互，2026-11-08）
+- 用户要求：男性向下面做一个和女生约会的 demo，第一人称、有互动、有趣，女生的性格和外表要和四位主播拉开差距。用户从 4 个方案里选了「和风大小姐 · 初詣」。
+- 角色：**白銀椿**，20 岁，老字号旅馆的大小姐，端庄有礼但天然呆，第一次挤人潮的初诣。造型 = 用户选的 **D**（银白长发侧低马尾、红白绳、白→红椿花振袖、毛皮披肩；`project/designs_contact.jpg`）。声音 ElevenLabs **tsubaki r1_b**（`ydtidqvCazlHO8YgKhfx`）。
+- 流程（自动通关 2:31，0 报错）：鸟居前倒数 → 小吃摊（只有黑卡）→ 热甘酒贴右脸 → 篝火（左暖）→ 被挤到右耳 → 参拜（摇铃、拍手、长按许愿）→ 抽签（你大吉、她凶）→ 冷风 → 毛皮披肩分你一半 → 左耳低语。细节见该目录 README。
+- 美术：Seedance 网页 GPT Image 2 图生图（风格锚 Demo12 style_3 + 造型 D），8 张 2K 静帧；API 当天上传限流 + 每日额度用尽。动画还没做（静帧优先）。
+- 坑：网页历史和 Downloads 是多个会话共用的，下载要按提示词认卡片、下载后马上核对画面（这次混进了别的会话的一张客厅图，已放回 Downloads）；cast.json 被别的会话同时写过，pick 之后要再确认 voice_id 还在。
+
 ### Demo23_NobunagaTalk ✅ 可玩（本机专用）—《信長と、語らう / Talk with Nobunaga》实时 AI 对话（2026-11-08）
 - 用户要求：不是固定台词，能对用户说的话做出反应；讲完等用户讲；本机版 + 限额不许超；可选 信長 / 家康 / 三人で、可选场所（5 个：岐阜城天守夕暮れ、茶室囲炉裏、京都居酒屋、山崎蒸溜所、安土月夜の宴）；角色先按场所开话题；约 2 分钟由角色收尾；角色要走动（不在一个位置讲话）让冷热变化。
 - 架构：`server.py`（端口 8771，持有 key，执行 `limits.json`）+ ElevenLabs **text-only agent**（`agent.json`，LLM claude-sonnet-5-5，prompt 每次在 `scenes.js` 生成后 override）+ 浏览器语音识别 + 每句 ElevenLabs v4 TTS → 每个角色独立 HRTF。细节见该目录 README。

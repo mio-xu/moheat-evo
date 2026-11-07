@@ -1,0 +1,24 @@
+# Demo25 · はじめての、初詣デート · My First Hatsumode (for-men, interactive)
+
+A first-person New Year's Eve date with **白銀椿 Tsubaki** (original character): 20, the sheltered young lady of an old ryokan family —
+polite and graceful, but a naive airhead on her very first crowded shrine visit. Kept apart from the four streamers (Mint / Cocoa /
+Hinata / Luna) in look (silver-white side ponytail, white-to-crimson camellia furisode, fur stole), personality and setting.
+
+## Story (5 steps, ~2:20)
+1. **鳥居の前で** — she hurries in from the right on geta (cold night wind on both ears) · "does it suit me?" (choice) · 5-second countdown, crowd cheer, temple bell · you say 「あけましておめでとう！」 (tap).
+2. **屋台と甘酒** — she only carries a black card (choice: treat her / ask if they take cards) · a hot amazake cup at your right cheek (right warm), she burns her tongue.
+3. **焚き火** — bonfire on your left (steady warm left, sparks) · the crowd pushes her to your right ear · hold to steady her.
+4. **お参り** — coin, ring the bell (3 taps), two claps, hold to pray · "what did you wish?" (choice).
+5. **おみくじ** — you draw 大吉, she draws her first 凶 (choice: swap / tie it together) · a cold gust sweeps left → right · she wraps her fur stole round you both (warm both) · last whisper at your left ear (depends on your wish).
+
+## Thermal (firmware DUAL)
+- Voice: always warm at the ear she speaks at, `(0.1 + 0.8 × level)` × distance (ear 1 / ≤ 50 cm 0.6 / further 0.28), × 0.5 in front.
+- Ambient: winter air (cool 0.24 both ears; less on the bonfire side; almost gone under the stole), gusts that move across the head (cool 0.6), bonfire left (warm 0.5, flicker), amazake cup at the right cheek (warm 0.65), steam of her cup (0.12), her face a hand's width away (≤ 0.35), fur stole (warm 0.28 both).
+- Not heated: her blush, her burnt tongue.
+
+## Files
+- `index.html`, `date.css` (+ Demo10 `demo.css`, `shared/series.css`), `game.js`, `audio.js` (HRTF + synthesized shrine ambience), `lines.js` (ja + en).
+- `scripts/voice.py` → `media/voice/*.m4a` (ElevenLabs `tsubaki` r1_b, user pick), `scripts/seedance.py` (design + scene prompts; `project/web_prompts.json`), `scripts/prepare_art.sh` → `media/art/*.jpg`, `scripts/make_cover.py` → `media/cover.jpg` + menu thumbnail.
+- Look: user picked **D** (`project/designs_contact.jpg`); stills `project/scenes_contact.jpg`. Raw PNGs in `assets/` (git-ignored).
+- `?auto=1` answers every choice / action itself (testing), `?cover=1` poster, `?embed=1` stage only.
+- Animation (Seedance video) not made yet — stills first (user rule).
