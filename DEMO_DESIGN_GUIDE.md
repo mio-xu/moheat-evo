@@ -30,7 +30,7 @@
 ## 2. 体验结构（纯交互 Demo 的标准形）
 
 - **时长 1:30–2:30**。用户嫌长的就拆成两集（Demo15/16 的做法：同一套代码，用 `data-part` 区分）。
-- **5 个左右的阶段**，显示在右侧 Progress 卡片里，每个阶段一个场景 / 画面。
+- **5 个左右的阶段**，每个阶段一个场景 / 画面（阶段写在代码的 `#steps` 里，界面上不显示进度，§7.3）。
 - **结构**：开场氛围 → 靠近 → 招牌冷热动作 → 贴耳一句 → 收尾（二选一的分支结局 + 一句贴耳的话）→ 渐黑 → 回到封面，显示结局文字。
 - **玩家的操作**，每个 Demo 用 3–5 次，混合使用：
   - 单击动作按钮（`action`）
@@ -62,12 +62,13 @@
 
 ### 2.2 显示语言：English（默认）/ 日本語 / 中文（用户 2026-11-08）
 
-- **一次只显示一种语言，字号一样**（中文 / 英文都用该 Demo 日文字幕的样式）。跟着切换的有：**整个页面**（顶栏、右侧卡片和说明、图例、Demo 切换面板、设备状态、输入框提示）、字幕、对话气泡、选项 / 动作 / 弹幕 / 礼物按钮、提示和目标栏、互动卡片（`interact.js`）、跳过 / 重玩等固定按钮、右侧 Progress 列表、**封面**（标题、副标题、角色标签、按钮、提示；长标题自动缩小）。场景标题、MP4 内嵌字幕、画在 canvas 上的字不变。
+- **一次只显示一种语言，字号一样**（中文 / 英文都用该 Demo 日文字幕的样式）。跟着切换的有：**整个页面**（顶栏、右侧卡片和说明、图例、Demo 切换面板、设备状态、输入框提示）、字幕、对话气泡、选项 / 动作 / 弹幕 / 礼物按钮、提示和目标栏、互动卡片（`interact.js`）、跳过 / 重玩等固定按钮、**封面**（标题、副标题、角色标签、按钮、提示；长标题自动缩小）。场景标题、MP4 内嵌字幕、画在 canvas 上的字不变。
 - **直播间的观众弹幕**保持原样（日本观众为主），另有约三分之一来自其他国家的观众，用各自的语言发言（`WORLD` 列表，名字后带国旗）。这是弹幕内容，不是界面语言（用户 2026-11-08 更正）。
 - **统一由 `demos/shared/subs.js`（`MoHeatSub`）处理**，`nav.js` 会自动加载它，Demo 代码照旧写日 + 英：
   - 字幕 `#subs .line > .ja / .en`、气泡 `#bubble > b / span`、按钮 `.ch / .act-btn / .chip-c / #micGate button / .toast / .hud-goal` 里的 `<b>日文</b><span>English</span>` → 两种都藏起来，另显示一个 `.one`。
   - 一个元素里写成「日本語 · English」的文字（互动卡片、`.ix-btn`、运行时改写的重玩按钮）→ 显示所选那一半；`#steps > li` 的「日本語 · <small>English</small>」同理。
   - 用 CSS `::before` 写的说话人标签（Demo20 スタッフ、Demo15/16 ばあば / じいじ）在 `subs.js` 的 `WHO` 表里翻译。
+  - 默认英文：选择只在这次浏览中记住（sessionStorage），重新打开网站一律从英文开始（用户 2026-11-08）。
   - 切换：舞台右上角的「字」按钮，**点一下换下一种语言**（用户不要下拉框），封面上也显示；Demo 1–9 右侧的 Subtitles 下拉框（多一个 Off）；或 `?sub=ja|en|zh`。存在 localStorage `moheat.sublang`，所有 Demo 共用。
 - **页面框架的共用词**放 `demos/shared/l10n_common.js`（`MOHEAT_L10N_COMMON.text.<lang>`）；页面上任何文字节点只要整句在表里就会被替换，页面改了文字（如连接状态）会重新翻译。
 - **翻译放在每个 Demo 自己的 `l10n.js`**（页面目录，或 `<base>` 指向的目录）：`window.MOHEAT_L10N = { langs, text: { zh: {…}, ja: {…}, en: {…} }, names, voice }`。
@@ -387,16 +388,16 @@ header.bar
   #estop「■ STOP」
 main.layout
   section.stage-col
-    .stage#stage（16:9）  画面 canvas / video · 封面 .intro · 字幕 #subs · 回答 .choices / .act · 提示 #toast · 目标 .hud-goal（左上）· 右上 HUD（.hud-top：🔊 + 「字」）· 两侧冷热光晕 .glow
+    .stage#stage（16:9）  画面 canvas / video · 封面 .intro · 字幕 #subs · 回答 .choices / .act · 提示 #toast · 目标 .hud-goal（左上）· 右上 HUD（.hud-top：🔊 + 「字」+ ⛶ 全屏，shared/fullscreen.js 自动加，F 键切换）· 两侧冷热光晕 .glow
     .transport + .legend   只有影片类（时间轴 Demo）有
-  aside.side（固定 4 张卡片，顺序不变）
+  aside.side（固定 3 张卡片，顺序不变）
     1 .card  Sounds around you        #radar（声源雷达）
     2 .card  Thermal output           #cmd + L/R cool / warm 四条表 + .note（一两句说明这个 Demo 的冷热来源）
-    3 .card  Progress                 #steps（游戏类由 main.js 写；影片类由 interact.js 按场景自动生成）；直播间叫 Stream、实时对话叫 Conversation
-    4 .card  设置                      Intensity（+ 影片类的 Device lead）· Send to device —— **不放字幕下拉框**（只用舞台上的「字」按钮）
+    3 .card  设置                      Intensity（+ 影片类的 Device lead）· Send to device —— **不放字幕下拉框**（只用舞台上的「字」按钮）
+    **不显示进度**（用户 2026-11-08）：游戏类代码里的 `#steps` 可以照写（剧情代码会用到），含 `#steps` 的卡片由 series.css 统一隐藏；新 Demo 不必再做进度卡片。Demo23 的对话状态卡片不算进度。
 ```
 
-**2. 封面 `.intro .cover-copy`（从上到下）**：`p.kicker`（MoHeat Evo · Binaural ASMR × Thermal Haptics；信长系列另加 `p.series`）→ `h1`（日文标题，带假名，有冲击力）→ `p.en`（英文标题 — 一句副标题）→ `p.cast` 里 2–3 个 `.chip`（角色 / 冷热来源，每个「日文 English · cool/warm」）→ `.intro-actions`（`#startBtn.btn.primary.big`「▶ 日文 · English」+ `#lrBtn`「🎧 Left / Right check」）→ `p.hint`（耳机 · 麦克风 · 连接设备）→ `p.draft#credits`（配音 / 美术署名）。其他语言的版本全部写在 `l10n.js` 的 `text.ja / en / zh`，标题过长会自动缩小到放得下。
+**2. 封面 `.intro .cover-copy`（从上到下）**：`p.kicker`（MoHeat Evo · Binaural ASMR × Thermal Haptics；信长系列另加 `p.series`）→ `h1`（日文标题，带假名，有冲击力）→ `p.en`（英文标题 — 一句副标题）→ `p.cast` 里 2–3 个 `.chip`（角色 / 冷热来源，每个「日文 English · cool/warm」）→ `.intro-actions`（`#startBtn.btn.primary.big`「▶ はじめる · Start」——**不写时长**（用户 2026-11-08）；直播间可写「▶ 配信を見る · Watch」+ `#lrBtn`「🎧 Left / Right check」）→ `p.hint`（耳机 · 麦克风 · 连接设备）→ `p.draft#credits`（配音 / 美术署名）。其他语言的版本全部写在 `l10n.js` 的 `text.ja / en / zh`，标题过长会自动缩小到放得下。
 
 **3. 舞台上的元素统一写法**（`subs.js` 才能切换语言、`voice.js` 才能用语音回答）：
 - 字幕：`#subs > .line > .ja + .en`（`.who` 写说话人）；对话气泡：`#bubble > b + span`。
@@ -412,7 +413,7 @@ main.layout
 - 手机 / 平板：按 §7.1。
 - 上线前用 `?sub=en / ja / zh` 各看一次封面和右侧栏，`node tools/l10n/check_missing.js zh <文件夹>` 没有可见的漏翻。
 
-**6. 新 Demo 的起点**：游戏类复制 `for-women/Demo21_JinLounge`（或同类最近的 Demo）的 `index.html` 骨架，影片类复制 `nobunaga-suntory/Demo05_GifuCastle`；只改内容（标题、角色、卡片里的说明、Progress 的阶段），不动结构和 class。
+**6. 新 Demo 的起点**：游戏类复制 `for-women/Demo21_JinLounge`（或同类最近的 Demo）的 `index.html` 骨架，影片类复制 `nobunaga-suntory/Demo05_GifuCastle`；只改内容（标题、角色、卡片里的说明），不动结构和 class。
 
 ### 7.2 共用文件的版本号
 

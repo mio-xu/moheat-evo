@@ -87,7 +87,8 @@ window.MOHEAT_L10N_COMMON = {
    "Your room": "あなたの部屋",
    "At your left ear": "左耳もと",
    "At your right ear": "右耳もと",
-   "Right in front": "すぐ目の前"
+   "Right in front": "すぐ目の前",
+   "▶ はじめる · Start": "▶ はじめる"
   },
   "zh": {
    "ASMR Demo": "ASMR 演示",
@@ -174,7 +175,8 @@ window.MOHEAT_L10N_COMMON = {
    "Your room": "你的房间",
    "At your left ear": "在你左耳边",
    "At your right ear": "在你右耳边",
-   "Right in front": "就在面前"
+   "Right in front": "就在面前",
+   "▶ はじめる · Start": "▶ 开始"
   },
   "en": {
    "ASMR Demo": "ASMR Demo",
@@ -261,7 +263,8 @@ window.MOHEAT_L10N_COMMON = {
    "Your room": "Your room",
    "At your left ear": "At your left ear",
    "At your right ear": "At your right ear",
-   "Right in front": "Right in front"
+   "Right in front": "Right in front",
+   "▶ はじめる · Start": "▶ Start"
   }
  }
 };

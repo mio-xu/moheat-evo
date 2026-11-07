@@ -83,17 +83,6 @@
   const A = window.DEMO_DATA && window.DEMO_DATA.anim;
   if (!dir || !stage || !media || !A) return;
   const CHEER = GATES[dir] === 'cheer';
-  // the side panel's Progress card (same as the game demos): the scenes of the film, the current one highlighted (shared/subs.js translates them)
-  const SCENES = (A.scenes || A.segments || []).map((s) => ({ t: s.t ?? s.t0 ?? 0, ja: s.ja, en: s.en }));
-  const stepsEl = document.getElementById('steps');
-  let stepNow = -2;
-  function steps(t) {
-    if (!stepsEl || !SCENES.length) return;
-    let i = -1; SCENES.forEach((s, k) => { if (t >= s.t - .05) i = k; });
-    if (i === stepNow) return; stepNow = i;
-    stepsEl.innerHTML = SCENES.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s.ja} · <small>${s.en}</small></li>`).join('');
-  }
-  steps(0);
   const GIVE_UP = 15, BLOW_NEED = 2.4, HOLD = 10;
 
   // each gate: pause at t; for your own subtitle line, just after it appears, and resume near its end (skip the silent rest)
@@ -324,7 +313,6 @@
   // ---------------------------------------------------------------- per frame (called by demo.js)
   function tick(t, m) {
     if (m) media = m;
-    steps(media.currentTime || t || 0);
     const n = performance.now(), dt = Math.min(.1, (n - lastNow) / 1000); lastNow = n;
     const playing = !media.paused && !media.ended;
     if (CHEER) {

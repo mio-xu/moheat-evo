@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=1" />
-  <link rel="stylesheet" href="../../shared/series.css?v=7" />
+  <link rel="stylesheet" href="../../shared/series.css?v=8" />
   <script>if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add('embed');</script>
   <style>/* ?embed=1 — used by the site's demo menu: stage + transport only */
     html.embed .bar, html.embed .side, html.embed .legend { display: none !important; }
@@ -50,7 +50,7 @@
             <p class="en">The Runaway Seasons Express</p>
             <p class="cast"><span class="chip k">❄ 風・雪・氷・雨 · cool</span><span class="chip h">🔥 夏風・炎・溶岩・蒸気 · warm</span></p>
             <div class="intro-actions">
-              <button class="btn primary big" id="startBtn" type="button">▶ Start · 2:30</button>
+              <button class="btn primary big" id="startBtn" type="button">▶ はじめる · Start</button>
               <button class="btn" id="lrBtn" type="button">🎧 Left / Right check</button>
             </div>
             <p class="hint">Headphones on · connect MoHeat Evo (top right): each window brings its own season — you feel it on that side</p>
@@ -87,7 +87,6 @@
         <p class="note">Strength from each ambience track (wind, snow, ice, rain → cool; breeze, fire, lava, steam → warm), left / right from where that sound is. Sunlight is a designed curve. Music and the train never drive it. One mode per ear.</p>
       </div>
 
-      <div class="card"><div class="card-head"><span>Progress</span></div><ol class="steps" id="steps"></ol></div>
       <div class="card">
         <label class="row"><span>Intensity</span><input id="intensity" type="range" min="0" max="100" value="100" /><b id="intensityVal">100%</b></label>
         <label class="row"><span>Device lead</span><input id="offset" type="range" min="-500" max="1000" step="50" value="0" /><b id="offsetVal">+0 ms</b></label>
@@ -100,15 +99,15 @@
   <script src="media/data.js?v=1"></script>
   <script src="../../../device.js?v=1"></script>
   <script src="main.js?v=2"></script>
-  <script src="../../shared/voice.js?v=4"></script>
-  <script src="../../shared/interact.js?v=8"></script>
+  <script src="../../shared/voice.js?v=5"></script>
+  <script src="../../shared/interact.js?v=9"></script>
   <script>/* ?autoplay=1 (site demo menu): start right away when the browser allows it, else the cover's Start button stays */
     if (/[?&]autoplay\b/.test(location.search)) {
       const m = document.getElementById('mix');
       m.play().then(() => { m.pause(); document.getElementById('startBtn').click(); }).catch(() => {});
     }
   </script>
-  <script src="../../shared/nav.js?v=14"></script>
+  <script src="../../shared/nav.js?v=16"></script>
   <script src="../../shared/scrub.js?v=1"></script>
 </body>
 </html>

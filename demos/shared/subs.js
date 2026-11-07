@@ -9,8 +9,8 @@
 //     (interact.js cards, .ix-btn) show the chosen part; the cover (.intro: title, tagline, chips, buttons, hint) from l10n.js.
 //   · data: <demo>/l10n.js — window.MOHEAT_L10N = { langs, text: { <lang>: { "<text as on the page>": "…" } },
 //     names: { "<ja name>": { <lang>: "…" } }, voice: { <lang>: { "<ja answer>": ["same meaning", …] } } }. Missing → English.
-//   · choice: the 字 button on the stage (each tap = next language), the demo's Subtitles select (Demo 1–9, + Off), ?sub=<lang>. Saved in localStorage
-//     'moheat.sublang' (all demos); a demo without that language shows English. shared/voice.js listens in the same language.
+//   · choice: the 字 button on the stage (each tap = next language), the demo's Subtitles select (Demo 1–9, + Off), ?sub=<lang>. Saved in sessionStorage
+//     'moheat.sublang' (all demos, this visit only — a new visit starts in English); a demo without that language shows English. shared/voice.js listens in the same language.
 (() => {
   if (window.MoHeatSub) return;
   const QS = new URLSearchParams(location.search);
@@ -35,8 +35,10 @@
   /** value for language l from { en, zh, … }, following the fallback chain (zh-Hant → zh → en) */
   const pickL = (obj, l) => { if (!obj) return undefined; for (const x of chain(l)) if (obj[x] != null) return obj[x]; return undefined; };
   const KEY = 'moheat.sublang';
-  const load = () => { try { return localStorage.getItem(KEY); } catch { return null; } };
-  const save = (v) => { try { localStorage.setItem(KEY, v); } catch {} };
+  // the choice lasts for this browser session only (user 2026-11-08: default English) — every new visit starts in English
+  try { localStorage.removeItem(KEY); } catch {}   // older builds kept it for good
+  const load = () => { try { return sessionStorage.getItem(KEY); } catch { return null; } };
+  const save = (v) => { try { sessionStorage.setItem(KEY, v); } catch {} };
   const L10N = () => window.MOHEAT_L10N || {};
   const langs = () => { const l = (L10N().langs || DEFAULT_LANGS).filter((x) => LANGS[x]); return l.includes('en') ? l : ['en', ...l]; };
   let pref = QS.get('sub') || load() || 'en';   // what the viewer chose (any demo)
@@ -335,7 +337,7 @@
     if (sel) { sel.value = lang; sel.dispatchEvent(new Event('change')); }   // the demo drops its old ja + en mode
     apply();
     const me = document.currentScript?.src || [...document.scripts].map((x) => x.src).find((x) => /shared\/subs\.js/.test(x));
-    if (me) { const c = document.createElement('script'); c.src = me.replace(/subs\.js(\?.*)?$/, 'l10n_common.js?v=4'); c.onload = () => { maps = {}; apply(); }; document.head.appendChild(c); }
+    if (me) { const c = document.createElement('script'); c.src = me.replace(/subs\.js(\?.*)?$/, 'l10n_common.js?v=5'); c.onload = () => { maps = {}; apply(); }; document.head.appendChild(c); }
     const s = document.createElement('script');   // relative to the page (or its <base>): the demo's own languages
     s.src = 'l10n.js?v=3';
     s.onload = () => {
