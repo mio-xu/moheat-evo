@@ -288,6 +288,7 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 - 下载文件名不带场景名（`image_batch_xx.png`、`video_batch_xx.mp4`），按下载时间对应，再用画面核对。
 - 不能替用户登录；网页没登录时请用户自己登录。credits 是多个会话共用的，批量超过约 1000 时先问用户。
 - API：上传接口有长时间限流（429，约 6–10 小时）；一次最多 5 个文件；不接受外部 URL 和 data URI；旧的生成记录约 10 分钟后会 503。不要 `pkill` 别的会话的 seedance 进程。
+- **多个会话共用同一个账号和 ~/Downloads**：同一时刻别的会话也在下载，"最新的那个文件"不一定是你的（2026-11-08 Demo26 和 Demo25 互相拿错了一次）。下载后先看一眼缩略图再改名移走；拿错的按原文件名放回 Downloads。历史卡片要按提示词里独有的一句话来认，不要按位置。
 - 网页偶尔会在生成后自己跳到 My Creations：回到原页面后，模式、1080p、Add end frame 这几项都要重新确认。
 
 ## 12. 资源清理与文件结构
