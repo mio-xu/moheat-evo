@@ -38,6 +38,7 @@ demos/Demo8_YamazakiDistillery/          Demo 8《信長と家康、山崎蒸溜
 demos/Demo5_GifuCastle/                   Demo 5《信長の岐阜城へようこそ》（完成）
 demos/Demo10_CaveSpring/                 纯交互解谜《火をともして、ひみつの泉へ》（可玩，等 Seedance 背景）
 demos/Demo11_Naomi/                      纯交互治愈小游戏《ナオミと、ふわふわの一日》（用户家的猫 Naomi，Seedance 美术）
+demos/Demo13_NaomiCam/                   Naomi 监控摄像头版《ナオミ、いまなにしてる？》（复用 Demo 11 美术和音频）
 HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
 ```
@@ -282,6 +283,12 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 声音全部浏览器实时合成（`audio.js`：呼噜、喵（共振峰合成）、肉垫脚步、嗅、雨、鸟…）。没有角色配音。以后如果用户提供 Naomi 真实的叫声 / 呼噜录音，可以替换合成音。
 - 美术：**Seedance API 直接生成**（用户指定），`scripts/make_jobs.py` → `scripts/seedance_images.py`（按路径加载 Demo 10 的 API 客户端）→ `scripts/prepare_art.py` → `media/art/*.webp`。坐标/尺寸在 `game.js` 的 `POSE_H` 和各步骤的 `setPose(...)`。
 - 已加入 `nav.js` 和官网菜单（缩略图 `assets/images/demos/Demo11_Naomi.jpg`）。
+
+### Demo13_NaomiCam ✅ 可玩 —《ナオミ、いまなにしてる？ / What's Naomi Up To? · Pet Cam》（2026-11-07）
+- 用户要求"监控版的 Naomi：相当于我在家里的摄像头看她"。你在外面，用手机看客厅摄像头；声音和冷热都**以摄像头朝向为准**（转动镜头，她的暖、窗边的风、雨声都跟着转）。
+- 流程：接通（雪花噪声）→ 转镜头找到在陽だまり睡觉的她 → 按住 🎤 对讲叫两次 → 她走到镜头前（嗅、**冰凉鼻子碰镜头 = 两耳凉**、在屏幕上摸她 → 左脸/右脸蹭摄像头 = 左暖/右暖）→ 激光笔抓 3 次 → 自动喂食器 → 21:08 红外夜视 + 雨（左凉）→ 说晚安 → 门口钥匙声（右）、她的眼睛在红外里发光、跑出画面去迎接你 → 回封面 `stop`。📸 可保存截图。同侧冲突 0（`NAOMICAM.conflicts()`）。
+- 美术和音频**按路径复用 Demo 11**（`../Demo11_Naomi/media/art/`、`audio.js`），不改 Demo 11；摄像头效果是 WebGL 着色器（桶形畸变、色差、噪点、暗角、红外、雪花）+ OSD 画布。喂食器为代码绘制。
+- 已加入 `nav.js` 和官网菜单（在 Naomi 之后，缩略图 `assets/images/demos/Demo13_NaomiCam.jpg`）。`Demo12_LateCall` 是另一个会话在做的，编号已被占用。
 
 ## 6. 本地未提交的大文件（仅在本机，可用脚本重建）
 

@@ -1,0 +1,67 @@
+/* Naomi pet cam — on top of Demo 10's demo.css (loaded by path): a phone camera app look, mint accent. */
+:root { --bg: #0f1418; --panel: #172026; --panel-2: #1f2a31; --line: #2c3a43; --gold: #8ff0d0; }
+.bar { background: #121a1f; }
+.brand span { color: #6fe3bf; }
+.btn.primary { background: linear-gradient(135deg, #5fe0b8, #7fb8ff); color: #062a22; }
+
+.stage > canvas#osd { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
+.stage.aim > canvas#scene { cursor: crosshair; }
+.stage.grab > canvas#scene { cursor: grab; }
+.stage.stroke > canvas#scene { cursor: pointer; }
+
+/* the camera's own text sits at the top edge; our goal + buttons go just below it */
+.hud-goal { top: 10cqw; border-left-color: #6fe3bf; background: rgba(8, 16, 18, .6); }
+.hud-goal small { color: #8ff0d0; }
+.hud-top { top: 10cqw; }
+
+/* hearts (bond) */
+.inv { bottom: 2cqw; left: 2.4cqw; }
+.inv .hearts { display: flex; align-items: center; gap: .35cqw; padding: .5cqw 1cqw; border-radius: 999px; background: rgba(8, 16, 18, .55); border: 1px solid rgba(143, 240, 208, .4); position: relative; }
+.inv .hearts i { font-style: normal; font-size: clamp(11px, 1.6cqw, 26px); line-height: 1; color: rgba(255, 255, 255, .25); transition: color .4s; }
+.inv .hearts i.on { color: #ff8fb8; text-shadow: 0 0 .8cqw rgba(255, 120, 170, .8); animation: pop .5s ease-out; }
+.inv .hearts em { position: absolute; left: 50%; bottom: -1.4cqw; transform: translateX(-50%); white-space: nowrap; font: 600 clamp(7px, .72cqw, 11px)/1 Inter, sans-serif; font-style: normal; color: #cfe3dc; }
+
+/* control dock: the camera app's buttons */
+.dock { position: absolute; left: 50%; bottom: 1.3cqw; transform: translateX(-50%); z-index: 3; display: flex; align-items: center; gap: .7cqw;
+  padding: .55cqw .7cqw; border-radius: 999px; background: rgba(10, 16, 20, .72); border: 1px solid rgba(255, 255, 255, .14); backdrop-filter: blur(6px); }
+.dk { display: inline-flex; align-items: center; gap: .5cqw; height: clamp(26px, 3.8cqw, 58px); min-width: clamp(26px, 3.8cqw, 58px); justify-content: center; padding: 0 1.1cqw;
+  border-radius: 999px; border: 1px solid rgba(255, 255, 255, .16); background: rgba(255, 255, 255, .07); color: #eaf6f1; cursor: pointer;
+  font: 700 clamp(9px, 1.15cqw, 18px)/1 "Zen Maru Gothic", "Noto Sans JP", Inter, sans-serif; transition: opacity .3s, background .2s, box-shadow .2s, transform .1s; touch-action: none; }
+.dk .ic { font-size: 1.25em; }
+.dk.pan { padding: 0; font-size: clamp(10px, 1.3cqw, 20px); }
+.dk:disabled { opacity: .28; cursor: default; }
+.dk.want:not(:disabled) { border-color: #8ff0d0; box-shadow: 0 0 0 .2cqw rgba(143, 240, 208, .35), 0 0 1.4cqw rgba(143, 240, 208, .45); animation: want 1.6s ease-in-out infinite; }
+.dk.on, .dk.holding { background: #8ff0d0; color: #062a22; }
+#laserBtn.on { background: #ff5a6a; color: #fff; border-color: #ffb0b8; }
+.dk:active:not(:disabled) { transform: scale(.96); }
+.dk .mic { display: none; align-items: flex-end; gap: 2px; height: 1.6cqw; }
+.dk.holding .mic { display: flex; }
+.dk .mic i { width: .35cqw; min-width: 2px; height: 15%; border-radius: 2px; background: #062a22; opacity: .35; }
+@keyframes want { 50% { box-shadow: 0 0 0 .35cqw rgba(143, 240, 208, .15), 0 0 2.2cqw rgba(143, 240, 208, .7); } }
+
+/* push notification (phone banner) */
+.push { position: absolute; left: 50%; top: 1cqw; z-index: 6; transform: translate(-50%, -140%); transition: transform .45s cubic-bezier(.2, .9, .3, 1.2), opacity .45s; opacity: 0;
+  display: flex; align-items: center; gap: 1cqw; min-width: 30cqw; max-width: 56cqw; padding: .8cqw 1.4cqw .8cqw 1cqw; border-radius: 1.4cqw;
+  background: rgba(245, 248, 250, .94); color: #15202a; box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, .35); pointer-events: none; }
+.push.show { transform: translate(-50%, 0); opacity: 1; }
+.push > i { font-style: normal; font-size: clamp(14px, 2.2cqw, 34px); width: 3.4cqw; height: 3.4cqw; min-width: 22px; min-height: 22px; display: grid; place-items: center; border-radius: .9cqw; background: linear-gradient(135deg, #5fe0b8, #7fb8ff); }
+.push small { display: block; font: 600 clamp(7px, .8cqw, 12px)/1.2 Inter, sans-serif; color: #6a7883; letter-spacing: .04em; }
+.push b { display: block; font: 700 clamp(10px, 1.35cqw, 21px)/1.3 "Zen Maru Gothic", "Noto Sans JP", sans-serif; }
+.push div > span { display: block; font: 500 clamp(8px, 1cqw, 16px)/1.3 Inter, sans-serif; color: #3e4c57; }
+
+.toast { bottom: 9.5cqw; background: rgba(8, 16, 18, .78); border-color: rgba(143, 240, 208, .4); }
+
+/* cover */
+.intro::before { background: linear-gradient(to right, rgba(6, 14, 16, .7), rgba(6, 14, 16, .42) 45%, rgba(6, 14, 16, 0) 68%), linear-gradient(to bottom, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, .35)); }
+body.cover-only .intro::before { background: linear-gradient(to right, rgba(6, 14, 16, .66), rgba(6, 14, 16, .3) 45%, rgba(6, 14, 16, 0) 65%); }
+body.cover-only .cover-copy { margin-top: 0 !important; }
+.intro .hero.a { position: absolute; right: 0; top: 0; width: 1px; height: 1px; }
+.intro h1 { background: linear-gradient(100deg, #b8ffe6 0%, #ffffff 55%, #ffd0e2 100%); -webkit-background-clip: text; background-clip: text; }
+.intro .chip.p { background: rgba(143, 240, 208, .16); color: #dcfff2; border-color: rgba(143, 240, 208, .55); }
+.intro .cleared { color: #effff8; background: rgba(95, 224, 184, .2); border-color: rgba(143, 240, 208, .6); }
+.stage:has(.intro:not(.hidden)) :is(.dock, .push) { display: none !important; }
+
+@container (max-width: 620px) {
+  .dk .tx { display: none; }
+  .dk { padding: 0 .9cqw; }
+}
