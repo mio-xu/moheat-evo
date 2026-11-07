@@ -1,5 +1,5 @@
 {
- "_doc": "All ElevenLabs character voices. persona = the user's character brief (zh, shown on the audition page); description = Voice Design prompt (en); sample = Japanese audition text with eleven audio tags (100-1000 chars); compare = current takes (repo paths) shown next to the previews; voice_id = set by pick.py after the user confirms. Tools: audition.py / pick.py / tts.py in this folder. Sample must be at least 100 characters. Voice Design blocks prompts naming real people: describe historical figures as fictional characters.",
+ "_doc": "All ElevenLabs character voices. persona = the user's character brief (zh, shown on the audition page); description = Voice Design prompt (en); sample = Japanese audition text with eleven audio tags (100-1000 chars); compare = current takes (repo paths) shown next to the previews; voice_id = set by pick.py after the user confirms. Tools: audition.py / pick.py / tts.py in this folder. Sample must be at least 100 characters. Voice Design blocks prompts naming real people: describe historical figures as fictional characters; it also blocks stated child ages (describe a youthful, boyish anime-style voice instead).",
  "hinata": {
   "name": "陽向 Hinata",
   "demos": [
@@ -172,5 +172,49 @@
   "voice_id": "wrMX0OkmDIInpPC5f1Hx",
   "confirmed": "2026-11-08",
   "pick": "r1_c"
+ },
+ "kohaku": {
+  "name": "コハク Kohaku",
+  "demos": [
+   "all-ages/Demo10_CaveSpring"
+  ],
+  "persona": "引路的小狐狸（Q 版神社狐、红绳铃铛），正太音：可爱、活泼、有点胆小但很勇敢，陪你找秘密泉水（之前从 6 个正太音里选的猫使ビィ）",
+  "description": "A cute little fox spirit character in a family adventure game, with a high, clear, youthful and boyish anime-style voice. Bright, cheerful and curious, brave but a little timid in the dark; friendly, encouraging and full of wonder. Native Japanese speaker. Clean close-mic recording, no background noise.",
+  "sample": "[cheerful] こんばんは！ ぼく、きつねのコハク。 [shivers] さむいね…。まずは火をおこそう！ [excited] 火打ち石だ！ そろった！ いろりで火打ち石を打ってみて。 [whispers] そーっと、ふーってして。 [happy] ついた！ あったかーい！ [nervous] まっくら…。どっちに行こう。耳をすませて。水の音がするほうへ。",
+  "compare": [
+   "demos/all-ages/Demo10_CaveSpring/media/voice/intro1.m4a",
+   "demos/all-ages/Demo10_CaveSpring/media/voice/burning.m4a"
+  ],
+  "voice_id": null
+ },
+ "hana": {
+  "name": "ハナ おばあちゃん",
+  "demos": [
+   "healing/Demo15_FamilyCall",
+   "healing/Demo16_FamilyCall2"
+  ],
+  "persona": "外婆：乡下的可爱奶奶，话多、爱操心、温柔慈祥，说一点方言（〜じゃろ、〜けんね），笑声\"ふふふ\"",
+  "description": "A sweet, kind Japanese grandmother in her seventies living in the countryside, on the phone with her grandchild. Warm, soft, slightly aged and gently wavering voice; chatty, fussing and caring, full of affection, often giggling softly. Speaks a gentle rural dialect. Native Japanese speaker. Clean recording, no background noise.",
+  "sample": "[happy] はいはい、もしもし〜？ …あらまあ！ あんたかい！ まあまあ、元気にしとった？ ちゃんとごはん、食べとる？ [worried] まあ！ そりゃいけん！ 野菜も食べんさいよ。 [warmly] 巻いてみて？ …どう？ あったかいじゃろ？ [giggles] ふふふ、よかったぁ。夜なべして編んだかいがあったわ。おばあちゃんも、だーいすきよ。",
+  "compare": [
+   "demos/healing/Demo15_FamilyCall/media/voice/g02.m4a",
+   "demos/healing/Demo15_FamilyCall/media/voice/g12.m4a"
+  ],
+  "voice_id": null
+ },
+ "gen": {
+  "name": "ゲン じいちゃん",
+  "demos": [
+   "healing/Demo15_FamilyCall",
+   "healing/Demo16_FamilyCall2"
+  ],
+  "persona": "外公：笨拙、嘴硬、爱抢电话的可爱爷爷，大嗓门、豪爽地\"わっはっは\"笑，其实很想孙子，说乡下方言（〜じゃ、〜けえ）",
+  "description": "A lovable, clumsy, stubborn Japanese grandfather in his seventies living in the countryside, grabbing the phone to talk to his grandchild. Gruff, loud, slightly hoarse old man's voice with a big hearty laugh; blunt and boastful but secretly soft-hearted and shy about showing it. Speaks a rural dialect. Native Japanese speaker. Clean recording, no background noise.",
+  "sample": "[surprised] なにぃ？ 孫じゃと！？ [excited] もしもし！ じいちゃんだぞ！ 元気か！ そっちは寒いか？ こっちはな、今朝から雪じゃ。 [proudly] とけとらん！ クール便じゃけえ！ …どうじゃ、つめたかろう！ [laughs heartily] わっはっは！ [shy] …で、お正月は帰ってくるんか？ …ばあさんから切れ。",
+  "compare": [
+   "demos/healing/Demo15_FamilyCall/media/voice/p01.m4a",
+   "demos/healing/Demo15_FamilyCall/media/voice/p08b.m4a"
+  ],
+  "voice_id": null
  }
 }
