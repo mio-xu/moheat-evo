@@ -1,0 +1,479 @@
+{
+  "count": 37,
+  "expected_count": 37,
+  "newly_generated": 36,
+  "reused_existing": 1,
+  "all_dimensions_ok": true,
+  "all_transparency_ok": true,
+  "integration_status": "Source pack only; not installed in player. Chroma key, geometry alignment and animated seam review remain before integration.",
+  "assets": [
+    {
+      "path": "ice_fire/fx_icicle.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "feff774ae537931ced07774b5af47c2f8246629780d47e4ab09a04d1a9fb4efc",
+      "fully_transparent_fraction": 0.0345
+    },
+    {
+      "path": "ice_fire/fx_lava_bubble.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "dc60bc2d22506262f318f11d8d992dd816841c11d90430658345776833a30ef8",
+      "fully_transparent_fraction": 0.5312
+    },
+    {
+      "path": "ice_fire/fx_steam.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "11177745125ec9cce29d9138b27e379beb35a0a1b1aef6b48a8d274d870739f1",
+      "fully_transparent_fraction": 0.6643
+    },
+    {
+      "path": "ice_fire/tunnel_ice_wall.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "dimensions_ok": true,
+      "alpha_expected": false,
+      "transparency_ok": true,
+      "sha256": "0786b0e2b43d0a15d36d3efb5caabd67f62362170332053ce4e6f8316aafec03"
+    },
+    {
+      "path": "ice_fire/tunnel_lava_wall.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "dimensions_ok": true,
+      "alpha_expected": false,
+      "transparency_ok": true,
+      "sha256": "5e2bdafbc2ad2519e4ce3c012fd75fd8070273e1603f25e2e3dc67beb0c23417"
+    },
+    {
+      "path": "rainforest/fx_lightning.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "e124436dc3482cd382f4ef3d41ca64e8b005df68b286ea5295d5416bdd19fa73",
+      "fully_transparent_fraction": 0.7343
+    },
+    {
+      "path": "rainforest/fx_tropical_leaf.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "16da34d6c7ecd8389b824db6d5cdd225d470026031628d5db37af0f0df3b41b9",
+      "fully_transparent_fraction": 0.5984
+    },
+    {
+      "path": "rainforest/raindrops_overlay.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "19884056de23acb1e52ea4312988a95e2262e8f7714f37dfe023437a592c6188",
+      "fully_transparent_fraction": 0.2659
+    },
+    {
+      "path": "rainforest/rainforest_far.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "dimensions_ok": true,
+      "alpha_expected": false,
+      "transparency_ok": true,
+      "sha256": "90cb4ac23025eafdb35655c7871973bf15e195afa342858594e99457e7f81fed"
+    },
+    {
+      "path": "rainforest/rainforest_mid.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "4ff9b9f82cdb2959467c9db063cc1e955dad553812bb4085bc6b87a5a0aaadcc",
+      "fully_transparent_fraction": 0.3379
+    },
+    {
+      "path": "rainforest/rainforest_near.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "ee05fd089aefd5428d363054f9d433f0c96602eef3fbb8b1ec0f2c4efcb17887",
+      "fully_transparent_fraction": 0.8339
+    },
+    {
+      "path": "rainforest/rainforest_storm_far.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "dimensions_ok": true,
+      "alpha_expected": false,
+      "transparency_ok": true,
+      "sha256": "7830f478d3af40fa741d5c24d9ad81ef5a15c9d4bbcc1ae4eda50b1a8804fe5c"
+    },
+    {
+      "path": "seasonal_chaos/fog_overlay.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "d5b8679bddfa2cb9687f7df493ae4524e5e660dac5d6a27fbd2bdba1f8b02466",
+      "fully_transparent_fraction": 0.2216
+    },
+    {
+      "path": "seasonal_chaos/fx_season_swirl.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "fab08db0de64779f232549ffac9391f7d5a3f199376a4bbbcb290ae4ad250ea0",
+      "fully_transparent_fraction": 0.3188
+    },
+    {
+      "path": "seasonal_chaos/night_aurora_far.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "dimensions_ok": true,
+      "alpha_expected": false,
+      "transparency_ok": true,
+      "sha256": "b44fb1a0874301e150158c83173d7793a7cee74162eb3ab6f45f7633e2617d52"
+    },
+    {
+      "path": "spring/fx_sakura_petal.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "0f76bc919bccf2cee2992694156b4b4835041632df2b5faf0840ef37a503f11d",
+      "fully_transparent_fraction": 0.7409
+    },
+    {
+      "path": "spring/spring_far.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "dimensions_ok": true,
+      "alpha_expected": false,
+      "transparency_ok": true,
+      "sha256": "5537dd6eca1e9b1aa6a2680ba65b1b6fc4c00ad045444236a103844c5012dabc"
+    },
+    {
+      "path": "spring/spring_mid.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "754c6f8ca81a7fb3a73a4fd6345650600914229a9db7f64f791d3f62def36015",
+      "fully_transparent_fraction": 0.4413
+    },
+    {
+      "path": "spring/spring_near.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "3d1640b7075e1199df8caab4ef990a26244c9af1ce7c1c3910aa96405c2beb96",
+      "fully_transparent_fraction": 0.8935
+    },
+    {
+      "path": "spring/spring_station.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "dimensions_ok": true,
+      "alpha_expected": false,
+      "transparency_ok": true,
+      "sha256": "d8a4c1b85980b938497a2d7a3dfb3353e86871a4f28a4acb1fb350f876f4da76"
+    },
+    {
+      "path": "summer/fx_sun_glare.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "0b77becfb4d4f713f929f5c9440837d7cee7446c77e026375fae67eeb5ed2fc5",
+      "fully_transparent_fraction": 0.2069
+    },
+    {
+      "path": "summer/heat_haze_overlay.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "b26190a4b73b86b6e8e6db20cb0f99a45987d4743de13a84cb789d987b8249ce",
+      "fully_transparent_fraction": 0.2256
+    },
+    {
+      "path": "summer/summer_far.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "dimensions_ok": true,
+      "alpha_expected": false,
+      "transparency_ok": true,
+      "sha256": "7f960b41772c04cffcdea36388fbd49938d7c8c68d46c4d23e2f21829524b5bf"
+    },
+    {
+      "path": "summer/summer_mid.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "558fa566e78951a47fdd3dec6a0f3c2820deed1ac37870109e6bcf8821c55af6",
+      "fully_transparent_fraction": 0.4138
+    },
+    {
+      "path": "summer/summer_near.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "8ee878cb9e006a4f0d6877b6c3de5fd8784039ea83f69e4eff6f8d4488595e61",
+      "fully_transparent_fraction": 0.8728
+    },
+    {
+      "path": "train_interior/clock_face.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "a600a142345b76a1bd6b1f1d9275e0d438a6b93b3757caf16ce829513501a867",
+      "fully_transparent_fraction": 0.4324
+    },
+    {
+      "path": "train_interior/lamp.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "ce74f42efb489e0e4559bef2d5b18f16b49453dabaa1e48fef6b60ec38d5d62d",
+      "fully_transparent_fraction": 0.655
+    },
+    {
+      "path": "train_interior/table_props.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "8cc0b8719afdcdfd3a4c5d79b084e65f3aeeb85311f647c6c1403f3166cc9769",
+      "fully_transparent_fraction": 0.6906
+    },
+    {
+      "path": "train_interior/train_interior_day.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "dimensions_ok": true,
+      "alpha_expected": false,
+      "transparency_ok": true,
+      "sha256": "a99f96f638a4cc7a1062c8bc8bbde68191c1439393a3fe011ae06dfa65b6350e"
+    },
+    {
+      "path": "train_interior/train_interior_dusk.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "dimensions_ok": true,
+      "alpha_expected": false,
+      "transparency_ok": true,
+      "sha256": "afd1fa97d0762e778bf0a077b401bf88ace500e3f45052b3600720e0553c16f7"
+    },
+    {
+      "path": "train_interior/train_interior_master.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "dimensions_ok": true,
+      "alpha_expected": false,
+      "transparency_ok": true,
+      "sha256": "90bdbccc4ef40b85d2169da498fd00984f2e521297b58cbf0f8663d2b9c7b663"
+    },
+    {
+      "path": "train_interior/train_interior_night.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "dimensions_ok": true,
+      "alpha_expected": false,
+      "transparency_ok": true,
+      "sha256": "34fa51e69fae1fd910c0f769e383952f7746fd39cb85e98c1526e8204acd5062"
+    },
+    {
+      "path": "winter/frost_corner.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "cf5d8370f34cb16c9aa826ae4be6587284b0549a14d7dcd95f5dab1a6c1af0c0",
+      "fully_transparent_fraction": 0.8328
+    },
+    {
+      "path": "winter/frost_overlay.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "0b49abd185c192da55c74eda8804281a8afde5a79da6613329d0238ef78626f0",
+      "fully_transparent_fraction": 0.1561
+    },
+    {
+      "path": "winter/winter_far.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "dimensions_ok": true,
+      "alpha_expected": false,
+      "transparency_ok": true,
+      "sha256": "5fef2b9b7b143bf2e2e9136c1bbc991af0abb578016fe4edf33522b6171e9b85"
+    },
+    {
+      "path": "winter/winter_mid.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "0df109fde72fa2cac9bee330d904257371bee2b68b146ec7b815b4615fe28fcb",
+      "fully_transparent_fraction": 0.4107
+    },
+    {
+      "path": "winter/winter_near.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "dimensions_ok": true,
+      "alpha_expected": true,
+      "transparency_ok": true,
+      "sha256": "f9231e1447e70b134e7f0d175b1340fad040933bc00a7348b8ed26925e3a45d6",
+      "fully_transparent_fraction": 0.916
+    }
+  ]
+}
