@@ -8,8 +8,8 @@ demos/Demo3_ShiningSmileConcert/assets/music_original/*.mp3
 demos/Demo3_ShiningSmileConcert/audio/
 demos/Demo3_ShiningSmileConcert/video/
 demos/Demo3_ShiningSmileConcert/assets/music_edited/*.wav
-demos/Demo4_SengokuBanquet/audio/
-demos/Demo4_SengokuBanquet/video/
-demos/Demo5_SeasonsExpress/audio/
-demos/Demo5_SeasonsExpress/video/
-demos/Demo5_SeasonsExpress/project/art_render/
+demos/Demo5_SengokuBanquet/audio/
+demos/Demo5_SengokuBanquet/video/
+demos/Demo4_SeasonsExpress/audio/
+demos/Demo4_SeasonsExpress/video/
+demos/Demo4_SeasonsExpress/project/art_render/

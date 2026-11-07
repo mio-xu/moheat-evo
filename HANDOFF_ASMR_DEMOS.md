@@ -1,7 +1,7 @@
 # MoHeat Evo — 冷热触觉 ASMR Demo 系列：交接文档 / Handoff
 
 > 写给接手的 agent（Claude Code、Codex 等）和项目负责人。**先读完"必须遵守的约定"再动手。**
-> 最后更新：2026-11-07。状态：Demo 1/2/3/4 已完成（Demo 4 可选补 3 张道具图）；Demo 5 已完成（程序绘制美术、16 条合成音轨、冷热 CSV、同步报告、播放器、MP4）。
+> 最后更新：2026-11-07（Demo 4 / Demo 5 已按用户要求互换编号：四季列车 = Demo 4，安土酒宴 = Demo 5）。状态：Demo 1–5 全部完成。Demo 4（四季列车）：程序绘制美术、16 条合成音轨、冷热 CSV、同步报告、播放器、MP4；Demo 5（安土酒宴）可选补 3 张道具图。
 
 ---
 
@@ -11,7 +11,7 @@
 |---|---|
 | **用中文和用户沟通** | 代码、commit message、站点英文文案可以用英文 |
 | **字幕只用日语 + 英文** | 适用于 Demo 2 及之后所有 Demo。播放器字幕、MP4 内嵌字幕、场景标题、封面都**不要中文**。内部文档可以保留中文列 |
-| **Seedance 只在用户要求时用** | Demo 1–4：浏览器动画渲染出的 MP4 就是正式成品。Demo 5：用户（2026-11-07）想要更精致、有穿梭感的画面，要求给 Seedance 提示词；clip 到位之前浏览器 MP4 仍是现行成品 |
+| **Seedance 只在用户要求时用** | Demo 1–3 和 Demo 5：浏览器动画渲染出的 MP4 就是正式成品。Demo 4（四季列车）：用户（2026-11-07）想要更精致、有穿梭感的画面，要求给 Seedance 提示词；clip 到位之前浏览器 MP4 仍是现行成品 |
 | **美术素材由用户用 ChatGPT 生成** | 我们写"ChatGPT 素材命令.md"（文件名、提示词、优先级、放哪个文件夹），用户生成后放进指定文件夹。差分图必须"编辑上一张图"生成，保证构图一致 |
 | **不修改、不覆盖之前的 Demo** | 新 Demo 复用旧素材用**符号链接/只读引用**，复用旧代码用**按路径 import**（见各 Demo 的 `demo1.py`）|
 | **每次改动自动 commit 并 push 到 `origin main`** | 这是 GitHub Pages 站点仓库（`moheat-evo.github.io`），push 即公开。大文件（WAV/MP4/原始音乐）已在 `.gitignore` 中排除 |
@@ -31,8 +31,8 @@ arduino/MoHeatEvoArduino.ino             ESP32 固件（.gitignore 排除，仅�
 demos/Demo1_SnowFoxfire/                 Demo 1《雪と狐火のひそひそ話》（原 `ASMR Demo/`）
 demos/Demo2_FanMeeting/                  Demo 2《キミだけのスペシャルファンミーティング》（原 `ASMR Demo 2/`）
 demos/Demo3_ShiningSmileConcert/         Demo 3《Shining Smile Melody — Ice & Fire Concert》
-demos/Demo4_SengokuBanquet/              Demo 4《安土最後の酒宴》
-demos/Demo5_SeasonsExpress/              Demo 5《四季暴走列車 / The Runaway Seasons Express》（原 `Demo_SeasonsExpress/`）
+demos/Demo4_SeasonsExpress/              Demo 4《四季暴走列車 / The Runaway Seasons Express》（原 `Demo_SeasonsExpress/`）
+demos/Demo5_SengokuBanquet/              Demo 5《安土最後の酒宴》
 HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
 ```
@@ -52,7 +52,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 | Swift | `/usr/bin/swift`，`demos/Demo1_SnowFoxfire/tools/lift_subject.swift` 用 macOS Vision 抠图（素材是绿底时可用）|
 | **VOICEVOX 引擎** | 0.26.1，`~/VOICEVOX-engine/engine`（3.9 GB，不在仓库里）。**agent 不能自己启动下载的二进制**（权限拦截），需要用户双击 `demos/Demo1_SnowFoxfire/start_voicevox.command`。端口 `http://127.0.0.1:50021`。检查：`curl -s http://127.0.0.1:50021/version` |
 | 本地预览服务器 | 在仓库根目录 `python3 -m http.server 8765`，然后打开 `http://localhost:8765/demos/<Demo 文件夹>/`。各 Demo 的 `start_demo.command` 会自动做这件事 |
-| MP4 渲染端口 | Demo 1: 8766，Demo 2: 8767，Demo 3: 8768，Demo 4: 8769，Demo 5: 8770（`render_mp4.py` 自带服务器）|
+| MP4 渲染端口 | Demo 1: 8766，Demo 2: 8767，Demo 3: 8768，Demo 5: 8769，Demo 4: 8770（`render_mp4.py` 自带服务器）|
 
 ---
 
@@ -101,43 +101,10 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 重建命令见 `README.md`；成品 `video/final/final_concert_150s.mp4`、`audio/final/final_stereo_150s.wav`（本地）。
 - 无歌词字幕（没有授权的歌词文本），只有段落标题（日/英）和片尾音乐署名。
 
-### Demo 4 · `demos/Demo4_SengokuBanquet/` ✅ 完成 —《安土最後の酒宴 / The Last Banquet at Azuchi》
-- **方向**：以 `demo4.jpg` 设定板为准，**B 细密浮世绘·金箔装饰风**、写实成年人比例（Q 版已淘汰，见 `project/discarded_chibi_drafts/`）。
-- **角色与冷热**：織田信長坐左前方 → 他的声音主要驱动 **L_Heat**；徳川家康坐右前方 → **R_Heat**。冷感来自风/雨/冰镇等环境（按设定板：冷气、风、雨；热：火焰、热酒蒸汽、炭火）。
-- **已有素材**（用户仍在陆续生成，开工前先 `ls assets/*/` 确认）：`assets/characters/N_Character.png`、`I_Character.png`、`N_bust_base.png`、`I_bust_base.png`、`N_ear.png`、`I_ear.png`；`assets/stage/banquet_bg.png`。
-- **素材命令**：`ChatGPT素材命令.md`（已更新为浮世绘金箔风，含设定板追加的道具/场景/特效）。还缺：信长其余口型与表情、家康全部半身/表情、贴耳特写、动作、道具、风雨夜背景、特效。
-- **配音（用户的 Demo 4 配音要求要点）**：
-  - 必须有情感，不能是平淡机械的 TTS。每个角色全片只用一个声线。
-  - 每句台词要定义：说话人、情绪、语气、空间位置、对谁说。尽量生成多个候选，挑最自然的。
-  - 信长：低沉、有威严、有魅力，会豪爽大笑，也会低声说话。家康：中低音、温和沉稳，语气更柔。
-  - 先生成自然的表演，再调整时间轴、动画和环境音来配合，总长严格 150 s。允许停顿、呼吸、轻笑，必要时可以对话重叠。
-  - 不能只靠音量制造近距离感，要用 HRTF、距离衰减、直达声/混响比；靠近耳朵时，动作、朝向、声音位置、音量、热感要同步。
-  - 热感用各角色独立的干声轨计算 RMS：大笑最热，普通说话中等，轻声弱但能感觉到。
-  - QA 检查项：两个声音能区分、发音自然、情绪对、没有切音、口型对、位置对、热感和语音能量一致。
-- **配音试听已生成**：`audio/audition/`（本地，`scripts/voice_audition.py` 可重建，需 VOICEVOX）。候选：
-  - 信長：**青山龍星**（低沉；有熱血/喜び/しっとり/囁き 等 7 种风格，首选）、玄野武宏、剣崎雌雄、麒ヶ島宗麟、離途。
-  - 家康：雀松朱司、麒ヶ島宗麟、玄野武宏、青山龍星（しっとり/囁き）、暁記ミタマ（有ささやき）、黒沢冴白。
-  - 用户反馈（2026-11-07）：家康选 **黒沢冴白**，但要更苍老；信长在 **青山龍星 / 玄野武宏** 之间，旧版笑声不自然；两人的声音都要贴合历史人设。
-  - v2 人设试听：`scripts/voice_personas.py` → `audio/audition/v2/`。人设参数（音高、语速、胸腔共鸣、沙哑颗粒、暗化、轻微颤音）都在 `PERSONAS` 里。笑声改为逐 mora 合成：「はっはっは」音高逐个下降，加促音停顿和呼气声。家康有 3 档苍老程度（年長 / 更年長 / 老成）。
-  - **信長 = 青山龍星（已选定，v2/v3 人设参数）**。
-  - 家康在 v2 里仍然"太高"。v3 先把 VOICEVOX 音高压到 −0.1，再做合成后变调（`shift()`：ffmpeg asetrate + atempo，语速不变、共鸣也变低沉），做了 −2 / −3.5 / −5 半音三档，平均音高约 104 / 96 / 88 Hz（信长约 107 Hz）。
-  - **家康 = 黒沢冴白「低沈-2」（已选定）**：VOICEVOX pitch −0.1、合成后 −2 半音、语速 ×0.88、胸腔 +5 dB、轻微颤音。
-  - 用户又反馈"信长不够低"：v4 做了青山龍星降 1.5 / 3 / 4.5 半音三档，**用户选定 −1.5 档**（VOICEVOX pitch −0.06、合成后 −1.5 半音、胸腔 +5 dB、沙哑颗粒 0.24）。
-  - **最终声线已锁定**：`scripts/voice_personas.py` 的 `FINAL = {"N": "信長_青山龍星_低沈-1.5", "I": "家康_黒沢冴白_低沈-2"}`；正式配音直接用这两个 `PERSONAS` 参数和 `laugh()`。
-- **已完成（2026-11-07）**：
-  - 素材检查：第 1–4 优先、4 道具、2 背景、3 特效齐全；6 张差分的暗色背景残留由 `prepare_art.py`（base 透明遮罩）自动清除。设定板追加的 12 张未生成，播放器用程序绘制的火焰/蒸汽/冷气/风/雨/金箔代替；若用户补 `prop_brazier` / `prop_ice_bucket` / `prop_hot_sake`，播放器自动换用。
-  - 剧本与时间轴 `scripts/banquet.py`（6 场景、30 句；每句含说话人、情绪、语气、位置、对谁说）→ `storyboard/script_150s.md`（`scripts/docs.py` 生成）。
-  - 配音 `scripts/voice.py`：锁定声线，每句 3 个 take 在 `audio/takes/`，`TAKE` 字典选用；先生成表演再按实际长度排时间轴。
-  - 音频 `scripts/build_audio.py`：两人干声、热酒蒸汽/炭火（热）、冰镇/风/雨（冷）、琴、铃虫、雷 → HRTF 双耳 → `audio/final/mix_48k.wav`（-18 LUFS）。
-  - 冷热 `scripts/thermal.py`：信长声 → L_Heat、家康声 → R_Heat（同一人一个响度标尺：大笑 > 说话 > 耳语），环境冷热按各自位置；同侧冲突 0、左右反温 19 次、左右切换 16 次。
-  - 播放器 `index.html / demo.js / demo.css`，封面 `media/cover.jpg`，渲染 `scripts/render_mp4.py`（端口 8769）→ `video/final/final_banquet_150s.mp4`（本地）。
-  - QA `scripts/check_sync.py` → `analysis/qa_report.json` 全部通过。一键重建 `./build_all.sh`。
-- **可选后续**：用户试听 `audio/takes/` 后换 take；补 3 张道具图后重跑 build + 渲染。
-
-### Demo 5 · `demos/Demo5_SeasonsExpress/` ✅ 完成 —《四季暴走列車 / The Runaway Seasons Express》
+### Demo 4 · `demos/Demo4_SeasonsExpress/` ✅ 完成 —《四季暴走列車 / The Runaway Seasons Express》
 - **任务书要点**（用户提供的完整制作指令）：
   - 150 s，1920×1080，30 fps，48 kHz 双耳声。第一人称坐在魔法列车车厢里朝前看，**无角色、无台词、无旁白**。
-  - 画风必须和 Demo 1–3 一致：可爱日系 2D、粉彩、赛璐璐。**不要浮世绘或金箔风**（那是 Demo 4 的风格）。
+  - 画风必须和 Demo 1–3 一致：可爱日系 2D、粉彩、赛璐璐。**不要浮世绘或金箔风**（那是 Demo 5 的风格）。
   - 车厢全程不变，只变左右两扇窗外的季节。
   - 时间轴：
     - 0–20 冬（左冷）
@@ -165,10 +132,10 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
     - `scripts/export.py` → `media/`；`scripts/render_mp4.py`（端口 8770）→ `video/final/final_seasons_express_150s.mp4`；`--at 10,30` 只渲染预览静帧。
     - 封面：`?cover=1` 截图 → `media/cover.jpg`（cover 模式不跑动画循环，headless 截图才不会卡住）。
   - **成品**：`video/final/final_seasons_express_150s.mp4`（本地，98 MB）：1920×1080、30 fps、4500 帧、48 kHz 双耳声，音画都是 150.000 s，内嵌封面。
-  - **文件夹整理**：已从根目录 `Demo_SeasonsExpress/` 移到 `demos/Demo5_SeasonsExpress/`，根目录的临时兼容链接（`ASMR Demo`、`ASMR Demo 2`、`Demo3_ShiningSmileConcert`）已删除。
+  - **文件夹整理**：已从根目录 `Demo_SeasonsExpress/` 移到 `demos/Demo4_SeasonsExpress/`，根目录的临时兼容链接（`ASMR Demo`、`ASMR Demo 2`、`Demo3_ShiningSmileConcert`）已删除。
     - `scripts/demo1.py` 会向上找到含 `device.js` 的仓库根，再在 `demos/` 或旧路径里找 Demo 1/2/3，所以以后再移动也能用。
     - 复用特效链接：`assets/reused_assets/*.png → ../../../Demo3_ShiningSmileConcert/assets/effects/`。
-    - 官网菜单已加第 5 项（`assets/images/demos/demo5.jpg`）。
+    - 官网菜单已加第 5 项（`assets/images/demos/demo4.jpg`）。
   - **用户反馈修改（2026-11-07）**：
     - **封面看起来像中文**：标题「四季暴走列車」全是汉字。现在日语用带假名的「季節が、暴走する。」，英文 *THE RUNAWAY SEASONS EXPRESS* 做大标题（冰蓝→火橙渐变）；结尾卡改为「終点・さくら駅」，场景名改为「春のさくら駅」。**以后日语标题一定要有假名**，避免被看成中文。
     - **冲击力不够**：封面背景改用 68 s 的冰火隧道帧（左冰右火，`scripts/make_cover.py`），加强冷暖对比光、速度线和粗体斜体大字。
@@ -185,12 +152,45 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
     - **乱季每 2 s 切换**：`seasons.py` 的 `CHAOS_FILM` 表直接按成片时间生成乱季段的音源包络、方位、蒸汽和打雷，同一个声音不会在相邻两格里跳到另一侧。
     - **前段节奏**：各音源都有 2–3 s 的阵风或脉冲（`PULSE`），阳光有云影明暗，冬天整片暴风雪（风、雪、冰）每 2–3 s 左右扫一次，夏风两次扫到左边。窗外天气的浓淡跟着对应音源的包络变化（demo.js 的 `gust()`）。
     - **冷热算法**：改为同一侧、同一种冷或热的音源能量先相加，再整体换算成强度（参考电平取 99.5 百分位、动态范围 30 dB、曲线 1.5、峰值 0.95）。原来是每个音源各自归一化后相加，几个音源一叠就顶在 0.8，没有强弱。春风功率权重 0.05。
-    - **标题页**：和 Demo 1–4 统一（Demo 1 的居中版式；Zen Maru 圆体日语大标题「季節が暴走する／魔法の列車」、英文副标题、日英双语冷暖胶囊标签）。背景用 68 s 的冰火隧道帧，左冰右火代替 Demo 1 两侧的角色。
+    - **标题页**：和其他 Demo 统一（Demo 1 的居中版式；Zen Maru 圆体日语大标题「季節が暴走する／魔法の列車」、英文副标题、日英双语冷暖胶囊标签）。背景用 68 s 的冰火隧道帧，左冰右火代替 Demo 1 两侧的角色。
   - **Seedance 暂停**：用户说"先不管 Seedance"。`Seedance素材命令.md` 和 `project/seedance_refs/` 还是旧的大车窗版本，以后要用时需要按全景车厢重新生成首帧图，并把提示词里的 "two huge panoramic side windows" 改掉。
   - **Seedance（用户要求，2026-11-07，已暂停）**：`Seedance素材命令.md` 里有 15 个图生视频镜头（S01–S15，每个 ≤10 s，熄灯段 107.5–111.5 s 不生成）。内容包括通用提示词、负面提示词、每个镜头左右窗的季节和事件时间，都与 `seasons.py` 一致。
     - 首帧和尾帧图：`scripts/make_seedance_refs.py` → `project/seedance_refs/S##_{start,end}.jpg`（播放器 `?clean=1` 干净渲染，`render_mp4.py --at … --clean`）。
     - 用户把生成的视频放进 `video/seedance/S01.mp4` … `S15.mp4` 之后：**下一步**写合成脚本，按时间轴剪辑和调速（24→30 fps），叠加 0–1.8 s 封面、场景标题、熄灯黑场和结尾卡，再与 `audio/final/final_binaural_150s.wav` 合成。冷热 CSV 不变。还要检查每个 clip 的左右季节是否画反。
   - **以后可选**：如果 ChatGPT 有额度，可按 `ChatGPT素材命令.md` 生成同名文件替换程序绘制的图，然后运行 `export.py` 和 `render_mp4.py`。
+
+### Demo 5 · `demos/Demo5_SengokuBanquet/` ✅ 完成 —《安土最後の酒宴 / The Last Banquet at Azuchi》
+- **方向**：以 `demo5.jpg` 设定板为准，**B 细密浮世绘·金箔装饰风**、写实成年人比例（Q 版已淘汰，见 `project/discarded_chibi_drafts/`）。
+- **角色与冷热**：織田信長坐左前方 → 他的声音主要驱动 **L_Heat**；徳川家康坐右前方 → **R_Heat**。冷感来自风/雨/冰镇等环境（按设定板：冷气、风、雨；热：火焰、热酒蒸汽、炭火）。
+- **已有素材**（用户仍在陆续生成，开工前先 `ls assets/*/` 确认）：`assets/characters/N_Character.png`、`I_Character.png`、`N_bust_base.png`、`I_bust_base.png`、`N_ear.png`、`I_ear.png`；`assets/stage/banquet_bg.png`。
+- **素材命令**：`ChatGPT素材命令.md`（已更新为浮世绘金箔风，含设定板追加的道具/场景/特效）。还缺：信长其余口型与表情、家康全部半身/表情、贴耳特写、动作、道具、风雨夜背景、特效。
+- **配音（用户的 Demo 5 配音要求要点）**：
+  - 必须有情感，不能是平淡机械的 TTS。每个角色全片只用一个声线。
+  - 每句台词要定义：说话人、情绪、语气、空间位置、对谁说。尽量生成多个候选，挑最自然的。
+  - 信长：低沉、有威严、有魅力，会豪爽大笑，也会低声说话。家康：中低音、温和沉稳，语气更柔。
+  - 先生成自然的表演，再调整时间轴、动画和环境音来配合，总长严格 150 s。允许停顿、呼吸、轻笑，必要时可以对话重叠。
+  - 不能只靠音量制造近距离感，要用 HRTF、距离衰减、直达声/混响比；靠近耳朵时，动作、朝向、声音位置、音量、热感要同步。
+  - 热感用各角色独立的干声轨计算 RMS：大笑最热，普通说话中等，轻声弱但能感觉到。
+  - QA 检查项：两个声音能区分、发音自然、情绪对、没有切音、口型对、位置对、热感和语音能量一致。
+- **配音试听已生成**：`audio/audition/`（本地，`scripts/voice_audition.py` 可重建，需 VOICEVOX）。候选：
+  - 信長：**青山龍星**（低沉；有熱血/喜び/しっとり/囁き 等 7 种风格，首选）、玄野武宏、剣崎雌雄、麒ヶ島宗麟、離途。
+  - 家康：雀松朱司、麒ヶ島宗麟、玄野武宏、青山龍星（しっとり/囁き）、暁記ミタマ（有ささやき）、黒沢冴白。
+  - 用户反馈（2026-11-07）：家康选 **黒沢冴白**，但要更苍老；信长在 **青山龍星 / 玄野武宏** 之间，旧版笑声不自然；两人的声音都要贴合历史人设。
+  - v2 人设试听：`scripts/voice_personas.py` → `audio/audition/v2/`。人设参数（音高、语速、胸腔共鸣、沙哑颗粒、暗化、轻微颤音）都在 `PERSONAS` 里。笑声改为逐 mora 合成：「はっはっは」音高逐个下降，加促音停顿和呼气声。家康有 3 档苍老程度（年長 / 更年長 / 老成）。
+  - **信長 = 青山龍星（已选定，v2/v3 人设参数）**。
+  - 家康在 v2 里仍然"太高"。v3 先把 VOICEVOX 音高压到 −0.1，再做合成后变调（`shift()`：ffmpeg asetrate + atempo，语速不变、共鸣也变低沉），做了 −2 / −3.5 / −5 半音三档，平均音高约 104 / 96 / 88 Hz（信长约 107 Hz）。
+  - **家康 = 黒沢冴白「低沈-2」（已选定）**：VOICEVOX pitch −0.1、合成后 −2 半音、语速 ×0.88、胸腔 +5 dB、轻微颤音。
+  - 用户又反馈"信长不够低"：v4 做了青山龍星降 1.5 / 3 / 4.5 半音三档，**用户选定 −1.5 档**（VOICEVOX pitch −0.06、合成后 −1.5 半音、胸腔 +5 dB、沙哑颗粒 0.24）。
+  - **最终声线已锁定**：`scripts/voice_personas.py` 的 `FINAL = {"N": "信長_青山龍星_低沈-1.5", "I": "家康_黒沢冴白_低沈-2"}`；正式配音直接用这两个 `PERSONAS` 参数和 `laugh()`。
+- **已完成（2026-11-07）**：
+  - 素材检查：第 1–4 优先、4 道具、2 背景、3 特效齐全；6 张差分的暗色背景残留由 `prepare_art.py`（base 透明遮罩）自动清除。设定板追加的 12 张未生成，播放器用程序绘制的火焰/蒸汽/冷气/风/雨/金箔代替；若用户补 `prop_brazier` / `prop_ice_bucket` / `prop_hot_sake`，播放器自动换用。
+  - 剧本与时间轴 `scripts/banquet.py`（6 场景、30 句；每句含说话人、情绪、语气、位置、对谁说）→ `storyboard/script_150s.md`（`scripts/docs.py` 生成）。
+  - 配音 `scripts/voice.py`：锁定声线，每句 3 个 take 在 `audio/takes/`，`TAKE` 字典选用；先生成表演再按实际长度排时间轴。
+  - 音频 `scripts/build_audio.py`：两人干声、热酒蒸汽/炭火（热）、冰镇/风/雨（冷）、琴、铃虫、雷 → HRTF 双耳 → `audio/final/mix_48k.wav`（-18 LUFS）。
+  - 冷热 `scripts/thermal.py`：信长声 → L_Heat、家康声 → R_Heat（同一人一个响度标尺：大笑 > 说话 > 耳语），环境冷热按各自位置；同侧冲突 0、左右反温 19 次、左右切换 16 次。
+  - 播放器 `index.html / demo.js / demo.css`，封面 `media/cover.jpg`，渲染 `scripts/render_mp4.py`（端口 8769）→ `video/final/final_banquet_150s.mp4`（本地）。
+  - QA `scripts/check_sync.py` → `analysis/qa_report.json` 全部通过。一键重建 `./build_all.sh`。
+- **可选后续**：用户试听 `audio/takes/` 后换 take；补 3 张道具图后重跑 build + 渲染。
 
 ---
 
@@ -202,8 +202,8 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 | `demos/Demo2_FanMeeting/output/final_1080p.mp4`、`mix_48k.wav`、`stems/`、`audition/` | ~640 MB | 同上 |
 | `demos/Demo3_ShiningSmileConcert/video/final/final_concert_150s.mp4`、`audio/` | ~410 MB | README 中的命令（不需要 VOICEVOX）|
 | `demos/Demo3_ShiningSmileConcert/assets/music_original/*.mp3`、`music_edited/*.wav` | 5 MB + 43 MB | 原曲需从 Pixabay 手动下载（Cloudflare 拦截自动下载）|
-| `demos/Demo4_SengokuBanquet/audio/`（选定声线试听、take 缓存、4 条干声 stem、mix）、`video/`（MP4、srt）| ~160 MB + ~520 MB | `./build_all.sh`（需 VOICEVOX）+ `scripts/render_mp4.py` |
-| `demos/Demo5_SeasonsExpress/audio/`（16 条干声、双耳 stem、混音）、`video/`（MP4、预览帧）| ~250 MB + ~100 MB | `scripts/build_audio.py` + `scripts/render_mp4.py`（不需要 VOICEVOX）|
+| `demos/Demo5_SengokuBanquet/audio/`（选定声线试听、take 缓存、4 条干声 stem、mix）、`video/`（MP4、srt）| ~160 MB + ~520 MB | `./build_all.sh`（需 VOICEVOX）+ `scripts/render_mp4.py` |
+| `demos/Demo4_SeasonsExpress/audio/`（16 条干声、双耳 stem、混音）、`video/`（MP4、预览帧）| ~250 MB + ~100 MB | `scripts/build_audio.py` + `scripts/render_mp4.py`（不需要 VOICEVOX）|
 | `~/VOICEVOX-engine/` | 3.9 GB | 官方 release 0.26.1 macos-arm64 `.vvpp`（zip）解压 |
 
 ---
