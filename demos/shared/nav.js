@@ -11,8 +11,9 @@
     { dir: 'Demo7_KyotoIzakaya', ja: '信長と家康、京都の居酒屋へ', en: 'Two Warlords in a Kyoto Izakaya', group: 1, ep: 3 },
     { dir: 'Demo8_YamazakiDistillery', ja: '信長と家康、山崎蒸溜所へ', en: 'Two Warlords at the Yamazaki Distillery', group: 1, ep: 4 },
     { dir: 'Demo9_SengokuBanquet', ja: '安土最後の酒宴', en: 'The Last Banquet at Azuchi', group: 1, ep: 5 },
+    { dir: 'Demo10_CaveSpring', ja: '火をともして、ひみつの泉へ', en: 'Kindle the Fire, Find the Hidden Spring', group: 2 },
   ];
-  const GROUPS = ['Short stories', '信長シリーズ · Nobunaga Series'];   // numbers are the list order: insert a demo anywhere in DEMOS
+  const GROUPS = ['Short stories', '信長シリーズ · Nobunaga Series', 'Interactive game · なぞ解き'];   // numbers are the list order: insert a demo anywhere in DEMOS
   const qs = new URLSearchParams(location.search);
   if (qs.has('embed') || qs.has('cover') || qs.has('render')) return;
   const bar = document.querySelector('header.bar'); if (!bar) return;

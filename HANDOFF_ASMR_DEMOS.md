@@ -36,6 +36,7 @@ demos/Demo9_SengokuBanquet/              Demo 9《安土最後の酒宴》
 demos/Demo7_KyotoIzakaya/                Demo 7《信長と家康、京都の居酒屋へ》（完成）
 demos/Demo8_YamazakiDistillery/          Demo 8《信長と家康、山崎蒸溜所へ》（完成）
 demos/Demo5_GifuCastle/                   Demo 5《信長の岐阜城へようこそ》（完成）
+demos/Demo10_CaveSpring/                 纯交互解谜《火をともして、ひみつの泉へ》（可玩，等 Seedance 背景）
 HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
 ```
@@ -264,6 +265,14 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 场景顺序：山脚宫殿、庭院瀑布 → 登金华山顶看浓尾平原 → 信长亲手点茶、家康拿到冰室的冰 → 夜晚长良川鹈饲 → 送你一张盖了"天下布武"印的纸。画风和 Demo 9 一样（浮世绘金箔），11 个镜头 G01–G11。
 - 冷热亮点：鹈饲的篝火船从左划到右，热感跟着船从左耳移到右耳。冷：瀑布水雾、山顶大风（左→右）、冰室之冰、夜晚河风。
 - 印章文字后期叠加（AI 生成的字会变形）。其余流程和 Demo 7、8 相同。
+
+### Demo10_CaveSpring ✅ 可玩 —《火をともして、ひみつの泉へ》（纯交互解谜，2026-11-07）
+- 用户要求"纯交互的 demo、解谜：找火源、点亮、吹灭蜡烛、进山洞看到水"。**没有时间轴、没有 MP4**；声音在浏览器实时合成（Web Audio HRTF），冷热按同一方向实时计算，同侧冲突 0（`CAVE.conflicts()`）。
+- 流程：小屋（篮子里的枯草 + 抽屉里的火打石 → 囲炉裏打火 3 下 → 吹气让火种烧起来 → 手燭借火 → 出门）→ 洞口（4 支蜡烛：真火热、狐火冷，选中后耳朵分辨，吹灭 3 支狐火；吹灭真火就全部复燃）→ 洞穴岔路 ×2（跟着水声和凉风走；另一边闷热的死路，有蝙蝠）→ 地底泉（吹灭手燭，湖水发光，摸水一侧变凉）→ 结束回到封面、设备 `stop`。
+- 引路狐狸**コハク**：代码绘制（Q 版神社狐、红绳铃铛），台词气泡日 + 英，配音 **VOICEVOX:猫使ビィ ノーマル**（用户从 6 个正太音候选中选定，参数不改）。台词表 `lines.js`（第 3 列是 TTS 读音），`scripts/voice.py` → `media/voice/*.m4a`。
+- 画风同 Demo 1–4（粉彩赛璐璐）。现在全部由 `art.js` 代码绘制；用户说 ChatGPT 没额度，**素材全部用 Seedance**：`Seedance素材命令.md` 有 7 段 5 s 背景循环（构图参考图在 `project/layout_refs/`）。放进 `assets/video/<名>.mp4` 后播放器自动替换背景；到货后要重新测 `GEO`、去掉重复的代码火焰、压成 720p 再提交。
+- 麦克风只取音量；没有麦克风时长按 Blow 按钮或空格键。`?scene=gate|tunnel|spring` 跳关测试，`?cover=1` 封面，`?shot=<bg>` 干净背景。
+- 已加入 `nav.js`（第三组 "Interactive game"）和官网菜单（缩略图 `assets/images/demos/Demo10_CaveSpring.jpg`）。
 
 ## 6. 本地未提交的大文件（仅在本机，可用脚本重建）
 
