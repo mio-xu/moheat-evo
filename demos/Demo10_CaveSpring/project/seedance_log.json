@@ -18,5 +18,15 @@
    "/Users/jiayixu/Desktop/MoHeat Evo/demos/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
    "/Users/jiayixu/Desktop/MoHeat Evo/demos/Demo10_CaveSpring/assets/art/bg_hut_night.png"
   ]
+ },
+ "prop_gate_door": {
+  "variant": 1,
+  "generation": "api_4011bf972701745a78ed2592d0804ce1d3e1a5dc625815498bca1d29a2377362",
+  "idempotency_key": "moheat-d10-prop-gate-door-v1",
+  "ratio": "3:4",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/Demo10_CaveSpring/project/seedance_refs/prop_gate_door_ref.jpg"
+  ]
  }
 }

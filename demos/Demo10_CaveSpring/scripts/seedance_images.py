@@ -16,7 +16,8 @@ BASE = 'https://seedance2-5.com/api/v1'
 JOBS = os.path.join(ROOT, 'project', 'seedance_jobs.json')
 OUT = os.path.join(ROOT, 'assets', 'art')
 LOG = os.path.join(ROOT, 'project', 'seedance_log.json')
-MODEL, RES, MAX_COST = 'gpt-image-2', '2K', 60
+MODEL, MAX_COST = 'gpt-image-2', 60
+res_of = lambda name: '2K' if name.startswith('bg_') else '1K'   # backgrounds fill the 1920 canvas; sprites are shown at 250–500 px
 
 
 def key():
@@ -70,7 +71,7 @@ def run(job_id, job, ref2=None, again=False):
     print(f'[{job_id}] {name}: uploading {len(refs)} reference(s)')
     urls = upload(refs)
     body = {'model': MODEL, 'mode': 'image-to-image', 'prompt': job['prompt'], 'inputs': [{'type': 'image', 'url': u} for u in urls],
-            'parameters': {'resolution': RES, 'aspect_ratio': job['ratio']}, 'max_cost_credits': MAX_COST}
+            'parameters': {'resolution': res_of(name), 'aspect_ratio': job['ratio']}, 'max_cost_credits': MAX_COST}
     q = unwrap(call('POST', '/quotes', body)); print(f'  quote: {json.dumps(q)[:160]}')
     log = json.load(open(LOG)) if os.path.exists(LOG) else {}
     n = log.get(name, {}).get('variant', 1) + (1 if again else 0)
@@ -79,6 +80,10 @@ def run(job_id, job, ref2=None, again=False):
     gid = g['id']; print(f'  generation {gid} ({idem}) cost {g.get("credits")}')
     log[name] = {'variant': n, 'generation': gid, 'idempotency_key': idem, 'ratio': job['ratio'], 'refs': refs}
     json.dump(log, open(LOG, 'w'), indent=1, ensure_ascii=False)
+    return wait_save(gid, dst, job_id)
+
+
+def wait_save(gid, dst, job_id=''):
     while True:
         time.sleep(12)
         g = unwrap(call('GET', f'/generations/{gid}'))
@@ -92,6 +97,11 @@ def run(job_id, job, ref2=None, again=False):
 
 def main():
     args = sys.argv[1:]; again = '--again' in args
+    if '--fetch' in args:   # download already-submitted jobs from the log (no new charge)
+        log = json.load(open(LOG)); jobs = json.load(open(JOBS))
+        for i in [a for a in args if not a.startswith('--')]:
+            name = jobs[i]['name']; wait_save(log[name]['generation'], os.path.join(OUT, name + '.png'), i)
+        return
     ref2 = args[args.index('--ref2') + 1] if '--ref2' in args else None
     ids = [a for a in args if not a.startswith('--') and a != ref2]
     jobs = json.load(open(JOBS))
