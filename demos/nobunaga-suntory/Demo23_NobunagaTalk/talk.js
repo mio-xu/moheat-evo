@@ -1,0 +1,468 @@
+// 『信長と、語らう』 — a live, unscripted conversation with Nobunaga, Ieyasu, or both (three of you), in one of five places.
+// Brain: a text-only ElevenLabs agent (Claude) over a WebSocket; the prompt is built per session (scenes.js) and asks for lines
+// "N|position|[tag] せりふ|English". Ears: the browser's speech recognition (your words never leave except as text to the agent).
+// Voices: our own ElevenLabs TTS per line (server.py, eleven_v4, the confirmed cast voices) → each character's own HRTF panner, so
+// every voice comes from where he stands and warms that ear with its loudness (DUAL). They open the talk, wait for you after each
+// turn, walk around you (seat / near / ears / sides / window / behind), and close it themselves after about two minutes.
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const QS = new URLSearchParams(location.search);
+  const SND = window.TKAudio, T = window.TALK, W = 1920, H = 1080;
+  const cv = $('scene'), ctx = cv.getContext('2d');
+  const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v)), rnd = (a, b) => a + Math.random() * (b - a);
+  const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000));
+  const store = { get: (k, d) => { try { return JSON.parse(localStorage.getItem(`moheat.${k}`)) ?? d; } catch { return d; } }, set: (k, v) => { try { localStorage.setItem(`moheat.${k}`, JSON.stringify(v)); } catch {} } };
+
+  // ---------------------------------------------------------------- picker (cover)
+  const CASTS = [['N', '信長', 'Nobunaga'], ['I', '家康', 'Ieyasu'], ['NI', '三人で', 'all three']];
+  const LANGS = [['ja-JP', '日本語'], ['en-US', 'English'], ['zh-CN', '中文']];
+  const pick = { cast: store.get('talk.cast', 'N'), scene: store.get('talk.scene', 'gifu'), lang: store.get('talk.lang', 'ja-JP') };
+  if (!T.SCENES.find((s) => s.id === pick.scene)) pick.scene = 'gifu';
+  function picker() {
+    const opt = (k, v, ja, en) => `<button type="button" class="opt${pick[k] === v ? ' on' : ''}" data-k="${k}" data-v="${v}">${ja}${en ? `<small>${en}</small>` : ''}</button>`;
+    $('pickCast').innerHTML = CASTS.map(([v, ja, en]) => opt('cast', v, ja, en)).join('');
+    $('pickScene').innerHTML = T.SCENES.map((s) => opt('scene', s.id, s.ja, '')).join('');
+    $('pickLang').innerHTML = LANGS.map(([v, ja]) => opt('lang', v, ja, '')).join('');
+    document.querySelectorAll('.opt').forEach((b) => b.addEventListener('click', () => { pick[b.dataset.k] = b.dataset.v; store.set(`talk.${b.dataset.k}`, b.dataset.v); picker(); coverChars(); }));
+    $('posInfo').textContent = scene().ja;
+  }
+  const scene = () => T.SCENES.find((s) => s.id === pick.scene);
+
+  // ---------------------------------------------------------------- art (Demo 9's, by path) + backgrounds (Demo 5 / 7 / 8 / 9)
+  const IMG = {};
+  const load = (key, src) => IMG[key] || (IMG[key] = new Promise((res) => { const im = new Image(); im.onload = () => { IMG[key] = im; res(im); }; im.onerror = () => { IMG[key] = null; res(null); }; im.src = src; }));
+  const img = (key) => (IMG[key] instanceof Image ? IMG[key] : null);
+  const SPR = {
+    N: ['bust_base', 'bust_blink', 'bust_grin', 'bust_laugh', 'bust_mouth_half', 'bust_mouth_open', 'bust_proud', 'bust_surprise', 'bust_suspicious', 'bust_whisper', 'ear', 'ear_laugh', 'pose_invite', 'pose_stand'],
+    I: ['bust_base', 'bust_blink', 'bust_chuckle', 'bust_concern', 'bust_mouth_half', 'bust_mouth_open', 'bust_polite', 'bust_surprise', 'bust_thoughtful', 'bust_whisper', 'ear', 'ear_smile', 'pose_calm'],
+  };
+  const loadChar = (c) => Promise.all(SPR[c].map((n) => load(`${c}_${n}`, `${T.ART}${c}_${n}.webp`)));
+  const loadBg = (s) => Promise.all([load(s.bg, s.bg), s.bgGust ? load(s.bgGust, s.bgGust) : null]);
+  // tag → expression frame
+  const EXPR = {
+    N: { laughs: 'laugh', chuckles: 'grin', 'chuckles softly': 'grin', playful: 'grin', excited: 'laugh', whispers: 'whisper', curious: 'suspicious', serious: 'suspicious', proud: 'proud', surprised: 'surprise' },
+    I: { laughs: 'chuckle', chuckles: 'chuckle', 'chuckles softly': 'chuckle', playful: 'chuckle', excited: 'surprise', whispers: 'whisper', curious: 'thoughtful', serious: 'concern', sighs: 'concern', proud: 'polite', warmly: 'polite', softly: 'polite', surprised: 'surprise' },
+  };
+
+  // ---------------------------------------------------------------- where everyone is
+  function spot(c, key, cast) {   // → { az, dist }
+    const duo = cast.length > 1, base = duo ? (c === 'N' ? -.42 : .42) : 0, p = T.POS[key] || T.POS.seat;
+    if (key === 'seat') return { az: base, dist: 1.3 };
+    if (key === 'near') return { az: base * .45, dist: .55 };
+    if (key === 'window') return { az: base * .35 + .05, dist: 4 };
+    if (key === 'behind') return { az: duo ? (c === 'N' ? -2.7 : 2.7) : 2.7, dist: .9 };
+    return { az: p.az, dist: p.d };
+  }
+  // the picture for a position: kind (bust / ear / stand / far), screen box (centre x, bottom y, height), mirrored or not
+  function frame(c, key, az) {
+    const sx = (a, k) => W / 2 + Math.sin(a) * W * k;
+    switch (key) {
+      case 'near': return { kind: 'bust', x: sx(az, .55), y: H * 1.42, h: H * 1.5, z: .55 };
+      case 'left_ear': return { kind: 'ear', x: W * .13, y: H * 1.08, h: H * 1.55, flip: false, z: .12 };
+      case 'right_ear': return { kind: 'ear', x: W * .87, y: H * 1.08, h: H * 1.55, flip: true, z: .12 };
+      case 'left': return { kind: c === 'N' ? 'stand' : 'bust', x: W * .1, y: H * (c === 'N' ? 1.12 : 1.14), h: H * (c === 'N' ? 1.2 : 1.15), z: 1 };
+      case 'right': return { kind: c === 'N' ? 'stand' : 'bust', x: W * .9, y: H * (c === 'N' ? 1.12 : 1.14), h: H * (c === 'N' ? 1.2 : 1.15), flip: c === 'N', z: 1 };
+      case 'window': return { kind: 'far', x: sx(az, .9), y: H * .8, h: H * .5, z: 4 };
+      case 'behind': return { kind: 'none', x: W / 2 + Math.sign(az) * W * .7, y: H * 1.1, h: H * .9, z: .9 };
+      default: return { kind: 'bust', x: sx(az, .62), y: H * 1.04, h: H * .98, z: 1.3 };
+    }
+  }
+
+  // ---------------------------------------------------------------- state
+  let S = null, run = 0;
+  const fresh = (cast) => ({
+    started: true, done: false, t: 0, clock: 0, talkStart: 0, phase: 'connect', cast, closing: false, endAfter: false, silent: 0, events: [],
+    ch: Object.fromEntries(cast.map((c) => { const sp = spot(c, 'seat', cast); return [c, { key: 'seat', ...sp, talking: false, lv: 0, expr: 'base', exprT: 0, blink: rnd(2, 4), d: { ...frame(c, 'seat', sp.az), a: 0 }, tgt: frame(c, 'seat', sp.az) }]; })),
+  });
+
+  // ---------------------------------------------------------------- side panel log + subtitles
+  const logEl = $('log');
+  function log(cls, who, text) { const li = document.createElement('li'); li.className = cls; li.innerHTML = who ? `<b>${who}</b>` : ''; li.append(document.createTextNode(text)); logEl.append(li); logEl.scrollTop = logEl.scrollHeight; }
+  function sub(who, ja, en, cls = '') { const w = $('subWho'); w.textContent = who || ''; w.className = `who ${cls}`; $('subJa').textContent = ja || ''; $('subEn').textContent = en || ''; $('subs').classList.toggle('show', !!ja); }
+  function setPhase(p) {
+    if (!S) return; S.phase = p;
+    const turn = $('turn'), name = S.cast.map((c) => T.CAST[c].name.slice(-2)).join('と');
+    turn.classList.toggle('show', p === 'listen' || p === 'think' || p === 'connect');
+    turn.classList.toggle('think', p !== 'listen');
+    if (p === 'listen') { $('turnK').textContent = 'あなたの番 · Your turn'; $('turnText').textContent = '話しかけてください · Say something'; $('turnText').className = 'interim'; $('typeIn').value = ''; }
+    if (p === 'think') { $('turnK').textContent = `${name} · thinking`; $('turnText').textContent = '考え中'; $('turnText').className = ''; }
+    if (p === 'connect') { $('turnK').textContent = 'Connecting'; $('turnText').textContent = '支度中'; $('turnText').className = ''; }
+    $('phase').textContent = { connect: 'Connecting', think: 'Thinking', speak: 'Speaking', listen: 'Your turn', end: 'Ended' }[p] || 'Conversation';
+  }
+
+  // ---------------------------------------------------------------- server (limits) + agent (WebSocket)
+  let LIMITS = { session_seconds: 120 };
+  async function status() {
+    try {
+      const r = await fetch('/api/talk/status', { cache: 'no-store' }); if (!r.ok) throw 0; const s = await r.json();
+      LIMITS = s.limits; const b = $('budget');
+      if (s.blocked) { b.textContent = `${s.blocked[0]} · ${s.blocked[1]}`; b.classList.add('warn'); $('startBtn').disabled = true; return; }
+      const left = s.month.limit - s.month.used;
+      b.textContent = `本日あと ${s.left_sessions} 回 · ${s.left_sessions} talks left today · 今月の残り ${left.toLocaleString()} 字（上限を超えると止まります · stops at the limit）`;
+      b.classList.remove('warn'); $('startBtn').disabled = false;
+    } catch {
+      const b = $('budget'); b.classList.add('warn'); $('startBtn').disabled = true;
+      b.textContent = 'ローカル専用：start_demo.command で起動してください · Local only — run start_demo.command (it starts the talk server)';
+    }
+  }
+
+  let ws = null, sid = null, buf = '', turnId = 0, turnParts = false, turnDone = false;
+  function wsSend(o) { if (ws && ws.readyState === 1) ws.send(JSON.stringify(o)); }
+  function ask(text) {   // one turn of the characters
+    turnId++; buf = ''; turnParts = false; turnDone = false; setPhase('think');
+    wsSend({ type: 'user_message', text });
+  }
+  function onWs(m) {
+    if (m.type === 'ping') return wsSend({ type: 'pong', event_id: m.ping_event.event_id });
+    if (m.type === 'conversation_initiation_metadata') { ask(T.OPEN(scene())); return; }
+    if (m.type === 'agent_chat_response_part') {
+      const p = m.text_response_part || {}; turnParts = true;
+      if (p.text) { buf += p.text; let n; while ((n = buf.indexOf('\n')) >= 0) { line(buf.slice(0, n)); buf = buf.slice(n + 1); } }
+      if (p.type === 'stop') { if (buf.trim()) line(buf); buf = ''; turnDone = true; kick(); }
+      return;
+    }
+    if (m.type === 'agent_response') {   // the full text of the turn (used only if no streamed parts came)
+      if (!turnParts) { for (const l of (m.agent_response_event?.agent_response || '').split('\n')) line(l); }
+      turnDone = true; kick();
+    }
+  }
+
+  // ---------------------------------------------------------------- lines → queue (TTS starts at once, plays in order)
+  const Q = [];
+  const strip = (s) => s.replace(/\[[^\]]*\]/g, '').replace(/\s+/g, ' ').trim();
+  function line(raw) {
+    const l = raw.trim(); if (!l || !S) return;
+    if (/#END/.test(l)) { S.endAfter = true; const rest = l.replace('#END', '').trim(); if (rest) line(rest); return; }
+    const parts = l.split('|').map((x) => x.trim());
+    if (parts[0] === '@') { const ev = scene().events[parts[1]]; if (ev) Q.push({ ev: parts[1] }); kick(); return; }
+    let who = parts[0].replace(/[^NI]/g, '').slice(0, 1), k = 1;
+    if (!S.cast.includes(who)) { who = S.cast[0]; k = /^\d+$/.test(parts[0]) || parts[0].length <= 2 ? 1 : 0; }
+    let key = parts[k]; if (!T.POS[key]) { key = S.ch[who].key; } else k++;
+    const ja = parts[k] || '', en = parts[k + 1] || '';
+    if (!strip(ja)) return;
+    const tag = ((ja.match(/^\s*\[([^\]]+)\]/) || [])[1] || '').toLowerCase();
+    const item = { who, key, ja, en, tag, audio: tts(who, ja) };
+    Q.push(item); log(who, T.CAST[who].name.slice(-2), strip(ja)); kick();
+  }
+  async function tts(who, text) {
+    try {
+      const r = await fetch('/api/talk/tts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sid, who, text }) });
+      if (r.status === 429) { const j = await r.json(); limitHit(j.blocked); return null; }
+      if (!r.ok) return null;
+      return await SND.decode(await r.arrayBuffer());
+    } catch { return null; }
+  }
+  function limitHit(why) { if (!S || S.limitMsg) return; S.limitMsg = why; S.endAfter = true; log('sys', '', `${why[0]} ${why[1]}`); }
+
+  let playing = false;
+  async function kick() {
+    if (playing || !S) return; playing = true; const my = run;
+    try {
+      while (Q.length && my === run) {
+        const it = Q.shift();
+        if (it.ev) { event(it.ev); await sleep(.8); continue; }
+        setPhase('speak');
+        go(it.who, it.key);
+        const ab = await it.audio; if (my !== run) break;
+        if (!S.talkStart) S.talkStart = S.t;
+        const c = S.ch[it.who]; c.talking = true; c.expr = EXPR[it.who][it.tag] || 'base'; c.exprT = 0;
+        sub(T.CAST[it.who].name.slice(-2), strip(it.ja), it.en, it.who);
+        if (ab) await SND.play(it.who, ab, it.key.endsWith('_ear') ? 1.25 : 1.6);
+        else await sleep(Math.min(6, 1 + strip(it.ja).length * .14));
+        c.talking = false; c.exprT = 1.4;
+        await sleep(.25);
+      }
+    } finally { playing = false; }
+    if (my !== run || !S) return;
+    if (Q.length) return kick();
+    if (!turnDone) return;   // more text is coming
+    sub('', '', '');
+    if (S.endAfter || S.closing) return finish(S.limitMsg ? 'limit' : 'bye');
+    listen();
+  }
+  // walk a character to a position (the voice glides with him), footsteps if he gets up and moves
+  function go(c, key) {
+    const ch = S.ch[c]; if (!ch) return;
+    if (/_ear|left|right|behind/.test(key)) for (const o of S.cast) if (o !== c && S.ch[o].key === key) go(o, 'seat');   // never two at one ear / side
+    if (ch.key === key) return;
+    const sp = spot(c, key, S.cast), far = Math.hypot(Math.sin(sp.az) * sp.dist - Math.sin(ch.az) * ch.dist, Math.cos(sp.az) * sp.dist - Math.cos(ch.az) * ch.dist);
+    SND.fx.rustle(ch.az, ch.dist); if (far > .6) SND.fx.steps(sp.az, Math.max(.5, sp.dist), far > 2 ? 4 : 2);
+    Object.assign(ch, { key, ...sp });
+    SND.move(c, sp.az, sp.dist, far > 2 ? .7 : .35);
+    retarget();
+  }
+  // pictures: someone at your ear fills that side of the screen, so whoever stands on that side steps into view (towards the centre)
+  function retarget() {
+    for (const c of S.cast) {
+      const ch = S.ch[c], f = frame(c, ch.key, ch.az);
+      const side = ch.key === 'left' || (ch.key === 'seat' && ch.az < -.2) ? 'left' : ch.key === 'right' || (ch.key === 'seat' && ch.az > .2) ? 'right' : '';
+      if (side && S.cast.some((o) => o !== c && S.ch[o].key === `${side}_ear`)) f.x += (side === 'left' ? 1 : -1) * W * .3;
+      ch.tgt = f;
+    }
+  }
+  function event(k) {
+    const ev = scene().events[k]; if (!ev) return;
+    S.events.push({ k, az: ev.az, s: ev.s, t0: S.t, dur: 5 });
+    if (k === 'gust') SND.fx.gust(ev.az); else SND.fx.fire(ev.az);
+    log('sys', '', k === 'gust' ? '🌬 風 · a gust' : '🔥 火 · warmth');
+  }
+
+  // ---------------------------------------------------------------- your turn: speech recognition (or typing)
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let rec = null, recOn = false, heard = '', interim = '', quietT = null, silentT = null, micStream = null, micAn = null, micBuf = null;
+  function listen() {
+    if (!S) return;
+    const left = LIMITS.session_seconds - S.clock;
+    if (left <= 0 && !S.closing) { S.closing = true; return ask(T.CLOSE('')); }
+    setPhase('listen'); heard = ''; interim = '';
+    clearTimeout(silentT); silentT = setTimeout(() => { if (S && S.phase === 'listen' && !heard && !interim && !$('typeIn').value) { if (S.silent < 2) { S.silent++; log('sys', '', '…'); submit(null); } } }, 14000);
+    if (SR && !S.noMic) startRec();
+  }
+  function startRec() {
+    if (recOn) return;
+    rec = new SR(); rec.lang = pick.lang; rec.continuous = true; rec.interimResults = true;
+    rec.onresult = (e) => {
+      let fin = '', tmp = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) { const r = e.results[i]; if (r.isFinal) fin += r[0].transcript; else tmp += r[0].transcript; }
+      if (fin) heard += fin; interim = tmp;
+      const t = $('turnText'); t.textContent = (heard + interim) || '…'; t.className = interim ? 'interim' : '';
+      clearTimeout(quietT); if (heard || interim) quietT = setTimeout(() => { if (heard.trim() || interim.trim()) submit((heard + interim).trim()); }, 1200);
+    };
+    rec.onerror = (e) => { if (e.error === 'not-allowed' || e.error === 'service-not-allowed') { S && (S.noMic = true); log('sys', '', 'マイクが使えません — キーボードで入力してください · no microphone, please type'); } };
+    rec.onend = () => { recOn = false; if (S && S.phase === 'listen' && !S.noMic) setTimeout(() => S && S.phase === 'listen' && startRec(), 150); };
+    try { rec.start(); recOn = true; } catch {}
+  }
+  function stopRec() { clearTimeout(quietT); clearTimeout(silentT); if (rec) { try { rec.onend = null; rec.abort(); } catch {} } recOn = false; }
+  function submit(text) {
+    if (!S || S.phase !== 'listen') return;
+    stopRec();
+    if (text) { S.silent = 0; log('you', 'あなた', text); sub('あなた', text, '', 'you'); }
+    const late = S.clock >= LIMITS.session_seconds - 25;
+    if (late) { S.closing = true; return ask(T.CLOSE(text || '')); }
+    ask(text ? T.USER(text) : T.SILENT);
+  }
+  $('typeIn').addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.isComposing && e.target.value.trim()) { submit(e.target.value.trim()); e.target.value = ''; } });
+  async function mic() {   // only for the level bars (and the permission prompt); nothing is recorded
+    try {
+      micStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+      const ac = SND.ctx(); micAn = ac.createAnalyser(); micAn.fftSize = 512; micBuf = new Float32Array(512); ac.createMediaStreamSource(micStream).connect(micAn);
+    } catch { if (S) S.noMic = true; }
+  }
+  function micLevel() { if (!micAn) return 0; micAn.getFloatTimeDomainData(micBuf); let s = 0; for (const v of micBuf) s += v * v; return Math.sqrt(s / micBuf.length); }
+
+  // ---------------------------------------------------------------- start / end
+  async function start() {
+    SND.init(); const my = ++run;
+    const cast = pick.cast.split(''), sc = scene();
+    $('startBtn').disabled = true; $('cleared').hidden = true;
+    let j;
+    try { const r = await fetch('/api/talk/session', { method: 'POST' }); j = await r.json(); if (!r.ok) throw j; }
+    catch (e) { $('budget').textContent = e?.blocked ? `${e.blocked[0]} · ${e.blocked[1]}` : `接続できません · cannot start (${e?.error || 'server'})`; $('budget').classList.add('warn'); $('startBtn').disabled = false; return; }
+    sid = j.signed_url ? j.sid : null; LIMITS = j.limits || LIMITS;
+    await Promise.all([...cast.map(loadChar), loadBg(sc)]);
+    if (my !== run) return;
+    S = fresh(cast); logEl.innerHTML = ''; viewBg = sc.bg;
+    for (const c of cast) { SND.char(c); const ch = S.ch[c]; SND.move(c, ch.az, ch.dist, .01); }
+    SND.ambience(sc.sound);
+    $('intro').classList.add('hidden'); $('endBtn').hidden = false; setPhase('connect'); log('sys', '', `${sc.ja} · ${sc.en}`);
+    if (!micStream) mic();
+    ws = new WebSocket(j.signed_url);
+    ws.onopen = () => wsSend({ type: 'conversation_initiation_client_data', conversation_config_override: { agent: { prompt: { prompt: T.prompt(sc, cast) }, first_message: '', language: 'ja' }, conversation: { text_only: true } } });
+    ws.onmessage = (e) => { try { onWs(JSON.parse(e.data)); } catch (err) { console.error(err); } };
+    ws.onclose = (e) => { if (S && !S.done && my === run) { console.warn('ws closed', e.code, e.reason); if (!Q.length && !playing) finish('lost'); else S.endAfter = true; } };
+  }
+  function finish(why = 'bye') {
+    if (!S || S.done) return;
+    S.done = true; run++; stopRec(); SND.stopVoices(); SND.stopAmbience(); Q.length = 0; playing = false;
+    try { ws && ws.close(); } catch {} ws = null;
+    if (sid) fetch('/api/talk/end', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sid }) }).catch(() => {}); sid = null;
+    S.phase = 'end'; $('phase').textContent = 'Ended'; $('turn').classList.remove('show'); sub('', '', ''); $('endBtn').hidden = true;
+    const fadeFrom = S;
+    setTimeout(() => {
+      if (S !== fadeFrom) return;
+      S.started = false; stopOutput();
+      const c = $('cleared'); c.hidden = false;
+      c.textContent = why === 'limit' ? `⏸ ${fadeFrom.limitMsg ? fadeFrom.limitMsg.join(' · ') : '上限に達しました · limit reached'}` : why === 'lost' ? '⚠ 接続が切れました · connection lost' : '🏯 またいずれ、語らおうぞ · Until we talk again';
+      $('startBtn').textContent = '↺ もう一度 · Talk again'; $('intro').classList.remove('hidden'); status(); coverChars();
+    }, why === 'bye' ? 2500 : 600);
+  }
+  $('endBtn').addEventListener('click', () => {   // you leave: they say goodbye if they can, otherwise stop at once
+    if (!S || S.done) return;
+    if (S.phase === 'listen' && !S.closing) { stopRec(); S.closing = true; ask(T.CLOSE('（そろそろ失礼します）')); } else finish('bye');
+  });
+
+  // ---------------------------------------------------------------- per frame
+  function update(dt) {
+    if (!S || !S.started) return;
+    S.t += dt; if (S.talkStart) S.clock = S.t - S.talkStart;
+    for (const c of S.cast) {
+      const ch = S.ch[c]; ch.lv = SND.level(c);
+      if (!ch.talking && ch.exprT > 0) { ch.exprT -= dt; if (ch.exprT <= 0) ch.expr = 'base'; }
+      ch.blink -= dt; if (ch.blink < -.13) ch.blink = rnd(2.5, 5);
+      // picture: slide to the target box; change of kind (bust ↔ ear …) = fade out, jump, fade in
+      const d = ch.d, t = ch.tgt, k = 1 - Math.exp(-dt / .22);
+      if (d.kind !== t.kind) { d.a -= dt / .22; for (const p of ['x', 'y', 'h']) d[p] += (t[p] - d[p]) * k * .5; if (d.a <= 0) { Object.assign(d, t, { a: 0 }); } }
+      else { for (const p of ['x', 'y', 'h']) d[p] += (t[p] - d[p]) * k; d.flip = t.flip; d.z = t.z; d.a = Math.min(1, d.a + dt / .3); }
+    }
+    S.events = S.events.filter((e) => S.t - e.t0 < e.dur);
+    if (S.phase === 'listen') {
+      if (S.clock >= LIMITS.session_seconds && !S.closing && !heard && !interim) { stopRec(); S.closing = true; ask(T.CLOSE('')); }
+      const lv = micLevel(); document.querySelectorAll('#mic i').forEach((el, i) => { const v = clamp(lv * 14 - i * .12); el.style.height = `${15 + 85 * v}%`; el.style.opacity = .4 + .6 * v; });
+    }
+    if (S.clock > LIMITS.session_seconds + 75) finish('bye');   // hard stop
+  }
+
+  // ---------------------------------------------------------------- drawing
+  let viewBg = null;
+  function sprite(c, ch) {
+    const d = ch.d;
+    if (d.kind === 'ear') return img(`${c}_${c === 'N' ? (ch.expr === 'laugh' || ch.expr === 'grin' ? 'ear_laugh' : 'ear') : (ch.expr === 'chuckle' || ch.expr === 'polite' ? 'ear_smile' : 'ear')}`);
+    if (d.kind === 'stand') return img(`${c}_pose_invite`);
+    if (d.kind === 'far') return img(c === 'N' ? 'N_pose_stand' : 'I_pose_calm');
+    if (d.kind === 'none') return null;
+    if (ch.talking && ch.expr === 'base') return img(`${c}_bust_${ch.lv > .05 ? 'mouth_open' : ch.lv > .02 ? 'mouth_half' : 'base'}`);
+    if (ch.expr !== 'base') return img(`${c}_bust_${ch.expr}`) || img(`${c}_bust_base`);
+    return img(`${c}_bust_${ch.blink < 0 ? 'blink' : 'base'}`);
+  }
+  function drawChar(c, ch, t) {
+    const im = sprite(c, ch), d = ch.d; if (!im || d.a <= .01) return;
+    const h = d.h * (1 + .006 * Math.sin(t * 1.7 + (c === 'I' ? 1 : 0))), w = h * im.width / im.height;
+    const bob = ch.talking ? clamp(ch.lv * 6) * .018 * h : 0;
+    ctx.save(); ctx.globalAlpha = d.a; ctx.translate(d.x, d.y - bob); if (d.flip) ctx.scale(-1, 1);
+    if (d.kind === 'far') ctx.filter = 'brightness(.88) saturate(.9)';
+    ctx.shadowColor = 'rgba(0,0,0,.45)'; ctx.shadowBlur = 40;
+    ctx.drawImage(im, -w / 2, -h, w, h * (1 + (ch.talking ? clamp(ch.lv * 6) * .012 : 0)));
+    ctx.restore();
+  }
+  function drawBg(src) {
+    const s = scene(), gust = S && S.events.some((e) => e.k === 'gust');
+    const a = img(src || s.bg), b = s.bgGust && img(s.bgGust);
+    if (a) ctx.drawImage(a, 0, 0, W, H); else { ctx.fillStyle = '#1a1008'; ctx.fillRect(0, 0, W, H); }
+    if (gust && b) { S.gustA = Math.min(1, (S.gustA || 0) + .03); } else if (S) S.gustA = Math.max(0, (S.gustA || 0) - .02);
+    if (b && S && S.gustA) { ctx.globalAlpha = S.gustA; ctx.drawImage(b, 0, 0, W, H); ctx.globalAlpha = 1; }
+  }
+  function draw(t) {
+    drawBg(viewBg);
+    const order = S.cast.map((c) => [c, S.ch[c]]).sort((a, b) => b[1].d.z - a[1].d.z);
+    for (const [c, ch] of order) drawChar(c, ch, t);
+    const bh = S.cast.find((c) => S.ch[c].key === 'behind'), el = $('behind');
+    el.classList.toggle('show', !!bh);
+    if (bh) { el.textContent = `↶ ${T.CAST[bh].name.slice(-2)}は背後に · behind you`; el.className = `behind show ${S.ch[bh].az < 0 ? 'l' : 'r'}`; }
+    if (S.done) { S.fade = Math.min(1, (S.fade || 0) + .02); ctx.fillStyle = `rgba(10,6,2,${S.fade})`; ctx.fillRect(0, 0, W, H); }
+  }
+  function coverChars() {   // the cover: the chosen place, the chosen company sitting at the right
+    const s = scene(), cast = pick.cast.split('');
+    Promise.all([loadBg(s), ...cast.map((c) => load(`${c}_bust_base`, `${T.ART}${c}_bust_base.webp`))]).then(() => { if (!S || !S.started) drawCover(); });
+  }
+  function drawCover() {
+    const s = scene(), cast = pick.cast.split(''), a = img(s.bg);
+    if (a) ctx.drawImage(a, 0, 0, W, H); else { ctx.fillStyle = '#1a1008'; ctx.fillRect(0, 0, W, H); }
+    const xs = cast.length > 1 ? { N: W * .66, I: W * .86 } : { [cast[0]]: W * .78 };
+    for (const c of cast.slice().reverse()) { const im = img(`${c}_bust_base`); if (!im) continue; const h = H * .96, w = h * im.width / im.height; ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 50; ctx.drawImage(im, xs[c] - w / 2, H * 1.03 - h, w, h); ctx.restore(); }
+  }
+
+  // ---------------------------------------------------------------- thermal (DUAL, two layers)
+  //  · VOICE: a voice is warm. Loudness (0.1 + 0.8 × level) at the speaker's direction, × 1 at your ear (≤ 15 cm), × 0.6 within
+  //    60 cm, × 0.3 at the seat, × 0.1 from the window; × 0.6 straight in front (shared by both ears). Silent at your ear: his breath, 0.15.
+  //  · PLACE: only what is really there — the sunset and mountain wind, the hearth, the warm sake and the snowy window, the misty
+  //    morning air, the lanterns and the night wind — plus the gusts / fire the characters bring about (a few seconds).
+  function sources() {
+    const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
+    if (!S || !S.started) return out;
+    for (const c of S.cast) {
+      const ch = S.ch[c], df = ch.dist <= .15 ? 1 : ch.dist <= .6 ? .6 : ch.dist <= 1.5 ? .3 : .1, front = Math.abs(Math.sin(ch.az)) < .45 && Math.cos(ch.az) > 0 ? .6 : 1;
+      if (ch.talking) add(ch.az, 'h', (.1 + .8 * clamp(ch.lv * 8)) * df * front, c === 'N' ? '信' : '家');
+      else if (ch.dist <= .15) add(ch.az, 'h', .15, c === 'N' ? '信' : '家');
+      else add(ch.az, 'h', 0, '');
+    }
+    const fade = S.done ? 0 : clamp(S.t / 3);
+    for (const a of scene().amb) add(a.az, a.k, a.s * fade, a.icon);
+    for (const e of S.events) { const x = (S.t - e.t0) / e.dur, env = x < .25 ? x / .25 : 1 - (x - .25) / .75; add(e.az, e.k === 'gust' ? 'c' : 'h', e.s * clamp(env), e.k === 'gust' ? '🌬' : '🔥'); }
+    return out;
+  }
+  const ear = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
+  function thermal(dt) {
+    const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
+    for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
+    for (const e of ['L', 'R']) for (const k of ['c', 'h']) {
+      const target = k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
+      const tau = target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
+      ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
+    }
+    return { th: { ...ear }, src };
+  }
+
+  // ---------------------------------------------------------------- radar + device (same protocol as every demo)
+  const rc = $('radar').getContext('2d');
+  function radar(src, th) {
+    const cx = 240, cy = 220, R = 160; rc.clearRect(0, 0, 480, 420);
+    rc.strokeStyle = 'rgba(255,255,255,.08)'; rc.lineWidth = 1.5; for (const r of [R * .5, R]) { rc.beginPath(); rc.arc(cx, cy, r, 0, 7); rc.stroke(); }
+    rc.fillStyle = '#8a7552'; rc.font = '600 13px Inter'; rc.textAlign = 'center'; rc.fillText('front', cx, cy - R - 10); rc.fillText('L', cx - R - 18, cy + 5); rc.fillText('R', cx + R + 18, cy + 5);
+    for (const [e, sx] of [['L', -1], ['R', 1]]) {
+      rc.fillStyle = '#2a2016'; rc.beginPath(); rc.ellipse(cx + sx * 46, cy, 12, 24, 0, 0, 7); rc.fill();
+      for (const [k, col, dy] of [['h', '255,122,69', -12], ['c', '79,179,255', 12]]) if (th[e + k] > .02) { rc.fillStyle = `rgba(${col},${.25 + .75 * th[e + k]})`; rc.beginPath(); rc.ellipse(cx + sx * 46, cy + dy, 11, 12, 0, 0, 7); rc.fill(); }
+    }
+    rc.fillStyle = '#3a2c1c'; rc.beginPath(); rc.arc(cx, cy, 40, 0, 7); rc.fill();
+    rc.textBaseline = 'middle';
+    for (const s of src) {
+      if (s.icon === '信' || s.icon === '家') continue;
+      const x = cx + Math.sin(s.az) * R, y = cy - Math.cos(s.az) * R; rc.globalAlpha = clamp(.35 + s.s); rc.fillStyle = s.k === 'h' ? 'rgba(255,122,69,.25)' : 'rgba(79,179,255,.25)';
+      rc.beginPath(); rc.arc(x, y, 14 + 18 * s.s, 0, 7); rc.fill(); rc.font = '22px sans-serif'; rc.fillText(s.icon, x, y + 1); rc.globalAlpha = 1;
+    }
+    if (S && S.started) for (const c of S.cast) {   // the characters, at their real distance (log scale)
+      const ch = S.ch[c], r = 46 + (R - 46) * clamp(Math.log(ch.dist / .12) / Math.log(4 / .12)), x = cx + Math.sin(ch.az) * r, y = cy - Math.cos(ch.az) * r;
+      rc.fillStyle = ch.talking ? (c === 'N' ? '#ff8a6a' : '#8fe0b4') : '#5a4630'; rc.beginPath(); rc.arc(x, y, 17 + (ch.talking ? 10 * clamp(ch.lv * 8) : 0), 0, 7); rc.fill();
+      rc.fillStyle = ch.talking ? '#1a0f05' : '#f4ead6'; rc.font = '700 17px "Noto Sans JP"'; rc.fillText(c === 'N' ? '信' : '家', x, y + 1);
+    }
+    rc.textBaseline = 'alphabetic';
+  }
+  const DEFAULT_RANGE = { heatMin: 0, heatMax: 200, coolMin: 35, coolMax: 80 }, SEND_INTERVAL = 100, OFF = .03;
+  const range = { ...DEFAULT_RANGE, ...store.get('range', {}) };
+  let lastSent = '', lastSendAt = 0, tripped = false, intensity = +store.get('asmr.intensity', 100) / 100;
+  const device = MoHeatDevice.create({ select: $('portSelect'), addBtn: $('addPort'), connectBtn: $('connectBtn'), status: $('deviceStatus') }, { log: (l) => console.log('[MoHeat]', l), onConnect: () => { lastSent = ''; } });
+  if (!MoHeatDevice.supported) $('deviceStatus').querySelector('span').textContent = 'Web Serial needs desktop Chrome / Edge';
+  function command(th) {   // DUAL: each ear's cool and heat set independently (firmware 2026-11-08)
+    const c = (v) => (v > OFF ? Math.round(range.coolMin + v * (range.coolMax - range.coolMin)) : 0), h = (v) => (v > OFF ? Math.round(range.heatMin + v * (range.heatMax - range.heatMin)) : 0);
+    return Math.max(th.Lc, th.Lh, th.Rc, th.Rh) <= OFF ? 'stop' : `DUAL LC${c(th.Lc)} LH${h(th.Lh)} RC${c(th.Rc)} RH${h(th.Rh)}`;
+  }
+  function stopOutput() { if (device.isConnected()) device.send('stop'); lastSent = 'stop'; }
+  function emergencyStop() { tripped = !tripped; const b = $('estop'); if (tripped) { stopOutput(); b.textContent = '↺ Re-arm output'; b.classList.add('tripped'); } else { b.textContent = '■ STOP'; b.classList.remove('tripped'); lastSent = ''; } }
+  $('estop').addEventListener('click', emergencyStop); addEventListener('pagehide', () => { stopOutput(); if (S && !S.done) finish('bye'); });
+  $('intensity').value = Math.round(intensity * 100); $('intensityVal').textContent = `${Math.round(intensity * 100)}%`;
+  $('intensity').addEventListener('input', (e) => { intensity = +e.target.value / 100; $('intensityVal').textContent = `${e.target.value}%`; store.set('asmr.intensity', +e.target.value); });
+  const meterEls = Object.fromEntries(['Lc', 'Lh', 'Rc', 'Rh'].map((k) => [k, [$(`m${k}`), $(`v${k}`)]]));
+  function output(th, live) {
+    const sc = Object.fromEntries(Object.entries(th).map(([k, v]) => [k, live && !tripped ? v * intensity : 0]));
+    for (const [k, [bar, val]] of Object.entries(meterEls)) { bar.style.width = `${sc[k] * 100}%`; val.textContent = Math.round(sc[k] * 100); }
+    const cmd = command(sc); $('cmd').textContent = cmd;
+    for (const [e, el] of [['L', $('glowL')], ['R', $('glowR')]]) {
+      const c = sc[e + 'c'], h = sc[e + 'h'], v = Math.max(c, h), dir = e === 'L' ? 'right' : 'left';
+      el.style.opacity = v.toFixed(2); el.style.background = `linear-gradient(to ${dir}, rgba(255,122,69,${(.55 * h / (v || 1)).toFixed(2)}), rgba(255,122,69,0)), linear-gradient(to ${dir}, rgba(79,179,255,${(.55 * c / (v || 1)).toFixed(2)}), rgba(79,179,255,0))`;
+    }
+    if (!device.isConnected() || !$('sendOn').checked) return;
+    const n = performance.now(); if (cmd !== lastSent && n - lastSendAt >= SEND_INTERVAL) { device.send(cmd); lastSent = cmd; lastSendAt = n; }
+  }
+  const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+
+  // ---------------------------------------------------------------- main loop
+  let last = performance.now(), hidden = false;
+  function loop() {
+    const n = performance.now(), dt = clamp((n - last) / 1000, 0, .05); last = n;
+    if (!hidden) {
+      update(dt);
+      if (S && S.started) draw(n / 1000);
+      const { th, src } = thermal(dt); output(th, !!(S && S.started)); radar(S && S.started ? src : [], th);
+      $('clock').textContent = S && S.started ? `${fmt(S.clock)} / ${fmt(LIMITS.session_seconds)}` : '0:00';
+    }
+    requestAnimationFrame(loop);
+  }
+  document.addEventListener('visibilitychange', () => { hidden = document.hidden; if (hidden) stopOutput(); else last = performance.now(); });
+  document.addEventListener('keydown', (e) => { if (e.code === 'Escape') emergencyStop(); });
+  $('startBtn').addEventListener('click', start);
+  $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
+  $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
+  window.TALKDEMO = { get S() { return S; }, line, thermal: () => thermal(.05) };
+  picker(); coverChars(); status();
+  if (QS.has('cover')) { document.body.classList.add('cover-only'); return; }
+  requestAnimationFrame(loop);
+})();

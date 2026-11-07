@@ -394,6 +394,12 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 美术：Seedance **网页** GPT Image 2 图生图（API 上传 2026-11-08 再次限流），6 张 2K 静帧，每张 25 credits；提示词 `project/web_prompts.json`。右侧吹风画面 = 吹风静帧镜像。封面用开门图右移 + 左侧压暗。
 - 自动通关测试：1:44，0 报错。**动画（§4b，Seedance 2.5 Lite 1080p 首尾帧）尚未做**：用户要求时再做。
 
+### Demo23_NobunagaTalk ✅ 可玩（本机专用）—《信長と、語らう / Talk with Nobunaga》实时 AI 对话（2026-11-08）
+- 用户要求：不是固定台词，能对用户说的话做出反应；讲完等用户讲；本机版 + 限额不许超；可选 信長 / 家康 / 三人で、可选场所（5 个：岐阜城天守夕暮れ、茶室囲炉裏、京都居酒屋、山崎蒸溜所、安土月夜の宴）；角色先按场所开话题；约 2 分钟由角色收尾；角色要走动（不在一个位置讲话）让冷热变化。
+- 架构：`server.py`（端口 8771，持有 key，执行 `limits.json`）+ ElevenLabs **text-only agent**（`agent.json`，LLM claude-sonnet-5-5，prompt 每次在 `scenes.js` 生成后 override）+ 浏览器语音识别 + 每句 ElevenLabs v4 TTS → 每个角色独立 HRTF。细节见该目录 README。
+- 不在 nav.js / 网站里（GitHub Pages 没有服务器）。`start_demo.command` 双击启动。
+- 一次 2 分钟三人对话 ≈ 600–700 credits。
+
 ### Demo switcher (`demos/shared/nav.js`)
 Every full demo page loads `../shared/nav.js`, which adds ‹ ☰ Demos N/9 › to the top bar and a thumbnail panel of all demos (thumbs = `assets/images/demos/demoN.jpg`). `#demos` in the URL opens the panel. Hidden with `?embed`, `?cover`, `?render`. **A new demo must be added to the `DEMOS` list in nav.js.**
 

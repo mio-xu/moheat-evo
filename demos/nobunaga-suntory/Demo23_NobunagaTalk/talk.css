@@ -1,0 +1,64 @@
+/* Live Nobunaga talk — on top of Demo 10's demo.css (by path): the Nobunaga series' black + gold-leaf palette, picker, turn HUD, log. */
+:root { --bg: #120a06; --panel: #1e140c; --panel-2: #2a1c10; --line: #4a3418; --ink: #f4ead6; --soft: #c8b48e; --faint: #8a7552; --gold: #d9a84a; --n: #ff8a6a; --i: #8fe0b4; }
+.bar { background: #170e07; }
+.brand span { color: var(--gold); }
+.btn:hover:not(:disabled) { border-color: var(--gold); background: #35240f; }
+.btn.primary { background: linear-gradient(135deg, #a8321c, #d9a84a); }
+.vv { bottom: auto; top: .6cqw; }
+
+/* cover */
+.intro::before { background: linear-gradient(to right, rgba(14, 8, 3, .88), rgba(14, 8, 3, .62) 45%, rgba(14, 8, 3, 0) 66%); }
+.intro .hero.a { position: absolute; width: 1px; height: 1px; }
+.intro .series { color: #ffe9b8; background: rgba(217, 168, 74, .16); border: 1px solid rgba(217, 168, 74, .55); }
+.intro h1 { font-family: "Shippori Mincho B1", serif !important; font-weight: 800; background: linear-gradient(100deg, #fff2cc 0%, #ffffff 40%, #e0a940 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.intro .cleared { color: #fff6e0; background: rgba(168, 50, 28, .35); border-color: rgba(255, 180, 120, .6); }
+.pick { display: grid; gap: .55cqw; margin: .3cqw 0; }
+.pick p { margin: 0; display: flex; align-items: center; gap: .7cqw; justify-content: center; flex-wrap: wrap; }
+.pick small { width: 100%; font: 700 clamp(7px, .78cqw, 14px)/1.2 Inter, sans-serif; letter-spacing: .12em; text-transform: uppercase; color: var(--soft); }
+.pick span { display: flex; gap: .5cqw; flex-wrap: wrap; justify-content: center; }
+.opt { cursor: pointer; border-radius: 999px; padding: .35em 1em; border: 1px solid rgba(217, 168, 74, .45); background: rgba(20, 12, 5, .7); color: #f4ead6;
+  font: 700 clamp(8px, .95cqw, 17px)/1.25 "Noto Sans JP", Inter, sans-serif; transition: background .15s, border-color .15s; }
+.opt small { display: inline; width: auto; margin-left: .4em; font: 500 .8em/1 Inter, sans-serif; letter-spacing: 0; text-transform: none; color: #d8c49c; }
+.opt:hover { border-color: #ffd58a; }
+.opt.on { background: linear-gradient(135deg, rgba(168, 50, 28, .85), rgba(217, 168, 74, .75)); border-color: #ffd58a; color: #fff; }
+.opt.on small { color: #fff3d6; }
+.intro .hint.warn { color: #ffb4a0; }
+
+/* subtitles (sizes from series.css) */
+.subs { position: absolute; z-index: 3; display: flex; justify-content: center; pointer-events: none; opacity: 0; transition: opacity .25s; }
+.subs.show { opacity: 1; }
+.subs .line { display: flex; flex-direction: column; align-items: center; background: rgba(14, 8, 3, .66); }
+.subs .ja { color: #fff; font-family: "Noto Sans JP", sans-serif; font-weight: 700; }
+.subs .en { color: #ecdcbc; font-family: Inter, sans-serif; }
+.subs .who { font-style: normal; margin-right: .45em; padding: 0 .4em; border-radius: .3em; font-size: .78em; vertical-align: .08em; color: #1a0f05; background: var(--n); }
+.subs .who.I { background: var(--i); } .subs .who.you { background: #e8e2d6; }
+.subs .who:empty { display: none; }
+
+/* your turn */
+.turn { position: absolute; top: 1.4cqw; left: 1.4cqw; z-index: 4; width: 42cqw; padding: .7cqw 1.1cqw; border-radius: .9cqw; background: rgba(14, 8, 3, .7);
+  border-left: .3cqw solid var(--gold); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); opacity: 0; transform: translateY(-.5cqw); transition: opacity .3s, transform .3s; pointer-events: none; }
+.turn.show { opacity: 1; transform: none; pointer-events: auto; }
+.turn small { display: block; font: 800 clamp(7px, .8cqw, 13px)/1.2 Inter, "Noto Sans JP", sans-serif; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+.turn b { display: block; margin: .25cqw 0 .3cqw; min-height: 1.3em; font: 700 clamp(10px, 1.35cqw, 24px)/1.3 "Noto Sans JP", sans-serif; color: #fff; }
+.turn b.interim { color: #d8c49c; }
+.turn .mic { display: inline-flex; align-items: flex-end; gap: 2px; height: clamp(10px, 1.5cqw, 24px); vertical-align: middle; margin-right: .6cqw; }
+.turn .mic i { width: clamp(3px, .35cqw, 6px); height: 15%; border-radius: 2px; background: #ffd58a; opacity: .4; }
+.turn input { width: calc(100% - 5cqw); border: 1px solid rgba(217, 168, 74, .35); border-radius: .5cqw; background: rgba(0, 0, 0, .35); padding: .25cqw .6cqw;
+  font: 500 clamp(8px, .9cqw, 15px)/1.4 "Noto Sans JP", Inter, sans-serif; color: #fff; }
+.turn.think .mic, .turn.think input { display: none; }
+.turn.think b { color: #d8c49c; }
+.turn.think b::after { content: ""; animation: dots 1.2s steps(4) infinite; }
+@keyframes dots { 0% { content: ""; } 25% { content: "・"; } 50% { content: "・・"; } 75% { content: "・・・"; } }
+.behind { position: absolute; bottom: 12cqw; z-index: 3; margin: 0; padding: .3em .9em; border-radius: 999px; background: rgba(14, 8, 3, .72); border: 1px solid rgba(217, 168, 74, .5);
+  font: 700 clamp(8px, 1cqw, 16px)/1.3 "Noto Sans JP", Inter, sans-serif; color: #ffe9b8; opacity: 0; transition: opacity .4s; pointer-events: none; }
+.behind.show { opacity: 1; }
+.behind.l { left: 2cqw; } .behind.r { right: 2cqw; }
+.stage:has(.intro:not(.hidden)) :is(.turn, .subs, .hud-top, .behind) { display: none !important; }
+
+/* side: conversation log */
+.log { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; max-height: 150px; overflow-y: auto; font-size: 12px; line-height: 1.45; scrollbar-width: thin; }
+.log li { color: var(--soft); }
+.log li b { font-weight: 700; margin-right: 4px; }
+.log li.N b { color: var(--n); } .log li.I b { color: var(--i); } .log li.you b { color: #fff; } .log li.sys { color: var(--faint); font-style: italic; }
+.endbtn { margin-top: 8px; width: 100%; justify-content: center; }
+@container (max-width: 620px) { .turn { width: 60cqw; } .turn b { font-size: 2.6cqw; } }

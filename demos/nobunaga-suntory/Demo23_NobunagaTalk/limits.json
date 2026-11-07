@@ -1,0 +1,8 @@
+{
+ "_doc": "Local limits for the live talk demo (server.py). session_seconds = the conversation length before the characters close it.",
+ "daily_sessions": 20,
+ "session_chars": 1500,
+ "daily_chars": 15000,
+ "month_reserve_chars": 10000,
+ "session_seconds": 120
+}

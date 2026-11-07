@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#120a06" />
+  <meta name="robots" content="noindex" />
+  <title>信長と、語らう · Talk with Nobunaga · MoHeat Evo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho+B1:wght@600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../all-ages/Demo10_CaveSpring/demo.css?v=1" />
+  <link rel="stylesheet" href="talk.css?v=1" />
+  <link rel="stylesheet" href="../../shared/series.css?v=3" />
+</head>
+<body>
+  <header class="bar">
+    <a class="brand" href="../../../">MoHeat <span>Evo</span> <em>Live talk · 信長シリーズ</em></a>
+    <div class="device">
+      <select id="portSelect" aria-label="Serial port"></select>
+      <button class="btn sm" id="addPort" type="button" title="Authorize a USB or Bluetooth serial port">+ Add</button>
+      <button class="btn sm primary" id="connectBtn" type="button" disabled>Connect</button>
+      <p class="status" id="deviceStatus"><i></i><span>Not connected</span></p>
+    </div>
+    <button class="estop" id="estop" type="button" title="Esc">■ STOP</button>
+  </header>
+
+  <main class="layout">
+    <section class="stage-col">
+      <div class="stage" id="stage">
+        <canvas id="scene" width="1920" height="1080"></canvas>
+        <i class="glow l" id="glowL"></i><i class="glow r" id="glowR"></i>
+        <div class="hud-top"><button class="hud-btn" id="soundBtn" type="button">🔊</button></div>
+        <div class="turn" id="turn">
+          <small id="turnK"></small>
+          <b id="turnText"></b>
+          <span class="mic" id="mic"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          <input id="typeIn" type="text" autocomplete="off" placeholder="キーボードでも · or type here, Enter" />
+        </div>
+        <p class="behind" id="behind"></p>
+        <div class="subs" id="subs"><p class="line"><span class="ja"><em class="who" id="subWho"></em><span id="subJa"></span></span><span class="en" id="subEn"></span></p></div>
+        <p class="vv" id="vv">信長・家康 ElevenLabs · live AI</p>
+
+        <div class="intro" id="intro">
+          <div class="hero a" aria-hidden="true"></div>
+          <div class="cover-copy">
+            <p class="series">信長シリーズ 特別編 · Nobunaga Series · Live</p>
+            <h1><span>信長と、</span><span>語らう</span></h1>
+            <p class="en">Talk with Nobunaga — live, unscripted, about two minutes</p>
+            <div class="pick">
+              <p><small>相手 · With</small><span id="pickCast"></span></p>
+              <p><small>場所 · Where</small><span id="pickScene"></span></p>
+              <p><small>あなたの言葉 · You speak</small><span id="pickLang"></span></p>
+            </div>
+            <p class="cleared" id="cleared" hidden></p>
+            <div class="intro-actions">
+              <button class="btn primary big" id="startBtn" type="button">▶ 語らう · Start</button>
+              <button class="btn" id="lrBtn" type="button">🎧 Left / Right check</button>
+            </div>
+            <p class="hint" id="budget">…</p>
+            <p class="draft">They speak first, then wait for you · headphones + microphone (Chrome) · voices ElevenLabs, live lines by AI, not scripted</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side">
+      <div class="card"><div class="card-head"><span>Around you</span><b id="posInfo"></b></div><canvas id="radar" width="480" height="420"></canvas></div>
+      <div class="card">
+        <div class="card-head"><span>Thermal output</span><b id="cmd" class="mono">stop</b></div>
+        <div class="meters">
+          <div class="meter-row"><span>L cool</span><div class="m cool"><i id="mLc"></i></div><b id="vLc">0</b></div>
+          <div class="meter-row"><span>L warm</span><div class="m heat"><i id="mLh"></i></div><b id="vLh">0</b></div>
+          <div class="meter-row"><span>R cool</span><div class="m cool"><i id="mRc"></i></div><b id="vRc">0</b></div>
+          <div class="meter-row"><span>R warm</span><div class="m heat"><i id="mRh"></i></div><b id="vRh">0</b></div>
+        </div>
+        <p class="note">Live (DUAL): a voice warms the ear it speaks at, with its loudness, strongest right at your ear. They walk around you while they talk; the place adds its own warm / cool (hearth, lanterns, wind).</p>
+      </div>
+      <div class="card">
+        <div class="card-head"><span id="phase">Conversation</span><b id="clock" class="mono">0:00</b></div>
+        <ol class="log" id="log"></ol>
+        <button class="btn sm endbtn" id="endBtn" type="button" hidden>■ 会話を終える · End</button>
+      </div>
+      <div class="card">
+        <label class="row"><span>Intensity</span><input id="intensity" type="range" min="0" max="100" value="100" /><b id="intensityVal">100%</b></label>
+        <label class="row check"><input id="sendOn" type="checkbox" checked /> <span>Send to device</span></label>
+      </div>
+    </aside>
+  </main>
+
+  <script src="../../../device.js?v=1"></script>
+  <script src="scenes.js?v=2"></script>
+  <script src="audio.js?v=2"></script>
+  <script src="talk.js?v=2"></script>
+  <script src="../../shared/nav.js?v=5"></script>
+</body>
+</html>
