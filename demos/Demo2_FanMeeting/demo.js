@@ -68,7 +68,7 @@ function drawStage(ctx, t, shift) {
   if (live > 0 && ok('art.stage_bg_live')) { ctx.globalAlpha = live; ctx.drawImage(lit, ox, oy, BW, BH); ctx.globalAlpha = 1; }
   ctx.save(); ctx.globalCompositeOperation = 'lighter';
   for (const s of STARS) {   // twinkling backdrop stars
-    const a = (.25 + .35 * live) * (.5 + .5 * Math.sin(t * 2.2 + s.p));
+    const a = (.25 + .35 * live) * (.5 + .5 * Math.sin(t * 2.2 + s.p)) * fxFade;
     const x = ox + (.2 + s.x * .6) * BW, y = oy + (.12 + s.y * .5) * BH;
     ctx.fillStyle = `rgba(255,240,250,${a})`; ctx.beginPath();
     for (let j = 0; j < 4; j++) { const r = j % 2 ? s.s * .35 : s.s * 1.6, an = j * Math.PI / 2 + t * .5; ctx.lineTo(x + Math.cos(an) * r, y + Math.sin(an) * r); }
@@ -93,6 +93,8 @@ function drawStage(ctx, t, shift) {
 // ---------------------------------------------------------------- particles
 let parts = [];
 function spawn(o) { if (parts.length < 1100) parts.push(o); }
+const LAST_OUT = A.present.A[1], CLEAN = LAST_OUT < A.duration ? LAST_OUT + .6 : Infinity;   // after she is gone: no subtitles, no effects, only the stage picture
+let fxFade = 1;
 function updateParts(dt) {
   for (const q of parts) {
     q.life += dt;
@@ -107,19 +109,20 @@ function updateParts(dt) {
   parts = parts.filter((q) => q.life < q.max);
 }
 function drawParts(ctx) {
+  if (fxFade <= .001) return;
   ctx.save();
   for (const q of parts) {
-    const k = q.life / q.max, a = Math.sin(Math.PI * Math.min(1, k * 1.2)) * q.a;
+    const k = q.life / q.max, a = Math.sin(Math.PI * Math.min(1, k * 1.2)) * q.a * fxFade;
     ctx.globalCompositeOperation = q.kind === 'note' || q.kind === 'heart' ? 'source-over' : 'lighter';
     if (q.kind === 'frost' || q.kind === 'haze') {
-      const fa = q.a * Math.min(1, k * 2.6) * Math.pow(1 - k, 1.3);
+      const fa = q.a * Math.min(1, k * 2.6) * Math.pow(1 - k, 1.3) * fxFade;
       ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(Math.atan2(q.vy, q.vx)); ctx.scale(1.9, 1);
       const g = ctx.createRadialGradient(0, 0, 0, 0, 0, q.size);
       if (q.kind === 'frost') { g.addColorStop(0, `rgba(228,242,255,${fa * .42})`); g.addColorStop(.6, `rgba(200,228,255,${fa * .16})`); g.addColorStop(1, 'rgba(190,225,255,0)'); }
       else { g.addColorStop(0, `rgba(255,222,200,${fa * .4})`); g.addColorStop(.6, `rgba(255,170,190,${fa * .16})`); g.addColorStop(1, 'rgba(255,170,190,0)'); }
       ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, q.size, 0, 7); ctx.fill(); ctx.restore();
     } else if (q.kind === 'wind') {   // fan breeze: soft curved streaks
-      const fa = q.a * Math.min(1, k * 3) * (1 - k);
+      const fa = q.a * Math.min(1, k * 3) * (1 - k) * fxFade;
       ctx.strokeStyle = `rgba(215,238,255,${fa})`; ctx.lineWidth = q.size; ctx.lineCap = 'round';
       const ang = Math.atan2(q.vy, q.vx), L = 60 + 140 * (1 - k);
       ctx.beginPath(); ctx.moveTo(q.x, q.y);
@@ -283,6 +286,14 @@ function charState(t) {
 
 function emit(st, t, dt) {
   const mx = st.mx ?? st.x, my = st.my ?? st.y + 76 * st.s;
+  if (LAST_OUT < A.duration && t > LAST_OUT - .35 && t < LAST_OUT + .3) {   // the goodbye: she dissolves into starlight and little hearts
+    const n = Math.ceil(dt * 150), R = 230 * st.s;
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * 7, r = R * Math.sqrt(Math.random()), x = st.x + Math.cos(a) * r, y = st.y + Math.sin(a) * r * 1.3;
+      if (Math.random() < .12) spawn({ kind: 'heart', x, y, vx: Math.cos(a) * 40, vy: -70 - Math.random() * 60, size: 18 + Math.random() * 14, seed: Math.random() * 6, life: 0, max: 1.2, a: .9 });
+      else spawn({ kind: Math.random() < .6 ? 'spark' : 'glint', x, y, vx: Math.cos(a) * 80, vy: -50 - Math.random() * 100, size: 5 + Math.random() * 10, rot: a, spin: 3, life: 0, max: 1 + Math.random() * .5, a: 1 });
+    }
+  }
   if (st.blowing) {   // warm "haa" or cool "fuu" from her lips toward the ear on that side
     const warm = st.cue && st.cue.kind === 'warm' && t < st.cue.t + st.cue.dur;
     const env = warm ? sample(A.chars.A.breath, A.fps, t) : coolAt(t).env;
@@ -307,8 +318,8 @@ function emit(st, t, dt) {
 // cooling source visuals: breeze, flying fan, iced drink, cool magic — drawn at the cooling source's own position
 function drawCool(ctx, t, dt, st) {
   const c = lastCue(t, COOL_KINDS, 0), cs = coolAt(t);
-  if (!c || t > c.t + c.dur || cs.env < .02) return;
-  const ex = xOf(cs.az), side = Math.sign(cs.az) || 0, env = cs.env;
+  if (!c || t > c.t + c.dur || cs.env < .02 || fxFade <= .001) return;
+  const ex = xOf(cs.az), side = Math.sign(cs.az) || 0, env = cs.env * fxFade;
   if (c.kind === 'fan' || c.kind === 'swish') {
     // breeze streaks flowing toward the ear the cooling comes from (off-screen on that side)
     const n = Math.ceil(dt * 90 * env);
@@ -355,7 +366,7 @@ function drawCool(ctx, t, dt, st) {
 
 function thermalEdges(ctx, th) {
   for (const [side, c, h] of [[-1, th.Lc, th.Lh], [1, th.Rc, th.Rh]]) {
-    const v = Math.max(c, h); if (v < .02) continue;
+    const v = Math.max(c, h) * fxFade; if (v < .02) continue;
     const col = c >= h ? '70,170,255' : '255,110,50';
     const x0 = side < 0 ? 0 : W, x1 = side < 0 ? 520 : W - 520;
     const g = ctx.createLinearGradient(x0, 0, x1, 0);
@@ -381,6 +392,7 @@ const cv = $('scene'), ctx = cv.getContext('2d');
 let camYaw = 0, lastT = 0, lastFrame = performance.now();
 
 function frame(t, dt) {
+  { const k = clamp((t - CLEAN) / .45, 0, 1); fxFade = 1 - k * k * (3 - 2 * k); }   // clean stage on the last frames
   const st = charState(t);
   const target = st && st.mouth > .05 ? clamp(st.az, -60, 60) * .16 : 0;
   camYaw += (target - camYaw) * clamp(dt * 1.5, 0, 1);
@@ -393,7 +405,7 @@ function frame(t, dt) {
   updateParts(dt); drawParts(ctx);
   const th = thermalAt(t + offsetMs / 1000);
   thermalEdges(ctx, th);
-  if (st) offscreenHint(ctx, st);
+  if (st && t < LAST_OUT + .3) offscreenHint(ctx, st);
   return { states: st ? [st] : [], th };
 }
 
@@ -495,7 +507,7 @@ const esc = (s) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>':
 const SUB_LANGS = { jaen: ['ja', 'en'], ja: ['ja'], en: ['en'], off: [] };   // Japanese + English only
 function updateSubs(t) {
   const mode = $('subMode').value, langs = SUB_LANGS[mode] || ['ja', 'en'];
-  const act = langs.length ? A.subs.filter((s) => t >= s.t0 && t < s.t1).slice(-2) : [];
+  const act = langs.length && t < CLEAN ? A.subs.filter((s) => t >= s.t0 && t < s.t1).slice(-2) : [];
   const key = mode + act.map((s) => s.t0).join('|');
   if (key === subKey) return; subKey = key;
   subsEl.innerHTML = act.map((s) => {
@@ -584,7 +596,7 @@ function loop() {
 // ---------------------------------------------------------------- offline render (tools/render_mp4.py): ja + en subtitles burned in
 const RENDER = new URLSearchParams(location.search).has('render');
 function drawSubsCanvas(t) {
-  const act = A.subs.filter((s) => t >= s.t0 && t < s.t1).slice(-2);
+  const act = t >= CLEAN ? [] : A.subs.filter((s) => t >= s.t0 && t < s.t1).slice(-2);
   let y = H - 60 - (act.length - 1) * 118;
   for (const s of act) {
     const sing = s.kind === 'sing' ? '♪ ' : '';
