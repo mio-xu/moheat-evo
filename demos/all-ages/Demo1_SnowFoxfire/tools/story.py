@@ -199,3 +199,11 @@ def positions(times):
         dd = np.clip(PchipInterpolator(t, d)(times), 0.12, 8.0)
         out[who] = (((a + 180.0) % 360.0) - 180.0, dd)
     return out
+
+
+# ---------------------------------------------------------------- retime (2026-11-08): the film follows the ElevenLabs voices' natural
+# length (no need to keep 150 s); tools/retime_voices.py writes audio/retime.json, every time above goes through W(). Script times: CUES0 / DURATION0.
+import importlib.util as _iu, os as _os
+_ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+_s = _iu.spec_from_file_location("retime", _os.path.join(_ROOT, "..", "..", "..", "tools", "eleven", "retime.py"))
+_R = _iu.module_from_spec(_s); _s.loader.exec_module(_R); _R.apply(globals(), _ROOT)

@@ -21,7 +21,7 @@ import story as S
 import tts_voicevox as VV
 
 # Voice backend: VOICEVOX (emotional anime voices) when its engine is running, otherwise macOS Kyoko (draft).
-BACKEND = "voicevox" if VV.available() else "kyoko"
+BACKEND = "eleven"   # 2026-11-08 (user): ElevenLabs; before: "voicevox" if VV.available() else "kyoko"
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT, MEDIA = os.path.join(ROOT, "output"), os.path.join(ROOT, "media")
@@ -71,7 +71,44 @@ def write_wav(path, x):
     os.remove(tmp)
 
 # ---------------------------------------------------------------- voices (draft TTS)
+# ElevenLabs (2026-11-08, user's picks in tools/eleven/cast.json): K = koyuki r1_b, H = homura r1_c, A = ayane r1_a (Demo 2 calls tts(.., "A")).
+_EL = []
+EL_CAST = {"K": "koyuki", "H": "homura", "A": "ayane"}
+EL_TAG = {"determined": "[determined]", "happy": "[happy]", "laugh": "[laughs]", "pout": "[pouting]", "shy": "[shy]", "smug": "[smug]",
+          "surprise": "[surprised]", "sleepy": "[sleepy]", "playful": "[playful]", "magic": "[excited]"}
+EL_SMILE = {"K": "[softly]", "H": "[cheerful]", "A": "[cheerful]"}
+
+
+def el():
+    if not _EL:
+        import importlib.util
+        sp = importlib.util.spec_from_file_location("eleven", os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "..", "tools", "eleven", "tts.py"))
+        m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m); _EL.append(m)
+    return _EL[0]
+
+
+def el_text(text, who, whisper, expr):
+    tag = "[whispers]" + (" " + EL_TAG[expr] if expr in EL_TAG and expr not in ("sleepy",) else "") if whisper else EL_TAG.get(expr, EL_SMILE.get(who, ""))
+    return f"{tag} {text}".strip()
+
+
 def tts(text, who, whisper=False, expr="smile"):
+    if BACKEND == "eleven":
+        E = el(); vid = E.voice(EL_CAST[who]); txt = el_text(text, who, whisper, expr)
+        key = hashlib.md5(f"el|{vid}|{E.MODEL}|{E.SEED}|{txt}".encode()).hexdigest()[:12]
+        wav = os.path.join(CACHE, f"el_{key}.wav")
+        if not os.path.exists(wav):
+            import io
+            from scipy.signal import resample_poly
+            sr0, y = wavfile.read(io.BytesIO(E.speak(txt, vid)))
+            x = resample_poly(y.astype(np.float64) / 32768, SR, sr0)
+            wavfile.write(wav, SR, (np.clip(x, -1, 1) * 32767).astype(np.int16))
+        sr, x = wavfile.read(wav)
+        x = x.astype(np.float64) / 32768.0
+        e = env_follow(x, 40); idx = np.where(e > 0.01)[0]
+        x = x[max(0, idx[0] - 480): idx[-1] + 2400] if len(idx) else x
+        a, b = int(.01 * SR), int(.06 * SR); x[:a] *= np.linspace(0, 1, a); x[-b:] *= np.linspace(1, 0, b)
+        return x
     if BACKEND == "voicevox":
         cfg = json.dumps(VV.CAST[who], ensure_ascii=False, sort_keys=True)
         key = hashlib.md5(f"vv|{cfg}|{whisper}|{expr}|{text}".encode()).hexdigest()[:12]
@@ -241,7 +278,7 @@ def main():
             x = tts(c["tts"], who, whisper=(kind == "whisper"), expr=c["expr"])
             if kind == "whisper":
                 # VOICEVOX already whispers (ささやき style): only add a little air; Kyoko needs the full treatment
-                x = norm_to(x + 0.35 * whisperize(x) if BACKEND == "voicevox" else whisperize(x), -25)
+                x = norm_to(x if BACKEND == "eleven" else x + 0.35 * whisperize(x) if BACKEND == "voicevox" else whisperize(x), -25)
                 place(tracks[who]["breath"], c["t"] - 0.55, inhale())
             else:
                 x = norm_to(x, -19 if not c.get("duet") else -21)
@@ -266,7 +303,7 @@ def main():
                 print(f"  ! {w}: line at {a['t']}s ({a['dur']:.2f}s) runs into {b['t']}s")
     with open(os.path.join(OUT, "voice_timing.json"), "w") as f: json.dump(timing, f, indent=1)
     with open(os.path.join(MEDIA, "voice.json"), "w") as f:
-        json.dump(dict(backend=BACKEND, credits=VV.credits() if BACKEND == "voicevox" else ["macOS Kyoko (draft)"]), f, ensure_ascii=False)
+        json.dump(dict(backend=BACKEND, credits=["ElevenLabs"] if BACKEND == "eleven" else VV.credits() if BACKEND == "voicevox" else ["macOS Kyoko (draft)"]), f, ensure_ascii=False)
     print("voice backend:", BACKEND)
 
     # stems

@@ -75,14 +75,9 @@ tools/story.py ── cues (lines, breaths, magic) + position key-frames (azimut
 `output/` holds large files and is not committed; run `./build_all.sh` to recreate it.
 
 ## Optional / manual steps
-**A. Voices: VOICEVOX (emotional anime TTS, recommended).**
-1. The engine is already downloaded to `~/VOICEVOX-engine/engine`. Double-click `start_voicevox.command`, or run `cd ~/VOICEVOX-engine/engine && ./run`. Leave it running.
-2. `./build_all.sh`. The build detects the engine and regenerates every line with a style per emotion:
-   - Both characters use ずんだもん, told apart by style and delivery:
-   - Koyuki (shy): あまあま / なみだめ / **ささやき**, slow, lower pitch, flat intonation, longer pauses, softer tone
-   - Homura (lively): ノーマル / ツンツン / **ヒソヒソ**, fast, higher pitch, bouncy intonation, short pauses, brighter tone
-3. To change voices, edit `CAST` in `tools/tts_voicevox.py`. `python3 tools/tts_voicevox.py --audition` writes comparison clips to `output/audition/`.
-4. Credit required by the voice terms: the demo shows `VOICEVOX:ずんだもん` automatically. Keep it in the film credits too.
+**A. Voices: ElevenLabs (since 2026-11-08, user's picks koyuki r1_b / homura r1_c in `tools/eleven/cast.json`; before: VOICEVOX ずんだもん).**
+1. Key = `ELEVENLABS_API_KEY` in the repo's `.env.local`. `./build_all.sh` runs `tools/retime_voices.py` first: every line at its natural length (cached in `output/cache/el_*.wav`), and wherever a line would run into the next one the film is pushed later (`audio/retime.json`; `story.py` maps every time through `W()`, script times in `CUES0`). Now 160.5 s.
+2. Delivery comes from audio tags: `EL_TAG` / `EL_SMILE` in `tools/build_audio.py` (expression → tag, `[whispers]` for whispers). The old VOICEVOX path (`tools/tts_voicevox.py`) is kept; set `BACKEND = "voicevox"` to use it.
 
 Without the engine running, the build falls back to macOS Kyoko (draft). For the final release, voice actors can still replace lines: put the takes at the cue times in `tools/story.py` and rebuild.
 

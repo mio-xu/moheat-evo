@@ -615,7 +615,7 @@ function updateScene(t) {
 }
 
 // voice credits (required by the VOICEVOX terms) / draft notice
-$('credits').textContent = A.voice && A.voice.backend === 'voicevox'
+$('credits').textContent = A.voice && (A.voice.backend === 'voicevox' || A.voice.backend === 'eleven')
   ? `Voices: ${A.voice.credits.join(' / ')}`
   : 'Draft build: synthesized voice (macOS Kyoko).';
 
