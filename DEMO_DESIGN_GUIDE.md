@@ -361,7 +361,7 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
   - `?stills`
   - `?t=`：定格预览（时间轴 Demo）。
 - **新 Demo 上线**要做三件事：
-  - 在 `demos/shared/nav.js` 的 `DEMOS` 里加一项。
+  - 在 `demos/shared/nav.js` 的 `DEMOS` 里加一项（`ja` / `en` / `zh` 三个标题都要写，作品列表按显示语言只显示一种）。
   - 在官网 `index.html` 的 `.td-menu` 对应分组里加一个按钮。
   - 放缩略图。
 - 页面上不写 Demo 编号；文件夹编号只当 ID 用。

@@ -207,7 +207,7 @@
 
   // everything else on the page (top bar, side cards, notes, legend, demo switcher, device status, placeholders): a text node whose whole
   // text is in the dictionary (shared/l10n_common.js + the demo's l10n.js) shows that language; it is re-checked whenever the page changes it
-  const SKIP = 'script, style, #subs, #bubble, .bubble, #chatList, .one, .intro, .ix-card, .ix-done, #steps, #sceneTitle, .scene-title, #chatHint, .mono, [data-mshown], [data-morig], [data-voice], ' + BTN;
+  const SKIP = 'script, style, .dnav, .dn-panel, #subs, #bubble, .bubble, #chatList, .one, .intro, .ix-card, .ix-done, #steps, #sceneTitle, .scene-title, #chatHint, .mono, [data-mshown], [data-morig], [data-voice], ' + BTN;
   const orig = new WeakMap(), shown = new WeakMap();
   function textNode(n) {
     const el = n.parentElement; if (!el || el.closest(SKIP)) return;
