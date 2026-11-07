@@ -25,7 +25,7 @@
 ## 通用提示词（关键帧和 Seedance 都放在最前面）
 
 ```
-Two historical Japanese warlords in a cozy modern Kyoto izakaya on a winter night: ODA NOBUNAGA (left, sharp-eyed, mustache, top-knot, crimson-and-gold kimono with gold-leaf flower crests) and TOKUGAWA IEYASU (right, round calm face, bald pate with small top-knot, deep green-and-gold kimono with hollyhock crests) — keep their faces, costumes and colors exactly as in the attached character sheets. First-person view of the viewer seated at the wooden counter between them: Nobunaga sits front-left, Ieyasu front-right. Warm paper lanterns, wooden interior, steam, soft bokeh, snow outside. Premium Japanese 2D anime film illustration, richly detailed, warm cinematic lighting, gold-leaf accents on the warlords' clothing, consistent character design across shots.
+Two historical Japanese warlords in modern Kyoto on a snowy winter night (the Pontocho lantern alley and a cozy izakaya): ODA NOBUNAGA (left, sharp-eyed, mustache, top-knot, crimson-and-gold kimono with gold-leaf flower crests) and TOKUGAWA IEYASU (right, round calm face, bald pate with small top-knot, deep green-and-gold kimono with hollyhock crests) — keep their faces, costumes and colors exactly as in the attached character sheets. First-person view of the viewer between them: Nobunaga front-left, Ieyasu front-right (at the izakaya they sit at the wooden counter). Warm paper lanterns, wooden interior, steam, soft bokeh, snow outside. Premium Japanese 2D anime film illustration, richly detailed, warm cinematic lighting, gold-leaf accents on the warlords' clothing, consistent character design across shots.
 ```
 
 ## 负面提示词（每次都填）
