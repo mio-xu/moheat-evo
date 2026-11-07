@@ -52,3 +52,6 @@ demos/for-women/Demo22_ShionRain/assets/art/
 demos/for-women/Demo22_ShionRain/project/ref_url.json
 demos/for-women/Demo22_ShionRain/assets/frames/
 demos/for-women/Demo22_ShionRain/assets/video/
+demos/for-women/Demo24_GakuCamp/assets/
+demos/for-women/Demo24_GakuCamp/audio/*
+!demos/for-women/Demo24_GakuCamp/audio/voice_cache.json
