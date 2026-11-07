@@ -321,3 +321,28 @@ section[id]{scroll-margin-top:70px}
 .td-cats button:hover{border-color:#ffffff40;color:#fff}
 .td-cats button[aria-selected=true]{border-color:var(--warm);background:#ff927b1f;color:#ffd2c4}
 @media (max-width:900px){.td-cats{flex-wrap:nowrap;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none}.td-cats::-webkit-scrollbar{display:none}.td-cats button{flex:none}}
+
+/* #stories fits exactly one screen: the card images take the height that is left (at most 2:3 of their width) */
+#stories{height:100svh;min-height:600px;max-height:1100px;padding:clamp(84px,11vh,112px) 0 clamp(20px,4vh,48px);display:flex}
+#stories>.container{display:flex;flex-direction:column;min-height:0;height:100%}
+#stories .section-head{margin-bottom:clamp(16px,3vh,40px)}
+#stories .section-head h2{font-size:clamp(34px,min(5vw,6.4vh),64px)}
+#stories .story-grid{--cols:4;--gap:14px;--text:172px;flex:1;min-height:0;container-type:size;align-content:center;align-items:start}
+#stories .story-card{min-height:0}
+#stories .story-media{aspect-ratio:auto;flex:none;height:min(calc(100cqh - var(--text)),calc((100cqw - (var(--cols) - 1) * var(--gap)) / var(--cols) * 1.5))}
+#stories .story-media img{object-position:center 35%}
+#stories .story-content{flex:none}
+#stories .story-content p{margin:0}
+@media (max-width:1200px) and (min-width:901px){#stories .story-grid{--text:196px}}
+@media (max-width:900px){
+  #stories .story-grid{--cols:2;--text:124px;grid-template-rows:auto auto}
+  #stories .story-media{height:min(calc((100cqh - var(--gap)) / 2 - var(--text)),calc((100cqw - var(--gap)) / 2 * 1.5))}
+  #stories .section-head{gap:10px}
+  #stories .section-head>p{font-size:15px;line-height:1.5;margin:0}
+}
+@media (max-width:620px){
+  #stories{padding:78px 0 16px}
+  #stories .story-grid{--gap:10px;--text:80px}
+  #stories .section-head h2{font-size:clamp(30px,8vw,40px);margin:8px 0 0}
+  #stories .section-head>p{display:none}
+}
