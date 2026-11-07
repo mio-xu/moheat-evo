@@ -17,6 +17,7 @@
 | **每次改动自动 commit 并 push 到 `origin main`** | 这是 GitHub Pages 站点仓库（`moheat-evo.github.io`），push 即公开。大文件（WAV/MP4/原始音乐）已在 `.gitignore` 中排除 |
 | **Demo 1 的配音保持不变** | 小雪 / 小焰 = ずんだもん（调过音高与语气区分两人）。用户明确说不要改回原声 |
 | **Demo 2 的绫音 = ずんだもん 原声** | 不改音高、语调、音色；说话ノーマル，耳语ささやき |
+| **新角色配音默认用 ElevenLabs**（2026-11-08） | 用户觉得比 VOICEVOX 自然得多。标准和做法全在 §4「配音标准：ElevenLabs」，照做即可，不用重新研究；旧 Demo 的 VOICEVOX 配音不改 |
 | **VOICEVOX 署名** | 使用 VOICEVOX 的 Demo 必须显示 `VOICEVOX:<角色名>`（播放器已自动显示） |
 | **冷热：旧指令每只耳朵同一时间只能冷或热；DUAL 指令可同时** | 旧 Demo 的控制数据都经过"同侧冷热仲裁"（同侧冲突帧 = 0）。2026-11-08 起固件（`arduino/MoHeatEvoArduino.ino`，仅本地，备份 `.bak-20261108`）支持 `DUAL LC60 LH120 RC0 RH40`：四路独立、互不清零；旧写法不变。用户希望新 Demo 用它：**人贴着耳朵说话时，这只耳朵的热度跟着声音大小走**；环境（门外冷风、围巾、雪人…）作为另一层冷热，可与人声的暖同时出现在同一只耳朵。需要用户重新烧录固件 |
 
@@ -39,7 +40,7 @@ demos/nobunaga-suntory/Demo5_GifuCastle/                   Demo 5《信長の岐
 demos/all-ages/Demo10_CaveSpring/                 纯交互解谜《火をともして、ひみつの泉へ》（可玩，等 Seedance 背景）
 demos/healing/Demo11_Naomi/                      纯交互治愈小游戏《ナオミと、ふわふわの一日》（用户家的猫 Naomi，Seedance 美术）
 demos/for-women/Demo12_LateCall/                   纯交互深夜电话《もしもし、きこえる？》（原创男偶像 蓮，VOICEVOX:青山龍星）
-demos/for-women/Demo20_HinataHandshake/           纯交互握手会《あと10秒だけ、ね？》（原创男偶像 陽向，VOICEVOX:白上虎太郎）
+demos/for-women/Demo20_HinataHandshake/           纯交互握手会《あと10秒だけ、ね？》（原创男偶像 陽向，ElevenLabs）
 demos/healing/Demo15_FamilyCall/                 纯交互家庭电话《もしもし、おばあちゃん？》（外婆ハナ VOICEVOX:もち子さん，外公ゲン VOICEVOX:ちび式じい）
 demos/healing/Demo13_NaomiCam/                   Naomi 监控摄像头版《ナオミ、いまなにしてる？》（复用 Demo 11 美术和音频）
 demos/for-men/Demo14_LiveStream/                 女主播直播间 ①《ミントの、ささやき配信》（共用代码、美术、配音都在这里；详见该目录 README）
@@ -64,6 +65,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 | Chrome | `/Applications/Google Chrome.app`，headless 用于截图和逐帧渲染 MP4 |
 | Swift | `/usr/bin/swift`，`demos/all-ages/Demo1_SnowFoxfire/tools/lift_subject.swift` 用 macOS Vision 抠图（素材是绿底时可用）|
 | **VOICEVOX 引擎** | 0.26.1，`~/VOICEVOX-engine/engine`（3.9 GB，不在仓库里）。**agent 不能自己启动下载的二进制**（权限拦截），需要用户双击 `demos/all-ages/Demo1_SnowFoxfire/start_voicevox.command`。端口 `http://127.0.0.1:50021`。检查：`curl -s http://127.0.0.1:50021/version` |
+| **ElevenLabs** | 已接好（2026-11-08）：key 在仓库根目录 `.env.local`（gitignore，**不要打开/打印**；验证用 `npx -y @elevenlabs/cli@latest onboard check --env-path .env.local`）；系统 python3 已装 `elevenlabs` 2.x + `python-dotenv`（`requirements.txt`）。不用再跑 onboard、不用再下载 skills |
 | 本地预览服务器 | 在仓库根目录 `python3 -m http.server 8765`，然后打开 `http://localhost:8765/demos/<Demo 文件夹>/`。各 Demo 的 `start_demo.command` 会自动做这件事 |
 | MP4 渲染端口 | Demo 1: 8766，Demo 2: 8767，Demo 3: 8768，Demo 9: 8769，Demo 4: 8770（`render_mp4.py` 自带服务器）|
 
@@ -89,6 +91,15 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - **播放器**（`demo.js`）：Live2D 风格（呼吸、说话弹动、条带网格摆动、镜像、交叉淡化）；按配音 RMS 切换眨眼/口型/表情帧；粒子特效；冷热边缘光晕、雷达、四通道表、时间轴；URL 参数：`?t=95` 定格预览、`?cover=1` 封面导出、`?render=1` 离线渲染。
 - **配音**：`demos/all-ages/Demo1_SnowFoxfire/tools/tts_voicevox.py`（`CAST` 配置、按表情选风格、停顿上限、音色 tone）；唱歌：Demo 2 `build_audio.py::sing()` 逐 mora 设定音高和时长。
 - **封面**：`?cover=1` 截图 → `media/cover.jpg`（分享图、MP4 开头 2–3 s 标题卡、MP4 内嵌缩略图）。
+
+### 配音标准：ElevenLabs（新角色默认；2026-11-08 用户确定）
+- **模板（直接复制，不要重写）**：`demos/for-women/Demo20_HinataHandshake/scripts/voice.py` 的 `eleven()`（懒加载 client，读根目录 `.env.local`，`pcm_24000` → WAV → 原有 `save()`：`loudnorm I=-18 TP=-2`，单声道 AAC 128k `.m4a`）+ 缓存（key = voice_id、模型、seed、带标签台词，只重做改过的句子）+ `media/voice.js` 时长。
+- **参数**：`eleven_v4`，`language_code='ja'`，`stability 0.4`，`similarity_boost 0.8`，`seed 7`。v4 只认 stability / similarity（没有 style、speed、SSML），语气全靠**英文方括号标签** + 省略号。台词用**带汉字的日文原文**（不用 lines.js 第 4 列的假名读音）。不加 VOICEVOX 时代的 EQ / 气声 / 变调。
+- **标签约定**：每句写在 `ELEVEN = {id: '带标签台词'}` 里。人前甜 `[excited]` `[giggles]` `[surprised]`；撩 / 坏笑 `[playful]` `[chuckles softly]` `[laughs]`；**贴耳 `[whispers]`**；哈气 / 叹气 `[sighs softly]`；温柔 `[softly]` `[warmly]`；撒娇不满 `[pouting]`；好奇 `[curious]`。一句里可以换标签（如 `[laughs] あはは… [whispers] …かわいい`）。
+- **新角色流程**：复制 `Demo20…/scripts/eleven_audition.py` → 只改 `DESCRIPTION`（英文声音描述）、`SAMPLE`（日文 ≥100 字）、`LINES`（4 句代表台词 + 对比用的旧声音）→ Voice Design（`eleven_ttv_v3`）出 3 个候选并存进账号 → 试听页 `audio/eleven_audition/index.html`（本地，`open` 打开）→ 用户选定 → 把 voice_id 写进该 Demo 的 `voice.py`。
+- **已有声音**：陽向 = `lODKQ6pXINFtajDz9nqR`（试听 v2）。同轮未选：v1 `eJoymIUkzLni9OW2OQmk`、v3 `m4jKle69yMJ3kg5ZpWHz`（账号声音名额满时可删，先问用户）。
+- **额度**：免费账号约 1 万字符 / 月；一轮试听约 600 字符，一个 Demo 全部台词约 700。免费生成的音频不能商用，以后商用要换付费账号重跑 `voice.py`。
+- **坑**：`pcm_44100` / `pcm_48000` 要 Pro 账号，用 `pcm_24000`；页面署名写 `<角色> ElevenLabs`（VOICEVOX 角色仍写 `VOICEVOX:<名>`）。
 
 ---
 
@@ -330,7 +341,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 ### Demo20_HinataHandshake ✅ 可玩 —《あと10秒だけ、ね？ / Just Ten More Seconds?》（纯交互握手会，2026-11-08）
 - 女性向男偶像系列第一位：**陽向**（19 岁，年下・腹黑：人前甜、耳边黑）。造型 = 用户定的粉毛设定图（`Demo16_HandshakeEvent/assets/art/hinata_pink_sheet.png`，复制为 `assets/art/ref_hinata.png`）。`Demo16_HandshakeEvent/` 是三位男偶像的设计/试听工作区（未进 git），不要删。
 - **其余两位**：迅 = 用户选 **v2 造型（红发、墨镜推在头上、黑皮衣/黑衬衫、戒指，`project/shion_jin_v2.jpg` 右图 / `assets/art/jin_sheet_v2.png`）**，声线 雀松朱司（ツンデレ）；第三位（湊 / 紫苑）造型未定。每位一个独立 demo 文件夹。
-- 声音（2026-11-08 改）：陽向 **VOICEVOX:暁記ミタマ**，用户在第 3–9 轮试听选定的「m1」（base pitch −0.03、共振峰 ×0.95、停顿 ×1.4、近讲 EQ；s 甜 = ノーマル，t 撩 = ノーマル + 少量气声，d 耳边 = ささやき + 气声 0.5）；工作人员 VOICEVOX:春日部つむぎ。`scripts/voice.py`（合成函数已复制进来，不依赖 Demo16 文件夹）。
+- 声音（2026-11-08 再改）：陽向 = **ElevenLabs 试听 v2**（`lODKQ6pXINFtajDz9nqR`，见 §4 配音标准；之前是 VOICEVOX:暁記ミタマ「m1」）；工作人员 VOICEVOX:春日部つむぎ。`scripts/voice.py`，试听 `scripts/eleven_audition.py`。
 - 动画（2026-11-08）：8 段 Seedance 2.5 Lite（网页 Image to Video → First & Last Frame，首尾帧 = demo 静帧）：6 段循环 + 2 段过渡（握手台→握手、握手→左耳）。`scripts/prepare_video.py` 重建循环接缝（模型尾帧色调会漂）。
 - 曾与另一个会话撞车（Demo16_HandshakeEvent 里的 Haruto，同一粉毛角色）：用户决定保留 Demo20，那边改去做迅。
 - 流程：冬天会场排队（右边自动门 → 右凉 + 开门时一阵冷风）→ 握手 → 「手好冰」→ 他对你手哈气（两耳暖的一波）→ 工作人员「快到时间了」→ 凑到**左耳**「你刚才也去排别人的队了吧…我都看见了」（左耳热跟着声音）→ 时间到他不放手（计时器变成"延長 +0:xx"）→ **右耳**「下次只排我的队，约好了」+ 有人进门的冷风（右耳同时暖 + 凉，DUAL）→ 说「約束する」（麦克风或按钮）→ 挥手再见。自动通关约 1:40，0 报错。

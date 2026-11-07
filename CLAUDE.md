@@ -8,6 +8,7 @@ Key rules (details in the handoff):
 - Talk to the user in **Chinese**.
 - Subtitles are **Japanese + English only** (no Chinese).
 - **Seedance only when the user asks**: for Demo 1–3 and Demo 9 the browser-rendered MP4 is the final film. For Demo 4 (Seasons Express) the user asked (2026-11-07) for Seedance prompts (`demos/all-ages/Demo4_SeasonsExpress/Seedance素材命令.md`); the browser MP4 stays the current film until the clips arrive.
+- **Voices for new characters: ElevenLabs** (user, 2026-11-08), already set up. Follow the handoff §4 "配音标准：ElevenLabs" (template code, settings, tag conventions, audition flow) instead of re-researching; earlier demos keep VOICEVOX.
 - Character art comes from **ChatGPT prompt lists** that the user runs.
 - **Never modify earlier demos**: reuse art by symlink and code by import-by-path.
 - **Commit and push every change to `origin main`.** Large media stay out of git.
