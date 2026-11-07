@@ -1,0 +1,64 @@
+/* 『ねこになった日』 — on top of Demo 10's demo.css (by path): the Naomi series' pink / lilac palette (Demo 11), Demo 22's choice /
+   hold / subtitle components, plus the two cat-ear dials and the meow button. */
+:root { --bg: #1e1625; --panel: #241b2b; --panel-2: #302438; --line: #45364f; --gold: #ffc2d8; }
+.bar { background: #1f1726; }
+.brand span { color: #ff8fb8; }
+.btn.primary { background: linear-gradient(135deg, #ff8fb8, #b49bff); }
+.vv { bottom: auto; top: .6cqw; }
+
+/* cover: the windowsill is drawn mirrored on the canvas (Naomi's reflection on the right); darken the left for the title */
+.intro::before { background: linear-gradient(to right, rgba(36, 18, 40, .8), rgba(36, 18, 40, .45) 42%, rgba(36, 18, 40, 0) 62%); }
+body.cover-only .intro::before { background: linear-gradient(to right, rgba(36, 18, 40, .74), rgba(36, 18, 40, .35) 42%, rgba(36, 18, 40, 0) 60%); }
+body.cover-only .cover-copy { margin-top: 0 !important; }
+.intro .hero.a { position: absolute; width: 1px; height: 1px; }
+.intro h1 { background: linear-gradient(100deg, #ffd0e2 0%, #ffffff 50%, #c9d8ff 100%); -webkit-background-clip: text; background-clip: text; }
+.intro .chip.p { background: rgba(255, 170, 205, .18); color: #ffe0ec; border-color: rgba(255, 170, 205, .55); }
+.intro .cleared { color: #fff0f6; background: rgba(255, 140, 190, .22); border-color: rgba(255, 180, 210, .6); }
+/* subtitles (sizes from series.css) */
+.subs { position: absolute; z-index: 3; display: flex; justify-content: center; pointer-events: none; opacity: 0; transition: opacity .25s; }
+.subs.show { opacity: 1; }
+.subs .line { display: flex; flex-direction: column; align-items: center; background: rgba(34, 18, 36, .64); }
+.subs .ja { color: #fff; font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif; font-weight: 700; }
+.subs .en { color: #f2d9e6; font-family: Inter, sans-serif; }
+
+/* your turn: choices / action / hold */
+.choices, .act { position: absolute; left: 50%; bottom: 12cqw; transform: translate(-50%, .6cqw); z-index: 4; opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s; }
+.choices.show, .act.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.choices { display: flex; gap: 1.2cqw; }
+.ch, .act-btn { cursor: pointer; border-radius: 1.4cqw; border: 1px solid rgba(255, 175, 210, .55); background: rgba(40, 20, 40, .8); color: #fff; padding: 1cqw 2cqw;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background .15s, transform .15s; user-select: none; -webkit-user-select: none; touch-action: none; }
+.ch:hover, .act-btn:hover { background: rgba(214, 96, 150, .55); transform: translateY(-2px); }
+.ch b, .act-btn b { display: block; font: 700 clamp(11px, 1.6cqw, 26px)/1.3 "Zen Maru Gothic", "Noto Sans JP", sans-serif; }
+.ch span, .act-btn span { display: block; font: 500 clamp(9px, 1.05cqw, 16px)/1.3 Inter, sans-serif; color: #f2d9e6; }
+.act-btn { display: grid; grid-template-columns: auto auto; grid-template-rows: auto auto; column-gap: 1cqw; align-items: center; text-align: left; animation: nudge 1.6s ease-in-out infinite; }
+.act-btn i { grid-row: span 2; font-style: normal; font-size: clamp(18px, 2.6cqw, 40px); }
+.act-btn.hold { grid-template-rows: auto auto auto; }
+.act-btn.hold.down { background: rgba(214, 96, 150, .7); transform: scale(.97); }
+.act-btn .bar { grid-column: 2; display: block; height: .45cqw; min-height: 4px; margin-top: .5cqw; border-radius: 9px; background: rgba(255, 255, 255, .15); overflow: hidden; }
+.act-btn .bar u { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ff9ec3, #ffd6e6); }
+@keyframes nudge { 50% { box-shadow: 0 0 1.6cqw rgba(255, 160, 200, .6); } }
+.stage:has(.intro:not(.hidden)) :is(.choices, .act, .subs, .hud-top) { display: none !important; }
+@container (max-width: 620px) {
+  .choices { flex-direction: column; bottom: 14cqw; } .ch b, .act-btn b { font-size: 3.2cqw; } .ch span, .act-btn span { font-size: 2.3cqw; }
+}
+
+/* muffled lines (inside the laundry) and inner thoughts; the listen / sunbeam prompts */
+.subs.muffled .ja { color: #b9b0cc; font-style: italic; }
+.subs.muffled .en { color: #9d94b3; }
+.act-btn.aim { cursor: default; pointer-events: none; grid-template-rows: auto auto auto; }
+.stage:has(.intro:not(.hidden)) .ears { display: none !important; }
+
+/* the cat-ear dials (top left / top right): drag to turn each ear; the pink wedge = where it points */
+.ears { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; transition: opacity .4s; }
+.ears.on { opacity: 1; }
+.ear { position: absolute; top: 5.4cqw; width: 8.4cqw; aspect-ratio: 1; border-radius: 50%; pointer-events: auto; cursor: grab; touch-action: none;
+  background: radial-gradient(circle, rgba(40, 20, 40, .55) 55%, rgba(40, 20, 40, .25) 56%); border: 1px solid rgba(255, 175, 210, .55);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); --a: 0rad; }
+.ear.l { left: 1.6cqw; } .ear.r { right: 1.6cqw; }
+.ear i { position: absolute; inset: 0; transform: rotate(var(--a)); transition: transform .08s; }
+.ear i::before { content: ""; position: absolute; left: 50%; top: 6%; width: 38%; height: 46%; transform: translateX(-50%); clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  background: linear-gradient(#ffb3cf, #ff8fb8); filter: drop-shadow(0 0 .5cqw rgba(255, 140, 190, .8)); }
+.ear span { position: absolute; inset: 0; display: grid; place-items: center; font: 700 clamp(9px, 1.3cqw, 20px)/1 Inter, sans-serif; color: #ffe0ec; }
+.ear:active { cursor: grabbing; }
+.stage.listening .ear { animation: nudge 1.6s ease-in-out infinite; }
+@container (max-width: 620px) { .ear { width: 12cqw; top: 8.5cqw; } }

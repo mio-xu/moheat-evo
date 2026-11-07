@@ -9,6 +9,7 @@
     { cat: 'all-ages', dir: 'Demo10_CaveSpring', ja: '火をともして、ひみつの泉へ', en: 'Kindle the Fire, Find the Hidden Spring', group: 0 },
     { cat: 'healing', dir: 'Demo11_Naomi', ja: 'ナオミと、ふわふわの一日', en: 'A Fluffy Day with Naomi', group: 1 },
     { cat: 'healing', dir: 'Demo13_NaomiCam', ja: 'ナオミ、いまなにしてる？', en: "What's Naomi Up To? · Pet Cam", group: 1 },
+    { cat: 'healing', dir: 'Demo26_NekoNiNatta', ja: 'ねこになった日', en: 'The Day I Became Naomi', group: 1 },
     { cat: 'healing', dir: 'Demo15_FamilyCall', ja: 'もしもし、おばあちゃん？', en: 'Hello, Grandma? · A Call Home, Part 1', group: 1 },
     { cat: 'healing', dir: 'Demo16_FamilyCall2', ja: 'じいちゃんの、ゆきだるま', en: "Grandpa's Little Snowman · A Call Home, Part 2", group: 1 },
     { cat: 'for-men', dir: 'Demo14_LiveStream', ja: 'ミントの、ささやき配信', en: "Mint's Whisper Stream", group: 2 },

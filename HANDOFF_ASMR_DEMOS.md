@@ -46,6 +46,7 @@ demos/for-women/Demo21_JinLounge/                 纯交互 VIP 休息室《俺�
 demos/for-women/Demo22_ShionRain/                 纯交互雨夜《雨が止むまで》（原创男偶像 紫苑，ElevenLabs，Seedance 动画）
 demos/healing/Demo15_FamilyCall/                 纯交互家庭电话《もしもし、おばあちゃん？》（外婆ハナ VOICEVOX:もち子さん，外公ゲン VOICEVOX:ちび式じい）
 demos/healing/Demo13_NaomiCam/                   Naomi 监控摄像头版《ナオミ、いまなにしてる？》（复用 Demo 11 美术和音频）
+demos/healing/Demo26_NekoNiNatta/                Naomi 第三作《ねこになった日》（你就是 Naomi，第一人称猫视角；主人 ElevenLabs kainushi）
 demos/for-men/Demo14_LiveStream/                 女主播直播间 ①《ミントの、ささやき配信》（共用代码、美术、配音都在这里；详见该目录 README）
 demos/for-men/Demo17_CocoaStream/                直播间 ②《ココアの、ほっこりカフェ配信》（只有页面+封面，<base href> 指向 Demo14）
 demos/for-men/Demo18_HinataStream/               直播间 ③《ひなたの、激辛チャレンジ配信》（同上）
@@ -324,6 +325,14 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 流程：接通（雪花噪声）→ 她躲在猫窝里，用 **🌡 サーモ（热成像）** 找到她（声音和露出的尾巴尖是提示）→ 按住 🎤 对讲叫两次 → 她走到镜头前（**冰凉鼻子碰镜头 = 两耳凉**，在屏幕上摸她 → 左脸/右脸蹭摄像头 = 左暖/右暖）→ 激光笔抓 3 次 → 她热得摊平 → **🌀 扇风机，拖动瞄准风向（风吹向哪边哪边凉）**把她吹凉 → 自动喂食器 → 21:08 红外夜视 + 雨，房间变冷她发抖 → **🔥 电热毯**（两耳由凉变暖）→ 说晚安 → 门口钥匙声（右）、她跑去迎接你 → 回封面 `stop`。📸 可保存截图。同侧冲突 0（`NAOMICAM.conflicts()`）。2026-11-07 完整通关测试：2:39、7 颗心、0 冲突、0 报错。
 - 美术和音频**按路径复用 Demo 11**（`../Demo11_Naomi/media/art/`、`audio.js`），不改 Demo 11；摄像头效果是 WebGL 着色器（桶形畸变、色差、噪点、暗角、红外、雪花）+ OSD 画布。喂食器为代码绘制。
 - 已加入 `nav.js` 和官网菜单（在 Naomi 之后，缩略图 `assets/images/demos/Demo13_NaomiCam.jpg`）。`Demo12_LateCall` 是另一个会话在做的，编号已被占用。
+
+### Demo26_NekoNiNatta ✅ 可玩 —《ねこになった日 / The Day I Became Naomi》（2026-11-08）
+- 用户要求"再给 Naomi 设计一个 demo"，从 4 个方案里选了"你就是 Naomi"。**第一人称猫视角**（离地 25 cm，画面里只有两只白爪子，Naomi 只在窗玻璃倒影里出现一次）；耳机 = 她的耳朵。冬天的星期六，主人（原创，20 多岁女生，用户指定；不露脸，只出现腿、手、毛衣）在家。
+- 流程：猫窝醒来，**猫耳雷达**（拖动左右两个耳朵转盘 / A D ← →，耳朵朝向的声音变清楚；只改声音不改冷热）找到台所 → 窗台：霜花玻璃（左冷）+ 冬日阳光（左暖）同一只耳朵 DUAL，云遮住后点地上的光斑跳过去 2 次 → 冰箱冷气沿地面吹到猫的高度（二选一：凑近 / 蹭腿）→ 烘干的衣物，**长按往里钻**（越深越暖、越闷：共用 AudioContext 的总线低通）→ 主人找猫、掀开、左耳「みーつけた」→ 回「にゃ」→ 夜里趴在主人胸口（心跳、体温），二选一 ふみふみ / まるくなる → 贴耳「おやすみ」→ 封面 `stop`。
+- 声音：主人 = ElevenLabs `kainushi` r1_a（用户选），15 句 52.8 s（`scripts/voice.py`）。Naomi 的呼噜 / 猫叫 / 脚步 / 鸟 / 室内底噪：**按路径加载 Demo11 的 `audio.js`**，在 `audio.js` 里把同一个 AudioContext（destination 换成本 Demo 的总线）交给它，所以闷声效果对所有声音都生效。其他（水壶、开罐头、冰箱、烘干机、布料、心跳）程序合成。
+- 美术：画风与 Naomi 系列一致（用户）：`scripts/make_jobs.py` 按路径读取 Demo11 `make_jobs.py` 的 `LOOK` / `NAOMI` / `AVOID` / 风格图；参考图 = 风格图 + Demo11 客厅 + 确认过的 `window_sill`（视角锚点）。API 上传被限流（429，约 4.7 h）→ 网页端 GPT Image 2，16:9 2K，7 张（窗台第一版视角不对，重画一次），约 175 credits。
+- QA：两条分支自动通关 1:54 / 1:48，0 报错，结束 `stop`；桌面三种尺寸 + 手机 / 平板（no-serial）一屏。视频没做（静帧优先，用户要求时再做）。
+- 已加入 `nav.js`（Demo13 之后）、官网菜单（缩略图 `assets/images/demos/Demo26_NekoNiNatta.jpg`）、`credits.html`。没有给所有页面升 `nav.js?v=`（Demo24 / 25 加列表时也没升；别的会话正在改那些页面）。
 
 ### Demo12_LateCall ✅ 可玩 —《もしもし、きこえる？ / Can You Hear Me?》（纯交互，2026-11-07）
 - 用户要求"和喜欢的男爱豆打电话，不要 Q 版"。**原创角色**「蓮（レン）」，24 岁人气偶像团体主唱（不能用真人偶像）。
