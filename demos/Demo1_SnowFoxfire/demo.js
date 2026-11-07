@@ -152,6 +152,7 @@ function wisp(ctx, x, y, r, alpha, t) {
 let parts = [];
 function spawn(o) { if (parts.length < 900) parts.push(o); }
 const LAST_OUT = Math.max(...Object.values(A.present).map((p) => p[1]));   // after the last one vanishes every light effect fades out
+const CLEAN = LAST_OUT < A.duration ? LAST_OUT + .2 : Infinity;   // from here: no subtitles, no effects — only the room picture
 let fxFade = 1;
 function updateParts(dt) {
   for (const q of parts) { q.life += dt; if (q.seed !== undefined && (q.kind === 'frost' || q.kind === 'haze')) { q.vx += Math.sin(q.life * 5 + q.seed) * 40 * dt; q.vy += Math.cos(q.life * 4 + q.seed) * 30 * dt + (q.kind === 'haze' ? -20 : 12) * dt; } q.x += q.vx * dt; q.y += q.vy * dt; q.vx *= 1 - 1.4 * dt; q.vy *= 1 - 1.4 * dt; if (q.spin) q.rot += q.spin * dt; if (q.grow) q.size += q.grow * dt; }
@@ -349,10 +350,10 @@ function drawArtRoom(ctx, t, shift) {
   ctx.fillStyle = 'rgba(245,248,255,.9)';
   for (const f of snow) {
     const y = wy0 + ((f.y + t * f.v * .8) % 1) * (wy1 - wy0), x = wx0 + ((f.x * (wx1 - wx0) + Math.sin(t * .8 + f.w) * 14) % (wx1 - wx0));
-    ctx.globalAlpha = .35 + f.s / 7; ctx.beginPath(); ctx.arc(x, y, f.s * .9, 0, 7); ctx.fill();
+    ctx.globalAlpha = (.35 + f.s / 7) * fxFade; ctx.beginPath(); ctx.arc(x, y, f.s * .9, 0, 7); ctx.fill();
   }
   ctx.restore(); ctx.globalAlpha = 1;
-  const fl = .85 + .1 * Math.sin(t * 7.3) + .06 * Math.sin(t * 13.1 + 1);
+  const fl = (.85 + .1 * Math.sin(t * 7.3) + .06 * Math.sin(t * 13.1 + 1)) * fxFade;
   let g = ctx.createRadialGradient(W / 2, H + 60, 20, W / 2, H + 60, 620);
   g.addColorStop(0, `rgba(255,150,60,${.32 * fl})`); g.addColorStop(1, 'rgba(255,100,30,0)');
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
@@ -476,7 +477,7 @@ const cv = $('scene'), ctx = cv.getContext('2d');
 let camYaw = 0, lastT = 0, lastFrame = performance.now();
 
 function frame(t, dt) {
-  { const k = clamp((t - LAST_OUT - .2) / .45, 0, 1); fxFade = LAST_OUT < A.duration ? 1 - k * k * (3 - 2 * k) : 1; }   // clean empty room on the last frames
+  { const k = clamp((t - CLEAN) / .45, 0, 1); fxFade = 1 - k * k * (3 - 2 * k); }   // clean empty room on the last frames
   const states = ['K', 'H'].map((w) => charState(w, t)).filter(Boolean);
   // camera follows whoever is speaking, a little
   let target = 0, wsum = 0;
@@ -592,7 +593,7 @@ const NAME = { K: { ja: '小雪', en: 'Koyuki' }, H: { ja: '焔', en: 'Homura' }
 const esc = (s) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
 function updateSubs(t) {
   const mode = $('subMode').value;
-  const act = mode === 'off' ? [] : A.subs.filter((s) => t >= s.t0 && t < s.t1).slice(-2);
+  const act = mode === 'off' || t >= CLEAN ? [] : A.subs.filter((s) => t >= s.t0 && t < s.t1).slice(-2);
   const key = mode + act.map((s) => s.t0 + s.who).join('|');
   if (key === subKey) return; subKey = key;
   subsEl.innerHTML = act.map((s) => {
@@ -692,7 +693,7 @@ function loop() {
 // ?render=1 → step through the timeline at 30 fps, draw ja/en subtitles into the canvas, PUT JPEG frames to the local render server.
 const RENDER = new URLSearchParams(location.search).has('render');
 function drawSubsCanvas(t) {
-  const act = A.subs.filter((s) => t >= s.t0 && t < s.t1).slice(-2);
+  const act = t >= CLEAN ? [] : A.subs.filter((s) => t >= s.t0 && t < s.t1).slice(-2);
   let y = H - 60 - (act.length - 1) * 118;
   ctx.textAlign = 'center';
   for (const s of act) {

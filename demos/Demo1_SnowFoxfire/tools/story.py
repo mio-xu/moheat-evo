@@ -184,7 +184,7 @@ KEYS = {
 }
 
 # When each character is on stage (for visuals; fades 0.6 s at the edges).
-PRESENT = {"K": (1.6, 148.5), "H": (49.8, 149.3)}   # end: as they step back from your ears they vanish (snow / foxfire), Koyuki first
+PRESENT = {"K": (1.6, 148.2), "H": (49.8, 148.8)}   # end: as they step back from your ears they vanish (snow / foxfire), Koyuki first
 
 
 def positions(times):
