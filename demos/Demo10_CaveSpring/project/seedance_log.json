@@ -1,0 +1,22 @@
+{
+ "kohaku_base": {
+  "variant": 1,
+  "generation": "api_40fc83ccd219114cad34dcd3b6c131d1c1d919750b4f61134ad8decff9311c22",
+  "idempotency_key": "moheat-d10-kohaku-base-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/Demo10_CaveSpring/project/seedance_refs/kohaku_base_ref.jpg"
+  ]
+ },
+ "bg_hut_fire": {
+  "variant": 1,
+  "generation": "api_85ef6ae5c6c591c458578bcf3b94e2351642c099b5cfbaa07a4ded45f741ef6b",
+  "idempotency_key": "moheat-d10-bg-hut-fire-v1",
+  "ratio": "16:9",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/Demo10_CaveSpring/assets/art/bg_hut_night.png"
+  ]
+ }
+}
