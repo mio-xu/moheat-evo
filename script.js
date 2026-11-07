@@ -14,7 +14,7 @@ revealEls.forEach(el=>io.observe(el));
     let n = g.nextElementSibling; const mine = [];
     while (n && !n.classList.contains('td-group')) { if (n.classList.contains('td-item')) mine.push(items.indexOf(n) + 1); n = n.nextElementSibling; }
     if (!mine.length) return;
-    g.textContent = g.dataset.unit ? `${g.dataset.name} · ${mine.length} ${g.dataset.unit}` : `${g.dataset.name} · ${mine[0]}–${mine[mine.length - 1]}`;
+    g.textContent = g.dataset.unit ? `${g.dataset.name} · ${mine.length} ${g.dataset.unit}` : (mine.length > 1 ? `${g.dataset.name} · ${mine[0]}–${mine[mine.length - 1]}` : `${g.dataset.name} · ${mine[0]}`);
   });
 })();
 const demoFrame = document.getElementById('demoFrame');

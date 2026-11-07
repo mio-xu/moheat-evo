@@ -46,11 +46,11 @@ Each demo is a 150 s binaural film whose sounds drive MoHeat Evo (cooling / warm
 
 | Folder | Demo |
 |---|---|
-| `demos/Demo1_SnowFoxfire/` | 雪と狐火のひそひそ話 / Whispers of Snow and Flame |
-| `demos/Demo2_FanMeeting/` | キミだけのスペシャルファンミーティング / Your Special Fan Meeting |
-| `demos/Demo3_ShiningSmileConcert/` | Shining Smile Melody — Ice & Fire Concert |
-| `demos/Demo9_SengokuBanquet/` | 安土最後の酒宴 / The Last Banquet at Azuchi |
-| `demos/Demo4_SeasonsExpress/` | 四季暴走列車 / The Runaway Seasons Express |
+| `demos/for-kids/Demo1_SnowFoxfire/` | 雪と狐火のひそひそ話 / Whispers of Snow and Flame |
+| `demos/for-men/Demo2_FanMeeting/` | キミだけのスペシャルファンミーティング / Your Special Fan Meeting |
+| `demos/for-men/Demo3_ShiningSmileConcert/` | Shining Smile Melody — Ice & Fire Concert |
+| `demos/nobunaga-suntory/Demo9_SengokuBanquet/` | 安土最後の酒宴 / The Last Banquet at Azuchi |
+| `demos/for-kids/Demo4_SeasonsExpress/` | 四季暴走列車 / The Runaway Seasons Express |
 
 The home page's interactive demo section embeds them (`?embed=1`) with covers from `assets/images/demos/`.
 

@@ -28,28 +28,28 @@
 index.html, styles.css, script.js        品牌官网（不要随意改动风格；商业文案简短）
 control.html/js, test.html/js, device.js 设备控制页、输出测试页、Web Serial 公共代码（所有 Demo 共用 device.js）
 arduino/MoHeatEvoArduino.ino             ESP32 固件（.gitignore 排除，仅本地）
-demos/Demo1_SnowFoxfire/                 Demo 1《雪と狐火のひそひそ話》（原 `ASMR Demo/`）
-demos/Demo2_FanMeeting/                  Demo 2《キミだけのスペシャルファンミーティング》（原 `ASMR Demo 2/`）
-demos/Demo3_ShiningSmileConcert/         Demo 3《Shining Smile Melody — Ice & Fire Concert》
-demos/Demo4_SeasonsExpress/              Demo 4《四季暴走列車 / The Runaway Seasons Express》（原 `Demo_SeasonsExpress/`）
-demos/Demo9_SengokuBanquet/              Demo 9《安土最後の酒宴》
-demos/Demo7_KyotoIzakaya/                Demo 7《信長と家康、京都の居酒屋へ》（完成）
-demos/Demo8_YamazakiDistillery/          Demo 8《信長と家康、山崎蒸溜所へ》（完成）
-demos/Demo5_GifuCastle/                   Demo 5《信長の岐阜城へようこそ》（完成）
-demos/Demo10_CaveSpring/                 纯交互解谜《火をともして、ひみつの泉へ》（可玩，等 Seedance 背景）
-demos/Demo11_Naomi/                      纯交互治愈小游戏《ナオミと、ふわふわの一日》（用户家的猫 Naomi，Seedance 美术）
-demos/Demo12_LateCall/                   纯交互深夜电话《もしもし、きこえる？》（原创男偶像 蓮，VOICEVOX:青山龍星）
-demos/Demo15_FamilyCall/                 纯交互家庭电话《もしもし、おばあちゃん？》（外婆ハナ VOICEVOX:もち子さん，外公ゲン VOICEVOX:ちび式じい）
-demos/Demo13_NaomiCam/                   Naomi 监控摄像头版《ナオミ、いまなにしてる？》（复用 Demo 11 美术和音频）
-demos/Demo14_LiveStream/                 女主播直播间 ①《ミントの、ささやき配信》（共用代码、美术、配音都在这里；详见该目录 README）
-demos/Demo17_CocoaStream/                直播间 ②《ココアの、ほっこりカフェ配信》（只有页面+封面，<base href> 指向 Demo14）
-demos/Demo18_HinataStream/               直播间 ③《ひなたの、激辛チャレンジ配信》（同上）
-demos/Demo19_LunaStream/                 直播间 ④《ルナの、よふかし配信》（同上）
+demos/for-kids/Demo1_SnowFoxfire/                 Demo 1《雪と狐火のひそひそ話》（原 `ASMR Demo/`）
+demos/for-men/Demo2_FanMeeting/                  Demo 2《キミだけのスペシャルファンミーティング》（原 `ASMR Demo 2/`）
+demos/for-men/Demo3_ShiningSmileConcert/         Demo 3《Shining Smile Melody — Ice & Fire Concert》
+demos/for-kids/Demo4_SeasonsExpress/              Demo 4《四季暴走列車 / The Runaway Seasons Express》（原 `Demo_SeasonsExpress/`）
+demos/nobunaga-suntory/Demo9_SengokuBanquet/              Demo 9《安土最後の酒宴》
+demos/nobunaga-suntory/Demo7_KyotoIzakaya/                Demo 7《信長と家康、京都の居酒屋へ》（完成）
+demos/nobunaga-suntory/Demo8_YamazakiDistillery/          Demo 8《信長と家康、山崎蒸溜所へ》（完成）
+demos/nobunaga-suntory/Demo5_GifuCastle/                   Demo 5《信長の岐阜城へようこそ》（完成）
+demos/for-kids/Demo10_CaveSpring/                 纯交互解谜《火をともして、ひみつの泉へ》（可玩，等 Seedance 背景）
+demos/healing/Demo11_Naomi/                      纯交互治愈小游戏《ナオミと、ふわふわの一日》（用户家的猫 Naomi，Seedance 美术）
+demos/for-women/Demo12_LateCall/                   纯交互深夜电话《もしもし、きこえる？》（原创男偶像 蓮，VOICEVOX:青山龍星）
+demos/healing/Demo15_FamilyCall/                 纯交互家庭电话《もしもし、おばあちゃん？》（外婆ハナ VOICEVOX:もち子さん，外公ゲン VOICEVOX:ちび式じい）
+demos/healing/Demo13_NaomiCam/                   Naomi 监控摄像头版《ナオミ、いまなにしてる？》（复用 Demo 11 美术和音频）
+demos/for-men/Demo14_LiveStream/                 女主播直播间 ①《ミントの、ささやき配信》（共用代码、美术、配音都在这里；详见该目录 README）
+demos/for-men/Demo17_CocoaStream/                直播间 ②《ココアの、ほっこりカフェ配信》（只有页面+封面，<base href> 指向 Demo14）
+demos/for-men/Demo18_HinataStream/               直播间 ③《ひなたの、激辛チャレンジ配信》（同上）
+demos/for-men/Demo19_LunaStream/                 直播间 ④《ルナの、よふかし配信》（同上）
 HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
 ```
 - 官网首页 “INTERACTIVE DEMO / Every whisper, felt.” 区：左侧封面菜单（`assets/images/demos/demoN.jpg`）切换右侧 iframe（`demos/<name>/?embed=1`，只显示画面和进度条；点选时加 `&autoplay=1` 直接播放），默认 Demo 1。播放器下方的“设备输出示意图”（左/右耳冷热 %、耳罩发光、设备指令）直接读取 iframe 里 Demo 自己的 `#vLc/#vLh/#vRc/#vRh/#cmd`（同源），与真机输出一致。现在有 Demo 1–5 共 5 项；新 Demo 完成后在 `index.html` 的 `.td-menu` 里加一项，缩略图用该 Demo 的 `media/cover.jpg` 缩到 480×270。每个 Demo 的 `index.html` 都要有 `?embed=1` 那段 script + style。
-- 2026-11-07 起所有 Demo 统一放在 `demos/DemoN_英文名/`。Demo 之间互相引用用同级路径（如 `demos/Demo1_SnowFoxfire/tools`），播放器引用 `../../device.js`，`render_mp4.py` 的服务器根目录是仓库根。
+- 2026-11-07 起所有 Demo 统一放在 `demos/DemoN_英文名/`。Demo 之间互相引用用同级路径（如 `demos/for-kids/Demo1_SnowFoxfire/tools`），播放器引用 `../../device.js`，`render_mp4.py` 的服务器根目录是仓库根。
 每个 Demo 文件夹里都有自己的 `README.md`（运行方法、管线、交付物清单），本文件是总览和交接。
 
 ---
@@ -61,8 +61,8 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 | Python | 系统 `python3` 3.9；已有 numpy 2.0、scipy 1.13、matplotlib 3.9、Pillow 11。**没有** librosa / soundfile / torch / pyserial（Demo 3 的音乐分析特意只用 numpy/scipy）|
 | ffmpeg / ffprobe | 9.0（Homebrew）|
 | Chrome | `/Applications/Google Chrome.app`，headless 用于截图和逐帧渲染 MP4 |
-| Swift | `/usr/bin/swift`，`demos/Demo1_SnowFoxfire/tools/lift_subject.swift` 用 macOS Vision 抠图（素材是绿底时可用）|
-| **VOICEVOX 引擎** | 0.26.1，`~/VOICEVOX-engine/engine`（3.9 GB，不在仓库里）。**agent 不能自己启动下载的二进制**（权限拦截），需要用户双击 `demos/Demo1_SnowFoxfire/start_voicevox.command`。端口 `http://127.0.0.1:50021`。检查：`curl -s http://127.0.0.1:50021/version` |
+| Swift | `/usr/bin/swift`，`demos/for-kids/Demo1_SnowFoxfire/tools/lift_subject.swift` 用 macOS Vision 抠图（素材是绿底时可用）|
+| **VOICEVOX 引擎** | 0.26.1，`~/VOICEVOX-engine/engine`（3.9 GB，不在仓库里）。**agent 不能自己启动下载的二进制**（权限拦截），需要用户双击 `demos/for-kids/Demo1_SnowFoxfire/start_voicevox.command`。端口 `http://127.0.0.1:50021`。检查：`curl -s http://127.0.0.1:50021/version` |
 | 本地预览服务器 | 在仓库根目录 `python3 -m http.server 8765`，然后打开 `http://localhost:8765/demos/<Demo 文件夹>/`。各 Demo 的 `start_demo.command` 会自动做这件事 |
 | MP4 渲染端口 | Demo 1: 8766，Demo 2: 8767，Demo 3: 8768，Demo 9: 8769，Demo 4: 8770（`render_mp4.py` 自带服务器）|
 
@@ -73,7 +73,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 固件命令（115200 baud，每行一条）：`LC<35..80> RH<0..200>` 等，`L/R/B` + `C`(冷)/`H`(热) + PWM；`stop` 全关。**写同一侧的 C 会清掉 H，反之亦然**。
 - 默认 PWM 范围：冷 35–80，热 0–200（固件上限）。`test.html` 设置的范围保存在浏览器 localStorage（`moheat.range`），所有播放器共用。
 - 播放器：Web Serial（`device.js`），最多 10 条命令/秒，变化时才发；暂停/结束/切走页面/断开/Esc/STOP → `stop`。
-- 无浏览器播放：`python3 "demos/Demo1_SnowFoxfire/tools/play_thermal_csv.py" --csv <csv> --audio <wav> --port /dev/cu.…`（需 `pip3 install pyserial`；`--dry-run` 可测试）。
+- 无浏览器播放：`python3 "demos/for-kids/Demo1_SnowFoxfire/tools/play_thermal_csv.py" --csv <csv> --audio <wav> --port /dev/cu.…`（需 `pip3 install pyserial`；`--dry-run` 可测试）。
 - CSV 统一格式：`time_s, L_cool, R_cool, L_heat, R_heat, *_pwm, command`，20 Hz，已含设备延迟补偿（冷提前 0.35 s，热提前 0.60 s）。
 
 ---
@@ -82,11 +82,11 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 
 **管线**：时间轴文件（台词/音效/位置关键帧）→ `build_audio.py`（配音、音效、HRTF 双耳渲染、母带）→ `thermal.py`（四通道 CSV）→ `export.py`（字幕 + `media/data.js`）→ 浏览器播放器 → `render_mp4.py`（headless Chrome 逐帧 → MP4）。
 
-- **双耳渲染**：`demos/Demo1_SnowFoxfire/tools/build_audio.py::render()`，球形头模型（Brown–Duda ITD + 头影滤波）+ 近场 ILD + 房间混响，位置由时间轴模块的 `positions(times)` 提供（复用时把 `B.S` 替换成新 Demo 的时间轴模块）。
-- **冷热控制器**：`demos/Demo1_SnowFoxfire/tools/thermal.py`：50 ms RMS → 噪声门 → 归一化 → 曲线 → hold/attack/release → 距离 → 左右权重 → 设备延迟 → 同侧仲裁 `resolve_ear` → 8 s 剂量限制 → PWM。Demo 2 的 `ear_weights` 更锐利（归一化到较近的耳朵）。
-- **美术处理**：`demos/Demo1_SnowFoxfire/tools/prepare_art.py`：差分图对齐（缩放搜索 + 相位相关）→ 自动找脸部区域（眨眼/张嘴差异）→ **只合成脸部** → WebP（`media/art/` + `faces.json`）。手/道具也变化的差分要列入 `FULL_FRAME` 保留整张。
+- **双耳渲染**：`demos/for-kids/Demo1_SnowFoxfire/tools/build_audio.py::render()`，球形头模型（Brown–Duda ITD + 头影滤波）+ 近场 ILD + 房间混响，位置由时间轴模块的 `positions(times)` 提供（复用时把 `B.S` 替换成新 Demo 的时间轴模块）。
+- **冷热控制器**：`demos/for-kids/Demo1_SnowFoxfire/tools/thermal.py`：50 ms RMS → 噪声门 → 归一化 → 曲线 → hold/attack/release → 距离 → 左右权重 → 设备延迟 → 同侧仲裁 `resolve_ear` → 8 s 剂量限制 → PWM。Demo 2 的 `ear_weights` 更锐利（归一化到较近的耳朵）。
+- **美术处理**：`demos/for-kids/Demo1_SnowFoxfire/tools/prepare_art.py`：差分图对齐（缩放搜索 + 相位相关）→ 自动找脸部区域（眨眼/张嘴差异）→ **只合成脸部** → WebP（`media/art/` + `faces.json`）。手/道具也变化的差分要列入 `FULL_FRAME` 保留整张。
 - **播放器**（`demo.js`）：Live2D 风格（呼吸、说话弹动、条带网格摆动、镜像、交叉淡化）；按配音 RMS 切换眨眼/口型/表情帧；粒子特效；冷热边缘光晕、雷达、四通道表、时间轴；URL 参数：`?t=95` 定格预览、`?cover=1` 封面导出、`?render=1` 离线渲染。
-- **配音**：`demos/Demo1_SnowFoxfire/tools/tts_voicevox.py`（`CAST` 配置、按表情选风格、停顿上限、音色 tone）；唱歌：Demo 2 `build_audio.py::sing()` 逐 mora 设定音高和时长。
+- **配音**：`demos/for-kids/Demo1_SnowFoxfire/tools/tts_voicevox.py`（`CAST` 配置、按表情选风格、停顿上限、音色 tone）；唱歌：Demo 2 `build_audio.py::sing()` 逐 mora 设定音高和时长。
 - **封面**：`?cover=1` 截图 → `media/cover.jpg`（分享图、MP4 开头 2–3 s 标题卡、MP4 内嵌缩略图）。
 
 ---
@@ -116,19 +116,19 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 改编号时对调了文件夹、全仓库文字引用、缩略图和官网菜单。Demo 6–8 和 Demo 5 用 `sengoku.py` 按 `Demo*_SengokuBanquet` 名称找安土酒宴的模块，不受影响；封面上的人物图路径已改为 `../Demo9_SengokuBanquet/`。
 - 以后改信长系列的台词，要先确认它和前后两部的承接不冲突。
 
-### Demo 1 · `demos/Demo1_SnowFoxfire/` ✅ 完成
+### Demo 1 · `demos/for-kids/Demo1_SnowFoxfire/` ✅ 完成
 - 角色：小雪（冷）/ 小焰（热）；ChatGPT 美术在 `art/chatgpt/`，设定图 `art/Character.jpg`，房间背景 `room_bg`。
 - 配音：ずんだもん（两人用音高/风格区分）。字幕：日 + 英。
 - 重建：`./build_all.sh`（需 VOICEVOX）→ `python3 tools/render_mp4.py`。成品：`output/final_1080p.mp4`（本地）。
 
-### Demo 2 · `demos/Demo2_FanMeeting/` ✅ 完成
+### Demo 2 · `demos/for-men/Demo2_FanMeeting/` ✅ 完成
 - 角色：星乃綾音（`A_` 前缀），ChatGPT 美术 `art/chatgpt/`（35 张），设定图 `art/A_Character.png`。
 - 热 = 绫音人声（含原创歌曲，VOICEVOX 逐音唱）随她的位置；冷 = 扇子/冰饮/冷气/魔法，各自独立位置。检查：左右同时异温 4 次、左右交替 17 次、同侧冲突 0（`output/thermal_checks.json`）。
 - 配音：ずんだもん 原声。字幕：日 + 英。萌妹音试听保留在 `output/audition/`（本地）。
 - 重建：`./build_all.sh` → `python3 tools/render_mp4.py`。成品：`output/final_1080p.mp4`。
 - 代码复用 Demo 1：`tools/demo1.py` 按路径加载（同名模块冲突，不能直接 import）。
 
-### Demo 3 · `demos/Demo3_ShiningSmileConcert/` ✅ 完成
+### Demo 3 · `demos/for-men/Demo3_ShiningSmileConcert/` ✅ 完成
 - 真实歌曲 *Shining Smile Melody – Jpop*（ZTMusic, Pixabay），来源/许可/哈希见 `assets/music_original/SOURCE.md`；原曲 MP3 不提交。
 - 音乐分析（numpy/scipy）→ 88.2 BPM 半拍（≈176），剪辑 170.04 → 150.000 s（去掉 131.33–150.43 s 间奏 7 小节）。
 - 两种冷热模式：A 纯音乐、B 音乐 × 舞台位置（默认）。`scripts/check_sync.py` 全部通过。
@@ -136,7 +136,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 重建命令见 `README.md`；成品 `video/final/final_concert_150s.mp4`、`audio/final/final_stereo_150s.wav`（本地）。
 - 无歌词字幕（没有授权的歌词文本），只有段落标题（日/英）和片尾音乐署名。
 
-### Demo 4 · `demos/Demo4_SeasonsExpress/` ✅ 完成 —《四季暴走列車 / The Runaway Seasons Express》
+### Demo 4 · `demos/for-kids/Demo4_SeasonsExpress/` ✅ 完成 —《四季暴走列車 / The Runaway Seasons Express》
 - **任务书要点**（用户提供的完整制作指令）：
   - 150 s，1920×1080，30 fps，48 kHz 双耳声。第一人称坐在魔法列车车厢里朝前看，**无角色、无台词、无旁白**。
   - 画风必须和 Demo 1–3 一致：可爱日系 2D、粉彩、赛璐璐。**不要浮世绘或金箔风**（那是 Demo 9 的风格）。
@@ -167,7 +167,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
     - `scripts/export.py` → `media/`；`scripts/render_mp4.py`（端口 8770）→ `video/final/final_seasons_express_150s.mp4`；`--at 10,30` 只渲染预览静帧。
     - 封面：`?cover=1` 截图 → `media/cover.jpg`（cover 模式不跑动画循环，headless 截图才不会卡住）。
   - **成品**：`video/final/final_seasons_express_150s.mp4`（本地，98 MB）：1920×1080、30 fps、4500 帧、48 kHz 双耳声，音画都是 150.000 s，内嵌封面。
-  - **文件夹整理**：已从根目录 `Demo_SeasonsExpress/` 移到 `demos/Demo4_SeasonsExpress/`，根目录的临时兼容链接（`ASMR Demo`、`ASMR Demo 2`、`Demo3_ShiningSmileConcert`）已删除。
+  - **文件夹整理**：已从根目录 `Demo_SeasonsExpress/` 移到 `demos/for-kids/Demo4_SeasonsExpress/`，根目录的临时兼容链接（`ASMR Demo`、`ASMR Demo 2`、`Demo3_ShiningSmileConcert`）已删除。
     - `scripts/demo1.py` 会向上找到含 `device.js` 的仓库根，再在 `demos/` 或旧路径里找 Demo 1/2/3，所以以后再移动也能用。
     - 复用特效链接：`assets/reused_assets/*.png → ../../../Demo3_ShiningSmileConcert/assets/effects/`。
     - 官网菜单已加第 5 项（`assets/images/demos/demo4.jpg`）。
@@ -198,7 +198,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
     - 用户把生成的视频放进 `video/seedance/S01.mp4` … `S15.mp4` 之后：**下一步**写合成脚本，按时间轴剪辑和调速（24→30 fps），叠加 0–1.8 s 封面、场景标题、熄灯黑场和结尾卡，再与 `audio/final/final_binaural_150s.wav` 合成。冷热 CSV 不变。还要检查每个 clip 的左右季节是否画反。
   - **以后可选**：如果 ChatGPT 有额度，可按 `ChatGPT素材命令.md` 生成同名文件替换程序绘制的图，然后运行 `export.py` 和 `render_mp4.py`。
 
-### Demo 9 · `demos/Demo9_SengokuBanquet/` ✅ 完成 —《安土最後の酒宴 / The Last Banquet at Azuchi》
+### Demo 9 · `demos/nobunaga-suntory/Demo9_SengokuBanquet/` ✅ 完成 —《安土最後の酒宴 / The Last Banquet at Azuchi》
 - **第一人称台词（2026-11-07，用户："少了我的参与"）**：`banquet.py` 的 `CUES` 末尾追加了 7 句 `Y`（你）的台词，只出字幕、不配音，都放在两位大名说话的空档里并回应他们：失礼します／乾杯／ひとくちだけ／その先……ですか？／あったかい／ずっとここにいたい／はい、必ず。追加在末尾是为了让已配音台词的序号（`TAKE`）不变。`build_audio`、`export`、`docs`、`check_sync`、CSS 都已支持 `you` 类型；QA 检查你的台词是否压在配音上。
 - **方向**：以 `demo9.jpg` 设定板为准，**B 细密浮世绘·金箔装饰风**、写实成年人比例（Q 版已淘汰，见 `project/discarded_chibi_drafts/`）。
 - **角色与冷热**：織田信長坐左前方 → 他的声音主要驱动 **L_Heat**；徳川家康坐右前方 → **R_Heat**。冷感来自风/雨/冰镇等环境（按设定板：冷气、风、雨；热：火焰、热酒蒸汽、炭火）。
@@ -234,7 +234,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 
 ---
 
-### Demo 7 · `demos/Demo7_KyotoIzakaya/` ✅ 完成 —《信長と家康、京都の居酒屋へ》
+### Demo 7 · `demos/nobunaga-suntory/Demo7_KyotoIzakaya/` ✅ 完成 —《信長と家康、京都の居酒屋へ》
 - **Demo 7 已完成（2026-11-07）**：
   - **素材**：用户的 7 张图从桌面收进 `assets/bg/`（`d7_bg_pontocho`、`d7_bg_izakaya`，另有备选 `d7_bg_pontocho_alt`）和 `assets/props/`（beer、yakitori、highball、atsukan）。嗨棒图的格子底是画进去的，已抠掉。"开窗"背景没做，播放器用推近窗户代替。
   - **结构**：照搬 Demo 6（Demo 9 的角色图通过 `artBase` 读取），时间轴 `scripts/izakaya.py`，`build_all.sh` 约 30 s，渲染端口 8771。
@@ -242,13 +242,13 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
   - **冷热**：冷是雪夜风（左右交替）、冰啤、嗨棒、窗外河风；热是两人的声音，加上炭火（左前）和热燗蒸汽（右）。QA 全部通过：左右切换 23 次、相反温度 36 段、0 冲突。
   - **注意**：暖的环境音不要和同侧那位大名的台词重叠，否则 QA 的"声音和热的相关性"会掉到 0.7 以下；把暖源放在说话者的另一侧。
   - 你的字幕台词 7 句；`render_mp4.py --at …` 可以只渲染预览静帧；封面用 `--timeout=7000` 截图；官网菜单已加第 7 项。
-### Demo 8 · `demos/Demo8_YamazakiDistillery/` ✅ 完成 —《信長と家康、山崎蒸溜所へ》
+### Demo 8 · `demos/nobunaga-suntory/Demo8_YamazakiDistillery/` ✅ 完成 —《信長と家康、山崎蒸溜所へ》
 - 用户（2026-11-07）：信长和家康穿越到现代，京都居酒屋和三得利山崎蒸馏所"各做一个，剧情不一样"。两部都和 Demo 6（你带威士忌去安土）呼应；Demo 8 是时间环：两人尝到这酒，才认出是"那晚在安土喝过的"。
 - 每个文件夹里有：`README.md`（剧情、角色位置、冷热来源、管线）、`storyboard/script_150s.md`（日英台词 + 时间 + 冷热）、`Seedance素材命令.md`（Demo 7 有 14 个镜头 K01–K14，Demo 8 有 12 个镜头 Y01–Y12）。
 - 画面由用户制作：先用 ChatGPT 或任意生图工具做关键帧（以 Demo 9 的 `N_Character.png` / `I_Character.png` 和表情、姿势图为人物参考），再用 Seedance 图生视频。交付位置：`assets/keyframes/`、`video/seedance/`。
 - 声音和冷热沿用前几个 Demo：信长在左前（声音 → 左耳热），家康在右前（→ 右耳热），声线锁定；"你"的台词只出字幕。冷热来源：Demo 7 是冰啤酒、嗨棒冰块、鸭川夜风 / 炭火、热燗、关东煮；Demo 8 是晨雾、熟成库、泉水、冰块 / 发酵桶蒸汽、铜制蒸馏器。
 - **2026-11-07 进展**：
-  - **桌面素材包** `~/Desktop/MoHeat_Demo7-9_Seedance素材/`（`demos/Demo7_KyotoIzakaya/scripts/make_seedance_kit.py` 生成，直接读三份 `Seedance素材命令.md`）。每个镜头一个文件夹：放好要上传的参考图（硬链接）、完整的关键帧 prompt、Seedance 动作 prompt 和负面 prompt；`index.html` 一页列出所有镜头，带复制按钮、"已完成"勾选和参考图缩略图。
+  - **桌面素材包** `~/Desktop/MoHeat_Demo7-9_Seedance素材/`（`demos/nobunaga-suntory/Demo7_KyotoIzakaya/scripts/make_seedance_kit.py` 生成，直接读三份 `Seedance素材命令.md`）。每个镜头一个文件夹：放好要上传的参考图（硬链接）、完整的关键帧 prompt、Seedance 动作 prompt 和负面 prompt；`index.html` 一页列出所有镜头，带复制按钮、"已完成"勾选和参考图缩略图。
   - 用户把关键帧存成 `<镜头号>_关键帧.png`、视频存成 `<镜头号>.mp4`，放回同一个镜头文件夹。之后从桌面收素材。
   - **台词表已写成代码**：`scripts/izakaya.py`（Demo 7，23 句配音）、`yamazaki.py`（Demo 8，20 句）、`gifu.py`（Demo 5，15 句），格式和 Demo 6 一样（`cues_common.py`）。
   - **配音已生成**：`scripts/make_voice.py` 按名称找到安土酒宴的 `voice.perform`，用锁定声线每句 3 个候选，写入 `audio/takes/` 和 `takes.json`（时长）。试听文件复制到桌面素材包的 `配音试听/`，每个 Demo 有一份 `00_台词连播_*.m4a`。
@@ -257,12 +257,12 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
   - 角色**不重画**，直接复用 Demo 9 的信长、家康全部角色图（参照 Demo 6 用 `artBase` 读取 Demo 9 `media/art` 的做法）。
   - 新素材只有背景和道具，共 21 张：Demo 7 有背景 3 张（其中 1 张是编辑上一张）、道具 4 个；Demo 8 有背景 4 张、道具 2 个；Demo 5 有背景 4 张、道具 4 个，其中鹈饲船是横向的透明道具，播放器里让它从左滑到右。
   - 背景都按 Demo 9 宴会厅的构图画（你坐在中间，左右三分之一前景留空），并尽量设计成坐着的场景（居酒屋包间、品酒室、观赏船、茶室），这样 Demo 9 的坐姿图可以直接用。画风统一用 Demo 9 的浮世绘金箔风。
-  - 清单和提示词由 `demos/Demo7_KyotoIzakaya/scripts/make_image_kit.py` 生成，写到每个 Demo 的 `ChatGPT素材命令.md` 和桌面 `~/Desktop/MoHeat_Demo7-9_图片素材/`（每张图一个文件夹：参考图 + `prompt.txt`；`index.html` 带复制按钮；`配音试听/` 也移到了这里）。旧的桌面 Seedance 素材包已改名为 `（旧方案_可删除）`。三份 `Seedance素材命令.md` 都标了"已停用"。
+  - 清单和提示词由 `demos/nobunaga-suntory/Demo7_KyotoIzakaya/scripts/make_image_kit.py` 生成，写到每个 Demo 的 `ChatGPT素材命令.md` 和桌面 `~/Desktop/MoHeat_Demo7-9_图片素材/`（每张图一个文件夹：参考图 + `prompt.txt`；`index.html` 带复制按钮；`配音试听/` 也移到了这里）。旧的桌面 Seedance 素材包已改名为 `（旧方案_可删除）`。三份 `Seedance素材命令.md` 都标了"已停用"。
 - **下一步**：用户听配音、挑候选或改台词，并生成背景和道具 → 按实际时长排正式时间轴 → 播放器（复用 Demo 9/6 的播放器，按场景切换背景） → 配音（需要用户启动 VOICEVOX）→ 拿到 clip 后按台词剪辑，合成双耳音频和冷热，生成 MP4 和播放器。
 - Seedance 的口型不会和配音对上：长台词剪在说话镜头上，耳语用遮嘴或侧脸构图。
 - Demo 8 涉及三得利商标：AI 画面里不出现可读的商标，酒瓶用 Demo 6 的真实图合成；公开前需向三得利确认。
 
-### Demo 5 · `demos/Demo5_GifuCastle/` ✅ 完成 —《信長の岐阜城へようこそ》
+### Demo 5 · `demos/nobunaga-suntory/Demo5_GifuCastle/` ✅ 完成 —《信長の岐阜城へようこそ》
 - **Demo 8 / 9 已完成（2026-11-07）**：
   - **共用播放器**：Demo 7 的 `demo.js` 已改成通用版，三个 Demo 都用它。各 Demo 的不同之处写在时间轴模块的 `VIS` 里，由 `make_export` 传给播放器：每个背景的天气（`bgfx`：snow / mist / dust / fireflies）、推近镜头（`zoomRect`）、道具的日英名称和尺寸、哪些道具冒热气。新增 `boat` 类提示，让图片横穿画面并带篝火光（Demo 5 的鹈饲船）。
   - **素材**：Demo 8 的 6 张、Demo 5 的 8 张都已收进各自的 `assets/`。Demo 8 品酒时的山崎酒瓶用 Demo 6 抠好的图，干杯的嗨棒用 Demo 7 的。
@@ -311,18 +311,18 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 美术：Seedance API 的上传接口当天达到上限（Retry-After 约 10 小时），之后 `~/.seedance_key` 被换成的新 key 返回 401；用户说**直接用网页端作图**：在 seedance2-5.com 的 Image to Image（GPT Image 2, 16:9, 2K）上传参考图、填 `project/web_prompts.json` 里的提示词、"Download all" 下载。注意：API 用"生成结果链接"当参考图时，返回的 outputs 里第一张是原样的参考图，新图是**最后一张**（`seedance.py` 的 `save_last`）。下载文件名不带场景名，按生成顺序对应，挪文件前先看清 Downloads 里有没有旧文件。
 - 表情：`scripts/prepare_art.py`（按路径用 Demo 12 的函数）切口型/眨眼小块；外公说话帧生成时被放大了，用眼睛和鼻子区域求缩放（0.87）再切嘴；眨眼用固定偏移（局部搜索会漂）。
 - **冷热改为双层 + DUAL（2026-11-08）**：人声层 = 听筒贴耳时这只耳朵的热度 = 0.1 + 0.8 × 声音包络（起 0.06 s / 落 0.3 s；对着别处喊的句子 ×0.35；免提时没有人声热）；环境层 = 门（左凉）、围巾（两侧暖）、雪人（右凉）。每只耳朵冷、热各自计算，发 `DUAL …`。`FAMILY.both()` = 同耳冷热同时出现的帧数。
-- **2026-11-08 用户说太长，拆成两集**（同一通电话）：第 1 集 = 本文件夹（打电话 → 外公抢听筒 → 包裹 → 开门 → 围巾，结尾外公"看看我的蓝箱子"→「つづく」，约 2:50）；第 2 集 = `demos/Demo16_FamilyCall2/`《じいちゃんの、ゆきだるま》（开场围巾已围着、免提 → 小雪人 → 听筒回耳边 → 过年 → 不肯先挂，约 2:05）。Demo16 文件夹只有页面和封面：`<base href="../Demo15_FamilyCall/">` + `<body data-part="2">`，代码/美术/配音全用第 1 集的（`game.js` 里 `PART`）。两集都已加入 `nav.js` 和官网菜单（缩略图按文件夹命名）。
+- **2026-11-08 用户说太长，拆成两集**（同一通电话）：第 1 集 = 本文件夹（打电话 → 外公抢听筒 → 包裹 → 开门 → 围巾，结尾外公"看看我的蓝箱子"→「つづく」，约 2:50）；第 2 集 = `demos/healing/Demo16_FamilyCall2/`《じいちゃんの、ゆきだるま》（开场围巾已围着、免提 → 小雪人 → 听筒回耳边 → 过年 → 不肯先挂，约 2:05）。Demo16 文件夹只有页面和封面：`<base href="../Demo15_FamilyCall/">` + `<body data-part="2">`，代码/美术/配音全用第 1 集的（`game.js` 里 `PART`）。两集都已加入 `nav.js` 和官网菜单（缩略图按文件夹命名）。
 
 ## 6. 本地未提交的大文件（仅在本机，可用脚本重建）
 
 | 文件 | 大小 | 重建 |
 |---|---|---|
-| `demos/Demo1_SnowFoxfire/output/final_1080p.mp4`、`mix_48k.wav`、`stems/` | ~700 MB | `./build_all.sh` + `tools/render_mp4.py`（需 VOICEVOX）|
-| `demos/Demo2_FanMeeting/output/final_1080p.mp4`、`mix_48k.wav`、`stems/`、`audition/` | ~640 MB | 同上 |
-| `demos/Demo3_ShiningSmileConcert/video/final/final_concert_150s.mp4`、`audio/` | ~410 MB | README 中的命令（不需要 VOICEVOX）|
-| `demos/Demo3_ShiningSmileConcert/assets/music_original/*.mp3`、`music_edited/*.wav` | 5 MB + 43 MB | 原曲需从 Pixabay 手动下载（Cloudflare 拦截自动下载）|
-| `demos/Demo9_SengokuBanquet/audio/`（选定声线试听、take 缓存、4 条干声 stem、mix）、`video/`（MP4、srt）| ~160 MB + ~520 MB | `./build_all.sh`（需 VOICEVOX）+ `scripts/render_mp4.py` |
-| `demos/Demo4_SeasonsExpress/audio/`（16 条干声、双耳 stem、混音）、`video/`（MP4、预览帧）| ~250 MB + ~100 MB | `scripts/build_audio.py` + `scripts/render_mp4.py`（不需要 VOICEVOX）|
+| `demos/for-kids/Demo1_SnowFoxfire/output/final_1080p.mp4`、`mix_48k.wav`、`stems/` | ~700 MB | `./build_all.sh` + `tools/render_mp4.py`（需 VOICEVOX）|
+| `demos/for-men/Demo2_FanMeeting/output/final_1080p.mp4`、`mix_48k.wav`、`stems/`、`audition/` | ~640 MB | 同上 |
+| `demos/for-men/Demo3_ShiningSmileConcert/video/final/final_concert_150s.mp4`、`audio/` | ~410 MB | README 中的命令（不需要 VOICEVOX）|
+| `demos/for-men/Demo3_ShiningSmileConcert/assets/music_original/*.mp3`、`music_edited/*.wav` | 5 MB + 43 MB | 原曲需从 Pixabay 手动下载（Cloudflare 拦截自动下载）|
+| `demos/nobunaga-suntory/Demo9_SengokuBanquet/audio/`（选定声线试听、take 缓存、4 条干声 stem、mix）、`video/`（MP4、srt）| ~160 MB + ~520 MB | `./build_all.sh`（需 VOICEVOX）+ `scripts/render_mp4.py` |
+| `demos/for-kids/Demo4_SeasonsExpress/audio/`（16 条干声、双耳 stem、混音）、`video/`（MP4、预览帧）| ~250 MB + ~100 MB | `scripts/build_audio.py` + `scripts/render_mp4.py`（不需要 VOICEVOX）|
 | `~/VOICEVOX-engine/` | 3.9 GB | 官方 release 0.26.1 macos-arm64 `.vvpp`（zip）解压 |
 
 ---
@@ -365,4 +365,4 @@ Covers, top bar and page titles carry **no demo number**, so a demo can be inser
 Demo10_CaveSpring now uses painted images (Demo 1–4 look) for all 4 scenes, Kohaku (4 face frames on one body) and 6 props.
 Generated through the seedance2-5.com API with **GPT Image 2** image-to-image (`scripts/seedance_images.py`, key in `~/.seedance_key`,
 backgrounds 2K / sprites 1K), processed by `scripts/prepare_art.py` → `media/art/*.webp` (raw PNGs git-ignored). Code drawing stays as fallback.
-Details in `demos/Demo10_CaveSpring/README.md` (Painted art). Note: GPT Image 2 often paints a fake checkerboard instead of alpha → Vision lift.
+Details in `demos/for-kids/Demo10_CaveSpring/README.md` (Painted art). Note: GPT Image 2 often paints a fake checkerboard instead of alpha → Vision lift.

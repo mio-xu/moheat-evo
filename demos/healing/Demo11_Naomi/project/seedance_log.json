@@ -1,0 +1,177 @@
+{
+ "naomi_sit": {
+  "variant": 1,
+  "generation": "api_6c041b44a07a43513b8453c00fcd038ef045f8c63c30b11fd869e42641f6f4fa",
+  "idempotency_key": "moheat-d10-naomi-sit-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/for-kids/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/project/seedance_refs/naomi_photos.jpg"
+  ]
+ },
+ "bg_room_morning": {
+  "variant": 1,
+  "generation": "api_4f8238ae99b041464b556987827e73c53666c6d18b4b65a4f9261c035b637520",
+  "idempotency_key": "moheat-d10-bg-room-morning-v1",
+  "ratio": "16:9",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/for-kids/Demo10_CaveSpring/project/seedance_refs/style_board.jpg"
+  ]
+ },
+ "naomi_sit_blink": {
+  "variant": 1,
+  "generation": "api_a1fc732fec90670faba0476200cf342483f987bb463f3f81ba995ce43149e687",
+  "idempotency_key": "moheat-d10-naomi-sit-blink-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/for-kids/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/assets/art/naomi_sit.png"
+  ]
+ },
+ "naomi_sit_meow": {
+  "variant": 1,
+  "generation": "api_467743c9c1c9ee136c0c080703e60c9212ebf9d9a5a99272e52ea2c219cade41",
+  "idempotency_key": "moheat-d10-naomi-sit-meow-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/for-kids/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/assets/art/naomi_sit.png"
+  ]
+ },
+ "naomi_sit_happy": {
+  "variant": 1,
+  "generation": "api_ea12c8570b6c18208d865872f35d7fd8a09d14fb5a2bf3ee9e792da896ac8947",
+  "idempotency_key": "moheat-d10-naomi-sit-happy-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/for-kids/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/assets/art/naomi_sit.png"
+  ]
+ },
+ "naomi_close": {
+  "variant": 1,
+  "generation": "api_74e46da8002f8b47a16e865194dadf76d042ca3c98ec17ea4af973b574f67211",
+  "idempotency_key": "moheat-d10-naomi-close-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/for-kids/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/assets/art/naomi_sit.png",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/project/seedance_refs/naomi_photos.jpg"
+  ]
+ },
+ "naomi_close_blink": {
+  "variant": 1,
+  "generation": "api_4dc7c699169046baf90ae2c68d3fba2b07f54671dc524e62e69a3cb242e34c81",
+  "idempotency_key": "moheat-d10-naomi-close-blink-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/for-kids/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/assets/art/naomi_close.png"
+  ]
+ },
+ "naomi_close_happy": {
+  "variant": 1,
+  "generation": "api_c101eccecac0f91be19ff608a57120ceb2ebabefe587a8cc38658bfead9775f8",
+  "idempotency_key": "moheat-d10-naomi-close-happy-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/for-kids/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/assets/art/naomi_close.png"
+  ]
+ },
+ "naomi_walk": {
+  "variant": 1,
+  "generation": "api_6ed0c67a8f51b8682b0df288079bb20d47edd15e7a147e9d8ff217f2b393bbc3",
+  "idempotency_key": "moheat-d10-naomi-walk-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/for-kids/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/assets/art/naomi_sit.png",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/project/seedance_refs/naomi_photos.jpg"
+  ]
+ },
+ "naomi_pounce": {
+  "variant": 1,
+  "generation": "api_d88f0170032fd80f34627dad23aa31ab2095fa5dc7d5c0853acf4e4866361ea6",
+  "idempotency_key": "moheat-d10-naomi-pounce-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/for-kids/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/assets/art/naomi_sit.png",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/project/seedance_refs/naomi_photos.jpg"
+  ]
+ },
+ "naomi_eat": {
+  "variant": 1,
+  "generation": "api_2584257839cc101ecef51f604f5cf96f40f1fd97813bf9c0cddc558c0e227e37",
+  "idempotency_key": "moheat-d10-naomi-eat-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/for-kids/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/assets/art/naomi_sit.png",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/project/seedance_refs/naomi_photos.jpg"
+  ]
+ },
+ "naomi_loaf": {
+  "variant": 1,
+  "generation": "api_9048c57e45d79e81d9d53bb81f5de7f004fc79a192a89a8c7166cc5c9416b08d",
+  "idempotency_key": "moheat-d10-naomi-loaf-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/for-kids/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/assets/art/naomi_sit.png",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/project/seedance_refs/naomi_photos.jpg"
+  ]
+ },
+ "naomi_belly": {
+  "variant": 1,
+  "generation": "api_1da5a690a85f90a375804ce63a2c2128954833e249687e6077dd034f1a8ab394",
+  "idempotency_key": "moheat-d10-naomi-belly-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/for-kids/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/assets/art/naomi_sit.png",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/project/seedance_refs/naomi_photos.jpg"
+  ]
+ },
+ "naomi_sleep": {
+  "variant": 1,
+  "generation": "api_425da75390fa94885e94b93090e3de2517d7e791c793ec7f30bfc0d151acb93e",
+  "idempotency_key": "moheat-d10-naomi-sleep-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/for-kids/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/assets/art/naomi_sit.png",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/project/seedance_refs/naomi_photos.jpg"
+  ]
+ },
+ "bg_room_day": {
+  "variant": 1,
+  "generation": "api_159429e6aeae082a7378584d0d152f6b936c475edfaad242a7404d68ea9c3f09",
+  "idempotency_key": "moheat-d10-bg-room-day-v1",
+  "ratio": "16:9",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/for-kids/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/assets/art/bg_room_morning.png"
+  ]
+ },
+ "bg_room_night": {
+  "variant": 1,
+  "generation": "api_9649a56e6afd2192b978d6c0a8e77aed553b4c2e0b9a4ede0347aa427b1ba52d",
+  "idempotency_key": "moheat-d10-bg-room-night-v1",
+  "ratio": "16:9",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/for-kids/Demo10_CaveSpring/project/seedance_refs/style_board.jpg",
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/healing/Demo11_Naomi/assets/art/bg_room_morning.png"
+  ]
+ },
+ "prop_bowl": {
+  "variant": 1,
+  "generation": "api_de08975e4c3849928aa133b77076f10895dab7ab0ce98a26ab46e9ea490735d6",
+  "idempotency_key": "moheat-d10-prop-bowl-v1",
+  "ratio": "1:1",
+  "refs": [
+   "/Users/jiayixu/Desktop/MoHeat Evo/demos/for-kids/Demo10_CaveSpring/project/seedance_refs/style_board.jpg"
+  ]
+ }
+}

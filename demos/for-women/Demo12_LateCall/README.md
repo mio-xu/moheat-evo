@@ -1,0 +1,19 @@
+# もしもし、きこえる？ · Can You Hear Me?
+
+An interactive late-night phone call with **Ren (蓮)**, an original character: the 24-year-old lead vocalist of an idol group.
+No timeline, no MP4: his voice lines are VOICEVOX files played live through a phone filter at one ear (or "for real" in the room at the end);
+room sounds are synthesized live with HRTF; the thermal output is computed live from the same directions.
+
+**Play**: `python3 -m http.server 8765` at the repo root → `http://localhost:8765/demos/for-women/Demo12_LateCall/` (or `start_demo.command`). Headphones on; mic optional.
+
+| Moment | Thermal |
+|---|---|
+| Phone at your left ear (band-limited voice right at the ear) | left warm, a bit more when he talks / whispers |
+| Open the window to the same snow he sees (window on the right) | right cool, left still warm |
+| Switch the phone to your other ear | voice and warmth move to the right |
+| Doorbell (on the phone and in your hallway), open the door | cold rush, both ears |
+| He is at your door; hold him; "…会いたかった" at your right ear | both warm, right warmest |
+
+Files: `index.html`, `call.css` (+ Demo 10's `demo.css` by path), `game.js` (story runner, choices / mic / actions, thermal, device), `audio.js` (phone path, HRTF, synthesized sounds),
+`lines.js` (ja / en / style / reading). Voice: `scripts/voice.py` — VOICEVOX:青山龍星, しっとり + 囁き, pitch +0.03, intonation 1.20, speed 1.02, formant ×1.06.
+Art: `scripts/seedance.py scenes` (Seedance GPT Image 2, style 3 soft cel; raw PNGs in `assets/art/`, not in git) → `scripts/prepare_art.py` → `media/art/*.webp`.
