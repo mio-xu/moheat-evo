@@ -1,0 +1,26 @@
+{
+ "use-idols_v1": {
+  "generation": "api_13891c39dfb5d41b2935f1ef3fd7bed73a1b4f3922135a2bae9dd17f01c0cc07",
+  "idempotency_key": "moheat-site-use-idols-v1"
+ },
+ "use-vtubers_v1": {
+  "generation": "api_01d3f281280290d31d05ee168c3c6166bb2b152c8f7758180036c0c066acadae",
+  "idempotency_key": "moheat-site-use-vtubers-v1"
+ },
+ "use-idols_v2": {
+  "generation": "api_79d83b7aa51fa3d0cca90e4462f7eda24f1e56c6d63c3a9354603150ec8f13ca",
+  "idempotency_key": "moheat-site-use-idols-v2"
+ },
+ "use-vtubers_v2": {
+  "generation": "api_af126f481918e91b1db572cafd5dd03f52c9bb12d610c33dd54b0b3d9165aba1",
+  "idempotency_key": "moheat-site-use-vtubers-v2"
+ },
+ "use-calls_v2": {
+  "generation": "api_ff9e074497ca05e7464520616f0f26a3dfcb72357dca296aa2dd72e8df691971",
+  "idempotency_key": "moheat-site-use-calls-v2"
+ },
+ "use-asmr_v2": {
+  "generation": "api_ae5094d5cf38014c33cce0ff8a822cbeb295a2bca15e0ea16f46d9d669a0d00d",
+  "idempotency_key": "moheat-site-use-asmr-v2"
+ }
+}

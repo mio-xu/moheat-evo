@@ -327,7 +327,7 @@ section[id]{scroll-margin-top:70px}
 #stories>.container{display:flex;flex-direction:column;min-height:0;height:100%}
 #stories .section-head{margin-bottom:clamp(16px,3vh,40px)}
 #stories .section-head h2{font-size:clamp(34px,min(5vw,6.4vh),64px)}
-#stories .story-grid{--cols:4;--gap:14px;--text:172px;flex:1;min-height:0;container-type:size;align-content:center;align-items:start}
+#stories .story-grid{--cols:4;--gap:14px;--text:172px;flex:1;min-height:0;container-type:size;align-content:center;align-items:stretch}
 #stories .story-card{min-height:0}
 #stories .story-media{aspect-ratio:auto;flex:none;height:min(calc(100cqh - var(--text)),calc((100cqw - (var(--cols) - 1) * var(--gap)) / var(--cols) * 1.5))}
 #stories .story-media img{object-position:center 35%}
