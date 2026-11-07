@@ -16,6 +16,7 @@
     { cat: 'for-men', dir: 'Demo18_HinataStream', ja: 'ひなたの、激辛チャレンジ配信', en: "Hinata's Super-Spicy Challenge", group: 2 },
     { cat: 'for-men', dir: 'Demo19_LunaStream', ja: 'ルナの、よふかし配信', en: "Luna's Late-Night Stream", group: 2 },
     { cat: 'for-women', dir: 'Demo12_LateCall', ja: 'もしもし、きこえる？', en: 'Can You Hear Me?', group: 3 },
+    { cat: 'for-women', dir: 'Demo20_HinataHandshake', ja: 'あと10秒だけ、ね？', en: 'Just Ten More Seconds?', group: 3 },
     { cat: 'nobunaga-suntory', dir: 'Demo5_GifuCastle', ja: '信長の岐阜城へようこそ', en: "Welcome to Nobunaga's Gifu Castle", group: 4, ep: 1 },
     { cat: 'nobunaga-suntory', dir: 'Demo6_FutureWhisky', ja: '未来の酒と、安土の夜', en: 'Future Whisky at Azuchi', group: 4, ep: 2 },
     { cat: 'nobunaga-suntory', dir: 'Demo7_KyotoIzakaya', ja: '信長と家康、京都の居酒屋へ', en: 'Two Warlords in a Kyoto Izakaya', group: 4, ep: 3 },
@@ -25,6 +26,17 @@
   const GROUPS = ['全年齢 · All ages', '癒し · Healing', '男性向け · For him', '女性向け · For her', '信長シリーズ · Nobunaga Series'];   // numbers are the list order
   const qs = new URLSearchParams(location.search);
   if (qs.has('embed') || qs.has('cover') || qs.has('render')) return;
+  // one screen: measure the bar and what sits below the stage, series.css sizes the stage and the side panel from these
+  const root = document.documentElement, fit = () => {
+    const bar = document.querySelector('header.bar'), lay = document.querySelector('.layout'), stage = document.querySelector('.stage-col .stage') || document.querySelector('.stage');
+    if (!lay || !stage) return;
+    root.classList.add('fit');   // first, so the column is no longer stretched to the side panel's height when measured
+    const col = stage.closest('.stage-col') || stage.parentElement, cs = getComputedStyle(lay);
+    root.style.setProperty('--fit-bar', `${bar ? bar.offsetHeight : 0}px`);
+    root.style.setProperty('--fit-pad', `${parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)}px`);
+    root.style.setProperty('--fit-below', `${Math.max(0, col.getBoundingClientRect().height - stage.getBoundingClientRect().height)}px`);
+  };
+  fit(); addEventListener('resize', fit); addEventListener('load', fit); setTimeout(fit, 600);
   const bar = document.querySelector('header.bar'); if (!bar) return;
   const cur = DEMOS.findIndex((d) => location.pathname.includes(`/${d.dir}/`));
   const href = (d) => `../../${d.cat}/${d.dir}/`, thumb = (i) => `../../../assets/images/demos/${DEMOS[i].dir}.jpg`;   // pages live at demos/<cat>/<dir>/   // named by folder, so inserting a demo renames nothing

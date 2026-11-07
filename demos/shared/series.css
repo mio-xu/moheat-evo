@@ -47,3 +47,13 @@
   .subs .ja { font-size: 3.2cqw !important; } .subs .en { font-size: 2.4cqw !important; }
   .scene-title { font-size: 2.4cqw !important; }
 }
+
+/* ---------- one screen (user, 2026-11-08): every demo page fits the window, same layout everywhere ----------
+   nav.js measures the top bar (--fit-bar) and whatever sits under the stage in its column (--fit-below); the stage then
+   takes the largest 16:9 size that fits, and the side panel scrolls inside itself instead of the page. Narrow screens stack. */
+@media (min-width: 1101px) {
+  html.fit:not(.embed) body:not(.cover-only) .layout { height: calc(100dvh - var(--fit-bar, 0px)); box-sizing: border-box; align-items: start; }
+  html.fit:not(.embed) body:not(.cover-only) .stage-col { min-width: 0; }
+  html.fit:not(.embed) body:not(.cover-only) .stage { width: min(100%, calc((100dvh - var(--fit-bar, 0px) - var(--fit-pad, 40px) - var(--fit-below, 0px)) * 16 / 9)); margin-inline: auto; }
+  html.fit:not(.embed) body:not(.cover-only) .side { max-height: calc(100dvh - var(--fit-bar, 0px) - var(--fit-pad, 40px)); overflow-y: auto; scrollbar-width: thin; }
+}

@@ -12,3 +12,4 @@ Key rules (details in the handoff):
 - **Never modify earlier demos**: reuse art by symlink and code by import-by-path.
 - **Commit and push every change to `origin main`.** Large media stay out of git.
 - Thermal output per ear: the old commands (`LC50 RH0`) are one mode per ear (cool or heat), and every old thermal CSV must keep 0 same-ear conflicts. Since 2026-11-08 the firmware (`arduino/`, local only) also takes `DUAL LC.. LH.. RC.. RH..`: cool and heat independent on the same ear. The user prefers new demos to use it: a voice close to your ear warms it with its loudness, and ambient warm / cool shows the surroundings.
+- **Every demo page fits exactly one screen** (no page scroll at common desktop sizes) with a layout as consistent as possible across demos; thermal mappings must be physically plausible (no warmth just because a character eats something spicy). Applies to all new demos (user, 2026-11-08).
