@@ -45,6 +45,10 @@ def lines():
     return [(i, c) for i, c in enumerate(BQ.CUES) if c["kind"] in ("say", "whisper", "laugh")]
 
 
+def lines0():   # the script's own (un-retimed) timeline
+    return [(i, c) for i, c in enumerate(BQ.CUES0) if c["kind"] in ("say", "whisper", "laugh")]
+
+
 def _key(*a): return hashlib.md5(json.dumps(a, ensure_ascii=False, sort_keys=True, default=str).encode()).hexdigest()[:12]
 
 
@@ -78,47 +82,41 @@ def perform(c, take=0):
         os.makedirs(CACHE, exist_ok=True)
         wavfile.write(path, SR, (np.clip(x / (np.max(np.abs(x)) + 1e-9) * .9, -1, 1) * 32767).astype(np.int16))
     _last_path[0] = path
-    return fit(c, wavfile.read(path)[1].astype(np.float64) / 32768)
+    return wavfile.read(path)[1].astype(np.float64) / 32768
 
 
-def slot(c):
-    """seconds until the same speaker's next line (−0.15 s), or the film end."""
-    i = BQ.CUES.index(c)
-    nxt = next((d["t"] for d in BQ.CUES[i + 1:] if d["kind"] in ("say", "whisper", "laugh") and d["who"] == c["who"]), BQ.DURATION)
-    return nxt - c["t"] - .15
-
-
-def fit(c, x):
-    """keep every line inside its slot: up to ×1.15 faster (pitch kept), beyond that fade out at the slot end (laughs)."""
-    room = int(slot(c) * SR)
-    if len(x) <= room: return x
-    r = len(x) / room
-    if r <= 1.15:
-        with tempfile.TemporaryDirectory() as d:
-            a, b = os.path.join(d, "a.wav"), os.path.join(d, "b.wav")
-            wavfile.write(a, SR, (np.clip(x, -1, 1) * 32767).astype(np.int16))
-            subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", a, "-af", f"atempo={r:.4f}", b], check=True)
-            return wavfile.read(b)[1].astype(np.float64) / 32768
-    x = x[:room].copy(); f = int(.3 * SR); x[-f:] *= np.linspace(1, 0, f)
-    return x
+def retime(cues, durs, gap_same=.15, gap_other=.3):
+    """The film follows the voices' natural length (user, 2026-11-08: no need to keep 150 s): whenever a line would run into the
+    next voiced line, everything from just before that next line on is pushed later. → [(old time, extra seconds)]."""
+    vo = sorted([c for c in cues if c["kind"] in ("say", "whisper", "laugh")], key=lambda c: c["t"])
+    pts, shift = [], 0.0
+    for a, b in zip(vo, vo[1:]):
+        end = a["t"] + shift + durs[id(a)] + (gap_same if a["who"] == b["who"] else gap_other)
+        over = end - (b["t"] + shift)
+        if over > 0: pts.append((round(b["t"] - .01, 3), round(over, 3))); shift += over
+    return pts
 
 
 def main():
     os.makedirs(TAKES_DIR, exist_ok=True)
     info = []
-    for i, c in lines():
+    for i, c in lines0():
         durs = []
         for k in range(len(TAKE_VARIANTS)):
             x = perform(c, k); durs.append(round(len(x) / SR, 2))
             dst = os.path.join(TAKES_DIR, f"{i:02d}_{c['who']}_{c['emo']}_t{k}.wav")     # readable name → symlink to the cached take (no copy)
             if os.path.lexists(dst): os.remove(dst)
             os.symlink(os.path.relpath(_last_path[0], TAKES_DIR), dst)
-        nxt = next((d["t"] for d in BQ.CUES[i + 1:] if d["kind"] in ("say", "whisper", "laugh") and d["who"] == c["who"]), BQ.DURATION)
+        nxt = next((d["t"] for d in BQ.CUES0[i + 1:] if d["kind"] in ("say", "whisper", "laugh") and d["who"] == c["who"]), BQ.DURATION0)
         use = TAKE.get(i, 0)
         flag = "  ! overlaps his next line" if c["t"] + durs[use] > nxt - .15 else ""
         print(f"{i:02d} {c['t']:6.1f}s {c['who']} {c['emo']:10s} takes {durs}  ends {c['t'] + durs[use]:6.1f}  next {nxt:6.1f}{flag}  {c['ja']}")
         info.append(dict(i=i, who=c["who"], t=c["t"], emo=c["emo"], ja=c["ja"], durs=durs, take=use))
     json.dump(info, open(os.path.join(ROOT, "audio", "takes.json"), "w"), ensure_ascii=False, indent=1)
+    durs = {id(c): len(perform(c, TAKE.get(i, 0))) / SR for i, c in lines0()}
+    pts = retime(BQ.CUES0, durs)
+    json.dump(pts, open(os.path.join(ROOT, "audio", "retime.json"), "w"))
+    print(f"retime: {len(pts)} gaps, +{sum(e for _, e in pts):.1f} s → film {BQ.DURATION0 + sum(e for _, e in pts):.1f} s")
 
 
 if __name__ == "__main__":

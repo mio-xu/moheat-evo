@@ -89,11 +89,11 @@ def main():
     last = rows[-1]
     rep["7_thermal"] = dict(rows=len(rows), first=rows[0][0], last=last[0], same_ear_conflicts=chk["same_ear_conflicts"],
                             opposite_temps=len(chk["simultaneous_opposite_temps"]), side_switches=chk["side_switches"], ends_at_zero=last[-1] == "stop",
-                            ok=len(rows) == 3000 and chk["same_ear_conflicts"] == 0 and last[-1] == "stop")
+                            ok=len(rows) == int(BQ.DURATION * 20) and chk["same_ear_conflicts"] == 0 and last[-1] == "stop")
     # 8 duration
     r = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "stream=duration,sample_rate", "-of", "csv=p=0",
                         os.path.join(ROOT, "audio", "final", "mix_48k.wav")], capture_output=True, text=True).stdout.strip().strip(",").split(",")
-    rep["8_mix"] = dict(sample_rate=r[0], duration_s=r[1], ok=r[0] == "48000" and abs(float(r[1]) - 150) < .01)
+    rep["8_mix"] = dict(sample_rate=r[0], duration_s=r[1], ok=r[0] == "48000" and abs(float(r[1]) - BQ.DURATION) < .01)
     ok = all(v["ok"] for v in rep.values())
     os.makedirs(os.path.join(ROOT, "analysis"), exist_ok=True)
     json.dump(dict(all_ok=ok, **rep), open(os.path.join(ROOT, "analysis", "qa_report.json"), "w"), indent=1, ensure_ascii=False, default=str)

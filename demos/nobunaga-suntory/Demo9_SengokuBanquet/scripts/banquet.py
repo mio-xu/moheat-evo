@@ -172,3 +172,28 @@ def positions(times):
     """{source: (az wrapped, d)} — used by the binaural renderer, the thermal controller and the player."""
     return {"N": _interp(N_KEYS, times), "I": _interp(I_KEYS, times),
             "C": _interp(_src_keys(COOL_KINDS), times), "F": _interp(_src_keys(WARM_KINDS), times)}
+
+
+# ---------------------------------------------------------------- retime (2026-11-08)
+# The film follows the ElevenLabs voices' natural length (no need to keep 150 s): scripts/voice.py writes audio/retime.json =
+# [(old t, extra s)]; every time above (cues, ambience durations, scenes, position keys, presence, duration) goes through W().
+import copy as _copy, json as _json, os as _os
+CUES0, DURATION0 = _copy.deepcopy(CUES), DURATION
+_RT = _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))), "audio", "retime.json")
+RETIME = _json.load(open(_RT)) if _os.path.exists(_RT) else []
+
+
+def W(t):
+    """old script time → film time."""
+    return t + sum(e for p, e in RETIME if t >= p)
+
+
+if RETIME:
+    for _c in CUES:
+        if "dur" in _c: _c["dur"] = W(_c["t"] + _c["dur"]) - W(_c["t"])
+        _c["t"] = W(_c["t"])
+    SCENES = [(W(t), *r) for t, *r in SCENES]
+    N_KEYS = [(W(t), *r) for t, *r in N_KEYS]
+    I_KEYS = [(W(t), *r) for t, *r in I_KEYS]
+    PRESENT = {k: (W(a), W(b)) for k, (a, b) in PRESENT.items()}
+    DURATION = W(DURATION)

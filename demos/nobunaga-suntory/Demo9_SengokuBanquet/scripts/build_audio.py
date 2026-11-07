@@ -189,7 +189,7 @@ def main():
 
     t = np.arange(N) / SR
     # insects: present in calm scenes, gone in wind/rain, back at the end
-    ins_env = np.interp(t, [0, 3, 80, 83, 129, 135, 148, 150], [0, 1, 1, 0, 0, .8, .8, 0])
+    ins_env = np.interp(t, [BQ.W(x) for x in (0, 3, 80, 83, 129, 135, 148, 150)], [0, 1, 1, 0, 0, .8, .8, 0])
     # only the dry stems the thermal controller / export / QA read (binaural intermediates are not kept: −300 MB)
     for name, x in [("N_voice", VO["N"]), ("I_voice", VO["I"]), ("F_warm", warm), ("C_cool", cool)]:
         B.write_wav(os.path.join(STEMS, name + ".wav"), x)
