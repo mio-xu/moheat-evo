@@ -59,3 +59,6 @@ demos/for-women/Demo12_LateCall/assets/frames/
 
 # Demo25 hatsumode date (raw Seedance PNGs, frames, downloaded video)
 demos/for-men/Demo25_HatsumodeDate/assets/
+
+# Demo12 late call: raw Seedance clips / downloads (the page loads media/ only)
+demos/for-women/Demo12_LateCall/assets/

@@ -22,5 +22,17 @@
  "use-asmr_v2": {
   "generation": "api_ae5094d5cf38014c33cce0ff8a822cbeb295a2bca15e0ea16f46d9d669a0d00d",
   "idempotency_key": "moheat-site-use-asmr-v2"
+ },
+ "media-music_v1": {
+  "generation": "api_3a1da852b378d0c312e6208d7ef395f2caa1ed1c1252c665fd1dba5207fa05e0",
+  "idempotency_key": "moheat-site-media-music-v1"
+ },
+ "media-movies_v1": {
+  "generation": "api_2e28fda4986c07772f2a6f975f46af4831b4015bc1aa8113bd27e7075dd6e7c4",
+  "idempotency_key": "moheat-site-media-movies-v1"
+ },
+ "media-games_v1": {
+  "generation": "api_d7902178637cfe75424bf5882b828918bfd3924ff0df658cd77d8be8b36ce26c",
+  "idempotency_key": "moheat-site-media-games-v1"
  }
 }

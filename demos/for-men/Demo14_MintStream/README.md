@@ -31,6 +31,19 @@ Art style = Demo 12's soft-cel pick. Covers: `?cover=1` → `media/cover.jpg` (h
 
 Voices now (2026-11-08, user picks): ElevenLabs mint r1_a / cocoa r1_a / hinata_s r1_b / luna r1_b (`tools/eleven/cast.json`), audio tags per line in `scripts/voice.py`. No voice is shared. Lines: `lines.js` (ja + en); voices: `scripts/voice.py` → `media/voice/` (only changed lines are re-synthesized).
 
+## Round 4 — each streamer in her own place (user 2026-11-08: "all four stream from home, a bit boring")
+
+User picks: Mint → **night aquarium after closing** (teal, jellyfish tank, bubbles + pump hum, ice "from the penguins' room", towel warmed in the staff room) ·
+Cocoa → **retro kissaten after closing** (caramel + amber, door bell, espresso steam wand, wall clock, rain on the shop window, stove + blanket) ·
+Hinata → **her ramen yatai at a summer-night festival** (lantern red on night navy, crowd / taiko / crickets / furin, milk → ice-cold ramune, the stall fan,
+a festival uchiwa, fireworks at the end — ambient: a mild warm summer night on both ears) ·
+Luna → **jazz bar after closing** (navy + wine red, record crackle, the bar window's night wind, music box → one song on the bar piano, tea at the counter, the stool next to you).
+Faces and hair stay; outfits follow the place. Story structure, steps and thermal layers stay; 18 lines rewritten / added (`lines.js`, re-voiced with the same ElevenLabs voices).
+
+Art: `scripts/seedance_v2.py` (prompts; `project/web_jobs_v2.json` for the website) → `assets/art/v2/`. The four new `*_live` bases use the old `*_live`
+as the style + character reference; every other round-4 frame refers to its new base by the generation's output URL (no upload). Then the v2 PNGs replace
+`assets/art/*.png` and `prepare_art.py` (face boxes) makes `media/art/*.webp` (`?v=2`). `luna_musicbox*` → `luna_piano*`.
+
 ## Files
 
 - `index.html`, `style.css` (+ Demo 10's `demo.css` by path), `main.js` (stories, chat, Super Chats, thermal, face animation), `audio.js` (HRTF + synthesized triggers), `lines.js`.

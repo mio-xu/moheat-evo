@@ -103,6 +103,38 @@ window.StreamAudio = (() => {
       let i = 0; const iv = setInterval(() => { if (!ac) return; const f = 440 * Math.pow(2, (mel[i % mel.length] - 69) / 12); tone(g, f, 1.6, .12); tone(g, f * 3.01, .5, .02); if (i % 4 === 0) tone(g, f / 2, 1.8, .05); i++; }, 520);
       nodes.push({ stop: () => clearInterval(iv), disconnect() {} });
     }
+    // round 4 (2026-11-08): each streamer's own place
+    if (kind === 'aquarium') {   // Mint: the big tank's pump hum + bubbles rising in the water
+      const o = add(new OscillatorNode(ac, { frequency: 58, type: 'sine' })), og = ac.createGain(); og.gain.value = .12; o.connect(og).connect(g); o.start();
+      const lp = new BiquadFilterNode(ac, { type: 'lowpass', frequency: 260 }); add(noiseSrc()).connect(lp).connect(g);
+      const iv = setInterval(() => { if (!ac) return; const n = Math.random() < .3 ? 3 : 1; for (let i = 0; i < n; i++) { const f = rnd(380, 900); tone(g, f, .07, rnd(.05, .11), i * .06, 'sine', f * 1.9); } }, 260);
+      nodes.push({ stop: () => clearInterval(iv), disconnect() {} });
+    }
+    if (kind === 'clock') {   // Cocoa: the kissaten's wall clock
+      let k = 0; const iv = setInterval(() => { if (!ac) return; burst(g, .012, .5, k++ % 2 ? 2600 : 3100, 'bandpass', 6); }, 500);
+      nodes.push({ stop: () => clearInterval(iv), disconnect() {} });
+    }
+    if (kind === 'festival') {   // Hinata: festival crowd murmur, far taiko, suzumushi crickets, a wind chime now and then
+      const bp = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 700, Q: .6 }), am = ac.createGain(); am.gain.value = .7; add(noiseSrc()).connect(bp).connect(am).connect(g);
+      const lfo = add(new OscillatorNode(ac, { frequency: .3 })), lg = ac.createGain(); lg.gain.value = .25; lfo.connect(lg).connect(am.gain); lfo.start();
+      let b = 0; const iv = setInterval(() => { if (!ac) return;
+        if (b % 4 !== 3) tone(g, 70, .35, .35, 0, 'sine', 48);   // don, don, don, (rest)
+        for (let i = 0; i < 4; i++) tone(g, 4300, .05, .012, .12 + i * .07);   // crickets
+        if (Math.random() < .12) for (const f of [2637, 3520, 3951]) tone(g, f * rnd(.99, 1.01), 1.4, .02, rnd(0, .1));   // furin
+        b++; }, 520);
+      nodes.push({ stop: () => clearInterval(iv), disconnect() {} });
+    }
+    if (kind === 'vinyl') {   // Luna: the bar's record player left on the run-out groove — soft crackle
+      const hp = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 1200, Q: .3 }), ng = ac.createGain(); ng.gain.value = .15; add(noiseSrc()).connect(hp).connect(ng).connect(g);
+      const iv = setInterval(() => { if (ac && Math.random() < .6) burst(g, .006, rnd(.2, .7), rnd(1500, 5000), 'bandpass', 1.5); }, 90);
+      nodes.push({ stop: () => clearInterval(iv), disconnect() {} });
+    }
+    if (kind === 'piano') {   // Luna's one song on the bar piano: an original slow jazz-ballad progression (Dm9 G13 Cmaj9 A7b9), soft melody on top
+      const ch = [[50, 53, 57, 60, 64], [43, 53, 57, 59, 64], [48, 52, 55, 59, 62], [45, 49, 55, 58, 61]], mel = [[76, 74], [72, 71], [71, 67], [69, 70]];
+      const key = (m, d, a, at) => { const f = 440 * Math.pow(2, (m - 69) / 12); tone(g, f, d, a, at, 'triangle'); tone(g, f * 2, d * .5, a * .25, at); tone(g, f * 3, d * .25, a * .08, at); };
+      let i = 0; const bar = () => { if (!ac) return; const c = ch[i % 4]; c.forEach((m, k) => key(m, 3, k ? .045 : .07, k * .04)); mel[i % 4].forEach((m, k) => key(m, 1.6, .06, .9 + k * 1.1)); i++; };
+      bar(); const iv = setInterval(bar, 2600); nodes.push({ stop: () => clearInterval(iv), disconnect() {} });
+    }
     if (kind === 'heart') { const iv = setInterval(() => { if (!ac) return; tone(g, 54, .14, .9); tone(g, 49, .16, .6, .26); }, 950); nodes.push({ stop: () => clearInterval(iv), disconnect() {} }); }
     const L = { g, p, set: (v, a = az, d = dist) => { g.gain.setTargetAtTime(v, ac.currentTime, .3); place(p, a, d); }, stop: () => { g.gain.setTargetAtTime(0, ac.currentTime, .4); setTimeout(() => { for (const n of nodes) try { n.stop(); n.disconnect(); } catch {} g.disconnect(); }, 1800); delete loops[kind]; } };
     loops[kind] = L; return L;
@@ -138,6 +170,10 @@ window.StreamAudio = (() => {
     flap: (az) => shot(az, .25, .03, (o) => { swell(o, .35, .5, 700, .5, 'bandpass', 0, .35); burst(o, .02, .15, 2500, 'bandpass', 2, .1); }, .5),
     // Luna: window sliding, a cup on a saucer
     slide: (az = -1.3, open = true) => shot(az, 1.4, .3, (o, t) => { const f = swell(o, .8, .35, open ? 500 : 650, 3, 'bandpass', 0, .5); f.frequency.linearRampToValueAtTime(open ? 750 : 450, t + .8); burst(o, .04, .5, 900, 'bandpass', 2, .82); }, 1),
+    bell: (az = -.6) => shot(az, 2.2, .35, (o) => { for (const [f, a, at] of [[2350, .08, 0], [3130, .05, 0], [2350, .05, .18], [3130, .03, .18]]) tone(o, f, 1.2, a, at); }, 1.6),   // kissaten door bell
+    steamwand: (az = .3) => shot(az, .6, .15, (o, t) => { const f = swell(o, 3, .22, 5200, .7, 'bandpass', 0, .15); f.frequency.setValueAtTime(6200, t); f.frequency.linearRampToValueAtTime(3400, t + 2.8); swell(o, 2.6, .12, 300, .8, 'lowpass', .3, .4); }, 3.2),   // espresso machine frothing milk
+    marble: (az = 0) => shot(az, .2, .05, (o) => { burst(o, .05, .4, 2200, 'bandpass', 1.5); tone(o, 3800, .25, .08, .06); tone(o, 5200, .15, .04, .1); swell(o, .5, .15, 4000, .6, 'highpass', .05, .2); }, .8),   // ramune: the marble pushed in + fizz
+    firework: (az = .3) => shot(az, 6, .7, (o) => { tone(o, 900, .9, .025, 0, 'sine', 300); burst(o, .25, .9, 160, 'lowpass', .7, .95); swell(o, 1.6, .18, 3500, .5, 'bandpass', 1.05, .1); }, 3),   // whistle up, boom, crackle
     saucer: (az = .1) => shot(az, .4, .1, (o) => { tone(o, 2900, .3, .08); tone(o, 4700, .2, .03); burst(o, .02, .25, 3000, 'bandpass', 2); }, .5),
     // stream UI (not spatial)
     pop: () => ac && tone(ui, 1320, .08, .06, 0, 'sine', 1760),

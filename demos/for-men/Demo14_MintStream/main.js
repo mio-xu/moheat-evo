@@ -15,28 +15,28 @@
   // ---------------------------------------------------------------- channels
   const CH = {
     mint: {
-      name: '白深ミント', en: 'Shiromi Mint', title: 'ねむれない夜の、ささやき配信 · Whisper ASMR', credit: 'ミント ElevenLabs', viewers: 3412, sc: 'mint',
+      name: '白深ミント', en: 'Shiromi Mint', title: '閉館後の水族館から、ささやき配信 · Whisper ASMR at the night aquarium', credit: 'ミント ElevenLabs', viewers: 3412, sc: 'mint',
       art: ['mint_live', 'mint_live_talk', 'mint_live_talk_s', 'mint_live_half', 'mint_live_blink', 'mint_lean_R_talk_s', 'mint_bye_talk', 'mint_lean_L_talk_s', 'mint_ice_talk', 'mint_towel_talk', 'mint_lean_L', 'mint_lean_R', 'mint_ice', 'mint_towel', 'mint_bye'],
       steps: [['あいさつ', 'Say hi'], ['耳ふー', 'Ear blowing'], ['こおりのスパチャ', 'Ice Super Chat'], ['あったかタオル', 'Warm towel'], ['おやすみ', 'Good night']],
-      pool: ['こんばんは〜', 'waiting for this all day', 'ねむれない…', 'ミントちゃん今日もかわいい', '耳ふーまだ？', 'ASMR time 😌', 'おふとん入った', '声がすき', 'mimi-kun!!', 'first time here too', 'ささやき助かる…', 'zzz', 'good night everyone', 'イヤホン準備OK🎧', 'so relaxing', 'あしたも仕事…', 'ミントの声で寝たい'],
+      pool: ['こんばんは〜', 'waiting for this all day', 'ねむれない…', 'ミントちゃん今日もかわいい', '耳ふーまだ？', 'ASMR time 😌', 'おふとん入った', '声がすき', 'mimi-kun!!', 'first time here too', 'ささやき助かる…', 'zzz', 'good night everyone', 'イヤホン準備OK🎧', 'so relaxing', 'あしたも仕事…', 'ミントの声で寝たい', 'くらげきれい…', 'aquarium at night?!', 'ペンギン起きてる？', '🪼🪼🪼', '水の音いやされる'],
     },
     cocoa: {
-      name: '甘音ココア', en: 'Amane Cocoa', title: 'ほっこりカフェ配信 · Cozy café chat', credit: 'ココア ElevenLabs', viewers: 2876, sc: 'cocoa',
+      name: '甘音ココア', en: 'Amane Cocoa', title: '閉店後の喫茶店から · Cozy café after hours', credit: 'ココア ElevenLabs', viewers: 2876, sc: 'cocoa',
       art: ['cocoa_live', 'cocoa_live_talk', 'cocoa_live_talk_s', 'cocoa_live_half', 'cocoa_live_blink', 'cocoa_blanket_talk', 'cocoa_bye_talk', 'cocoa_fufu_talk_s', 'cocoa_aan_talk_s', 'cocoa_fufu', 'cocoa_aan', 'cocoa_blanket', 'cocoa_bye'],
       steps: [['あいさつ', 'Say hi'], ['ふーふー＆あーん', 'Fu-fu & aah'], ['トッピング', 'Topping Super Chat'], ['ブランケット', 'Blanket'], ['またね', 'See you']],
-      pool: ['ココアちゃん！', 'こんばんは〜☕', 'I brought my own cocoa', 'さむすぎる…', '配信まってた！', 'cute beret!!', 'あったまる〜', 'tea gang here 🍵', 'くまのマイクかわいい', 'ちょうど仕事おわった', 'cozy vibes ☕', 'マシュマロ派', '声あまい…', 'ふわふわ', 'hello hello', 'こたつから見てる'],
+      pool: ['ココアちゃん！', 'こんばんは〜☕', 'I brought my own cocoa', 'さむすぎる…', '配信まってた！', 'cute beret!!', 'あったまる〜', 'tea gang here 🍵', 'くまのマイクかわいい', 'ちょうど仕事おわった', 'cozy vibes ☕', 'マシュマロ派', '声あまい…', 'ふわふわ', 'hello hello', 'こたつから見てる', 'このお店いきたい', 'retro kissaten vibes ☕', 'ナポリタンある？', '時計の音すき', 'マスターは？'],
     },
     hinata: {
-      name: '火野ひなた', en: 'Hino Hinata', title: '激辛チャレンジ配信 · Super-spicy challenge', credit: 'ひなた ElevenLabs', viewers: 4105, sc: 'hinata',
+      name: '火野ひなた', en: 'Hino Hinata', title: '夏祭りの屋台から、激辛チャレンジ · Spicy challenge at the festival', credit: 'ひなた ElevenLabs', viewers: 4105, sc: 'hinata',
       art: ['hinata_live', 'hinata_live_talk', 'hinata_live_blink', 'hinata_spicy_talk', 'hinata_cool_talk', 'hinata_whisper_talk_s', 'hinata_bye_talk', 'hinata_eat', 'hinata_spicy', 'hinata_cool', 'hinata_fan', 'hinata_whisper', 'hinata_bye'],
       steps: [['あいさつ', 'Say hi'], ['激辛ラーメン', 'Spicy ramen'], ['たすけて！スパチャ', 'Rescue Super Chat'], ['完食＆うちわ', 'All gone & fan'], ['ないしょ話', 'A secret']],
-      pool: ['おっはひな〜！', 'レベル10はやばい', 'spicy queen 🌶', 'がんばれー！', 'もう汗かいてる笑', 'I could never', 'ひなたちゃん元気すぎ', '辛いの苦手…', 'w w w', 'let\'s gooo', '牛乳用意して', 'ラーメンおいしそう', 'fang cute', '応援してる！'],
+      pool: ['おっはひな〜！', 'レベル10はやばい', 'spicy queen 🌶', 'がんばれー！', 'もう汗かいてる笑', 'I could never', 'ひなたちゃん元気すぎ', '辛いの苦手…', 'w w w', 'let\'s gooo', 'ラムネ用意して', 'ラーメンおいしそう', 'fang cute', '応援してる！', '屋台配信は草', 'festival!! 🏮', '浴衣じゃないの？', '花火まだ？', 'はっぴ似合う', 'ラムネ飲みたい'],
     },
     luna: {
-      name: '宵月ルナ', en: 'Yoizuki Luna', title: '深夜のおしゃべり配信 · Late-night chat', credit: 'ルナ ElevenLabs', viewers: 1958, sc: 'luna',
-      art: ['luna_live', 'luna_live_talk', 'luna_live_talk_s', 'luna_live_blink', 'luna_window', 'luna_window_talk', 'luna_tea', 'luna_tea_talk', 'luna_musicbox', 'luna_musicbox_talk', 'luna_close', 'luna_close_talk', 'luna_bye', 'luna_bye_talk'],
+      name: '宵月ルナ', en: 'Yoizuki Luna', title: '閉店後のジャズバーから · Late night at the jazz bar', credit: 'ルナ ElevenLabs', viewers: 1958, sc: 'luna',
+      art: ['luna_live', 'luna_live_talk', 'luna_live_talk_s', 'luna_live_blink', 'luna_window', 'luna_window_talk', 'luna_tea', 'luna_tea_talk', 'luna_piano', 'luna_piano_talk', 'luna_close', 'luna_close_talk', 'luna_bye', 'luna_bye_talk'],
       steps: [['あいさつ', 'Say hi'], ['夜の風', 'Night wind'], ['リクエスト', 'Request'], ['となりで', 'Next to you'], ['夜明け前', 'Before dawn']],
-      pool: ['こんばんは', 'ルナさんの声おちつく', 'night owl here 🦉', '眠れない夜', '雨やんだね', 'calm vibes', 'まだ仕事中…', 'その声ずるい', 'from overseas, hi', '月がきれい', '深夜の楽しみ', 'goodnight soon', 'ルナさん…'],
+      pool: ['こんばんは', 'ルナさんの声おちつく', 'night owl here 🦉', '眠れない夜', '雨やんだね', 'calm vibes', 'まだ仕事中…', 'その声ずるい', 'from overseas, hi', '月がきれい', '深夜の楽しみ', 'goodnight soon', 'ルナさん…', 'お店の雰囲気よすぎ', 'piano please 🎹', 'バーのカウンター…', 'ここで飲みたい', 'ルナさんの店？'],
     },
   };
   const HANDLES = ['ねこまる', 'yuki_88', 'とうふ', 'Kai', 'ほしぞら', 'mochi', 'ぬい', 'Leo', 'さくら餅', 'night_owl', 'くま吉', 'Rin', 'ぽてと', 'ami', 'しろくま', 'Sora', 'みかん', 'tomo'];
@@ -55,7 +55,7 @@
   // ---------------------------------------------------------------- art
   const IMG = {};
   const ALL = ONE ? CH[ONE].art : Object.values(CH).flatMap((c) => c.art);   // a one-streamer demo loads only her frames
-  const artReady = Promise.all(ALL.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/${n}.webp?v=1`; })));
+  const artReady = Promise.all(ALL.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/${n}.webp?v=2`; })));
 
   // ---------------------------------------------------------------- state
   const fresh = (ch) => ({ ch, started: true, t: 0, clock: 0, view: 'live', pos: { az: 0, dist: .9 }, lv: 0,
@@ -149,6 +149,8 @@
     await sleep(.6); S.shy = 1; await say('m03'); S.shy = 0;
     SND.fx.taps(-1.5, 2); setTimeout(() => SND.fx.taps(1.5, 2), 700);
     await say('m04');
+    SND.loop('aquarium')?.set(.16); SND.fx.cloth(0, .5, .6); await say('m04b', .6);   // the tank behind her bubbles up a little louder for a moment
+    react(['こぽこぽ…', 'jellyfish!! 🪼', '水族館ASMR天才'], 3); await sleep(1.2); SND.loop('aquarium')?.set(.07);
     // ear blowing, the ear you choose first
     setStep(1); await say('m05');
     const s = (await comment('どっちの耳から？', 'Which ear first?', [['ひだり耳で！', 'Left ear!'], ['みぎ耳で！', 'Right ear!']])) ? 1 : -1;
@@ -203,11 +205,11 @@
   // ---------------------------------------------------------------- Cocoa: cozy café chat (the bear mic = your head)
   async function cocoaStory(my) {
     S.view = 'live'; at(0, .8); setStep(0); S.mug = 1;
-    await sleep(1.4); guard(my);
+    SND.fx.bell(-.7); await sleep(1.6); guard(my);   // she has just turned the sign: the door bell still rings
     await say('c01'); SND.fx.steam(); await say('c02');
     const a = await comment('ココアにこたえよう', 'Answer Cocoa', [['さむい〜', "I'm cold~"], ['あったかいよ', "I'm warm"]]);
     await sleep(.5); await say(a ? 'c03b' : 'c03a');
-    S.mug = 0; SND.fx.pour(.2); await sleep(2.9); SND.fx.stir(.15); await sleep(1.9); S.mug = 1; SND.fx.steam();
+    S.mug = 0; SND.fx.steamwand(.35); await sleep(3.3); SND.fx.pour(.2); await sleep(2.9);   // the espresso machine froths the milk, then she pours SND.fx.stir(.15); await sleep(1.9); S.mug = 1; SND.fx.steam();
     react(['いいにおいしそう', 'cocoa ASMR 🤤', 'とくせい！', '☕☕'], 3);
     await say('c04');
     // fu-fu, then aah
@@ -262,12 +264,12 @@
     S.view = 'eat'; SND.fx.slurp(0); await sleep(1.3); SND.fx.slurp(.1); await sleep(1.4);
     react(['いったー！', 'slurp ASMR 🍜', 'いい音', '顔赤くなってきた笑'], 3);
     S.view = 'spicy'; S.shy = 1; await say('h05'); await sleep(.6);
-    react(['がんばれ😂', 'MILK MILK', 'ギブ？', '水はダメらしい'], 4);
+    react(['がんばれ😂', 'ラムネ！ラムネ！', 'ギブ？', '水はダメらしい'], 4);
     // rescue Super Chat: milk (cool in front) or a desk fan (cool from the left)
     setStep(2);
-    const g = await gift('ひなたをたすけよう', 'Rescue Hinata', [['🥛', '牛乳', 'Milk', '¥500'], ['🌀', '扇風機', 'Desk fan', '¥300']]);
+    const g = await gift('ひなたをたすけよう', 'Rescue Hinata', [['🫙', 'ラムネ', 'Ramune', '¥500'], ['🌀', '扇風機', 'Desk fan', '¥300']]);
     await sleep(.5); S.view = 'cool'; S.shy = 0;
-    if (g === 0) { SND.fx.gulp(0); await sleep(1.4); SND.fx.taps(-1.45, 2); S.bottle = 1; await say('h06m'); }   // then the cold bottle on the mic's left ear
+    if (g === 0) { SND.fx.marble(0); await sleep(.8); SND.fx.gulp(0); await sleep(1.4); SND.fx.taps(-1.45, 2); S.bottle = 1; await say('h06m'); }   // ramune: then the cold bottle on the mic's left ear
     else { SND.loop('fan', -1.2, .8)?.set(.35); S.fan = 1; await sleep(1.2); await say('h06f'); }
     await sleep(1.2);
     // finish the bowl, then she fans you (left / right puffs)
@@ -284,10 +286,14 @@
     react(['すずしい〜', 'fan ASMR lol', 'ぱたぱた'], 3);
     // a secret in your right ear
     setStep(4); S.view = 'whisper'; at(1.45, .08); SND.fx.cloth(1.2, .3, .6); await sleep(.9);
-    S.near = 1; S.shy = 1; await say('h10', .3); await say('h11', .8); S.near = 0; S.shy = 0;
-    S.view = 'bye'; at(0, .85); await sleep(.6);
+    S.near = 1; S.shy = 1; await say('h10', .3); await say('h11', .5); S.near = 0; S.shy = 0;
+    // the festival fireworks start over the stalls
+    let fwIv = 0; const boom = () => { if (my !== run) { clearInterval(fwIv); return; } SND.fx.firework(rnd(-.2, .9)); setTimeout(() => { if (my === run) S.fw = 1; }, 950); };
+    boom(); S.view = 'bye'; at(0, .85); await sleep(1.6);
+    fwIv = setInterval(boom, 2300); await say('h11b', .4);
+    react(['たまや〜！', 'fireworks 🎆', 'エモすぎ', 'かぎや〜'], 4); await sleep(2.4);
     react(['おつひな〜！', 'otsu-hina!', 'またね〜', '💛💛'], 4);
-    await say('h12', 1);
+    await say('h12', 1); clearInterval(fwIv);
     await endStream(my, '🌶 おつひな〜 · Great job, Hinata!');
   }
 
@@ -302,9 +308,9 @@
     react(['夜風いいね', 'the wind ASMR', 'ひだり耳すずしい'], 3);
     await sleep(.6); await say('l03');
     setStep(2); S.view = 'live'; await say('l04');
-    const g = await gift('ルナにリクエストを送ろう', 'Send Luna a request', [['🎵', 'オルゴール', 'Music box', '¥300'], ['🍵', 'ホットティー', 'Hot tea', '¥500']]);
+    const g = await gift('ルナにリクエストを送ろう', 'Send Luna a request', [['🎹', 'ピアノ', 'Piano', '¥300'], ['🍵', 'ホットティー', 'Hot tea', '¥500']]);
     await sleep(.6);
-    if (g === 0) { S.view = 'musicbox'; at(.15, .5); await say('l05m', .4); SND.loop('musicbox', .2, .6)?.set(.5); await sleep(14); SND.loop('musicbox')?.stop(); await sleep(1.4); }
+    if (g === 0) { S.view = 'piano'; at(.35, 1.4); await say('l05p', .4); SND.loop('vinyl')?.set(0); SND.loop('piano', .35, 1.6)?.set(.55); await sleep(15.6); SND.loop('piano')?.stop(); await sleep(1.6); SND.loop('vinyl')?.set(.035); at(0, .5); S.view = 'live'; }
     else { S.view = 'tea'; at(0, .5); SND.fx.pour(.15); await sleep(2.8); S.tea = 1; await say('l05t'); SND.fx.sip(0); await sleep(1.2); SND.fx.saucer(.1); await sleep(1.5); }
     react(['しあわせ…', 'so peaceful', 'ねむくなってきた'], 3);
     // she closes the window and sits next to you (left)
@@ -315,7 +321,7 @@
     const b = await comment('ルナにこたえよう', 'Answer Luna', [['つかれた…', "I'm tired…"], ['いいことあった', 'Something good happened']]);
     await sleep(.8); await say(b ? 'l08b' : 'l08a', .8);
     S.shy = 1; await say('l09', 1.2); S.shy = 0;
-    react(['…', 'ずるい', 'my heart 🌙', 'ルナさん…'], 3);
+    react(['…', 'ずるい', 'my heart 🌙', 'ルナさん…', 'お店の雰囲気よすぎ', 'piano please 🎹', 'バーのカウンター…', 'ここで飲みたい', 'ルナさんの店？'], 3);
     setStep(4); S.view = 'bye'; at(0, .9); S.near = .5; await sleep(.8);
     await say('l10', 1);
     react(['おやすみ', 'good night Luna', '🌙🌙'], 3);
@@ -342,6 +348,7 @@
     S.blow = Math.max(0, S.blow - dt / 2.6);
     S.puff = Math.max(0, S.puff - dt / 1.1);
     S.treat = Math.max(0, S.treat - dt / 9);
+    S.fw = Math.max(0, (S.fw || 0) - dt / .9);
     if (S.ch === 'luna' && S.tea) S.tea = Math.max(0, S.tea - dt / 40);
     if (Math.random() < dt * .5) S.viewers += Math.round(rnd(-3, 6));
     bots(dt);
@@ -362,6 +369,7 @@
       if (S.ice) add(S.iceSide * 1.45, 'c', .55, '🧊');
       if (S.towel) { add(-1.5, 'h', .65 * S.towel, '♨'); add(1.5, 'h', .65 * S.towel, '♨'); }
     } else if (S.ch === 'hinata') {
+      add(-1.5, 'h', .08, '🏮'); add(1.5, 'h', .08, '🏮');   // a warm summer night outdoors (ambient, mild)
       if (S.bowl && /live|eat|spicy/.test(v)) add(0, 'h', .22, '🍜');   // steam of the hot bowl right next to the mic
       if (S.bottle > 0) add(-1.45, 'c', .65 * Math.min(1, S.bottle * 1.5), '🥛');   // cold bottle pressed to the mic's left ear
       if (S.fan) add(-1.2, 'c', .55, '🌀');
@@ -442,16 +450,20 @@
     // particles: steam from the towel / cocoa, rain streaks on the window side
     const steamy = (S.ch === 'mint' && S.view === 'towel') || (S.ch === 'cocoa' && S.mug && /live|fufu/.test(S.view));
     if (steamy && Math.random() < dt * 8) parts.push({ k: 's', x: S.ch === 'mint' ? rnd(380, 820) : rnd(560, 760), y: S.ch === 'mint' ? rnd(560, 720) : rnd(560, 640), vx: rnd(-10, 10), vy: rnd(-50, -30), r: rnd(18, 34), life: 0, max: rnd(2, 3) });
+    if (S.ch === 'mint' && Math.random() < dt * 6) parts.push({ k: 'b', x: rnd(560, 1440), y: rnd(620, 900), vx: 0, vy: rnd(-60, -35), r: rnd(3, 7), life: 0, max: rnd(4, 7), ph: rnd(0, 6) });   // bubbles rising in the tank
     if (S.ch === 'cocoa' && S.rain && Math.random() < dt * 25) parts.push({ k: 'r', x: rnd(0, 1440), y: rnd(-50, 0), vx: -60, vy: rnd(900, 1200), r: 0, life: 0, max: 1.4 });
     for (const p of parts) { p.life += dt; p.x += p.vx * dt; p.y += p.vy * dt; }
     parts = parts.filter((p) => p.life < p.max && p.y < H + 40);
     for (const p of parts) {
+      if (p.k === 'b') { p.x += Math.sin(p.life * 3 + p.ph) * .4; const a = Math.sin(Math.PI * p.life / p.max) * .35; ctx.strokeStyle = `rgba(220,255,250,${a})`; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.stroke(); continue; }
       if (p.k === 's') { const a = Math.sin(Math.PI * p.life / p.max) * .16; ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * (1 + p.life * .6), 0, 7); ctx.fill(); }
       else { ctx.strokeStyle = 'rgba(200,215,255,.14)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - 4, p.y + 40); ctx.stroke(); }
     }
     // warm / cool tint for what you feel
     if (S.ch === 'mint' && (S.blow > 0 || S.ice)) { const v = Math.max(S.blow, S.ice ? .5 : 0) * .22, x = (S.ch === 'mint' && S.blow > 0 ? S.blowSide : S.iceSide) < 0 ? 0 : W; const g = ctx.createRadialGradient(x, H / 2, 50, x, H / 2, 900); g.addColorStop(0, `rgba(150,230,255,${v})`); g.addColorStop(1, 'rgba(150,230,255,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
     if (S.blanket || S.towel) { const g = ctx.createRadialGradient(W * .35, H / 2, 300, W * .35, H / 2, 1200); g.addColorStop(0, 'rgba(255,170,120,0)'); g.addColorStop(1, `rgba(255,160,110,${.18 * Math.max(S.blanket, S.towel)})`); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+    if (S.ch === 'mint') { const a = .05 + .03 * Math.sin(t * .9); const x = W * (.45 + .2 * Math.sin(t * .23)); const g = ctx.createRadialGradient(x, H * .3, 40, x, H * .3, 700); g.addColorStop(0, `rgba(170,255,240,${a})`); g.addColorStop(1, 'rgba(170,255,240,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }   // caustic light from the tank, slowly drifting
+    if (S.fw > 0) { const g = ctx.createRadialGradient(W * .6, 0, 100, W * .6, 0, 1400); g.addColorStop(0, `rgba(255,190,120,${.22 * S.fw})`); g.addColorStop(1, 'rgba(255,190,120,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }   // firework flash
     if (S.fade) { S.fadeA = Math.min(1, (S.fadeA || 0) + dt / 2.4); ctx.fillStyle = `rgba(10,8,20,${S.fadeA})`; ctx.fillRect(0, 0, W, H); }
     $('viewers').textContent = `👁 ${S.viewers.toLocaleString()}`;
   }
@@ -524,6 +536,7 @@
     $('chName').textContent = CH[ch].name; $('chTitle').textContent = CH[ch].title; $('vv').textContent = CH[ch].credit;
     stage.dataset.ch = ch; show('live');
     SND.loop('room', 0, 3)?.set(.05);
+    ({ mint: () => SND.loop('aquarium', 0, 3)?.set(.07), cocoa: () => SND.loop('clock', -.9, 2.5)?.set(.05), hinata: () => SND.loop('festival', 0, 4)?.set(.12), luna: () => SND.loop('vinyl', .6, 2)?.set(.035) })[ch]();   // round 4: each one's own place
     for (let i = 0; i < 5; i++) chat(pick(HANDLES), pick(CH[ch].pool));
     ({ mint: mintStory, cocoa: cocoaStory, hinata: hinataStory, luna: lunaStory })[ch](my).catch((e) => { if (e.message !== 'stopped') console.error(e); });
   }
