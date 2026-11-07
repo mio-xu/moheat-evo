@@ -33,6 +33,8 @@ demos/Demo2_FanMeeting/                  Demo 2《キミだけのスペシャル
 demos/Demo3_ShiningSmileConcert/         Demo 3《Shining Smile Melody — Ice & Fire Concert》
 demos/Demo4_SeasonsExpress/              Demo 4《四季暴走列車 / The Runaway Seasons Express》（原 `Demo_SeasonsExpress/`）
 demos/Demo5_SengokuBanquet/              Demo 5《安土最後の酒宴》
+demos/Demo7_KyotoIzakaya/                Demo 7《信長と家康、京都の居酒屋へ》（策划中：剧本 + Seedance 命令，等用户的关键帧和 clip）
+demos/Demo8_YamazakiDistillery/          Demo 8《信長と家康、山崎蒸溜所へ》（策划中：剧本 + Seedance 命令，等用户的关键帧和 clip）
 HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
 ```
@@ -196,6 +198,16 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - **可选后续**：用户试听 `audio/takes/` 后换 take；补 3 张道具图后重跑 build + 渲染。
 
 ---
+
+### Demo 7 · `demos/Demo7_KyotoIzakaya/` 📝 策划中 —《信長と家康、京都の居酒屋へ》
+### Demo 8 · `demos/Demo8_YamazakiDistillery/` 📝 策划中 —《信長と家康、山崎蒸溜所へ》
+- 用户（2026-11-07）：信长和家康穿越到现代，京都居酒屋和三得利山崎蒸馏所"各做一个，剧情不一样"。两部都和 Demo 6（你带威士忌去安土）呼应；Demo 8 是时间环：两人尝到这酒，才认出是"那晚在安土喝过的"。
+- 每个文件夹里有：`README.md`（剧情、角色位置、冷热来源、管线）、`storyboard/script_150s.md`（日英台词 + 时间 + 冷热）、`Seedance素材命令.md`（Demo 7 有 14 个镜头 K01–K14，Demo 8 有 12 个镜头 Y01–Y12）。
+- 画面由用户制作：先用 ChatGPT 或任意生图工具做关键帧（以 Demo 5 的 `N_Character.png` / `I_Character.png` 和表情、姿势图为人物参考），再用 Seedance 图生视频。交付位置：`assets/keyframes/`、`video/seedance/`。
+- 声音和冷热沿用前几个 Demo：信长在左前（声音 → 左耳热），家康在右前（→ 右耳热），声线锁定；"你"的台词只出字幕。冷热来源：Demo 7 是冰啤酒、嗨棒冰块、鸭川夜风 / 炭火、热燗、关东煮；Demo 8 是晨雾、熟成库、泉水、冰块 / 发酵桶蒸汽、铜制蒸馏器。
+- **下一步**：等用户确认剧本 → 写 `scripts/izakaya.py` / `yamazaki.py` 时间轴 → 配音（需要用户启动 VOICEVOX）→ 拿到 clip 后按台词剪辑，合成双耳音频和冷热，生成 MP4 和播放器。
+- Seedance 的口型不会和配音对上：长台词剪在说话镜头上，耳语用遮嘴或侧脸构图。
+- Demo 8 涉及三得利商标：AI 画面里不出现可读的商标，酒瓶用 Demo 6 的真实图合成；公开前需向三得利确认。
 
 ## 6. 本地未提交的大文件（仅在本机，可用脚本重建）
 
