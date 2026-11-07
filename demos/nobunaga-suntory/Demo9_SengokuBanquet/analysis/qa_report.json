@@ -2,12 +2,12 @@
  "all_ok": true,
  "1_voices": {
   "N": {
-   "f0_hz": 76.9,
-   "centroid_hz": 2673.0
+   "f0_hz": 186.4,
+   "centroid_hz": 2910.0
   },
   "I": {
-   "f0_hz": 95.6,
-   "centroid_hz": 2425.0
+   "f0_hz": 127.7,
+   "centroid_hz": 2473.0
   },
   "ok": true
  },
@@ -19,11 +19,16 @@
   "lines": 38,
   "voiced": 30,
   "yours": 8,
-  "yours_over_a_voice": [],
+  "yours_over_a_voice": [
+   5.1,
+   36.2,
+   48.6,
+   124.4
+  ],
   "ok": true
  },
  "4_lip_sync": {
-  "min_fraction_of_line_with_mouth_open": 0.52,
+  "min_fraction_of_line_with_mouth_open": 0.47,
   "ok": true
  },
  "5_positions": {
@@ -32,13 +37,13 @@
  },
  "6_heat_vs_voice": {
   "heat_by_delivery": {
-   "say": 0.507,
-   "laugh": 0.696,
-   "whisper": 0.304
+   "say": 0.546,
+   "laugh": 0.718,
+   "whisper": 0.327
   },
   "correlation": {
-   "N": 0.971,
-   "I": 0.814
+   "N": 0.961,
+   "I": 0.77
   },
   "ok": true
  },
@@ -47,8 +52,8 @@
   "first": "0.00",
   "last": "149.95",
   "same_ear_conflicts": 0,
-  "opposite_temps": 15,
-  "side_switches": 16,
+  "opposite_temps": 13,
+  "side_switches": 18,
   "ends_at_zero": true,
   "ok": true
  },

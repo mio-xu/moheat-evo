@@ -1,13 +1,14 @@
-"""Demo 9 dialogue voices — the two LOCKED personas from voice_personas.py (FINAL), one voice per character for the whole film.
+"""Demo 9 dialogue voices — ElevenLabs since 2026-11-08 (user picks nobunaga r1_a / ieyasu r1_a, tools/eleven/cast.json); before: the\ntwo LOCKED VOICEVOX personas from voice_personas.py (FINAL). One voice per character for the whole film.
 
   python3 scripts/voice.py        → audio/takes/<line>_t{0,1,2}.wav  (+ takes.json with durations)
 
 Each line is performed in 3 takes (designed prosody, slower/more expressive, brisker/flatter); TAKE picks the one used
 in the film (default 0). Listen in audio/takes/ and change TAKE to swap a take. Needs the VOICEVOX engine.
 """
-import hashlib, json, os, sys
+import hashlib, importlib.util, io, json, os, subprocess, sys, tempfile
 import numpy as np
 from scipy.io import wavfile
+from scipy.signal import resample_poly
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -36,7 +37,7 @@ LAUGH = {  # per emotion: VOICEVOX style, start pitch (Hz, before the persona's 
     "earlaugh": dict(N=dict(style="囁き", base=128, drop=.84)),
 }
 # take k → multipliers on (speed, intonation)
-TAKE_VARIANTS = [(1.0, 1.0), (.93, 1.15), (1.06, .88)]
+TAKE_VARIANTS = [(1.0, 1.0)]   # ElevenLabs: one take per line (was 3 VOICEVOX takes)
 TAKE = {}          # line index → chosen take (default 0)
 
 
@@ -50,31 +51,56 @@ def _key(*a): return hashlib.md5(json.dumps(a, ensure_ascii=False, sort_keys=Tru
 _last_path = [None]
 
 
+# ElevenLabs (2026-11-08, user's picks nobunaga r1_a / ieyasu r1_a in tools/eleven/cast.json): emotion → audio tag.
+# Text = the cue's kana reading (c["tts"]) so archaic words are read right. The VOICEVOX persona code above is kept for reference.
+_sp = importlib.util.spec_from_file_location("eleven", os.path.join(ROOT, "..", "..", "..", "tools", "eleven", "tts.py"))
+E = importlib.util.module_from_spec(_sp); _sp.loader.exec_module(E)
+EL_VOICE = {"N": E.voice("nobunaga"), "I": E.voice("ieyasu")}
+TAG = {"proud": "[proudly]", "invite": "[warmly]", "tease": "[teasing]", "excited": "[excited]", "suspicious": "[suspicious]",
+       "soft": "[softly]", "whisper": "[whispers]", "polite": "[politely]", "calm": "[calmly]", "concern": "[concerned]",
+       "surprise": "[surprised]", "thoughtful": "[thoughtfully]", "laugh": "[laughs heartily]", "chuckle": "[chuckles softly]",
+       "earlaugh": "[whispers] [chuckles softly]"}
+
+
+def el_text(c):
+    return f"{TAG.get(c['emo'], '')} {c['tts']}".strip()
+
+
 def perform(c, take=0):
-    """→ dry mono float voice for one line (persona post-processing applied, peak-normalised later by the mixer)."""
-    who, p = c["who"], PERSONA[c["who"]]
-    sm, im = TAKE_VARIANTS[take]
-    path = os.path.join(CACHE, f"{who}_{_key(c['tts'], c['emo'], c['kind'], c.get('n'), take, VP.FINAL[who], PROS[who].get(c['emo']))}.wav")
+    """→ dry mono float voice for one line at 48 kHz (ElevenLabs, trimmed; peak-normalised later by the mixer)."""
+    who = c["who"]; text = el_text(c)
+    path = os.path.join(CACHE, f"{who}_el_{_key(text, EL_VOICE[who], E.MODEL, E.SEED)}.wav")
     if not os.path.exists(path):
-        if c["kind"] == "laugh":
-            lp = dict(p); L = dict(p["laugh"]); L.update(LAUGH[c["emo"]][who]); L["n"] = c.get("n") or len(c["tts"]) // 2
-            L["base"] *= (1.0, 1.04, .96)[take]; lp["laugh"] = L
-            x = VP.laugh(lp, c["tts"])
-            if c["emo"] == "earlaugh": x = .55 * x + .6 * B.whisperize(x)
-        else:
-            st, sp, pi, it, vol, wmix = PROS[who][c["emo"]]
-            VV.CAST["X"] = dict(speaker=p["speaker"], speed=sp * sm * p.get("speed_mul", 1), pitch=p["pitch"] + pi, inton=it * im,
-                                pause=.42, tone=None, styles=dict(default=st, smile=st, whisper=st, sleepy=st))
-            x, _ = VV.synth(c["tts"], "X", "say", "smile")
-            if wmix: x = (1 - .45 * wmix) * x + .6 * wmix * B.whisperize(x)
-            x = x * vol
-        x = VP.post(x, p)
+        sr, y = wavfile.read(io.BytesIO(E.speak(text, EL_VOICE[who])))
+        x = resample_poly(y.astype(np.float64) / 32768, SR, sr)
         e = B.env_follow(x, 40); idx = np.where(e > .008 * np.max(e))[0]
         if len(idx): x = x[max(0, idx[0] - 960): idx[-1] + 2400]
         os.makedirs(CACHE, exist_ok=True)
         wavfile.write(path, SR, (np.clip(x / (np.max(np.abs(x)) + 1e-9) * .9, -1, 1) * 32767).astype(np.int16))
     _last_path[0] = path
-    return wavfile.read(path)[1].astype(np.float64) / 32768
+    return fit(c, wavfile.read(path)[1].astype(np.float64) / 32768)
+
+
+def slot(c):
+    """seconds until the same speaker's next line (−0.15 s), or the film end."""
+    i = BQ.CUES.index(c)
+    nxt = next((d["t"] for d in BQ.CUES[i + 1:] if d["kind"] in ("say", "whisper", "laugh") and d["who"] == c["who"]), BQ.DURATION)
+    return nxt - c["t"] - .15
+
+
+def fit(c, x):
+    """keep every line inside its slot: up to ×1.15 faster (pitch kept), beyond that fade out at the slot end (laughs)."""
+    room = int(slot(c) * SR)
+    if len(x) <= room: return x
+    r = len(x) / room
+    if r <= 1.15:
+        with tempfile.TemporaryDirectory() as d:
+            a, b = os.path.join(d, "a.wav"), os.path.join(d, "b.wav")
+            wavfile.write(a, SR, (np.clip(x, -1, 1) * 32767).astype(np.int16))
+            subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", a, "-af", f"atempo={r:.4f}", b], check=True)
+            return wavfile.read(b)[1].astype(np.float64) / 32768
+    x = x[:room].copy(); f = int(.3 * SR); x[-f:] *= np.linspace(1, 0, f)
+    return x
 
 
 def main():

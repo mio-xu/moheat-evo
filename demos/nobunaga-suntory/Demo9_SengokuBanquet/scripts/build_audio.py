@@ -184,8 +184,8 @@ def main():
         for a, b in zip(seq, seq[1:]):
             if a["t"] + a["dur"] > b["t"] - .05: print(f"  ! {w} line at {a['t']}s ({a['dur']:.2f}s) runs into {b['t']}s")
     json.dump(timing, open(os.path.join(AUD, "voice_timing.json"), "w"), indent=1)
-    credits = [f"VOICEVOX:{V.PERSONA[w]['speaker']}" for w in "NI"]
-    json.dump(dict(backend="voicevox", credits=credits), open(os.path.join(MEDIA, "voice.json"), "w"), ensure_ascii=False)
+    credits = ["ElevenLabs"]
+    json.dump(dict(backend="elevenlabs", credits=credits), open(os.path.join(MEDIA, "voice.json"), "w"), ensure_ascii=False)
 
     t = np.arange(N) / SR
     # insects: present in calm scenes, gone in wind/rain, back at the end

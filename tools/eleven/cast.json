@@ -137,7 +137,9 @@
    "demos/nobunaga-suntory/Demo9_SengokuBanquet/audio/takes/01_N_proud_t0.wav",
    "demos/nobunaga-suntory/Demo9_SengokuBanquet/audio/takes/11_N_laugh_t0.wav"
   ],
-  "voice_id": null
+  "voice_id": "GunRCVU2DD99MoNH24tx",
+  "confirmed": "2026-11-08",
+  "pick": "r1_a"
  },
  "ieyasu": {
   "name": "徳川家康 Tokugawa Ieyasu",
@@ -154,6 +156,8 @@
   "compare": [
    "demos/nobunaga-suntory/Demo9_SengokuBanquet/audio/takes/03_I_polite_t0.wav"
   ],
-  "voice_id": null
+  "voice_id": "1UDxZiI0jgOqBg3Be8m1",
+  "confirmed": "2026-11-08",
+  "pick": "r1_a"
  }
 }
