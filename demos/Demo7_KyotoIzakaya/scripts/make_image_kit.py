@@ -69,10 +69,30 @@ def prompt(kind, what):
     return f"{what}\n\n{BG}\n\n{STYLE}"
 
 
-def link(src, dst):
-    if os.path.exists(dst): os.remove(dst)
-    try: os.link(src, dst)
-    except OSError: shutil.copy2(src, dst)
+LIMIT = 3.5 * 1024 * 1024        # upload limit is 4 MB (Seedance / some tools): keep every reference safely below it
+
+
+def place_ref(src, dst_noext):
+    """hard-link small files; re-encode big ones (JPEG q90 if opaque, else a smaller PNG) so each stays < 4 MB. Returns path."""
+    from PIL import Image
+    ext = os.path.splitext(src)[1]
+    if os.path.getsize(src) <= LIMIT:
+        dst = dst_noext + ext
+        if os.path.exists(dst): os.remove(dst)
+        try: os.link(src, dst)
+        except OSError: shutil.copy2(src, dst)
+        return dst
+    im = Image.open(src); im.load()
+    has_alpha = im.mode in ("RGBA", "LA") and im.getchannel("A").getextrema()[0] < 250
+    if not has_alpha:
+        dst = dst_noext + ".jpg"; im.convert("RGB").save(dst, quality=90, optimize=True)
+    else:
+        dst = dst_noext + ".png"; k = 1.0
+        while True:
+            im.resize((int(im.width * k), int(im.height * k)), Image.LANCZOS).save(dst, optimize=True)
+            if os.path.getsize(dst) <= LIMIT or k < .4: break
+            k *= .85
+    return dst
 
 
 def main():
@@ -93,7 +113,8 @@ def main():
                 if f.startswith("参考图_"): os.remove(os.path.join(sdir, f))
             names = []
             for i, r in enumerate(refs, 1):
-                n = f"参考图_{i}_{os.path.basename(r)}"; link(r, os.path.join(sdir, n)); names.append(n)
+                stem = f"参考图_{i}_{os.path.splitext(os.path.basename(r))[0]}"
+                names.append(os.path.basename(place_ref(r, os.path.join(sdir, stem))))
             p = prompt(kind, what)
             open(os.path.join(sdir, "prompt.txt"), "w").write(p)
             kind_ja = {"bg": "背景", "bg_edit": "背景（编辑上一张）", "prop": "道具（透明背景）"}[kind]
@@ -110,7 +131,8 @@ def main():
 共 21 张。
 
 最方便：双击 index.html。每张图一张卡片：参考图缩略图 + 一个「复制提示词」按钮。
-每张图也有自己的文件夹：里面的「参考图_*」全选拖进 ChatGPT，再粘贴 prompt.txt。
+每张图也有自己的文件夹：里面的「参考图_*」全选拖进 ChatGPT（或 Seedance），再粘贴 prompt.txt。
+参考图都已压到 4 MB 以内（大图另存为高质量 JPEG，原图不变）。
 
 生成后：选最好的一张，按卡片上的文件名（例：d7_bg_izakaya.png）存进同一个文件夹，告诉我就行。
 道具要透明背景；如果出来是白底也没关系，我来抠。
