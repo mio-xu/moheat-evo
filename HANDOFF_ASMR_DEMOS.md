@@ -38,6 +38,7 @@ demos/Demo8_YamazakiDistillery/          Demo 8《信長と家康、山崎蒸溜
 demos/Demo5_GifuCastle/                   Demo 5《信長の岐阜城へようこそ》（完成）
 demos/Demo10_CaveSpring/                 纯交互解谜《火をともして、ひみつの泉へ》（可玩，等 Seedance 背景）
 demos/Demo11_Naomi/                      纯交互治愈小游戏《ナオミと、ふわふわの一日》（用户家的猫 Naomi，Seedance 美术）
+demos/Demo12_LateCall/                   纯交互深夜电话《もしもし、きこえる？》（原创男偶像 蓮，VOICEVOX:青山龍星）
 demos/Demo13_NaomiCam/                   Naomi 监控摄像头版《ナオミ、いまなにしてる？》（复用 Demo 11 美术和音频）
 HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
@@ -289,6 +290,13 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 流程：接通（雪花噪声）→ 她躲在猫窝里，用 **🌡 サーモ（热成像）** 找到她（声音和露出的尾巴尖是提示）→ 按住 🎤 对讲叫两次 → 她走到镜头前（**冰凉鼻子碰镜头 = 两耳凉**，在屏幕上摸她 → 左脸/右脸蹭摄像头 = 左暖/右暖）→ 激光笔抓 3 次 → 她热得摊平 → **🌀 扇风机，拖动瞄准风向（风吹向哪边哪边凉）**把她吹凉 → 自动喂食器 → 21:08 红外夜视 + 雨，房间变冷她发抖 → **🔥 电热毯**（两耳由凉变暖）→ 说晚安 → 门口钥匙声（右）、她跑去迎接你 → 回封面 `stop`。📸 可保存截图。同侧冲突 0（`NAOMICAM.conflicts()`）。2026-11-07 完整通关测试：2:39、7 颗心、0 冲突、0 报错。
 - 美术和音频**按路径复用 Demo 11**（`../Demo11_Naomi/media/art/`、`audio.js`），不改 Demo 11；摄像头效果是 WebGL 着色器（桶形畸变、色差、噪点、暗角、红外、雪花）+ OSD 画布。喂食器为代码绘制。
 - 已加入 `nav.js` 和官网菜单（在 Naomi 之后，缩略图 `assets/images/demos/Demo13_NaomiCam.jpg`）。`Demo12_LateCall` 是另一个会话在做的，编号已被占用。
+
+### Demo12_LateCall ✅ 可玩 —《もしもし、きこえる？ / Can You Hear Me?》（纯交互，2026-11-07）
+- 用户要求"和喜欢的男爱豆打电话，不要 Q 版"。**原创角色**「蓮（レン）」，24 岁人气偶像团体主唱（不能用真人偶像）。
+- 造型：用户从 5 套 Seedance 设计里选了 **A（银白狼尾、淡紫灰眼、黑高领 + 长大衣）**；画风从 8 种里选了 **3 号柔和赛璐璐**（细的彩色线条、淡平涂阴影）。参考图 `assets/art/style_3_softcel.png`（不进 git）。注意：中途我误按 4 号生成了 2 张（50 credits 浪费），之后全部用 3 号。
+- 声音：**VOICEVOX:青山龍星**，用户选的「a4」：しっとり（耳语句用 囁き），pitch +0.03、intonation 1.20、speed 1.02、**共振峰 ×1.06**（先以 pitch −ln1.06 合成，再 asetrate×1.06 + atempo 1/1.06，音高不变、声质更年轻）。`scripts/voice.py`；试听记录在 `scripts/audition*.py`（结果在 `audio/`，本地）。
+- 流程：床头手机震动 → 接听（声音带电话音质、只在**左耳**，左耳热）→ 两次选择 → 他在雪夜回家路上 → **开窗看同一场雪（右耳凉，左耳仍热）**→ 关窗 → **换耳朵（声音和热度移到右耳）**→ 耳语秘密 → 说「おやすみ」（麦克风或按钮）→ 门铃（电话里和走廊同时响）→ 开门（两耳一凉）→ 真实立体声「来ちゃった」→ 拥抱（两耳热）→ 右耳「会いたかった」→ 回封面 `stop`。同侧冲突 0（`CALL.conflicts()`）。
+- 美术 10 张：`scripts/seedance.py scenes`（2K，16:9）→ `scripts/prepare_art.py`（表情帧对齐只换脸，用 Demo 11 的对齐函数按路径加载）→ `media/art/*.webp`。
 
 ## 6. 本地未提交的大文件（仅在本机，可用脚本重建）
 
