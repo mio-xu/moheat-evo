@@ -1,0 +1,18 @@
+{
+ "design_A_mint": {
+  "generation": "api_4c6fe982ae21b0373391d8bdb3c0f091f4e6fd46535479e2e7b2bda7676eecc6",
+  "idempotency_key": "moheat-d14-design-A-mint-v1"
+ },
+ "design_B_hinata": {
+  "generation": "api_4969bcef044d8c9c5e1565a4ed82248f341aa070b9868d7ff337d674d7627c99",
+  "idempotency_key": "moheat-d14-design-B-hinata-v1"
+ },
+ "design_C_luna": {
+  "generation": "api_304e5a36fcfa0254985ffc2d5af8e2cc773e8f2832c5099e63e09025b2de6048",
+  "idempotency_key": "moheat-d14-design-C-luna-v1"
+ },
+ "design_D_cocoa": {
+  "generation": "api_eeffc94509cf7ebc5f1f6b0ed81b008f1b05d0ab32c38e6d2152e663cb2914e9",
+  "idempotency_key": "moheat-d14-design-D-cocoa-v1"
+ }
+}

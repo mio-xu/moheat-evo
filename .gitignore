@@ -31,3 +31,6 @@ demos/Demo11_Naomi/project/gen_*.log
 demos/Demo12_LateCall/assets/art/
 demos/Demo12_LateCall/audio/
 demos/Demo12_LateCall/project/gen_*.log
+demos/Demo14_LiveStream/assets/art/
+demos/Demo14_LiveStream/audio/
+demos/Demo14_LiveStream/project/gen_*.log
