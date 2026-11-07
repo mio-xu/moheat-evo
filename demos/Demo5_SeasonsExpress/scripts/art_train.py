@@ -17,9 +17,9 @@ OUT = os.path.join(ROOT, "assets", "train_interior")
 TMP = os.path.join(ROOT, "project", "art_render")
 W, H = 1536, 1024
 FOC, VX, VY = 610.0, 768.0, 418.0
-HW, FLOOR, CORN, PEAK = 1.3, -1.15, 1.02, 1.52        # half width, floor, cornice, ceiling peak (m, eye = 0)
+HW, FLOOR, CORN, PEAK = 1.3, -1.15, 1.14, 1.58        # half width, floor, cornice, ceiling peak (m, eye = 0)
 Z0, ZEND = 0.30, 5.6
-WIN = dict(z0=1.45, z1=3.55, y0=-0.08, y1=0.86, r=0.20, frame=0.085)
+WIN = dict(z0=1.08, z1=4.3, y0=-0.34, y1=0.95, r=0.2, frame=0.08)   # panorama windows (user: windows too small, twice)
 LAMPS = (1.85, 3.45, 5.0)
 LINE = "#7a5446"
 # palette
@@ -103,13 +103,8 @@ def side_wall(side):
     # rails: brass rail at -0.25, wood cornice at CORN
     for y, col, wdt in ((-0.25, BRASS, 13), (-0.21, "#fff1c4", 4), (CORN - .02, WOOD, 30), (CORN - .05, WOOD_L, 8)):
         out += P(poly(wall_pts(s, [(Z0, y), (ZEND, y)]), False), stroke=col, sw=wdt / 2.2)
-    # luggage rack: brass bar + brackets
-    for z in np.arange(0.9, ZEND, .9):
-        out += P(poly(prs([(s * HW, .93, z), (s * (HW - .2), .93, z)]), False), stroke=BRASS_S, sw=f(9 / z))
-    out += P(poly(prs([(s * (HW - .2), .93, Z0 + .3), (s * (HW - .2), .93, ZEND)]), False), stroke=BRASS, sw=8)
-    out += P(poly(prs([(s * (HW - .2), .96, Z0 + .3), (s * (HW - .2), .96, ZEND)]), False), stroke="#fff1c4", sw=2.5)
     # sconce lamp between window and end wall
-    x, y = pr(s * HW, .45, 4.45)
+    x, y = pr(s * HW, .45, 5.1)
     out += E(x, y + 6, 13, 6, BRASS_S) + P(smooth([(x - 12, y), (x - 16, y - 26), (x, y - 34), (x + 16, y - 26), (x + 12, y)]), "#fff4c9", LINE, 2)
     return out
 

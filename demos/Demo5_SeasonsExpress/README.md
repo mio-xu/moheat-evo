@@ -64,7 +64,10 @@ The player draws, back to front:
 - Winter lasts 12 s with no slow fade-in, and the train is 20 % faster in winter.
 - The player (`TW()` in demo.js) and the audio use the same remap.
 
-**Windows:** large (glass from 1.22 m to 3.75 m along the car and from −0.24 m to 0.88 m in height), with the curtains tied back beside the frames.
+**Windows:** panorama windows.
+- The glass runs from 1.08 m to 4.3 m along the car and from −0.34 m to 0.95 m in height. A frame stays visible, and the curtains are tied back beside it.
+- The two windows cover most of the left and right of the frame.
+- The scenery is anchored to eye level: the layers' horizon (y≈590) sits at the vanishing point and is drawn at 1.05×. It is not scaled to the window size.
 
 ## Pipeline
 ```

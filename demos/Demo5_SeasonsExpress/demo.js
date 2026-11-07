@@ -51,9 +51,10 @@ const P = ([x, y]) => [x * IS, y * IS + IOY];
 const GLASS = { L: G.left_glass.map(P), R: G.right_glass.map(P) };
 const BOX = Object.fromEntries(Object.entries(GLASS).map(([k, pts]) => {
   const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
-  return [k, { x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) }];
+  return [k, { x0: Math.max(0, Math.min(...xs)), y0: Math.max(0, Math.min(...ys)), x1: Math.min(W, Math.max(...xs)), y1: Math.min(H, Math.max(...ys)) }];   // visible part
 }));
 const DOOR = G.door_glass.map(P);
+const EYE = G.vanishing_point[1] * IS + IOY;   // eye level on the canvas: the scenery horizon sits here
 const CLOCK = { x: G.clock.cx * IS, y: G.clock.cy * IS + IOY, r: G.clock.r * IS };
 
 // ---------------------------------------------------------------- window "looks"
@@ -143,7 +144,7 @@ function drawLook(c, key, side, t, alpha) {
   const box = BOX[side], dir = side === 'L' ? -1 : 1, bh = box.y1 - box.y0;
   c.save(); c.globalAlpha = alpha;
   if (L.fill) { c.fillStyle = L.fill; c.fillRect(box.x0, box.y0, box.x1 - box.x0, bh); }
-  const wall = L.layers.length === 1, k = wall ? bh * 1.15 / 1024 : bh * 1.9 / 1024, top = wall ? box.y0 - bh * .075 : box.y1 - 900 * k;
+  const wall = L.layers.length === 1, k = wall ? bh * 1.1 / 1024 : 1.05, top = wall ? box.y0 - bh * .05 : EYE - 590 * k;   // layer horizon (y≈590) at eye level
   for (const [name, f] of L.layers) drawLayer(c, name, box, f, dir, t, k, top);
   if (key === 'spring' && side === 'R') drawStation(c, box, t, k, top);
   c.restore();

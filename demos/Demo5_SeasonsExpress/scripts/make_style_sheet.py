@@ -34,8 +34,8 @@ def scene(name):
     left, right, light, gl, gr = SCENES[name]
     bg = Image.new("RGBA", (1536, 1024))
     lft, rgt = layers(left), layers(right)
-    # the windows sit high in the frame → raise the scenery so the horizon (y≈560 in the layers) shows through the glass
-    bg.paste(lft.crop((0, 230, 768, 1024)), (0, 0)); bg.paste(rgt.crop((768, 230, 1536, 1024)), (768, 0))
+    # put the layers' horizon (y≈590) at eye level (y≈418), as the player does
+    bg.paste(lft.crop((0, 172, 768, 1024)), (0, 0)); bg.paste(rgt.crop((768, 172, 1536, 1024)), (768, 0))
     for g, x0 in ((gl, 0), (gr, 768)):                     # glass overlays are drawn on the glass itself (not raised)
         for n in g:
             ov = Image.open(A(n + ".png")).convert("RGBA").crop((x0, 0, x0 + 768, 1024)); bg.alpha_composite(ov, (x0, 0))
