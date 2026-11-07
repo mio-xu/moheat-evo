@@ -1,5 +1,5 @@
 // Jin's VIP lounge: id → [ja, en, mode, TTS reading (optional)].
-// mode: 'n' = 青山龍星 不機嫌 (domineering) · 'c' = same, closer / softer · 'w' = 青山龍星 囁き at your ear. Voice: scripts/voice.py ("j6").
+// Voice: ElevenLabs, user's pick "jin r1_a" (tools/eleven/cast.json) — scripts/voice.py (tagged text there; mode n / c / w kept for reference).
 window.JIN_LINES = {
   "j01": ["遅えよ。 …俺を待たせていいのは、お前だけだ。", "You're late. …You're the only one allowed to keep me waiting.", "n", "おせえよ。 …おれをまたせていいのは、おまえだけだ。"],
   "j02": ["突っ立ってねえで、こっち来い。", "Don't just stand there. Come here.", "n", "つったってねえで、こっちこい。"],

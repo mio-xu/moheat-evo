@@ -1,7 +1,7 @@
 # 俺だけ見てろ · Look Only at Me
 
 An interactive scene with **Jin (迅)**, an original character: the domineering, red-haired rapper of an idol group, rich-heir type.
-After the concert he calls you into his VIP lounge. No timeline: his VOICEVOX lines play live with HRTF, room sounds are synthesized,
+After the concert he calls you into his VIP lounge. No timeline: his ElevenLabs lines play live with HRTF, room sounds are synthesized,
 the thermal output (firmware **DUAL**: cool and heat independent per ear) is computed live. About 65 s.
 
 **Play**: `python3 -m http.server 8765` at the repo root → `http://localhost:8765/demos/for-women/Demo21_JinLounge/`. Headphones on.
@@ -16,7 +16,7 @@ the thermal output (firmware **DUAL**: cool and heat independent per ear) is com
 | He wraps you in his leather jacket | both warm (the collar) |
 
 Files: `index.html`, `lounge.css` (+ Demo 10's `demo.css` and `../../shared/series.css` by path), `game.js`, `audio.js` (JLAudio), `lines.js`.
-Voice: `scripts/voice.py` — VOICEVOX:青山龍星 不機嫌 (+ 囁き at the ear), pitch −0.02, intonation 1.20, speed 0.90, pauses ×1.4 (user pick "j6").
+Voice: `scripts/voice.py` — ElevenLabs, the user's pick `jin r1_a` (tools/eleven/cast.json; earlier VOICEVOX:青山龍星 "j6"), audio tags per line.
 Art: Seedance web (GPT Image 2, style 3 soft cel; raw PNGs in `assets/art/`, not in git) → `media/art/jin_*.jpg` (stills / fallback).
 Animation: Seedance 2.0 Pro first = last frame, 4 s, 720p (raw in `assets/video/`, not in git) → `scripts/compress_video.sh` (ping-pong, 1280 w, CRF 26) → `media/video/v_*.mp4`.
 The view's clip plays while he talks; its first frame is shown while he waits.

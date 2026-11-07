@@ -39,7 +39,7 @@ demos/nobunaga-suntory/Demo8_YamazakiDistillery/          Demo 8《信長と家�
 demos/nobunaga-suntory/Demo5_GifuCastle/                   Demo 5《信長の岐阜城へようこそ》（完成）
 demos/all-ages/Demo10_CaveSpring/                 纯交互解谜《火をともして、ひみつの泉へ》（可玩，等 Seedance 背景）
 demos/healing/Demo11_Naomi/                      纯交互治愈小游戏《ナオミと、ふわふわの一日》（用户家的猫 Naomi，Seedance 美术）
-demos/for-women/Demo12_LateCall/                   纯交互深夜电话《もしもし、きこえる？》（原创男偶像 蓮，VOICEVOX:青山龍星）
+demos/for-women/Demo12_LateCall/                   纯交互深夜电话《もしもし、きこえる？》（原创男偶像 蓮，ElevenLabs）
 demos/for-women/Demo20_HinataHandshake/           纯交互握手会《あと10秒だけ、ね？》（原创男偶像 陽向，ElevenLabs）
 demos/for-women/Demo21_JinLounge/                 纯交互 VIP 休息室《俺だけ見てろ》（原创男偶像 迅，VOICEVOX:青山龍星，Seedance 动画）
 demos/healing/Demo15_FamilyCall/                 纯交互家庭电话《もしもし、おばあちゃん？》（外婆ハナ VOICEVOX:もち子さん，外公ゲン VOICEVOX:ちび式じい）
@@ -94,12 +94,13 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - **封面**：`?cover=1` 截图 → `media/cover.jpg`（分享图、MP4 开头 2–3 s 标题卡、MP4 内嵌缩略图）。
 
 ### 配音标准：ElevenLabs（新角色默认；2026-11-08 用户确定）
-- **模板（直接复制，不要重写）**：`demos/for-women/Demo20_HinataHandshake/scripts/voice.py` 的 `eleven()`（懒加载 client，读根目录 `.env.local`，`pcm_24000` → WAV → 原有 `save()`：`loudnorm I=-18 TP=-2`，单声道 AAC 128k `.m4a`）+ 缓存（key = voice_id、模型、seed、带标签台词，只重做改过的句子）+ `media/voice.js` 时长。
+- **共用工具 `tools/eleven/`（2026-11-08，全部 Demo 重配音用）**：`cast.json` = 所有角色的登记表（人设、Voice Design 英文描述、≥100 字日文样本、对比用旧音频、确认后的 voice_id）；`audition.py <角色…> [--again]` 每轮出 3 个预览（不占声音名额），汇总到 `tools/eleven/out/index.html`（本地）；用户说"角色 + 编号" → `pick.py <角色> <编号>` 存声音并写入 voice_id；`tts.py` 的 `speak()` / `voice()` 供各 Demo 的 `voice.py` 按路径 import。**模板**：`demos/for-women/Demo12_LateCall/scripts/voice.py`（`TAGGED = {id: 带标签台词}` + 缓存 + m4a）。
+- **用户要求（2026-11-08）**：以前和新做的全部人声都用 ElevenLabs 重做，顺序 女性向 → 男性向 → 信长 → 其他；**每个角色先出试听、用户确认声音后才重做台词**，声音必须符合用户给的人设。
 - **参数**：`eleven_v4`，`language_code='ja'`，`stability 0.4`，`similarity_boost 0.8`，`seed 7`。v4 只认 stability / similarity（没有 style、speed、SSML），语气全靠**英文方括号标签** + 省略号。台词用**带汉字的日文原文**（不用 lines.js 第 4 列的假名读音）。不加 VOICEVOX 时代的 EQ / 气声 / 变调。
 - **标签约定**：每句写在 `ELEVEN = {id: '带标签台词'}` 里。人前甜 `[excited]` `[giggles]` `[surprised]`；撩 / 坏笑 `[playful]` `[chuckles softly]` `[laughs]`；**贴耳 `[whispers]`**；哈气 / 叹气 `[sighs softly]`；温柔 `[softly]` `[warmly]`；撒娇不满 `[pouting]`；好奇 `[curious]`。一句里可以换标签（如 `[laughs] あはは… [whispers] …かわいい`）。
-- **新角色流程**：复制 `Demo20…/scripts/eleven_audition.py` → 只改 `DESCRIPTION`（英文声音描述）、`SAMPLE`（日文 ≥100 字）、`LINES`（4 句代表台词 + 对比用的旧声音）→ Voice Design（`eleven_ttv_v3`）出 3 个候选并存进账号 → 试听页 `audio/eleven_audition/index.html`（本地，`open` 打开）→ 用户选定 → 把 voice_id 写进该 Demo 的 `voice.py`。
-- **已有声音**：陽向 = `lODKQ6pXINFtajDz9nqR`（试听 v2）。同轮未选：v1 `eJoymIUkzLni9OW2OQmk`、v3 `m4jKle69yMJ3kg5ZpWHz`（账号声音名额满时可删，先问用户）。
-- **额度**：免费账号约 1 万字符 / 月；一轮试听约 600 字符，一个 Demo 全部台词约 700。免费生成的音频不能商用，以后商用要换付费账号重跑 `voice.py`。
+- **进度**：女性向完成：陽向（Demo20）、蓮 ren r1_c（Demo12）、迅 jin r1_a（Demo21）、握手会女工作人员 staff_f r1_a（Demo20）。紫苑还没有 Demo。下一步：男性向（Demo14/17/18/19 主播）。
+- **已有声音**：全部在 `tools/eleven/cast.json`（陽向 = `lODKQ6pXINFtajDz9nqR`；Demo20 试听时存下的 v1 / v3 没用上，名额满时可删，先问用户）。
+- **额度**：账号是 **Creator 档**（每月 12 万字符，30 个声音名额，可商用）；一轮试听 3 个预览，一个 Demo 全部台词约 500–1000 字符。
 - **坑**：`pcm_44100` / `pcm_48000` 要 Pro 账号，用 `pcm_24000`；页面署名写 `<角色> ElevenLabs`（VOICEVOX 角色仍写 `VOICEVOX:<名>`）。
 
 ---

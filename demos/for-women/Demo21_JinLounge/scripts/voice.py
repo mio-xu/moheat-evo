@@ -1,19 +1,32 @@
 #!/usr/bin/env python3
-"""Jin's voice — the user's pick "j6": 青山龍星 不機嫌, pitch −0.02, intonation 1.20, speed 0.90, pauses ×1.4, close-mic EQ.
-mode 'c' (closer): pitch −0.01 more, intonation ×0.9, speed ×0.92 · mode 'w' (at your ear): 囁き, slower, light breath.
-Reads ../lines.js → media/voice/<id>.m4a + media/voice.js. Only re-voices changed lines (audio/voice_cache.json). Needs VOICEVOX."""
-import importlib.util, json, os, subprocess, urllib.request
+"""Jin's voice: ElevenLabs, the user's pick "jin r1_a" (2026-11-08, tools/eleven/cast.json; earlier VOICEVOX:青山龍星 不機嫌 "j6").
+Standard settings from tools/eleven/tts.py (eleven_v4, ja, stability 0.4, similarity 0.8, seed 7); delivery from the audio tags in
+TAGGED below ([whispers] for the 'w' line). Reads ../lines.js → media/voice/<id>.m4a (mono AAC) + media/voice.js. Only (re)synthesizes lines whose text or voice changed (cache: audio/voice_cache.json)."""
+import importlib.util, json, os, subprocess, tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-spec = importlib.util.spec_from_file_location('vt', os.path.join(ROOT, 'scripts', 'vtools.py'))
-V = importlib.util.module_from_spec(spec); spec.loader.exec_module(V)
-PITCH, INTON, SPEED, PAUSE = -.02, 1.20, .90, 1.4
-MODES = {'n': ('不機嫌', 0, 1.0, 1.0, 0), 'c': ('不機嫌', -.01, .9, .92, 0), 'w': ('囁き', -.01, 1.0, .9, .35)}
+REPO = os.path.abspath(os.path.join(ROOT, '..', '..', '..'))
+sp = importlib.util.spec_from_file_location('eleven', os.path.join(REPO, 'tools', 'eleven', 'tts.py')); E = importlib.util.module_from_spec(sp); sp.loader.exec_module(E)
+VOICE = E.voice('jin')
+TAGGED = {
+    'j01': '[annoyed] 遅えよ。 [smirks] …俺を待たせていいのは、お前だけだ。',
+    'j02': '[commanding] 突っ立ってねえで、こっち来い。',
+    'j03': '[low voice] …ほら。',
+    'j04': '[chuckles] はっ…。いい反応。[teasing] 冷たいの、嫌いじゃねえだろ。',
+    'j05': '[confident] 今日のライブ、どこ見てた？',
+    'j06a': '[smirks] …当然だ。俺以外、見る必要ねえからな。',
+    'j06b': '[annoyed] は？ …ふざけんな。[firmly] 今日から、俺だけ見てろ。',
+    'j07': '[low voice] 目、逸らすな。',
+    'j08': '[chuckles softly] …顔、真っ赤じゃねえか。[low voice] 可愛いな、お前。',
+    'j09': '[gruffly] 寒そうにしてんじゃねえよ。[softly] …ほら、着とけ。',
+    'j10': '[whispers] …今日はもう、帰さねえから。',
+    'j11': '[chuckles] …冗談だ。送ってく。[smirks] …半分はな。',
+}
 src = open(os.path.join(ROOT, 'lines.js'), encoding='utf-8').read()
 LINES = json.loads(src[src.index('= {') + 2:src.rindex('}') + 1])
-out = os.path.join(ROOT, 'media', 'voice'); os.makedirs(out, exist_ok=True)
-cache_p = os.path.join(ROOT, 'audio', 'voice_cache.json'); cache = json.load(open(cache_p)) if os.path.exists(cache_p) else {}
-st = {t['name']: t['id'] for s in json.loads(urllib.request.urlopen(f'{V.API}/speakers').read()) if s['name'] == '青山龍星' for t in s['styles']}
+out_dir = os.path.join(ROOT, 'media', 'voice'); os.makedirs(out_dir, exist_ok=True)
+cache_p = os.path.join(ROOT, 'audio', 'voice_cache.json'); os.makedirs(os.path.dirname(cache_p), exist_ok=True)
+cache = json.load(open(cache_p)) if os.path.exists(cache_p) else {}
 
 
 def dur(p):
@@ -22,18 +35,17 @@ def dur(p):
 
 
 durs = {}
-for lid, v in LINES.items():
-    mode = v[2]; text = v[3] if len(v) > 3 else v[0]
-    style, po, io, so, br = MODES[mode]
-    key = json.dumps([text, mode, PITCH, INTON, SPEED, PAUSE, MODES[mode]])
-    dst = os.path.join(out, lid + '.m4a')
-    if cache.get(lid) != key or not os.path.exists(dst):
-        w = V.tts(text, st[style], PITCH + po, INTON * io, SPEED * so, PAUSE)
-        if br: w = V.breathe(w, br)
-        V.save(w, dst, 1.0, True); cache[lid] = key; print('voiced', lid, text)
-    durs[lid] = dur(dst)
-for f in os.listdir(out):
-    if f.endswith('.m4a') and f[:-4] not in LINES: os.remove(os.path.join(out, f))
+for lid in LINES:
+    if lid not in TAGGED: raise SystemExit(f'{lid}: add its tagged text to TAGGED')
+    key = f'eleven|{VOICE}|{E.MODEL}|{E.SEED}|{TAGGED[lid]}'
+    m4a = os.path.join(out_dir, f'{lid}.m4a')
+    if cache.get(lid) != key or not os.path.exists(m4a):
+        with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as f: f.write(E.speak(TAGGED[lid], VOICE)); wav = f.name
+        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', wav, '-ac', '1', '-af', 'loudnorm=I=-18:TP=-2', '-ar', '48000', '-c:a', 'aac', '-b:a', '112k', m4a], check=True)
+        os.remove(wav); cache[lid] = key; print('voiced', lid, TAGGED[lid])
+    durs[lid] = dur(m4a)
+for f in os.listdir(out_dir):
+    if f.endswith('.m4a') and f[:-4] not in LINES: os.remove(os.path.join(out_dir, f))
 json.dump(cache, open(cache_p, 'w'), ensure_ascii=False, indent=1)
-open(os.path.join(ROOT, 'media', 'voice.js'), 'w').write('window.JIN_VOICE = ' + json.dumps({'credit': 'VOICEVOX:青山龍星', 'dur': durs}) + ';\n')
+open(os.path.join(ROOT, 'media', 'voice.js'), 'w').write('window.JIN_VOICE = ' + json.dumps({'credit': 'ElevenLabs', 'dur': durs}) + ';\n')
 print(len(durs), 'lines,', round(sum(durs.values()), 1), 's')

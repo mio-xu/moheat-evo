@@ -3,7 +3,7 @@
 
 Hinata = ElevenLabs voice "v2" (user's pick 2026-11-08 from scripts/eleven_audition.py: a Voice Design young male idol), eleven_v4,
 Japanese, stability 0.4 / similarity 0.8, fixed seed; delivery comes from the audio tags in ELEVEN below (sweet / teasing / whispers
-at the ear). Key = ELEVENLABS_API_KEY in the repo's .env.local. Staff = VOICEVOX:春日部つむぎ ノーマル (plain, needs VOICEVOX on :50021).
+at the ear). Key = ELEVENLABS_API_KEY in the repo's .env.local. Staff = ElevenLabs staff_f (user's pick r1_a; earlier VOICEVOX:春日部つむぎ).
 The old VOICEVOX Hinata ("m1": 暁記ミタマ) settings are kept in MODES for reference.
 Only (re)synthesizes changed lines (cache: audio/voice_cache.json)."""
 import io, json, math, os, subprocess, tempfile, urllib.parse, urllib.request, wave
@@ -50,15 +50,22 @@ ELEVEN = {   # line id → text with eleven_v4 audio tags (ja text from lines.js
     'h13': '[whispers] …ふふ。いい子',
     'h14': '[excited] お姉さん、またね！ 絶対だよー！',
 }
+STAFF_VOICE = 'yPc0NYDQ3YY6sY4bxZwS'   # tools/eleven/cast.json staff_f (user's pick r1_a)
+STAFF = {
+    's01': '[cheerful] 次の方、どうぞー',
+    's02': '[politely] そろそろお時間でーす',
+    's03': '[firmly] お時間でーす、お手を離してくださーい',
+    's04': '[cheerful] はい、ありがとうございましたー',
+}
 _el = []
-def eleven(text):
+def eleven(text, voice=None):
     if not _el:
         from dotenv import load_dotenv
         load_dotenv(os.path.join(ROOT, '..', '..', '..', '.env.local'))
         from elevenlabs import ElevenLabs
         _el.append(ElevenLabs())
     from elevenlabs import VoiceSettings
-    pcm = b''.join(_el[0].text_to_speech.convert(text=text, voice_id=HINATA_VOICE, model_id=HINATA_MODEL, language_code='ja', seed=SEED,
+    pcm = b''.join(_el[0].text_to_speech.convert(text=text, voice_id=voice or HINATA_VOICE, model_id=HINATA_MODEL, language_code='ja', seed=SEED,
                                                  output_format='pcm_24000', voice_settings=VoiceSettings(stability=.4, similarity_boost=.8)))
     b = io.BytesIO()
     with wave.open(b, 'wb') as w: w.setnchannels(1); w.setsampwidth(2); w.setframerate(24000); w.writeframes(pcm)
@@ -106,15 +113,14 @@ for lid, v in LINES.items():
     style = v[2]; text = v[3] if len(v) > 3 else v[0]
     staff = style == 'staff'
     if staff:
-        key = json.dumps(['m1', text, style, BASE_PITCH, K, PAUSE, MODES[style]], ensure_ascii=False)
+        key = json.dumps(['eleven', STAFF_VOICE, HINATA_MODEL, SEED, STAFF[lid]], ensure_ascii=False)
     else:
         if lid not in ELEVEN: raise SystemExit(f'{lid}: add its tagged text to ELEVEN')
         key = json.dumps(['eleven', HINATA_VOICE, HINATA_MODEL, SEED, ELEVEN[lid]], ensure_ascii=False)
     dst = os.path.join(out_dir, lid + '.m4a')
     if cache.get(lid) != key or not os.path.exists(dst):
         if staff:
-            spk, vstyle, po, inton, speed, br = MODES[style]
-            save(tts(text, SP(spk, vstyle), po, inton, speed, 1.0), dst, 1.0, False)
+            save(eleven(STAFF[lid], STAFF_VOICE), dst, 1.0, False)
         else:
             save(eleven(ELEVEN[lid]), dst, 1.0, False)
         cache[lid] = key; print('voiced', lid, text)
@@ -122,5 +128,5 @@ for lid, v in LINES.items():
 for f in os.listdir(out_dir):
     if f.endswith('.m4a') and f[:-4] not in LINES: os.remove(os.path.join(out_dir, f))
 json.dump(cache, open(cache_p, 'w'), ensure_ascii=False, indent=1)
-open(os.path.join(ROOT, 'media', 'voice.js'), 'w').write('window.HINA_VOICE = ' + json.dumps({'credit': 'Hinata: ElevenLabs, staff: VOICEVOX:春日部つむぎ', 'dur': durs}) + ';\n')
+open(os.path.join(ROOT, 'media', 'voice.js'), 'w').write('window.HINA_VOICE = ' + json.dumps({'credit': 'ElevenLabs', 'dur': durs}) + ';\n')
 print(len(durs), 'lines,', round(sum(durs.values()), 1), 's')

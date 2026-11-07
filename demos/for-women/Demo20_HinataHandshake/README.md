@@ -22,7 +22,7 @@ Files: `index.html` (+ Demo 10's `demo.css` and Demo 12's `call.css` by path, th
 Voice: `scripts/voice.py` — Hinata = **ElevenLabs** voice "v2" (the user's pick 2026-11-08 from `scripts/eleven_audition.py`, a Voice Design
 young male idol; earlier VOICEVOX:暁記ミタマ "m1"), `eleven_v4`, Japanese, delivery from audio tags per line (`[whispers]` at the ear, `[playful]`,
 `[giggles]` …). Key = `ELEVENLABS_API_KEY` in the repo's `.env.local` (gitignored; set up with `npx -y @elevenlabs/cli@latest onboard init`).
-Staff **VOICEVOX:春日部つむぎ**.
+Staff = ElevenLabs `staff_f` (user pick r1_a; earlier VOICEVOX:春日部つむぎ).
 
 Art: `scripts/seedance.py` (Seedance GPT Image 2, 2K 16:9). The upload API was rate-limited, so `hina_booth` is text-to-image and every other picture
 uses its generation URL as the reference (outputs: the new picture is the last one). Raw PNGs in `assets/art/` (not in git) →
