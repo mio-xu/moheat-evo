@@ -37,6 +37,7 @@ demos/Demo7_KyotoIzakaya/                Demo 7《信長と家康、京都の居
 demos/Demo8_YamazakiDistillery/          Demo 8《信長と家康、山崎蒸溜所へ》（完成）
 demos/Demo5_GifuCastle/                   Demo 5《信長の岐阜城へようこそ》（完成）
 demos/Demo10_CaveSpring/                 纯交互解谜《火をともして、ひみつの泉へ》（可玩，等 Seedance 背景）
+demos/Demo11_Naomi/                      纯交互治愈小游戏《ナオミと、ふわふわの一日》（用户家的猫 Naomi，Seedance 美术）
 HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
 ```
@@ -273,6 +274,14 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 画风同 Demo 1–4（粉彩赛璐璐）。现在全部由 `art.js` 代码绘制；用户说 ChatGPT 没额度，**素材全部用 Seedance**：`Seedance素材命令.md` 有 7 段 5 s 背景循环（构图参考图在 `project/layout_refs/`）。放进 `assets/video/<名>.mp4` 后播放器自动替换背景；到货后要重新测 `GEO`、去掉重复的代码火焰、压成 720p 再提交。
 - 麦克风只取音量；没有麦克风时长按 Blow 按钮或空格键。`?scene=gate|tunnel|spring` 跳关测试，`?cover=1` 封面，`?shot=<bg>` 干净背景。
 - 已加入 `nav.js`（第三组 "Interactive game"）和官网菜单（缩略图 `assets/images/demos/Demo10_CaveSpring.jpg`）。
+
+### Demo11_Naomi ✅ 可玩 —《ナオミと、ふわふわの一日 / A Fluffy Day with Naomi》（纯交互治愈小游戏，2026-11-07）
+- 用户要求"和小猫动态交互的治愈向小游戏，小猫像我家的 Naomi"。Naomi 性格：**乖乖、软软、好欺负**。用户照片在 `demos/naomi/`（**不进 git**），拼成参考图 `project/seedance_refs/naomi_photos.jpg`（也不进 git）。
+- Naomi 外观：长毛蓝灰 × 白双色，额头到鼻子白色倒 V，粉鼻子，黄绿色眼睛，白色大围脖，四只白手套，尾巴深灰蓬松。
+- 流程：早上闭眼听脚步 → 左耳嗅嗅 → **冰凉鼻子碰左耳**（左冷）→ 睁眼摸头（呼噜 = 前方暖）→ 蹭左脸再蹭右脸（左暖 → 右暖）→ 白天叫名字（麦克风音量或按钮，她在右边猫爬架上回应后走过来）→ 逗猫棒抓 3 次（羽毛风 = 羽毛方向冷）→ 吹凉猫饭（呼气两耳冷）→ 戳 3 下（不生气）→ 翻肚皮、摸肚子 → 雨夜在腿上睡觉（两耳暖）→ 变暗、おやすみ → 回封面 `stop`。同侧冲突 0（`NAOMI.conflicts()`）。
+- 声音全部浏览器实时合成（`audio.js`：呼噜、喵（共振峰合成）、肉垫脚步、嗅、雨、鸟…）。没有角色配音。以后如果用户提供 Naomi 真实的叫声 / 呼噜录音，可以替换合成音。
+- 美术：**Seedance API 直接生成**（用户指定），`scripts/make_jobs.py` → `scripts/seedance_images.py`（按路径加载 Demo 10 的 API 客户端）→ `scripts/prepare_art.py` → `media/art/*.webp`。坐标/尺寸在 `game.js` 的 `POSE_H` 和各步骤的 `setPose(...)`。
+- 已加入 `nav.js` 和官网菜单（缩略图 `assets/images/demos/Demo11_Naomi.jpg`）。
 
 ## 6. 本地未提交的大文件（仅在本机，可用脚本重建）
 

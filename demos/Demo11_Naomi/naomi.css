@@ -1,0 +1,30 @@
+/* Naomi demo — on top of Demo 10's demo.css (loaded by path): soft pink / lilac cover, bond hearts, call button. */
+:root { --bg: #1a1420; --panel: #231b29; --panel-2: #2f2436; --line: #43354d; --gold: #ffc2d8; }
+.bar { background: #1e1625; }
+.brand span { color: #ff8fb8; }
+
+/* cover: the room is drawn on the canvas behind; soften it on the left where the title sits */
+.intro::before { background: linear-gradient(to right, rgba(40, 20, 45, .62), rgba(40, 20, 45, .35) 45%, rgba(40, 20, 45, 0) 68%),
+  linear-gradient(to bottom, rgba(20, 10, 25, 0) 60%, rgba(20, 10, 25, .35)); }
+body.cover-only .intro::before { background: linear-gradient(to right, rgba(40, 20, 45, .55), rgba(40, 20, 45, .25) 45%, rgba(40, 20, 45, 0) 65%); }
+body.cover-only .cover-copy { margin-top: 0 !important; }
+.intro .hero.a { position: absolute; right: 0; top: 0; width: 1px; height: 1px; }
+.intro h1 { background: linear-gradient(100deg, #ffd0e2 0%, #ffffff 55%, #d9d2ff 100%); -webkit-background-clip: text; background-clip: text; }
+.intro .chip.p { background: rgba(255, 170, 205, .18); color: #ffe0ec; border-color: rgba(255, 170, 205, .55); }
+.intro .cleared { color: #fff0f6; background: rgba(255, 140, 190, .22); border-color: rgba(255, 180, 210, .6); }
+.btn.primary { background: linear-gradient(135deg, #ff8fb8, #b49bff); }
+
+/* bond hearts (bottom left) */
+.inv .hearts { display: flex; align-items: center; gap: .35cqw; padding: .5cqw 1cqw; border-radius: 999px; background: rgba(30, 14, 30, .55); border: 1px solid rgba(255, 170, 205, .45); position: relative; }
+.inv .hearts i { font-style: normal; font-size: clamp(12px, 1.9cqw, 30px); line-height: 1; color: rgba(255, 255, 255, .25); transition: color .4s, transform .4s; }
+.inv .hearts i.on { color: #ff8fb8; text-shadow: 0 0 .8cqw rgba(255, 120, 170, .8); animation: pop .5s ease-out; }
+.inv .hearts em { position: absolute; left: 50%; bottom: -1.5cqw; transform: translateX(-50%); white-space: nowrap; font: 600 clamp(7px, .75cqw, 11px)/1 Inter, sans-serif; font-style: normal; color: #e9d6e6; }
+
+/* cat speech bubble: rounder, pink */
+.bubble { background: #fff6fa; border-color: #6a3f5c; color: #5a2f4c; border-radius: 2cqw; }
+.bubble::after { background: #fff6fa; border-color: #6a3f5c; }
+.blow.call { border-color: rgba(255, 170, 205, .6); color: #ffe6f0; }
+.blow.call button { background: linear-gradient(135deg, #ffb3cf, #ffd6e6); color: #5a1d3c; }
+.blow.call .mic i { background: #ff9ec3; }
+.hud-goal { border-left-color: #ff9ec3; }
+.hud-goal small { color: #ffb3cf; }
