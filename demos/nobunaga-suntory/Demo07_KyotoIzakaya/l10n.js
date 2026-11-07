@@ -53,7 +53,12 @@ window.MOHEAT_L10N = {
    "🔥 炭火・あつかん": "🔥 炭火・热清酒",
    "▶ Start · 2:30": "▶ 开始 · 2:30",
    "🎧 Left / Right check": "🎧 左右声道检查",
-   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he talks; snow, cold beer and ice cool the other, the grill and hot sake warm it": "请戴上耳机 · 连接 MoHeat Evo（右上角）：哪位武将说话，哪一侧就变暖；雪、冰啤酒和冰块让另一侧清凉，炭火和热清酒让它温暖"
+   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he talks; snow, cold beer and ice cool the other, the grill and hot sake warm it": "请戴上耳机 · 连接 MoHeat Evo（右上角）：哪位武将说话，哪一侧就变暖；雪、冰啤酒和冰块让另一侧清凉，炭火和热清酒让它温暖",
+   "雪の先斗町": "雪中的先斗町",
+   "はじめての生ビール": "第一杯生啤",
+   "ハイボールと熱燗": "嗨棒与热清酒",
+   "鴨川の灯り": "鸭川的灯火",
+   "未来に乾杯": "为未来干杯"
   },
   "ja": {
    "信長シリーズ 第三話 · Nobunaga Series Ep. 3 / 5": "信長シリーズ 第三話 · 全5話",
@@ -66,7 +71,12 @@ window.MOHEAT_L10N = {
    "🔥 炭火・あつかん": "🔥 炭火・あつかん",
    "▶ Start · 2:30": "▶ スタート · 2:30",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he talks; snow, cold beer and ice cool the other, the grill and hot sake warm it": "ヘッドホンを装着 · 右上から MoHeat Evo をつなぐと、話す武将の側があたたまります。雪、冷えたビール、氷が反対側を冷やし、炭火と熱燗があたためます"
+   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he talks; snow, cold beer and ice cool the other, the grill and hot sake warm it": "ヘッドホンを装着 · 右上から MoHeat Evo をつなぐと、話す武将の側があたたまります。雪、冷えたビール、氷が反対側を冷やし、炭火と熱燗があたためます",
+   "雪の先斗町": "雪の先斗町",
+   "はじめての生ビール": "はじめての生ビール",
+   "ハイボールと熱燗": "ハイボールと熱燗",
+   "鴨川の灯り": "鴨川の灯り",
+   "未来に乾杯": "未来に乾杯"
   },
   "en": {
    "信長シリーズ 第三話 · Nobunaga Series Ep. 3 / 5": "Nobunaga Series Ep. 3 / 5",
@@ -79,7 +89,12 @@ window.MOHEAT_L10N = {
    "🔥 炭火・あつかん": "🔥 charcoal grill · hot sake",
    "▶ Start · 2:30": "▶ Start · 2:30",
    "🎧 Left / Right check": "🎧 Left / Right check",
-   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he talks; snow, cold beer and ice cool the other, the grill and hot sake warm it": "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he talks; snow, cold beer and ice cool the other, the grill and hot sake warm it"
+   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he talks; snow, cold beer and ice cool the other, the grill and hot sake warm it": "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he talks; snow, cold beer and ice cool the other, the grill and hot sake warm it",
+   "雪の先斗町": "Snow in Pontocho",
+   "はじめての生ビール": "Their first draft beer",
+   "ハイボールと熱燗": "Highball and hot sake",
+   "鴨川の灯り": "Lights on the Kamo River",
+   "未来に乾杯": "A toast to the future"
   }
  },
  "names": {

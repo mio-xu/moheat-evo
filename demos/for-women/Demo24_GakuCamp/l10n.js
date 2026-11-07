@@ -64,7 +64,8 @@ window.MOHEAT_L10N = {
    "▶ 配信を見る · Watch": "▶ 观看直播",
    "🎧 Left / Right check": "🎧 左右声道检查",
    "Headphones on · comment and send a Super Chat from the chat · connect MoHeat Evo to feel the fire, the lake wind and the blanket": "请戴上耳机 · 在聊天区发弹幕、送超级留言 · 连接 MoHeat Evo，感受篝火、湖风和毛毯",
-   "月嶋ガク": "月岛岳"
+   "月嶋ガク": "月岛岳",
+   "DUAL, two layers: his voice warms the ear he is close to; the campfire (right), the coffee steam or sweet potato and the blanket are warm, the lake wind (left) and the snow are cool. When he sits on your left he blocks the wind.": "DUAL，两层：他的声音让他靠近的那只耳朵变暖；篝火（右）、咖啡的热气或烤红薯、毛毯带来温暖，湖风（左）和雪带来清凉。他坐到你左边时会替你挡住风。"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -75,7 +76,8 @@ window.MOHEAT_L10N = {
    "🌬 湖の風 · cool": "🌬 湖の風 · ひんやり",
    "▶ 配信を見る · Watch": "▶ 配信を見る",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "Headphones on · comment and send a Super Chat from the chat · connect MoHeat Evo to feel the fire, the lake wind and the blanket": "ヘッドホンを装着 · チャットからコメントやスパチャを送ろう · MoHeat Evo をつなぐと、焚き火、湖の風、ブランケットを感じられます"
+   "Headphones on · comment and send a Super Chat from the chat · connect MoHeat Evo to feel the fire, the lake wind and the blanket": "ヘッドホンを装着 · チャットからコメントやスパチャを送ろう · MoHeat Evo をつなぐと、焚き火、湖の風、ブランケットを感じられます",
+   "DUAL, two layers: his voice warms the ear he is close to; the campfire (right), the coffee steam or sweet potato and the blanket are warm, the lake wind (left) and the snow are cool. When he sits on your left he blocks the wind.": "DUAL・二層：彼の声は近い側の耳を温めます。焚き火（右）、コーヒーの湯気や焼き芋、毛布は温かく、湖からの風（左）と雪は冷たく。彼が左に座ると風をさえぎってくれます。"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -87,7 +89,8 @@ window.MOHEAT_L10N = {
    "▶ 配信を見る · Watch": "▶ Watch",
    "🎧 Left / Right check": "🎧 Left / Right check",
    "Headphones on · comment and send a Super Chat from the chat · connect MoHeat Evo to feel the fire, the lake wind and the blanket": "Headphones on · comment and send a Super Chat from the chat · connect MoHeat Evo to feel the fire, the lake wind and the blanket",
-   "月嶋ガク": "Tsukishima Gaku"
+   "月嶋ガク": "Tsukishima Gaku",
+   "DUAL, two layers: his voice warms the ear he is close to; the campfire (right), the coffee steam or sweet potato and the blanket are warm, the lake wind (left) and the snow are cool. When he sits on your left he blocks the wind.": "DUAL, two layers: his voice warms the ear he is close to; the campfire (right), the coffee steam or sweet potato and the blanket are warm, the lake wind (left) and the snow are cool. When he sits on your left he blocks the wind."
   }
  },
  "names": {},

@@ -64,7 +64,15 @@ window.MOHEAT_L10N = {
    "🎧 Left / Right check": "🎧 左右声道检查",
    "Headphones on · you are the cat: drag the two ear dials to turn your ears, tap / hold to play · connect MoHeat Evo to feel the cold glass, the sun, the fridge air and the warm laundry": "请戴上耳机 · 你就是猫：拖动两个耳朵转盘来转动耳朵，点按 / 长按来玩耍 · 连接 MoHeat Evo，感受冰凉的玻璃、阳光、冰箱的冷气和温暖的衣物",
    "👂 耳をうごかして、台所の音をさがす Drag the ear dials to find the sound from the kitchen": "👂 转动耳朵，寻找厨房传来的声音",
-   "☀ ひだまりをタップ Tap the patch of sunlight to hop into it": "☀ 点击那片阳光"
+   "☀ ひだまりをタップ Tap the patch of sunlight to hop into it": "☀ 点击那片阳光",
+   "ASMR Game · be Naomi": "ASMR 游戏 · 变成直美",
+   "cat bed · morning": "猫窝 · 早晨",
+   "windowsill · winter sun": "窗台 · 冬日阳光",
+   "kitchen · open fridge": "厨房 · 打开的冰箱",
+   "living room · laundry": "客厅 · 晾晒的衣物",
+   "inside the laundry": "钻进衣物堆里",
+   "sofa · night": "沙发 · 夜晚",
+   "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the frosted glass, the winter sun, the fridge air at floor level, the warm laundry and her chest add real cold / warmth. Turning your ears only changes what you hear.": "实时（DUAL）：她的声音按音量让她说话那一侧的耳朵变暖；起雾的窗玻璃、冬日阳光、贴着地面的冰箱冷气、温暖的衣物和她的胸口带来真实的冷与暖。转动耳朵只改变你听到的声音。"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -75,7 +83,15 @@ window.MOHEAT_L10N = {
    "❄️ 窓ガラス・冷蔵庫 · cool": "❄️ 窓ガラス・冷蔵庫 · ひんやり",
    "▶ はじめる · Start": "▶ はじめる",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "Headphones on · you are the cat: drag the two ear dials to turn your ears, tap / hold to play · connect MoHeat Evo to feel the cold glass, the sun, the fridge air and the warm laundry": "ヘッドホンを装着 · あなたはねこ：2つの耳ダイヤルをドラッグして耳を向け、タップ / 長押しで遊ぼう · MoHeat Evo をつなぐと、冷たいガラス、日ざし、冷蔵庫の冷気、あたたかい洗濯ものを感じられます"
+   "Headphones on · you are the cat: drag the two ear dials to turn your ears, tap / hold to play · connect MoHeat Evo to feel the cold glass, the sun, the fridge air and the warm laundry": "ヘッドホンを装着 · あなたはねこ：2つの耳ダイヤルをドラッグして耳を向け、タップ / 長押しで遊ぼう · MoHeat Evo をつなぐと、冷たいガラス、日ざし、冷蔵庫の冷気、あたたかい洗濯ものを感じられます",
+   "ASMR Game · be Naomi": "ASMRゲーム · ナオミになる",
+   "cat bed · morning": "猫ベッド · 朝",
+   "windowsill · winter sun": "窓辺 · 冬の日差し",
+   "kitchen · open fridge": "キッチン · 開いた冷蔵庫",
+   "living room · laundry": "リビング · 洗濯物",
+   "inside the laundry": "洗濯物の中",
+   "sofa · night": "ソファ · 夜",
+   "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the frosted glass, the winter sun, the fridge air at floor level, the warm laundry and her chest add real cold / warmth. Turning your ears only changes what you hear.": "リアルタイム（DUAL）：彼女の声は話しかける側の耳をその音量で温めます。曇った窓ガラス・冬の日差し・床すれすれの冷蔵庫の冷気・温かい洗濯物・彼女の胸元が、本当の冷たさ・温かさを加えます。耳を回しても変わるのは聞こえ方だけです。"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -88,7 +104,15 @@ window.MOHEAT_L10N = {
    "🎧 Left / Right check": "🎧 Left / Right check",
    "Headphones on · you are the cat: drag the two ear dials to turn your ears, tap / hold to play · connect MoHeat Evo to feel the cold glass, the sun, the fridge air and the warm laundry": "Headphones on · you are the cat: drag the two ear dials to turn your ears, tap / hold to play · connect MoHeat Evo to feel the cold glass, the sun, the fridge air and the warm laundry",
    "👂 耳をうごかして、台所の音をさがす Drag the ear dials to find the sound from the kitchen": "👂 Drag the ear dials to find the sound from the kitchen",
-   "☀ ひだまりをタップ Tap the patch of sunlight to hop into it": "☀ Tap the patch of sunlight to hop into it"
+   "☀ ひだまりをタップ Tap the patch of sunlight to hop into it": "☀ Tap the patch of sunlight to hop into it",
+   "ASMR Game · be Naomi": "ASMR Game · be Naomi",
+   "cat bed · morning": "cat bed · morning",
+   "windowsill · winter sun": "windowsill · winter sun",
+   "kitchen · open fridge": "kitchen · open fridge",
+   "living room · laundry": "living room · laundry",
+   "inside the laundry": "inside the laundry",
+   "sofa · night": "sofa · night",
+   "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the frosted glass, the winter sun, the fridge air at floor level, the warm laundry and her chest add real cold / warmth. Turning your ears only changes what you hear.": "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the frosted glass, the winter sun, the fridge air at floor level, the warm laundry and her chest add real cold / warmth. Turning your ears only changes what you hear."
   }
  },
  "names": {

@@ -112,7 +112,14 @@ window.MOHEAT_L10N = {
    "▶ カメラをひらく · Open camera": "▶ 打开摄像头",
    "🎧 Left / Right check": "🎧 左右声道检查",
    "You're out, Naomi is home alone · headphones on, you hear her through the camera's mic · mic optional (talk to her, or just hold the button) · connect MoHeat Evo to feel her warmth": "你出门在外，直美独自在家 · 戴上耳机，通过摄像头的麦克风听到她 · 麦克风可选（和她说话，或直接长按按钮） · 连接 MoHeat Evo，感受她的体温",
-   "🏠 ただいま、ナオミ": "🏠 我回来了，娜奥米"
+   "🏠 ただいま、ナオミ": "🏠 我回来了，娜奥米",
+   "ASMR Game · Naomi Cam": "ASMR 游戏 · 直美摄像头",
+   "Sounds around the camera": "摄像头周围的声音",
+   "Afternoon": "午后",
+   "Night": "夜晚",
+   "Night · IR": "夜晚 · 红外",
+   "Live, relative to where the camera looks: Naomi's body, her purr and the heated blanket are warm at their direction; the fan's wind (wherever you aim it), the window, the rain and her nose on the lens are cool. Turn the camera and the warmth turns with it. One mode per ear.": "实时，以摄像头的朝向为准：直美的身体、呼噜声和电热毯在各自的方向带来温暖；电风扇的风（吹向哪里就在哪里）、窗户、雨和贴在镜头上的小鼻子带来清凉。转动摄像头，温暖也随之转动。每只耳朵一次只能冷或热其一。",
+   "Use the microphone for Talk (level only, nothing recorded)": "“说话”时使用麦克风（只读取音量，不录音）"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -123,7 +130,14 @@ window.MOHEAT_L10N = {
    "🌀 扇風機・お鼻・雨 · cool": "🌀 扇風機・お鼻・雨 · ひんやり",
    "▶ カメラをひらく · Open camera": "▶ カメラをひらく",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "You're out, Naomi is home alone · headphones on, you hear her through the camera's mic · mic optional (talk to her, or just hold the button) · connect MoHeat Evo to feel her warmth": "あなたは外出中、ナオミはひとりでお留守番 · ヘッドホンを装着すると、カメラのマイク越しに彼女の音が聞こえます · マイクは任意（話しかける、またはボタンを長押し） · MoHeat Evo をつなぐと、彼女のぬくもりを感じられます"
+   "You're out, Naomi is home alone · headphones on, you hear her through the camera's mic · mic optional (talk to her, or just hold the button) · connect MoHeat Evo to feel her warmth": "あなたは外出中、ナオミはひとりでお留守番 · ヘッドホンを装着すると、カメラのマイク越しに彼女の音が聞こえます · マイクは任意（話しかける、またはボタンを長押し） · MoHeat Evo をつなぐと、彼女のぬくもりを感じられます",
+   "ASMR Game · Naomi Cam": "ASMRゲーム · ナオミカメラ",
+   "Sounds around the camera": "カメラのまわりの音",
+   "Afternoon": "午後",
+   "Night": "夜",
+   "Night · IR": "夜 · 赤外線",
+   "Live, relative to where the camera looks: Naomi's body, her purr and the heated blanket are warm at their direction; the fan's wind (wherever you aim it), the window, the rain and her nose on the lens are cool. Turn the camera and the warmth turns with it. One mode per ear.": "リアルタイム、カメラの向きが基準：ナオミの体・ゴロゴロ・電気毛布はその方向で温かく、扇風機の風（向けた方向）・窓・雨・レンズに当たる鼻は冷たく。カメラを回すと温かさも一緒に回ります。冷・温は片耳ごとにどちらか一方。",
+   "Use the microphone for Talk (level only, nothing recorded)": "「話しかける」にマイクを使う（音量のみ使用、録音はしません）"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -135,7 +149,14 @@ window.MOHEAT_L10N = {
    "▶ カメラをひらく · Open camera": "▶ Open camera",
    "🎧 Left / Right check": "🎧 Left / Right check",
    "You're out, Naomi is home alone · headphones on, you hear her through the camera's mic · mic optional (talk to her, or just hold the button) · connect MoHeat Evo to feel her warmth": "You're out, Naomi is home alone · headphones on, you hear her through the camera's mic · mic optional (talk to her, or just hold the button) · connect MoHeat Evo to feel her warmth",
-   "🏠 ただいま、ナオミ": "🏠 Home with Naomi"
+   "🏠 ただいま、ナオミ": "🏠 Home with Naomi",
+   "ASMR Game · Naomi Cam": "ASMR Game · Naomi Cam",
+   "Sounds around the camera": "Sounds around the camera",
+   "Afternoon": "Afternoon",
+   "Night": "Night",
+   "Night · IR": "Night · IR",
+   "Live, relative to where the camera looks: Naomi's body, her purr and the heated blanket are warm at their direction; the fan's wind (wherever you aim it), the window, the rain and her nose on the lens are cool. Turn the camera and the warmth turns with it. One mode per ear.": "Live, relative to where the camera looks: Naomi's body, her purr and the heated blanket are warm at their direction; the fan's wind (wherever you aim it), the window, the rain and her nose on the lens are cool. Turn the camera and the warmth turns with it. One mode per ear.",
+   "Use the microphone for Talk (level only, nothing recorded)": "Use the microphone for Talk (level only, nothing recorded)"
   }
  },
  "names": {

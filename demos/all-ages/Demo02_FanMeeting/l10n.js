@@ -62,7 +62,15 @@ window.MOHEAT_L10N = {
    "❄ 扇子・氷・魔法 · cool": "❄ 折扇・冰块・魔法 · 清凉",
    "▶ Start · 2:30": "▶ 开始 · 2:30",
    "🎧 Left / Right check": "🎧 左右声道检查",
-   "Headphones on · connect MoHeat Evo (top right): her voice warms the ear she is at, the fan and the ice cool the other": "请戴上耳机 · 连接 MoHeat Evo（右上角）：她在哪边，哪边耳朵就被她的声音温暖；折扇和冰块让另一边清凉"
+   "Headphones on · connect MoHeat Evo (top right): her voice warms the ear she is at, the fan and the ice cool the other": "请戴上耳机 · 连接 MoHeat Evo（右上角）：她在哪边，哪边耳朵就被她的声音温暖；折扇和冰块让另一边清凉",
+   "Around your head · 🔥 voice / ❄ cooling": "头部周围 · 🔥 声音 / ❄ 清凉",
+   "Voice → heat at the ear she is near; fan / ice / magic → cool at their own side. One mode per ear (firmware rule).": "声音 → 她靠近的那只耳朵变暖；折扇 / 冰块 / 魔法 → 各自那一侧变凉。每只耳朵一次只能冷或热其一（固件规则）。",
+   "アイドル登場": "偶像登场",
+   "ないしょ話": "悄悄话",
+   "ひんやりサプライズ": "清凉惊喜",
+   "どっちでしょうゲーム": "猜猜是哪边",
+   "キミだけのミニライブ": "只为你的迷你演唱会",
+   "またね": "下次见"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -72,7 +80,15 @@ window.MOHEAT_L10N = {
    "❄ 扇子・氷・魔法 · cool": "❄ 扇子・氷・魔法 · ひんやり",
    "▶ Start · 2:30": "▶ スタート · 2:30",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "Headphones on · connect MoHeat Evo (top right): her voice warms the ear she is at, the fan and the ice cool the other": "ヘッドホンを装着 · 右上から MoHeat Evo をつなぐと、彼女の声がいる側の耳をあたため、扇子と氷が反対側を冷やします"
+   "Headphones on · connect MoHeat Evo (top right): her voice warms the ear she is at, the fan and the ice cool the other": "ヘッドホンを装着 · 右上から MoHeat Evo をつなぐと、彼女の声がいる側の耳をあたため、扇子と氷が反対側を冷やします",
+   "Around your head · 🔥 voice / ❄ cooling": "頭のまわり · 🔥 声 / ❄ 冷感",
+   "Voice → heat at the ear she is near; fan / ice / magic → cool at their own side. One mode per ear (firmware rule).": "声 → 彼女が近い側の耳が温かく。扇子・氷・魔法 → それぞれの側が冷たく。冷・温は片耳ごとにどちらか一方（ファームウェアの仕様）。",
+   "アイドル登場": "アイドル登場",
+   "ないしょ話": "ないしょ話",
+   "ひんやりサプライズ": "ひんやりサプライズ",
+   "どっちでしょうゲーム": "どっちでしょうゲーム",
+   "キミだけのミニライブ": "キミだけのミニライブ",
+   "またね": "またね"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -82,7 +98,15 @@ window.MOHEAT_L10N = {
    "❄ 扇子・氷・魔法 · cool": "❄ fan · ice · magic · cool",
    "▶ Start · 2:30": "▶ Start · 2:30",
    "🎧 Left / Right check": "🎧 Left / Right check",
-   "Headphones on · connect MoHeat Evo (top right): her voice warms the ear she is at, the fan and the ice cool the other": "Headphones on · connect MoHeat Evo (top right): her voice warms the ear she is at, the fan and the ice cool the other"
+   "Headphones on · connect MoHeat Evo (top right): her voice warms the ear she is at, the fan and the ice cool the other": "Headphones on · connect MoHeat Evo (top right): her voice warms the ear she is at, the fan and the ice cool the other",
+   "Around your head · 🔥 voice / ❄ cooling": "Around your head · 🔥 voice / ❄ cooling",
+   "Voice → heat at the ear she is near; fan / ice / magic → cool at their own side. One mode per ear (firmware rule).": "Voice → heat at the ear she is near; fan / ice / magic → cool at their own side. One mode per ear (firmware rule).",
+   "アイドル登場": "Idol entrance",
+   "ないしょ話": "A secret, just for you",
+   "ひんやりサプライズ": "A cool surprise",
+   "どっちでしょうゲーム": "Left or right?",
+   "キミだけのミニライブ": "A mini live for you",
+   "またね": "See you again"
   }
  },
  "names": {

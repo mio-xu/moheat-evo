@@ -50,7 +50,12 @@ window.MOHEAT_L10N = {
    "🔥 蒸留釜": "🔥 蒸馏釜",
    "▶ Start · 2:30": "▶ 开始 · 2:30",
    "🎧 Left / Right check": "🎧 左右声道检查",
-   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he talks; the copper stills blaze, the cask warehouse and the spring water cool you": "请戴上耳机 · 连接 MoHeat Evo（右上角）：哪位武将说话，哪一侧就变暖；铜制蒸馏釜炽热，熟成库与名水带来清凉"
+   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he talks; the copper stills blaze, the cask warehouse and the spring water cool you": "请戴上耳机 · 连接 MoHeat Evo（右上角）：哪位武将说话，哪一侧就变暖；铜制蒸馏釜炽热，熟成库与名水带来清凉",
+   "霧の谷": "雾之谷",
+   "蒸留釜の熱": "蒸馏釜的热度",
+   "眠る樽": "沉睡的酒桶",
+   "あの夜の香り": "那一夜的香气",
+   "樽を安土へ": "把酒桶运往安土"
   },
   "ja": {
    "信長シリーズ 第四話 · Nobunaga Series Ep. 4 / 5": "信長シリーズ 第四話 · 全5話",
@@ -63,7 +68,13 @@ window.MOHEAT_L10N = {
    "🔥 蒸留釜": "🔥 蒸留釜",
    "▶ Start · 2:30": "▶ スタート · 2:30",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he talks; the copper stills blaze, the cask warehouse and the spring water cool you": "ヘッドホンを装着 · 右上から MoHeat Evo をつなぐと、話す武将の側があたたまります。銅の蒸留釜が燃え、熟成庫と名水が冷やします"
+   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he talks; the copper stills blaze, the cask warehouse and the spring water cool you": "ヘッドホンを装着 · 右上から MoHeat Evo をつなぐと、話す武将の側があたたまります。銅の蒸留釜が燃え、熟成庫と名水が冷やします",
+   "霧の谷": "霧の谷",
+   "蒸留釜の熱": "蒸留釜の熱",
+   "眠る樽": "眠る樽",
+   "山崎の名水": "山崎の名水",
+   "あの夜の香り": "あの夜の香り",
+   "樽を安土へ": "樽を安土へ"
   },
   "en": {
    "信長シリーズ 第四話 · Nobunaga Series Ep. 4 / 5": "Nobunaga Series Ep. 4 / 5",
@@ -76,7 +87,13 @@ window.MOHEAT_L10N = {
    "🔥 蒸留釜": "🔥 copper stills",
    "▶ Start · 2:30": "▶ Start · 2:30",
    "🎧 Left / Right check": "🎧 Left / Right check",
-   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he talks; the copper stills blaze, the cask warehouse and the spring water cool you": "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he talks; the copper stills blaze, the cask warehouse and the spring water cool you"
+   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he talks; the copper stills blaze, the cask warehouse and the spring water cool you": "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he talks; the copper stills blaze, the cask warehouse and the spring water cool you",
+   "霧の谷": "A misty valley",
+   "蒸留釜の熱": "The heat of the stills",
+   "眠る樽": "Sleeping casks",
+   "山崎の名水": "Yamazaki's spring water",
+   "あの夜の香り": "The scent of that night",
+   "樽を安土へ": "A cask for Azuchi"
   }
  },
  "names": {

@@ -74,7 +74,13 @@ window.MOHEAT_L10N = {
    "❄ 氷・ハイボール": "❄ 氷・ハイボール",
    "▶ Start · 2:30": "▶ スタート · 2:30",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he tastes, the ice and the highball cool the other": "ヘッドホンを装着 · 右上から MoHeat Evo をつなぐと、味わう武将の側があたたまり、氷とハイボールが反対側を冷やします"
+   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he tastes, the ice and the highball cool the other": "ヘッドホンを装着 · 右上から MoHeat Evo をつなぐと、味わう武将の側があたたまり、氷とハイボールが反対側を冷やします",
+   "未来からの客人": "未来からの客人",
+   "山崎 ― ロックで": "山崎 ― ロックで",
+   "白州 ― ハイボール": "白州 ― ハイボール",
+   "響 ― 左右で利き酒": "響 ― 左右で利き酒",
+   "未来への乾杯": "未来への乾杯",
+   "また、いつか": "また、いつか"
   },
   "en": {
    "信長シリーズ 第二話 · Nobunaga Series Ep. 2 / 5": "Nobunaga Series Ep. 2 / 5",
@@ -86,7 +92,13 @@ window.MOHEAT_L10N = {
    "❄ 氷・ハイボール": "❄ ice · highball",
    "▶ Start · 2:30": "▶ Start · 2:30",
    "🎧 Left / Right check": "🎧 Left / Right check",
-   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he tastes, the ice and the highball cool the other": "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he tastes, the ice and the highball cool the other"
+   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he tastes, the ice and the highball cool the other": "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he tastes, the ice and the highball cool the other",
+   "未来からの客人": "A guest from the future",
+   "山崎 ― ロックで": "Yamazaki, on the rocks",
+   "白州 ― ハイボール": "Hakushu, as a highball",
+   "響 ― 左右で利き酒": "Hibiki, left and right",
+   "未来への乾杯": "A toast to the future",
+   "また、いつか": "Until next time"
   }
  },
  "names": {

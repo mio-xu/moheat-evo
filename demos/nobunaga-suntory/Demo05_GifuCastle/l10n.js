@@ -62,7 +62,12 @@ window.MOHEAT_L10N = {
    "🔥 茶・鵜飼の篝火": "🔥 茶・鵜飼の篝火",
    "▶ Start · 2:30": "▶ スタート · 2:30",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "Headphones on · connect MoHeat Evo (top right): Nobunaga shows you his castle: the summit wind and ice cool you, the tea and the fire boats warm you — the boats' fire crosses from left to right": "ヘッドホンを装着 · 右上から MoHeat Evo をつなぐと、信長が城を案内してくれます：山頂の風と氷が冷やし、お茶と篝火の舟があたためます — 舟の火は左から右へ横切ります"
+   "Headphones on · connect MoHeat Evo (top right): Nobunaga shows you his castle: the summit wind and ice cool you, the tea and the fire boats warm you — the boats' fire crosses from left to right": "ヘッドホンを装着 · 右上から MoHeat Evo をつなぐと、信長が城を案内してくれます：山頂の風と氷が冷やし、お茶と篝火の舟があたためます — 舟の火は左から右へ横切ります",
+   "庭と滝": "庭と滝",
+   "金華山の風": "金華山の風",
+   "信長の茶": "信長の茶",
+   "長良川の鵜飼": "長良川の鵜飼",
+   "天下布武": "天下布武"
   },
   "en": {
    "信長シリーズ 第一話 · Nobunaga Series Ep. 1 / 5": "Nobunaga Series Ep. 1 / 5",
@@ -75,7 +80,12 @@ window.MOHEAT_L10N = {
    "🔥 茶・鵜飼の篝火": "🔥 tea · cormorant-fishing fires",
    "▶ Start · 2:30": "▶ Start · 2:30",
    "🎧 Left / Right check": "🎧 Left / Right check",
-   "Headphones on · connect MoHeat Evo (top right): Nobunaga shows you his castle: the summit wind and ice cool you, the tea and the fire boats warm you — the boats' fire crosses from left to right": "Headphones on · connect MoHeat Evo (top right): Nobunaga shows you his castle: the summit wind and ice cool you, the tea and the fire boats warm you — the boats' fire crosses from left to right"
+   "Headphones on · connect MoHeat Evo (top right): Nobunaga shows you his castle: the summit wind and ice cool you, the tea and the fire boats warm you — the boats' fire crosses from left to right": "Headphones on · connect MoHeat Evo (top right): Nobunaga shows you his castle: the summit wind and ice cool you, the tea and the fire boats warm you — the boats' fire crosses from left to right",
+   "庭と滝": "The garden and the waterfall",
+   "金華山の風": "Wind on Mt. Kinka",
+   "信長の茶": "Tea by Nobunaga's hand",
+   "長良川の鵜飼": "Cormorant fishing on the Nagara",
+   "天下布武": "Tenka Fubu"
   }
  },
  "names": {

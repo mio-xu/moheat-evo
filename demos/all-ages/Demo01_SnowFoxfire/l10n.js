@@ -80,7 +80,15 @@ window.MOHEAT_L10N = {
    "Headphones on · connect MoHeat Evo (top right) to feel the cold and the warmth": "请戴上耳机 · 连接 MoHeat Evo（右上角），感受寒意与温暖",
    "小雪": "小雪",
    "焔": "焰",
-   "小雪＆焔": "小雪＆焰"
+   "小雪＆焔": "小雪＆焰",
+   "One mode per ear (firmware rule). PWM range is shared with the Output test page.": "每只耳朵一次只能冷或热其一（固件规则）。PWM 范围与输出测试页共用。",
+   "小雪、はじめての登場": "小雪初次登场",
+   "小雪のいたずら": "小雪的恶作剧",
+   "焔、乱入": "焰闯了进来",
+   "冷たい？あったかい？": "冷？还是暖？",
+   "冷と熱の追いかけっこ": "冷与热的追逐",
+   "ないしょの魔法": "秘密魔法",
+   "おやすみ": "晚安"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -90,7 +98,15 @@ window.MOHEAT_L10N = {
    "🔥 焔 Homura · warm": "🔥 焔 · あたたか",
    "▶ Start · 2:30": "▶ スタート · 2:30",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "Headphones on · connect MoHeat Evo (top right) to feel the cold and the warmth": "ヘッドホンを装着 · 右上から MoHeat Evo をつなぐと、冷たさとぬくもりを感じられます"
+   "Headphones on · connect MoHeat Evo (top right) to feel the cold and the warmth": "ヘッドホンを装着 · 右上から MoHeat Evo をつなぐと、冷たさとぬくもりを感じられます",
+   "One mode per ear (firmware rule). PWM range is shared with the Output test page.": "冷・温は片耳ごとにどちらか一方（ファームウェアの仕様）。PWM の範囲は出力テストページと共通です。",
+   "小雪、はじめての登場": "小雪、はじめての登場",
+   "小雪のいたずら": "小雪のいたずら",
+   "焔、乱入": "焔、乱入",
+   "冷たい？あったかい？": "冷たい？あったかい？",
+   "冷と熱の追いかけっこ": "冷と熱の追いかけっこ",
+   "ないしょの魔法": "ないしょの魔法",
+   "おやすみ": "おやすみ"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -103,7 +119,15 @@ window.MOHEAT_L10N = {
    "Headphones on · connect MoHeat Evo (top right) to feel the cold and the warmth": "Headphones on · connect MoHeat Evo (top right) to feel the cold and the warmth",
    "小雪": "Koyuki",
    "焔": "Homura",
-   "小雪＆焔": "Koyuki & Homura"
+   "小雪＆焔": "Koyuki & Homura",
+   "One mode per ear (firmware rule). PWM range is shared with the Output test page.": "One mode per ear (firmware rule). PWM range is shared with the Output test page.",
+   "小雪、はじめての登場": "Koyuki arrives",
+   "小雪のいたずら": "Koyuki's little trick",
+   "焔、乱入": "Homura bursts in",
+   "冷たい？あったかい？": "Cool vs. warm",
+   "冷と熱の追いかけっこ": "The chase",
+   "ないしょの魔法": "Secret magic",
+   "おやすみ": "Good night"
   }
  },
  "names": {

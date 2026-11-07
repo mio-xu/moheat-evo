@@ -61,7 +61,9 @@ window.MOHEAT_L10N = {
    "鈴を鳴らす（タップ）": "摇响神铃（点击）",
    "🎍 来年も、その次の年も。": "🎍 明年，还有后年。",
    "🎍 願いごとは、二人だけの秘密": "🎍 愿望，是只属于两个人的秘密",
-   "↺ もう一度": "↺ 再来一次"
+   "↺ もう一度": "↺ 再来一次",
+   "ASMR Date · New Year's Eve": "ASMR 约会 · 除夕夜",
+   "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the winter night wind and its gusts, the bonfire on your left, the hot amazake cup and her fur stole add real cold / warmth.": "实时（DUAL）：她的声音按音量让她说话那一侧的耳朵变暖；冬夜的风和阵风、你左边的篝火、热甜酒杯和她的毛皮披肩带来真实的冷与暖。"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -72,7 +74,9 @@ window.MOHEAT_L10N = {
    "🌬 冬の夜風 · cool": "🌬 冬の夜風 · ひんやり",
    "▶ はじめる · Start": "▶ はじめる",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "Headphones on · tap / hold to answer her · connect MoHeat Evo to feel the winter wind, the bonfire, a hot amazake on your cheek and her voice": "ヘッドホンを装着 · タップ / 長押しで彼女に答えよう · MoHeat Evo をつなぐと、冬の風、焚き火、頬にあたる熱い甘酒、彼女の声を感じられます"
+   "Headphones on · tap / hold to answer her · connect MoHeat Evo to feel the winter wind, the bonfire, a hot amazake on your cheek and her voice": "ヘッドホンを装着 · タップ / 長押しで彼女に答えよう · MoHeat Evo をつなぐと、冬の風、焚き火、頬にあたる熱い甘酒、彼女の声を感じられます",
+   "ASMR Date · New Year's Eve": "ASMRデート · 大晦日",
+   "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the winter night wind and its gusts, the bonfire on your left, the hot amazake cup and her fur stole add real cold / warmth.": "リアルタイム（DUAL）：彼女の声は話しかける側の耳をその音量で温めます。冬の夜風と突風、左のかがり火、熱い甘酒のカップ、彼女のファーショールが、本当の冷たさ・温かさを加えます。"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -92,7 +96,9 @@ window.MOHEAT_L10N = {
    "鈴を鳴らす（タップ）": "Ring the shrine bell (tap)",
    "🎍 来年も、その次の年も。": "🎍 Next year, and the year after",
    "🎍 願いごとは、二人だけの秘密": "🎍 Your wishes stay a secret for two",
-   "↺ もう一度": "↺ Play again"
+   "↺ もう一度": "↺ Play again",
+   "ASMR Date · New Year's Eve": "ASMR Date · New Year's Eve",
+   "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the winter night wind and its gusts, the bonfire on your left, the hot amazake cup and her fur stole add real cold / warmth.": "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the winter night wind and its gusts, the bonfire on your left, the hot amazake cup and her fur stole add real cold / warmth."
   }
  },
  "names": {},

@@ -105,7 +105,14 @@ window.MOHEAT_L10N = {
    "▶ はじめる · Start": "▶ 开始",
    "🎧 Left / Right check": "🎧 左右声道检查",
    "Headphones on · mic optional (blow to fan the fire / blow out candles; or hold the Blow button) · connect MoHeat Evo to feel where the heat and the cold are": "请戴上耳机 · 麦克风可选（吹气扇旺火焰 / 吹灭蜡烛；也可长按“吹气”按钮） · 连接 MoHeat Evo，感受冷热所在的方位",
-   "🎉 クリア！ ひみつの泉、はっけん": "🎉 通关！发现了秘密之泉"
+   "🎉 クリア！ ひみつの泉、はっけん": "🎉 通关！发现了秘密之泉",
+   "ASMR Game · Hidden Spring": "ASMR 游戏 · 秘密之泉",
+   "Mountain hut": "山间小屋",
+   "Cave mouth": "洞口",
+   "Cave · fork ": "洞穴 · 岔路 ",
+   "Hidden spring": "秘密之泉",
+   "Live: every fire, draught and water sound in the scene is a heat or cool source at its own direction; your breath cools both ears. One mode per ear (the stronger side wins).": "实时：场景中每一处火、穿堂风和水声，都是位于其方向的热源或冷源；你的呼气让双耳变凉。每只耳朵一次只能冷或热其一（较强的一方优先）。",
+   "Use the microphone for blowing (level only, nothing recorded)": "用麦克风吹气（只读取音量，不录音）"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -116,7 +123,14 @@ window.MOHEAT_L10N = {
    "💧 すきま風・きつね火・地底の水 · cool": "💧 すきま風・きつね火・地底の水 · ひんやり",
    "▶ はじめる · Start": "▶ はじめる",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "Headphones on · mic optional (blow to fan the fire / blow out candles; or hold the Blow button) · connect MoHeat Evo to feel where the heat and the cold are": "ヘッドホンを装着 · マイクは任意（息を吹いて火をあおる / ろうそくを消す。「ふーっ」ボタン長押しでもOK） · MoHeat Evo をつなぐと、熱さと冷たさのある場所を感じられます"
+   "Headphones on · mic optional (blow to fan the fire / blow out candles; or hold the Blow button) · connect MoHeat Evo to feel where the heat and the cold are": "ヘッドホンを装着 · マイクは任意（息を吹いて火をあおる / ろうそくを消す。「ふーっ」ボタン長押しでもOK） · MoHeat Evo をつなぐと、熱さと冷たさのある場所を感じられます",
+   "ASMR Game · Hidden Spring": "ASMRゲーム · ひみつの泉",
+   "Mountain hut": "山小屋",
+   "Cave mouth": "洞窟の入口",
+   "Cave · fork ": "洞窟 · 分かれ道 ",
+   "Hidden spring": "ひみつの泉",
+   "Live: every fire, draught and water sound in the scene is a heat or cool source at its own direction; your breath cools both ears. One mode per ear (the stronger side wins).": "リアルタイム：場面の火・すきま風・水の音は、それぞれの方向にある温・冷の源です。あなたの息は両耳を冷やします。冷・温は片耳ごとにどちらか一方（強いほうが優先）。",
+   "Use the microphone for blowing (level only, nothing recorded)": "マイクで息を吹きかける（音量のみ使用、録音はしません）"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -128,7 +142,14 @@ window.MOHEAT_L10N = {
    "▶ はじめる · Start": "▶ Start",
    "🎧 Left / Right check": "🎧 Left / Right check",
    "Headphones on · mic optional (blow to fan the fire / blow out candles; or hold the Blow button) · connect MoHeat Evo to feel where the heat and the cold are": "Headphones on · mic optional (blow to fan the fire / blow out candles; or hold the Blow button) · connect MoHeat Evo to feel where the heat and the cold are",
-   "🎉 クリア！ ひみつの泉、はっけん": "🎉 Cleared! You found the hidden spring"
+   "🎉 クリア！ ひみつの泉、はっけん": "🎉 Cleared! You found the hidden spring",
+   "ASMR Game · Hidden Spring": "ASMR Game · Hidden Spring",
+   "Mountain hut": "Mountain hut",
+   "Cave mouth": "Cave mouth",
+   "Cave · fork ": "Cave · fork ",
+   "Hidden spring": "Hidden spring",
+   "Live: every fire, draught and water sound in the scene is a heat or cool source at its own direction; your breath cools both ears. One mode per ear (the stronger side wins).": "Live: every fire, draught and water sound in the scene is a heat or cool source at its own direction; your breath cools both ears. One mode per ear (the stronger side wins).",
+   "Use the microphone for blowing (level only, nothing recorded)": "Use the microphone for blowing (level only, nothing recorded)"
   }
  },
  "names": {

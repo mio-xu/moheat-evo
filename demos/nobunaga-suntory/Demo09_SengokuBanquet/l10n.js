@@ -56,7 +56,13 @@ window.MOHEAT_L10N = {
    "❄ 風・雨・氷": "❄ 风・雨・冰",
    "▶ Start · 2:30": "▶ 开始 · 2:30",
    "🎧 Left / Right check": "🎧 左右声道检查",
-   "Headphones on · connect MoHeat Evo (top right): each lord's voice warms his side, the night wind and rain cool the other": "请戴上耳机 · 连接 MoHeat Evo（右上角）：每位武将的声音温暖他那一侧，夜风和雨让另一侧清凉"
+   "Headphones on · connect MoHeat Evo (top right): each lord's voice warms his side, the night wind and rain cool the other": "请戴上耳机 · 连接 MoHeat Evo（右上角）：每位武将的声音温暖他那一侧，夜风和雨让另一侧清凉",
+   "安土の宴": "安土之宴",
+   "熱燗で乾杯": "以热清酒干杯",
+   "耳元の密談": "耳边的密谈",
+   "風が変わる": "风向变了",
+   "雨の夜": "雨夜",
+   "最後の盃": "最后一杯"
   },
   "ja": {
    "信長シリーズ 第五話 · Nobunaga Series Ep. 5 / 5": "信長シリーズ 第五話 · 全5話",
@@ -68,7 +74,13 @@ window.MOHEAT_L10N = {
    "❄ 風・雨・氷": "❄ 風・雨・氷",
    "▶ Start · 2:30": "▶ スタート · 2:30",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "Headphones on · connect MoHeat Evo (top right): each lord's voice warms his side, the night wind and rain cool the other": "ヘッドホンを装着 · 右上から MoHeat Evo をつなぐと、それぞれの武将の声がその側をあたため、夜風と雨が反対側を冷やします"
+   "Headphones on · connect MoHeat Evo (top right): each lord's voice warms his side, the night wind and rain cool the other": "ヘッドホンを装着 · 右上から MoHeat Evo をつなぐと、それぞれの武将の声がその側をあたため、夜風と雨が反対側を冷やします",
+   "安土の宴": "安土の宴",
+   "熱燗で乾杯": "熱燗で乾杯",
+   "耳元の密談": "耳元の密談",
+   "風が変わる": "風が変わる",
+   "雨の夜": "雨の夜",
+   "最後の盃": "最後の盃"
   },
   "en": {
    "信長シリーズ 第五話 · Nobunaga Series Ep. 5 / 5": "Nobunaga Series Ep. 5 / 5",
@@ -80,7 +92,13 @@ window.MOHEAT_L10N = {
    "❄ 風・雨・氷": "❄ wind · rain · ice",
    "▶ Start · 2:30": "▶ Start · 2:30",
    "🎧 Left / Right check": "🎧 Left / Right check",
-   "Headphones on · connect MoHeat Evo (top right): each lord's voice warms his side, the night wind and rain cool the other": "Headphones on · connect MoHeat Evo (top right): each lord's voice warms his side, the night wind and rain cool the other"
+   "Headphones on · connect MoHeat Evo (top right): each lord's voice warms his side, the night wind and rain cool the other": "Headphones on · connect MoHeat Evo (top right): each lord's voice warms his side, the night wind and rain cool the other",
+   "安土の宴": "The banquet at Azuchi",
+   "熱燗で乾杯": "A toast of warm sake",
+   "耳元の密談": "Secrets at your ear",
+   "風が変わる": "The wind turns",
+   "雨の夜": "A night of rain",
+   "最後の盃": "The last cup"
   }
  },
  "names": {

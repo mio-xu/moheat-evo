@@ -47,7 +47,9 @@ window.MOHEAT_L10N = {
    "▶ はじめる · Start": "▶ 开始",
    "🎧 Left / Right check": "🎧 左右声道检查",
    "Headphones on · drag to aim the dryer, tap / hold to answer him · connect MoHeat Evo to feel the wet hair, the warm air circling your head and his voice": "请戴上耳机 · 拖动来调整吹风机方向，点按 / 长按来回应他 · 连接 MoHeat Evo，感受湿发、环绕头部的暖风和他的声音",
-   "💨 ドラッグして温風を当てる Drag across the picture to aim the warm air": "💨 拖动画面，让暖风吹过去"
+   "💨 ドラッグして温風を当てる Drag across the picture to aim the warm air": "💨 拖动画面，让暖风吹过去",
+   "ASMR Game · rainy night": "ASMR 游戏 · 雨夜",
+   "Live (DUAL): his voice warms the ear he speaks at, with its loudness; the rain-wet hair, the towel and the hair dryer (hot, then cool air that circles your head) add real cold / warmth.": "实时（DUAL）：他的声音按音量让他说话那一侧的耳朵变暖；被雨淋湿的头发、毛巾和吹风机（先是热风，然后是环绕头部的冷风）带来真实的冷与暖。"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -58,7 +60,9 @@ window.MOHEAT_L10N = {
    "💧 濡れた髪・冷風 · cool": "💧 濡れた髪・冷風 · ひんやり",
    "▶ はじめる · Start": "▶ はじめる",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "Headphones on · drag to aim the dryer, tap / hold to answer him · connect MoHeat Evo to feel the wet hair, the warm air circling your head and his voice": "ヘッドホンを装着 · ドラッグでドライヤーの向きを変え、タップ / 長押しで彼に答えよう · MoHeat Evo をつなぐと、濡れた髪、頭をめぐる温風、彼の声を感じられます"
+   "Headphones on · drag to aim the dryer, tap / hold to answer him · connect MoHeat Evo to feel the wet hair, the warm air circling your head and his voice": "ヘッドホンを装着 · ドラッグでドライヤーの向きを変え、タップ / 長押しで彼に答えよう · MoHeat Evo をつなぐと、濡れた髪、頭をめぐる温風、彼の声を感じられます",
+   "ASMR Game · rainy night": "ASMRゲーム · 雨の夜",
+   "Live (DUAL): his voice warms the ear he speaks at, with its loudness; the rain-wet hair, the towel and the hair dryer (hot, then cool air that circles your head) add real cold / warmth.": "リアルタイム（DUAL）：彼の声は話しかける側の耳をその音量で温めます。雨に濡れた髪、タオル、ドライヤー（温風のあと、頭のまわりを巡る冷風）が、本当の冷たさ・温かさを加えます。"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -70,7 +74,9 @@ window.MOHEAT_L10N = {
    "▶ はじめる · Start": "▶ Start",
    "🎧 Left / Right check": "🎧 Left / Right check",
    "Headphones on · drag to aim the dryer, tap / hold to answer him · connect MoHeat Evo to feel the wet hair, the warm air circling your head and his voice": "Headphones on · drag to aim the dryer, tap / hold to answer him · connect MoHeat Evo to feel the wet hair, the warm air circling your head and his voice",
-   "💨 ドラッグして温風を当てる Drag across the picture to aim the warm air": "💨 Drag across the picture to aim the warm air"
+   "💨 ドラッグして温風を当てる Drag across the picture to aim the warm air": "💨 Drag across the picture to aim the warm air",
+   "ASMR Game · rainy night": "ASMR Game · rainy night",
+   "Live (DUAL): his voice warms the ear he speaks at, with its loudness; the rain-wet hair, the towel and the hair dryer (hot, then cool air that circles your head) add real cold / warmth.": "Live (DUAL): his voice warms the ear he speaks at, with its loudness; the rain-wet hair, the towel and the hair dryer (hot, then cool air that circles your head) add real cold / warmth."
   }
  },
  "names": {},

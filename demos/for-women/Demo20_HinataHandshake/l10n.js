@@ -58,7 +58,9 @@ window.MOHEAT_L10N = {
    "またね": "再见",
    "延長 +": "延长 +",
    "💗 次も、陽向の列でね": "💗 下次也要排阳向的队哦",
-   "↺ もう一度": "↺ 再来一次"
+   "↺ もう一度": "↺ 再来一次",
+   "ASMR Game · Handshake event": "ASMR 游戏 · 握手会",
+   "Live, two layers (DUAL): his voice warms the ear it is close to, with its loudness; his breath on your hands warms both ears; the entrance doors on your right let the winter in. Warm and cool can be on the same ear.": "实时，两层（DUAL）：他的声音按音量让他靠近的那只耳朵变暖；他呵在你手上的气息让双耳变暖；你右边的入口大门放进冬天的寒气。同一只耳朵可以同时有暖和凉。"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -69,7 +71,9 @@ window.MOHEAT_L10N = {
    "❄ 入口のすきま風 · cool": "❄ 入口のすきま風 · ひんやり",
    "▶ はじめる · Start": "▶ はじめる",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "Headphones on · mic optional (answer him with your voice, or tap) · connect MoHeat Evo (DUAL firmware) to feel his whispers and the winter draft": "ヘッドホンを装着 · マイクは任意（声で彼に答える、またはタップ） · MoHeat Evo（DUAL ファームウェア）をつなぐと、彼のささやきと冬のすきま風を感じられます"
+   "Headphones on · mic optional (answer him with your voice, or tap) · connect MoHeat Evo (DUAL firmware) to feel his whispers and the winter draft": "ヘッドホンを装着 · マイクは任意（声で彼に答える、またはタップ） · MoHeat Evo（DUAL ファームウェア）をつなぐと、彼のささやきと冬のすきま風を感じられます",
+   "ASMR Game · Handshake event": "ASMRゲーム · 握手会",
+   "Live, two layers (DUAL): his voice warms the ear it is close to, with its loudness; his breath on your hands warms both ears; the entrance doors on your right let the winter in. Warm and cool can be on the same ear.": "リアルタイム・二層（DUAL）：彼の声は近い側の耳をその音量で温めます。手に吹きかける彼の息は両耳を温め、右手の入口のドアから冬の冷気が入ります。同じ耳に温と冷を同時に出せます。"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -89,7 +93,9 @@ window.MOHEAT_L10N = {
    "またね": "See you",
    "延長 +": "Overtime +",
    "💗 次も、陽向の列でね": "💗 Next time, only his line",
-   "↺ もう一度": "↺ Play again"
+   "↺ もう一度": "↺ Play again",
+   "ASMR Game · Handshake event": "ASMR Game · Handshake event",
+   "Live, two layers (DUAL): his voice warms the ear it is close to, with its loudness; his breath on your hands warms both ears; the entrance doors on your right let the winter in. Warm and cool can be on the same ear.": "Live, two layers (DUAL): his voice warms the ear it is close to, with its loudness; his breath on your hands warms both ears; the entrance doors on your right let the winter in. Warm and cool can be on the same ear."
   }
  },
  "names": {

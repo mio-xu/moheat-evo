@@ -60,7 +60,9 @@ window.MOHEAT_L10N = {
    "玄関の向こうに": "门的那一边",
    "蓮": "莲",
    "💗 また電話してね": "💗 下次再打给我哦",
-   "↺ もう一度": "↺ 再来一次"
+   "↺ もう一度": "↺ 再来一次",
+   "ASMR Game · Late-night call": "ASMR 游戏 · 深夜来电",
+   "Live: the phone warms the ear it is pressed to (more when he talks or whispers); the open window and the door let the cold in. One mode per ear.": "实时：手机让贴着的那只耳朵变暖（他说话或低语时更暖）；开着的窗户和门放进冷空气。每只耳朵一次只能冷或热其一。"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -71,7 +73,9 @@ window.MOHEAT_L10N = {
    "❄ 窓の外の雪 · cool": "❄ 窓の外の雪 · ひんやり",
    "▶ はじめる · Start": "▶ はじめる",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "Headphones on · mic optional (answer him with your voice, or tap) · connect MoHeat Evo to feel the phone at your ear": "ヘッドホンを装着 · マイクは任意（声で彼に答える、またはタップ） · MoHeat Evo をつなぐと、耳にあてたスマホを感じられます"
+   "Headphones on · mic optional (answer him with your voice, or tap) · connect MoHeat Evo to feel the phone at your ear": "ヘッドホンを装着 · マイクは任意（声で彼に答える、またはタップ） · MoHeat Evo をつなぐと、耳にあてたスマホを感じられます",
+   "ASMR Game · Late-night call": "ASMRゲーム · 深夜の電話",
+   "Live: the phone warms the ear it is pressed to (more when he talks or whispers); the open window and the door let the cold in. One mode per ear.": "リアルタイム：スマホは当てている耳を温めます（彼が話す・ささやくとさらに）。開いた窓とドアから冷気が入ります。冷・温は片耳ごとにどちらか一方。"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -91,7 +95,9 @@ window.MOHEAT_L10N = {
    "玄関の向こうに": "At your door",
    "蓮": "Ren",
    "💗 また電話してね": "💗 Call me again sometime",
-   "↺ もう一度": "↺ Play again"
+   "↺ もう一度": "↺ Play again",
+   "ASMR Game · Late-night call": "ASMR Game · Late-night call",
+   "Live: the phone warms the ear it is pressed to (more when he talks or whispers); the open window and the door let the cold in. One mode per ear.": "Live: the phone warms the ear it is pressed to (more when he talks or whispers); the open window and the door let the cold in. One mode per ear."
   }
  },
  "names": {},

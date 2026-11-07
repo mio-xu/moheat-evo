@@ -17,7 +17,21 @@ window.MOHEAT_L10N = {
    "あなたの言葉 · You speak": "あなたの言葉",
    "▶ 語らう · Start": "▶ 語らう",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "…": "…"
+   "…": "…",
+   "Live talk · 信長シリーズ": "ライブトーク · 信長シリーズ",
+   "Nobunaga": "信長",
+   "Ieyasu": "家康",
+   "三人で": "三人で",
+   "all three": "三人で",
+   "They speak first, then wait for you · headphones + microphone (Chrome) · voices ElevenLabs, live lines by AI, not scripted": "まず彼らが話し、あなたの返事を待ちます · ヘッドホン＋マイク（Chrome） · 声は ElevenLabs、セリフは AI がその場で生成（台本なし）",
+   "Around you": "まわり",
+   "Conversation": "会話",
+   "Live (DUAL): a voice warms the ear it speaks at, with its loudness, strongest right at your ear. They walk around you while they talk; the place adds its own warm / cool (hearth, lanterns, wind).": "リアルタイム（DUAL）：声は話しかける側の耳をその音量で温め、耳元でいちばん強くなります。二人は話しながらあなたのまわりを歩き、場所ごとの温・冷（囲炉裏・行灯・風）が加わります。",
+   "岐阜城・天守の夕暮れ": "岐阜城・天守の夕暮れ",
+   "岐阜城・茶室の囲炉裏": "岐阜城・茶室の囲炉裏",
+   "京都・先斗町の居酒屋": "京都・先斗町の居酒屋",
+   "山崎蒸溜所・霧の朝": "山崎蒸溜所・霧の朝",
+   "安土城・月夜の酒宴": "安土城・月夜の酒宴"
   },
   "en": {
    "信長シリーズ 特別編 · Nobunaga Series · Live": "Nobunaga Series · Live",
@@ -54,7 +68,15 @@ window.MOHEAT_L10N = {
    "岐阜城・茶室の囲炉裏": "The tea room by the hearth",
    "京都・先斗町の居酒屋": "A Kyoto izakaya in Pontocho",
    "山崎蒸溜所・霧の朝": "Yamazaki Distillery, a misty morning",
-   "安土城・月夜の酒宴": "Azuchi Castle, a moonlit banquet"
+   "安土城・月夜の酒宴": "Azuchi Castle, a moonlit banquet",
+   "Live talk · 信長シリーズ": "Live talk · Nobunaga Series",
+   "Nobunaga": "Nobunaga",
+   "Ieyasu": "Ieyasu",
+   "all three": "all three",
+   "They speak first, then wait for you · headphones + microphone (Chrome) · voices ElevenLabs, live lines by AI, not scripted": "They speak first, then wait for you · headphones + microphone (Chrome) · voices ElevenLabs, live lines by AI, not scripted",
+   "Around you": "Around you",
+   "Conversation": "Conversation",
+   "Live (DUAL): a voice warms the ear it speaks at, with its loudness, strongest right at your ear. They walk around you while they talk; the place adds its own warm / cool (hearth, lanterns, wind).": "Live (DUAL): a voice warms the ear it speaks at, with its loudness, strongest right at your ear. They walk around you while they talk; the place adds its own warm / cool (hearth, lanterns, wind)."
   },
   "zh": {
    "信長シリーズ 特別編 · Nobunaga Series · Live": "信长系列 特别篇 · 实时",
@@ -91,7 +113,15 @@ window.MOHEAT_L10N = {
    "岐阜城・茶室の囲炉裏": "岐阜城·茶室的地炉",
    "京都・先斗町の居酒屋": "京都·先斗町的居酒屋",
    "山崎蒸溜所・霧の朝": "山崎蒸馏所·雾中的清晨",
-   "安土城・月夜の酒宴": "安土城·月夜酒宴"
+   "安土城・月夜の酒宴": "安土城·月夜酒宴",
+   "Live talk · 信長シリーズ": "实时对话 · 信长系列",
+   "Nobunaga": "信长",
+   "Ieyasu": "家康",
+   "all three": "三人一起",
+   "They speak first, then wait for you · headphones + microphone (Chrome) · voices ElevenLabs, live lines by AI, not scripted": "他们先开口，然后等你回应 · 耳机 + 麦克风（Chrome） · 配音 ElevenLabs，台词由 AI 实时生成，没有剧本",
+   "Around you": "你的周围",
+   "Conversation": "对话",
+   "Live (DUAL): a voice warms the ear it speaks at, with its loudness, strongest right at your ear. They walk around you while they talk; the place adds its own warm / cool (hearth, lanterns, wind).": "实时（DUAL）：声音按音量让说话那一侧的耳朵变暖，贴在耳边时最强。他们边说边在你身边走动；不同的地点还会加上各自的暖与凉（地炉、行灯、风）。"
   }
  },
  "names": {},

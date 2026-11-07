@@ -70,7 +70,13 @@ window.MOHEAT_L10N = {
    "👃 つめたいお鼻・雨 · cool": "👃 冰凉的小鼻子・雨 · 清凉",
    "▶ はじめる · Start": "▶ 开始",
    "🎧 Left / Right check": "🎧 左右声道检查",
-   "Headphones on · mic optional (call her name, blow on her food; or use the buttons) · connect MoHeat Evo to feel her warmth and her cold little nose": "请戴上耳机 · 麦克风可选（叫她的名字、给她的饭吹吹气；也可以用按钮） · 连接 MoHeat Evo，感受她的体温和冰凉的小鼻子"
+   "Headphones on · mic optional (call her name, blow on her food; or use the buttons) · connect MoHeat Evo to feel her warmth and her cold little nose": "请戴上耳机 · 麦克风可选（叫她的名字、给她的饭吹吹气；也可以用按钮） · 连接 MoHeat Evo，感受她的体温和冰凉的小鼻子",
+   "ASMR Game · Naomi": "ASMR 游戏 · 直美",
+   "Morning": "早晨",
+   "Afternoon": "午后",
+   "Rainy night": "雨夜",
+   "Live: Naomi's body and purr are warm at her direction; her nose, the feather's wind, the rain and your breath are cool. One mode per ear (the stronger side wins).": "实时：直美的身体和呼噜声在她所在的方向带来温暖；她的鼻子、羽毛带起的风、雨和你的呼气带来清凉。每只耳朵一次只能冷或热其一（较强的一方优先）。",
+   "Use the microphone (calling / blowing; level only, nothing recorded)": "使用麦克风（呼唤 / 吹气；只读取音量，不录音）"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -81,7 +87,13 @@ window.MOHEAT_L10N = {
    "👃 つめたいお鼻・雨 · cool": "👃 つめたいお鼻・雨 · ひんやり",
    "▶ はじめる · Start": "▶ はじめる",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "Headphones on · mic optional (call her name, blow on her food; or use the buttons) · connect MoHeat Evo to feel her warmth and her cold little nose": "ヘッドホンを装着 · マイクは任意（名前を呼ぶ、ごはんをふーふーする。ボタンでもOK） · MoHeat Evo をつなぐと、彼女のぬくもりと冷たい小さなお鼻を感じられます"
+   "Headphones on · mic optional (call her name, blow on her food; or use the buttons) · connect MoHeat Evo to feel her warmth and her cold little nose": "ヘッドホンを装着 · マイクは任意（名前を呼ぶ、ごはんをふーふーする。ボタンでもOK） · MoHeat Evo をつなぐと、彼女のぬくもりと冷たい小さなお鼻を感じられます",
+   "ASMR Game · Naomi": "ASMRゲーム · ナオミ",
+   "Morning": "朝",
+   "Afternoon": "午後",
+   "Rainy night": "雨の夜",
+   "Live: Naomi's body and purr are warm at her direction; her nose, the feather's wind, the rain and your breath are cool. One mode per ear (the stronger side wins).": "リアルタイム：ナオミの体とゴロゴロは彼女のいる方向で温かく、鼻・羽根の風・雨・あなたの息は冷たく。冷・温は片耳ごとにどちらか一方（強いほうが優先）。",
+   "Use the microphone (calling / blowing; level only, nothing recorded)": "マイクを使う（呼びかけ・息の吹きかけ。音量のみ使用、録音はしません）"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -92,7 +104,13 @@ window.MOHEAT_L10N = {
    "👃 つめたいお鼻・雨 · cool": "👃 cold little nose · rain · cool",
    "▶ はじめる · Start": "▶ Start",
    "🎧 Left / Right check": "🎧 Left / Right check",
-   "Headphones on · mic optional (call her name, blow on her food; or use the buttons) · connect MoHeat Evo to feel her warmth and her cold little nose": "Headphones on · mic optional (call her name, blow on her food; or use the buttons) · connect MoHeat Evo to feel her warmth and her cold little nose"
+   "Headphones on · mic optional (call her name, blow on her food; or use the buttons) · connect MoHeat Evo to feel her warmth and her cold little nose": "Headphones on · mic optional (call her name, blow on her food; or use the buttons) · connect MoHeat Evo to feel her warmth and her cold little nose",
+   "ASMR Game · Naomi": "ASMR Game · Naomi",
+   "Morning": "Morning",
+   "Afternoon": "Afternoon",
+   "Rainy night": "Rainy night",
+   "Live: Naomi's body and purr are warm at her direction; her nose, the feather's wind, the rain and your breath are cool. One mode per ear (the stronger side wins).": "Live: Naomi's body and purr are warm at her direction; her nose, the feather's wind, the rain and your breath are cool. One mode per ear (the stronger side wins).",
+   "Use the microphone (calling / blowing; level only, nothing recorded)": "Use the microphone (calling / blowing; level only, nothing recorded)"
   }
  },
  "names": {

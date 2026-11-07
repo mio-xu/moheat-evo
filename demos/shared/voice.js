@@ -20,8 +20,8 @@
   const OFF = QS.has('cover') || QS.has('render') || QS.has('auto');
   // listening language = the subtitle language (shared/subs.js: EN default / 日本語 / 中文; user 2026-11-08), ?vlang= overrides
   const subLang = () => { if (window.MoHeatSub) return window.MoHeatSub.lang; try { return localStorage.getItem('moheat.sublang') || 'en'; } catch { return 'en'; } };
-  const LANG = () => QS.get('vlang') || ({ en: 'en-US', ja: 'ja-JP', zh: 'zh-CN', 'zh-Hant': 'zh-TW', ko: 'ko-KR', es: 'es-ES', fr: 'fr-FR', de: 'de-DE', pt: 'pt-BR', id: 'id-ID', th: 'th-TH', vi: 'vi-VN' })[subLang()] || 'en-US';
-  const T = (ja, en, zh) => ({ ja, en, zh })[subLang()] || en;   // pill texts in the chosen language
+  const LANG = () => QS.get('vlang') || window.MoHeatSub?.speech?.() || ({ ja: 'ja-JP', zh: 'zh-CN' })[subLang()] || 'en-US';   // codes: LANGS in subs.js
+  const T = (ja, en, zh) => (window.MoHeatSub ? window.MoHeatSub.pick({ ja, en, zh }) : ({ ja, en, zh })[subLang()]) || en;   // pill texts; other languages fall back via subs.js
   const store = { get: (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : v === '1'; } catch { return d; } },
     set: (k, v) => { try { localStorage.setItem(k, v ? '1' : '0'); } catch {} } };
   let enabled = store.get('moheat.voice', true);

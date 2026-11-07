@@ -1,5 +1,7 @@
-// MoHeatSub — one display language for every demo (user 2026-11-08): English (default) / 日本語 / 简体中文, and more languages
-// where the demo's l10n.js has them (live-stream rooms: 繁體中文 한국어 Español Français Deutsch Português Bahasa Indonesia ไทย Tiếng Việt).
+// MoHeatSub — one display language for every demo (user 2026-11-08): English (default) / 日本語 / 简体中文.
+// ADDING A LANGUAGE (user: keep it easy): 1) one entry in LANGS below (name, button label, speech-recognition code, font, fallback),
+// 2) text.<code> (+ voice.<code>) in each demo's l10n.js — tools/l10n/ extracts the strings and reports what is missing,
+// 3) add the code to DEFAULT_LANGS (all demos) or to "langs" in one demo's l10n.js. Nothing else in the code needs to change.
 // ONE language at a time, same size. Loaded by shared/nav.js on every demo page; the demos' own code stays as it is:
 //   · subtitles: the demo writes ja + en (#subs .line > .ja / .en, speech #bubble > b / span) → both hidden, one .one line (styled
 //     as the demo's ja line → same size in every language) shows the chosen language.
@@ -13,22 +15,37 @@
   if (window.MoHeatSub) return;
   const QS = new URLSearchParams(location.search);
   if (QS.has('cover') || QS.has('render')) return;
-  const NATIVE = { en: 'English', ja: '日本語', zh: '简体中文', 'zh-Hant': '繁體中文', ko: '한국어', es: 'Español', fr: 'Français', de: 'Deutsch',
-    pt: 'Português', id: 'Bahasa Indonesia', th: 'ไทย', vi: 'Tiếng Việt' };
-  const SHORT = { en: 'EN', ja: '日本語', zh: '简中', 'zh-Hant': '繁中', ko: '한국어', es: 'ES', fr: 'FR', de: 'DE', pt: 'PT', id: 'ID', th: 'ไทย', vi: 'VI', off: 'OFF' };
-  const BCP = { en: 'en', ja: 'ja', zh: 'zh-CN', 'zh-Hant': 'zh-TW', ko: 'ko', es: 'es', fr: 'fr', de: 'de', pt: 'pt-BR', id: 'id', th: 'th', vi: 'vi' };
+  // ---------------------------------------------------------------- the language registry (the only place that knows languages)
+  // name: native name · short: label on the 字 button · bcp: lang attribute · speech: Web Speech recognition code (voice.js)
+  // font: CSS font stack for this script (optional) · fallback: language used when a text has no translation (default English)
+  const CJK_SC = '"PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", "Zen Maru Gothic", sans-serif';
+  const LANGS = {
+    en: { name: 'English', short: 'EN', bcp: 'en', speech: 'en-US' },
+    ja: { name: '日本語', short: '日本語', bcp: 'ja', speech: 'ja-JP' },
+    zh: { name: '简体中文', short: '中文', bcp: 'zh-CN', speech: 'zh-CN', font: CJK_SC },
+    'zh-Hant': { name: '繁體中文', short: '繁中', bcp: 'zh-TW', speech: 'zh-TW', font: '"PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif', fallback: 'zh' },
+    ko: { name: '한국어', short: '한국어', bcp: 'ko', speech: 'ko-KR', font: '"Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif' },
+    es: { name: 'Español', short: 'ES', bcp: 'es', speech: 'es-ES' }, fr: { name: 'Français', short: 'FR', bcp: 'fr', speech: 'fr-FR' },
+    de: { name: 'Deutsch', short: 'DE', bcp: 'de', speech: 'de-DE' }, pt: { name: 'Português', short: 'PT', bcp: 'pt-BR', speech: 'pt-BR' },
+    id: { name: 'Bahasa Indonesia', short: 'ID', bcp: 'id', speech: 'id-ID' }, vi: { name: 'Tiếng Việt', short: 'VI', bcp: 'vi', speech: 'vi-VN' },
+    th: { name: 'ไทย', short: 'ไทย', bcp: 'th', speech: 'th-TH', font: 'Thonburi, "Noto Sans Thai", Tahoma, sans-serif' },
+  };
+  const DEFAULT_LANGS = ['en', 'ja', 'zh'];   // what every demo offers unless its l10n.js lists "langs"
+  const chain = (l) => { const out = []; for (let x = l; x && !out.includes(x); x = LANGS[x]?.fallback || (x === 'en' ? null : 'en')) out.push(x); return out; };
+  /** value for language l from { en, zh, … }, following the fallback chain (zh-Hant → zh → en) */
+  const pickL = (obj, l) => { if (!obj) return undefined; for (const x of chain(l)) if (obj[x] != null) return obj[x]; return undefined; };
   const KEY = 'moheat.sublang';
   const load = () => { try { return localStorage.getItem(KEY); } catch { return null; } };
   const save = (v) => { try { localStorage.setItem(KEY, v); } catch {} };
   const L10N = () => window.MOHEAT_L10N || {};
-  const langs = () => { const l = L10N().langs || ['en', 'ja', 'zh']; return l.includes('en') ? l : ['en', ...l]; };
+  const langs = () => { const l = (L10N().langs || DEFAULT_LANGS).filter((x) => LANGS[x]); return l.includes('en') ? l : ['en', ...l]; };
   let pref = QS.get('sub') || load() || 'en';   // what the viewer chose (any demo)
   const eff = () => (pref === 'off' || langs().includes(pref) ? pref : 'en');   // what this demo can show
   let lang = eff();
   const root = document.documentElement;
 
   // ---------------------------------------------------------------- translations
-  const NAMES = { 信長: { en: 'Nobunaga', zh: '信长', 'zh-Hant': '信長' }, 家康: { en: 'Ieyasu', zh: '家康', 'zh-Hant': '家康' }, あなた: { en: 'You', zh: '你', 'zh-Hant': '你' } };
+  const NAMES = { 信長: { en: 'Nobunaga', zh: '信长', 'zh-Hant': '信長' }, 家康: { en: 'Ieyasu', zh: '家康' }, あなた: { en: 'You', zh: '你' } };
   const norm = (s) => String(s || '').replace(/\s+/g, ' ').trim();
   let maps = {};
   function map(l) {   // normalized "page text" → text in language l
@@ -38,7 +55,8 @@
       for (const s of window.DEMO_DATA?.anim?.subs || []) if (s.zh && s.ja) m.set(norm(s.ja), s.zh);
       for (const [k, v] of Object.entries(window.MOHEAT_ZH || {})) if (v) m.set(norm(k), v);   // older subs_zh.js format
     }
-    for (const [k, v] of Object.entries(L10N().text?.[l] || {})) if (typeof v === 'string') { m.set(norm(k), v); const ns = k.replace(/\s/g, ''); if (!m.has(ns)) m.set(ns, v); }
+    for (const src of [window.MOHEAT_L10N_COMMON?.text?.[l], L10N().text?.[l]])   // shared/l10n_common.js (page chrome) then the demo's own l10n.js
+      for (const [k, v] of Object.entries(src || {})) if (typeof v === 'string') { m.set(norm(k), v); const ns = k.replace(/\s/g, ''); if (!m.has(ns)) m.set(ns, v); }
     return m;
   }
   const missing = new Set();
@@ -51,7 +69,7 @@
   const nameOf = (ja, l = lang) => {
     if (!ja || l === 'ja') return ja;
     const n = { ...NAMES, ...(window.MOHEAT_NAMES || {}), ...(L10N().names || {}) }[norm(ja)];
-    return (n && (n[l] || (l === 'zh-Hant' && n.zh) || n.en)) || ja;
+    return pickL(n, l) || ja;
   };
 
   // ---------------------------------------------------------------- one line per subtitle / answer
@@ -76,7 +94,7 @@
     if (!one) one = document.createElement(tag || (src.tagName === 'DIV' ? 'div' : 'span'));
     one.className = [cls, 'one', ...(tag ? [] : [...src.classList].filter((x) => x !== 'ja' && x !== 'en'))].filter(Boolean).join(' ');
     const name = nameOf(who, lang === 'off' ? 'en' : lang);
-    one.lang = BCP[lang] || 'en';
+    one.lang = LANGS[lang]?.bcp || 'en';
     one.textContent = '';
     if (whoEl && name) { const w = whoEl.cloneNode(false); w.removeAttribute('id'); w.textContent = name; one.appendChild(w); }
     one.appendChild(document.createTextNode(pick(jaT, enT)));
@@ -85,7 +103,7 @@
   }
 
   // "日本語 · English" in one element (interact.js cards, some buttons) → the chosen part; both kept in data-voice for voice.js
-  const SPLIT = '.ix-card .ix-tag, .ix-card .ix-how, .ix-card .ix-gauge b, .ix-btn, .ch, .act-btn, .chip-c, #micGate button, .intro .ix-toggle span';
+  const SPLIT = '.ix-card .ix-tag, .ix-card .ix-how, .ix-card .ix-gauge b, .ix-btn, .ch, .act-btn, .chip-c, #micGate button, .intro .ix-toggle span, .pick > p > small';
   const UI = {   // interact.js (Demo 1–9) texts: ja → { en, zh, … }
     'スキップ': { en: 'Skip', zh: '跳过', 'zh-Hant': '跳過' }, 'あなたの番': { en: 'Your turn', zh: '轮到你了', 'zh-Hant': '輪到你了' }, '感じてみて': { en: 'Feel it', zh: '感受一下' },
     'あなたのセリフ': { en: 'Your line', zh: '你的台词' }, '耳で感じて、選んでね': { en: 'Feel it on your ears, then choose', zh: '用耳朵感受，然后选择' },
@@ -97,12 +115,13 @@
     '声に出して乾杯！ または グラスをタップ': { en: 'Say it — or tap the glass', zh: '大声说"干杯！"，或点一下酒杯' }, 'グラスをタップして乾杯！': { en: 'Tap the glass to toast', zh: '点一下酒杯干杯！' },
     '乾杯！': { en: 'Cheers!', zh: '干杯！' }, 'あなたも参加する': { en: 'Interactive — answer & play along', zh: '参与互动 — 回答并一起玩' },
     '声援で参加する': { en: 'Cheer along (mic or tap)', zh: '一起应援（麦克风或点击）' },
+    '相手': { en: 'With', zh: '对象' }, '場所': { en: 'Where', zh: '地点' }, 'あなたの言葉': { en: 'You speak', zh: '你的语言' },   // Demo23 pickers
     'もう一度': { en: 'Play again', zh: '再玩一次', 'zh-Hant': '再玩一次', ko: '다시 하기', es: 'Jugar de nuevo', fr: 'Rejouer', de: 'Nochmal', pt: 'Jogar de novo', id: 'Main lagi', th: 'เล่นอีกครั้ง', vi: 'Chơi lại' },
   };
   function pickSplit(t) {   // "↺ 日本語 · English" written by the demo at run time (e.g. the replay button) → the chosen language, or null
     const m = /^(.*?)\s[·・]\s(.*)$/s.exec(t); if (!m || !CJK.test(m[1])) return null;
     const [, pre, core, post] = AFFIX.exec(m[1].trim()), en = AFFIX.exec(m[2].trim())[2], ui = UI[norm(core)];
-    const c = lang === 'ja' ? core : lang === 'en' || lang === 'off' ? en : ui?.[lang] || (lang === 'zh-Hant' && ui?.zh) || tr(core, lang, false) || en;
+    const c = lang === 'ja' ? core : lang === 'en' || lang === 'off' ? en : (lang !== 'en' && ui && chain(lang).slice(0, -1).map((x) => ui[x]).find(Boolean)) || tr(core, lang, false) || en;
     return `${pre}${c}${post}`;
   }
   const CJK = /[぀-ヿ㐀-鿿]/;
@@ -124,7 +143,7 @@
     const { mpre, mja, men, mpost } = el.dataset, ui = UI[norm(mja)];
     let core = mja;
     if (lang === 'en' || lang === 'off') core = men || mja;
-    else if (lang !== 'ja') { const z = tr(`${mpre}${mja}${mpost}`, lang, false); core = ui?.[lang] || (lang === 'zh-Hant' && ui?.zh) || tr(mja, lang, false) || (z && AFFIX.exec(z)[2]) || men || mja; }
+    else if (lang !== 'ja') { const z = tr(`${mpre}${mja}${mpost}`, lang, false); core = (ui && chain(lang).slice(0, -1).map((x) => ui[x]).find(Boolean)) || tr(mja, lang, false) || (z && AFFIX.exec(z)[2]) || men || mja; }
     const v = `${mpre}${core}${mpost}`;
     el.dataset.mlang = lang; el.dataset.mshown = v; el.textContent = v;
   }
@@ -133,12 +152,12 @@
   function chip(el) {
     const m = CHIP.exec(el.textContent.replace(/^(🎙 Interactive|📣 Cheer|🎙 互动模式|📣 应援模式|🎙 互動模式|📣 應援模式) (ON|OFF)$/, (s, a, b) => `${a.startsWith('📣') ? '📣 声援' : '🎙 参加'}モード ${b}`));
     if (!m) return;
-    const t = CHIP_T[lang] || (lang === 'ja' ? null : CHIP_T.en), v = t ? `${t[m[1].startsWith('📣') ? 1 : 0]} ${m[2]}` : `${m[1]}モード ${m[2]}`;
+    const t = lang === 'ja' ? null : pickL(CHIP_T, lang), v = t ? `${t[m[1].startsWith('📣') ? 1 : 0]} ${m[2]}` : `${m[1]}モード ${m[2]}`;
     if (el.textContent !== v) el.textContent = v;
   }
 
   // the cover: every text in .intro that l10n.js translates ("" = hidden); the title shrinks when the new text is longer
-  const COVER = '.intro h1, .intro p:not(.draft):not(.cleared):not(.dn-rights), .intro .chip, .intro button';
+  const COVER = '.intro h1, .intro p:not(.draft):not(.cleared):not(.dn-rights), .intro .chip, .intro button:not(.opt), .intro .opt:not(:has(small))';
   const units = (s) => [...s].reduce((n, c) => n + (/[　-鿿가-힯＀-￯]/.test(c) ? 1 : c === ' ' ? .3 : .56), 0);
   function cover(el) {
     if (el.closest('.ix-toggle') || el.querySelector(COVER)) return;   // a box of chips: the chips themselves
@@ -160,17 +179,51 @@
     if (el.dataset.mcap) { el.style.fontSize = ''; const f = Math.min(1, Math.max(.42, +el.dataset.mcap / units(v))); if (f < 1) el.style.fontSize = `${parseFloat(getComputedStyle(el).fontSize) * f}px`; }
   }
 
-  // the side panel's progress list: <li>日本語 · <small>English</small></li>
+  // "日本語 <small>English</small>" in one element: the progress list (<li>ja · <small>en</small>), Demo 1–9 scene titles
+  // ("3　ja<small>en</small>", the number stays), the stream's chat hint
+  const SMALL = '#steps > li, #sceneTitle, .scene-title, #chatHint, .pick .opt';
   function step(li) {
     const sm = li.querySelector(':scope > small');
-    if (sm && li.dataset.mshown === undefined) { li.dataset.mja = norm(li.firstChild?.nodeType === 3 ? li.firstChild.textContent.replace(/\s[·・]\s*$/, '') : ''); li.dataset.men = norm(sm.textContent); li.dataset.mhtml = li.innerHTML; }
+    if (sm && (li.dataset.mshown === undefined || li.textContent !== li.dataset.mshown)) {
+      const first = li.firstChild?.nodeType === 3 ? li.firstChild.textContent.replace(/\s[·・]\s*$/, '') : '', num = /^(?:[\d一二三四五六七八九十]+[\s　]+)?/.exec(first)[0];
+      li.dataset.mnum = num; li.dataset.mja = norm(first.slice(num.length)); li.dataset.men = norm(sm.textContent); li.dataset.mlang = '';
+    } else if (!sm && li.dataset.mshown !== undefined && li.textContent !== li.dataset.mshown) { delete li.dataset.mja; delete li.dataset.mshown; }
     if (li.dataset.mja === undefined || li.dataset.mlang === lang) return;
     li.dataset.mlang = lang;
-    if (lang === 'ja') { li.textContent = li.dataset.mja; } else { li.textContent = lang === 'en' || lang === 'off' ? li.dataset.men : tr(li.dataset.mja, lang, false) || li.dataset.men; }
-    li.dataset.mshown = li.textContent;
+    const t = lang === 'ja' ? li.dataset.mja : lang === 'en' || lang === 'off' ? li.dataset.men : tr(li.dataset.mja, lang, false) || li.dataset.men;
+    li.textContent = `${li.dataset.mnum}${t}`; li.dataset.mshown = li.textContent;
   }
+
+  // everything else on the page (top bar, side cards, notes, legend, demo switcher, device status, placeholders): a text node whose whole
+  // text is in the dictionary (shared/l10n_common.js + the demo's l10n.js) shows that language; it is re-checked whenever the page changes it
+  const SKIP = 'script, style, #subs, #bubble, .bubble, #chatList, .one, .intro, .ix-card, #steps, #sceneTitle, .scene-title, #chatHint, .mono, [data-mshown], [data-morig], [data-voice], ' + BTN;
+  const orig = new WeakMap(), shown = new WeakMap();
+  function textNode(n) {
+    const el = n.parentElement; if (!el || el.closest(SKIP)) return;
+    const cur = n.nodeValue;
+    if (!orig.has(n) || cur !== shown.get(n)) orig.set(n, cur);
+    const o = orig.get(n), k = norm(o); if (!k || k.length < 2 || !/\p{L}/u.test(k)) return;
+    const v = map(lang === 'off' ? 'en' : lang).get(k), lead = /^\s*/.exec(o)[0], tail = /\s*$/.exec(o)[0];
+    const out = v == null ? o : `${lead}${v}${tail}`;
+    if (cur !== out) n.nodeValue = out;
+    shown.set(n, out);
+  }
+  function chrome(root = document.body) {
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); let n;
+    while ((n = w.nextNode())) textNode(n);
+    for (const el of (root.querySelectorAll ? root.querySelectorAll('[placeholder]') : [])) {
+      if (el.dataset.mph === undefined || (el.placeholder !== el.dataset.mphs)) el.dataset.mph = el.placeholder;
+      const v = map(lang === 'off' ? 'en' : lang).get(norm(el.dataset.mph)); el.placeholder = v ?? el.dataset.mph; el.dataset.mphs = el.placeholder;
+    }
+  }
+  const chromeMo = new MutationObserver((recs) => {
+    for (const r of recs) {
+      if (r.type === 'characterData') textNode(r.target);
+      else for (const a of r.addedNodes) { if (a.nodeType === 3) textNode(a); else if (a.nodeType === 1) chrome(a); }
+    }
+  });
   function renderAll() {
-    for (const li of document.querySelectorAll('#steps > li')) step(li);
+    for (const li of document.querySelectorAll(SMALL)) step(li);
     for (const [sel, ja, en, tag, cls] of KINDS) for (const c of document.querySelectorAll(sel)) pair(c, ja, en, tag, cls);
     for (const el of document.querySelectorAll(SPLIT)) split(el);
     for (const el of document.querySelectorAll('.ix-chip')) chip(el);
@@ -179,23 +232,22 @@
   const containers = () => [...document.querySelectorAll(KINDS.map((k) => k[0]).join(', '))];
   const mo = new MutationObserver(() => renderAll());
   function watch() {
-    const roots = new Set([...document.querySelectorAll('#stage, .stage, #subs, #bubble, .bubble, #toast, .toast, #steps')].map((el) => el.closest('#stage, .stage') || el));
+    const roots = new Set([...document.querySelectorAll('#stage, .stage, #subs, #bubble, .bubble, #toast, .toast, #steps, #sceneTitle, #chatHint')].map((el) => el.closest('#stage, .stage') || el));
     for (const el of roots) mo.observe(el, { childList: true, subtree: true, characterData: true });
+    chromeMo.observe(document.body, { childList: true, subtree: true, characterData: true });
   }
 
   // speaker labels that a demo's CSS writes as .ja::before (Demo20 staff, Demo15/16 grandma / grandpa): the same label on .one, translated
   const WHO = { staff: { en: 'Staff', zh: '工作人员', 'zh-Hant': '工作人員', ko: '스태프' }, gm: { en: 'Grandma', zh: '奶奶' }, gp: { en: 'Grandpa', zh: '爷爷' } };
-  const whoCss = () => Object.entries(WHO).map(([w, t]) => `html.msub:not(.msub-ja) .subs[data-who="${w}"] .one::before { content: "${t.en}  "; }
-    ${Object.entries(t).filter(([l]) => l !== 'en').map(([l, v]) => `html.msub.msub-${l} .subs[data-who="${w}"] .one::before { content: "${v}  "; }`).join(' ')}`).join('\n  ');
+  const whoCss = () => Object.entries(WHO).map(([w, t]) => Object.keys(LANGS).filter((l) => l !== 'ja')
+    .map((l) => `html.msub.msub-${l} .subs[data-who="${w}"] .one::before { content: "${pickL(t, l)}  "; }`).join(' ')).join('\n  ');
+  const fontCss = () => Object.entries(LANGS).filter(([, i]) => i.font).map(([l, i]) => `html.msub-${l} :is(.one, [data-mlang="${l}"]) { font-family: ${i.font} !important; }`).join('\n  ');
   const css = document.createElement('style');
   css.textContent = `
   html.msub #subs .line > :is(.ja, .en):not(.one), html.msub :is(#bubble, .bubble, ${BTN}) > :is(b, span):not(.one),
   html.msub .ix-card > :is(.ix-line, .ix-en):not(.one), .msub-hide { display: none !important; }
   html.msub #subs .line > .one { display: block; }
-  html.msub-zh :is(.one, [data-mlang="zh"]) { font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", "Zen Maru Gothic", sans-serif !important; }
-  html.msub-zh-Hant :is(.one, [data-mlang="zh-Hant"]) { font-family: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Zen Maru Gothic", sans-serif !important; }
-  html.msub-ko :is(.one, [data-mlang="ko"]) { font-family: "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif !important; }
-  html.msub-th :is(.one, [data-mlang="th"]) { font-family: Thonburi, "Noto Sans Thai", Tahoma, sans-serif !important; }
+  ${fontCss()}
   html.msub-off #subs { display: none !important; }
   ${whoCss()}
   .msub-hud { position: absolute; top: 1.2cqw; right: 1.2cqw; z-index: 6; display: flex; gap: .6cqw; align-items: center; }
@@ -213,7 +265,7 @@
 
   // ---------------------------------------------------------------- controls: the 字 button on the stage (each tap = next language)
   let btn = null, sel = null;
-  const options = (withOff) => [...langs(), ...(withOff ? ['off'] : [])].map((l) => `<option value="${l}">${l === 'off' ? 'Off' : NATIVE[l] || l}</option>`).join('');
+  const options = (withOff) => [...langs(), ...(withOff ? ['off'] : [])].map((l) => `<option value="${l}">${l === 'off' ? 'Off' : LANGS[l]?.name || l}</option>`).join('');
   function button() {
     const wrap = btn = document.createElement('button');
     btn.type = 'button'; btn.className = 'msub-btn'; btn.title = 'Subtitles · 字幕 — tap for the next language';
@@ -233,15 +285,15 @@
     root.classList.add('msub');
     for (const c of [...root.classList]) if (c.startsWith('msub-')) root.classList.remove(c);
     root.classList.add(`msub-${lang}`);
-    if (btn) btn.textContent = `字 ${SHORT[lang] || lang}`;
+    if (btn) btn.textContent = `字 ${lang === 'off' ? 'OFF' : LANGS[lang]?.short || lang}`;
     if (sel && sel.value !== lang) { sel.value = lang; sel.dispatchEvent(new Event('change')); }   // the demo re-renders its lines (ja + en for other languages)
-    renderAll();
+    renderAll(); chrome(); root.lang = LANGS[lang]?.bcp || 'en';
     dispatchEvent(new CustomEvent('moheat:sublang', { detail: lang }));
   }
   function set(l) { if (!(l === 'off' || langs().includes(l))) return; if (l !== pref) { pref = l; save(l); } lang = eff(); apply(); }
 
   window.MoHeatSub = {
-    get lang() { return lang; }, get langs() { return langs(); }, set, NATIVE, BCP,
+    get lang() { return lang; }, get langs() { return langs(); }, set, LANGS, pick: (obj) => pickL(obj, lang), speech: () => LANGS[lang]?.speech,
     tr, zh: (ja) => tr(ja, 'zh'), name: nameOf,
     /** for shared/voice.js: what else counts for a Japanese answer label — its translation + same-meaning phrasings */
     voice: (ja) => {
@@ -260,6 +312,8 @@
     select(); button(); fill(); watch();
     if (sel) { sel.value = lang; sel.dispatchEvent(new Event('change')); }   // the demo drops its old ja + en mode
     apply();
+    const me = document.currentScript?.src || [...document.scripts].map((x) => x.src).find((x) => /shared\/subs\.js/.test(x));
+    if (me) { const c = document.createElement('script'); c.src = me.replace(/subs\.js(\?.*)?$/, 'l10n_common.js?v=1'); c.onload = () => { maps = {}; apply(); }; document.head.appendChild(c); }
     const s = document.createElement('script');   // relative to the page (or its <base>): the demo's own languages
     s.src = 'l10n.js?v=1';
     s.onload = () => {

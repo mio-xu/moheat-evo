@@ -62,19 +62,21 @@
 
 ### 2.2 显示语言：English（默认）/ 日本語 / 中文（用户 2026-11-08）
 
-- **一次只显示一种语言，字号一样**（中文 / 英文都用该 Demo 日文字幕的样式）。跟着切换的有：字幕、对话气泡、选项 / 动作 / 弹幕 / 礼物按钮、提示和目标栏、互动卡片（`interact.js`）、跳过 / 重玩等固定按钮、右侧 Progress 列表、**封面**（标题、副标题、角色标签、按钮、提示；长标题自动缩小）。场景标题、MP4 内嵌字幕、画在 canvas 上的字不变。
+- **一次只显示一种语言，字号一样**（中文 / 英文都用该 Demo 日文字幕的样式）。跟着切换的有：**整个页面**（顶栏、右侧卡片和说明、图例、Demo 切换面板、设备状态、输入框提示）、字幕、对话气泡、选项 / 动作 / 弹幕 / 礼物按钮、提示和目标栏、互动卡片（`interact.js`）、跳过 / 重玩等固定按钮、右侧 Progress 列表、**封面**（标题、副标题、角色标签、按钮、提示；长标题自动缩小）。场景标题、MP4 内嵌字幕、画在 canvas 上的字不变。
 - **直播间的观众弹幕**保持原样（日本观众为主），另有约三分之一来自其他国家的观众，用各自的语言发言（`WORLD` 列表，名字后带国旗）。这是弹幕内容，不是界面语言（用户 2026-11-08 更正）。
 - **统一由 `demos/shared/subs.js`（`MoHeatSub`）处理**，`nav.js` 会自动加载它，Demo 代码照旧写日 + 英：
   - 字幕 `#subs .line > .ja / .en`、气泡 `#bubble > b / span`、按钮 `.ch / .act-btn / .chip-c / #micGate button / .toast / .hud-goal` 里的 `<b>日文</b><span>English</span>` → 两种都藏起来，另显示一个 `.one`。
   - 一个元素里写成「日本語 · English」的文字（互动卡片、`.ix-btn`、运行时改写的重玩按钮）→ 显示所选那一半；`#steps > li` 的「日本語 · <small>English</small>」同理。
   - 用 CSS `::before` 写的说话人标签（Demo20 スタッフ、Demo15/16 ばあば / じいじ）在 `subs.js` 的 `WHO` 表里翻译。
   - 切换：舞台右上角的「字」按钮，**点一下换下一种语言**（用户不要下拉框），封面上也显示；Demo 1–9 右侧的 Subtitles 下拉框（多一个 Off）；或 `?sub=ja|en|zh`。存在 localStorage `moheat.sublang`，所有 Demo 共用。
+- **页面框架的共用词**放 `demos/shared/l10n_common.js`（`MOHEAT_L10N_COMMON.text.<lang>`）；页面上任何文字节点只要整句在表里就会被替换，页面改了文字（如连接状态）会重新翻译。
 - **翻译放在每个 Demo 自己的 `l10n.js`**（页面目录，或 `<base>` 指向的目录）：`window.MOHEAT_L10N = { langs, text: { zh: {…}, ja: {…}, en: {…} }, names, voice }`。
   - `text.zh`：「页面上显示的日文原文」→ 简体中文；`text.ja / text.en`：封面等原本日英混写的文字 → 只有该语言的版本（`""` = 隐藏）。key 必须和页面文字**一字不差**，用脚本从 `lines.js` / `media/data.js` / `main.js` / `index.html` 抽出来生成，不要手打。
   - `names`：字幕里的说话人名字 → `{ en, zh }`（信長 / 家康 / あなた 已内置）。
   - `voice.all`：每个回答选项的日文 → 6–10 个**意思相同**的说法（中文为主，加英文、日文口语），给语音判定用。
   - 找不到翻译时显示英文，控制台打出 `[MoHeatSub] no zh for …`；`MoHeatSub.missing()` 列出全部。
 - **语音判定跟着显示语言**：`voice.js` 用 en-US / ja-JP / zh-CN 识别；每个选项除了日文、英文，还匹配 `l10n.js` 里的中文和 `voice` 说法；英文另按词匹配（词干 + 常见同义词）。只要意思相近就算通过；两个选项都沾边的模糊回答（如只说 "sure"）不会乱选。中文序数（第一个 / 第二个）也认。
+- **以后加一种语言**（用户 2026-11-08：程序要方便扩展）：① `demos/shared/subs.js` 的 `LANGS` 加一行（名字、按钮简称、`speech` 识别代码、字体、`fallback`）；② `node tools/l10n/check_missing.js <代码>` 列出缺的字符串，把 `text.<代码>`（和 `voice.<代码>`）写进 `l10n_common.js` 和各 Demo 的 `l10n.js`；③ 把代码加进 `DEFAULT_LANGS`（全部 Demo）或某个 Demo 的 `langs`。其他代码不用改；缺翻译时沿 `fallback` 退回（如 繁中 → 简中 → 英文）。
 - **验收**：中文模式下用 `?auto` 跑完整个 Demo，扫描画面上可见的假名（应为 0，直播弹幕除外）；三种语言各看一次封面；用 `MoHeatVoice._hear('中文说法')` 测每个选项。
 
 ## 3. 冷热设计（DUAL）
