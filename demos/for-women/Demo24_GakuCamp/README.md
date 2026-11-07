@@ -39,6 +39,15 @@ Nothing for being shy or praised. `STREAM.both()` counts frames with cool + warm
 - Art: 8 stills, Seedance website (GPT Image 2, 16:9 2K), 2026-11-08 — the API upload was rate-limited. v1 (low camera, `assets/art/v1/`) → v2 eye level from `ref_gaku.jpg` (drew the phone rig in frame, `assets/art/v2_rig/`) → final = v2 edited ("remove the phone and tripod, look into the lens"). Raw PNGs in `assets/` stay out of git.
 - `?embed=1` site menu · `?cover=1` poster (`media/cover.jpg`, headless Chrome 1920×1080) · `?auto=1` auto-picks the first option, `?auto=1&alt=1` the last (testing).
 
+## Animation (handoff §4b)
+
+18 clips, Seedance 2.5 Lite 1080p 4 s First & Last Frame (user OK'd 1152 credits): talk loops for all 8 views + a quiet loop at the fire,
+9 transitions in story order (live → log → left → live → coffee | imo → blanket → whisper_R → bye). Prompts and frames:
+`project/web_video_prompts.json`; frames `assets/frames/` (`end_*.jpg` = copies for the end slot). `scripts/prepare_video.py` snaps each clip's
+ends onto the stills → `media/video/`. The player (`go(transition, view, onStart)`, switches only at a clip's end) falls back to the still for
+any clip that is missing, so the page works with a partial set. `?stills` = no video.
+
 ## Status
 
-Stills version done and auto-tested (both branches, 0 errors). Next (user's call): feedback, then Seedance animation (handoff §4b) as the last step.
+Stills version done and auto-tested (both branches, 0 errors). Animation in progress: 3 / 18 clips done (v_live, v_live_idle, v_log);
+2026-11-08 the account's daily upload limit (web and API share it) was reached → the other 15 after the reset (~09:00 JST).

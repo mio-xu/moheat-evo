@@ -14,6 +14,8 @@
   const cv = $('scene'), ctx = cv.getContext('2d'), stage = $('stage');
   const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v)), rnd = (a, b) => a + Math.random() * (b - a), pick = (a) => a[Math.floor(Math.random() * a.length)];
   const sleep = (s) => new Promise((r) => setTimeout(r, (AUTO ? Math.min(s, 1.5) : s) * 1000));
+  let run = 0;
+  const after = (s, fn) => { const my = run; setTimeout(() => { if (my === run) fn(); }, s * 1000); };   // a timed cue inside a transition
 
   const CH = {
     name: '月嶋ガク', en: 'Tsukishima Gaku', title: '冬の湖畔で、焚き火キャンプ · Winter campfire by the lake', credit: 'ガク ElevenLabs', viewers: 8215,
@@ -34,7 +36,7 @@
   // ---------------------------------------------------------------- state
   const fresh = () => ({ started: true, t: 0, clock: 0, view: 'live', pos: { az: 0, dist: 1 }, lv: 0, env: 0,
     fire: .32, fireBase: .32, wind: .4, shield: 0, snow: 0, blanket: 0, mug: 0, imo: 0, fade: 0, viewers: CH.viewers });
-  let S = { started: false, t: 0 }, run = 0, mode = 'title';   // title | live | ended
+  let S = { started: false, t: 0 }, mode = 'title';   // title | live | ended
   function setStep(i) { S.step = i; $('steps').innerHTML = CH.steps.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[0]} · <small>${s[1]}</small></li>`).join(''); }
 
   // ---------------------------------------------------------------- subtitles + his voice
@@ -130,13 +132,15 @@
     const hi = await comment('ガクにあいさつしよう', 'Say hi to Gaku', [['はじめまして！', 'First time here!'], ['こんばんは〜', 'Good evening~']]);
     await sleep(.6); await say(hi ? 'g04b' : 'g04a');
 
-    // the campfire (right ear warm), the lake wind (left ear cool)
+    // the campfire (right ear warm), the lake wind (left ear cool). Every cut is a go(transition, view): with video it waits for the
+    // current loop to end, plays the 4 s transition, then continues; `onStart` times the sounds to the transition (stills: at once).
     setStep(1); await say('g05', .2);
-    SND.fx.steps(0, .6, 3, .9); await sleep(.8); S.view = 'log'; at(.75, .7); await sleep(.8);
-    SND.fx.log(.85); S.fire = .62; fireLoop?.set(.42); if (fireLoop) fireLoop.crack = 2.2; await sleep(1.6);
+    let logged = false; const addLog = () => { if (logged) return; logged = true; SND.fx.log(.85); S.fire = .62; fireLoop?.set(.42); if (fireLoop) fireLoop.crack = 2.2; };
+    await go('t_live_log', 'log', () => { SND.fx.cloth(.4, .9, .8); at(.75, .7); after(2.2, addLog); });
+    at(.75, .7); addLog();
+    await sleep(.6);
     react(['火、強くなった', 'パチパチ…', '🔥🔥🔥', '右耳あったかい'], 3);
     await say('g06'); if (fireLoop) fireLoop.crack = 1.2;
-    S.view = 'live'; at(0, 1); SND.fx.steps(.6, 0, 3, .9); await sleep(1.2);
     await say('g07');
     S.wind = .55; lakeLoop?.set(.32);
     const cold = await comment('ガクにこたえよう', 'Answer Gaku', [['さむい…', "I'm cold…"], ['あったかい', "I'm warm"]]);
@@ -145,8 +149,11 @@
 
     // the windbreak: he sits down on your left — left cool fades, his voice warms it
     setStep(2); await say('g09', .3);
-    SND.fx.steps(0, -1.2, 4, .6); await sleep(1.3);
-    SND.fx.cloth(-1.3, .25, 1.1); S.view = 'left'; at(-1.35, .25); S.shield = 1; await sleep(1.2);
+    await go('t_log_left', 'left', () => {
+      SND.fx.steps(.6, -1.2, 4, .6); at(-.6, .6);
+      after(2.4, () => { SND.fx.cloth(-1.3, .25, 1.1); at(-1.35, .25); S.shield = 1; });
+    });
+    at(-1.35, .25); S.shield = 1; await sleep(.6);
     await say('g10', .6);
     react(['え', '壁！？', '距離ちかい', 'イケメンの壁…', '💚💚💚'], 5);
     at(-1.4, .1); await sleep(.4);
@@ -156,17 +163,21 @@
     react(['どかないって', 'ずるい', '…好き'], 3);
 
     // Super Chat: a treat in front of the mic (warm steam)
-    setStep(3); SND.fx.cloth(-1, .5, .8); SND.fx.steps(-1, 0, 3, .7); S.shield = 0; S.view = 'live'; at(0, 1); S.wind = .3; lakeLoop?.set(.2); await sleep(1.4);
+    setStep(3);
+    await go('t_left_live', 'live', () => { SND.fx.cloth(-1, .4, .8); after(.8, () => { S.shield = 0; at(-.5, .8); SND.fx.steps(-1, 0, 3, .7); }); after(2.6, () => at(0, 1)); });
+    S.shield = 0; at(0, 1); S.wind = .3; lakeLoop?.set(.2); await sleep(1);
     chat(pick(HANDLES), 'スパチャで差し入れできるらしい'); chat(pick(HANDLES), '焼き芋たべてほしい🍠'); chat(pick(HANDLES), 'コーヒー淹れてるとこ見たい☕');
     const g = await gift('ガクに差し入れのスパチャ', 'Send Gaku a treat', [['☕', 'ホットコーヒー', 'Hot coffee', '¥500'], ['🍠', '焼き芋', 'Roasted sweet potato', '¥500']]);
     await sleep(.8);
     if (g === 0) {
-      await say('g13c', .3); SND.fx.pour(.5); await sleep(2.8);
-      S.view = 'coffee'; at(0, .35); S.mug = 1; SND.fx.steam(0); await sleep(.8);
+      await say('g13c', .3); SND.fx.pour(.5); await sleep(2.6);
+      await go('t_live_coffee', 'coffee', () => after(2.4, () => { at(0, .35); S.mug = 1; SND.fx.steam(0); }));
+      at(0, .35); S.mug = 1; await sleep(.4);
       await say('g14c', .6);
     } else {
-      await say('g13i', .3); SND.fx.steps(0, .6, 2, .8); await sleep(1); SND.fx.foil(.6); await sleep(1.2);
-      S.view = 'imo'; at(.3, .35); S.imo = 1; SND.fx.foil(.3); SND.fx.steam(.3); await sleep(1);
+      await say('g13i', .3);
+      await go('t_live_imo', 'imo', () => { SND.fx.foil(.6); after(1.6, () => SND.fx.foil(.4)); after(2.6, () => { at(.3, .35); S.imo = 1; SND.fx.steam(.3); }); });
+      at(.3, .35); S.imo = 1; await sleep(.4);
       await say('g14i', .6);
     }
     react(['いいなあ', 'ゆげ見える', 'あったかそう', '私も食べたい'], 3);
@@ -174,23 +185,29 @@
     react(['ひとりじゃないよ', 'みんないるよ〜', '泣く'], 4);
 
     // snow, his blanket over the mic, the right ear
-    setStep(4); S.mug = 0; S.imo = 0; S.view = 'live'; at(0, 1); await sleep(1);
-    S.snow = 1; S.fireBase = .2; S.fire = Math.min(S.fire, .3); fireLoop?.set(.22);
+    setStep(4); S.snow = 1; S.fireBase = .2; S.fire = Math.min(S.fire, .3); fireLoop?.set(.22); await sleep(1);
     await say('g16', .8);
     react(['雪！', '❄❄❄', 'きれい…'], 3);
     await say('g17', .2);
-    SND.fx.steps(0, 0, 2, .6); await sleep(.6);
-    S.view = 'blanket'; at(0, .3); SND.fx.cloth(-1.2, .1, 1.3); setTimeout(() => SND.fx.cloth(1.2, .1, 1.1), 500); S.blanket = 1; lakeLoop?.set(.05); fireLoop?.set(.12); await sleep(1.8);
+    await go(g === 0 ? 't_coffee_blanket' : 't_imo_blanket', 'blanket', () => {
+      after(1, () => { S.mug = 0; S.imo = 0; }); after(1.8, () => { SND.fx.cloth(-1.2, .1, 1.3); setTimeout(() => SND.fx.cloth(1.2, .1, 1.1), 500); });
+      after(2.8, () => { at(0, .3); S.blanket = 1; lakeLoop?.set(.05); fireLoop?.set(.12); });
+    });
+    S.mug = 0; S.imo = 0; at(0, .3); S.blanket = 1; lakeLoop?.set(.05); fireLoop?.set(.12); await sleep(.6);
     await say('g18', .8);
     react(['彼ブランケット…', 'ずるい', 'あったかい…'], 3);
     await say('g19', .6);
     react(['ねむい', 'まだ起きてる', 'zzz'], 3);
-    S.view = 'whisper_R'; at(1.4, .1); SND.fx.cloth(1.3, .15, .8); await sleep(1.2);
+    await go('t_blanket_whisper', 'whisper_R', () => { after(1, () => at(.9, .3)); after(2.5, () => { at(1.4, .1); SND.fx.cloth(1.3, .15, .8); }); });
+    at(1.4, .1); await sleep(.5);
     await say('g20', .4);
     await hold('🤍', '長押し：まだ見てる', 'Hold: I\'m still here');
     await sleep(.5); await say('g21', 1.4);
     react(['…', '泣いた', '声も好きだよ', '💚'], 4);
-    S.view = 'bye'; at(0, 1); S.fireBase = .14; S.fire = .14; SND.fx.cloth(0, .3, 1); S.blanket = 0; S.wind = .2; lakeLoop?.set(.14); await sleep(1.2);   // he takes the blanket back around his own shoulders (as in the picture)
+    // he takes the blanket back around his own shoulders (as in the picture): the wind and snow reach the mic again
+    S.fireBase = .14; S.fire = .14;
+    await go('t_whisper_bye', 'bye', () => { after(.6, () => at(.6, .4)); after(1.6, () => { SND.fx.cloth(0, .3, 1.2); S.blanket = 0; S.wind = .2; lakeLoop?.set(.14); }); after(3, () => at(0, 1)); });
+    S.blanket = 0; S.wind = .2; lakeLoop?.set(.14); at(0, 1); await sleep(.6);
     await say('g22', 1);
     react(['おやすみ', 'good night Gaku', '🔥🔥', 'またね'], 4);
     await endStream(my, '🔥 …また、焚き火の夜に · See you on another campfire night');
@@ -199,7 +216,7 @@
   async function endStream(my, msg) {
     guard(my);
     S.fade = 1; SND.fx.end(); await sleep(2.6); guard(my);
-    mode = 'ended'; SND.stopLoops(); S.started = false; stopOutput(); sub('', '');
+    mode = 'ended'; SND.stopLoops(); stopClips(); S.started = false; stopOutput(); sub('', '');
     $('endedSub').textContent = msg; $('ended').classList.add('show');
   }
 
@@ -243,15 +260,54 @@
 
   // ---------------------------------------------------------------- drawing
   let viewA = '', viewB = '', mix = 1, parts = [];
+  // ---- animation (handoff §4b, as Demo 20 / 22): Seedance 2.5 Lite 1080p clips whose first and last frames are EXACTLY the stills
+  // (scripts/prepare_video.py), so clips only switch at a clip's end — a hard cut between identical frames, no ghosting.
+  // Loops: a talk loop per view (+ a quiet one at the fire while he reads the chat); transitions: one per cut, asked for with go().
+  // ?stills = no video (stills with a slow drift).
+  const CLIP_NAMES = ['v_live', 'v_live_idle', 'v_log', 'v_left', 'v_coffee', 'v_imo', 'v_blanket', 'v_whisper', 'v_bye',
+    't_live_log', 't_log_left', 't_left_live', 't_live_coffee', 't_live_imo', 't_coffee_blanket', 't_imo_blanket', 't_blanket_whisper', 't_whisper_bye'];
+  const ONCE = new Set(CLIP_NAMES.filter((n) => n.startsWith('t_')));
+  const CLIP = {};
+  if (!QS.has('stills') && !QS.has('cover')) for (const n of CLIP_NAMES) {
+    const v = document.createElement('video'); Object.assign(v, { muted: true, loop: false, playsInline: true, preload: 'auto', src: `media/video/${n}.mp4?v=1` });
+    v.setAttribute('playsinline', ''); v.addEventListener('error', () => { delete CLIP[n]; }); CLIP[n] = v;
+  }
+  const clipOK = (n) => n && CLIP[n] && CLIP[n].readyState >= 2;
+  let cur = null, curView = null, pending = null;
+  function loopFor(view) {
+    if (view === 'live' && !talking) return 'v_live_idle';
+    return { live: 'v_live', log: 'v_log', left: 'v_left', coffee: 'v_coffee', imo: 'v_imo', blanket: 'v_blanket', whisper_R: 'v_whisper', bye: 'v_bye' }[view] || null;
+  }
+  function go(name, view, onStart) {   // a one-shot transition at the next clip end, then continue in `view`
+    if (!clipOK(name) || !cur) { S.view = view; return Promise.resolve(); }   // stills: cut at once (the code after go() sets the end state)
+    const my = run;
+    return new Promise((done, fail) => { pending = { name, view, onStart, done: () => (my === run ? done() : fail(new Error('stopped'))), started: false }; });
+  }
+  function playClip(name, view) { const v = CLIP[name]; cur = name; curView = view; v.currentTime = 0; v.play().catch(() => {}); }
+  function startLoop() { const w = loopFor(S.view); if (w && clipOK(w)) playClip(w, S.view); else cur = null; }
+  function clips() {
+    if (QS.has('stills')) return;
+    if (!cur) { startLoop(); return; }
+    if (!ONCE.has(cur) && curView !== S.view && !pending) { startLoop(); return; }
+    const v = CLIP[cur];
+    if (!v.ended && v.currentTime < v.duration - .03) return;   // mid-clip: never switch
+    if (ONCE.has(cur) && pending && pending.started) { const p = pending; pending = null; S.view = curView; viewA = viewB = curView; mix = 1; p.done(); }
+    if (pending && !pending.started) { pending.started = true; pending.onStart?.(); playClip(pending.name, pending.view); return; }
+    startLoop();
+  }
+  function stopClips() { for (const v of Object.values(CLIP)) v.pause(); cur = null; curView = null; pending = null; }
   function drawView(view, t, alpha) {
+    if (cur && clipOK(cur) && (view === curView || (view === S.view && ONCE.has(cur)))) { ctx.globalAlpha = alpha; ctx.drawImage(CLIP[cur], 0, 0, W, H); ctx.globalAlpha = 1; return; }
+    const exact = !QS.has('stills') && Object.keys(CLIP).length > 0;   // with video the still must match the clips' frames exactly (no drift)
     const im = IMG[view] || IMG.live; ctx.globalAlpha = alpha;
-    const close = /left|whisper|coffee|imo|blanket/.test(view), z = (close ? 1.025 : 1.012) + .006 * Math.sin(t * .5);
-    const dx = W / 2 - W * z / 2, dy = H / 2 - H * z / 2 + 3 * Math.sin(t * .9);
+    const close = /left|whisper|coffee|imo|blanket/.test(view), z = exact ? 1 : (close ? 1.025 : 1.012) + .006 * Math.sin(t * .5);
+    const dx = W / 2 - W * z / 2, dy = H / 2 - H * z / 2 + (exact ? 0 : 3 * Math.sin(t * .9));
     if (im) ctx.drawImage(im, dx, dy, W * z, H * z); else { ctx.fillStyle = '#16242a'; ctx.fillRect(0, 0, W, H); }
     ctx.globalAlpha = 1;
   }
   function draw(t, dt) {
     if (S.view !== viewB) { viewA = viewB; viewB = S.view; mix = 0; }
+    clips();
     mix = Math.min(1, mix + dt / .6);
     if (mix < 1 && viewA) drawView(viewA, t, 1);
     drawView(S.view, t, mix < 1 && viewA ? mix : 1);
@@ -345,7 +401,7 @@
   }
   function goLive() {
     SND.init(); SND.loadVoices(Object.keys(LINES));
-    run++; SND.stopLoops(); const my = run;
+    run++; SND.stopLoops(); stopClips(); const my = run;
     S = fresh(); parts = []; viewB = ''; mix = 1; list.innerHTML = ''; botT = 1; $('act').classList.remove('show');
     chatIn.classList.remove('turn', 'giving'); chips.innerHTML = ''; hint.innerHTML = '';
     $('chName').textContent = CH.name; $('chTitle').textContent = CH.title; $('vv').textContent = CH.credit;

@@ -1,0 +1,100 @@
+{
+ "model": "Seedance 2.5 Lite",
+ "resolution": "1080p",
+ "duration_s": 4,
+ "mode": "First & Last Frame",
+ "frames": "assets/frames/<name>.jpg (= media/art)",
+ "credits": 1152,
+ "clips": {
+  "v_live": {
+   "first": "gaku_live",
+   "last": "gaku_live",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nSitting on his camp chair by the campfire, he talks quietly to the viewer (the camera is at his eye level): natural mouth movement as if speaking Japanese, a small calm nod, one slow blink, the campfire flickers and sparks rise, a few strands of his hair move in the night breeze. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_live_idle": {
+   "first": "gaku_live",
+   "last": "gaku_live",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nHe sits quietly on his camp chair by the campfire, reading the live chat: mouth closed, slow calm breathing, one slow blink, the faintest smile, the campfire flickers and sparks rise, a few strands of hair move in the breeze. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_log": {
+   "first": "gaku_log",
+   "last": "gaku_log",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nHis hand rests on the split log on the fire while he talks quietly to the viewer: natural mouth movement as if speaking Japanese, one slow blink, the flames flicker brighter, sparks rise, firelight dances on his face. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_left": {
+   "first": "gaku_left",
+   "last": "gaku_left",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nVery close on the left, he talks softly to the viewer: small natural mouth movement as if speaking Japanese, a slightly shy look, one slow blink, slow breathing, his hair moves a little in the cold wind from the lake, the campfire flickers in the background. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_coffee": {
+   "first": "gaku_coffee",
+   "last": "gaku_coffee",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nHe holds the steaming mug of coffee up in front of the viewer and talks softly: natural mouth movement as if speaking Japanese, a small shy smile, one slow blink, white steam rises and curls from the mug, the fire flickers. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_imo": {
+   "first": "gaku_imo",
+   "last": "gaku_imo",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nHe holds the steaming half of the roasted sweet potato up in front of the viewer and talks softly: natural mouth movement as if speaking Japanese, a small warm smile, one slow blink, steam rises and curls from the sweet potato, the fire flickers. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_blanket": {
+   "first": "gaku_blanket",
+   "last": "gaku_blanket",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nHolding the grey blanket over the camera at both sides, he talks gently to the viewer: natural mouth movement as if speaking Japanese, one slow blink, the blanket edge sways a little, soft snow falls, the embers glow. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_whisper": {
+   "first": "gaku_whisper_R",
+   "last": "gaku_whisper_R",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nVery close at the viewer's right ear he whispers: lips moving softly as if whispering Japanese, eyes half closed, slow breathing, a few snowflakes drift past. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "v_bye": {
+   "first": "gaku_bye",
+   "last": "gaku_bye",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nSitting on the camp chair with the grey blanket over his shoulders, he talks softly and waves a little: natural mouth movement as if speaking Japanese, a shy warm smile, his raised hand sways gently, one slow blink, soft snow falls, the embers glow. The clip starts and ends on exactly the same frame, so it loops seamlessly.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_live_log": {
+   "first": "gaku_live",
+   "last": "gaku_log",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nHe leans sideways from his camp chair toward the campfire, picks up a split log and places it on the fire with one hand, then turns his head back toward the viewer. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_log_left": {
+   "first": "gaku_log",
+   "last": "gaku_left",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nHe lets go of the log, gets up and moves right next to the camera on its left side, sitting down very close to the viewer; he ends close on the left of the frame, looking into the lens. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_left_live": {
+   "first": "gaku_left",
+   "last": "gaku_live",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nHe leans back away from the camera, gets up and returns to his camp chair in front of the camera, sitting down by the campfire and looking into the lens. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_live_coffee": {
+   "first": "gaku_live",
+   "last": "gaku_coffee",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nHe reaches to the side, picks up a black enamel mug of hot coffee and leans toward the camera, holding the steaming mug up in front of the lens with both hands. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_live_imo": {
+   "first": "gaku_live",
+   "last": "gaku_imo",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nHe reaches toward the fire, takes a foil-wrapped roasted sweet potato, breaks it in half and leans toward the camera, holding the steaming half up in front of the lens. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_coffee_blanket": {
+   "first": "gaku_coffee",
+   "last": "gaku_blanket",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nSnow begins to fall. He sets the mug down out of frame, stands up with a grey wool blanket and drapes it over the camera like a little hood, holding its edges at both sides. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_imo_blanket": {
+   "first": "gaku_imo",
+   "last": "gaku_blanket",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nSnow begins to fall. He sets the sweet potato down out of frame, stands up with a grey wool blanket and drapes it over the camera like a little hood, holding its edges at both sides. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_blanket_whisper": {
+   "first": "gaku_blanket",
+   "last": "gaku_whisper_R",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nStill holding the blanket over the camera, he slowly leans in close to the viewer's right ear to whisper, his face moving to just right of centre, his eyes half closing. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  },
+  "t_whisper_bye": {
+   "first": "gaku_whisper_R",
+   "last": "gaku_bye",
+   "prompt": "Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours, the lighting and the background of the input images. Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact proportions; hands keep five fingers. He is Gaku: sleek short black hair with a hidden deep-green inner colour, cool dark-grey eyes, a thin silver chain, a black aviator jacket with a cream shearling collar.\n\nHe slowly leans back from the viewer's ear, takes the grey blanket and wraps it around his own shoulders, sits back down on his camp chair and raises one hand in a small wave. The first image is the start and the second image is the end; one smooth continuous movement that ends exactly on the second image.\n\nAvoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, colour shift, new objects, text, subtitles, logo, watermark, camera movement, fast jerky motion."
+  }
+ }
+}
