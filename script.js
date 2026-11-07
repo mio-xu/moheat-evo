@@ -17,6 +17,35 @@ revealEls.forEach(el=>io.observe(el));
     g.textContent = g.dataset.unit ? `${g.dataset.name} · ${mine.length} ${g.dataset.unit}` : (mine.length > 1 ? `${g.dataset.name} · ${mine[0]}–${mine[mine.length - 1]}` : `${g.dataset.name} · ${mine[0]}`);
   });
 })();
+// Two-level menu: level 1 = category tabs built from the .td-group headings (always visible), level 2 = the demos of the
+// chosen category (the one holding the playing demo at first). The headings themselves stay in the HTML as the source of truth.
+const tdGroups = [...document.querySelectorAll('.td-group')].map((g, gi) => {
+  const items = []; let n = g.nextElementSibling;
+  while (n && !n.classList.contains('td-group')) { if (n.classList.contains('td-item')) { items.push(n); n.dataset.g = gi; } n = n.nextElementSibling; }
+  g.setAttribute('role', 'button'); g.tabIndex = 0;
+  return { g, items, label: g.dataset.name };
+});
+const tdCats = document.createElement('div'); tdCats.className = 'td-cats'; tdCats.setAttribute('role', 'tablist');
+tdCats.innerHTML = tdGroups.map((x, gi) => `<button type="button" role="tab" data-g="${gi}">${x.label}<i>${x.items.length}</i></button>`).join('');
+document.querySelector('.td-menu-top')?.after(tdCats);
+const tdPlace = () => { const m = document.querySelector('.td-menu'); if (m && getComputedStyle(m).position === 'absolute') m.style.top = `${tdCats.offsetTop + tdCats.offsetHeight}px`; else if (m) m.style.top = ''; };
+addEventListener('resize', tdPlace);
+const tdOpen = (gi, scroll = true) => {
+  tdGroups.forEach((x, k) => {
+    const on = k === gi; x.g.classList.toggle('is-open', on); x.g.setAttribute('aria-expanded', on);
+    x.items.forEach((it) => it.classList.toggle('is-folded', !on));
+  });
+  tdCats.querySelectorAll('button').forEach((b) => b.setAttribute('aria-selected', +b.dataset.g === gi));
+  const menu = document.querySelector('.td-menu');
+  if (scroll && menu) menu.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  setTimeout(() => { try { tdUpdateArrows(); } catch (e) { /* defined below */ } }, 50);
+};
+tdGroups.forEach((x, gi) => {
+  x.g.addEventListener('click', () => tdOpen(gi));
+  x.g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tdOpen(gi); } });
+});
+tdCats.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) tdOpen(+b.dataset.g); });
+tdPlace(); tdOpen(+(document.querySelector('.td-item.is-active')?.dataset.g || 0), false);
 const demoFrame = document.getElementById('demoFrame');
 const demoOpen = document.getElementById('demoOpen');
 document.querySelectorAll('.td-item').forEach((item) => {

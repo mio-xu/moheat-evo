@@ -311,3 +311,13 @@ section[id]{scroll-margin-top:70px}
 
 
 .kick-tag{display:block;margin-bottom:6px;color:#fff;font-weight:800}
+
+/* two-level demo menu: level 1 = category tabs (always visible), level 2 = the demos of the chosen category */
+.td-group{display:none!important}
+.td-item.is-folded{display:none!important}
+.td-cats{display:flex;flex-wrap:wrap;gap:5px;padding:0 2px 8px}
+.td-cats button{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;border:1px solid #ffffff1f;background:#ffffff08;color:#cbb7b1;font:700 10.5px/1 Manrope,"Noto Sans JP",sans-serif;cursor:pointer;white-space:nowrap;transition:background .2s,border-color .2s,color .2s}
+.td-cats button i{font-style:normal;font-size:9.5px;opacity:.65}
+.td-cats button:hover{border-color:#ffffff40;color:#fff}
+.td-cats button[aria-selected=true]{border-color:var(--warm);background:#ff927b1f;color:#ffd2c4}
+@media (max-width:900px){.td-cats{flex-wrap:nowrap;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none}.td-cats::-webkit-scrollbar{display:none}.td-cats button{flex:none}}

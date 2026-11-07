@@ -41,7 +41,13 @@
     padding:16px;border-radius:18px;background:rgba(20,13,16,.97);border:1px solid rgba(255,255,255,.12);box-shadow:0 24px 70px rgba(0,0,0,.6);color:#f4ece8}
   .dn-panel[hidden]{display:none}
   .dn-panel h4{margin:6px 4px 10px;font:800 11px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#ffab93}
-  .dn-panel h4:not(:first-child){margin-top:18px}
+  .dn-panel section+section h4{margin-top:18px}
+  .dn-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.08)}
+  .dn-tabs button{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:#cbbfb8;font:700 12px/1 Inter,"Noto Sans JP",sans-serif;cursor:pointer}
+  .dn-tabs button i{font-style:normal;font-size:11px;opacity:.65}
+  .dn-tabs button:hover{color:#fff;border-color:rgba(255,255,255,.35)}
+  .dn-tabs button[aria-selected=true]{border-color:#ff9a7a;background:rgba(255,140,110,.16);color:#ffd2c4}
+  .dn-panel section[hidden]{display:none}
   .dn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
   .dn-card{display:block;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:inherit;text-decoration:none;transition:transform .15s,border-color .15s}
   .dn-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.35)}
@@ -62,8 +68,14 @@
     + `<a class="dn-step" href="${next ? href(next) : '#'}" title="${next ? 'Next: ' + next.en : ''}" aria-label="Next demo" ${next ? '' : 'aria-disabled="true"'}>›</a>`;
   const panel = document.createElement('div'); panel.className = 'dn-panel'; panel.hidden = true;
   const span = (gi) => { const n = DEMOS.map((d, i) => (d.group === gi ? i + 1 : 0)).filter(Boolean); return gi < 4 ? (n.length > 1 ? ` · ${n[0]}–${n[n.length - 1]}` : ` · ${n[0]}`) : ''; };
-  panel.innerHTML = GROUPS.map((g, gi) => `<h4>${g}${span(gi)}</h4><div class="dn-grid">` + DEMOS.map((d, i) => d.group !== gi ? '' :
-    `<a class="dn-card${i === cur ? ' is-cur' : ''}" href="${href(d)}"><img src="${thumb(i)}" alt="" loading="lazy"><span><em>Demo ${i + 1}${d.ep ? ' · Ep ' + d.ep + ' / 5' : ''}${i === cur ? ' · now playing' : ''}</em><b>${d.ja}</b><small>${d.en}</small></span></a>`).join('') + '</div>').join('');
+  const count = (gi) => DEMOS.filter((d) => d.group === gi).length;   // level 1: category tabs (+ "all"); level 2: that category's demos
+  panel.innerHTML = `<div class="dn-tabs" role="tablist"><button type="button" role="tab" data-g="all">すべて · All<i>${DEMOS.length}</i></button>`
+    + GROUPS.map((g, gi) => `<button type="button" role="tab" data-g="${gi}">${g}<i>${count(gi)}</i></button>`).join('') + '</div>'
+    + GROUPS.map((g, gi) => `<section data-g="${gi}"><h4>${g}${span(gi)}</h4><div class="dn-grid">` + DEMOS.map((d, i) => d.group !== gi ? '' :
+    `<a class="dn-card${i === cur ? ' is-cur' : ''}" href="${href(d)}"><img src="${thumb(i)}" alt="" loading="lazy"><span><em>Demo ${i + 1}${d.ep ? ' · Ep ' + d.ep + ' / 5' : ''}${i === cur ? ' · now playing' : ''}</em><b>${d.ja}</b><small>${d.en}</small></span></a>`).join('') + '</div></section>').join('');
+  const show = (g) => { panel.querySelectorAll('.dn-tabs button').forEach((b) => b.setAttribute('aria-selected', b.dataset.g === String(g))); panel.querySelectorAll('section').forEach((x) => { x.hidden = g !== 'all' && x.dataset.g !== String(g); }); };
+  panel.querySelector('.dn-tabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { e.stopPropagation(); show(b.dataset.g); } });
+  show(cur >= 0 ? DEMOS[cur].group : 'all');
   const brand = bar.querySelector('.brand');
   (brand ? brand.after(nav) : bar.prepend(nav)); document.body.appendChild(panel);
   const btn = nav.querySelector('button');
