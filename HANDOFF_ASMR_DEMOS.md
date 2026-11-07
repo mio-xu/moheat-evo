@@ -84,6 +84,18 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 
 ## 5. 各 Demo 状态
 
+### 所有 Demo 共用的封面和字幕样式：`demos/shared/series.css`（2026-11-07）
+- 每个 Demo 的 `index.html` 都在 `demo.css` 之后加载 `../shared/series.css?v=N`。`.stage` 设为容器（`container-type: inline-size`），封面和字幕的尺寸全部用 `cqw`，随**播放画面宽度**缩放：手机嵌入、官网菜单、整页、1920×1080 封面截图看起来一样。
+- **统一的封面版式**：
+  - 标题居中；只有一个角色在右边时（`.hero.a`），标题居中在左边的空白里。
+  - 顶部小字统一为 `MoHeat Evo · Binaural ASMR × Thermal Haptics · Demo N`。
+  - 信长系列在小字上方加金色徽章 `<p class="series">信長シリーズ 第N話 · Nobunaga Series Ep. N / 5</p>`。
+  - 道具排、标签、按钮使用同一套尺寸。
+- **小屏规则**（`@container (max-width:620px)`）：隐藏小字、提示和署名，标签排成一行，道具缩小，确保 Start 和 Left/Right check 按钮完整显示。
+- **字幕**：日语 2cqw、英文 1.3cqw；小屏时分别为 3.2cqw、2.4cqw。九个 Demo 一致。
+- 字体和配色仍由各 Demo 自己决定：前四部用圆体，信长系列用金色明朝体。
+- 改封面后要重新截图（`?cover=1`，用 `--timeout=7000`，带动画循环的页面不能用 virtual-time），并更新 `assets/images/demos/demoN.jpg`。新 Demo 也要加载这个样式表。
+
 ### 信长系列：剧情顺序 = 编号顺序（2026-11-07 用户要求剧情连贯，按剧情重新编号）
 | # | 文件夹 | 剧情 | 承上 / 启下 |
 |---|---|---|---|
