@@ -393,7 +393,7 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 - **新 Demo 上线**要做三件事：
   - 在 `demos/shared/nav.js` 的 `DEMOS` 里加一项（`ja` / `en` / `zh` 三个标题都要写，作品列表按显示语言只显示一种）。
   - 在官网 `index.html` 的 `.td-menu` 对应分组里加一个按钮。
-  - 放缩略图。
+  - 放缩略图（`assets/images/demos/<文件夹名>.jpg`，官网菜单用），再跑 `python3 tools/web/thumbs.py <文件夹名>` 生成 Demo 切换面板用的三语缩略图 `<文件夹名>.en/ja/zh.jpg`（用户 2026-11-08：菜单里的封面图也随语言切换；封面或 l10n.js 改了也要重跑）。
 - 页面上不写 Demo 编号；文件夹编号只当 ID 用。
 
 ### 7.1 手机与平板（2026-11-08 用户要求）

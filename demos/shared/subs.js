@@ -14,7 +14,10 @@
 (() => {
   if (window.MoHeatSub) return;
   const QS = new URLSearchParams(location.search);
-  if (QS.has('cover') || QS.has('render')) return;
+  // ?cover=1 (poster export) stays untranslated, except ?cover=1&sub=<lang>: the cover texts in that language, without the 🌐 button and the
+  // language row — tools/web/thumbs.py renders the per-language thumbnails of the demo switcher this way
+  const SHOT = QS.has('cover') && QS.has('sub');
+  if ((QS.has('cover') && !SHOT) || QS.has('render')) return;
   // ---------------------------------------------------------------- the language registry (the only place that knows languages)
   // name: native name · short: label on the 🌐 language button · bcp: lang attribute · speech: Web Speech recognition code (voice.js)
   // font: CSS font stack for this script (optional) · fallback: language used when a text has no translation (default English)
@@ -353,7 +356,7 @@
   };
 
   function init() {
-    select(); button(); coverRow(); fill(); watch();
+    select(); if (!SHOT) { button(); coverRow(); } fill(); watch();
     if (sel) { sel.value = lang; sel.dispatchEvent(new Event('change')); }   // the demo drops its old ja + en mode
     apply();
     const me = document.currentScript?.src || [...document.scripts].map((x) => x.src).find((x) => /shared\/subs\.js/.test(x));

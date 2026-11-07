@@ -410,8 +410,8 @@
     ctx.fillStyle = '#0b0f1e'; ctx.fillRect(0, 0, W, H);
     ctx.save(); ctx.translate(380, 0); drawBg(t, dt, 1.05, 0, .1); ctx.restore();
     const g = ctx.createLinearGradient(300, 0, 1150, 0); g.addColorStop(0, 'rgba(11,15,30,1)'); g.addColorStop(1, 'rgba(11,15,30,0)'); ctx.fillStyle = g; ctx.fillRect(300, 0, 850, H); ctx.fillStyle = '#0b0f1e'; ctx.fillRect(0, 0, 300, H);
-    spr('H_bust_happy', 1450, 1230, 980, { bob: Math.sin(t * 1.6) * 5 }); spr('K_bust_happy', 1750, 1220, 980, { bob: Math.sin(t * 1.6 + 1.7) * 5 });
-    wisps(1450, 470, 260, t, 5, true, .8); wisps(1750, 450, 240, t, 7, false, .8);
+    spr('H_bust_happy', 1560, 1230, 980, { bob: Math.sin(t * 1.6) * 5 }); spr('K_bust_happy', 1820, 1220, 980, { bob: Math.sin(t * 1.6 + 1.7) * 5 });
+    wisps(1560, 470, 240, t, 5, true, .8); wisps(1820, 450, 220, t, 7, false, .8);
   }
   // testing: LULLABY.peek('share') shows one view without the story (screenshots / layout checks)
   const peek = (v) => { run++; S = fresh(); S.started = true; S.view = v; S.walk = 1; S.poof = -9; S.t = 9; viewA = viewB = v; mix = 1; $('intro').classList.add('hidden'); };

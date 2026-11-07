@@ -42,7 +42,8 @@
   const GROUPS = ['全年齢 · All ages', '癒し · Healing', '男性向け · For him', '女性向け · For her', '信長シリーズ · Nobunaga Series'];   // numbers are the list order
   const qs = new URLSearchParams(location.search);
   { const me = document.currentScript?.src;   // subtitle language EN / 日本語 / 中文 (also in ?embed): shared/subs.js next to this file
-    if (me && !window.MoHeatSub && !qs.has('cover') && !qs.has('render')) for (const f of ['subs.js?v=13', 'fullscreen.js?v=3', 'guide.js?v=4', 'thermocheck.js?v=2']) {   // display language + ⛶ fullscreen + first-visit guide + 🌡 thermal check (tools/web/bump.py updates these numbers)
+    const shot = qs.has('cover') && qs.has('sub');   // per-language thumbnail export (tools/web/thumbs.py): only the display language
+    if (me && !window.MoHeatSub && (shot || (!qs.has('cover') && !qs.has('render')))) for (const f of shot ? ['subs.js?v=14'] : ['subs.js?v=14', 'fullscreen.js?v=3', 'guide.js?v=4', 'thermocheck.js?v=2']) {   // display language + ⛶ fullscreen + first-visit guide + 🌡 thermal check (tools/web/bump.py updates these numbers)
       const s = document.createElement('script'); s.src = me.replace(/nav\.js(\?.*)?$/, f); s.async = false; document.head.appendChild(s); } }
   if (qs.has('embed') || qs.has('cover') || qs.has('render')) return;
   // one screen: measure the bar and what sits below the stage, series.css sizes the stage and the side panel from these
@@ -61,7 +62,7 @@
     if (cr && RIGHTS[dir] && !document.querySelector('.dn-rights')) { const r = document.createElement('p'); r.className = 'draft dn-rights'; r.textContent = RIGHTS[dir]; cr.after(r); } }
   const bar = document.querySelector('header.bar'); if (!bar) return;
   const cur = DEMOS.findIndex((d) => location.pathname.includes(`/${d.dir}/`));
-  const href = (d) => `../../${d.cat}/${d.dir}/`, thumb = (i) => `../../../assets/images/demos/${DEMOS[i].dir}.jpg`;   // pages live at demos/<cat>/<dir>/   // named by folder, so inserting a demo renames nothing
+  const href = (d) => `../../${d.cat}/${d.dir}/`, thumb = (i, l) => `../../../assets/images/demos/${DEMOS[i].dir}${l ? '.' + l : ''}.jpg`;   // pages live at demos/<cat>/<dir>/   // named by folder, so inserting a demo renames nothing
 
   const css = document.createElement('style');
   css.textContent = `
@@ -117,7 +118,7 @@
   panel.innerHTML = `<div class="dn-tabs" role="tablist"><button type="button" role="tab" data-g="all"><span data-w="all"></span><i>${DEMOS.length}</i></button>`
     + GROUPS.map((g, gi) => `<button type="button" role="tab" data-g="${gi}"><span data-gt="${gi}"></span><i>${count(gi)}</i></button>`).join('') + '</div>'
     + GROUPS.map((g, gi) => `<section data-g="${gi}"><h4><span data-gt="${gi}"></span>${span(gi)}</h4><div class="dn-grid">` + DEMOS.map((d, i) => d.group !== gi ? '' :
-    `<a class="dn-card${i === cur ? ' is-cur' : ''}" href="${href(d)}"><img src="${thumb(i)}" alt="" loading="lazy"><span><em>Demo ${i + 1}${d.ep ? ` · <span data-ep="${d.ep}"></span>` : ''}</em><b data-d="${i}"></b>${i === cur ? '<small class="dn-now" data-w="now"></small>' : ''}</span></a>`).join('') + '</div></section>').join('')
+    `<a class="dn-card${i === cur ? ' is-cur' : ''}" href="${href(d)}"><img src="${thumb(i)}" data-t="${i}" alt="" loading="lazy"><span><em>Demo ${i + 1}${d.ep ? ` · <span data-ep="${d.ep}"></span>` : ''}</em><b data-d="${i}"></b>${i === cur ? '<small class="dn-now" data-w="now"></small>' : ''}</span></a>`).join('') + '</div></section>').join('')
     + '<p class="dn-foot"><a href="../../../credits.html" data-w="credits"></a> · <span data-w="rights"></span> · © 2026 MoHeat Evo</p>';
   function paint() {   // texts in the display language; again whenever it changes
     for (const r of [nav, panel]) {
@@ -126,6 +127,8 @@
       r.querySelectorAll('[data-d]').forEach((e) => { e.textContent = TITLE(DEMOS[+e.dataset.d]); });
       r.querySelectorAll('[data-ep]').forEach((e) => { const l = LG(), n = e.dataset.ep; e.textContent = l === 'en' ? `Ep ${n} / 5` : l === 'ja' ? `第${n}話 / 全5話` : `第${n}集 / 共5集`; });
     }
+    // thumbnails in the display language (assets/images/demos/<dir>.<lang>.jpg from tools/web/thumbs.py; missing → <dir>.jpg)
+    panel.querySelectorAll('img[data-t]').forEach((im) => { const i = +im.dataset.t, src = thumb(i, LG()); if (im.dataset.l === LG()) return; im.dataset.l = LG(); im.onerror = () => { im.onerror = null; im.src = thumb(i); }; im.src = src; });
     const st = nav.querySelectorAll('.dn-step');
     if (prev) st[0].title = `${pickT(W.prev)}: ${TITLE(prev)}`; if (next) st[1].title = `${pickT(W.next)}: ${TITLE(next)}`;
   }
