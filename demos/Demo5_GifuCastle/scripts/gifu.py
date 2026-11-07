@@ -70,7 +70,8 @@ CUES = [
     L(84.0, "N", "say", "鵜飼じゃ。篝火の舟が来るぞ！", "Cormorant fishing! Here come the fire boats!", "excited",
       tts="うかいじゃ。かがりびの、ふねが、くるぞ！", pose="alert"),
     L(87.6, "N", "laugh", "わっはっは！", "Ha ha ha!", "laugh", tts="わっはっはっは", pose="laugh"),
-    L(89.0, "-", "boat", name="d9_prop_ukai_boat", dur=16.0, y=318, h=200, fireX=.9, fireY=.3),   # on the river band of the bg
+    L(85.6, "-", "zoom", dur=24.0),                                          # camera pushes up to the open side of the pavilion (VIS zoomRect)
+    L(89.0, "-", "boat", name="d9_prop_ukai_boat", dur=16.0, y=318, h=200, bgY=303, bgH=153, fireX=.9, fireY=.3),   # bg coords, clipped to the opening
     L(89.0, "F", "brazier", dur=16.0, az=-80, az1=80, d=1.3, gain=1.0),      # the fire basket's heat travels LEFT → RIGHT with the boat
     L(106.0, "C", "wind", dur=6.0, az=-60, d=1.3, gain=.7),                  # river breeze LEFT while Ieyasu (RIGHT) speaks
     L(106.0, "I", "say", "火と水が、こんなにも美しいとは……。", "Who knew fire and water could be so beautiful…", "thoughtful",
@@ -101,7 +102,7 @@ SCENES = [(t if t <= 7.5 else round(t + 4.4, 2), n, ja, en) for t, n, ja, en in 
 
 # ---------------------------------------------------------------- player config (read by the shared demo.js)
 VIS = dict(
-    bgfx={"d9_bg_palace_garden": "mist", "d9_bg_nagara_night": "fireflies"},
+    bgfx={"d9_bg_palace_garden": "mist", "d9_bg_nagara_night": "fireflies"}, zoomRect=[236, 110, 1304, 650],   # the river view between the pillars
     propNames={"d9_prop_teabowl": ["おうすの茶碗", "A bowl of matcha"], "d9_prop_ice": ["ひむろの氷", "Ice from the ice-house"],
                "d9_prop_seal_paper": ["「天下布武」の印", "The 'Tenka Fubu' seal"]},
     propSize={"d9_prop_teabowl": 260, "d9_prop_ice": 280, "d9_prop_seal_paper": 330}, steamy=["d9_prop_teabowl"], steamDx={}, nightGrade=0.0)

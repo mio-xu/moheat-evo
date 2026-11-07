@@ -55,6 +55,7 @@ Summer 1569: Nobunaga (front-left) shows you, a guest from the future, round Gif
 | 87.8 | 5.0 | ❄ cold | wind |  |  | az +62°, 1.4 m |  |  |
 | 88.4 | 3.2 | 信長 | say | excited |  | left -38°, 1.15 m | 鵜飼じゃ。篝火の舟が来るぞ！ | Cormorant fishing! Here come the fire boats! |
 | 92.0 | 1.1 | 信長 | laugh | laugh |  | left -38°, 1.15 m | わっはっは！ | Ha ha ha! |
+| 90.0 | 24.0 | — | zoom |  |  |  |  |  |
 | 93.4 | 16.0 | — | boat |  |  |  |  |  |
 | 93.4 | 16.0 | 🔥 warm | brazier |  |  | az -80°, 1.3 m |  |  |
 | 110.4 | 6.0 | ❄ cold | wind |  |  | az -60°, 1.3 m |  |  |

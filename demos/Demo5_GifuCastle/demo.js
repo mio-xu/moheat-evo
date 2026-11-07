@@ -53,7 +53,7 @@ const PAL = { N: '255,96,60', I: '120,225,170' };
 const BGW = 1536, BGH = 1024;
 let BGX = { ox: 0, oy: 0, k: 1 };
 const bx = (x) => BGX.ox + x * BGX.k, by = (y) => BGX.oy + y * BGX.k;
-const WINDOW = A.zoomRect || null;              // camera push target in bg coords (Demo 5: the window on the Kamo River)
+const WINDOW = A.zoomRect || null;              // camera push target in bg coords (Demo 5: the river view between the pavilion pillars)
 const BGFX = A.bgfx || {};                      // per background: snow / mist / dust / fireflies
 const BGS = A.cues.filter((c) => c.kind === 'bg');
 const zoomAt = (t) => { const c = cueOf(t, (x) => x.kind === 'zoom', 0); return c ? smooth((t - c.t) / 2.6) * smooth((c.t + c.dur - t) / 2.2) : 0; };
@@ -337,17 +337,28 @@ function drawWarmth(ctx, t, dt) {   // charcoal grill / hot-sake steam at the wa
     spawn({ kind: 'steam', x: gx + (Math.random() - .5) * 160, y: gy, vx: (Math.random() - .5) * 20, vy: -40, size: 40, grow: 70, life: 0, max: 2.6, a: .8, seed: Math.random() * 6 });
 }
 
-function drawBoat(ctx, t, dt) {   // e.g. the cormorant-fishing fire boat gliding from left to right
+function drawBoat(ctx, t, dt) {   // the cormorant-fishing fire boat gliding from left to right
   const c = cueOf(t, (x) => x.kind === 'boat', 0); if (!c || !ok(c.name)) return;
-  const p = clamp((t - c.t) / c.dur, 0, 1), im = IMG[c.name], h = c.h || 240, w = im.naturalWidth * h / im.naturalHeight;
-  const x = lerp(-w, W, p), y = (c.y || 560) + Math.sin(t * 1.6) * 5;
-  const fx = x + w * (c.fireX || .88), fy = y + h * (c.fireY || .3);
-  const g = ctx.createRadialGradient(fx, fy, 10, fx, fy, 420); g.addColorStop(0, 'rgba(255,170,70,.55)'); g.addColorStop(1, 'rgba(255,120,40,0)');
-  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = g; ctx.fillRect(fx - 420, fy - 420, 840, 840);
-  const r = ctx.createLinearGradient(0, y + h, 0, y + h + 220); r.addColorStop(0, 'rgba(255,150,60,.35)'); r.addColorStop(1, 'rgba(255,150,60,0)');   // reflection
-  ctx.fillStyle = r; ctx.fillRect(fx - 60, y + h, 120, 220); ctx.restore();
+  const p = clamp((t - c.t) / c.dur, 0, 1), im = IMG[c.name];
+  let x, y, w, h, clip = null;
+  if (c.bgY != null && WINDOW) {   // in background coords, through the opening only (it never crosses the pillars), follows the camera push
+    const [wx0, wy0, wx1, wy1] = WINDOW, bh = c.bgH || 150, bw = im.naturalWidth * bh / im.naturalHeight;
+    h = bh * BGX.k; w = bw * BGX.k; x = bx(lerp(wx0 - bw, wx1, p)); y = by(c.bgY) + Math.sin(t * 1.6) * 5 * BGX.k;
+    clip = [bx(wx0), by(wy0), bx(wx1) - bx(wx0), by(wy1) - by(wy0)];
+  } else {
+    h = c.h || 240; w = im.naturalWidth * h / im.naturalHeight; x = lerp(-w, W, p); y = (c.y || 560) + Math.sin(t * 1.6) * 5;
+  }
+  const fx = x + w * (c.fireX || .88), fy = y + h * (c.fireY || .3), gr = 420 * h / 200;
+  ctx.save();
+  if (clip) { ctx.beginPath(); ctx.rect(...clip); ctx.clip(); }
+  const g = ctx.createRadialGradient(fx, fy, 10, fx, fy, gr); g.addColorStop(0, 'rgba(255,170,70,.55)'); g.addColorStop(1, 'rgba(255,120,40,0)');
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = g; ctx.fillRect(fx - gr, fy - gr, gr * 2, gr * 2);
+  const r = ctx.createLinearGradient(0, y + h, 0, y + h + gr * .52); r.addColorStop(0, 'rgba(255,150,60,.35)'); r.addColorStop(1, 'rgba(255,150,60,0)');   // reflection
+  ctx.fillStyle = r; ctx.fillRect(fx - 60 * h / 200, y + h, 120 * h / 200, gr * .52); ctx.restore();
   ctx.drawImage(im, x, y, w, h);
-  if (Math.random() < dt * 40) spawn({ kind: 'ember', x: fx + (Math.random() - .5) * 40, y: fy, vx: (Math.random() - .5) * 60, vy: -80 - Math.random() * 120, size: 2 + Math.random() * 3, life: 0, max: 1.6, a: 1 });
+  ctx.restore();
+  const inside = !clip || (fx > clip[0] && fx < clip[0] + clip[2]);
+  if (inside && Math.random() < dt * 40) spawn({ kind: 'ember', x: fx + (Math.random() - .5) * 40, y: fy, vx: (Math.random() - .5) * 60, vy: -80 - Math.random() * 120, size: 2 + Math.random() * 3, life: 0, max: 1.6, a: 1 });
 }
 
 function drawSlip(ctx, t, dt) {   // the golden time slip: they appear in it at the start and vanish in it at the end
