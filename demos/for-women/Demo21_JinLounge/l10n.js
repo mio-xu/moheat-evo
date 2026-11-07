@@ -42,7 +42,10 @@ window.MOHEAT_L10N = {
    "🎧 Left / Right check": "🎧 左右声道检查",
    "Headphones on · tap / hold to answer him · connect MoHeat Evo to feel the cold can, his voice and his jacket": "请戴上耳机 · 点按 / 长按来回应他 · 连接 MoHeat Evo，感受冰凉的易拉罐、他的声音和他的外套",
    "ASMR Game · VIP lounge": "ASMR 游戏 · VIP 休息室",
-   "Live (DUAL): his voice warms the ear he speaks at, with its loudness; the ice-cold can, his face up close and his jacket collar add real cold / warmth.": "实时（DUAL）：他的声音按音量让他说话那一侧的耳朵变暖；冰凉的易拉罐、近在眼前的他的脸和他的外套领子带来真实的冷与暖。"
+   "Live (DUAL): his voice warms the ear he speaks at, with its loudness; the ice-cold can, his face up close and his jacket collar add real cold / warmth.": "实时（DUAL）：他的声音按音量让他说话那一侧的耳朵变暖；冰凉的易拉罐、近在眼前的他的脸和他的外套领子带来真实的冷与暖。",
+   "VIP lounge": "VIP 包厢",
+   "🖤 …次も、俺だけ見てろよ · Next time too, look only at me": "🖤 …下次也只许看着我",
+   "…次も、俺だけ見てろよ": "…下次也只许看着我"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -55,7 +58,10 @@ window.MOHEAT_L10N = {
    "🎧 Left / Right check": "🎧 左右チェック",
    "Headphones on · tap / hold to answer him · connect MoHeat Evo to feel the cold can, his voice and his jacket": "ヘッドホンを装着 · タップ / 長押しで彼に答えよう · MoHeat Evo をつなぐと、冷たい缶、彼の声、彼のジャケットを感じられます",
    "ASMR Game · VIP lounge": "ASMRゲーム · VIPラウンジ",
-   "Live (DUAL): his voice warms the ear he speaks at, with its loudness; the ice-cold can, his face up close and his jacket collar add real cold / warmth.": "リアルタイム（DUAL）：彼の声は話しかける側の耳をその音量で温めます。キンキンに冷えた缶、間近の彼の顔、ジャケットの襟が、本当の冷たさ・温かさを加えます。"
+   "Live (DUAL): his voice warms the ear he speaks at, with its loudness; the ice-cold can, his face up close and his jacket collar add real cold / warmth.": "リアルタイム（DUAL）：彼の声は話しかける側の耳をその音量で温めます。キンキンに冷えた缶、間近の彼の顔、ジャケットの襟が、本当の冷たさ・温かさを加えます。",
+   "VIP lounge": "VIPラウンジ",
+   "🖤 …次も、俺だけ見てろよ · Next time too, look only at me": "🖤 …次も、俺だけ見てろよ",
+   "…次も、俺だけ見てろよ": "…次も、俺だけ見てろよ"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -68,7 +74,10 @@ window.MOHEAT_L10N = {
    "🎧 Left / Right check": "🎧 Left / Right check",
    "Headphones on · tap / hold to answer him · connect MoHeat Evo to feel the cold can, his voice and his jacket": "Headphones on · tap / hold to answer him · connect MoHeat Evo to feel the cold can, his voice and his jacket",
    "ASMR Game · VIP lounge": "ASMR Game · VIP lounge",
-   "Live (DUAL): his voice warms the ear he speaks at, with its loudness; the ice-cold can, his face up close and his jacket collar add real cold / warmth.": "Live (DUAL): his voice warms the ear he speaks at, with its loudness; the ice-cold can, his face up close and his jacket collar add real cold / warmth."
+   "Live (DUAL): his voice warms the ear he speaks at, with its loudness; the ice-cold can, his face up close and his jacket collar add real cold / warmth.": "Live (DUAL): his voice warms the ear he speaks at, with its loudness; the ice-cold can, his face up close and his jacket collar add real cold / warmth.",
+   "VIP lounge": "VIP lounge",
+   "🖤 …次も、俺だけ見てろよ · Next time too, look only at me": "🖤 Next time too, look only at me",
+   "…次も、俺だけ見てろよ": "Next time too, look only at me"
   }
  },
  "names": {},

@@ -180,7 +180,8 @@ window.MOHEAT_L10N = {
    "DUAL, two layers: her whisper warms the ear she is at with its loudness (with mint balm on, a cool menthol breath at the same time); her fuu, the glass of ice from the penguins' room and the warm towel are the room layer.": "DUAL，两层：她的耳语按音量让她所在那一侧的耳朵变暖（涂上薄荷膏时，同时还有清凉的薄荷气息）；她的“呼——”、从企鹅馆拿来的冰块杯和温热的毛巾属于房间层。",
    "DUAL, two layers: her voice warms the ear she is close to; the hot mug and its steam, the shared blanket, the stove and her hands are warm, her fu-fu is a cool breath.": "DUAL，两层：她的声音让她靠近的那只耳朵变暖；热马克杯和它的热气、一起盖的毛毯、暖炉和她的手带来温暖，她的“呼呼”是一阵清凉的气息。",
    "DUAL, two layers: her secret warms your right ear with her voice; the summer night is mildly warm on both ears and the steaming bowl beside the mic adds a little; the cold ramune bottle, the stall fan and her uchiwa are cool.": "DUAL，两层：她的悄悄话用声音让你的右耳变暖；夏夜让双耳微微温暖，麦克风旁冒着热气的面碗再添一点；冰镇波子汽水瓶、摊位的电风扇和她的团扇带来清凉。",
-   "DUAL, two layers: her whisper warms the ear she is at; the night wind from the bar's window cools your left ear as it gusts, the hot tea and Luna on the stool next to you are warm.": "DUAL，两层：她的耳语让她所在那一侧的耳朵变暖；酒吧窗外吹来的夜风一阵阵让你的左耳变凉，热茶和坐在你身旁高脚凳上的露娜带来温暖。"
+   "DUAL, two layers: her whisper warms the ear she is at; the night wind from the bar's window cools your left ear as it gusts, the hot tea and Luna on the stool next to you are warm.": "DUAL，两层：她的耳语让她所在那一侧的耳朵变暖；酒吧窗外吹来的夜风一阵阵让你的左耳变凉，热茶和坐在你身旁高脚凳上的露娜带来温暖。",
+   "At her desk": "在她的桌前"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -213,7 +214,9 @@ window.MOHEAT_L10N = {
    "DUAL, two layers: her whisper warms the ear she is at with its loudness (with mint balm on, a cool menthol breath at the same time); her fuu, the glass of ice from the penguins' room and the warm towel are the room layer.": "DUAL・二層：彼女のささやきは、いる側の耳をその音量で温めます（ミントバームを塗ると、同時にひんやりしたメントールの吐息も）。「ふぅー」、ペンギン部屋から持ってきた氷のグラス、温かいタオルが部屋の層です。",
    "DUAL, two layers: her voice warms the ear she is close to; the hot mug and its steam, the shared blanket, the stove and her hands are warm, her fu-fu is a cool breath.": "DUAL・二層：彼女の声は近い側の耳を温めます。熱いマグと湯気、一緒にかけた毛布、ストーブ、彼女の手は温かく、「ふーふー」はひんやりした吐息です。",
    "DUAL, two layers: her secret warms your right ear with her voice; the summer night is mildly warm on both ears and the steaming bowl beside the mic adds a little; the cold ramune bottle, the stall fan and her uchiwa are cool.": "DUAL・二層：彼女の内緒話はその声で右耳を温めます。夏の夜は両耳にほんのり温かく、マイク横の湯気の立つ丼が少し加わります。冷えたラムネの瓶、屋台の扇風機、彼女のうちわは冷たく。",
-   "DUAL, two layers: her whisper warms the ear she is at; the night wind from the bar's window cools your left ear as it gusts, the hot tea and Luna on the stool next to you are warm.": "DUAL・二層：彼女のささやきは、いる側の耳を温めます。バーの窓からの夜風は吹くたびに左耳を冷やし、熱いお茶と隣のスツールに座るルナは温かく。"
+   "DUAL, two layers: her whisper warms the ear she is at; the night wind from the bar's window cools your left ear as it gusts, the hot tea and Luna on the stool next to you are warm.": "DUAL・二層：彼女のささやきは、いる側の耳を温めます。バーの窓からの夜風は吹くたびに左耳を冷やし、熱いお茶と隣のスツールに座るルナは温かく。",
+   "の配信へ ·": "の配信へ ·",
+   "At her desk": "デスクで"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -276,7 +279,8 @@ window.MOHEAT_L10N = {
    "DUAL, two layers: her whisper warms the ear she is at with its loudness (with mint balm on, a cool menthol breath at the same time); her fuu, the glass of ice from the penguins' room and the warm towel are the room layer.": "DUAL, two layers: her whisper warms the ear she is at with its loudness (with mint balm on, a cool menthol breath at the same time); her fuu, the glass of ice from the penguins' room and the warm towel are the room layer.",
    "DUAL, two layers: her voice warms the ear she is close to; the hot mug and its steam, the shared blanket, the stove and her hands are warm, her fu-fu is a cool breath.": "DUAL, two layers: her voice warms the ear she is close to; the hot mug and its steam, the shared blanket, the stove and her hands are warm, her fu-fu is a cool breath.",
    "DUAL, two layers: her secret warms your right ear with her voice; the summer night is mildly warm on both ears and the steaming bowl beside the mic adds a little; the cold ramune bottle, the stall fan and her uchiwa are cool.": "DUAL, two layers: her secret warms your right ear with her voice; the summer night is mildly warm on both ears and the steaming bowl beside the mic adds a little; the cold ramune bottle, the stall fan and her uchiwa are cool.",
-   "DUAL, two layers: her whisper warms the ear she is at; the night wind from the bar's window cools your left ear as it gusts, the hot tea and Luna on the stool next to you are warm.": "DUAL, two layers: her whisper warms the ear she is at; the night wind from the bar's window cools your left ear as it gusts, the hot tea and Luna on the stool next to you are warm."
+   "DUAL, two layers: her whisper warms the ear she is at; the night wind from the bar's window cools your left ear as it gusts, the hot tea and Luna on the stool next to you are warm.": "DUAL, two layers: her whisper warms the ear she is at; the night wind from the bar's window cools your left ear as it gusts, the hot tea and Luna on the stool next to you are warm.",
+   "At her desk": "At her desk"
   }
  },
  "names": {},

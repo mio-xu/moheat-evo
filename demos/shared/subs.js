@@ -103,7 +103,7 @@
   }
 
   // "日本語 · English" in one element (interact.js cards, some buttons) → the chosen part; both kept in data-voice for voice.js
-  const SPLIT = '.ix-card .ix-tag, .ix-card .ix-how, .ix-card .ix-gauge b, .ix-btn, .ch, .act-btn, .chip-c, #micGate button, .intro .ix-toggle span, .pick > p > small';
+  const SPLIT = '.ix-card .ix-tag, .ix-card .ix-how, .ix-card .ix-gauge b, .ix-btn, .ch, .act-btn, .chip-c, #micGate button, .intro .ix-toggle span, .pick > p > small, .stage button:not(.opt):not(.msub-btn), .stage :is(em, span, small, b, p, label, div, li):not(.one)';   // any leaf on the stage written "日本語 · English"
   const UI = {   // interact.js (Demo 1–9) texts: ja → { en, zh, … }
     'スキップ': { en: 'Skip', zh: '跳过', 'zh-Hant': '跳過' }, 'あなたの番': { en: 'Your turn', zh: '轮到你了', 'zh-Hant': '輪到你了' }, '感じてみて': { en: 'Feel it', zh: '感受一下' },
     'あなたのセリフ': { en: 'Your line', zh: '你的台词' }, '耳で感じて、選んでね': { en: 'Feel it on your ears, then choose', zh: '用耳朵感受，然后选择' },
@@ -118,6 +118,7 @@
     '相手': { en: 'With', zh: '对象' }, '場所': { en: 'Where', zh: '地点' }, 'あなたの言葉': { en: 'You speak', zh: '你的语言' },   // Demo23 pickers
     '正解！': { en: 'Correct!', zh: '答对了！' }, 'ざんねん…': { en: 'Not quite — listen!', zh: '可惜……再听听！' }, 'ちょうどいい！': { en: 'Just right!', zh: '刚刚好！' },
     'いいね！': { en: 'Nice!', zh: '很好！' }, 'ありがとう〜！': { en: 'Thank you~!', zh: '谢谢～！' },   // interact.js feedback pops
+    'ヒント': { en: 'Hint', zh: '提示' }, '着信': { en: 'Incoming call', zh: '来电' }, '出る': { en: 'Answer', zh: '接听' }, 'かける': { en: 'Call', zh: '拨打' }, 'なかよし': { en: 'bond', zh: '亲密度' },
     'もう一度': { en: 'Play again', zh: '再玩一次', 'zh-Hant': '再玩一次', ko: '다시 하기', es: 'Jugar de nuevo', fr: 'Rejouer', de: 'Nochmal', pt: 'Jogar de novo', id: 'Main lagi', th: 'เล่นอีกครั้ง', vi: 'Chơi lại' },
   };
   function pickSplit(t) {   // "↺ 日本語 · English" written by the demo at run time (e.g. the replay button) → the chosen language, or null
@@ -129,7 +130,7 @@
   const CJK = /[぀-ヿ㐀-鿿]/;
   const AFFIX = /^([^\p{L}\p{N}「]*)(.*?)([^\p{L}\p{N}」！？!?…。]*)$/su;   // emoji / arrows around the words stay in every language
   function split(el) {
-    if (el.children.length) return;
+    if (el.children.length || (el.closest('.intro') && !el.closest('.ix-toggle, .pick, .cleared')) || el.closest('#chatList, #subs, #bubble, .bubble')) return;   // cover buttons: cover() below
     const t = el.textContent;
     if (el.dataset.mshown === undefined || t !== el.dataset.mshown) {   // new text from the demo
       const m = /^(.*?)\s[·・]\s(.*)$/s.exec(t), [, pre, core, post] = AFFIX.exec((m ? m[1] : t).trim());
@@ -334,9 +335,9 @@
     if (sel) { sel.value = lang; sel.dispatchEvent(new Event('change')); }   // the demo drops its old ja + en mode
     apply();
     const me = document.currentScript?.src || [...document.scripts].map((x) => x.src).find((x) => /shared\/subs\.js/.test(x));
-    if (me) { const c = document.createElement('script'); c.src = me.replace(/subs\.js(\?.*)?$/, 'l10n_common.js?v=3'); c.onload = () => { maps = {}; apply(); }; document.head.appendChild(c); }
+    if (me) { const c = document.createElement('script'); c.src = me.replace(/subs\.js(\?.*)?$/, 'l10n_common.js?v=4'); c.onload = () => { maps = {}; apply(); }; document.head.appendChild(c); }
     const s = document.createElement('script');   // relative to the page (or its <base>): the demo's own languages
-    s.src = 'l10n.js?v=2';
+    s.src = 'l10n.js?v=3';
     s.onload = () => {
       maps = {}; missing.clear(); lang = eff(); fill();
       containers().forEach((c) => delete c.dataset.msub); document.querySelectorAll('[data-mlang]').forEach((e) => { e.dataset.mlang = ''; });

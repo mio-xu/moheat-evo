@@ -123,7 +123,10 @@ window.MOHEAT_L10N = {
    "Live, two layers: a voice right at your ear warms it with its loudness (louder = warmer); the room around you (front door, scarf, snowman) adds warm or cool. Warm and cool can be on the same ear at once (firmware DUAL).": "实时，两层：贴在耳边的声音按音量让那只耳朵变暖（越大声越暖）；你周围的房间（玄关、围巾、雪人）再加上暖或凉。同一只耳朵可以同时有暖和凉（固件 DUAL）。",
    "ASMR Game · A call home, part 2": "ASMR 游戏 · 给家里打电话（下）",
    "なにが入ってるの？": "里面装的是什么？",
-   "どれどれ？": "让我看看？"
+   "どれどれ？": "让我看看？",
+   "Speaker · on the table": "免提 · 放在桌上",
+   "💗 また電話してね · Call them again soon": "💗 记得再打电话给他们哦",
+   "⛄ つづく · To be continued → 第2話「じいちゃんの、ゆきだるま」 · Part 2": "⛄ 未完待续 → 第2话「爷爷的雪人」"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -142,7 +145,13 @@ window.MOHEAT_L10N = {
    "Headphones on · mic optional (answer them with your voice, or tap) · connect MoHeat Evo to feel the scarf and the snowman": "ヘッドホンを装着 · マイクは任意（声で答える、またはタップ） · MoHeat Evo をつなぐと、マフラーと雪だるまを感じられます",
    "ASMR Game · A call home": "ASMRゲーム · 実家への電話",
    "Live, two layers: a voice right at your ear warms it with its loudness (louder = warmer); the room around you (front door, scarf, snowman) adds warm or cool. Warm and cool can be on the same ear at once (firmware DUAL).": "リアルタイム・二層：耳元の声はその音量で耳を温めます（大きいほど温かい）。まわりの部屋（玄関・マフラー・雪だるま）が温かさや冷たさを加えます。同じ耳に温と冷を同時に出せます（ファームウェア DUAL）。",
-   "ASMR Game · A call home, part 2": "ASMRゲーム · 実家への電話（後編）"
+   "ASMR Game · A call home, part 2": "ASMRゲーム · 実家への電話（後編）",
+   "おばあちゃんち": "おばあちゃんち",
+   "Speaker · on the table": "スピーカー · テーブルの上",
+   "💗 また電話してね · Call them again soon": "💗 また電話してね",
+   "また電話してね": "また電話してね",
+   "⛄ つづく · To be continued → 第2話「じいちゃんの、ゆきだるま」 · Part 2": "⛄ つづく → 第2話「じいちゃんの、ゆきだるま」",
+   "つづく": "つづく"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -161,7 +170,13 @@ window.MOHEAT_L10N = {
    "Headphones on · mic optional (answer them with your voice, or tap) · connect MoHeat Evo to feel the scarf and the snowman": "Headphones on · mic optional (answer them with your voice, or tap) · connect MoHeat Evo to feel the scarf and the snowman",
    "ASMR Game · A call home": "ASMR Game · A call home",
    "Live, two layers: a voice right at your ear warms it with its loudness (louder = warmer); the room around you (front door, scarf, snowman) adds warm or cool. Warm and cool can be on the same ear at once (firmware DUAL).": "Live, two layers: a voice right at your ear warms it with its loudness (louder = warmer); the room around you (front door, scarf, snowman) adds warm or cool. Warm and cool can be on the same ear at once (firmware DUAL).",
-   "ASMR Game · A call home, part 2": "ASMR Game · A call home, part 2"
+   "ASMR Game · A call home, part 2": "ASMR Game · A call home, part 2",
+   "おばあちゃんち": "Grandma's",
+   "Speaker · on the table": "Speaker · on the table",
+   "💗 また電話してね · Call them again soon": "💗 Call them again soon",
+   "また電話してね": "Call them again soon",
+   "⛄ つづく · To be continued → 第2話「じいちゃんの、ゆきだるま」 · Part 2": "⛄ To be continued → Part 2: Grandpa's Snowman",
+   "つづく": "To be continued"
   }
  },
  "names": {

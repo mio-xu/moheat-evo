@@ -64,7 +64,10 @@ window.MOHEAT_L10N = {
    "ASMR Game · Late-night call": "ASMR 游戏 · 深夜来电",
    "Live: the phone warms the ear it is pressed to (more when he talks or whispers); the open window and the door let the cold in. One mode per ear.": "实时：手机让贴着的那只耳朵变暖（他说话或低语时更暖）；开着的窗户和门放进冷空气。每只耳朵一次只能冷或热其一。",
    "カーテンをあける": "拉开窗帘",
-   "…だれ？": "……是谁？"
+   "…だれ？": "……是谁？",
+   "Switching…": "切换中…",
+   "💗 また電話してね · Call me again sometime": "💗 还要再打给我哦",
+   "また電話してね": "还要再打给我哦"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -77,7 +80,10 @@ window.MOHEAT_L10N = {
    "🎧 Left / Right check": "🎧 左右チェック",
    "Headphones on · mic optional (answer him with your voice, or tap) · connect MoHeat Evo to feel the phone at your ear": "ヘッドホンを装着 · マイクは任意（声で彼に答える、またはタップ） · MoHeat Evo をつなぐと、耳にあてたスマホを感じられます",
    "ASMR Game · Late-night call": "ASMRゲーム · 深夜の電話",
-   "Live: the phone warms the ear it is pressed to (more when he talks or whispers); the open window and the door let the cold in. One mode per ear.": "リアルタイム：スマホは当てている耳を温めます（彼が話す・ささやくとさらに）。開いた窓とドアから冷気が入ります。冷・温は片耳ごとにどちらか一方。"
+   "Live: the phone warms the ear it is pressed to (more when he talks or whispers); the open window and the door let the cold in. One mode per ear.": "リアルタイム：スマホは当てている耳を温めます（彼が話す・ささやくとさらに）。開いた窓とドアから冷気が入ります。冷・温は片耳ごとにどちらか一方。",
+   "Switching…": "持ちかえ中…",
+   "💗 また電話してね · Call me again sometime": "💗 また電話してね",
+   "また電話してね": "また電話してね"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -99,7 +105,10 @@ window.MOHEAT_L10N = {
    "💗 また電話してね": "💗 Call me again sometime",
    "↺ もう一度": "↺ Play again",
    "ASMR Game · Late-night call": "ASMR Game · Late-night call",
-   "Live: the phone warms the ear it is pressed to (more when he talks or whispers); the open window and the door let the cold in. One mode per ear.": "Live: the phone warms the ear it is pressed to (more when he talks or whispers); the open window and the door let the cold in. One mode per ear."
+   "Live: the phone warms the ear it is pressed to (more when he talks or whispers); the open window and the door let the cold in. One mode per ear.": "Live: the phone warms the ear it is pressed to (more when he talks or whispers); the open window and the door let the cold in. One mode per ear.",
+   "Switching…": "Switching…",
+   "💗 また電話してね · Call me again sometime": "💗 Call me again sometime",
+   "また電話してね": "Call me again sometime"
   }
  },
  "names": {},

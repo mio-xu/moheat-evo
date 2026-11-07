@@ -76,7 +76,13 @@ window.MOHEAT_L10N = {
    "Afternoon": "午后",
    "Rainy night": "雨夜",
    "Live: Naomi's body and purr are warm at her direction; her nose, the feather's wind, the rain and your breath are cool. One mode per ear (the stronger side wins).": "实时：直美的身体和呼噜声在她所在的方向带来温暖；她的鼻子、羽毛带起的风、雨和你的呼气带来清凉。每只耳朵一次只能冷或热其一（较强的一方优先）。",
-   "Use the microphone (calling / blowing; level only, nothing recorded)": "使用麦克风（呼唤 / 吹气；只读取音量，不录音）"
+   "Use the microphone (calling / blowing; level only, nothing recorded)": "使用麦克风（呼唤 / 吹气；只读取音量，不录音）",
+   "🎤 声 · voice": "🎤 声音",
+   "🌬 息 · breath": "🌬 气息",
+   "📣 ナオミ〜 · Call": "📣 直美〜",
+   "ナオミ〜": "直美〜",
+   "ふーふー · Blow": "呼呼",
+   "💤 ナオミと、ふわふわの一日 · A fluffy day together (": "💤 和直美一起的软绵绵一天（"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -93,7 +99,17 @@ window.MOHEAT_L10N = {
    "Afternoon": "午後",
    "Rainy night": "雨の夜",
    "Live: Naomi's body and purr are warm at her direction; her nose, the feather's wind, the rain and your breath are cool. One mode per ear (the stronger side wins).": "リアルタイム：ナオミの体とゴロゴロは彼女のいる方向で温かく、鼻・羽根の風・雨・あなたの息は冷たく。冷・温は片耳ごとにどちらか一方（強いほうが優先）。",
-   "Use the microphone (calling / blowing; level only, nothing recorded)": "マイクを使う（呼びかけ・息の吹きかけ。音量のみ使用、録音はしません）"
+   "Use the microphone (calling / blowing; level only, nothing recorded)": "マイクを使う（呼びかけ・息の吹きかけ。音量のみ使用、録音はしません）",
+   "なかよし": "なかよし",
+   "🎤 声 · voice": "🎤 声",
+   "声": "声",
+   "🌬 息 · breath": "🌬 息",
+   "息": "息",
+   "📣 ナオミ〜 · Call": "📣 ナオミ〜",
+   "ナオミ〜": "ナオミ〜",
+   "ふーふー · Blow": "ふーふー",
+   "ふーふー": "ふーふー",
+   "💤 ナオミと、ふわふわの一日 · A fluffy day together (": "💤 ナオミと、ふわふわの一日（"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -110,7 +126,17 @@ window.MOHEAT_L10N = {
    "Afternoon": "Afternoon",
    "Rainy night": "Rainy night",
    "Live: Naomi's body and purr are warm at her direction; her nose, the feather's wind, the rain and your breath are cool. One mode per ear (the stronger side wins).": "Live: Naomi's body and purr are warm at her direction; her nose, the feather's wind, the rain and your breath are cool. One mode per ear (the stronger side wins).",
-   "Use the microphone (calling / blowing; level only, nothing recorded)": "Use the microphone (calling / blowing; level only, nothing recorded)"
+   "Use the microphone (calling / blowing; level only, nothing recorded)": "Use the microphone (calling / blowing; level only, nothing recorded)",
+   "なかよし": "bond",
+   "🎤 声 · voice": "🎤 voice",
+   "声": "voice",
+   "🌬 息 · breath": "🌬 breath",
+   "息": "breath",
+   "📣 ナオミ〜 · Call": "📣 Call",
+   "ナオミ〜": "Call",
+   "ふーふー · Blow": "Blow",
+   "ふーふー": "Blow",
+   "💤 ナオミと、ふわふわの一日 · A fluffy day together (": "💤 A fluffy day together ("
   }
  },
  "names": {

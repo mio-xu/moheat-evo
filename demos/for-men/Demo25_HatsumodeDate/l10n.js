@@ -66,7 +66,11 @@ window.MOHEAT_L10N = {
    "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the winter night wind and its gusts, the bonfire on your left, the hot amazake cup and her fur stole add real cold / warmth.": "实时（DUAL）：她的声音按音量让她说话那一侧的耳朵变暖；冬夜的风和阵风、你左边的篝火、热甜酒杯和她的毛皮披肩带来真实的冷与暖。",
    "「今年もよろしく！」": "“今年也请多关照！”",
    "五円玉を入れる": "投一枚五日元硬币",
-   "二人で一緒に引く": "两个人一起抽"
+   "二人で一緒に引く": "两个人一起抽",
+   "🎍 来年も、その次の年も。 · Next year, and the year after": "🎍 明年，还有后年，也一起。",
+   "来年も、その次の年も。": "明年，还有后年，也一起。",
+   "🎍 願いごとは、二人だけの秘密 · Your wishes stay a secret for two": "🎍 许下的愿望，是我们俩的秘密",
+   "願いごとは、二人だけの秘密": "许下的愿望，是我们俩的秘密"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -79,7 +83,11 @@ window.MOHEAT_L10N = {
    "🎧 Left / Right check": "🎧 左右チェック",
    "Headphones on · tap / hold to answer her · connect MoHeat Evo to feel the winter wind, the bonfire, a hot amazake on your cheek and her voice": "ヘッドホンを装着 · タップ / 長押しで彼女に答えよう · MoHeat Evo をつなぐと、冬の風、焚き火、頬にあたる熱い甘酒、彼女の声を感じられます",
    "ASMR Date · New Year's Eve": "ASMRデート · 大晦日",
-   "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the winter night wind and its gusts, the bonfire on your left, the hot amazake cup and her fur stole add real cold / warmth.": "リアルタイム（DUAL）：彼女の声は話しかける側の耳をその音量で温めます。冬の夜風と突風、左のかがり火、熱い甘酒のカップ、彼女のファーショールが、本当の冷たさ・温かさを加えます。"
+   "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the winter night wind and its gusts, the bonfire on your left, the hot amazake cup and her fur stole add real cold / warmth.": "リアルタイム（DUAL）：彼女の声は話しかける側の耳をその音量で温めます。冬の夜風と突風、左のかがり火、熱い甘酒のカップ、彼女のファーショールが、本当の冷たさ・温かさを加えます。",
+   "🎍 来年も、その次の年も。 · Next year, and the year after": "🎍 来年も、その次の年も。",
+   "来年も、その次の年も。": "来年も、その次の年も。",
+   "🎍 願いごとは、二人だけの秘密 · Your wishes stay a secret for two": "🎍 願いごとは、二人だけの秘密",
+   "願いごとは、二人だけの秘密": "願いごとは、二人だけの秘密"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -101,7 +109,11 @@ window.MOHEAT_L10N = {
    "🎍 願いごとは、二人だけの秘密": "🎍 Your wishes stay a secret for two",
    "↺ もう一度": "↺ Play again",
    "ASMR Date · New Year's Eve": "ASMR Date · New Year's Eve",
-   "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the winter night wind and its gusts, the bonfire on your left, the hot amazake cup and her fur stole add real cold / warmth.": "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the winter night wind and its gusts, the bonfire on your left, the hot amazake cup and her fur stole add real cold / warmth."
+   "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the winter night wind and its gusts, the bonfire on your left, the hot amazake cup and her fur stole add real cold / warmth.": "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the winter night wind and its gusts, the bonfire on your left, the hot amazake cup and her fur stole add real cold / warmth.",
+   "🎍 来年も、その次の年も。 · Next year, and the year after": "🎍 Next year, and the year after",
+   "来年も、その次の年も。": "Next year, and the year after",
+   "🎍 願いごとは、二人だけの秘密 · Your wishes stay a secret for two": "🎍 Your wishes stay a secret for two",
+   "願いごとは、二人だけの秘密": "Your wishes stay a secret for two"
   }
  },
  "names": {},

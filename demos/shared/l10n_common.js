@@ -76,7 +76,18 @@ window.MOHEAT_L10N_COMMON = {
    "ASMR · Handshake event": "ASMR · 握手会",
    "ASMR · VIP lounge": "ASMR · VIPラウンジ",
    "ASMR · Rainy night": "ASMR · 雨の夜",
-   "ASMR · Live talk": "ASMR · ライブトーク"
+   "ASMR · Live talk": "ASMR · ライブトーク",
+   "🎧 Left…": "🎧 左…",
+   "🎧 …Right": "🎧 …右",
+   "↺ Re-arm output": "↺ 出力を再開",
+   "↺ もう一度 · Play again": "↺ もう一度",
+   "もう一度": "もう一度",
+   "Phone · left ear": "電話 · 左耳",
+   "Phone · right ear": "電話 · 右耳",
+   "Your room": "あなたの部屋",
+   "At your left ear": "左耳もと",
+   "At your right ear": "右耳もと",
+   "Right in front": "すぐ目の前"
   },
   "zh": {
    "ASMR Demo": "ASMR 演示",
@@ -152,7 +163,18 @@ window.MOHEAT_L10N_COMMON = {
    "ASMR · Handshake event": "ASMR · 握手会",
    "ASMR · VIP lounge": "ASMR · VIP 休息室",
    "ASMR · Rainy night": "ASMR · 雨夜",
-   "ASMR · Live talk": "ASMR · 实时对话"
+   "ASMR · Live talk": "ASMR · 实时对话",
+   "🎧 Left…": "🎧 左…",
+   "🎧 …Right": "🎧 …右",
+   "↺ Re-arm output": "↺ 重新启用输出",
+   "↺ もう一度 · Play again": "↺ 再玩一次",
+   "もう一度": "再玩一次",
+   "Phone · left ear": "电话 · 左耳",
+   "Phone · right ear": "电话 · 右耳",
+   "Your room": "你的房间",
+   "At your left ear": "在你左耳边",
+   "At your right ear": "在你右耳边",
+   "Right in front": "就在面前"
   },
   "en": {
    "ASMR Demo": "ASMR Demo",
@@ -228,7 +250,18 @@ window.MOHEAT_L10N_COMMON = {
    "ASMR · Handshake event": "ASMR · Handshake event",
    "ASMR · VIP lounge": "ASMR · VIP lounge",
    "ASMR · Rainy night": "ASMR · Rainy night",
-   "ASMR · Live talk": "ASMR · Live talk"
+   "ASMR · Live talk": "ASMR · Live talk",
+   "🎧 Left…": "🎧 Left…",
+   "🎧 …Right": "🎧 …Right",
+   "↺ Re-arm output": "↺ Re-arm output",
+   "↺ もう一度 · Play again": "↺ Play again",
+   "もう一度": "Play again",
+   "Phone · left ear": "Phone · left ear",
+   "Phone · right ear": "Phone · right ear",
+   "Your room": "Your room",
+   "At your left ear": "At your left ear",
+   "At your right ear": "At your right ear",
+   "Right in front": "Right in front"
   }
  }
 };

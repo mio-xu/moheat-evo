@@ -112,7 +112,12 @@ window.MOHEAT_L10N = {
    "Cave · fork ": "洞穴 · 岔路 ",
    "Hidden spring": "秘密之泉",
    "Live: every fire, draught and water sound in the scene is a heat or cool source at its own direction; your breath cools both ears. One mode per ear (the stronger side wins).": "实时：场景中每一处火、穿堂风和水声，都是位于其方向的热源或冷源；你的呼气让双耳变凉。每只耳朵一次只能冷或热其一（较强的一方优先）。",
-   "Use the microphone for blowing (level only, nothing recorded)": "用麦克风吹气（只读取音量，不录音）"
+   "Use the microphone for blowing (level only, nothing recorded)": "用麦克风吹气（只读取音量，不录音）",
+   "Straw": "干草",
+   "Flint": "打火石",
+   "Cave · fork": "洞穴 · 岔路",
+   "🎉 クリア！ ひみつの泉、はっけん · Cleared in": "🎉 通关！发现了秘密泉水 · 用时",
+   "クリア！ ひみつの泉、はっけん": "通关！发现了秘密泉水"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -130,7 +135,14 @@ window.MOHEAT_L10N = {
    "Cave · fork ": "洞窟 · 分かれ道 ",
    "Hidden spring": "ひみつの泉",
    "Live: every fire, draught and water sound in the scene is a heat or cool source at its own direction; your breath cools both ears. One mode per ear (the stronger side wins).": "リアルタイム：場面の火・すきま風・水の音は、それぞれの方向にある温・冷の源です。あなたの息は両耳を冷やします。冷・温は片耳ごとにどちらか一方（強いほうが優先）。",
-   "Use the microphone for blowing (level only, nothing recorded)": "マイクで息を吹きかける（音量のみ使用、録音はしません）"
+   "Use the microphone for blowing (level only, nothing recorded)": "マイクで息を吹きかける（音量のみ使用、録音はしません）",
+   "かれ草": "かれ草",
+   "Straw": "かれ草",
+   "火打ち石": "火打ち石",
+   "Flint": "火打ち石",
+   "Cave · fork": "洞くつ · 分かれ道",
+   "🎉 クリア！ ひみつの泉、はっけん · Cleared in": "🎉 クリア！ ひみつの泉、はっけん ·",
+   "クリア！ ひみつの泉、はっけん": "クリア！ ひみつの泉、はっけん"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -149,7 +161,14 @@ window.MOHEAT_L10N = {
    "Cave · fork ": "Cave · fork ",
    "Hidden spring": "Hidden spring",
    "Live: every fire, draught and water sound in the scene is a heat or cool source at its own direction; your breath cools both ears. One mode per ear (the stronger side wins).": "Live: every fire, draught and water sound in the scene is a heat or cool source at its own direction; your breath cools both ears. One mode per ear (the stronger side wins).",
-   "Use the microphone for blowing (level only, nothing recorded)": "Use the microphone for blowing (level only, nothing recorded)"
+   "Use the microphone for blowing (level only, nothing recorded)": "Use the microphone for blowing (level only, nothing recorded)",
+   "かれ草": "Straw",
+   "Straw": "Straw",
+   "火打ち石": "Flint",
+   "Flint": "Flint",
+   "Cave · fork": "Cave · fork",
+   "🎉 クリア！ ひみつの泉、はっけん · Cleared in": "🎉 Cleared in",
+   "クリア！ ひみつの泉、はっけん": "Cleared! You found the hidden spring"
   }
  },
  "names": {

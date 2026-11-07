@@ -120,7 +120,10 @@ window.MOHEAT_L10N = {
    "Night · IR": "夜晚 · 红外",
    "Live, relative to where the camera looks: Naomi's body, her purr and the heated blanket are warm at their direction; the fan's wind (wherever you aim it), the window, the rain and her nose on the lens are cool. Turn the camera and the warmth turns with it. One mode per ear.": "实时，以摄像头的朝向为准：直美的身体、呼噜声和电热毯在各自的方向带来温暖；电风扇的风（吹向哪里就在哪里）、窗户、雨和贴在镜头上的小鼻子带来清凉。转动摄像头，温暖也随之转动。每只耳朵一次只能冷或热其一。",
    "Use the microphone for Talk (level only, nothing recorded)": "“说话”时使用麦克风（只读取音量，不录音）",
-   "CAM 1 · リビング Living room": "CAM 1 · 客厅"
+   "CAM 1 · リビング Living room": "CAM 1 · 客厅",
+   "🏠 ただいま、ナオミ · Home with Naomi (": "🏠 我回来啦，直美（",
+   "ただいま、ナオミ": "我回来啦，直美",
+   "↺ もう一度 · Watch again": "↺ 再看一次"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -139,7 +142,11 @@ window.MOHEAT_L10N = {
    "Night · IR": "夜 · 赤外線",
    "Live, relative to where the camera looks: Naomi's body, her purr and the heated blanket are warm at their direction; the fan's wind (wherever you aim it), the window, the rain and her nose on the lens are cool. Turn the camera and the warmth turns with it. One mode per ear.": "リアルタイム、カメラの向きが基準：ナオミの体・ゴロゴロ・電気毛布はその方向で温かく、扇風機の風（向けた方向）・窓・雨・レンズに当たる鼻は冷たく。カメラを回すと温かさも一緒に回ります。冷・温は片耳ごとにどちらか一方。",
    "Use the microphone for Talk (level only, nothing recorded)": "「話しかける」にマイクを使う（音量のみ使用、録音はしません）",
-   "CAM 1 · リビング Living room": "CAM 1 · リビング"
+   "CAM 1 · リビング Living room": "CAM 1 · リビング",
+   "なかよし": "なかよし",
+   "🏠 ただいま、ナオミ · Home with Naomi (": "🏠 ただいま、ナオミ（",
+   "ただいま、ナオミ": "ただいま、ナオミ",
+   "↺ もう一度 · Watch again": "↺ もう一度"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -159,7 +166,11 @@ window.MOHEAT_L10N = {
    "Night · IR": "Night · IR",
    "Live, relative to where the camera looks: Naomi's body, her purr and the heated blanket are warm at their direction; the fan's wind (wherever you aim it), the window, the rain and her nose on the lens are cool. Turn the camera and the warmth turns with it. One mode per ear.": "Live, relative to where the camera looks: Naomi's body, her purr and the heated blanket are warm at their direction; the fan's wind (wherever you aim it), the window, the rain and her nose on the lens are cool. Turn the camera and the warmth turns with it. One mode per ear.",
    "Use the microphone for Talk (level only, nothing recorded)": "Use the microphone for Talk (level only, nothing recorded)",
-   "CAM 1 · リビング Living room": "CAM 1 · Living room"
+   "CAM 1 · リビング Living room": "CAM 1 · Living room",
+   "なかよし": "bond",
+   "🏠 ただいま、ナオミ · Home with Naomi (": "🏠 Home with Naomi (",
+   "ただいま、ナオミ": "Home with Naomi",
+   "↺ もう一度 · Watch again": "↺ Watch again"
   }
  },
  "names": {
