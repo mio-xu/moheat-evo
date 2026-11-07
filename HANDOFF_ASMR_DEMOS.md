@@ -41,7 +41,10 @@ demos/Demo11_Naomi/                      纯交互治愈小游戏《ナオミと
 demos/Demo12_LateCall/                   纯交互深夜电话《もしもし、きこえる？》（原创男偶像 蓮，VOICEVOX:青山龍星）
 demos/Demo15_FamilyCall/                 纯交互家庭电话《もしもし、おばあちゃん？》（外婆ハナ VOICEVOX:もち子さん，外公ゲン VOICEVOX:ちび式じい）
 demos/Demo13_NaomiCam/                   Naomi 监控摄像头版《ナオミ、いまなにしてる？》（复用 Demo 11 美术和音频）
-demos/Demo14_LiveStream/                 女主播直播间《きみだけの、ひみつ配信》：4 频道（ミント/ココア/ひなた/ルナ），弹幕+Super Chat 互动，画风同 Demo12（详见该目录 README）
+demos/Demo14_LiveStream/                 女主播直播间 ①《ミントの、ささやき配信》（共用代码、美术、配音都在这里；详见该目录 README）
+demos/Demo17_CocoaStream/                直播间 ②《ココアの、ほっこりカフェ配信》（只有页面+封面，<base href> 指向 Demo14）
+demos/Demo18_HinataStream/               直播间 ③《ひなたの、激辛チャレンジ配信》（同上）
+demos/Demo19_LunaStream/                 直播间 ④《ルナの、よふかし配信》（同上）
 HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
 ```

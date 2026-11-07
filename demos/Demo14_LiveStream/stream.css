@@ -121,3 +121,15 @@
 }
 .hud-top { right: 26cqw !important; }
 @container (max-width: 620px) { .hud-top { right: 31cqw !important; } }
+
+/* one streamer per demo: she is on the left of her frame, the title goes on the right */
+body[data-ch] .intro { align-items: center !important; justify-content: flex-start !important; }
+body[data-ch] .intro .cover-copy { margin: 0 2.5cqw 0 50cqw !important; max-width: 46cqw !important; }
+body[data-ch] .intro h1 span { display: block !important; }
+body[data-ch] .intro h1 { font-size: clamp(18px, 5cqw, 96px) !important; }
+body[data-ch="mint"] .intro h1 { background-image: linear-gradient(100deg, #c9fff1, #ffffff 60%, #d8ccff); }
+body[data-ch="cocoa"] .intro h1 { background-image: linear-gradient(100deg, #ffe0cc, #ffffff 55%, #ffc2d8); }
+body[data-ch="hinata"] .intro h1 { background-image: linear-gradient(100deg, #ffd38a, #ffffff 55%, #ff9a8a); }
+body[data-ch="luna"] .intro h1 { background-image: linear-gradient(100deg, #c8d6ff, #ffffff 55%, #b9a8ff); }
+a.btn { text-decoration: none; display: inline-flex; align-items: center; }
+@container (max-width: 620px) { body[data-ch] .intro .cover-copy { margin: 0 2cqw 0 46cqw !important; max-width: 52cqw !important; } body[data-ch] .intro h1 { font-size: 5.6cqw !important; } }

@@ -6,6 +6,7 @@
 (() => {
   const $ = (id) => document.getElementById(id);
   const QS = new URLSearchParams(location.search), AUTO = QS.has('auto');
+  const ONE = document.body.dataset.ch || '';   // one demo per streamer (Demo14 Mint, 17 Cocoa, 18 Hinata, 19 Luna)
   const SND = window.StreamAudio, LINES = window.STREAM_LINES, W = 1920, H = 1080;
   const cv = $('scene'), ctx = cv.getContext('2d'), stage = $('stage');
   const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v)), rnd = (a, b) => a + Math.random() * (b - a), pick = (a) => a[Math.floor(Math.random() * a.length)];
@@ -43,7 +44,7 @@
 
   // ---------------------------------------------------------------- art
   const IMG = {};
-  const ALL = Object.values(CH).flatMap((c) => c.art);
+  const ALL = ONE ? CH[ONE].art : Object.values(CH).flatMap((c) => c.art);   // a one-streamer demo loads only her frames
   const artReady = Promise.all(ALL.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/${n}.webp?v=1`; })));
 
   // ---------------------------------------------------------------- state
@@ -313,9 +314,8 @@
     guard(my);
     S.fade = 1; SND.fx.end(); await sleep(2.6); guard(my);
     mode = 'ended'; SND.stopLoops(); S.started = false; stopOutput(); sub('', '');
-    const order = Object.keys(CH), other = order[(order.indexOf(S.ch) + 1) % order.length];
     $('endedSub').textContent = msg;
-    $('nextBtn').textContent = `▶ ${CH[other].name}の配信へ · ${CH[other].en}`; $('nextBtn').onclick = () => goLive(other);
+    if (!ONE) { const order = Object.keys(CH), other = order[(order.indexOf(S.ch) + 1) % order.length]; $('nextBtn').textContent = `▶ ${CH[other].name}の配信へ · ${CH[other].en}`; $('nextBtn').onclick = () => goLive(other); }
     $('ended').classList.add('show');
   }
 
@@ -488,7 +488,7 @@
   function show(m) {
     mode = m;
     $('intro').classList.toggle('hidden', m !== 'title');
-    $('lobby').classList.toggle('show', m === 'lobby');
+    $('lobby')?.classList.toggle('show', m === 'lobby');
     $('ended').classList.toggle('show', m === 'ended');
     stage.classList.toggle('on-air', m === 'live' || m === 'ended');
   }
@@ -505,14 +505,26 @@
     ({ mint: mintStory, cocoa: cocoaStory, hinata: hinataStory, luna: lunaStory })[ch](my).catch((e) => { if (e.message !== 'stopped') console.error(e); });
   }
   document.querySelectorAll('.ch-card').forEach((b) => b.addEventListener('click', () => goLive(b.dataset.ch)));
-  $('startBtn').addEventListener('click', () => { SND.init(); goLobby(); });
-  $('lobbyBack').addEventListener('click', () => show('title'));
-  $('againBtn').addEventListener('click', () => goLive(S.ch || 'mint'));
-  $('toLobbyBtn').addEventListener('click', goLobby);
+  $('startBtn').addEventListener('click', () => { SND.init(); if (ONE) goLive(ONE); else goLobby(); });
+  $('lobbyBack')?.addEventListener('click', () => show('title'));
+  $('againBtn').addEventListener('click', () => goLive(S.ch || ONE || 'mint'));
+  $('toLobbyBtn')?.addEventListener('click', goLobby);
+  if (ONE && $('nextBtn').tagName === 'A') {   // keep ?embed=1 when hopping to the next streamer's demo (and start it right away)
+    const q = new URLSearchParams(location.search); q.delete('cover'); q.delete('auto'); if (q.has('embed')) q.set('autoplay', '1');
+    $('nextBtn').href = $('nextBtn').getAttribute('href') + (q.toString() ? '?' + q : '');
+  }
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
 
-  function drawCover() {   // the four streamers side by side, faces in the upper half; the title sits below them
+  function drawCover() {
+    if (ONE) {   // one streamer: her stream frame, darkened on the right where the title sits
+      const im = IMG[`${ONE}_live`]; ctx.fillStyle = '#231c3c'; ctx.fillRect(0, 0, W, H); if (im) ctx.drawImage(im, 0, 0, W, H);
+      const g = ctx.createLinearGradient(0, 0, W, 0); g.addColorStop(0, 'rgba(18,12,36,0)'); g.addColorStop(.42, 'rgba(18,12,36,.1)'); g.addColorStop(.6, 'rgba(18,12,36,.62)'); g.addColorStop(1, 'rgba(18,12,36,.8)');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); return;
+    }
+    drawCover4();
+  }
+  function drawCover4() {   // the four streamers side by side, faces in the upper half; the title sits below them
     ctx.fillStyle = '#231c3c'; ctx.fillRect(0, 0, W, H);
     [['mint_live', 585], ['cocoa_live', 640], ['hinata_live', 630], ['luna_live', 570]].forEach(([n, cx], i) => {
       const im = IMG[n]; if (!im) return; const k = im.width / W, sw = 480, sx = Math.max(0, Math.min(W - sw, cx - sw / 2));
@@ -542,6 +554,7 @@
   window.STREAM = { get S() { return S; }, get mode() { return mode; }, goLive, conflicts: () => conflicts, frames: () => frames, peak: () => ({ ...peak }) };
   setStep(0); show('title');
   if (QS.has('cover')) { document.body.classList.add('cover-only'); artReady.then(drawCover); return; }
-  if (QS.has('autoplay')) { const ac = SND.init(); if (ac.state === 'running') goLobby(); else ac.resume().then(() => { if (ac.state === 'running' && mode === 'title') goLobby(); }).catch(() => {}); }
+  const go = () => (ONE ? goLive(ONE) : goLobby());
+  if (QS.has('autoplay')) { const ac = SND.init(); if (ac.state === 'running') go(); else ac.resume().then(() => { if (ac.state === 'running' && mode === 'title') go(); }).catch(() => {}); }
   requestAnimationFrame(loop);
 })();

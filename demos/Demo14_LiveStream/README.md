@@ -1,12 +1,18 @@
-# Demo 14 — Live stream room (working title 「きみだけの配信、はじまるよ」 / *Your Stream, Live*)
+# Live-stream demos — Demo 14 / 17 / 18 / 19 (one streamer each)
 
-Interactive demo: you are a viewer in a live-stream room of a female streamer. You switch between **four channels**,
-send chat comments and gift items (super-chat style), and the streamer reacts to you by name. She uses a binaural
-(dummy-head) mic, so her voice, whispers and breath come from your left or right ear, and the headphones answer with
-**per-ear cool / warm** (one mode per ear, 0 same-ear conflicts).
+| Demo | Page | Title |
+|---|---|---|
+| 14 | `demos/Demo14_LiveStream/` | ミントの、ささやき配信 · Mint's Whisper Stream |
+| 17 | `demos/Demo17_CocoaStream/` | ココアの、ほっこりカフェ配信 · Cocoa's Cozy Café Stream |
+| 18 | `demos/Demo18_HinataStream/` | ひなたの、激辛チャレンジ配信 · Hinata's Super-Spicy Challenge |
+| 19 | `demos/Demo19_LunaStream/` | ルナの、よふかし配信 · Luna's Late-Night Stream |
 
-Art style = Demo 12's soft-cel pick (`assets/art/ref_style3.png` → symlink to Demo 12's `style_3_softcel.png`).
-Art via Seedance API (`scripts/seedance.py`), voices via VOICEVOX (`scripts/audition.py` for the audition).
+You are a viewer in the streamer's live room: chat comments and Super Chats, she answers you. Her binaural mic is your head,
+so her voice, whispers and triggers come from her side, and the headphones answer per ear (one mode per ear, 0 same-ear conflicts).
+This folder holds the shared code, art and voices; Demo 17/18/19 hold only `index.html` + `media/cover.jpg` and use
+`<base href="../Demo14_LiveStream/">`; `<body data-ch="…">` picks the streamer. All four pages come from `scripts/make_pages.py`
+(edit there, not in the pages). The stream-end screen links to the next streamer (Mint → Cocoa → Hinata → Luna → Mint).
+Art style = Demo 12's soft-cel pick. Covers: `?cover=1` → `media/cover.jpg` (headless Chrome 1920×1080).
 
 ## Channels (final)
 
@@ -22,7 +28,7 @@ No voice is shared. Lines: `lines.js` (ja + en); voices: `scripts/voice.py` → 
 ## Files
 
 - `index.html`, `stream.css` (+ Demo 10's `demo.css` by path), `stream.js` (stories, chat, Super Chats, thermal, face animation), `audio.js` (HRTF + synthesized triggers), `lines.js`.
-- `?embed=1` site menu · `?cover=1` poster (`media/cover.jpg`) · `?auto=1` auto-picks every choice (testing). `window.STREAM.conflicts()` = same-ear conflict frames (0 in every channel).
+- `?embed=1` site menu · `?cover=1` poster (`media/cover.jpg`) · `?auto=1` auto-picks every choice (testing). Without `data-ch` the page would show the 4-channel lobby (not used any more). `window.STREAM.conflicts()` = same-ear conflict frames (0 in every channel).
 - Face animation: `scripts/prepare_art.py` blends only the eyes (blink / half) or only the mouth (talk / talk_s) of each extra frame into its base, using the eye and mouth boxes in `FACES`, so colour and hair never jump. Blush is a soft overlay drawn in `stream.js` (`CHEEKS`).
 
 ## Art (Seedance, gpt-image-2, 16:9 2K)
