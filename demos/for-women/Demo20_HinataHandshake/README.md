@@ -19,10 +19,16 @@ star stud earring, cream cable-knit cardigan), from `../Demo16_HandshakeEvent/as
 Files: `index.html` (+ Demo 10's `demo.css` and Demo 12's `call.css` by path, then `hs.css`), `game.js` (story, choices / mic / actions, thermal layers, device),
 `audio.js` (HRTF voices, synthesized hall: crowd, stage music, entrance draft, door, breath, timer), `lines.js` (ja / en / style / reading).
 
-Voice: `scripts/voice.py` — Hinata **VOICEVOX:白上虎太郎 ふつう** (the user's pick from the Demo16_HandshakeEvent audition), variant v4 "ギャップ強め"
-(base intonation ×1.15) with per-line styles: s sweet (+0.03, ×1.25, ×1.03), t tease (0, ×1.10, ×0.95), d dark at the ear (−0.05, ×0.85, ×0.88).
-Staff **VOICEVOX:春日部つむぎ**.
+Voice: `scripts/voice.py` — Hinata **VOICEVOX:暁記ミタマ**, the user's pick "m1" (2026-11-08, audition rounds 3–9 in Demo16_HandshakeEvent):
+base pitch −0.03, formant ×0.95, pauses ×1.4, close-mic EQ; s sweet = ノーマル (+0.02, ×1.25, ×1.04), t tease = ノーマル (0, ×1.15, ×0.96, breath 0.2),
+d dark at the ear = ささやき (−0.04, ×0.95, ×0.85, breath 0.5). Staff **VOICEVOX:春日部つむぎ**.
 
 Art: `scripts/seedance.py` (Seedance GPT Image 2, 2K 16:9). The upload API was rate-limited, so `hina_booth` is text-to-image and every other picture
 uses its generation URL as the reference (outputs: the new picture is the last one). Raw PNGs in `assets/art/` (not in git) →
 `scripts/prepare_art.py` (patch positions in `project/patches.json`) → `media/art/*.webp`. The right-ear lean is the left one mirrored.
+
+Animation: 8 Seedance 2.5 Lite clips (720p, first + last frame = the stills above), made on the seedance2-5.com web page (Image to Video →
+First & Last Frame) except `v_take_hand` (API). Loops (first = last = one still): `v_booth_talk`, `v_hands_talk`, `v_hands_idle`, `v_hands_breath`,
+`v_lean_whisper` (mirrored for the right ear), `v_wave`; transitions played once: `v_take_hand` (booth → hands), `v_lean_in` (hands → left ear).
+Raw downloads in `assets/video/` (not in git) → `scripts/prepare_video.py` → `media/video/*.mp4` (1280×720; loops rebuilt so the loop point is
+seamless: the model's last frame drifts a little in tone). `?stills` = the old stills + mouth patches.

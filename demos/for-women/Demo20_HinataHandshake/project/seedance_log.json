@@ -38,5 +38,9 @@
  "hina_hands_talk": {
   "generation": "api_2f3e81ed7b2e01195f8d3ba232508e295f2656f747964aaab1800d7cc1f4fdb9",
   "idempotency_key": "moheat-d20-hina_hands_talk-v2"
+ },
+ "v_take_hand": {
+  "generation": "api_4cd82e2bcf01f6df0a3bde2a780a2bfccc05755db13f49db4b5d527ef2a79700",
+  "idempotency_key": "moheat-d20-v-take-hand-v1"
  }
 }

@@ -317,7 +317,9 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 ### Demo20_HinataHandshake ✅ 可玩 —《あと10秒だけ、ね？ / Just Ten More Seconds?》（纯交互握手会，2026-11-08）
 - 女性向男偶像系列第一位：**陽向**（19 岁，年下・腹黑：人前甜、耳边黑）。造型 = 用户定的粉毛设定图（`Demo16_HandshakeEvent/assets/art/hinata_pink_sheet.png`，复制为 `assets/art/ref_hinata.png`）。`Demo16_HandshakeEvent/` 是三位男偶像的设计/试听工作区（未进 git），不要删。
 - **其余两位**：迅 = 用户选 **v2 造型（红发、墨镜推在头上、黑皮衣/黑衬衫、戒指，`project/shion_jin_v2.jpg` 右图 / `assets/art/jin_sheet_v2.png`）**，声线 雀松朱司（ツンデレ）；第三位（湊 / 紫苑）造型未定。每位一个独立 demo 文件夹。
-- 声音：陽向 **VOICEVOX:白上虎太郎 ふつう**，试听第 2 轮 v4「ギャップ強め」（intonation ×1.15）+ 每句风格 s 甜 / t 撩 / d 耳边黑；工作人员 VOICEVOX:春日部つむぎ。`scripts/voice.py`。
+- 声音（2026-11-08 改）：陽向 **VOICEVOX:暁記ミタマ**，用户在第 3–9 轮试听选定的「m1」（base pitch −0.03、共振峰 ×0.95、停顿 ×1.4、近讲 EQ；s 甜 = ノーマル，t 撩 = ノーマル + 少量气声，d 耳边 = ささやき + 气声 0.5）；工作人员 VOICEVOX:春日部つむぎ。`scripts/voice.py`（合成函数已复制进来，不依赖 Demo16 文件夹）。
+- 动画（2026-11-08）：8 段 Seedance 2.5 Lite（网页 Image to Video → First & Last Frame，首尾帧 = demo 静帧）：6 段循环 + 2 段过渡（握手台→握手、握手→左耳）。`scripts/prepare_video.py` 重建循环接缝（模型尾帧色调会漂）。
+- 曾与另一个会话撞车（Demo16_HandshakeEvent 里的 Haruto，同一粉毛角色）：用户决定保留 Demo20，那边改去做迅。
 - 流程：冬天会场排队（右边自动门 → 右凉 + 开门时一阵冷风）→ 握手 → 「手好冰」→ 他对你手哈气（两耳暖的一波）→ 工作人员「快到时间了」→ 凑到**左耳**「你刚才也去排别人的队了吧…我都看见了」（左耳热跟着声音）→ 时间到他不放手（计时器变成"延長 +0:xx"）→ **右耳**「下次只排我的队，约好了」+ 有人进门的冷风（右耳同时暖 + 凉，DUAL）→ 说「約束する」（麦克风或按钮）→ 挥手再见。自动通关约 1:40，0 报错。
 - 冷热：DUAL，三层 = 人声（离哪只耳朵近就暖哪只，跟响度）、哈气、门口冷风。牵手本身不加热（物理上不合理）。
 - 美术：Seedance GPT Image 2（`scripts/seedance.py`）。**2026-11-08 上传接口被限流（Retry-After ≈ 8 h）**：锚点图 `hina_booth` 用文生图，其余用锚点的生成链接当参考（不用上传）。注意：**生成记录约 10 分钟后 GET 返回 503**，差分必须紧跟底图生成；用别的生成的 outputs[0] 代替锚点不可靠（握手台的两张差分因此取错了画面，已弃用，握手台没有口型/眨眼）。右耳的画面 = 左耳画面镜像。

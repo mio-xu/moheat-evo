@@ -1,31 +1,63 @@
 #!/usr/bin/env python3
-"""Voices for Hinata's handshake event. Reads ../lines.js → media/voice/<id>.m4a (mono AAC, dry) + media/voice.js (durations).
+"""Voices for Hinata's handshake event. Reads ../lines.js → media/voice/<id>.m4a (mono AAC) + media/voice.js (durations).
 
-Hinata = VOICEVOX:白上虎太郎 ふつう (the user's pick for the 腹黒 年下 idol, Demo16_HandshakeEvent audition round 2),
-variant v4 "ギャップ強め": base pitch 0, intonation ×1.15, speed ×1.0, with the per-line "two voices" of round 2:
-  s sweet (public)   pitch +0.03, intonation ×1.25, speed ×1.03
-  t teasing          pitch  0,    intonation ×1.10, speed ×0.95
-  d dark (at ear)    pitch −0.05, intonation ×0.85, speed ×0.88, quieter
-Staff = VOICEVOX:春日部つむぎ ノーマル. Only (re)synthesizes changed lines (cache: audio/voice_cache.json). Needs VOICEVOX on :50021."""
-import json, os, subprocess, tempfile, urllib.parse, urllib.request
+Hinata = the user's pick "m1" (2026-11-08, audition rounds 3–9 in Demo16_HandshakeEvent): VOICEVOX:暁記ミタマ,
+base pitch −0.03, formant ×0.95 (a little more masculine), pauses ×1.4, close-mic EQ. Per line style:
+  s sweet (public)    ノーマル  pitch +0.02, intonation ×1.25, speed ×1.04
+  t teasing           ノーマル  pitch  0,    intonation ×1.15, speed ×0.96, breath 0.2
+  d dark (at the ear) ささやき  pitch −0.04, intonation ×0.95, speed ×0.85, breath 0.5
+Staff = VOICEVOX:春日部つむぎ ノーマル (plain). The tts / breath / save steps are m1's (copied from audition4.py, so this demo
+does not depend on that work folder). Only (re)synthesizes changed lines (cache: audio/voice_cache.json). Needs VOICEVOX on :50021."""
+import io, json, math, os, subprocess, tempfile, urllib.parse, urllib.request, wave
+import numpy as np
+from scipy.signal import butter, sosfilt
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 API = 'http://127.0.0.1:50021'
-BASE = (0, 1.15, 1.0)
-STYLE = {'s': (.03, 1.25, 1.03, 0), 't': (0, 1.10, .95, 0), 'd': (-.05, .85, .88, 1), 'staff': (0, 1.0, 1.08, 0)}
+BASE_PITCH, K, PAUSE = -.03, .95, 1.4
+MODES = {   # style: (speaker, VOICEVOX style, pitch offset, intonation, speed, breath)
+    's': ('暁記ミタマ', 'ノーマル', +.02, 1.25, 1.04, 0),
+    't': ('暁記ミタマ', 'ノーマル', 0, 1.15, .96, .2),
+    'd': ('暁記ミタマ', 'ささやき', -.04, .95, .85, .5),
+    'staff': ('春日部つむぎ', 'ノーマル', 0, 1.1, 1.05, 0),
+}
 src = open(os.path.join(ROOT, 'lines.js'), encoding='utf-8').read()
 LINES = json.loads(src[src.index('= {') + 2:src.rindex('}') + 1])
 out_dir = os.path.join(ROOT, 'media', 'voice'); os.makedirs(out_dir, exist_ok=True)
 cache_p = os.path.join(ROOT, 'audio', 'voice_cache.json'); os.makedirs(os.path.dirname(cache_p), exist_ok=True)
 cache = json.load(open(cache_p)) if os.path.exists(cache_p) else {}
 SP = {s['name']: {t['name']: t['id'] for t in s['styles']} for s in json.loads(urllib.request.urlopen(f'{API}/speakers').read())}
-HINA, STAFF = SP['白上虎太郎']['ふつう'], SP['春日部つむぎ']['ノーマル']
 
 
-def tts(text, sid, pitch, inton, speed):
+def tts(text, sid, pitch, inton, speed, pause):
     q = json.loads(urllib.request.urlopen(urllib.request.Request(f'{API}/audio_query?' + urllib.parse.urlencode({'text': text, 'speaker': sid}), method='POST')).read())
-    q.update(outputSamplingRate=48000, prePhonemeLength=.08, postPhonemeLength=.2, pitchScale=pitch, intonationScale=inton, speedScale=speed)
+    q.update(outputSamplingRate=48000, prePhonemeLength=.15, postPhonemeLength=.35, pitchScale=pitch, intonationScale=inton, speedScale=speed)
+    if 'pauseLengthScale' in q: q['pauseLengthScale'] = pause
+    else:
+        for ph in q['accent_phrases']:
+            if ph.get('pause_mora'): ph['pause_mora']['vowel_length'] *= pause
     return urllib.request.urlopen(urllib.request.Request(f'{API}/synthesis?speaker={sid}', data=json.dumps(q).encode(), headers={'Content-Type': 'application/json'})).read()
+
+
+def breathe(wav_bytes, amount):
+    """a soft breath layer: 1.5–7 kHz noise shaped by the voice envelope."""
+    with wave.open(io.BytesIO(wav_bytes)) as w: sr = w.getframerate(); x = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768
+    env = np.abs(x); k = int(sr * .03); env = np.convolve(env, np.ones(k) / k, 'same')
+    n = np.random.default_rng(1).standard_normal(len(x)).astype(np.float32)
+    n = sosfilt(butter(4, [1500, 7000], 'bandpass', fs=sr, output='sos'), n)
+    y = x + amount * 2.2 * n * env
+    y = y / max(1e-6, np.max(np.abs(y))) * .9
+    b = io.BytesIO()
+    with wave.open(b, 'wb') as w: w.setnchannels(1); w.setsampwidth(2); w.setframerate(sr); w.writeframes((y * 32767).astype(np.int16).tobytes())
+    return b.getvalue()
+
+
+def save(wav_bytes, dst, k, eq):
+    with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as f: f.write(wav_bytes); p = f.name
+    af = ([f'asetrate={round(48000 * k)}', 'aresample=48000', f'atempo={1 / k:.5f}'] if k != 1 else [])
+    if eq: af += ['equalizer=f=160:t=q:w=1:g=4', 'equalizer=f=3200:t=q:w=1.5:g=-2', 'highshelf=f=9000:g=3']
+    af += ['loudnorm=I=-18:TP=-2']
+    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', p, '-ac', '1', '-af', ','.join(af), '-c:a', 'aac', '-b:a', '128k', dst], check=True); os.remove(p)
 
 
 def dur(p):
@@ -36,19 +68,18 @@ def dur(p):
 durs = {}
 for lid, v in LINES.items():
     style = v[2]; text = v[3] if len(v) > 3 else v[0]
-    po, io, so, quiet = STYLE[style]
-    if style == 'staff': sid, pitch, inton, speed = STAFF, po, io, so
-    else: sid, pitch, inton, speed = HINA, BASE[0] + po, BASE[1] * io, BASE[2] * so
-    key = f'{text}|{style}|{sid}|{pitch}|{inton}|{speed}'
-    m4a = os.path.join(out_dir, f'{lid}.m4a')
-    if cache.get(lid) != key or not os.path.exists(m4a):
-        with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as f: f.write(tts(text, sid, pitch, inton, speed)); wav = f.name
-        af = 'loudnorm=I=-18:TP=-2'   # 'd' lines are played quieter in the browser (they are right at your ear)
-        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', wav, '-ac', '1', '-af', af, '-ar', '48000', '-c:a', 'aac', '-b:a', '112k', m4a], check=True)
-        os.remove(wav); cache[lid] = key; print('voiced', lid, text)
-    durs[lid] = dur(m4a)
+    spk, vstyle, po, inton, speed, br = MODES[style]
+    staff = style == 'staff'
+    key = json.dumps(['m1', text, style, BASE_PITCH, K, PAUSE, MODES[style]], ensure_ascii=False)
+    dst = os.path.join(out_dir, lid + '.m4a')
+    if cache.get(lid) != key or not os.path.exists(dst):
+        k = 1.0 if staff else K
+        w = tts(text, SP[spk][vstyle], (0 if staff else BASE_PITCH) + po - math.log(k), inton, speed, 1.0 if staff else PAUSE)
+        if br: w = breathe(w, br)
+        save(w, dst, k, not staff); cache[lid] = key; print('voiced', lid, text)
+    durs[lid] = dur(dst)
 for f in os.listdir(out_dir):
     if f.endswith('.m4a') and f[:-4] not in LINES: os.remove(os.path.join(out_dir, f))
 json.dump(cache, open(cache_p, 'w'), ensure_ascii=False, indent=1)
-open(os.path.join(ROOT, 'media', 'voice.js'), 'w').write('window.HINA_VOICE = ' + json.dumps({'dur': durs}) + ';\n')
+open(os.path.join(ROOT, 'media', 'voice.js'), 'w').write('window.HINA_VOICE = ' + json.dumps({'credit': 'VOICEVOX:暁記ミタマ, VOICEVOX:春日部つむぎ', 'dur': durs}) + ';\n')
 print(len(durs), 'lines,', round(sum(durs.values()), 1), 's')

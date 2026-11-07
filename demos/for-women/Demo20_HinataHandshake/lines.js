@@ -1,6 +1,6 @@
 // Lines: id → [ja, en, style, TTS reading (optional)].
 // Hinata (陽向) styles: 's' = sweet, in public (bright) · 't' = teasing · 'd' = dark, at your ear (low, slow, quiet).
-// Staff: 'staff'. Voices: scripts/voice.py (Hinata VOICEVOX:白上虎太郎 ふつう, staff VOICEVOX:春日部つむぎ).
+// Staff: 'staff'. Voices: scripts/voice.py (Hinata VOICEVOX:暁記ミタマ, the user pick m1; staff VOICEVOX:春日部つむぎ).
 window.HINA_LINES = {
   "s01": ["次の方、どうぞー", "Next, please!", "staff", "つぎのかた、どうぞー"],
   "h01": ["次の…あっ！ お姉さん、来てくれたんだ！", "Next… oh! You came!", "s", "つぎの…あっ！ おねえさん、きてくれたんだ！"],

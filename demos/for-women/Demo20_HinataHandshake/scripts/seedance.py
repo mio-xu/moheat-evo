@@ -112,5 +112,68 @@ def scenes(names):
     print('balance:', m.unwrap(m.call('GET', '/credits/balance')))
 
 
+
+
+
+# ---------------------------------------------------------------- animation (Seedance 2.5 lite image-to-video, 720p)
+# The stills' own generations answer 503 after ~10 min, but later generations list their inputs among their outputs:
+# (generation of, output index) where each still can be fetched — no upload needed (uploads were rate-limited on 2026-11-08).
+STILL = {'hina_booth': ('hina_wave_talk', 0), 'hina_wave': ('hina_wave_talk', 1), 'hina_wave_talk': ('hina_wave_talk', 2),
+         'hina_lean': ('hina_lean_talk', 0), 'hina_lean_talk': ('hina_lean_talk', 1), 'hina_hands': ('hina_hands_talk', 1),
+         'hina_hands_talk': ('hina_hands_talk', 2), 'bg_queue': ('hina_booth_blink', 0)}
+VLOOK = ("Japanese anime cel animation. Keep EXACTLY the art style, the character, the colours and the background of the input "
+         "image(s). Locked-off camera: no zoom, no pan, no camera shake. Natural, gentle, believable motion; the face keeps its exact "
+         "proportions; hands keep five fingers.")
+VAVOID = ("Avoid: morphing, face distortion, changing hair style or colour, extra fingers, extra hands, warped hands, flicker, new objects, "
+          "text, subtitles, logo, watermark, camera movement, fast jerky motion.")
+LOOPV = " The clip starts and ends on exactly the same frame, so it loops seamlessly."
+VIDEOS = {   # name: (first still, last still, motion)
+    'v_booth_idle': ('hina_booth', 'hina_booth', "He keeps holding out his hand to the viewer with a bright smile, waiting for the handshake: slow natural breathing, his open hand moves slightly as if inviting, a small happy laugh, one natural blink, balloons sway softly." + LOOPV),
+    'v_take_hand': ('hina_booth', 'hina_hands', "He takes the viewer's hand: his outstretched hand gently closes around the viewer's hand (a slim woman's hand coming in from the bottom of the frame), then he leans a little forward and wraps it in both of his hands and brings it up close to his lips, looking up at the viewer with a soft playful smile. One smooth continuous movement."),
+    'v_hands_idle': ('hina_hands', 'hina_hands', "He holds the viewer's hand wrapped in both of his hands near his lips: slow breathing, his thumbs gently rub the back of her hand to warm it, a slow blink, a soft smile, a few hair strands move." + LOOPV),
+    'v_hands_talk': ('hina_hands', 'hina_hands', "He talks softly and playfully while holding the viewer's hand in both of his near his lips: natural mouth movement as if speaking Japanese, small head tilts, a natural blink, his thumbs move a little." + LOOPV),
+    'v_hands_breath': ('hina_hands', 'hina_hands', "He brings the viewer's hand closer and blows warm breath on it: lips rounded, eyes half closed, a soft faint white breath mist on the hand, then he looks up at the viewer with a gentle smile." + LOOPV),
+    'v_lean_in': ('hina_hands', 'hina_lean', "Still holding the viewer's hand with one hand, he leans in close toward the viewer's left ear, his face moving to the left side of the frame, his other hand rising beside his mouth as if to whisper a secret; his smile turns small and knowing. One smooth continuous movement."),
+    'v_lean_whisper': ('hina_lean', 'hina_lean', "He whispers into the viewer's ear, very close: lips moving softly as he whispers, slow half-lidded blinks, a tiny tilt of the head, gentle breathing, the lights behind twinkle softly." + LOOPV),
+    'v_wave': ('hina_wave', 'hina_wave', "He waves goodbye to the viewer with his raised open hand, a big bright smile with his small fang, calling out cheerfully, leaning a little side to side, balloons sway." + LOOPV),
+}
+
+
+def still_url(log, name):
+    gen, i = STILL[name]
+    return m.unwrap(m.call('GET', f"/generations/{log[gen]['generation']}", tries=3))['outputs'][i]['url']
+
+
+def videos(names, model='seedance-2.5-lite'):
+    import time, urllib.request
+    print('balance:', m.unwrap(m.call('GET', '/credits/balance')), flush=True)
+    log = json.load(open(m.LOG))
+    os.makedirs(os.path.join(ROOT, 'assets', 'video'), exist_ok=True)
+    for name in names:
+        dst = os.path.join(ROOT, 'assets', 'video', name + '.mp4')
+        if os.path.exists(dst): print('exists', name); continue
+        a, b, motion = VIDEOS[name]
+        body = {'model': model, 'mode': 'image-to-video', 'prompt': '\n\n'.join([VLOOK, motion, VAVOID]),
+                'inputs': [{'type': 'image', 'url': still_url(log, a)}, {'type': 'image', 'url': still_url(log, b)}],
+                'parameters': {'resolution': '720p', 'aspect_ratio': '16:9', 'duration_seconds': 5, 'image_mode': 'first-last-frame'}, 'max_cost_credits': 80}
+        idem = f'moheat-d20-{name}-v1'.replace('_', '-')
+        g = None
+        for path in ('/videos', '/generations'):
+            try: g = m.unwrap(m.call('POST', path, body, {'Idempotency-Key': idem}, tries=200)); break
+            except SystemExit as e:
+                if '404' not in str(e) and '405' not in str(e): raise
+        print(f'[{name}] generation {g["id"]} cost {g.get("credits")}', flush=True)
+        log[name] = {'generation': g['id'], 'idempotency_key': idem}; json.dump(log, open(m.LOG, 'w'), indent=1)
+        while True:
+            time.sleep(12)
+            r = m.unwrap(m.call('GET', f'/generations/{g["id"]}'))
+            if r.get('outputs'):
+                tmp = dst + '.part'; urllib.request.urlretrieve(r['outputs'][-1]['url'], tmp); os.replace(tmp, dst); print('  saved', name, flush=True); break
+            if r['status'] not in ('pending', 'processing'): print(f'  {name} {r["status"]}: {r.get("error")}', flush=True); break
+    print('balance:', m.unwrap(m.call('GET', '/credits/balance')))
+
+
 if __name__ == '__main__':
-    scenes(sys.argv[1:] or list(SCENES))
+    a = sys.argv[1:]
+    if a[:1] == ['video']: videos(a[1:] or list(VIDEOS))
+    else: scenes(a or list(SCENES))
