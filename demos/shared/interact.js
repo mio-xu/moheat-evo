@@ -48,6 +48,9 @@
     Demo06_FutureWhisky: [
       { t: 13.3, kind: 'read' },
       { t: 115.0, kind: 'read' },
+      { t: 131.49, kind: 'choice', what: ['「毎晩こんな酒を？」', '"This kind of drink every night?"'],   // two options instead of one line (user)
+        options: ['さすがに、毎晩ではないです · Not every night!', '…毎晩、かもしれません · …Maybe every night'],
+        fb: [['家康様が、くすっと笑った', 'Ieyasu chuckles'], ['信長様、うらやましそう', 'Nobunaga looks envious']] },
       { t: 135.63, kind: 'toast', resume: 135.63, what: ['乾杯！', 'Cheers!'] },
       { t: 147.4, kind: 'read' },
     ],
@@ -67,6 +70,9 @@
     Demo09_SengokuBanquet: [
       { t: 5.1, kind: 'read' },
       { t: 36.2, kind: 'toast', resume: 36.2 },
+      { t: 49.69, kind: 'choice', what: ['「まだ飲めるであろう？」', '"Surely you can drink a little more?"'],   // two options instead of one line (user)
+        options: ['では、ひとくちだけ · Just one sip, then', 'もう、十分いただきました · I\'ve had plenty'],
+        fb: [['信長様、満足そう', 'Nobunaga looks pleased'], ['信長様「遠慮するな」と笑う', 'Nobunaga laughs: "Don\'t hold back"']] },
       { t: 111.0, kind: 'read' },
       { t: 146.95, kind: 'read' },
     ],
@@ -82,7 +88,7 @@
   // each gate: pause at t; for your own subtitle line, just after it appears, and resume near its end (skip the silent rest)
   const subs = A.subs || [], voices = subs.filter((s) => s.who !== 'Y');
   const list = CHEER ? [] : [...GATES[dir]];
-  if (/^Demo[5-9]_/.test(dir)) {   // Nobunaga series: every line of yours is a read-aloud gate (unless a toast / blow is already there)
+  if (/^Demo0[5-9]_/.test(dir)) {   // Nobunaga series: every line of yours is a read-aloud gate (unless a toast / blow is already there)
     for (const s of subs) if (s.who === 'Y' && !list.some((g) => Math.abs(g.t - s.t0) < .5)) list.push({ t: s.t0, kind: 'read' });
     list.sort((a, b) => a.t - b.t);
   }
@@ -228,7 +234,7 @@
   // ---------------------------------------------------------------- gate state
   const fired = new Set();
   let cur = null, card = null, lastT = media.currentTime || 0, lastNow = performance.now();
-  const say = (g) => (g.sub ? [g.sub.ja, g.sub.en] : g.what || ['', '']);
+  const say = (g) => (g.kind === 'choice' && g.what ? g.what : g.sub ? [g.sub.ja, g.sub.en] : g.what || ['', '']);   // a choice shows its question
   function start(g) {
     cur = { g, t0: performance.now(), speech: 0, silence: 0, heard: false, blow: 0, b: 0, holding: false, done: false };
     fired.add(g); media.pause(); stage.classList.add('ix-wait'); render(); listen(g);

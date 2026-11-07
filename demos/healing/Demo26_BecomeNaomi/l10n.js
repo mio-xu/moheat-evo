@@ -72,7 +72,8 @@ window.MOHEAT_L10N = {
    "living room · laundry": "客厅 · 晾晒的衣物",
    "inside the laundry": "钻进衣物堆里",
    "sofa · night": "沙发 · 夜晚",
-   "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the frosted glass, the winter sun, the fridge air at floor level, the warm laundry and her chest add real cold / warmth. Turning your ears only changes what you hear.": "实时（DUAL）：她的声音按音量让她说话那一侧的耳朵变暖；起雾的窗玻璃、冬日阳光、贴着地面的冰箱冷气、温暖的衣物和她的胸口带来真实的冷与暖。转动耳朵只改变你听到的声音。"
+   "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the frosted glass, the winter sun, the fridge air at floor level, the warm laundry and her chest add real cold / warmth. Turning your ears only changes what you hear.": "实时（DUAL）：她的声音按音量让她说话那一侧的耳朵变暖；起雾的窗玻璃、冬日阳光、贴着地面的冰箱冷气、温暖的衣物和她的胸口带来真实的冷与暖。转动耳朵只改变你听到的声音。",
+   "ごろごろ…": "呼噜呼噜……"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -215,7 +216,8 @@ window.MOHEAT_L10N = {
     "meow",
     "meow back",
     "にゃっ",
-    "にゃー"
+    "にゃー",
+    "にゃ"
    ],
    "🐾 ふみふみ": [
     "踩奶",
@@ -256,6 +258,15 @@ window.MOHEAT_L10N = {
     "go to sleep",
     "まるくなる",
     "丸くなる"
+   ],
+   "ごろごろ…": [
+    "呼噜",
+    "呼噜呼噜",
+    "打呼噜",
+    "purr",
+    "purring",
+    "ごろごろ",
+    "ゴロゴロ"
    ]
   }
  }

@@ -148,7 +148,7 @@
       await caption('📦 お届けものでーす！', 'Delivery for you!', 1.6);
       SND.fx.thud(-.8); await sleep(.9); SND.fx.door(-.8); await sleep(.8);
       SND.fx.steps(-.8, .05, 5); await sleep(2);
-      await action('📦', '箱をあける', 'Open the box');
+      await choice([['箱をあける', 'Open the box'], ['なにが入ってるの？', "What's inside?"]]);   // two options, same reply (user)
       SND.fx.tape(.05); await sleep(.9); SND.fx.cardboard(.05); S.view = 'box'; await sleep(.8);
       // grandma's scarf: both ears warm
       setStep(4);
@@ -172,7 +172,7 @@
       await caption('🧣 ばあばのマフラーを巻いたまま、電話はスピーカーで…', "Still wrapped in Grandma's scarf, the call on speaker…", 2.6);
       // grandpa's refrigerated snowman: right cheek cool, the scarf keeps the left warm
       await say('p05');
-      await action('🧊', '青い箱をあける', 'Open the blue box', { x0: 900, x1: 1920, y0: 200, y1: 1080 });
+      await choice([['青い箱をあける', 'Open the blue box'], ['どれどれ？', 'Let me see!']]);
       SND.fx.cooler(.1); S.view = 'cooler'; await sleep(1.4);
       S.view = 'snow'; await say('p06'); await say('g13');
       S.view = 'cooler'; await say('p07'); await say('p08');

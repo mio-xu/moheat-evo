@@ -62,7 +62,9 @@ window.MOHEAT_L10N = {
    "💗 また電話してね": "💗 下次再打给我哦",
    "↺ もう一度": "↺ 再来一次",
    "ASMR Game · Late-night call": "ASMR 游戏 · 深夜来电",
-   "Live: the phone warms the ear it is pressed to (more when he talks or whispers); the open window and the door let the cold in. One mode per ear.": "实时：手机让贴着的那只耳朵变暖（他说话或低语时更暖）；开着的窗户和门放进冷空气。每只耳朵一次只能冷或热其一。"
+   "Live: the phone warms the ear it is pressed to (more when he talks or whispers); the open window and the door let the cold in. One mode per ear.": "实时：手机让贴着的那只耳朵变暖（他说话或低语时更暖）；开着的窗户和门放进冷空气。每只耳朵一次只能冷或热其一。",
+   "カーテンをあける": "拉开窗帘",
+   "…だれ？": "……是谁？"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -151,7 +153,10 @@ window.MOHEAT_L10N = {
     "open the window",
     "open window",
     "窓をあける",
-    "窓あけて"
+    "窓あけて",
+    "open it",
+    "窓あける",
+    "まど開けるね"
    ],
    "窓をしめる": [
     "关上窗户",
@@ -181,7 +186,10 @@ window.MOHEAT_L10N = {
     "open the door",
     "door",
     "玄関をあける",
-    "ドアあける"
+    "ドアあける",
+    "get the door",
+    "ドア開ける",
+    "玄関あける"
    ],
    "ぎゅっ": [
     "抱住",
@@ -212,6 +220,24 @@ window.MOHEAT_L10N = {
     "night night",
     "おやすみ",
     "おやすみなさい"
+   ],
+   "カーテンをあける": [
+    "拉开窗帘",
+    "拉窗帘",
+    "看看窗帘外面",
+    "open the curtain",
+    "pull the curtain",
+    "カーテン開ける",
+    "カーテンあけるね"
+   ],
+   "…だれ？": [
+    "是谁",
+    "谁呀",
+    "谁在外面",
+    "who is it",
+    "who's there",
+    "だれ",
+    "どなた"
    ]
   }
  }

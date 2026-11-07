@@ -120,7 +120,7 @@
       await say('t04', CLOSE);
       for (let n = 5; n >= 1; n--) { alive(my); S.count = n; SND.fx.tick(0); await sleep(.85); }
       S.count = 0; SND.fx.cheer(); await sleep(.3); SND.fx.bell(.7);
-      await action('🎍', '「あけましておめでとう！」', 'Say "Happy New Year!"');
+      await choice([['「あけましておめでとう！」', 'Say "Happy New Year!"'], ['「今年もよろしく！」', 'Say "Here\'s to this year!"']]);   // two options, same reply (user)
       S.count = null;
       await say('t05', FRONT);
       setTimeout(() => { if (my === run) SND.fx.bell(.7); }, 2500);
@@ -150,7 +150,7 @@
 
       // 4 · the prayer: coin, the bell rope, two bows two claps, hold your hands together
       setStep(3); await go('t_close_pray', 'pray', () => { S.near = 0; S.fire = 0; fire?.set(0, 1.5); SND.fx.geta(.4, -.6, 6, .3); }); fire?.stop(); await sleep(.2);
-      await action('🪙', 'お賽銭を入れる', 'Toss in a coin'); SND.fx.coin(0); await sleep(.6);
+      await choice([['お賽銭を入れる', 'Toss in a coin'], ['五円玉を入れる', 'Toss a lucky 5-yen coin']]); SND.fx.coin(0); await sleep(.6);
       await taps('🔔', '鈴を鳴らす（タップ）', 'Ring the shrine bell (tap)', 3, () => SND.fx.suzu(0));
       await sleep(.4); for (let i = 0; i < 2; i++) { SND.fx.clap(-.8, .5); SND.fx.clap(0, .3); await sleep(.55); }
       crowd?.set(.12, 1.5); wind?.set(.12, 1.5); S.cold = .6;
@@ -162,7 +162,7 @@
 
       // 5 · the omikuji: you draw 大吉, she draws 凶; tie it in the cold wind; she shares her stole
       setStep(4); await go('t_pray_omikuji', 'omikuji');
-      await action('🎋', 'おみくじを引く', 'Draw a fortune'); SND.fx.shake(0, .4); await sleep(1.2); SND.fx.paper(0, .4);
+      await choice([['おみくじを引く', 'Draw a fortune'], ['二人で一緒に引く', 'Draw one together']]); SND.fx.shake(0, .4); await sleep(1.2); SND.fx.paper(0, .4);
       S.slip = { k: 0, text: '大吉', en: 'Excellent luck' }; await sleep(1.9); S.slip = null; alive(my);
       await say('t16', CLOSE);
       const c = await choice([['僕の大吉と、交換しよう', 'Swap with my great luck'], ['一緒に、結びに行こう', 'Let\'s tie it up together']]);

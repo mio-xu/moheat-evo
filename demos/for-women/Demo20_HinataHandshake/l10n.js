@@ -60,7 +60,9 @@ window.MOHEAT_L10N = {
    "💗 次も、陽向の列でね": "💗 下次也要排阳向的队哦",
    "↺ もう一度": "↺ 再来一次",
    "ASMR Game · Handshake event": "ASMR 游戏 · 握手会",
-   "Live, two layers (DUAL): his voice warms the ear it is close to, with its loudness; his breath on your hands warms both ears; the entrance doors on your right let the winter in. Warm and cool can be on the same ear.": "实时，两层（DUAL）：他的声音按音量让他靠近的那只耳朵变暖；他呵在你手上的气息让双耳变暖；你右边的入口大门放进冬天的寒气。同一只耳朵可以同时有暖和凉。"
+   "Live, two layers (DUAL): his voice warms the ear it is close to, with its loudness; his breath on your hands warms both ears; the entrance doors on your right let the winter in. Warm and cool can be on the same ear.": "实时，两层（DUAL）：他的声音按音量让他靠近的那只耳朵变暖；他呵在你手上的气息让双耳变暖；你右边的入口大门放进冬天的寒气。同一只耳朵可以同时有暖和凉。",
+   "深呼吸してから": "先深呼吸一下",
+   "両手でにぎる": "用双手握住"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -174,7 +176,10 @@ window.MOHEAT_L10N = {
     "step up",
     "step forward",
     "前へすすむ",
-    "すすむ"
+    "すすむ",
+    "go forward",
+    "前にすすむ",
+    "行く"
    ],
    "手をにぎる": [
     "握手",
@@ -184,7 +189,7 @@ window.MOHEAT_L10N = {
     "take his hand",
     "shake hands",
     "手をにぎる",
-    "握手"
+    "握手する"
    ],
    "🤙 約束する": [
     "我保证",
@@ -205,6 +210,24 @@ window.MOHEAT_L10N = {
     "promise",
     "約束する",
     "約束"
+   ],
+   "深呼吸してから": [
+    "先深呼吸",
+    "深呼吸",
+    "先冷静一下",
+    "take a deep breath",
+    "breathe first",
+    "深呼吸する",
+    "落ち着いてから"
+   ],
+   "両手でにぎる": [
+    "双手握",
+    "用两只手握",
+    "两只手",
+    "both hands",
+    "hold with both hands",
+    "両手で",
+    "両手でにぎる"
    ]
   }
  }

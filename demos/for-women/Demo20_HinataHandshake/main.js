@@ -109,7 +109,7 @@
       S.view = 'queue'; setStep(0);
       SND.loop('crowd', 0, 3)?.set(.32); SND.loop('music', -.5, 7)?.set(.4); SND.loop('draft', 1.4, 2.2)?.set(.22);
       await sleep(1.4); door(); await sleep(2.6);
-      await action('👣', '前へすすむ', 'Step up to the booth', { x0: 950, x1: 1450, y0: 250, y1: 760 });
+      await choice([['前へすすむ', 'Step up to the booth'], ['深呼吸してから', 'Take a deep breath first']]);   // two options, same reply (user)
       SND.fx.steps(0, 0, 4, .6); await sleep(1.2);
       await staff('s01');
       S.view = 'booth'; S.draft = .22; setStep(1);
@@ -117,7 +117,7 @@
       await sleep(.8);
       await say('h01'); await say('h02');
       // the handshake: his warm hands (both ears, mild)
-      await action('🤝', '手をにぎる', 'Take his hand', { x0: 600, x1: 1100, y0: 540, y1: 1080 });
+      await choice([['手をにぎる', 'Take his hand'], ['両手でにぎる', 'Hold it with both hands']]);
       SND.fx.clasp(); S.hold = 1; S.shake = S.clock; setStep(2);
       await go('v_take_hand', 'hands');   // he takes your hand (booth → hands)
       await sleep(.3);

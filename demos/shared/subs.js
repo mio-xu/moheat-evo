@@ -181,7 +181,7 @@
 
   // "日本語 <small>English</small>" in one element: the progress list (<li>ja · <small>en</small>), Demo 1–9 scene titles
   // ("3　ja<small>en</small>", the number stays), the stream's chat hint
-  const SMALL = '#steps > li, #sceneTitle, .scene-title, #chatHint, .pick .opt';
+  const SMALL = '#steps > li, #sceneTitle, .scene-title, #chatHint, .pick .opt, .ix-done';
   function step(li) {
     const sm = li.querySelector(':scope > small');
     if (sm && (li.dataset.mshown === undefined || li.textContent !== li.dataset.mshown)) {
@@ -196,7 +196,7 @@
 
   // everything else on the page (top bar, side cards, notes, legend, demo switcher, device status, placeholders): a text node whose whole
   // text is in the dictionary (shared/l10n_common.js + the demo's l10n.js) shows that language; it is re-checked whenever the page changes it
-  const SKIP = 'script, style, #subs, #bubble, .bubble, #chatList, .one, .intro, .ix-card, #steps, #sceneTitle, .scene-title, #chatHint, .mono, [data-mshown], [data-morig], [data-voice], ' + BTN;
+  const SKIP = 'script, style, #subs, #bubble, .bubble, #chatList, .one, .intro, .ix-card, .ix-done, #steps, #sceneTitle, .scene-title, #chatHint, .mono, [data-mshown], [data-morig], [data-voice], ' + BTN;
   const orig = new WeakMap(), shown = new WeakMap();
   function textNode(n) {
     const el = n.parentElement; if (!el || el.closest(SKIP)) return;

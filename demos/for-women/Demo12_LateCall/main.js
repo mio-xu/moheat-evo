@@ -117,7 +117,7 @@
       SND.loop('street')?.set(.35); await say('c06');
       // the window: the same snow (window on the right of your room → cool on the right, phone warm on the left)
       setStep(2); await say('c07'); S.view = 'room';
-      await action('🪟', '窓をあける', 'Open the window', { x0: 1250, x1: 1920, y0: 0, y1: 800 });
+      await choice([['窓をあける', 'Open the window'], ['カーテンをあける', 'Open the curtain']]);   // two options, same reply (user: one-option moments → two)
       await go('t_room_open', 'roomOpen', () => { SND.fx.window(1.2, true); S.windowOpen = 1; setLoops(); });
       await sleep(2.2); await say('c08'); await sleep(1.5); await say('c09');
       await action('🪟', '窓をしめる', 'Close the window', { x0: 1250, x1: 1920, y0: 0, y1: 800 });
@@ -136,7 +136,7 @@
       setStep(5); S.view = 'call'; await say('c16'); await sleep(.8);
       SND.fx.bell(-.75, 3.5, true); await sleep(2.2);
       await say('c17'); S.view = 'room';
-      await action('🚪', '玄関をあける', 'Open the door', { x0: 0, x1: 700, y0: 0, y1: 1000 });
+      await choice([['玄関をあける', 'Open the door'], ['…だれ？', '…Who is it?']]);
       SND.fx.steps(.2, -.7, 5); await sleep(2); SND.fx.door(-.7);
       SND.fx.hangup(S.ear * 1.45); await sleep(.5); SND.phoneOff(); S.inCall = false; S.ear = 0;
       S.doorCold = 1; SND.fx.gust(); S.view = 'door'; S.real = { az: 0, dist: 1 };

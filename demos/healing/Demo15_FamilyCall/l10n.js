@@ -121,7 +121,9 @@ window.MOHEAT_L10N = {
    "Headphones on · mic optional (answer them with your voice, or tap) · connect MoHeat Evo to feel the scarf and the snowman": "请戴上耳机 · 麦克风可选（用声音回应他们，或点按） · 连接 MoHeat Evo，感受围巾和雪人",
    "ASMR Game · A call home": "ASMR 游戏 · 给家里打电话",
    "Live, two layers: a voice right at your ear warms it with its loudness (louder = warmer); the room around you (front door, scarf, snowman) adds warm or cool. Warm and cool can be on the same ear at once (firmware DUAL).": "实时，两层：贴在耳边的声音按音量让那只耳朵变暖（越大声越暖）；你周围的房间（玄关、围巾、雪人）再加上暖或凉。同一只耳朵可以同时有暖和凉（固件 DUAL）。",
-   "ASMR Game · A call home, part 2": "ASMR 游戏 · 给家里打电话（下）"
+   "ASMR Game · A call home, part 2": "ASMR 游戏 · 给家里打电话（下）",
+   "なにが入ってるの？": "里面装的是什么？",
+   "どれどれ？": "让我看看？"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -292,7 +294,11 @@ window.MOHEAT_L10N = {
     "open the box",
     "open it",
     "箱をあける",
-    "あける"
+    "あける",
+    "拆开",
+    "拆箱",
+    "箱あける",
+    "開けてみる"
    ],
    "マフラーを巻く": [
     "围上围巾",
@@ -332,7 +338,12 @@ window.MOHEAT_L10N = {
     "open the blue box",
     "the blue box",
     "青い箱をあける",
-    "青い箱"
+    "青い箱",
+    "打开蓝箱子",
+    "开箱",
+    "open it",
+    "青い箱あける",
+    "開けてみる"
    ],
    "右のほっぺにピタッ": [
     "贴到右脸蛋",
@@ -433,6 +444,24 @@ window.MOHEAT_L10N = {
     "end the call",
     "電話を切る",
     "切る"
+   ],
+   "なにが入ってるの？": [
+    "里面是什么",
+    "装了什么",
+    "这是什么呀",
+    "what's inside",
+    "what is it",
+    "なにが入ってるの",
+    "なにこれ"
+   ],
+   "どれどれ？": [
+    "让我看看",
+    "我看看",
+    "是什么呀",
+    "let me see",
+    "show me",
+    "どれどれ",
+    "見せて"
    ]
   }
  }

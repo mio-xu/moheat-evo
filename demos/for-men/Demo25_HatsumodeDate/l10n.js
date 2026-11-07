@@ -63,7 +63,10 @@ window.MOHEAT_L10N = {
    "🎍 願いごとは、二人だけの秘密": "🎍 愿望，是只属于两个人的秘密",
    "↺ もう一度": "↺ 再来一次",
    "ASMR Date · New Year's Eve": "ASMR 约会 · 除夕夜",
-   "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the winter night wind and its gusts, the bonfire on your left, the hot amazake cup and her fur stole add real cold / warmth.": "实时（DUAL）：她的声音按音量让她说话那一侧的耳朵变暖；冬夜的风和阵风、你左边的篝火、热甜酒杯和她的毛皮披肩带来真实的冷与暖。"
+   "Live (DUAL): her voice warms the ear she speaks at, with its loudness; the winter night wind and its gusts, the bonfire on your left, the hot amazake cup and her fur stole add real cold / warmth.": "实时（DUAL）：她的声音按音量让她说话那一侧的耳朵变暖；冬夜的风和阵风、你左边的篝火、热甜酒杯和她的毛皮披肩带来真实的冷与暖。",
+   "「今年もよろしく！」": "“今年也请多关照！”",
+   "五円玉を入れる": "投一枚五日元硬币",
+   "二人で一緒に引く": "两个人一起抽"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -192,7 +195,8 @@ window.MOHEAT_L10N = {
     "happy new year",
     "new year",
     "あけましておめでとう",
-    "あけおめ"
+    "あけおめ",
+    "happy new year to you"
    ],
    "お賽銭を入れる": [
     "投香油钱",
@@ -202,7 +206,12 @@ window.MOHEAT_L10N = {
     "toss in a coin",
     "coin",
     "お賽銭",
-    "お賽銭を入れる"
+    "お賽銭を入れる",
+    "投钱",
+    "放硬币",
+    "put a coin in",
+    "お賽銭いれる",
+    "お金入れる"
    ],
    "おみくじを引く": [
     "抽签",
@@ -212,7 +221,36 @@ window.MOHEAT_L10N = {
     "draw a fortune",
     "fortune",
     "おみくじ",
-    "おみくじを引く"
+    "おみくじを引く",
+    "get a fortune",
+    "おみくじ引く"
+   ],
+   "「今年もよろしく！」": [
+    "今年也请多关照",
+    "今年也多多关照",
+    "新的一年多关照",
+    "here's to this year",
+    "let’s make it a good year",
+    "今年もよろしく",
+    "ことしもよろしくね"
+   ],
+   "五円玉を入れる": [
+    "五日元",
+    "投五元",
+    "投五日元硬币",
+    "five yen",
+    "a five yen coin",
+    "五円玉",
+    "ご縁がありますように"
+   ],
+   "二人で一緒に引く": [
+    "一起抽",
+    "两个人一起抽",
+    "我们一起",
+    "draw together",
+    "together",
+    "一緒に引く",
+    "ふたりで引こう"
    ]
   }
  }

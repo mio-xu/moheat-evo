@@ -191,7 +191,7 @@
       await sleep(.8); SND.fx.lift(-.6); S.open = 1; SND.setMuffle(0); S.puff = 1; to(.3, 'lw', 1.2); to(0, 'puff', 2.5); S.deep = 0;
       await sleep(.7);
       S.ear = 1; await say('k09', LEFT_EAR); S.ear = .3;
-      await action('🐾', 'にゃっ', 'Meow back');
+      await choice([['にゃっ', 'Meow back'], ['ごろごろ…', 'Purr…']]);   // two options, same reply (user)
       NA.meow('ask', 0, .3); await sleep(.8); S.ear = 0;
       await say('k10', { az: -.5, dist: .4 });
       await sleep(.6);

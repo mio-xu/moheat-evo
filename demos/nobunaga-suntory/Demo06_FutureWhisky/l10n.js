@@ -62,7 +62,12 @@ window.MOHEAT_L10N = {
    "❄ 氷・ハイボール": "❄ 冰块・嗨棒",
    "▶ Start · 2:30": "▶ 开始 · 2:30",
    "🎧 Left / Right check": "🎧 左右声道检查",
-   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he tastes, the ice and the highball cool the other": "请戴上耳机 · 连接 MoHeat Evo（右上角）：哪位武将品酒，哪一侧就变暖；冰块和嗨棒让另一侧清凉"
+   "Headphones on · connect MoHeat Evo (top right): each lord warms his side as he tastes, the ice and the highball cool the other": "请戴上耳机 · 连接 MoHeat Evo（右上角）：哪位武将品酒，哪一侧就变暖；冰块和嗨棒让另一侧清凉",
+   "「毎晩こんな酒を？」": "“每晚都喝这样的酒？”",
+   "さすがに、毎晩ではないです": "倒也不是每晚啦",
+   "…毎晩、かもしれません": "……说不定是每晚",
+   "家康様が、くすっと笑った": "家康大人扑哧一笑",
+   "信長様、うらやましそう": "信长大人一脸羡慕"
   },
   "ja": {
    "信長シリーズ 第二話 · Nobunaga Series Ep. 2 / 5": "信長シリーズ 第二話 · 全5話",
@@ -216,6 +221,24 @@ window.MOHEAT_L10N = {
     "kanpai",
     "乾杯",
     "かんぱい"
+   ],
+   "さすがに、毎晩ではないです": [
+    "不是每晚",
+    "倒也不是每晚",
+    "偶尔喝",
+    "not every night",
+    "only sometimes",
+    "毎晩じゃない",
+    "たまにです"
+   ],
+   "…毎晩、かもしれません": [
+    "每晚",
+    "说不定是每晚",
+    "天天喝",
+    "maybe every night",
+    "every night",
+    "毎晩かも",
+    "まいばんです"
    ]
   }
  }
