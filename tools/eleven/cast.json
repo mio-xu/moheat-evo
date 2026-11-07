@@ -69,7 +69,9 @@
    "demos/for-men/Demo14_LiveStream/media/voice/m01.m4a",
    "demos/for-men/Demo14_LiveStream/media/voice/m08.m4a"
   ],
-  "voice_id": null
+  "voice_id": "o9ShAxsqSyRBJWLn4hAF",
+  "confirmed": "2026-11-08",
+  "pick": "r1_a"
  },
  "cocoa": {
   "name": "甘音ココア Cocoa",
@@ -83,7 +85,9 @@
    "demos/for-men/Demo14_LiveStream/media/voice/c01.m4a",
    "demos/for-men/Demo14_LiveStream/media/voice/c07.m4a"
   ],
-  "voice_id": null
+  "voice_id": "Wvbdi4FXYZiHiu1iXnak",
+  "confirmed": "2026-11-08",
+  "pick": "r1_a"
  },
  "hinata_s": {
   "name": "火野ひなた Hinata (streamer)",
@@ -97,7 +101,9 @@
    "demos/for-men/Demo14_LiveStream/media/voice/h01.m4a",
    "demos/for-men/Demo14_LiveStream/media/voice/h12.m4a"
   ],
-  "voice_id": null
+  "voice_id": "J7YQSku966ZQUlAwM2Zi",
+  "confirmed": "2026-11-08",
+  "pick": "r1_b"
  },
  "luna": {
   "name": "宵月ルナ Luna",
@@ -111,6 +117,8 @@
    "demos/for-men/Demo14_LiveStream/media/voice/l01.m4a",
    "demos/for-men/Demo14_LiveStream/media/voice/l11.m4a"
   ],
-  "voice_id": null
+  "voice_id": "1blqWrqFcJagS9nJcCXc",
+  "confirmed": "2026-11-08",
+  "pick": "r1_b"
  }
 }

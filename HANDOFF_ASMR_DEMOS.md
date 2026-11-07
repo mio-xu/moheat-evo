@@ -98,7 +98,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - **用户要求（2026-11-08）**：以前和新做的全部人声都用 ElevenLabs 重做，顺序 女性向 → 男性向 → 信长 → 其他；**每个角色先出试听、用户确认声音后才重做台词**，声音必须符合用户给的人设。
 - **参数**：`eleven_v4`，`language_code='ja'`，`stability 0.4`，`similarity_boost 0.8`，`seed 7`。v4 只认 stability / similarity（没有 style、speed、SSML），语气全靠**英文方括号标签** + 省略号。台词用**带汉字的日文原文**（不用 lines.js 第 4 列的假名读音）。不加 VOICEVOX 时代的 EQ / 气声 / 变调。
 - **标签约定**：每句写在 `ELEVEN = {id: '带标签台词'}` 里。人前甜 `[excited]` `[giggles]` `[surprised]`；撩 / 坏笑 `[playful]` `[chuckles softly]` `[laughs]`；**贴耳 `[whispers]`**；哈气 / 叹气 `[sighs softly]`；温柔 `[softly]` `[warmly]`；撒娇不满 `[pouting]`；好奇 `[curious]`。一句里可以换标签（如 `[laughs] あはは… [whispers] …かわいい`）。
-- **进度**：女性向完成：陽向（Demo20）、蓮 ren r1_c（Demo12）、迅 jin r1_a（Demo21）、握手会女工作人员 staff_f r1_a（Demo20）。紫苑还没有 Demo。下一步：男性向（Demo14/17/18/19 主播）。
+- **进度**：女性向完成：陽向（Demo20）、蓮 ren r1_c（Demo12）、迅 jin r1_a（Demo21）、握手会女工作人员 staff_f r1_a（Demo20）。男性向完成：ミント mint r1_a、ココア cocoa r1_a、ひなた hinata_s r1_b、ルナ luna r1_b（Demo14 `scripts/voice.py`：每人一个默认标签 + 耳语 `[whispers]` + 个别句 OVERRIDE）。紫苑还没有 Demo。下一步：信长系列（Demo5–9）。
 - **已有声音**：全部在 `tools/eleven/cast.json`（陽向 = `lODKQ6pXINFtajDz9nqR`；Demo20 试听时存下的 v1 / v3 没用上，名额满时可删，先问用户）。
 - **额度**：账号是 **Creator 档**（每月 12 万字符，30 个声音名额，可商用）；一轮试听 3 个预览，一个 Demo 全部台词约 500–1000 字符。
 - **坑**：`pcm_44100` / `pcm_48000` 要 Pro 账号，用 `pcm_24000`；页面署名写 `<角色> ElevenLabs`（VOICEVOX 角色仍写 `VOICEVOX:<名>`）。

@@ -1,7 +1,5 @@
 // Streamer lines: id → [ja, en, style ('n' = talk, 'w' = close whisper), TTS reading (optional)].
-// Mint  (m..): VOICEVOX:四国めたん  — user's pick "m2": talk ささやき, whisper ヒソヒソ, intonation 1.00, speed 0.92 (whispers ×0.88).
-// Cocoa (c..): VOICEVOX:ユーレイちゃん — user's pick "c2": talk 甘々, whisper ささやき, intonation 1.20, speed 1.00 (whispers ×0.88).
-// Hinata (h..): VOICEVOX:春日部つむぎ "h2" · Luna (l..): VOICEVOX:九州そら あまあま / ささやき "n5" (round 3) (scripts/voice.py).
+// Voices: ElevenLabs, user's picks mint r1_a / cocoa r1_a / hinata_s r1_b / luna r1_b (tools/eleven/cast.json) — scripts/voice.py (tags there).
 window.STREAM_LINES = {
   "m01": ["…こんばんは。ミントです", "…Good evening. It's Mint.", "n", "…こんばんは。ミントです"],
   "m02": ["今夜も、ねむれない人のための、ささやき配信…はじめますね", "Tonight again, a whisper stream for everyone who can't sleep… let's begin.", "n", "こんやも、ねむれないひとのための、ささやきはいしん…はじめますね"],

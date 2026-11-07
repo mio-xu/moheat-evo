@@ -15,25 +15,25 @@
   // ---------------------------------------------------------------- channels
   const CH = {
     mint: {
-      name: '白深ミント', en: 'Shiromi Mint', title: 'ねむれない夜の、ささやき配信 · Whisper ASMR', credit: 'ミント VOICEVOX:四国めたん', viewers: 3412, sc: 'mint',
+      name: '白深ミント', en: 'Shiromi Mint', title: 'ねむれない夜の、ささやき配信 · Whisper ASMR', credit: 'ミント ElevenLabs', viewers: 3412, sc: 'mint',
       art: ['mint_live', 'mint_live_talk', 'mint_live_talk_s', 'mint_live_half', 'mint_live_blink', 'mint_lean_R_talk_s', 'mint_bye_talk', 'mint_lean_L_talk_s', 'mint_ice_talk', 'mint_towel_talk', 'mint_lean_L', 'mint_lean_R', 'mint_ice', 'mint_towel', 'mint_bye'],
       steps: [['あいさつ', 'Say hi'], ['耳ふー', 'Ear blowing'], ['こおりのスパチャ', 'Ice Super Chat'], ['あったかタオル', 'Warm towel'], ['おやすみ', 'Good night']],
       pool: ['こんばんは〜', 'waiting for this all day', 'ねむれない…', 'ミントちゃん今日もかわいい', '耳ふーまだ？', 'ASMR time 😌', 'おふとん入った', '声がすき', 'mimi-kun!!', 'first time here too', 'ささやき助かる…', 'zzz', 'good night everyone', 'イヤホン準備OK🎧', 'so relaxing', 'あしたも仕事…', 'ミントの声で寝たい'],
     },
     cocoa: {
-      name: '甘音ココア', en: 'Amane Cocoa', title: 'ほっこりカフェ配信 · Cozy café chat', credit: 'ココア VOICEVOX:ユーレイちゃん', viewers: 2876, sc: 'cocoa',
+      name: '甘音ココア', en: 'Amane Cocoa', title: 'ほっこりカフェ配信 · Cozy café chat', credit: 'ココア ElevenLabs', viewers: 2876, sc: 'cocoa',
       art: ['cocoa_live', 'cocoa_live_talk', 'cocoa_live_talk_s', 'cocoa_live_half', 'cocoa_live_blink', 'cocoa_blanket_talk', 'cocoa_bye_talk', 'cocoa_fufu_talk_s', 'cocoa_aan_talk_s', 'cocoa_fufu', 'cocoa_aan', 'cocoa_blanket', 'cocoa_bye'],
       steps: [['あいさつ', 'Say hi'], ['ふーふー＆あーん', 'Fu-fu & aah'], ['トッピング', 'Topping Super Chat'], ['ブランケット', 'Blanket'], ['またね', 'See you']],
       pool: ['ココアちゃん！', 'こんばんは〜☕', 'I brought my own cocoa', 'さむすぎる…', '配信まってた！', 'cute beret!!', 'あったまる〜', 'tea gang here 🍵', 'くまのマイクかわいい', 'ちょうど仕事おわった', 'cozy vibes ☕', 'マシュマロ派', '声あまい…', 'ふわふわ', 'hello hello', 'こたつから見てる'],
     },
     hinata: {
-      name: '火野ひなた', en: 'Hino Hinata', title: '激辛チャレンジ配信 · Super-spicy challenge', credit: 'ひなた VOICEVOX:春日部つむぎ', viewers: 4105, sc: 'hinata',
+      name: '火野ひなた', en: 'Hino Hinata', title: '激辛チャレンジ配信 · Super-spicy challenge', credit: 'ひなた ElevenLabs', viewers: 4105, sc: 'hinata',
       art: ['hinata_live', 'hinata_live_talk', 'hinata_live_blink', 'hinata_spicy_talk', 'hinata_cool_talk', 'hinata_whisper_talk_s', 'hinata_bye_talk', 'hinata_eat', 'hinata_spicy', 'hinata_cool', 'hinata_fan', 'hinata_whisper', 'hinata_bye'],
       steps: [['あいさつ', 'Say hi'], ['激辛ラーメン', 'Spicy ramen'], ['たすけて！スパチャ', 'Rescue Super Chat'], ['完食＆うちわ', 'All gone & fan'], ['ないしょ話', 'A secret']],
       pool: ['おっはひな〜！', 'レベル10はやばい', 'spicy queen 🌶', 'がんばれー！', 'もう汗かいてる笑', 'I could never', 'ひなたちゃん元気すぎ', '辛いの苦手…', 'w w w', 'let\'s gooo', '牛乳用意して', 'ラーメンおいしそう', 'fang cute', '応援してる！'],
     },
     luna: {
-      name: '宵月ルナ', en: 'Yoizuki Luna', title: '深夜のおしゃべり配信 · Late-night chat', credit: 'ルナ VOICEVOX:九州そら', viewers: 1958, sc: 'luna',
+      name: '宵月ルナ', en: 'Yoizuki Luna', title: '深夜のおしゃべり配信 · Late-night chat', credit: 'ルナ ElevenLabs', viewers: 1958, sc: 'luna',
       art: ['luna_live', 'luna_live_talk', 'luna_live_talk_s', 'luna_live_blink', 'luna_window', 'luna_window_talk', 'luna_tea', 'luna_tea_talk', 'luna_musicbox', 'luna_musicbox_talk', 'luna_close', 'luna_close_talk', 'luna_bye', 'luna_bye_talk'],
       steps: [['あいさつ', 'Say hi'], ['夜の風', 'Night wind'], ['リクエスト', 'Request'], ['となりで', 'Next to you'], ['夜明け前', 'Before dawn']],
       pool: ['こんばんは', 'ルナさんの声おちつく', 'night owl here 🦉', '眠れない夜', '雨やんだね', 'calm vibes', 'まだ仕事中…', 'その声ずるい', 'from overseas, hi', '月がきれい', '深夜の楽しみ', 'goodnight soon', 'ルナさん…'],

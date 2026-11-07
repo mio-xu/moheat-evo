@@ -22,14 +22,14 @@ Art style = Demo 12's soft-cel pick. Covers: `?cover=1` → `media/cover.jpg` (h
 
 ## Channels (final)
 
-| Channel | Feel | Voice (VOICEVOX) | Story · thermal |
+| Channel | Feel | Voice (until 2026-11-08 VOICEVOX; now ElevenLabs, see below) | Story · thermal |
 |---|---|---|---|
 | 白深ミント Mint | calm, sleepy, ASMR whisper | 四国めたん ささやき / ヒソヒソ | dummy head "みみくん": ear blowing with mint lip balm on the ear you pick (cool), ice Super Chat (cool, moves L→R), warm towel on both ears, a secret in each ear |
 | 甘音ココア Cocoa | sweet café chat | ユーレイちゃん 甘々 / ささやき | hot cocoa (warm), fu-fu blowing (cool right), "aah" (warm), topping Super Chat (marshmallow warm / ice cream cool), rain → shared blanket, her hands on your right ear (warm) |
 | 火野ひなた Hinata | genki gamer | 春日部つむぎ | spicy ramen challenge (warm, both ears), rescue Super Chat (milk = cool front / desk fan = cool left), paper-fan flaps L/R (cool), a secret at the right ear |
 | 宵月ルナ Luna | cool, mature, late night | 九州そら あまあま / ささやき (round 3 "n5": pitch −0.07, intonation 1.20, formant ×0.96) | night wind from the open window (cool left), music box or hot tea request (warm), she sits on your left (warm), a confession before dawn |
 
-No voice is shared. Lines: `lines.js` (ja + en); voices: `scripts/voice.py` → `media/voice/` (only changed lines are re-synthesized).
+Voices now (2026-11-08, user picks): ElevenLabs mint r1_a / cocoa r1_a / hinata_s r1_b / luna r1_b (`tools/eleven/cast.json`), audio tags per line in `scripts/voice.py`. No voice is shared. Lines: `lines.js` (ja + en); voices: `scripts/voice.py` → `media/voice/` (only changed lines are re-synthesized).
 
 ## Files
 
