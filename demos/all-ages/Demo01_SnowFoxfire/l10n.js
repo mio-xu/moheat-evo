@@ -1,0 +1,200 @@
+// Languages of this demo for ../../shared/subs.js (subtitles, answers, cover) and ../../shared/voice.js (voice answers).
+// text.<lang>: "text exactly as the page shows it" → that language · names: speaker labels · voice.<lang|all>: same-meaning phrasings per answer.
+// Generated from the translation tables (DEMO_DESIGN_GUIDE §2.2); edit here, keys must stay byte-identical to the page text.
+window.MOHEAT_L10N = {
+ "langs": [
+  "en",
+  "ja",
+  "zh"
+ ],
+ "text": {
+  "zh": {
+   "こんばんは…。あ、まだ起きてたんだ。": "晚上好…啊，你还醒着呀。",
+   "雪の音がきれいで…遊びに来ちゃった。": "雪的声音好好听…我就来玩啦。",
+   "わたし、小雪。雪女なの。": "我是小雪，是雪女哦。",
+   "ねえ…こっちの耳、ちょっと貸して？": "呐…这边的耳朵，借我一下好吗？",
+   "（ふぅー…）": "（呼——…）",
+   "ふふっ…つめたかった？": "呵呵…凉不凉？",
+   "じゃあ…次はどっちから来るか、当ててみて。": "那…猜猜我下次从哪边来？",
+   "…こっちでした。": "…是这边哦。",
+   "（ふっ…）": "（呼…）",
+   "えへへ、今度は左！": "嘿嘿，这次是左边！",
+   "右…と見せかけて…": "右边…才怪…",
+   "…ひだり。": "…左边。",
+   "ふふふっ。": "呵呵呵。",
+   "ちょっとちょっと〜！ 小雪ばっかりずるいよ！": "喂喂～！只有小雪玩，太狡猾了吧！",
+   "きゃっ！？": "呀！？",
+   "はいはい、ちょっと詰めて〜。": "好啦好啦，往那边挪一挪～",
+   "ほ、焔ちゃん…押さないでよぉ…": "小、小焰…别挤我嘛…",
+   "はじめまして。わたしは焔。狐火の精だよ。": "初次见面，我是小焰，是狐火精灵哦。",
+   "ほら…あったかいでしょ？": "你看…很暖和吧？",
+   "（はぁ〜…）": "（哈——…）",
+   "にひひっ。": "嘻嘻。",
+   "つ、冷たいほうが気持ちいいよね…？": "凉、凉凉的更舒服吧…？",
+   "えー、あったかいほうがいいに決まってるでしょ！": "诶～当然是暖和的更好啦！",
+   "じゃあ交代！ 今度はわたしが左ね！": "那就交换！这次我在左边！",
+   "こっち側も…ひんやり。": "这边也…凉丝丝的。",
+   "（ふぅ…）": "（呼…）",
+   "こっちも、ぽかぽか〜。": "这边也暖洋洋的～",
+   "（はぁ…）": "（哈…）",
+   "むぅ…負けないもん。": "哼…我才不会输呢。",
+   "ふふん、勝負だね！": "哼哼，那就比一比吧！",
+   "まて〜っ！": "站住～！",
+   "きゃー！ こないで〜！": "呀～！别过来～！",
+   "つかまえちゃうぞ〜！": "我要抓住你啦～！",
+   "あはは！ こっちこっち〜！": "啊哈哈！这边这边～！",
+   "（はぁっ）": "（哈！）",
+   "（ふっ）": "（呼！）",
+   "すばしっこいなぁ、もう！": "真是的，跑得好快！",
+   "こっちだよ〜！": "在这边哦～！",
+   "あっ、そっちか！": "啊，在那边！",
+   "（はぁ…はぁ…）": "（呼…呼…）",
+   "つかまえた〜！ …なんてね。": "抓到啦～！…开玩笑的。",
+   "もう…ふふっ、楽しかった。": "真是的…呵呵，好开心。",
+   "ねえ小雪、いっしょにやろっか。": "呐小雪，我们一起来吧。",
+   "…うん。せーのっ…": "…嗯。预备…",
+   "雪と焔の、ないしょの魔法！": "雪与焰的秘密魔法！",
+   "わぁ…きれい…": "哇…好漂亮…",
+   "でしょ〜？": "对吧～？",
+   "今夜は、遊んでくれて…ありがとう。": "今晚陪我们玩…谢谢你。",
+   "また遊ぼうね。": "下次再一起玩吧。",
+   "おやすみなさい…": "晚安…",
+   "おやすみ〜。": "晚安～",
+   "うん、つめたい！": "嗯，好凉！",
+   "小雪は、どっちから来る？": "小雪会从哪边来？",
+   "⬅ ひだり": "⬅ 左边",
+   "みぎ ➡": "右边 ➡",
+   "どっちが好き？": "你更喜欢哪个？",
+   "❄ つめたい": "❄ 凉凉的",
+   "🔥 あったかい": "🔥 暖暖的",
+   "小雪、うれしそう！": "小雪好开心！",
+   "焔、うれしそう！": "焰好开心！",
+   "うん、また遊ぼう！ おやすみ。": "嗯，下次再一起玩！晚安。",
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · 双耳ASMR × 冷热触感",
+   "雪と狐火の ひそひそ話": "雪与狐火的悄悄话",
+   "Whispers of Snow and Flame": "",
+   "❄ 小雪 Koyuki · cool": "❄ 小雪 · 清凉",
+   "🔥 焔 Homura · warm": "🔥 焰 · 温暖",
+   "▶ Start · 2:30": "▶ 开始 · 2:30",
+   "🎧 Left / Right check": "🎧 左右声道检查",
+   "Headphones on · connect MoHeat Evo (top right) to feel the cold and the warmth": "请戴上耳机 · 连接 MoHeat Evo（右上角），感受寒意与温暖",
+   "小雪": "小雪",
+   "焔": "焰",
+   "小雪＆焔": "小雪＆焰"
+  },
+  "ja": {
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
+   "雪と狐火の ひそひそ話": "雪と狐火の ひそひそ話",
+   "Whispers of Snow and Flame": "",
+   "❄ 小雪 Koyuki · cool": "❄ 小雪 · ひんやり",
+   "🔥 焔 Homura · warm": "🔥 焔 · あたたか",
+   "▶ Start · 2:30": "▶ スタート · 2:30",
+   "🎧 Left / Right check": "🎧 左右チェック",
+   "Headphones on · connect MoHeat Evo (top right) to feel the cold and the warmth": "ヘッドホンを装着 · 右上から MoHeat Evo をつなぐと、冷たさとぬくもりを感じられます"
+  },
+  "en": {
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
+   "雪と狐火の ひそひそ話": "Whispers of Snow and Flame",
+   "Whispers of Snow and Flame": "",
+   "❄ 小雪 Koyuki · cool": "❄ Koyuki · cool",
+   "🔥 焔 Homura · warm": "🔥 Homura · warm",
+   "▶ Start · 2:30": "▶ Start · 2:30",
+   "🎧 Left / Right check": "🎧 Left / Right check",
+   "Headphones on · connect MoHeat Evo (top right) to feel the cold and the warmth": "Headphones on · connect MoHeat Evo (top right) to feel the cold and the warmth",
+   "小雪": "Koyuki",
+   "焔": "Homura",
+   "小雪＆焔": "Koyuki & Homura"
+  }
+ },
+ "names": {
+  "小雪": {
+   "en": "Koyuki",
+   "zh": "小雪"
+  },
+  "焔": {
+   "en": "Homura",
+   "zh": "焰"
+  },
+  "小雪＆焔": {
+   "en": "Koyuki & Homura",
+   "zh": "小雪＆焰"
+  }
+ },
+ "voice": {
+  "all": {
+   "うん、つめたい！": [
+    "嗯，好凉",
+    "好凉",
+    "好冰",
+    "凉凉的",
+    "yes it's cold",
+    "it's cold",
+    "cold",
+    "つめたい",
+    "冷たい"
+   ],
+   "⬅ ひだり": [
+    "左边",
+    "左",
+    "往左",
+    "左侧",
+    "left",
+    "the left",
+    "ひだり",
+    "左側"
+   ],
+   "みぎ ➡": [
+    "右边",
+    "右",
+    "往右",
+    "右侧",
+    "right",
+    "the right",
+    "みぎ",
+    "右側"
+   ],
+   "❄ つめたい": [
+    "凉的",
+    "凉凉的",
+    "冷的",
+    "小雪",
+    "冰",
+    "cool",
+    "cold",
+    "つめたいほう",
+    "冷たい"
+   ],
+   "🔥 あったかい": [
+    "暖的",
+    "暖暖的",
+    "热的",
+    "焰",
+    "温暖",
+    "warm",
+    "hot",
+    "あったかいほう",
+    "暖かい"
+   ],
+   "雪と焔の、ないしょの魔法！": [
+    "雪与焰的秘密魔法",
+    "雪和焰的秘密魔法",
+    "秘密魔法",
+    "雪与焰的魔法",
+    "our secret magic of snow and flame",
+    "secret magic",
+    "ないしょの魔法",
+    "雪と焔の魔法"
+   ],
+   "うん、また遊ぼう！ おやすみ。": [
+    "嗯，下次再玩，晚安",
+    "下次再一起玩",
+    "再玩吧",
+    "晚安",
+    "let's play again, good night",
+    "good night",
+    "また遊ぼう",
+    "おやすみ"
+   ]
+  }
+ }
+};

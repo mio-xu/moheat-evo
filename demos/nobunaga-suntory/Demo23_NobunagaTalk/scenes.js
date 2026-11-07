@@ -2,24 +2,24 @@
 // amb = what is really warm / cool around you in that place (az: rad, 0 = front, + = right; k: 'h' warm / 'c' cool; s: 0..1).
 // gust / fire = the events the characters may trigger (an "@" line); each says what it does to the ears.
 window.TALK = (() => {
-  const ART = '../Demo9_SengokuBanquet/media/art/';
+  const ART = '../Demo09_SengokuBanquet/media/art/';
   const SCENES = [
-    { id: 'gifu', ja: '岐阜城・天守の夕暮れ', en: 'Gifu Castle, the keep at sunset', bg: '../Demo5_GifuCastle/media/art/d9_bg_summit.webp',
+    { id: 'gifu', ja: '岐阜城・天守の夕暮れ', en: 'Gifu Castle, the keep at sunset', bg: '../Demo05_GifuCastle/media/art/d9_bg_summit.webp',
       place: '永禄十二年（1569年）夏、岐阜城の天守の最上階。朱塗りの欄干の向こうに夕陽が沈み、長良川と濃尾平野が金色に光る。山風がときおり右手から吹き上がる。',
       topics: ['「天下布武」の印を作ったばかりのこと', '眼下に広がる国々の眺めと、天下の行く末', '「岐阜」という名を自分で付けた話', '未来から来た客人の暮らしへの好奇心', '南蛮渡来の珍しい品（地球儀、金平糖、ビロードのマント）'],
       amb: [{ az: 0, k: 'h', s: .16, icon: '🌇', ja: '夕陽' }, { az: 1.3, k: 'c', s: .2, icon: '🍃', ja: '山風' }],
       sound: { wind: .55, birds: .25 }, events: { gust: { az: 1.2, s: .75, ja: '強い山風が吹き上がる（右から冷たい）' } } },
-    { id: 'tea', ja: '岐阜城・茶室の囲炉裏', en: 'The tea room by the hearth', bg: '../Demo5_GifuCastle/media/art/d9_bg_tearoom.webp',
+    { id: 'tea', ja: '岐阜城・茶室の囲炉裏', en: 'The tea room by the hearth', bg: '../Demo05_GifuCastle/media/art/d9_bg_tearoom.webp',
       place: '岐阜城の茶室。正面の囲炉裏で炭が赤く熾り、茶釜が湯気を立てている。丸窓の外は夕焼け。背後の障子からすきま風。',
       topics: ['名物の茶器（つくも茄子など）を集めている話', '茶の湯で家臣に褒美を与える「御茶湯御政道」', '客人に一服点てようという誘い', '戦の合間の静けさ', '未来の世でも茶を飲むのかという好奇心'],
       amb: [{ az: 0, k: 'h', s: .26, icon: '🔥', ja: '囲炉裏' }, { az: -2.4, k: 'c', s: .1, icon: '🌬', ja: 'すきま風' }],
       sound: { fire: .5, kettle: .35 }, events: { fire: { az: 0, s: .5, ja: '炭を足して火が強くなる（正面から暖かい）' }, gust: { az: -2.4, s: .5, ja: '背後の障子からすきま風（後ろ左から冷たい）' } } },
-    { id: 'kyoto', ja: '京都・先斗町の居酒屋', en: 'A Kyoto izakaya in Pontocho', bg: '../Demo7_KyotoIzakaya/media/art/d7_bg_izakaya.webp',
+    { id: 'kyoto', ja: '京都・先斗町の居酒屋', en: 'A Kyoto izakaya in Pontocho', bg: '../Demo07_KyotoIzakaya/media/art/d7_bg_izakaya.webp',
       place: '現代の京都、冬の夜。四百年後の世に迷い込んだ二人を、客人（ユーザー）が先斗町の小さな居酒屋に案内した。卓上に熱燗と焼き鳥、窓の外は雪の鴨川。店内は暖かいが、窓際は冷える。',
       topics: ['四百年後の京の町の変わりよう', '熱燗の旨さと、未来の酒（ビール、ハイボール）への驚き', '焼き鳥や品書きへの興味', '雪の鴨川の景色', '客人の暮らしや仕事への好奇心'],
       amb: [{ az: 0, k: 'h', s: .14, icon: '🍶', ja: '熱燗' }, { az: 1.1, k: 'c', s: .16, icon: '❄️', ja: '雪の窓' }],
       sound: { chatter: .35, fire: .15 }, events: { gust: { az: 2.7, s: .6, ja: '入口の戸が開いて雪混じりの風（後ろから冷たい）' }, fire: { az: 0, s: .35, ja: 'お代わりの熱燗が届く（正面から湯気）' } } },
-    { id: 'yamazaki', ja: '山崎蒸溜所・霧の朝', en: 'Yamazaki Distillery, a misty morning', bg: '../Demo8_YamazakiDistillery/media/art/d8_bg_tasting.webp',
+    { id: 'yamazaki', ja: '山崎蒸溜所・霧の朝', en: 'Yamazaki Distillery, a misty morning', bg: '../Demo08_YamazakiDistillery/media/art/d8_bg_tasting.webp',
       place: '現代、霧の朝の山崎蒸溜所（京都と大阪の間、天王山のふもと）。試飲室の窓の向こうに霧の山々。開いた窓から冷たく湿った朝の空気。卓上にはウイスキーのグラス。',
       topics: ['山崎の地（天王山、名水、千利休ゆかりの待庵）の話', '樽で何年も眠る酒への驚き', 'ウイスキーの香りと、戦国の酒との違い', '霧の山々の眺め', '客人の好きな飲み方'],
       amb: [{ az: 0, k: 'c', s: .18, icon: '🌫', ja: '霧の朝風' }, { az: -1.2, k: 'h', s: .1, icon: '🏮', ja: '行灯' }],

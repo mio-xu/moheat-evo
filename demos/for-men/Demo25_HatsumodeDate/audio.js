@@ -70,7 +70,7 @@ window.HTAudio = (() => {
   function loop(kind) {
     if (!ac) return null; if (loops[kind]) return loops[kind];
     const nodes = []; let g, p, lp;
-    if (kind === 'wind') {         // winter night wind: low rumble + a whistle; gusts are set from game.js (set + at)
+    if (kind === 'wind') {         // winter night wind: low rumble + a whistle; gusts are set from main.js (set + at)
       ({ g, p } = chain(-1.2, 1.5, .2)); g.gain.value = 0;
       lp = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 520, Q: .5 });
       const s = noiseSrc(); s.connect(lp).connect(g); nodes.push(s);

@@ -18,7 +18,7 @@ No timeline: his ElevenLabs lines play live with HRTF, room sounds are synthesiz
 | Cool air to finish, while he talks close to your right ear | cool circling both ears + right warm (DUAL) |
 | He takes off his glasses, face a hand's width away | both mildly warm |
 
-Files: `index.html`, `rain.css` (+ Demo 10's `demo.css` and `../../shared/series.css` by path), `game.js`, `audio.js` (SRAudio), `lines.js`.
+Files: `index.html`, `style.css` (+ Demo 10's `demo.css` and `../../shared/series.css` by path), `main.js`, `audio.js` (SRAudio), `lines.js`.
 Voice: `scripts/voice.py` — ElevenLabs, the user's pick `shion r1_c` (tools/eleven/cast.json), audio tags per line.
 Art: Seedance web, GPT Image 2 image-to-image from the user's sheet `shion_v4_platinum.png` (prompts: `project/web_prompts.json`,
 `scripts/seedance.py`; raw PNGs in `assets/art/`, not in git) → `scripts/prepare_art.sh` → `media/art/shion_*.jpg`. The right-side

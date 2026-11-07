@@ -15,7 +15,7 @@ from PIL import Image, ImageFilter, ImageChops
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC, DST = os.path.join(ROOT, 'assets', 'art'), os.path.join(ROOT, 'media', 'art')
-LIFT = os.path.join(os.path.dirname(ROOT), '../all-ages/Demo1_SnowFoxfire', 'tools', 'lift_subject.swift')
+LIFT = os.path.join(os.path.dirname(ROOT), '../all-ages/Demo01_SnowFoxfire', 'tools', 'lift_subject.swift')
 BGS = ['bg_hut_night', 'bg_hut_fire', 'bg_gate_open', 'bg_tunnel_fork', 'bg_spring_glow']
 PROPS = {'prop_gate_door': 1000, 'prop_candle': 700, 'prop_hand_candle': 800, 'prop_straw': 700, 'prop_flint': 500, 'prop_drawer': 800}
 FOX = ['kohaku_base', 'kohaku_talk', 'kohaku_blink', 'kohaku_happy']

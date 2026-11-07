@@ -18,9 +18,9 @@ Then Kohaku thanks you and the page returns to the cover (device output `stop`).
 Your breath always cools both ears. Per ear only the stronger mode is sent (hysteresis 0.06; switching sets the other channel to 0) → 0 same-ear conflicts (the page counts them: `CAVE.conflicts()`).
 
 ## Files
-- `index.html`, `demo.css` — page (player chrome like Demo 4; `?embed=1` for the site menu, `?cover=1` poster, `?shot=<bg>` clean background, `?scene=gate|tunnel|spring` jump for testing).
-- `game.js` — puzzle state, hit areas, Kohaku's speech queue, thermal engine, device output (same protocol / range as all demos).
-- `art.js` — code-drawn pastel cel-shaded scenes; Seedance clips in `assets/video/<name>.mp4` replace them automatically (see `Seedance素材命令.md`; layout references in `project/layout_refs/`). When clips arrive: re-measure `GEO`, skip the code-drawn hearth flames when `hut_fire` is present, compress to 720p before committing.
+- `index.html`, `../../shared/game.css` — page (player chrome like Demo 4; `?embed=1` for the site menu, `?cover=1` poster, `?shot=<bg>` clean background, `?scene=gate|tunnel|spring` jump for testing).
+- `main.js` — puzzle state, hit areas, Kohaku's speech queue, thermal engine, device output (same protocol / range as all demos).
+- `art.js` — code-drawn pastel cel-shaded scenes; Seedance clips in `assets/video/<name>.mp4` replace them automatically (see `project/prompts_seedance.md`; layout references in `project/layout_refs/`). When clips arrive: re-measure `GEO`, skip the code-drawn hearth flames when `hut_fire` is present, compress to 720p before committing.
 - `audio.js` — synthesized sounds (wind, fire, candle, foxfire, stream, waterfall, drips, bats, door rumble…) + Kohaku's voice playback.
 - `lines.js` — Kohaku's lines (ja / en / TTS reading). `scripts/voice.py` → `media/voice/<id>.m4a` + `media/voice.js` (ElevenLabs, key in the repo .env.local).
 - Voice: **ElevenLabs** `kohaku r1_b` (user's pick 2026-11-08, tools/eleven/cast.json; earlier VOICEVOX:猫使ビィ). Auditions: `audio/audition/` (local only).

@@ -2,7 +2,7 @@
 
   python3 scripts/audition.py        → audio/audition/*.m4a + audio/audition/index.html (local only, not in git)
 
-Needs the VOICEVOX engine on :50021 (double-click demos/all-ages/Demo1_SnowFoxfire/start_voicevox.command).
+Needs the VOICEVOX engine on :50021 (double-click demos/all-ages/Demo01_SnowFoxfire/start_voicevox.command).
 Whisper line uses the speaker's whisper / calm style when it has one.
 """
 import json, os, subprocess, tempfile, urllib.parse, urllib.request

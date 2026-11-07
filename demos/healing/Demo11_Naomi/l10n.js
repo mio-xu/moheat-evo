@@ -1,0 +1,128 @@
+// Languages of this demo for ../../shared/subs.js (subtitles, answers, cover) and ../../shared/voice.js (voice answers).
+// text.<lang>: "text exactly as the page shows it" → that language · names: speaker labels · voice.<lang|all>: same-meaning phrasings per answer.
+// Generated from the translation tables (DEMO_DESIGN_GUIDE §2.2); edit here, keys must stay byte-identical to the page text.
+window.MOHEAT_L10N = {
+ "langs": [
+  "en",
+  "ja",
+  "zh"
+ ],
+ "text": {
+  "zh": {
+   "ちゅっ": "啾",
+   "…にゃ？": "…喵？",
+   "にゃう…？": "喵呜…？",
+   "ごろーん": "咕噜——翻个身",
+   "ごろごろ…": "呼噜呼噜…",
+   "にゃ？": "喵？",
+   "にゃ〜ん": "喵〜呜",
+   "なぁに？": "干嘛呀？",
+   "つかまえた！": "抓到啦！",
+   "たのしかった！": "好好玩！",
+   "にゃ…": "喵…",
+   "ごちそうさま！": "吃饱啦！谢谢款待！",
+   "💡 ヒント": "💡 提示",
+   "ヒント": "提示",
+   "🌬 息": "🌬 气息",
+   "息": "气息",
+   "ふーふー": "呼呼",
+   "おはよう、ナオミ": "早上好，直美",
+   "頭を なでなで してあげて": "摸摸她的头",
+   "名前を呼んでみて「ナオミ〜」": "叫叫她的名字「直美〜」",
+   "ねこじゃらしで あそぼう": "用逗猫棒一起玩",
+   "ごはんを ふーふー してあげて": "帮她把饭呼呼吹凉",
+   "ちょっとだけ、つんつん": "就一下下，戳戳",
+   "ふわふわのおなかを なでなで": "摸摸毛茸茸的肚子",
+   "いっしょに、おやすみ": "一起，晚安",
+   "目をとじて、耳をすませて": "闭上眼睛，竖起耳朵听",
+   "ナオミの頭の上を、ゆっくりドラッグ": "在直美的头上，慢慢拖动",
+   "マイクに「ナオミ〜」、またはボタン": "对着麦克风喊「直美〜」，或者按按钮",
+   "ねこじゃらしを動かして、ナオミの前でふりふり": "挥动逗猫棒，在直美面前晃一晃",
+   "マイクに息を吹きかけるか、ボタンを長押し": "对着麦克风吹气，或者长按按钮",
+   "ナオミをタップ（3回）": "点直美（3次）",
+   "ナオミをタップ（3回": "点直美（3次",
+   "おなかの上を、ゆっくりドラッグ": "在肚子上，慢慢拖动",
+   "そっとなでても、ただ聞いていてもいいよ": "轻轻摸她也行，静静听着也行哦",
+   "なかよし": "亲密度",
+   "🎤 声": "🎤 声音",
+   "声": "声音",
+   "📣 ナオミ〜": "📣 直美〜",
+   "ナオミ": "直美",
+   "…おこらない。やさしい子": "…没生气。真是个温柔的孩子",
+   "おこらない。やさしい子": "没生气。真是个温柔的孩子",
+   "おなかを見せてくれた…": "把肚子露给你看了…",
+   "ひゃっ、つめたい！ …ナオミのお鼻？": "呀，好凉！…是直美的鼻子？",
+   "すりすり…": "蹭蹭…",
+   "お返事してくれた！ もういちど呼んでみて": "她回应你了！再叫一次吧",
+   "もういっかい！": "再来一次！",
+   "まだ？": "还没好吗？",
+   "もう熱くないよ": "已经不烫了哦",
+   "おなかいっぱいで、うとうと…": "吃得饱饱的，开始犯困…",
+   "ふわっふわ…": "毛茸茸的…",
+   "おやすみ、ナオミ": "晚安，直美",
+   "↺ もう一度": "↺ 再玩一次",
+   "もう一度": "再玩一次",
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · 双耳ASMR × 冷热触感",
+   "ナオミと、ふわふわの一日": "和直美的毛茸茸一天",
+   "A Fluffy Day with Naomi": "",
+   "🐾 ねこと遊ぶ · Interactive": "🐾 和猫咪玩 · 互动",
+   "🐈 ぬくもり・ごろごろ · warm": "🐈 体温・呼噜呼噜 · 温暖",
+   "👃 つめたいお鼻・雨 · cool": "👃 冰凉的小鼻子・雨 · 清凉",
+   "▶ はじめる · Start": "▶ 开始",
+   "🎧 Left / Right check": "🎧 左右声道检查",
+   "Headphones on · mic optional (call her name, blow on her food; or use the buttons) · connect MoHeat Evo to feel her warmth and her cold little nose": "请戴上耳机 · 麦克风可选（叫她的名字、给她的饭吹吹气；也可以用按钮） · 连接 MoHeat Evo，感受她的体温和冰凉的小鼻子"
+  },
+  "ja": {
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
+   "ナオミと、ふわふわの一日": "ナオミと、ふわふわの一日",
+   "A Fluffy Day with Naomi": "",
+   "🐾 ねこと遊ぶ · Interactive": "🐾 ねこと遊ぶ · インタラクティブ",
+   "🐈 ぬくもり・ごろごろ · warm": "🐈 ぬくもり・ごろごろ · あたたか",
+   "👃 つめたいお鼻・雨 · cool": "👃 つめたいお鼻・雨 · ひんやり",
+   "▶ はじめる · Start": "▶ はじめる",
+   "🎧 Left / Right check": "🎧 左右チェック",
+   "Headphones on · mic optional (call her name, blow on her food; or use the buttons) · connect MoHeat Evo to feel her warmth and her cold little nose": "ヘッドホンを装着 · マイクは任意（名前を呼ぶ、ごはんをふーふーする。ボタンでもOK） · MoHeat Evo をつなぐと、彼女のぬくもりと冷たい小さなお鼻を感じられます"
+  },
+  "en": {
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
+   "ナオミと、ふわふわの一日": "A Fluffy Day with Naomi",
+   "A Fluffy Day with Naomi": "",
+   "🐾 ねこと遊ぶ · Interactive": "🐾 play with a cat · Interactive",
+   "🐈 ぬくもり・ごろごろ · warm": "🐈 warmth · purring · warm",
+   "👃 つめたいお鼻・雨 · cool": "👃 cold little nose · rain · cool",
+   "▶ はじめる · Start": "▶ Start",
+   "🎧 Left / Right check": "🎧 Left / Right check",
+   "Headphones on · mic optional (call her name, blow on her food; or use the buttons) · connect MoHeat Evo to feel her warmth and her cold little nose": "Headphones on · mic optional (call her name, blow on her food; or use the buttons) · connect MoHeat Evo to feel her warmth and her cold little nose"
+  }
+ },
+ "names": {
+  "ナオミ": {
+   "en": "Naomi",
+   "zh": "直美"
+  }
+ },
+ "voice": {
+  "all": {
+   "📣 ナオミ〜": [
+    "直美〜",
+    "直美",
+    "直美快来",
+    "小直美",
+    "Naomi",
+    "come here Naomi",
+    "ナオミ",
+    "ナオミおいで"
+   ],
+   "ナオミ": [
+    "直美〜",
+    "直美",
+    "直美快来",
+    "小直美",
+    "Naomi",
+    "come here Naomi",
+    "ナオミ",
+    "ナオミおいで"
+   ]
+  }
+ }
+};

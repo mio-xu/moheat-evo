@@ -1,0 +1,238 @@
+// Languages of this demo for ../../shared/subs.js (subtitles, answers, cover) and ../../shared/voice.js (voice answers).
+// text.<lang>: "text exactly as the page shows it" → that language · names: speaker labels · voice.<lang|all>: same-meaning phrasings per answer.
+// Generated from the translation tables (DEMO_DESIGN_GUIDE §2.2); edit here, keys must stay byte-identical to the page text.
+window.MOHEAT_L10N = {
+ "langs": [
+  "en",
+  "ja",
+  "zh"
+ ],
+ "text": {
+  "zh": {
+   "ナオミ〜？ おはよう。": "直美〜？早上好。",
+   "ごはんだよ〜。ほら、おいで。": "吃饭啦〜。来，过来。",
+   "あったかいね、なおちゃん。ひなたぼっこ？": "好暖和呀，小直。在晒太阳吗？",
+   "あ、お日さま、逃げちゃったね。": "啊，太阳跑掉了呢。",
+   "あ、だめだよ〜。寒いでしょ。": "啊，不行哦〜。会冷的吧。",
+   "ふふ、のぞいてもなにもないよ。はい、閉めまーす。": "呵呵，往里看也什么都没有哦。好，关上啦〜。",
+   "もう、くすぐったい。…あとでね。": "真是的，好痒。…待会儿哦。",
+   "よいしょ。…ハンガー、取ってこよ。": "嘿咻。…去拿衣架吧。",
+   "あれ？ ナオミ？ どこ行ったの？": "咦？直美？跑哪儿去了？",
+   "…みーつけた。": "…找——到了。",
+   "もう、あったかいとこ知ってるんだから。": "真是的，就知道哪里暖和。",
+   "今日もいっぱい遊んだね。": "今天也玩了好多呢。",
+   "ふふ、ふみふみしてる。くすぐったいよ。": "呵呵，在踩奶呢。好痒哦。",
+   "…もう寝ちゃうの？ じゃあ、わたしも。": "…已经要睡了吗？那我也睡吧。",
+   "おやすみ、ナオミ。": "晚安，直美。",
+   "🐾 にゃ": "🐾 喵",
+   "にゃ": "喵",
+   "あさ・耳をすませる": "早晨・竖起耳朵",
+   "まどべのひなた": "窗边的阳光",
+   "れいぞうこ": "冰箱",
+   "ふわふわダイブ": "软绵绵大跳水",
+   "よる・おなかのうえ": "夜晚・趴在肚子上",
+   "耳をうごかして、台所の音をさがす": "转动耳朵，寻找厨房的声音",
+   "ひだまりをタップ": "点一下阳光",
+   "（…いいにおい。台所から、何か聞こえる？）": "（…好香。厨房那边，好像有什么声音？）",
+   "いいにおい。台所から、何か聞こえる？": "好香。厨房那边，好像有什么声音？",
+   "おきる": "起床",
+   "🧊 のぞきこむ": "🧊 往里看",
+   "のぞきこむ": "往里看",
+   "🐾 足にすりすり": "🐾 蹭蹭她的脚",
+   "足にすりすり": "蹭蹭她的脚",
+   "とびこむ": "跳进去",
+   "もぐる（長押し）": "钻进去（长按）",
+   "もぐる（長押し": "钻进去（长按",
+   "にゃっ": "喵！",
+   "🐾 ふみふみ": "🐾 踩奶",
+   "ふみふみ": "踩奶",
+   "😪 まるくなる": "😪 缩成一团",
+   "まるくなる": "缩成一团",
+   "🐾 ずっと、ここがいい。": "🐾 一直待在这里就好。",
+   "ずっと、ここがいい。": "一直待在这里就好。",
+   "😪 いちばんあったかい場所。": "😪 最暖和的地方。",
+   "いちばんあったかい場所。": "最暖和的地方。",
+   "↺ もう一度": "↺ 再玩一次",
+   "もう一度": "再玩一次",
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · 双耳ASMR × 冷热触感",
+   "ねこになった日": "变成猫咪的那一天",
+   "The Day I Became Naomi — a winter Saturday through a cat's ears": "用猫的耳朵度过冬日的周六",
+   "🐈 ナオミになる · Interactive": "🐈 变成直美 · 互动",
+   "☀ ひだまり・洗濯もの · warm": "☀ 阳光・晾晒的衣物 · 温暖",
+   "❄️ 窓ガラス・冷蔵庫 · cool": "❄️ 窗玻璃・冰箱 · 清凉",
+   "▶ はじめる · Start": "▶ 开始",
+   "🎧 Left / Right check": "🎧 左右声道检查",
+   "Headphones on · you are the cat: drag the two ear dials to turn your ears, tap / hold to play · connect MoHeat Evo to feel the cold glass, the sun, the fridge air and the warm laundry": "请戴上耳机 · 你就是猫：拖动两个耳朵转盘来转动耳朵，点按 / 长按来玩耍 · 连接 MoHeat Evo，感受冰凉的玻璃、阳光、冰箱的冷气和温暖的衣物",
+   "👂 耳をうごかして、台所の音をさがす Drag the ear dials to find the sound from the kitchen": "👂 转动耳朵，寻找厨房传来的声音",
+   "☀ ひだまりをタップ Tap the patch of sunlight to hop into it": "☀ 点击那片阳光"
+  },
+  "ja": {
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
+   "ねこになった日": "ねこになった日",
+   "The Day I Became Naomi — a winter Saturday through a cat's ears": "ねこの耳で過ごす、冬の土曜日",
+   "🐈 ナオミになる · Interactive": "🐈 ナオミになる · インタラクティブ",
+   "☀ ひだまり・洗濯もの · warm": "☀ ひだまり・洗濯もの · あたたか",
+   "❄️ 窓ガラス・冷蔵庫 · cool": "❄️ 窓ガラス・冷蔵庫 · ひんやり",
+   "▶ はじめる · Start": "▶ はじめる",
+   "🎧 Left / Right check": "🎧 左右チェック",
+   "Headphones on · you are the cat: drag the two ear dials to turn your ears, tap / hold to play · connect MoHeat Evo to feel the cold glass, the sun, the fridge air and the warm laundry": "ヘッドホンを装着 · あなたはねこ：2つの耳ダイヤルをドラッグして耳を向け、タップ / 長押しで遊ぼう · MoHeat Evo をつなぐと、冷たいガラス、日ざし、冷蔵庫の冷気、あたたかい洗濯ものを感じられます"
+  },
+  "en": {
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
+   "ねこになった日": "The Day I Became Naomi",
+   "The Day I Became Naomi — a winter Saturday through a cat's ears": "a winter Saturday through a cat's ears",
+   "🐈 ナオミになる · Interactive": "🐈 Become Naomi · Interactive",
+   "☀ ひだまり・洗濯もの · warm": "☀ sunny spot · laundry · warm",
+   "❄️ 窓ガラス・冷蔵庫 · cool": "❄️ window glass · fridge · cool",
+   "▶ はじめる · Start": "▶ Start",
+   "🎧 Left / Right check": "🎧 Left / Right check",
+   "Headphones on · you are the cat: drag the two ear dials to turn your ears, tap / hold to play · connect MoHeat Evo to feel the cold glass, the sun, the fridge air and the warm laundry": "Headphones on · you are the cat: drag the two ear dials to turn your ears, tap / hold to play · connect MoHeat Evo to feel the cold glass, the sun, the fridge air and the warm laundry",
+   "👂 耳をうごかして、台所の音をさがす Drag the ear dials to find the sound from the kitchen": "👂 Drag the ear dials to find the sound from the kitchen",
+   "☀ ひだまりをタップ Tap the patch of sunlight to hop into it": "☀ Tap the patch of sunlight to hop into it"
+  }
+ },
+ "names": {
+  "ナオミ": {
+   "en": "Naomi",
+   "zh": "直美"
+  },
+  "飼い主": {
+   "en": "Owner",
+   "zh": "主人"
+  }
+ },
+ "voice": {
+  "all": {
+   "耳をうごかして、台所の音をさがす": [
+    "找厨房的声音",
+    "转耳朵",
+    "听听厨房",
+    "寻找声音",
+    "find the sound",
+    "listen to the kitchen",
+    "音をさがす",
+    "耳をうごかす"
+   ],
+   "ひだまりをタップ": [
+    "点阳光",
+    "跳进阳光里",
+    "去晒太阳",
+    "晒太阳",
+    "tap the sunlight",
+    "hop into the sun",
+    "ひだまり",
+    "ひなたに行く"
+   ],
+   "おきる": [
+    "起床",
+    "起来",
+    "醒醒",
+    "起来吧",
+    "get up",
+    "wake up",
+    "おきる",
+    "起きる"
+   ],
+   "🧊 のぞきこむ": [
+    "往里看",
+    "看看里面",
+    "偷看一下",
+    "瞧瞧冰箱",
+    "peek inside",
+    "look inside",
+    "のぞきこむ",
+    "のぞく"
+   ],
+   "のぞきこむ": [
+    "往里看",
+    "看看里面",
+    "偷看一下",
+    "瞧瞧冰箱",
+    "peek inside",
+    "look inside",
+    "のぞきこむ",
+    "のぞく"
+   ],
+   "🐾 足にすりすり": [
+    "蹭蹭她的脚",
+    "蹭脚",
+    "蹭蹭",
+    "去蹭她",
+    "rub against her leg",
+    "rub her leg",
+    "足にすりすり",
+    "すりすり"
+   ],
+   "足にすりすり": [
+    "蹭蹭她的脚",
+    "蹭脚",
+    "蹭蹭",
+    "去蹭她",
+    "rub against her leg",
+    "rub her leg",
+    "足にすりすり",
+    "すりすり"
+   ],
+   "とびこむ": [
+    "跳进去",
+    "扑进去",
+    "跳",
+    "钻进去",
+    "dive in",
+    "jump in",
+    "とびこむ",
+    "飛び込む"
+   ],
+   "にゃっ": [
+    "喵",
+    "喵一声",
+    "喵喵",
+    "回她一声喵",
+    "meow",
+    "meow back",
+    "にゃっ",
+    "にゃー"
+   ],
+   "🐾 ふみふみ": [
+    "踩奶",
+    "踩踩",
+    "踩一踩",
+    "揉揉毛衣",
+    "knead",
+    "knead her sweater",
+    "ふみふみ",
+    "ふみふみする"
+   ],
+   "ふみふみ": [
+    "踩奶",
+    "踩踩",
+    "踩一踩",
+    "揉揉毛衣",
+    "knead",
+    "knead her sweater",
+    "ふみふみ",
+    "ふみふみする"
+   ],
+   "😪 まるくなる": [
+    "缩成一团",
+    "团起来",
+    "蜷起来",
+    "睡觉",
+    "curl up",
+    "go to sleep",
+    "まるくなる",
+    "丸くなる"
+   ],
+   "まるくなる": [
+    "缩成一团",
+    "团起来",
+    "蜷起来",
+    "睡觉",
+    "curl up",
+    "go to sleep",
+    "まるくなる",
+    "丸くなる"
+   ]
+  }
+ }
+};

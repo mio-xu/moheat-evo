@@ -1,0 +1,141 @@
+// Languages of this demo for ../../shared/subs.js (subtitles, answers, cover) and ../../shared/voice.js (voice answers).
+// text.<lang>: "text exactly as the page shows it" → that language · names: speaker labels · voice.<lang|all>: same-meaning phrasings per answer.
+// Generated from the translation tables (DEMO_DESIGN_GUIDE §2.2); edit here, keys must stay byte-identical to the page text.
+window.MOHEAT_L10N = {
+ "langs": [
+  "en",
+  "ja",
+  "zh"
+ ],
+ "text": {
+  "zh": {
+   "…ずぶ濡れじゃないか。 傘は？ …まったく。 ほら、おいで。": "…浑身都湿透了啊。伞呢？…真是的。来，过来。",
+   "じっとして。 …風邪をひかれたら、僕が困る。": "别动。…你要是感冒了，我会很困扰的。",
+   "髪、冷たいね。 …ちゃんと乾かそうか。 ここに座って。": "头发好凉。…好好吹干吧。坐这里。",
+   "熱かったら言って。 …まずは、左から。": "太烫的话就说。…先从左边开始。",
+   "君の髪、僕と同じ匂いがする。 …悪くないね。": "你的头发，和我是一样的味道。…感觉不坏呢。",
+   "…聞こえなかった？": "…没听见吗？",
+   "じゃあ、もう一回だけ。 …こうして触れるの、ずっと我慢してたんだけどな。": "那，就再说一次。…像这样碰你，我其实一直在忍着。",
+   "反対側も。 …こっち、向いて。": "另一边也吹。…转过来，看这边。",
+   "最後は冷風で。 …ほら、さらさら。": "最后用冷风。…你看，顺滑了。",
+   "眼鏡、外してもいい？ …君の顔、ちゃんと見たいから。": "眼镜，可以摘下来吗？…因为我想好好看看你的脸。",
+   "雨、まだ止みそうにないね。": "雨，好像还停不了呢。",
+   "そう。 …じゃあ、傘を貸すよ。 返しに来るのは、明日でいいから。": "这样啊。…那我借你伞吧。明天再来还就好。",
+   "…いい子だね。 雨が止むまで、ここにいればいい。": "…真乖。雨停之前，就待在这里吧。",
+   "…止まなければいいのに。": "…要是一直不停就好了。",
+   "（ドライヤーの音で、よく聞こえない…）": "（吹风机的声音太大，听不太清…）",
+   "部屋に入る": "走进房间",
+   "右を向く": "转向右边",
+   "見つめ返す（長押し）": "回望他（长按）",
+   "雨の夜": "雨夜",
+   "タオル": "毛巾",
+   "ドライヤー": "吹风机",
+   "耳元で": "在耳边",
+   "雨が止むまで": "直到雨停",
+   "…なんて言ったの？": "…你刚才说什么？",
+   "もう一回、言って": "再说一遍",
+   "…そろそろ帰らなきゃ": "…我该回家了",
+   "…もう少しだけ、いてもいい？": "…可以再多待一会儿吗？",
+   "☔ …雨が止むまで、ここにいればいい": "☔ …雨停之前，就待在这里吧",
+   "☂ 傘は明日、返しにおいで": "☂ 伞明天再来还吧",
+   "↺ もう一度": "↺ 再来一次",
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · 双耳ASMR × 冷热触感",
+   "Until the Rain Stops — a rainy night at his flat, he dries your hair": "雨夜，在他家里，他为你吹干头发",
+   "🤍 雨の夜の紫苑 · Interactive": "🤍 雨夜的紫苑 · 互动",
+   "💨 ドライヤー・耳元の声 · warm": "💨 吹风机・耳边的声音 · 温暖",
+   "💧 濡れた髪・冷風 · cool": "💧 湿发・冷风 · 清凉",
+   "▶ はじめる · Start": "▶ 开始",
+   "🎧 Left / Right check": "🎧 左右声道检查",
+   "Headphones on · drag to aim the dryer, tap / hold to answer him · connect MoHeat Evo to feel the wet hair, the warm air circling your head and his voice": "请戴上耳机 · 拖动来调整吹风机方向，点按 / 长按来回应他 · 连接 MoHeat Evo，感受湿发、环绕头部的暖风和他的声音",
+   "💨 ドラッグして温風を当てる Drag across the picture to aim the warm air": "💨 拖动画面，让暖风吹过去"
+  },
+  "ja": {
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
+   "雨が止むまで": "雨が止むまで",
+   "Until the Rain Stops — a rainy night at his flat, he dries your hair": "雨の夜、彼の部屋で髪を乾かしてもらう",
+   "🤍 雨の夜の紫苑 · Interactive": "🤍 雨の夜の紫苑 · インタラクティブ",
+   "💨 ドライヤー・耳元の声 · warm": "💨 ドライヤー・耳元の声 · あたたか",
+   "💧 濡れた髪・冷風 · cool": "💧 濡れた髪・冷風 · ひんやり",
+   "▶ はじめる · Start": "▶ はじめる",
+   "🎧 Left / Right check": "🎧 左右チェック",
+   "Headphones on · drag to aim the dryer, tap / hold to answer him · connect MoHeat Evo to feel the wet hair, the warm air circling your head and his voice": "ヘッドホンを装着 · ドラッグでドライヤーの向きを変え、タップ / 長押しで彼に答えよう · MoHeat Evo をつなぐと、濡れた髪、頭をめぐる温風、彼の声を感じられます"
+  },
+  "en": {
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
+   "雨が止むまで": "Until the Rain Stops",
+   "Until the Rain Stops — a rainy night at his flat, he dries your hair": "a rainy night at his flat, he dries your hair",
+   "🤍 雨の夜の紫苑 · Interactive": "🤍 Shion on a rainy night · Interactive",
+   "💨 ドライヤー・耳元の声 · warm": "💨 hair dryer · his voice at your ear · warm",
+   "💧 濡れた髪・冷風 · cool": "💧 wet hair · cool air · cool",
+   "▶ はじめる · Start": "▶ Start",
+   "🎧 Left / Right check": "🎧 Left / Right check",
+   "Headphones on · drag to aim the dryer, tap / hold to answer him · connect MoHeat Evo to feel the wet hair, the warm air circling your head and his voice": "Headphones on · drag to aim the dryer, tap / hold to answer him · connect MoHeat Evo to feel the wet hair, the warm air circling your head and his voice",
+   "💨 ドラッグして温風を当てる Drag across the picture to aim the warm air": "💨 Drag across the picture to aim the warm air"
+  }
+ },
+ "names": {},
+ "voice": {
+  "all": {
+   "部屋に入る": [
+    "走进房间",
+    "进房间",
+    "进去",
+    "进屋",
+    "step inside",
+    "go in",
+    "部屋に入る",
+    "入る"
+   ],
+   "右を向く": [
+    "转向右边",
+    "向右转",
+    "转头",
+    "看右边",
+    "turn my head",
+    "turn right",
+    "右を向く",
+    "右向く"
+   ],
+   "…なんて言ったの？": [
+    "你说什么",
+    "刚才说什么",
+    "说了什么",
+    "什么",
+    "what did you say",
+    "what",
+    "なんて言ったの",
+    "なに"
+   ],
+   "もう一回、言って": [
+    "再说一遍",
+    "再说一次",
+    "再讲一遍",
+    "重复一下",
+    "say it again",
+    "again please",
+    "もう一回",
+    "もう一度言って"
+   ],
+   "…そろそろ帰らなきゃ": [
+    "我该回家了",
+    "该回去了",
+    "回家",
+    "我要走了",
+    "I should go home",
+    "I have to go",
+    "そろそろ帰る",
+    "帰らなきゃ"
+   ],
+   "…もう少しだけ、いてもいい？": [
+    "可以再待一会儿吗",
+    "再待一会儿",
+    "想多待一会",
+    "不想走",
+    "can I stay a little longer",
+    "let me stay",
+    "もう少しいたい",
+    "まだいてもいい"
+   ]
+  }
+ }
+};

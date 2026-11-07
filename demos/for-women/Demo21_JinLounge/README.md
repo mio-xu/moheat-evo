@@ -15,7 +15,7 @@ the thermal output (firmware **DUAL**: cool and heat independent per ear) is com
 | "…今日はもう、帰さねえから" at your right ear | right warm (voice + breath) |
 | He wraps you in his leather jacket | both warm (the collar) |
 
-Files: `index.html`, `lounge.css` (+ Demo 10's `demo.css` and `../../shared/series.css` by path), `game.js`, `audio.js` (JLAudio), `lines.js`.
+Files: `index.html`, `style.css` (+ Demo 10's `demo.css` and `../../shared/series.css` by path), `main.js`, `audio.js` (JLAudio), `lines.js`.
 Voice: `scripts/voice.py` — ElevenLabs, the user's pick `jin r1_a` (tools/eleven/cast.json; earlier VOICEVOX:青山龍星 "j6"), audio tags per line.
 Art: Seedance web (GPT Image 2, style 3 soft cel; raw PNGs in `assets/art/`, not in git) → `media/art/jin_*.jpg` (stills / fallback).
 Animation (redone 2026-11-08 to the DEMO_DESIGN_GUIDE §6 standard): 16 Seedance 2.5 Lite 1080p 4 s clips, first & last frame = the stills

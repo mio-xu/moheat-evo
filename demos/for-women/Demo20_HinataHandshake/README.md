@@ -16,7 +16,7 @@ star stud earring, cream cable-knit cardigan), from `../Demo16_HandshakeEvent/as
 | He leans to your **right** ear for a promise; someone comes in through the doors | right **warm (voice) + cool (gust) at once** |
 | You say "約束する" (mic or button), he waves goodbye | warmth fades |
 
-Files: `index.html` (+ Demo 10's `demo.css` and Demo 12's `call.css` by path, then `hs.css`), `game.js` (story, choices / mic / actions, thermal layers, device),
+Files: `index.html` (+ Demo 10's `demo.css` and Demo 12's `call.css` by path, then `style.css`), `main.js` (story, choices / mic / actions, thermal layers, device),
 `audio.js` (HRTF voices, synthesized hall: crowd, stage music, entrance draft, door, breath, timer), `lines.js` (ja / en / style / reading).
 
 Voice: `scripts/voice.py` — Hinata = **ElevenLabs** voice "v2" (the user's pick 2026-11-08 from `scripts/eleven_audition.py`, a Voice Design
@@ -33,5 +33,5 @@ Animation (v2, 2026-11-08, handoff §4b): 11 Seedance 2.5 Lite **1080p** clips, 
 (mirrored for the right ear), `v_wave`. One-shots, each from one still to the next: `v_take_hand` (booth→hands), `v_hands_breath`, `v_lean_in`
 (→left ear), `v_lean_back` (→hands), `v_lean_in_r` (→right ear, last frame = the mirrored lean still), `v_leave` (→wave).
 `scripts/prepare_video.py`: per clip, position + colour drift corrected and the first / last frames blended onto the stills (exact), 1920×1080.
-`game.js` switches clips only at a clip's end (identical frames → hard cut); `go(clip, view)` queues a transition for the next end.
+`main.js` switches clips only at a clip's end (identical frames → hard cut); `go(clip, view)` queues a transition for the next end.
 Raw downloads in `assets/video/` (not in git). `?stills` = stills + mouth patches.

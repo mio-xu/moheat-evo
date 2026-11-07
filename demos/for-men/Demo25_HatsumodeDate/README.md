@@ -18,7 +18,7 @@ Hinata / Luna) in look (silver-white side ponytail, white-to-crimson camellia fu
 - Not heated: her blush, her burnt tongue, the steam of her own cup (45 cm away), the food stalls (metres away). Review 2026-11-08 (user): steam heat removed, stole made asymmetric, bonfire / stole / face timing fixed, less wind chill under the eaves.
 
 ## Files
-- `index.html`, `date.css` (+ Demo10 `demo.css`, `shared/series.css`), `game.js`, `audio.js` (HRTF + synthesized shrine ambience), `lines.js` (ja + en).
+- `index.html`, `style.css` (+ Demo10 `demo.css`, `shared/series.css`), `main.js`, `audio.js` (HRTF + synthesized shrine ambience), `lines.js` (ja + en).
 - `scripts/voice.py` → `media/voice/*.m4a` (ElevenLabs `tsubaki` r1_b, user pick), `scripts/seedance.py` (design + scene prompts; `project/web_prompts.json`), `scripts/prepare_art.sh` → `media/art/*.jpg`, `scripts/make_cover.py` → `media/cover.jpg` + menu thumbnail.
 - Look: user picked **D** (`project/designs_contact.jpg`); stills `project/scenes_contact.jpg`. Raw PNGs in `assets/` (git-ignored).
 - `?auto=1` answers every choice / action itself (testing), `?cover=1` poster, `?embed=1` stage only.

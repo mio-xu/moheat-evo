@@ -1,0 +1,159 @@
+// Languages of this demo for ../../shared/subs.js (subtitles, answers, cover) and ../../shared/voice.js (voice answers).
+// text.<lang>: "text exactly as the page shows it" → that language · names: speaker labels · voice.<lang|all>: same-meaning phrasings per answer.
+// Generated from the translation tables (DEMO_DESIGN_GUIDE §2.2); edit here, keys must stay byte-identical to the page text.
+window.MOHEAT_L10N = {
+ "langs": [
+  "en",
+  "ja",
+  "zh"
+ ],
+ "text": {
+  "zh": {
+   "はーい！ みんな、おまたせ〜！": "大家久等啦～！",
+   "…あれ？ もう来てくれてたの？": "…诶？你已经来啦？",
+   "えへへ、うれしいな。今日はキミだけの、特別なファンミーティングだよ！": "嘿嘿，好开心。今天是只属于你的特别见面会哦！",
+   "こっちの耳から…こんにちは。": "从这边的耳朵…你好呀。",
+   "（はぁ…）": "（哈…）",
+   "こっちからも、こんにちは〜！": "这边也，你好～！",
+   "ねえねえ…キミにだけ、ひみつ教えてあげる。": "呐呐…只告诉你一个秘密哦。",
+   "じつはね…今日のステージ、すっごく緊張してたの。": "其实呀…今天的舞台，我超紧张的。",
+   "でも、キミの顔を見たら…ぜんぶ忘れちゃった。": "可是看到你的脸…就全忘掉了。",
+   "ふふっ。": "呵呵。",
+   "だから今日は、キミのためだけに歌っちゃうね！": "所以今天，我只为你一个人唱歌！",
+   "…ないしょだよ？": "…要保密哦？",
+   "えへへ。": "嘿嘿。",
+   "ふぅ…ステージのライト、ちょっと暑いね。": "呼…舞台的灯光有点热呢。",
+   "そうだ！ 扇いであげる！": "对了！我来帮你扇扇风！",
+   "パタパタ〜。すずしい？": "啪嗒啪嗒～凉快吗？",
+   "こっちも、パタパタ〜。": "这边也，啪嗒啪嗒～",
+   "それから…じゃーん！ つめた〜いドリンク！": "然后…铛铛～！冰冰凉的饮料！",
+   "はい、どうぞ。…カランって、いい音でしょ？": "给，请用。…冰块咔啷一声，很好听吧？",
+   "じゃあ次は…どっちから話しかけるか、当てるゲーム！": "接下来…猜猜我从哪边跟你说话的游戏！",
+   "…右でした♪": "…是右边哦♪",
+   "あ、今の風は…ひみつの魔法！": "啊，刚才那阵风…是秘密魔法！",
+   "つぎは…ひだり。": "下一次…左边。",
+   "ふふっ、くすぐったい？": "呵呵，痒不痒？",
+   "みぎ…": "右边…",
+   "（ふぅ〜）": "（呼～）",
+   "ひだり！": "左边！",
+   "ぜんぶ当たった？ キミ、すごーい！": "全都猜中了？你好厉害！",
+   "それじゃあ…キミだけのための、ミニライブ！": "那么…只为你一个人的迷你演唱会！",
+   "きらきら ひかる ほしのした": "闪闪发光的 星空下",
+   "キミとの ひみつ ふたりだけ": "和你的秘密 只属于我们俩",
+   "ドキドキ とまらない": "心跳 停不下来",
+   "このきもち とどけ キミに": "这份心意 传达给你",
+   "…えへへ、聞いてくれて、ありがとう。": "…嘿嘿，谢谢你听我唱。",
+   "今日は、来てくれて…ほんとうにありがとう。": "今天你能来…真的谢谢你。",
+   "また、会いに来てね。…やくそく。": "下次也要来见我哦。…约定好了。",
+   "ばいばい〜！": "拜拜～！",
+   "うん、来たよ！": "嗯，我来啦！",
+   "すずしい〜！": "好凉快～！",
+   "綾音は、どっちから話しかける？": "绫音会从哪边跟你说话？",
+   "⬅ ひだり": "⬅ 左边",
+   "みぎ ➡": "右边 ➡",
+   "さいこう！": "太棒了！",
+   "👏 拍手！": "👏 鼓掌！",
+   "ありがとう〜！": "谢谢～！",
+   "うん、やくそく！": "嗯，说好了！",
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · 双耳ASMR × 冷热触感",
+   "キミだけの スペシャル ファンミーティング": "只属于你的特别见面会",
+   "Your Special Idol Fan Meeting": "",
+   "🔥 綾音の声 · warm": "🔥 绫音的声音 · 温暖",
+   "❄ 扇子・氷・魔法 · cool": "❄ 折扇・冰块・魔法 · 清凉",
+   "▶ Start · 2:30": "▶ 开始 · 2:30",
+   "🎧 Left / Right check": "🎧 左右声道检查",
+   "Headphones on · connect MoHeat Evo (top right): her voice warms the ear she is at, the fan and the ice cool the other": "请戴上耳机 · 连接 MoHeat Evo（右上角）：她在哪边，哪边耳朵就被她的声音温暖；折扇和冰块让另一边清凉"
+  },
+  "ja": {
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
+   "キミだけの スペシャル ファンミーティング": "キミだけの スペシャル ファンミーティング",
+   "Your Special Idol Fan Meeting": "",
+   "🔥 綾音の声 · warm": "🔥 綾音の声 · あたたか",
+   "❄ 扇子・氷・魔法 · cool": "❄ 扇子・氷・魔法 · ひんやり",
+   "▶ Start · 2:30": "▶ スタート · 2:30",
+   "🎧 Left / Right check": "🎧 左右チェック",
+   "Headphones on · connect MoHeat Evo (top right): her voice warms the ear she is at, the fan and the ice cool the other": "ヘッドホンを装着 · 右上から MoHeat Evo をつなぐと、彼女の声がいる側の耳をあたため、扇子と氷が反対側を冷やします"
+  },
+  "en": {
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
+   "キミだけの スペシャル ファンミーティング": "Your Special Idol Fan Meeting",
+   "Your Special Idol Fan Meeting": "",
+   "🔥 綾音の声 · warm": "🔥 Ayane's voice · warm",
+   "❄ 扇子・氷・魔法 · cool": "❄ fan · ice · magic · cool",
+   "▶ Start · 2:30": "▶ Start · 2:30",
+   "🎧 Left / Right check": "🎧 Left / Right check",
+   "Headphones on · connect MoHeat Evo (top right): her voice warms the ear she is at, the fan and the ice cool the other": "Headphones on · connect MoHeat Evo (top right): her voice warms the ear she is at, the fan and the ice cool the other"
+  }
+ },
+ "names": {
+  "綾音": {
+   "en": "Ayane",
+   "zh": "绫音"
+  }
+ },
+ "voice": {
+  "all": {
+   "うん、来たよ！": [
+    "嗯，我来了",
+    "我来啦",
+    "我来了",
+    "来了",
+    "yep I'm here",
+    "I'm here",
+    "きたよ",
+    "来たよ"
+   ],
+   "すずしい〜！": [
+    "好凉快",
+    "凉快",
+    "好凉",
+    "真凉快",
+    "so cool",
+    "nice and cool",
+    "すずしい",
+    "涼しい"
+   ],
+   "⬅ ひだり": [
+    "左边",
+    "左",
+    "往左",
+    "左侧",
+    "left",
+    "the left",
+    "ひだり",
+    "左側"
+   ],
+   "みぎ ➡": [
+    "右边",
+    "右",
+    "往右",
+    "右侧",
+    "right",
+    "the right",
+    "みぎ",
+    "右側"
+   ],
+   "さいこう！": [
+    "太棒了",
+    "最棒了",
+    "好棒",
+    "太好了",
+    "amazing",
+    "that was amazing",
+    "awesome",
+    "さいこう",
+    "すごい"
+   ],
+   "うん、やくそく！": [
+    "嗯，说好了",
+    "一言为定",
+    "我保证",
+    "约定好了",
+    "I promise",
+    "yes I promise",
+    "やくそく",
+    "約束する"
+   ]
+  }
+ }
+};

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Desktop kit for the Seedance backgrounds (same idea as the Demo 7–9 kits): reads ../Seedance素材命令.md and builds
+"""Desktop kit for the Seedance backgrounds (same idea as the Demo 7–9 kits): reads ../project/prompts_seedance.md and builds
 ~/Desktop/MoHeat_Demo10_Seedance素材/ — one folder per clip with its first (and last) frame, style references,
 the full positive prompt (general + shot) and the negative prompt as separate files, plus an index.html with copy buttons.
 Re-run after editing the .md. The user drops the generated <name>.mp4 into the same folder."""
@@ -9,13 +9,13 @@ from PIL import Image
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEMOS = os.path.dirname(ROOT)
 KIT = os.path.expanduser('~/Desktop/MoHeat_Demo10_Seedance素材')
-md = open(os.path.join(ROOT, 'Seedance素材命令.md'), encoding='utf-8').read()
+md = open(os.path.join(ROOT, 'project/prompts_seedance.md'), encoding='utf-8').read()
 blocks = re.findall(r'```\n(.*?)\n```', md, re.S)
 general, negative = blocks[0].strip(), blocks[1].strip()
 shots = re.findall(r'### (\d) · `([\w]+)\.mp4` · (.+?)\n```\n(.*?)\n```', md, re.S)
 rows = {m[0]: m for m in re.findall(r'\| (\d) \| `[\w]+\.mp4` \| (.+?) \| (.+?) \|', md)}
-STYLE = [('画风参考_A_Demo1房间.jpg', os.path.join(DEMOS, '../all-ages/Demo1_SnowFoxfire/art/chatgpt/room_bg.png')),
-         ('画风参考_B_Demo3舞台.jpg', os.path.join(DEMOS, '../all-ages/Demo3_ShiningSmileConcert/assets/new_stage/concert_stage_split.png'))]
+STYLE = [('画风参考_A_Demo1房间.jpg', os.path.join(DEMOS, '../all-ages/Demo01_SnowFoxfire/art/chatgpt/room_bg.png')),
+         ('画风参考_B_Demo3舞台.jpg', os.path.join(DEMOS, '../all-ages/Demo03_ShiningSmileConcert/assets/new_stage/concert_stage_split.png'))]
 FRAMES = {'1': ['01_hut_night'], '2': ['02_hut_fire'], '3': ['03_gate_night'], '4': ['03_gate_night', '04_gate_open_end'],
           '5': ['05_tunnel_fork'], '6': ['06_spring_dark'], '7': ['07_spring_glow']}
 PRIORITY = {'7': '★ 最优先', '3': '优先', '4': '优先'}

@@ -44,15 +44,15 @@ CATS = {
     'rejected': lambda: g('demos/for-women/Demo12_LateCall/assets/art/design_[B-E]_*.png', 'demos/for-women/Demo12_LateCall/assets/art/x_style*',
                           'demos/for-women/Demo12_LateCall/assets/art/style_[124-8]_*.png',
                           'demos/for-women/Demo21_JinLounge/assets/video_alt', 'demos/for-women/Demo21_JinLounge/assets/art/jin_whisper_[abc].png',
-                          'demos/all-ages/Demo4_SeasonsExpress/video/swirl_candidates', 'demos/for-women/Demo22_ShionRain/assets/frames',
+                          'demos/all-ages/Demo04_SeasonsExpress/video/swirl_candidates', 'demos/for-women/Demo22_ShionRain/assets/frames',
                           'demos/**/*_relit.png'),
-    'obsolete': lambda: g('demos/for-women/Demo16_HandshakeEvent', 'demos/for-men/Demo14_LiveStream/project/box_*.jpg',
-                          'demos/*/*/assets/kit', 'demos/all-ages/Demo4_SeasonsExpress/project/generated_art',
-                          'demos/all-ages/Demo4_SeasonsExpress/project/chatgpt_layout_refs', 'demos/all-ages/Demo4_SeasonsExpress/project/art_render',
-                          'demos/all-ages/Demo4_SeasonsExpress/project/seedance_refs'),
-    'rebuild': lambda: g('demos/all-ages/Demo3_ShiningSmileConcert/audio/stems', 'demos/all-ages/Demo3_ShiningSmileConcert/assets/music_edited',
-                         'demos/all-ages/Demo4_SeasonsExpress/audio/source_stems', 'demos/all-ages/Demo1_SnowFoxfire/output/stems', 'demos/all-ages/Demo2_FanMeeting/output/stems',
-                         'demos/all-ages/Demo4_SeasonsExpress/audio/spatialized', 'demos/nobunaga-suntory/*/audio/stems'),
+    'obsolete': lambda: g('demos/for-women/Demo16_HandshakeEvent', 'demos/for-men/Demo14_MintStream/project/box_*.jpg',
+                          'demos/*/*/assets/kit', 'demos/all-ages/Demo04_SeasonsExpress/project/generated_art',
+                          'demos/all-ages/Demo04_SeasonsExpress/project/chatgpt_layout_refs', 'demos/all-ages/Demo04_SeasonsExpress/project/art_render',
+                          'demos/all-ages/Demo04_SeasonsExpress/project/seedance_refs'),
+    'rebuild': lambda: g('demos/all-ages/Demo03_ShiningSmileConcert/audio/stems', 'demos/all-ages/Demo03_ShiningSmileConcert/assets/music_edited',
+                         'demos/all-ages/Demo04_SeasonsExpress/audio/source_stems', 'demos/all-ages/Demo01_SnowFoxfire/output/stems', 'demos/all-ages/Demo02_FanMeeting/output/stems',
+                         'demos/all-ages/Demo04_SeasonsExpress/audio/spatialized', 'demos/nobunaga-suntory/*/audio/stems'),
 }
 
 

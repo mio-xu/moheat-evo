@@ -34,7 +34,7 @@ Nothing for being shy or praised. `STREAM.both()` counts frames with cool + warm
 
 ## Files
 
-- `index.html`, `camp.css` (on top of Demo 14's `stream.css` and Demo 10's `demo.css`, both by path), `game.js`, `audio.js` (Demo 14's audio.js + campfire, lake wind, snow steps, log, foil), `lines.js`.
+- `index.html`, `style.css` (on top of Demo 14's `stream.css` and Demo 10's `demo.css`, both by path), `main.js`, `audio.js` (Demo 14's audio.js + campfire, lake wind, snow steps, log, foil), `lines.js`.
 - `scripts/voice.py` → `media/voice/*.m4a` (ElevenLabs, tags per line); `scripts/seedance.py` (prompts: `designs`, `scenes`; also in `project/web_prompts.json` for the website); `scripts/prepare_art.sh` → `media/art/*.jpg`.
 - Art: 8 stills, Seedance website (GPT Image 2, 16:9 2K), 2026-11-08 — the API upload was rate-limited. v1 (low camera, `assets/art/v1/`) → v2 eye level from `ref_gaku.jpg` (drew the phone rig in frame, `assets/art/v2_rig/`) → final = v2 edited ("remove the phone and tripod, look into the lens"). Raw PNGs in `assets/` stay out of git.
 - `?embed=1` site menu · `?cover=1` poster (`media/cover.jpg`, headless Chrome 1920×1080) · `?auto=1` auto-picks the first option, `?auto=1&alt=1` the last (testing).

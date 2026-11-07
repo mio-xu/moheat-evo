@@ -5,4 +5,4 @@ they are on speaker on your table and grandma's scarf is round your neck (both e
 (right cool, left warm), the phone back to your ear, a New Year promise, and nobody wants to hang up first.
 
 This folder holds only the page and its cover: `index.html` sets `<base href="../Demo15_FamilyCall/">` and `<body data-part="2">`, so the code, art and
-voices are Part 1's files (one `game.js` runs either part). Details in Part 1's README.
+voices are Part 1's files (one `main.js` runs either part). Details in Part 1's README.

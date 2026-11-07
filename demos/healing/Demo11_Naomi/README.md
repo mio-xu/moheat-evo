@@ -22,8 +22,8 @@ Then the room dims, *おやすみ、ナオミ*, and the page returns to the cove
 Per ear only the stronger mode is sent (hysteresis 0.06; switching sets the other channel to 0) → 0 same-ear conflicts (`NAOMI.conflicts()`).
 
 ## Files
-- `index.html`, `naomi.css` (+ Demo 10's `demo.css` by path) — page; `?embed=1` site menu, `?cover=1` poster, `?step=pet|call|play|feed|poke|belly|sleep` jump (testing).
-- `game.js` — steps, input (stroke / tap / wand), Naomi's sprite animation (breathing, blink, mew faces, squish, walk, pounce), thermal engine, device output.
+- `index.html`, `style.css` (+ Demo 10's `demo.css` by path) — page; `?embed=1` site menu, `?cover=1` poster, `?step=pet|call|play|feed|poke|belly|sleep` jump (testing).
+- `main.js` — steps, input (stroke / tap / wand), Naomi's sprite animation (breathing, blink, mew faces, squish, walk, pounce), thermal engine, device output.
 - `audio.js` — synthesized purr (25 Hz pulse trains, inhale / exhale), mews (formant-filtered sawtooth: mew, ask, tiny, trill, long), paw steps, sniff, boop, fur brushing, feather + bell, crunching, rain, birds.
 - Art: **Seedance (GPT Image 2, image-to-image)** from Naomi's photos + the Demo 1–4 style board.
   `scripts/make_jobs.py` → `project/seedance_jobs.json`; `scripts/seedance_images.py all` (Demo 10's API client loaded by path, key `~/.seedance_key`) → `assets/art/*.png` (not in git);

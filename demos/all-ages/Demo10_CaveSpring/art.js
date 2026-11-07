@@ -1,6 +1,6 @@
 // Demo 10 — picture layer. Cute pastel cel-shaded 2D (the Demo 1–4 look): flat fills, soft gradients, dark rounded outlines.
 // Backgrounds are the painted stills (media/art) or code-drawn and cached. Seedance clips (assets/video/<name>.mp4, see
-// Seedance素材命令.md) are only requested with ?film — they were never made, so by default nothing is requested; flames, items, light and particles stay code-drawn
+// project/prompts_seedance.md) are only requested with ?film — they were never made, so by default nothing is requested; flames, items, light and particles stay code-drawn
 // on top, at the positions in GEO (re-measure GEO when the clips arrive).
 window.CaveArt = (() => {
   const W = 1920, H = 1080, INK = '#3a2638';

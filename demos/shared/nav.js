@@ -2,17 +2,17 @@
 // Hidden in ?embed=1 (site menu) and ?cover=1 (cover export) — the bar is hidden there anyway. Add new demos to DEMOS.
 (() => {
   const DEMOS = [   // folders: demos/<cat>/<dir>/ ; groups (in this order): 0 all ages · 1 healing · 2 for him · 3 for her · 4 Nobunaga × Suntory
-    { cat: 'all-ages', dir: 'Demo1_SnowFoxfire', ja: '雪と狐火のひそひそ話', en: 'Whispers of Snow and Flame', group: 0 },
-    { cat: 'all-ages', dir: 'Demo2_FanMeeting', ja: 'キミだけのスペシャルファンミーティング', en: 'Your Special Fan Meeting', group: 0 },
-    { cat: 'all-ages', dir: 'Demo3_ShiningSmileConcert', ja: '氷と炎の星光コンサート', en: 'Ice & Fire Concert', group: 0 },
-    { cat: 'all-ages', dir: 'Demo4_SeasonsExpress', ja: '季節が暴走する魔法の列車', en: 'The Runaway Seasons Express', group: 0 },
+    { cat: 'all-ages', dir: 'Demo01_SnowFoxfire', ja: '雪と狐火のひそひそ話', en: 'Whispers of Snow and Flame', group: 0 },
+    { cat: 'all-ages', dir: 'Demo02_FanMeeting', ja: 'キミだけのスペシャルファンミーティング', en: 'Your Special Fan Meeting', group: 0 },
+    { cat: 'all-ages', dir: 'Demo03_ShiningSmileConcert', ja: '氷と炎の星光コンサート', en: 'Ice & Fire Concert', group: 0 },
+    { cat: 'all-ages', dir: 'Demo04_SeasonsExpress', ja: '季節が暴走する魔法の列車', en: 'The Runaway Seasons Express', group: 0 },
     { cat: 'all-ages', dir: 'Demo10_CaveSpring', ja: '火をともして、ひみつの泉へ', en: 'Kindle the Fire, Find the Hidden Spring', group: 0 },
     { cat: 'healing', dir: 'Demo11_Naomi', ja: 'ナオミと、ふわふわの一日', en: 'A Fluffy Day with Naomi', group: 1 },
     { cat: 'healing', dir: 'Demo13_NaomiCam', ja: 'ナオミ、いまなにしてる？', en: "What's Naomi Up To? · Pet Cam", group: 1 },
-    { cat: 'healing', dir: 'Demo26_NekoNiNatta', ja: 'ねこになった日', en: 'The Day I Became Naomi', group: 1 },
+    { cat: 'healing', dir: 'Demo26_BecomeNaomi', ja: 'ねこになった日', en: 'The Day I Became Naomi', group: 1 },
     { cat: 'healing', dir: 'Demo15_FamilyCall', ja: 'もしもし、おばあちゃん？', en: 'Hello, Grandma? · A Call Home, Part 1', group: 1 },
     { cat: 'healing', dir: 'Demo16_FamilyCall2', ja: 'じいちゃんの、ゆきだるま', en: "Grandpa's Little Snowman · A Call Home, Part 2", group: 1 },
-    { cat: 'for-men', dir: 'Demo14_LiveStream', ja: 'ミントの、ささやき配信', en: "Mint's Whisper Stream", group: 2 },
+    { cat: 'for-men', dir: 'Demo14_MintStream', ja: 'ミントの、ささやき配信', en: "Mint's Whisper Stream", group: 2 },
     { cat: 'for-men', dir: 'Demo17_CocoaStream', ja: 'ココアの、ほっこりカフェ配信', en: "Cocoa's Cozy Café Stream", group: 2 },
     { cat: 'for-men', dir: 'Demo18_HinataStream', ja: 'ひなたの、激辛チャレンジ配信', en: "Hinata's Super-Spicy Challenge", group: 2 },
     { cat: 'for-men', dir: 'Demo19_LunaStream', ja: 'ルナの、よふかし配信', en: "Luna's Late-Night Stream", group: 2 },
@@ -22,26 +22,26 @@
     { cat: 'for-women', dir: 'Demo21_JinLounge', ja: '俺だけ見てろ', en: 'Look Only at Me', group: 3 },
     { cat: 'for-women', dir: 'Demo22_ShionRain', ja: '雨が止むまで', en: 'Until the Rain Stops', group: 3 },
     { cat: 'for-women', dir: 'Demo24_GakuCamp', ja: 'ガクの、焚き火キャンプ配信', en: "Gaku's Campfire Stream", group: 3 },
-    { cat: 'nobunaga-suntory', dir: 'Demo5_GifuCastle', ja: '信長の岐阜城へようこそ', en: "Welcome to Nobunaga's Gifu Castle", group: 4, ep: 1 },
-    { cat: 'nobunaga-suntory', dir: 'Demo6_FutureWhisky', ja: '未来の酒と、安土の夜', en: 'Future Whisky at Azuchi', group: 4, ep: 2 },
-    { cat: 'nobunaga-suntory', dir: 'Demo7_KyotoIzakaya', ja: '信長と家康、京都の居酒屋へ', en: 'Two Warlords in a Kyoto Izakaya', group: 4, ep: 3 },
-    { cat: 'nobunaga-suntory', dir: 'Demo8_YamazakiDistillery', ja: '信長と家康、山崎蒸溜所へ', en: 'Two Warlords at the Yamazaki Distillery', group: 4, ep: 4 },
-    { cat: 'nobunaga-suntory', dir: 'Demo9_SengokuBanquet', ja: '安土最後の酒宴', en: 'The Last Banquet at Azuchi', group: 4, ep: 5 },
+    { cat: 'nobunaga-suntory', dir: 'Demo05_GifuCastle', ja: '信長の岐阜城へようこそ', en: "Welcome to Nobunaga's Gifu Castle", group: 4, ep: 1 },
+    { cat: 'nobunaga-suntory', dir: 'Demo06_FutureWhisky', ja: '未来の酒と、安土の夜', en: 'Future Whisky at Azuchi', group: 4, ep: 2 },
+    { cat: 'nobunaga-suntory', dir: 'Demo07_KyotoIzakaya', ja: '信長と家康、京都の居酒屋へ', en: 'Two Warlords in a Kyoto Izakaya', group: 4, ep: 3 },
+    { cat: 'nobunaga-suntory', dir: 'Demo08_YamazakiDistillery', ja: '信長と家康、山崎蒸溜所へ', en: 'Two Warlords at the Yamazaki Distillery', group: 4, ep: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo09_SengokuBanquet', ja: '安土最後の酒宴', en: 'The Last Banquet at Azuchi', group: 4, ep: 5 },
   ];
   // rights notes shown under each demo's cover credits (full pages only); the full list is the site's credits.html
   const HIST = 'Oda Nobunaga and Tokugawa Ieyasu are portrayed as fictional characters', ADULT = 'お酒は20歳になってから · 20+ only';
   const RIGHTS = {
-    Demo1_SnowFoxfire: 'Art: ChatGPT (OpenAI) · original characters', Demo2_FanMeeting: 'Art: ChatGPT (OpenAI) · original character and song',
-    Demo5_GifuCastle: `${HIST} · art: ChatGPT (OpenAI)`,
-    Demo6_FutureWhisky: `${HIST} · Suntory, Yamazaki, Hibiki and Hakushu (names and bottle designs) are trademarks of Suntory Holdings Limited · ${ADULT}`,
-    Demo7_KyotoIzakaya: `${HIST} · art: ChatGPT (OpenAI) · ${ADULT}`,
-    Demo8_YamazakiDistillery: `${HIST} · Suntory and Yamazaki are trademarks of Suntory Holdings Limited · ${ADULT}`,
-    Demo9_SengokuBanquet: `${HIST} · art: ChatGPT (OpenAI) · ${ADULT}`,
+    Demo01_SnowFoxfire: 'Art: ChatGPT (OpenAI) · original characters', Demo02_FanMeeting: 'Art: ChatGPT (OpenAI) · original character and song',
+    Demo05_GifuCastle: `${HIST} · art: ChatGPT (OpenAI)`,
+    Demo06_FutureWhisky: `${HIST} · Suntory, Yamazaki, Hibiki and Hakushu (names and bottle designs) are trademarks of Suntory Holdings Limited · ${ADULT}`,
+    Demo07_KyotoIzakaya: `${HIST} · art: ChatGPT (OpenAI) · ${ADULT}`,
+    Demo08_YamazakiDistillery: `${HIST} · Suntory and Yamazaki are trademarks of Suntory Holdings Limited · ${ADULT}`,
+    Demo09_SengokuBanquet: `${HIST} · art: ChatGPT (OpenAI) · ${ADULT}`,
   };
   const GROUPS = ['全年齢 · All ages', '癒し · Healing', '男性向け · For him', '女性向け · For her', '信長シリーズ · Nobunaga Series'];   // numbers are the list order
   const qs = new URLSearchParams(location.search);
   { const me = document.currentScript?.src;   // subtitle language EN / 日本語 / 中文 (also in ?embed): shared/subs.js next to this file
-    if (me && !window.MoHeatSub && !qs.has('cover') && !qs.has('render')) { const s = document.createElement('script'); s.src = me.replace(/nav\.js(\?.*)?$/, 'subs.js?v=1'); document.head.appendChild(s); } }
+    if (me && !window.MoHeatSub && !qs.has('cover') && !qs.has('render')) { const s = document.createElement('script'); s.src = me.replace(/nav\.js(\?.*)?$/, 'subs.js?v=2'); document.head.appendChild(s); } }
   if (qs.has('embed') || qs.has('cover') || qs.has('render')) return;
   // one screen: measure the bar and what sits below the stage, series.css sizes the stage and the side panel from these
   if (!('serial' in navigator)) document.documentElement.classList.add('no-serial');   // phones: no Web Serial → series.css hides the device controls

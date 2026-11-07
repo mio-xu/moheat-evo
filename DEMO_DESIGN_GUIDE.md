@@ -60,19 +60,22 @@
 - 官网嵌入的 iframe 已加 `allow="… microphone"`。
 - **测试**：自动通关脚本里用 `MoHeatVoice._hear('台词')` 模拟说话，每个选项、每个分支都要用"说"走一遍；再用一句无关的话确认不会误判。
 
-### 2.2 字幕语言：English（默认）/ 日本語 / 中文（用户 2026-11-08）
+### 2.2 显示语言：English（默认）/ 日本語 / 中文（用户 2026-11-08）
 
-- **一次只显示一种语言，三种字号一样**（中文 / 英文都用该 Demo 日文字幕的样式）。选项按钮、动作按钮、弹幕 / 礼物选项、Demo 1–9 的互动卡片（`interact.js`）也跟着切换。封面、场景标题、MP4 内嵌字幕不变。
+- **一次只显示一种语言，字号一样**（中文 / 英文都用该 Demo 日文字幕的样式）。跟着切换的有：字幕、对话气泡、选项 / 动作 / 弹幕 / 礼物按钮、提示和目标栏、互动卡片（`interact.js`）、跳过 / 重玩等固定按钮、右侧 Progress 列表、**封面**（标题、副标题、角色标签、按钮、提示；长标题自动缩小）。场景标题、MP4 内嵌字幕、画在 canvas 上的字不变。
+- **直播间的观众弹幕**保持原样（日本观众为主），另有约三分之一来自其他国家的观众，用各自的语言发言（`WORLD` 列表，名字后带国旗）。这是弹幕内容，不是界面语言（用户 2026-11-08 更正）。
 - **统一由 `demos/shared/subs.js`（`MoHeatSub`）处理**，`nav.js` 会自动加载它，Demo 代码照旧写日 + 英：
-  - 字幕：`#subs .line > .ja / .en`、对话气泡 `#bubble > b / span`；按钮：`.ch / .act-btn / .chip-c / #micGate button / .toast` 里的 `<b>日文</b><span>English</span>`；一个元素里写成「日本語 · English」的文字（互动卡片、`.ix-btn`）。两种语言都藏起来，另显示一个 `.one`。
-  - 切换：舞台右上角的「字 EN」按钮（EN → 日本語 → 中文），Demo 1–9 右侧的 Subtitles 下拉框（多一个 Off），或 `?sub=ja|en|zh`。存在 localStorage `moheat.sublang`，所有 Demo 共用。
-- **中文放在每个 Demo 自己的 `subs_zh.js`**（页面目录，或 `<base>` 指向的目录）：
-  - `MOHEAT_ZH`：「页面上显示的日文原文」→ 简体中文。key 必须和日文**一字不差**，用脚本从 `lines.js` / `media/data.js` / `game.js` 抽出来生成，不要手打。
-  - `MOHEAT_NAMES`：字幕里的说话人名字 → `{ en, zh }`（信長 / 家康 / あなた 已内置）。
-  - `MOHEAT_VOICE`：每个回答选项的日文 → 6–10 个**意思相同**的说法（中文为主，加英文、日文口语），给语音判定用。
-  - 找不到中文时显示英文，控制台打出 `[MoHeatSub] no 中文 for …`；`MoHeatSub.missing()` 列出全部。
-- **语音判定跟着字幕语言**：`voice.js` 用 en-US / ja-JP / zh-CN 识别；每个选项除了日文、英文，还匹配 `subs_zh.js` 里的中文和 `MOHEAT_VOICE` 的说法；英文另按词匹配（词干 + 常见同义词）。只要意思相近就算通过；两个选项都沾边的模糊回答（如只说 "sure"）不会乱选。中文序数（第一个 / 第二个）也认。
-- **新 Demo**：写完 `lines.js` 和按钮后生成 `subs_zh.js`，三种语言各走一遍，并用 `MoHeatVoice._hear('中文说法')` 测每个选项。
+  - 字幕 `#subs .line > .ja / .en`、气泡 `#bubble > b / span`、按钮 `.ch / .act-btn / .chip-c / #micGate button / .toast / .hud-goal` 里的 `<b>日文</b><span>English</span>` → 两种都藏起来，另显示一个 `.one`。
+  - 一个元素里写成「日本語 · English」的文字（互动卡片、`.ix-btn`、运行时改写的重玩按钮）→ 显示所选那一半；`#steps > li` 的「日本語 · <small>English</small>」同理。
+  - 用 CSS `::before` 写的说话人标签（Demo20 スタッフ、Demo15/16 ばあば / じいじ）在 `subs.js` 的 `WHO` 表里翻译。
+  - 切换：舞台右上角的「字」按钮，**点一下换下一种语言**（用户不要下拉框），封面上也显示；Demo 1–9 右侧的 Subtitles 下拉框（多一个 Off）；或 `?sub=ja|en|zh`。存在 localStorage `moheat.sublang`，所有 Demo 共用。
+- **翻译放在每个 Demo 自己的 `l10n.js`**（页面目录，或 `<base>` 指向的目录）：`window.MOHEAT_L10N = { langs, text: { zh: {…}, ja: {…}, en: {…} }, names, voice }`。
+  - `text.zh`：「页面上显示的日文原文」→ 简体中文；`text.ja / text.en`：封面等原本日英混写的文字 → 只有该语言的版本（`""` = 隐藏）。key 必须和页面文字**一字不差**，用脚本从 `lines.js` / `media/data.js` / `main.js` / `index.html` 抽出来生成，不要手打。
+  - `names`：字幕里的说话人名字 → `{ en, zh }`（信長 / 家康 / あなた 已内置）。
+  - `voice.all`：每个回答选项的日文 → 6–10 个**意思相同**的说法（中文为主，加英文、日文口语），给语音判定用。
+  - 找不到翻译时显示英文，控制台打出 `[MoHeatSub] no zh for …`；`MoHeatSub.missing()` 列出全部。
+- **语音判定跟着显示语言**：`voice.js` 用 en-US / ja-JP / zh-CN 识别；每个选项除了日文、英文，还匹配 `l10n.js` 里的中文和 `voice` 说法；英文另按词匹配（词干 + 常见同义词）。只要意思相近就算通过；两个选项都沾边的模糊回答（如只说 "sure"）不会乱选。中文序数（第一个 / 第二个）也认。
+- **验收**：中文模式下用 `?auto` 跑完整个 Demo，扫描画面上可见的假名（应为 0，直播弹幕除外）；三种语言各看一次封面；用 `MoHeatVoice._hear('中文说法')` 测每个选项。
 
 ## 3. 冷热设计（DUAL）
 
@@ -247,7 +250,7 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 
 ## 7. 页面与版式
 
-- **以最近一个同类 Demo 为模板**复制（女性向：Demo21 / 22 的 `index.html` + `<name>.css` + `game.js` + `audio.js` + `lines.js`），共用 `../../all-ages/Demo10_CaveSpring/demo.css`、`../../shared/series.css`、`../../shared/nav.js`、`../../../device.js`。
+- **以最近一个同类 Demo 为模板**复制（女性向：Demo21 / 22 的 `index.html` + `style.css` + `main.js` + `audio.js` + `lines.js` + `l10n.js`），共用 `../../shared/game.css`、`../../shared/series.css`、`../../shared/nav.js`、`../../../device.js`。
 - **固定结构**：
   - 顶栏：品牌、设备连接、■ STOP。
   - 左侧：16:9 舞台，内含字幕、选择 / 动作按钮、两侧冷热光晕、封面层。
@@ -323,17 +326,20 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 
 ## 12. 资源清理与文件结构
 
-### 12.1 文件结构（新 Demo 一律照这个放）
+### 12.1 命名规则与文件结构（所有 Demo，2026-11-08 统一）
+
+- **文件夹**：`demos/<品类>/Demo<两位编号>_<英文名>/`。编号是创建顺序的 ID（`Demo01`…`Demo26`，不补位到三位）；英文名用 PascalCase 英文单词，1–3 个词，写清角色或主题（`Demo14_MintStream`、`Demo26_BecomeNaomi`），不用罗马字日语。品类：all-ages / healing / for-men / for-women / nobunaga-suntory。
+- **官网缩略图**：`assets/images/demos/<文件夹名>.jpg`；`nav.js` 的 `DEMOS` 用文件夹名。
 
 ```
-仓库根目录            官网（index.html / styles.css / script.js）、设备页（control / test）、device.js、文档（CLAUDE / AGENTS / HANDOFF / 本文件）
-demos/shared/         所有 Demo 共用的 nav.js、series.css、interact.js、scrub.js
-demos/<品类>/<DemoN_英文名>/      品类：all-ages / healing / for-men / for-women / nobunaga-suntory
-  index.html  <名>.css  game.js  audio.js  lines.js  README.md     页面（进 git）
-  media/      art/*.jpg  video/*.mp4  voice/*.m4a  voice.js  cover.jpg   页面实际加载的压缩成品（进 git）
-  scripts/    voice.py  seedance.py  prepare_art.*  prepare_video.py      可重建管线（进 git）
-  project/    提示词 JSON、设计笔记、小的参考图                           （进 git，只放小文件）
-  assets/     原始 PNG、首尾帧、下载的原始视频                           （不进 git：在 .gitignore 里逐个加）
+仓库根目录            官网（index.html / styles.css / script.js）、设备页（control / test）、device.js、文档（CLAUDE / AGENTS / HANDOFF / DEMO_DESIGN_GUIDE / TASKS）
+demos/shared/         所有 Demo 共用：nav.js、series.css、game.css（游戏类页面的基础样式）、subs.js（显示语言）、voice.js、interact.js、scrub.js
+demos/<品类>/Demo<NN>_<Name>/
+  index.html  style.css  main.js  lines.js  audio.js  l10n.js  README.md     页面（进 git；没有就不建）
+  media/      art/*.webp  video/*.mp4  voice/*.m4a  voice.js  cover.jpg  data.js   页面实际加载的压缩成品（进 git）
+  scripts/    voice.py  seedance.py  prepare_art.*  prepare_video.py   可重建管线（进 git）
+  project/    提示词（prompts_chatgpt.md / prompts_seedance.md）、设计笔记、小的参考图（进 git，只放小文件）
+  assets/     原始 PNG、首尾帧、下载的原始视频（不进 git：在 .gitignore 里逐个加）
   audio/      voice_cache.json 进 git；试听、中间音频不进 git
 tools/eleven/         配音（cast.json、audition / pick / tts）
 tools/seedance/       Seedance 共用工具（ident_clips.py）
@@ -341,10 +347,11 @@ tools/cleanup/        清理报告（audit.py）
 assets/images/demos/  官网菜单缩略图（按文件夹名命名）
 ```
 
+- 页面文件名固定：样式 `style.css`、主程序 `main.js`、台词 `lines.js`、声音 `audio.js`、翻译 `l10n.js`；其他模块用说明性的名字（`art.js`、`scenes.js`）。只用另一个 Demo 页面的 Demo（Demo16 → 15、Demo17–19 → 14）只有 `index.html` + `media/`，用 `<base href>` 指过去。
+- Demo 1–9 的制作管线目录（`tools/`、`production/`、`analysis/`、`storyboard/`、`thermal/`、`video/`、`art/`、`output/`）保留原名：里面的 Python 互相按路径引用，重命名要重跑整条管线验证；新 Demo 用上面的 `scripts/` + `project/`。
 - 一个文件只放在它所属 Demo 的文件夹里；多个 Demo 共用的放 `demos/shared/` 或 `tools/`，**按路径引用，不复制**。
 - 从 Downloads 下载的东西**马上**改名，移进对应 Demo 的 `assets/`，不在 Downloads 或仓库根目录留着。
 - 临时文件放会话的 scratchpad，不放进仓库。
-- 旧 Demo 内部的目录结构不动（脚本按路径引用，改了会坏）；只有新 Demo 照上面的结构。
 
 ### 12.2 定期清理
 

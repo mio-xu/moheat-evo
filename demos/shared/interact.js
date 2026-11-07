@@ -16,7 +16,7 @@
   if (QS.has('embed') || QS.has('cover') || QS.has('render')) return;
   const LR = ['⬅ ひだり · Left', 'みぎ ➡ · Right'];
   const GATES = {
-    Demo1_SnowFoxfire: [
+    Demo01_SnowFoxfire: [
       { t: 25.75, kind: 'read', what: ['うん、つめたい！', "Yes — it's cold!"] },
       { t: 31.0, kind: 'choice', what: ['小雪は、どっちから来る？', 'Which side will Koyuki come from?'], options: LR, answer: 1 },
       { t: 76.85, kind: 'choice', what: ['どっちが好き？', 'Which do you like better?'], options: ['❄ つめたい · Cool', '🔥 あったかい · Warm'],
@@ -24,47 +24,47 @@
       { t: 129.95, kind: 'read', tag: '✨ いっしょに · Together', how: ['ふたりと一緒に、唱えてみて', 'Chant it with them'], what: ['雪と焔の、ないしょの魔法！', 'Our secret magic of snow and flame!'] },
       { t: 144.8, kind: 'read', what: ['うん、また遊ぼう！ おやすみ。', "Let's play again! Good night."] },
     ],
-    Demo2_FanMeeting: [
+    Demo02_FanMeeting: [
       { t: 8.95, kind: 'read', what: ['うん、来たよ！', "Yep, I'm here!"] },
       { t: 60.1, kind: 'read', what: ['すずしい〜！', 'So cool~!'] },
       { t: 80.85, kind: 'choice', what: ['綾音は、どっちから話しかける？', 'Which side will Ayane talk from?'], options: LR, answer: 1 },
       { t: 129.6, kind: 'toast', icon: '👏', btn: '👏 拍手！', what: ['さいこう！', 'That was amazing!'], how: ['拍手するか、「さいこう！」と言ってみて · Clap, cheer — or tap', '拍手ボタンをタップ · Tap to applaud'], done: 'ありがとう〜！' },
       { t: 143.9, kind: 'read', what: ['うん、やくそく！', 'Yes — I promise!'] },
     ],
-    Demo3_ShiningSmileConcert: 'cheer',
-    Demo4_SeasonsExpress: [
+    Demo03_ShiningSmileConcert: 'cheer',
+    Demo04_SeasonsExpress: [
       { t: 24.0, kind: 'blow', what: ['暑い…！ ふーっと涼しい風を送ろう', 'So hot! Blow a cool breeze'] },
       { t: 66.0, kind: 'choice', hold: true, what: ['冷たいのは、どっちの耳？', 'Which ear feels cold?'], options: LR, answer: 0 },
       { t: 82.0, kind: 'choice', hold: true, what: ['今度は？ 冷たいのは、どっち？', 'And now — which ear is cold?'], options: LR, answer: 1 },
       { t: 109.3, kind: 'read', tag: '💡 まっくら！ · Power cut!', what: ['ライト、ついて！', 'Lights on!'], resume: 110.3 },
       { t: 146.4, kind: 'read', what: ['ありがとう、魔法の列車！', 'Thank you, magic train!'] },
     ],
-    Demo5_GifuCastle: [
+    Demo05_GifuCastle: [
       { t: 23.0, kind: 'read' },
       { t: 74.35, kind: 'blow', what: ['お茶をふーふーして、冷ましましょう', 'Blow on the tea to cool it'] },
       { t: 116.8, kind: 'read' },
       { t: 136.0, kind: 'read' },
     ],
-    Demo6_FutureWhisky: [
+    Demo06_FutureWhisky: [
       { t: 13.3, kind: 'read' },
       { t: 115.0, kind: 'read' },
       { t: 135.63, kind: 'toast', resume: 135.63, what: ['乾杯！', 'Cheers!'] },
       { t: 147.4, kind: 'read' },
     ],
-    Demo7_KyotoIzakaya: [
+    Demo07_KyotoIzakaya: [
       { t: 16.2, kind: 'read' },
       { t: 34.3, kind: 'toast', resume: 34.3 },
       { t: 55.5, kind: 'blow', what: ['殿の焼き鳥を、ふーふーしてあげましょう', "Blow on Nobunaga's yakitori to cool it"] },
       { t: 107.2, kind: 'read' },
       { t: 132.4, kind: 'read' },
     ],
-    Demo8_YamazakiDistillery: [
+    Demo08_YamazakiDistillery: [
       { t: 16.22, kind: 'read' },
       { t: 35.87, kind: 'read' },
       { t: 120.33, kind: 'toast' },
       { t: 136.1, kind: 'read' },
     ],
-    Demo9_SengokuBanquet: [
+    Demo09_SengokuBanquet: [
       { t: 5.1, kind: 'read' },
       { t: 36.2, kind: 'toast', resume: 36.2 },
       { t: 111.0, kind: 'read' },

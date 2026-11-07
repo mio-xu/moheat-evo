@@ -1,0 +1,213 @@
+// Languages of this demo for ../../shared/subs.js (subtitles, answers, cover) and ../../shared/voice.js (voice answers).
+// text.<lang>: "text exactly as the page shows it" → that language · names: speaker labels · voice.<lang|all>: same-meaning phrasings per answer.
+// Generated from the translation tables (DEMO_DESIGN_GUIDE §2.2); edit here, keys must stay byte-identical to the page text.
+window.MOHEAT_L10N = {
+ "langs": [
+  "en",
+  "ja",
+  "zh"
+ ],
+ "text": {
+  "zh": {
+   "お待たせしました…！ 振袖って、こんなに走りにくいんですのね。": "让您久等了……！原来振袖这么难跑呀。",
+   "あの…どう、でしょう。 似合って、いますか？": "那个……怎么样呢。适合我吗？",
+   "き、綺麗…!? …ありがとうございます。 顔が、熱いです…。": "漂、漂亮……!? ……谢谢您。脸好烫……。",
+   "ふふ、平気です。 このショール、祖母のお下がりで、とっても温かいの。": "呵呵，我没事。这条披肩，是祖母留给我的，非常暖和呢。",
+   "あっ、あと五秒です！ 一緒に、数えましょう？": "啊，还剩五秒了！我们一起，倒数吧？",
+   "あけましておめでとうございます。 今年は…もっと、仲良くしてくださいね。": "新年快乐。今年……也请和我，更亲近一些哦。",
+   "あの…私、現金を持っていなくて。 …カードは、使えないのかしら？": "那个……我没有带现金。……不能用卡吗？",
+   "まあ…！ では、このお返しは、来年必ず。": "哎呀……！那么，这份人情，明年一定还您。",
+   "すみません、カードは…え、だめ？ …ふふっ、やっぱり、おごっていただけます？": "不好意思，请问能刷卡吗……诶，不行？……呵呵，果然，还是请您请客吧？",
+   "はい、あなたの分。 …ほっぺ、冷たいでしょう？ えいっ。": "来，这是您的。……脸颊，很冰吧？嘿。",
+   "…ふー、ふー。 あつっ…！ ふふ、私、猫舌なんです。": "……呼——，呼——。好烫……！呵呵，我是猫舌头呢。",
+   "焚き火、あったかい…。 手をかざすと、指先がじんわりしますね。": "篝火，好暖和……。把手伸过去，指尖暖洋洋的呢。",
+   "きゃっ…！ ご、ごめんなさい。 人が多くて…。 …もう少しだけ、このままでも、いいですか？": "呀……！对、对不起。人太多了……。……能再稍微，就这样待一会儿吗？",
+   "…何を、お願いしたんですか？": "……您许了，什么愿呀？",
+   "ずるいです。 …じゃあ、私も秘密です。": "太狡猾了。……那么，我的也是秘密。",
+   "…っ！ …同じ、です。 私も、それをお願いしました。": "……！……一样，呢。我也，许了这个愿。",
+   "…凶。 生まれて初めて引きました、凶…。": "……凶。有生以来第一次抽到，凶……。",
+   "えっ、交換…いいんですか？ …ふふ、あなたの大吉、大切にしますね。": "诶，交换……可以吗？……呵呵，您的大吉，我会好好珍惜的。",
+   "はい…！ 二人で結べば、きっと吉に変わりますよね。": "嗯……！两个人一起系上的话，一定会变成吉的吧。",
+   "風、冷たい…。 寒いでしょう？ …ほら、半分こ。": "风，好冷……。您很冷吧？……来，分您一半。",
+   "…さっきの秘密、少しだけ教えます。 来年も、あなたの隣にいられますように、って。": "……刚才的秘密，告诉您一点点吧。愿明年，也能待在您身边。",
+   "来年も、その次の年も…。 初詣は、あなたと来たいです。": "明年，还有后年……。新年参拜，我想和您一起来。",
+   "…すごく、綺麗だ": "……真的，好美",
+   "…寒くない？": "……不冷吗？",
+   "僕がおごるよ": "我请客",
+   "…カード、使えるか聞いてみたら？": "……要不问问能不能刷卡？",
+   "…秘密": "……秘密",
+   "椿さんと、また来られますように": "愿能和椿小姐再一起来",
+   "僕の大吉と、交換しよう": "和我的大吉交换吧",
+   "一緒に、結びに行こう": "一起去系上吧",
+   "「あけましておめでとう！」": "「新年快乐！」",
+   "支えてあげる（長押し）": "扶住她（长按）",
+   "お賽銭を入れる": "投香油钱",
+   "手を合わせて、お願いする（長押し）": "双手合十，许愿（长按）",
+   "おみくじを引く": "抽签",
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · 双耳ASMR × 冷热触感",
+   "はじめての、初詣デート": "第一次的新年参拜约会",
+   "My First Hatsumode — New Year's Eve at the shrine with Tsubaki": "和椿一起在神社度过除夕夜",
+   "🎍 お嬢様と初詣 · Interactive": "🎍 与大小姐新年参拜 · 互动",
+   "🔥 焚き火・甘酒・耳元の声 · warm": "🔥 篝火・甜酒・耳边的声音 · 温暖",
+   "🌬 冬の夜風 · cool": "🌬 冬夜寒风 · 清凉",
+   "▶ はじめる · Start": "▶ 开始",
+   "🎧 Left / Right check": "🎧 左右声道检查",
+   "Headphones on · tap / hold to answer her · connect MoHeat Evo to feel the winter wind, the bonfire, a hot amazake on your cheek and her voice": "请戴上耳机 · 点按 / 长按来回应她 · 连接 MoHeat Evo，感受冬风、篝火、贴在脸颊的热甜酒和她的声音",
+   "鳥居の前で": "在鸟居前",
+   "屋台と甘酒": "小摊与甜酒",
+   "焚き火": "篝火",
+   "お参り": "参拜",
+   "おみくじ": "求签",
+   "鈴を鳴らす（タップ）": "摇响神铃（点击）",
+   "🎍 来年も、その次の年も。": "🎍 明年，还有后年。",
+   "🎍 願いごとは、二人だけの秘密": "🎍 愿望，是只属于两个人的秘密",
+   "↺ もう一度": "↺ 再来一次"
+  },
+  "ja": {
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
+   "はじめての、初詣デート": "はじめての、初詣デート",
+   "My First Hatsumode — New Year's Eve at the shrine with Tsubaki": "椿と過ごす、神社の大晦日",
+   "🎍 お嬢様と初詣 · Interactive": "🎍 お嬢様と初詣 · インタラクティブ",
+   "🔥 焚き火・甘酒・耳元の声 · warm": "🔥 焚き火・甘酒・耳元の声 · あたたか",
+   "🌬 冬の夜風 · cool": "🌬 冬の夜風 · ひんやり",
+   "▶ はじめる · Start": "▶ はじめる",
+   "🎧 Left / Right check": "🎧 左右チェック",
+   "Headphones on · tap / hold to answer her · connect MoHeat Evo to feel the winter wind, the bonfire, a hot amazake on your cheek and her voice": "ヘッドホンを装着 · タップ / 長押しで彼女に答えよう · MoHeat Evo をつなぐと、冬の風、焚き火、頬にあたる熱い甘酒、彼女の声を感じられます"
+  },
+  "en": {
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
+   "はじめての、初詣デート": "My First Hatsumode",
+   "My First Hatsumode — New Year's Eve at the shrine with Tsubaki": "New Year's Eve at the shrine with Tsubaki",
+   "🎍 お嬢様と初詣 · Interactive": "🎍 Hatsumode with the young lady · Interactive",
+   "🔥 焚き火・甘酒・耳元の声 · warm": "🔥 bonfire · amazake · her voice at your ear · warm",
+   "🌬 冬の夜風 · cool": "🌬 winter night wind · cool",
+   "▶ はじめる · Start": "▶ Start",
+   "🎧 Left / Right check": "🎧 Left / Right check",
+   "Headphones on · tap / hold to answer her · connect MoHeat Evo to feel the winter wind, the bonfire, a hot amazake on your cheek and her voice": "Headphones on · tap / hold to answer her · connect MoHeat Evo to feel the winter wind, the bonfire, a hot amazake on your cheek and her voice",
+   "鳥居の前で": "At the torii",
+   "屋台と甘酒": "Stalls & amazake",
+   "焚き火": "The bonfire",
+   "お参り": "The prayer",
+   "おみくじ": "The fortune",
+   "鈴を鳴らす（タップ）": "Ring the shrine bell (tap)",
+   "🎍 来年も、その次の年も。": "🎍 Next year, and the year after",
+   "🎍 願いごとは、二人だけの秘密": "🎍 Your wishes stay a secret for two",
+   "↺ もう一度": "↺ Play again"
+  }
+ },
+ "names": {},
+ "voice": {
+  "all": {
+   "…すごく、綺麗だ": [
+    "好美",
+    "你真美",
+    "真漂亮",
+    "太好看了",
+    "you look beautiful",
+    "beautiful",
+    "きれいだ",
+    "すごくきれい"
+   ],
+   "…寒くない？": [
+    "不冷吗",
+    "冷不冷",
+    "你冷吗",
+    "会不会冷",
+    "aren't you cold",
+    "are you cold",
+    "さむくない",
+    "寒くない"
+   ],
+   "僕がおごるよ": [
+    "我请客",
+    "我来付",
+    "我请你",
+    "算我的",
+    "my treat",
+    "i'll pay",
+    "おごるよ",
+    "僕が払う"
+   ],
+   "…カード、使えるか聞いてみたら？": [
+    "问问能不能刷卡",
+    "能刷卡吗",
+    "问一下刷卡",
+    "刷卡试试",
+    "ask if they take cards",
+    "can you pay by card",
+    "カード使えるか聞いて",
+    "カードは"
+   ],
+   "…秘密": [
+    "秘密",
+    "不告诉你",
+    "保密",
+    "是秘密",
+    "it's a secret",
+    "secret",
+    "ひみつ",
+    "内緒"
+   ],
+   "椿さんと、また来られますように": [
+    "再一起来",
+    "和椿一起再来",
+    "还想和你一起来",
+    "下次再一起来",
+    "come here with you again",
+    "with you again",
+    "また来られますように",
+    "また一緒に来たい"
+   ],
+   "僕の大吉と、交換しよう": [
+    "交换",
+    "和我交换",
+    "换我的大吉",
+    "我们换吧",
+    "swap",
+    "swap with my great luck",
+    "交換しよう",
+    "大吉と交換"
+   ],
+   "一緒に、結びに行こう": [
+    "一起去系",
+    "去系上",
+    "一起系",
+    "系起来吧",
+    "let's tie it up together",
+    "tie it together",
+    "一緒に結びに行こう",
+    "結びに行こう"
+   ],
+   "「あけましておめでとう！」": [
+    "新年快乐",
+    "新年好",
+    "过年好",
+    "恭贺新年",
+    "happy new year",
+    "new year",
+    "あけましておめでとう",
+    "あけおめ"
+   ],
+   "お賽銭を入れる": [
+    "投香油钱",
+    "投硬币",
+    "扔硬币",
+    "香油钱",
+    "toss in a coin",
+    "coin",
+    "お賽銭",
+    "お賽銭を入れる"
+   ],
+   "おみくじを引く": [
+    "抽签",
+    "抽个签",
+    "求签",
+    "抽神签",
+    "draw a fortune",
+    "fortune",
+    "おみくじ",
+    "おみくじを引く"
+   ]
+  }
+ }
+};
