@@ -255,6 +255,32 @@
     } catch { toast('📸', 'Snapshot', 1200); }
   }
 
+  // ---------------------------------------------------------------- coach bubble: what to press / tap next
+  const coachEl = $('coach');
+  const COACH = { thermBtn: ['👇 ここを タップ！', 'Tap: thermal view'], talkBtn: ['👇 おしたまま 話しかけて', 'Hold and talk to her'], laserBtn: ['👇 レーザー ON', 'Turn on the laser'],
+    fanBtn: ['👇 扇風機 ON', 'Turn on the fan'], feedBtn: ['👇 ごはんを 出す', 'Drop her dinner'], heatBtn: ['👇 ホットカーペット ON', 'Turn on the heated blanket'] };
+  let coachKey = '';
+  function coach() {
+    let tgt = null, txt = null;
+    if (S.started && !S.done && !fading) {
+      const b = [...document.querySelectorAll('.dk.want')].find((x) => !x.hidden && !x.disabled);
+      if (S.step === 'find' && S.found < 0 && cam.thermTo) {
+        const [hx, hy] = toScreen(P.house[0], P.house[1]);
+        if (hx > 120 && hx < W - 120) { tgt = ['pt', hx, hy - 70]; txt = ['👇 あたたかい所を タップ', 'Tap the warm spot']; }
+        else { tgt = ['el', btn.panR]; txt = ['👇 みぎへ まわす', 'Turn the camera right']; }
+      } else if (S.step === 'cool' && S.fan && !S.cooled && Math.abs(S.aim - N.x) > 200) {
+        const [nx, ny] = toScreen(N.x, N.y - 160); tgt = ['pt', nx, ny]; txt = ['👇 ドラッグして 風を ここへ', 'Drag to blow the wind here'];
+      } else if (b && COACH[b.id] && S.st > 1) { tgt = ['el', b]; txt = COACH[b.id]; }
+    }
+    coachEl.classList.toggle('show', !!tgt); if (!tgt) return;
+    const sr = stage.getBoundingClientRect();
+    let x, y;
+    if (tgt[0] === 'el') { const r = tgt[1].getBoundingClientRect(); x = r.left + r.width / 2 - sr.left; y = r.top - sr.top; }
+    else { x = tgt[1] / W * sr.width; y = tgt[2] / H * sr.height; }
+    coachEl.style.left = `${clamp(x, 90, sr.width - 90)}px`; coachEl.style.top = `${y}px`;
+    const key = txt.join('|'); if (key !== coachKey) { coachKey = key; coachEl.querySelector('b').textContent = txt[0]; coachEl.querySelector('span').textContent = txt[1]; }
+  }
+
   // ---------------------------------------------------------------- input on the picture
   const ptr = { down: false, x: 0, y: 0, lx: 0, ly: 0 };
   function toCanvas(e) { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H]; }
@@ -334,8 +360,8 @@
     const st = S.st;
     switch (S.step) {
       case 'connect':
-        cam.stat = st < 1.4 ? 1 : clamp(1 - (st - 1.4) / .6);
-        if (st > 2.1) { setStep('find'); push('📹', 'カメラに接続しました', 'Connected · CAM 1 · Living room'); setTimeout(hint, 1800); }
+        cam.stat = st < .9 ? 1 : clamp(1 - (st - .9) / .5);
+        if (st > 1.5) { setStep('find'); push('🐾', 'ナオミが 見当たりません…', 'LIVE · CAM 1 · Naomi is not in view', 3000); setTimeout(hint, 1200); }
         break;
       case 'find': {
         const inView = Math.abs(N.x - cam.x) < HALF * .5;
@@ -824,6 +850,7 @@
     if (!hidden) {
       update(dt);
       if (S.started) { placeLoops(); frame(S.t); } else coverFrame(wall);
+      coach();
       const { th, src } = thermal(dt);
       output(th, S.started); radar(S.started ? src : [], th);
       $('clock').textContent = fmt(S.clock);
