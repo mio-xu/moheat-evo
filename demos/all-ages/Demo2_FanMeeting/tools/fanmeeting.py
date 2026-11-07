@@ -104,11 +104,11 @@ CUES = [
     # ── 5  1:45–2:10  Mini live: song (heat) moves L → R, cool magic on the other side ─
     L(105.6, "say", "それじゃあ…キミだけのための、ミニライブ！", "那么…只为你一个人的迷你演唱会！", "And now… a mini live, just for you!", "happy", pose="sing"),
     L(108.8, "bgm", dur=22.0),
-    L(110.0, "sing", "きらきら ひかる ほしのした", "闪闪发光的 星空下", "Twinkling, shining, under the stars", "sing", phrase=0, pose="sing"),
-    L(115.1, "sing", "キミとの ひみつ ふたりだけ", "和你的秘密 只属于我们俩", "A secret with you, just us two", "sing", phrase=1, pose="sing"),
+    L(110.04, "sing", "きらきら ひかる ほしのした", "闪闪发光的 星空下", "Twinkling, shining, under the stars", "sing", phrase=0, pose="sing"),
+    L(115.12, "sing", "キミとの ひみつ ふたりだけ", "和你的秘密 只属于我们俩", "A secret with you, just us two", "sing", phrase=1, pose="sing"),
     L(116.8, "magic", dur=2.8, az=72, d=0.45, gain=0.9),            # right COOL while she sings left
-    L(120.5, "sing", "ドキドキ とまらない", "心跳 停不下来", "My heart won't stop racing", "sing", phrase=2, pose="dance"),
-    L(124.1, "sing", "このきもち とどけ キミに", "这份心意 传达给你", "This feeling — reach you", "sing", phrase=3, pose="sing"),
+    L(119.04, "sing", "ドキドキ とまらない", "心跳 停不下来", "My heart won't stop racing", "sing", phrase=2, pose="dance"),
+    L(123.22, "sing", "このきもち とどけ キミに", "这份心意 传达给你", "This feeling — reach you", "sing", phrase=3, pose="sing"),
     L(125.2, "magic", dur=2.8, az=-72, d=0.45, gain=0.9),           # left COOL while she sings right
 
     # ── 6  2:10–2:30  Goodbye: left → right → fading breeze ─────────────────────
@@ -120,6 +120,11 @@ CUES = [
     L(145.8, "fan", dur=3.6, az=-40, az1=40, d=0.55, gain=0.55, fade=True),
 ]
 
+# Song (2026-11-08, user): ElevenLabs Music "song_a" (project/song/song_a.mp3, ~20 s, the same four lines). It starts 1.24 s before
+# phrase 0 (= the old bgm cue at 108.8 s); phrase cues sit where each line is sung (ElevenLabs speech-to-text timings, project/song/words_a.json).
+# The whole song moves with Ayane; only the isolated vocal (project/song/vocal_a.mp3) drives the heat. The VOICEVOX melody below is kept for reference.
+SONG_FILE, SONG_VOCAL = "project/song/song_a.mp3", "project/song/vocal_a.mp3"
+SONG_PHRASES = [(1.24, 4.48), (6.32, 9.74), (10.24, 13.68), (14.42, 19.44)]   # (start, end) of each sung line inside the song
 # Song (original melody, C major, 100 BPM; eighth = 0.3 s). MIDI notes per mora and lengths in eighths.
 EIGHTH = 0.3
 SONG = [
@@ -175,3 +180,11 @@ def positions(times):
     ck = cool_keys()
     # the cool source rests where the previous cue ended; linear between cues (it is silent there anyway)
     return {"A": _interp(A_KEYS, times), "C": _interp(ck, times) if ck else _interp(A_KEYS, times)}
+
+
+# ---------------------------------------------------------------- retime (2026-11-08): the film follows the ElevenLabs voices' natural
+# length (no need to keep 150 s); tools/retime_voices.py writes audio/retime.json, every time above goes through W(). Script times: CUES0 / DURATION0.
+import importlib.util as _iu, os as _os
+_ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+_s = _iu.spec_from_file_location("retime", _os.path.join(_ROOT, "..", "..", "..", "tools", "eleven", "retime.py"))
+_R = _iu.module_from_spec(_s); _s.loader.exec_module(_R); _R.apply(globals(), _ROOT)

@@ -34,7 +34,7 @@ thermal.py       → heat = RMS(heat_dry) × position(A),  cool = RMS(cool_dry) 
 - **Player and serial**: the player is Demo 1's, adapted. `device.js` (Web Serial) and `play_thermal_csv.py` work unchanged.
 
 New in Demo 2:
-- **Song**: an original melody sung by VOICEVOX, one note per mora.
+- **Song**: ElevenLabs Music `song_a` (since 2026-11-08, user; `project/song/`), the original four lines; the whole song moves with Ayane, only the isolated vocal (ElevenLabs voice isolator) drives the heat. Before: an original melody sung by VOICEVOX, one note per mora.
 - **Cooling SFX**: folding fan, swish, ice + fizz.
 - **Music**: idol backing track.
 - **Two sources**: separate heat and cool sources with independent positions.
@@ -66,11 +66,11 @@ output/     mix_48k.wav · stems/ (heat_voice, heat_breath, cool_fan, cool_ice, 
 | Project files | this folder | Done |
 
 ## Rebuild
-- Start VOICEVOX (`../../all-ages/Demo1_SnowFoxfire/start_voicevox.command`), then `./build_all.sh` (≈1 min).
+- `./build_all.sh` (key = `ELEVENLABS_API_KEY` in the repo `.env.local`): `tools/retime_voices.py` first (natural length, `audio/retime.json`; now 150.8 s), then the mix.
 - MP4: `python3 tools/render_mp4.py` (≈5 min).
 - After new art: `python3 tools/prepare_art.py && python3 tools/export.py`.
-- Voice: VOICEVOX ずんだもん, her original voice (ノーマル; whispers in her own ささやき style). No pitch, intonation or EQ changes.
-- Credit required by the voice terms: **VOICEVOX:ずんだもん**. The demo shows it; keep it in any film credits.
+- Voice: ElevenLabs `ayane r1_a` (user, 2026-11-08; tags from the expression via Demo 1 `EL_TAG`). Before: VOICEVOX ずんだもん.
+- The demo shows "Voice & song: ElevenLabs".
 
 ## Manual
 - **Hardware calibration**: set the comfortable PWM range on `../../test.html`, then measure the device lead and set `COOL_LEAD` / `HEAT_LEAD` in `tools/thermal.py`.

@@ -524,7 +524,7 @@ function updateScene(t) {
     sceneTimer = setTimeout(() => sceneEl.classList.remove('show'), 3200);
   }
 }
-$('credits').textContent = A.voice && A.voice.backend === 'voicevox' ? `Voice: ${A.voice.credits.join(' / ')} · original song & SFX` : 'Draft build: synthesized voice (macOS Kyoko).';
+$('credits').textContent = A.voice && A.voice.backend === 'eleven' ? `Voice & song: ${A.voice.credits.join(' / ')} · original lyrics & SFX` : A.voice && A.voice.backend === 'voicevox' ? `Voice: ${A.voice.credits.join(' / ')} · original song & SFX` : 'Draft build: synthesized voice (macOS Kyoko).';
 
 // ---------------------------------------------------------------- device output (same protocol as Demo 1)
 const DEFAULT_RANGE = { heatMin: 0, heatMax: 200, coolMin: 35, coolMax: 80 };

@@ -22,11 +22,18 @@ B.CACHE = os.path.join(ROOT, "output", "cache")
 VV.CAST["A"] = FM.VOICE
 OUT, MEDIA, STEMS = os.path.join(ROOT, "output"), os.path.join(ROOT, "media"), os.path.join(ROOT, "output", "stems")
 SR, N = FM.SR, int(FM.DURATION * FM.SR)
+B.N = N                                          # Demo 1 helpers (footsteps …) size their tracks by B.N: use this film's length
 rng = np.random.default_rng(11)
 db, filt, place, norm_to, adsr = B.db, B.filt, B.place, B.norm_to, B.adsr
 
 
 # ---------------------------------------------------------------- singing (VOICEVOX, one note per mora)
+def load_song(rel):
+    """ElevenLabs Music / isolated vocal → mono float at SR."""
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", os.path.join(ROOT, rel), "-ac", "1", "-ar", str(SR), "-f", "s16le", "-"], capture_output=True, check=True).stdout
+    return np.frombuffer(raw, np.int16).astype(np.float64) / 32768
+
+
 def sing(phrase):
     """Synthesise one lyric phrase with an original melody by setting each mora's pitch and length."""
     key = f"sing_{abs(hash(json.dumps(phrase, ensure_ascii=False) + json.dumps(FM.VOICE, ensure_ascii=False))) % 10**12}.wav"
@@ -143,8 +150,9 @@ def bgm(dur):
 # ---------------------------------------------------------------- build
 def main():
     os.makedirs(B.CACHE, exist_ok=True); os.makedirs(STEMS, exist_ok=True); os.makedirs(MEDIA, exist_ok=True)
-    backend = "voicevox" if VV.available() else "kyoko"
+    backend = "eleven"   # 2026-11-08 (user): Ayane = ElevenLabs ayane r1_a (Demo 1's tts()), song = ElevenLabs Music; before: VOICEVOX
     B.BACKEND = backend
+    SONGMIX, VOCAL = np.zeros(N), np.zeros(N)     # whole song (heard, moves with Ayane) · isolated vocal (heat only)
     H = {k: np.zeros(N) for k in ("voice", "breath")}
     C = {k: np.zeros(N) for k in ("fan", "ice", "breath", "magic")}
     foley, music = np.zeros(N), np.zeros((N, 2))
@@ -154,13 +162,17 @@ def main():
         if k in ("say", "whisper"):
             x = B.tts(c["tts"], "A", whisper=(k == "whisper"), expr=c["expr"])
             if k == "whisper":
-                x = norm_to(x + .3 * B.whisperize(x) if backend == "voicevox" else B.whisperize(x), -24)
+                x = norm_to(x if backend == "eleven" else x + .3 * B.whisperize(x) if backend == "voicevox" else B.whisperize(x), -24)
                 place(H["breath"], c["t"] - .5, B.inhale() * .8)
             else:
                 x = norm_to(x, -19)
             place(H["voice"], c["t"], x); dur = len(x) / SR
         elif k == "sing":
-            x = sing(FM.SONG[c["phrase"]]); place(H["voice"], c["t"], x); dur = len(x) / SR
+            p0, p1 = FM.SONG_PHRASES[c["phrase"]]; dur = p1 - p0
+            if c["phrase"] == 0:
+                t0 = c["t"] - p0; song, voc = load_song(FM.SONG_FILE), load_song(FM.SONG_VOCAL)
+                g = db(-19) / np.sqrt(np.mean(voc[voc ** 2 > 1e-5] ** 2))        # sung lines as loud as her speech
+                place(SONGMIX, t0, song * g * 1.25); place(VOCAL, t0, voc * g)
         elif k == "warm":
             x = B.breath("warm", c["dur"], c["gain"]); place(H["breath"], c["t"], x); dur = c["dur"]
         elif k == "fan":
@@ -180,22 +192,22 @@ def main():
         elif k == "jingle":
             x = jingle(c["dur"]); i0 = int(c["t"] * SR); music[i0: i0 + len(x)] += np.stack([x, x * .9], 1)[: N - i0]; dur = c["dur"]
         elif k == "bgm":
-            x = bgm(c["dur"]); i0 = int(c["t"] * SR); music[i0: i0 + len(x)] += x[: N - i0]; dur = c["dur"]
+            dur = c["dur"]   # the ElevenLabs song carries its own accompaniment (was: synthesized bgm())
         timing.append(dict(i=i, t=c["t"], kind=k, dur=round(dur, 3)))
     seq = sorted([x for x in timing if x["kind"] in ("say", "whisper", "sing")], key=lambda x: x["t"])
     for a, b in zip(seq, seq[1:]):
         if a["t"] + a["dur"] > b["t"] - .05: print(f"  ! line at {a['t']}s ({a['dur']:.2f}s) runs into {b['t']}s")
     json.dump(timing, open(os.path.join(OUT, "voice_timing.json"), "w"), indent=1)
-    json.dump(dict(backend=backend, credits=[f"VOICEVOX:{FM.VOICE['speaker']}"] if backend == "voicevox" else ["macOS Kyoko (draft)"]),
+    json.dump(dict(backend=backend, credits=["ElevenLabs"] if backend == "eleven" else [f"VOICEVOX:{FM.VOICE['speaker']}"] if backend == "voicevox" else ["macOS Kyoko (draft)"]),
               open(os.path.join(MEDIA, "voice.json"), "w"), ensure_ascii=False)
     print("voice backend:", backend)
 
-    heat = H["voice"] + H["breath"]; cool = sum(C.values())
+    heat = H["voice"] + H["breath"] + VOCAL; cool = sum(C.values())   # thermal: speech, breaths and the sung vocal (not the band)
     for name, x in [*(("heat_" + k, v) for k, v in H.items()), *(("cool_" + k, v) for k, v in C.items()),
                     ("heat_dry", heat), ("cool_dry", cool), ("foley", foley)]:
         B.write_wav(os.path.join(STEMS, name + ".wav"), x)
     print("rendering binaural…", flush=True)
-    hb = B.render(heat + foley * .0, who="A"); cb = B.render(cool, who="C"); fb = B.render(foley, who="A")
+    hb = B.render(H["voice"] + H["breath"] + SONGMIX, who="A"); cb = B.render(cool, who="C"); fb = B.render(foley, who="A")
     mb = B.render(music[:, 0], az=-32, d=3.0) + B.render(music[:, 1], az=32, d=3.0)
     t = np.arange(N) / SR
     amb = np.stack([filt(B.sos_lp(380), rng.standard_normal(N)) for _ in range(2)], 1)

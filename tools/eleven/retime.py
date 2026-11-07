@@ -13,12 +13,13 @@ VOICED = ("say", "whisper", "laugh")
 
 
 def compute(cues, durs, gap_same=.15, gap_other=.3):
-    """cues: the script's own timeline; durs: {cue index: seconds}."""
-    vo = sorted([(c["t"], i, c) for i, c in enumerate(cues) if c["kind"] in VOICED and i in durs])
+    """cues: the script's own timeline; durs: {cue index: seconds} for every voiced cue (say / whisper / laugh, sung phrases)."""
+    vo = sorted([(c["t"], i, c) for i, c in enumerate(cues) if i in durs])   # durs decides what counts (voices, sung phrases)
     pts, shift = [], 0.0
     for (ta, ia, a), (tb, ib, b) in zip(vo, vo[1:]):
-        inhale = .45 if b["kind"] == "whisper" and a["who"] == b["who"] else 0   # the mixers place an inhale 0.45 s before a whisper
-        over = ta + durs[ia] + (gap_same if a["who"] == b["who"] else gap_other) + inhale - tb
+        same = a.get("who") == b.get("who")   # single-character demos (Demo 2) have no "who"
+        inhale = .45 if b["kind"] == "whisper" and same else 0   # the mixers place an inhale 0.45 s before a whisper (Demo 2: 0.5 s)
+        over = ta + durs[ia] + (gap_same if same else gap_other) + inhale - tb
         if over > 0: pts.append((round(tb - .01, 3), round(over, 3)))
         # the shift accumulates in W(); comparisons stay in script time because both lines move together up to here
     return pts
