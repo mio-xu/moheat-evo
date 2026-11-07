@@ -1,6 +1,6 @@
 // Demo 10 — picture layer. Cute pastel cel-shaded 2D (the Demo 1–4 look): flat fills, soft gradients, dark rounded outlines.
-// Static backgrounds are drawn by code once and cached. When the Seedance clips exist (assets/video/<name>.mp4, see
-// Seedance素材命令.md) they replace the cached backgrounds automatically; flames, items, light and particles stay code-drawn
+// Backgrounds are the painted stills (media/art) or code-drawn and cached. Seedance clips (assets/video/<name>.mp4, see
+// Seedance素材命令.md) are only requested with ?film — they were never made, so by default nothing is requested; flames, items, light and particles stay code-drawn
 // on top, at the positions in GEO (re-measure GEO when the clips arrive).
 window.CaveArt = (() => {
   const W = 1920, H = 1080, INK = '#3a2638';
@@ -266,7 +266,7 @@ window.CaveArt = (() => {
   const video = {};
   const QS = new URLSearchParams(location.search);
   function loadClips() {
-    if (QS.has('nofilm')) return;
+    if (!QS.has('film')) return;   // the Seedance background clips were never made: no requests (no 404s) unless ?film (user, 2026-11-08)
     for (const name of new Set(Object.values(CLIPS))) {
       const v = document.createElement('video'); v.muted = true; v.playsInline = true; v.loop = name !== 'gate_open'; v.preload = 'auto';
       v.addEventListener('loadeddata', () => { video[name] = v; if (v.loop) v.play().catch(() => {}); }, { once: true });
