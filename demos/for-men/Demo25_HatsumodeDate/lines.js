@@ -1,0 +1,27 @@
+// Tsubaki's first hatsumode: id → [ja, en]. Voice: ElevenLabs (tools/eleven/cast.json "tsubaki") — scripts/voice.py holds the tagged text.
+window.TSUBAKI_LINES = {
+  "t01": ["お待たせしました…！ 振袖って、こんなに走りにくいんですのね。", "Sorry to keep you waiting…! I had no idea a furisode was this hard to run in."],
+  "t02": ["あの…どう、でしょう。 似合って、いますか？", "Um… how do I look? Does it suit me?"],
+  "t03a": ["き、綺麗…!? …ありがとうございます。 顔が、熱いです…。", "B-beautiful…!? …Thank you. My face feels hot…"],
+  "t03b": ["ふふ、平気です。 このショール、祖母のお下がりで、とっても温かいの。", "Hehe, I'm fine. This stole was my grandmother's — it's very warm."],
+  "t04": ["あっ、あと十秒です！ 一緒に、数えましょう？", "Oh, ten seconds left! Shall we count down together?"],
+  "t05": ["あけましておめでとうございます。 今年は…もっと、仲良くしてくださいね。", "Happy New Year. This year… let's get even closer, all right?"],
+  "t06": ["わあ…屋台って、こんなにいい匂いがするんですね！", "Wow… I never knew food stalls smelled this good!"],
+  "t07": ["あの…私、現金を持っていなくて。 …カードは、使えないのかしら？", "Um… I don't carry cash. …Do you think they take cards?"],
+  "t08a": ["まあ…！ では、このお返しは、来年必ず。", "Oh my…! Then I'll repay you next year, I promise."],
+  "t08b": ["すみません、カードは…え、だめ？ …ふふっ、やっぱり、おごっていただけます？", "Excuse me, do you take cards… oh, no? …Hehe, could you treat me after all?"],
+  "t09": ["はい、あなたの分。 …ほっぺ、冷たいでしょう？ えいっ。", "Here, this one's yours. …Your cheek must be cold, right? There!"],
+  "t10": ["…ふー、ふー。 あつっ…！ ふふ、私、猫舌なんです。", "…Fuu, fuu. Hot…! Hehe, I can't handle hot drinks."],
+  "t11": ["焚き火、あったかい…。 手をかざすと、指先がじんわりしますね。", "The bonfire is so warm… Hold your hands out — your fingertips tingle."],
+  "t12": ["きゃっ…！ ご、ごめんなさい。 人が多くて…。 …もう少しだけ、このままでも、いいですか？", "Eek…! I-I'm sorry. It's so crowded… …Could we stay like this, just a little longer?"],
+  "t13": ["二礼、二拍手、一礼…ですよ。 一緒に。", "Two bows, two claps, one bow… Together."],
+  "t14": ["…何を、お願いしたんですか？", "…What did you wish for?"],
+  "t15a": ["ずるいです。 …じゃあ、私も秘密です。", "That's not fair. …Then mine's a secret too."],
+  "t15b": ["…っ！ …同じ、です。 私も、それをお願いしました。", "…! …Same. That's exactly what I wished for."],
+  "t16": ["…凶。 生まれて初めて引きました、凶…。", "…Bad luck. The first bad-luck fortune of my life…"],
+  "t17a": ["えっ、交換…いいんですか？ …ふふ、あなたの大吉、大切にしますね。", "Huh, swap… are you sure? …Hehe, I'll treasure your great-luck fortune."],
+  "t17b": ["はい…！ 二人で結べば、きっと吉に変わりますよね。", "Yes…! If we tie it together, it's sure to turn lucky."],
+  "t18": ["風、冷たい…。 寒いでしょう？ …ほら、半分こ。", "The wind is so cold… You're freezing, aren't you? …Here, we'll share."],
+  "t19a": ["…さっきの秘密、少しだけ教えます。 来年も、あなたの隣にいられますように、って。", "…I'll tell you a little of my secret. I wished I could be beside you again next year."],
+  "t19b": ["来年も、その次の年も…。 初詣は、あなたと来たいです。", "Next year, and the year after that… I want to come here with you."]
+};

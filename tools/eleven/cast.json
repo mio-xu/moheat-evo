@@ -272,5 +272,25 @@
   "description": "A Japanese man, 26, a strikingly handsome, cool and quiet live streamer. A clear, low, smooth young baritone, calm and a little aloof, with an attractive airy softness; speaks slowly with few words and short pauses, unbothered and understated, then suddenly gentle and shy with a soft breathy laugh. Not husky, not old, not flirty or showy. Close up it becomes a low, soft, intimate whisper. Native Japanese speaker. Clean close-mic recording, no background noise.",
   "sample": "[softly] …あ、もう映ってる？ …こんばんは。岳です。 [chuckles softly] …顔の話はいいって。今日も、湖のそばで焚き火してる。 …寒くないか？ 風、こっちから来るだろ。…ほら、俺が壁になるから。 [sighs softly] 火、ちょっと足すな。…パチパチいってるの、聞こえる？ [whispers] …しゃべるの、得意じゃないんだけどさ。…お前が見てると、なんか、続けたくなる。 [softly] …もうちょっとだけ、ここにいろよ。",
   "compare": []
+ },
+ "tsubaki": {
+  "name": "白銀椿 Tsubaki",
+  "demos": [
+   "for-men/Demo25_HatsumodeDate"
+  ],
+  "persona": "约会①（男性向）：20 岁老字号旅馆的大小姐，端庄有礼、说话用敬语，但不谙世事的天然呆；人生第一次挤人潮的初诣、第一次逛小吃摊，好奇又容易害羞",
+  "description": "A Japanese woman of twenty, a well-bred young lady from an old traditional family. Clear, bright, refined light soprano; elegant and polite with a gentle, graceful lilt, slightly airy and innocent, curious and easily delighted, a little shy; she giggles softly behind her hand. Close to the ear she becomes a soft, breathy whisper. Native Japanese speaker. Clean close-mic recording, no background noise.",
+  "sample": "[softly] あけましておめでとうございます。 [giggles] …ふふ、こうして人混みの初詣に来るのは、生まれて初めてなんです。 [curious] あっ、あれは何でしょう？ りんご飴…？ まあ、立ったまま食べてもよろしいの？ [whispers] …今日は、あなたと来られて、本当によかった。",
+  "compare": []
+ },
+ "kainushi": {
+  "name": "飼い主 Kainushi",
+  "persona": "Demo26《ねこになった日》：Naomi 的主人，20 多岁的女生，一个人住；周六在家，温柔、有点宠溺、会对猫撒娇地说话，偶尔笑出声；贴耳时轻声细语",
+  "description": "A Japanese woman in her mid-twenties talking to her beloved cat at home on a lazy weekend. Warm, soft, natural mezzo-soprano; gentle and affectionate, a little doting and playful, she laughs softly and talks in a sweet, cooing tone to the cat. Relaxed and unpolished, like everyday speech at home, not an anime voice. Close to the ear she becomes a soft, breathy whisper. Native Japanese speaker. Clean close-mic recording, no background noise.",
+  "sample": "[warmly] ナオミ〜、おはよう。 ごはんだよ〜、ほら、おいで。 [softly] …あったかいね、なおちゃん。 ひなたぼっこ、気持ちいい？ [laughs] あ、だめだよ〜、冷蔵庫は寒いでしょ。 [surprised] あれ？ ナオミ？ どこ行ったの？ [whispers] …みーつけた。 [softly] 今日もいっぱい遊んだね。 おやすみ、ナオミ。",
+  "compare": [],
+  "demos": [
+   "healing/Demo26_NekoNiNatta"
+  ]
  }
 }

@@ -55,3 +55,7 @@ demos/for-women/Demo22_ShionRain/assets/video/
 demos/for-women/Demo24_GakuCamp/assets/
 demos/for-women/Demo24_GakuCamp/audio/*
 !demos/for-women/Demo24_GakuCamp/audio/voice_cache.json
+demos/for-women/Demo12_LateCall/assets/frames/
+
+# Demo25 hatsumode date (raw Seedance PNGs, frames, downloaded video)
+demos/for-men/Demo25_HatsumodeDate/assets/
