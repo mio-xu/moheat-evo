@@ -11,6 +11,8 @@ Categories
   auditions  voice audition takes for characters whose voice is already chosen (VOICEVOX-era takes, ElevenLabs previews of
              confirmed characters). Never ElevenLabs line caches (they cost characters to rebuild).
   rejected   art / video candidates the user did not choose (unchosen designs and styles, alternates, the relit test, frame copies)
+  obsolete   retired workspaces and one-off kits: the idol design workspace (Demo16_HandshakeEvent, finished as Demo20–22),
+             debug crops, Seedance / ChatGPT upload kits, art packs already imported into assets/, refs for paused plans
   rebuild    big intermediates that the build scripts regenerate (binaural stems, spatialized audio). Only the final MP4 / mix and
              the inputs are needed to keep a demo; trash these only when disk space matters.
 Never listed: anything tracked by git, final films (video/final, output/final_*.mp4), media/, ElevenLabs caches, raw art that the
@@ -20,7 +22,7 @@ import glob, json, os, shutil, subprocess, sys, time
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 D = os.path.join(REPO, 'demos')
-KEEP = ['demos/for-women/Demo16_HandshakeEvent']   # design / audition workspace of the idol series (handoff: do not delete)
+KEEP = []   # folders another session is still working in (add while it runs; Demo16_HandshakeEvent was retired 2026-11-08)
 
 
 def g(*pats):
@@ -44,7 +46,12 @@ CATS = {
                           'demos/for-women/Demo21_JinLounge/assets/video_alt', 'demos/for-women/Demo21_JinLounge/assets/art/jin_whisper_[abc].png',
                           'demos/all-ages/Demo4_SeasonsExpress/video/swirl_candidates', 'demos/for-women/Demo22_ShionRain/assets/frames',
                           'demos/**/*_relit.png'),
-    'rebuild': lambda: g('demos/all-ages/Demo1_SnowFoxfire/output/stems', 'demos/all-ages/Demo2_FanMeeting/output/stems',
+    'obsolete': lambda: g('demos/for-women/Demo16_HandshakeEvent', 'demos/for-men/Demo14_LiveStream/project/box_*.jpg',
+                          'demos/*/*/assets/kit', 'demos/all-ages/Demo4_SeasonsExpress/project/generated_art',
+                          'demos/all-ages/Demo4_SeasonsExpress/project/chatgpt_layout_refs', 'demos/all-ages/Demo4_SeasonsExpress/project/art_render',
+                          'demos/all-ages/Demo4_SeasonsExpress/project/seedance_refs'),
+    'rebuild': lambda: g('demos/all-ages/Demo3_ShiningSmileConcert/audio/stems', 'demos/all-ages/Demo3_ShiningSmileConcert/assets/music_edited',
+                         'demos/all-ages/Demo4_SeasonsExpress/audio/source_stems', 'demos/all-ages/Demo1_SnowFoxfire/output/stems', 'demos/all-ages/Demo2_FanMeeting/output/stems',
                          'demos/all-ages/Demo4_SeasonsExpress/audio/spatialized', 'demos/nobunaga-suntory/*/audio/stems'),
 }
 

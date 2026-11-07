@@ -346,3 +346,6 @@ section[id]{scroll-margin-top:70px}
   #stories .section-head h2{font-size:clamp(30px,8vw,40px);margin:8px 0 0}
   #stories .section-head>p{display:none}
 }
+
+/* footer links wrap on phones (the Credits link made the row wider than the screen) */
+@media (max-width:900px){.footer-links{flex-wrap:wrap;row-gap:8px}}

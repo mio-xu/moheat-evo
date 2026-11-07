@@ -39,6 +39,7 @@
   const qs = new URLSearchParams(location.search);
   if (qs.has('embed') || qs.has('cover') || qs.has('render')) return;
   // one screen: measure the bar and what sits below the stage, series.css sizes the stage and the side panel from these
+  if (!('serial' in navigator)) document.documentElement.classList.add('no-serial');   // phones: no Web Serial → series.css hides the device controls
   const root = document.documentElement, fit = () => {
     const bar = document.querySelector('header.bar'), lay = document.querySelector('.layout'), stage = document.querySelector('.stage-col .stage') || document.querySelector('.stage');
     if (!lay || !stage) return;

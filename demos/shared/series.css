@@ -57,3 +57,30 @@
   html.fit:not(.embed) body:not(.cover-only) .stage { width: min(100%, calc((100dvh - var(--fit-bar, 0px) - var(--fit-pad, 40px) - var(--fit-below, 0px)) * 16 / 9)); margin-inline: auto; }
   html.fit:not(.embed) body:not(.cover-only) .side { max-height: calc(100dvh - var(--fit-bar, 0px) - var(--fit-pad, 40px)); overflow-y: auto; scrollbar-width: thin; }
 }
+
+/* ---------- phones and tablets (user, 2026-11-08): the page fits the screen exactly and the player is as large as possible ----------
+   Portrait: the player (+ its transport) sits at the top at full width, the side panel fills the rest of the screen and scrolls
+   inside itself. Landscape phone: only the player — as big as the height allows — with a slim top bar; the side panel is hidden.
+   html.no-serial (set by nav.js when the browser has no Web Serial, i.e. every phone) hides the device-connection controls. */
+@media (max-width: 1100px) {
+  html.fit:not(.embed) body:not(.cover-only) { overflow: hidden; }
+  html.fit:not(.embed) body:not(.cover-only) .layout { display: flex; flex-direction: column; gap: 8px; height: calc(100dvh - var(--fit-bar, 0px)); padding: 8px; box-sizing: border-box; max-width: none; }
+  html.fit:not(.embed) body:not(.cover-only) .stage-col { flex: none; width: 100%; min-width: 0; }
+  html.fit:not(.embed) body:not(.cover-only) .stage { width: min(100%, calc((100dvh - var(--fit-bar, 0px) - 16px - var(--fit-below, 0px) - 120px) * 16 / 9)); margin-inline: auto; }
+  html.fit:not(.embed) body:not(.cover-only) .side { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  html.no-serial .bar .device { display: none !important; }
+  html.fit:not(.embed) body:not(.cover-only) .side #radar { display: block; width: auto !important; max-width: 100%; height: 150px !important; margin: 0 auto; }
+  .bar { gap: 8px !important; padding: 6px 10px !important; flex-wrap: nowrap; }
+  .bar .brand em { display: none; }
+}
+@media (max-width: 1100px) and (orientation: landscape) and (max-height: 600px) {
+  html.fit:not(.embed) body:not(.cover-only) .side { display: none; }
+  html.fit:not(.embed) body:not(.cover-only) .layout { padding: 4px 8px; }
+  html.fit:not(.embed) body:not(.cover-only) .stage { width: min(100%, calc((100dvh - var(--fit-bar, 0px) - 8px - var(--fit-below, 0px)) * 16 / 9)); }
+  .bar { padding: 3px 10px !important; }
+  .bar .btn, .bar .estop, .dnav button, .dnav a.dn-step { height: 28px !important; min-height: 0 !important; padding-block: 0 !important; font-size: 12px !important; }
+  html.fit:not(.embed) body:not(.cover-only) .stage-col .legend { display: none; }   /* timeline demos: more height for the player */
+  html.fit:not(.embed) body:not(.cover-only) .stage-col .transport { margin-top: 4px !important; }
+}
+/* small players (phones): the cover's "join in" toggle stays inside the picture */
+@container (max-width: 620px) { .intro .ix-toggle { font-size: 2.4cqw !important; margin-top: .4cqw !important; padding: .3em .8em !important; } }
