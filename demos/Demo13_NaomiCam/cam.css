@@ -65,3 +65,8 @@ body.cover-only .cover-copy { margin-top: 0 !important; }
   .dk .tx { display: none; }
   .dk { padding: 0 .9cqw; }
 }
+#thermBtn.on { background: linear-gradient(135deg, #5a0fa0, #ff4d6d 60%, #ffb020); color: #fff; border-color: #ffc27a; }
+#fanBtn.on { background: #9fd8ff; color: #062236; }
+#heatBtn.on { background: #ff8a5c; color: #3a0f00; }
+.dk[hidden] { display: none !important; }
+.dk { white-space: nowrap; }

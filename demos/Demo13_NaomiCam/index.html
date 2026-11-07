@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../Demo10_CaveSpring/demo.css?v=1" />
-  <link rel="stylesheet" href="cam.css?v=1" />
+  <link rel="stylesheet" href="cam.css?v=3" />
   <link rel="stylesheet" href="../shared/series.css?v=3" />
   <script>if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add('embed');</script>
   <style>/* ?embed=1 — used by the site's demo menu: stage only */
@@ -47,9 +47,12 @@
         <div class="push" id="push"><i>🐾</i><div><small>NaomiCam · <span id="pushTime">now</span></small><b></b><span></span></div></div>
         <div class="dock" id="dock">
           <button class="dk pan" id="panL" type="button" title="Pan left (←)">◀</button>
+          <button class="dk" id="thermBtn" type="button" title="Thermal view"><span class="ic">🌡</span><span class="tx">サーモ · Thermal</span></button>
           <button class="dk talk" id="talkBtn" type="button" title="Hold to talk (Space)"><span class="ic">🎤</span><span class="tx">話す · Talk</span><span class="mic" id="micBars"></span></button>
           <button class="dk" id="laserBtn" type="button" title="Laser pointer"><span class="ic">🔴</span><span class="tx">レーザー · Laser</span></button>
+          <button class="dk" id="fanBtn" type="button" title="Electric fan"><span class="ic">🌀</span><span class="tx">扇風機 · Fan</span></button>
           <button class="dk" id="feedBtn" type="button" title="Food dispenser"><span class="ic">🍚</span><span class="tx">ごはん · Feed</span></button>
+          <button class="dk" id="heatBtn" type="button" title="Heated blanket"><span class="ic">🔥</span><span class="tx">ホットカーペット · Heat</span></button>
           <button class="dk" id="snapBtn" type="button" title="Snapshot"><span class="ic">📸</span></button>
           <button class="dk pan" id="panR" type="button" title="Pan right (→)">▶</button>
         </div>
@@ -62,7 +65,7 @@
             <p class="kicker">MoHeat Evo · Binaural ASMR × Thermal Haptics</p>
             <h1><span>ナオミ、</span><span>いまなにしてる？</span></h1>
             <p class="en">What's Naomi Up To? · Pet Cam</p>
-            <p class="cast"><span class="chip p">📹 見守りカメラ · Pet cam</span><span class="chip h">🐈 ぬくもり・ごろごろ · warm</span><span class="chip k">👃 お鼻・窓の風・雨 · cool</span></p>
+            <p class="cast"><span class="chip p">📹 見守りカメラ · Pet cam</span><span class="chip h">🌡 サーモ・ホットカーペット · warm</span><span class="chip k">🌀 扇風機・お鼻・雨 · cool</span></p>
             <p class="cleared" id="cleared" hidden></p>
             <div class="intro-actions">
               <button class="btn primary big" id="startBtn" type="button">▶ カメラをひらく · Open camera</button>
@@ -88,7 +91,7 @@
           <div class="meter-row"><span>R cool</span><div class="m cool"><i id="mRc"></i></div><b id="vRc">0</b></div>
           <div class="meter-row"><span>R warm</span><div class="m heat"><i id="mRh"></i></div><b id="vRh">0</b></div>
         </div>
-        <p class="note">Live, relative to where the camera looks: Naomi's body and purr are warm at her direction; the window breeze, the rain and her nose on the lens are cool. Turn the camera and the warmth turns with it. One mode per ear.</p>
+        <p class="note">Live, relative to where the camera looks: Naomi's body, her purr and the heated blanket are warm at their direction; the fan's wind (wherever you aim it), the window, the rain and her nose on the lens are cool. Turn the camera and the warmth turns with it. One mode per ear.</p>
       </div>
       <div class="card">
         <div class="card-head"><span>Progress</span><b id="clock" class="mono">0:00</b></div>
@@ -104,8 +107,8 @@
 
   <script src="../../device.js?v=1"></script>
   <script src="../Demo11_Naomi/audio.js?v=2"></script>
-  <script src="cam_audio.js?v=1"></script>
-  <script src="cam.js?v=1"></script>
+  <script src="cam_audio.js?v=2"></script>
+  <script src="cam.js?v=3"></script>
   <script src="../shared/nav.js?v=5"></script>
 </body>
 </html>

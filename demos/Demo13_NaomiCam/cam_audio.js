@@ -80,6 +80,26 @@ window.CamAudio = (() => {
     motor.g.gain.setTargetAtTime(.05 * Math.min(1, v), ac.currentTime, .05);
     motor.osc.frequency.setTargetAtTime(150 + 90 * Math.min(1, v), ac.currentTime, .05);
   }
+  // the electric fan: motor hum + blade swish at the fan, and its breeze at the direction it blows
+  let fanN = null;
+  function fan(level = 0, az = 0, aimAz = 0, dist = 2) {
+    if (!ac) return;
+    if (!fanN) {
+      if (!level) return;
+      const mk = () => { const p = new PannerNode(ac, { panningModel: 'HRTF', distanceModel: 'inverse', refDistance: .6, rolloffFactor: .8 }); p.connect(out); return p; };
+      const p1 = mk(), p2 = mk(), g1 = ac.createGain(), g2 = ac.createGain(); g1.gain.value = 0; g2.gain.value = 0; g1.connect(p1); g2.connect(p2);
+      const n1 = ac.createBufferSource(); n1.buffer = noise; n1.loop = true; const f1 = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 700, Q: .8 });
+      const hum = new OscillatorNode(ac, { type: 'triangle', frequency: 100 }), hg = ac.createGain(); hg.gain.value = .15;
+      const am = new OscillatorNode(ac, { frequency: 18 }), amg = ac.createGain(); amg.gain.value = .25; const swish = ac.createGain(); swish.gain.value = .75; am.connect(amg).connect(swish.gain);
+      n1.connect(f1).connect(swish).connect(g1); hum.connect(hg).connect(g1);
+      const n2 = ac.createBufferSource(); n2.buffer = noise; n2.loop = true; const f2 = new BiquadFilterNode(ac, { type: 'lowpass', frequency: 1100 });
+      n2.connect(f2).connect(g2); n1.start(); n2.start(0, .7); hum.start(); am.start();
+      fanN = { p1, p2, g1, g2 };
+    }
+    const t = ac.currentTime, put = (p, a, d) => { p.positionX.setTargetAtTime(Math.sin(a) * d, t, .08); p.positionZ.setTargetAtTime(-Math.cos(a) * d, t, .08); };
+    put(fanN.p1, az, dist); put(fanN.p2, aimAz, 1.3);
+    fanN.g1.gain.setTargetAtTime(.22 * level, t, .15); fanN.g2.gain.setTargetAtTime(.32 * level, t, .15);
+  }
   function setMuted(m) { if (out) out.gain.setTargetAtTime(m ? 0 : .8, ac.currentTime, .05); }
-  return { init, fx, motorLevel, setMuted };
+  return { init, fx, motorLevel, fan, setMuted };
 })();
