@@ -37,6 +37,7 @@ ASMR Demo, ASMR Demo 2, Demo3_ShiningSmileConcert   ← 临时兼容符号链接
 HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
 ```
+- 官网首页 “INTERACTIVE DEMO / Every whisper, felt.” 区：左侧封面菜单（`assets/images/demos/demoN.jpg`）切换右侧 iframe（`demos/<name>/?embed=1`，只显示画面和进度条），默认 Demo 1。新 Demo 完成后在 `index.html` 的 `.td-menu` 里加一项。
 - 2026-11-07 起所有 Demo 统一放在 `demos/DemoN_英文名/`。Demo 之间互相引用用同级路径（如 `demos/Demo1_SnowFoxfire/tools`），播放器引用 `../../device.js`，`render_mp4.py` 的服务器根目录是仓库根。
 每个 Demo 文件夹里都有自己的 `README.md`（运行方法、管线、交付物清单），本文件是总览和交接。
 

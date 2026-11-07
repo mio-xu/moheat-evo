@@ -80,70 +80,30 @@
         </div>
 
         <div class="td-body">
-          <div class="td-stage">
-            <div class="td-aura td-aura-l"></div>
-            <div class="td-aura td-aura-r"></div>
-            <div class="td-rings"><span></span><span></span><span></span></div>
+          <nav class="td-menu" aria-label="Choose a demo">
+            <button class="td-item is-active" type="button" data-demo="demos/Demo1_SnowFoxfire/">
+              <img src="assets/images/demos/demo1.jpg" alt="" width="480" height="270" loading="lazy">
+              <span class="td-item-text"><em>Demo 1 · ice &amp; fire</em><b>Whispers of Snow and Flame</b></span>
+            </button>
+            <button class="td-item" type="button" data-demo="demos/Demo2_FanMeeting/">
+              <img src="assets/images/demos/demo2.jpg" alt="" width="480" height="270" loading="lazy">
+              <span class="td-item-text"><em>Demo 2 · idol ASMR</em><b>Your Special Fan Meeting</b></span>
+            </button>
+            <button class="td-item" type="button" data-demo="demos/Demo3_ShiningSmileConcert/">
+              <img src="assets/images/demos/demo3.jpg" alt="" width="480" height="270" loading="lazy">
+              <span class="td-item-text"><em>Demo 3 · music</em><b>Ice &amp; Fire Concert</b></span>
+            </button>
+            <button class="td-item" type="button" data-demo="demos/Demo4_SengokuBanquet/">
+              <img src="assets/images/demos/demo4.jpg" alt="" width="480" height="270" loading="lazy">
+              <span class="td-item-text"><em>Demo 4 · audio drama</em><b>The Last Banquet at Azuchi</b></span>
+            </button>
+          </nav>
 
-            <div class="td-gauge td-gauge-l" data-ch="0">
-              <span class="td-gauge-side">LEFT EAR</span>
-              <b class="heat-value">Off</b>
-              <div class="td-meter"><i></i></div>
-            </div>
-
-            <div class="td-figure">
-              <svg class="head-svg" viewBox="0 0 160 200" aria-hidden="true">
-                <defs>
-                  <linearGradient id="hairGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stop-color="#6e5357"/>
-                    <stop offset="1" stop-color="#3f2e31"/>
-                  </linearGradient>
-                </defs>
-                <path d="M8 200C8 162 38 146 80 146S152 162 152 200Z" fill="#2b2225" stroke="#ffffff22"/>
-                <rect x="62" y="104" width="36" height="50" rx="14" fill="#d8c6c0"/>
-                <ellipse cx="80" cy="66" rx="46" ry="54" fill="url(#hairGrad)" stroke="#ffffff26"/>
-              </svg>
-              <div class="ear left-ear"></div>
-              <div class="ear right-ear"></div>
-            </div>
-
-            <div class="td-gauge td-gauge-r" data-ch="1">
-              <span class="td-gauge-side">RIGHT EAR</span>
-              <b class="heat-value">Off</b>
-              <div class="td-meter"><i></i></div>
-            </div>
-
-            <div class="td-status"><i></i><span id="tdStatus">Waiting for audio</span></div>
-          </div>
-
-          <div class="td-panel">
-            <div class="td-field">
-              <div class="td-label"><span>01</span>Audio source</div>
-              <label class="td-drop" for="audioFile">
-                <span class="td-drop-icon">♪</span>
-                <span class="td-drop-text"><b id="audioName">Upload a stereo track</b><small>Binaural ASMR works best</small></span>
-              </label>
-              <input id="audioFile" type="file" accept="audio/*" hidden />
-            </div>
-
-            <div class="td-field">
-              <div class="td-label"><span>02</span>Temperature <em id="tempValue"></em></div>
-              <input id="tempRange" class="td-temp" type="range" min="-100" max="100" value="60" aria-label="Temperature feedback" />
-              <div class="td-scale"><span>Cool</span><span>Off</span><span>Warm</span></div>
-            </div>
-
-            <div class="td-field">
-              <div class="td-label"><span>03</span>Playback</div>
-              <div class="td-player">
-                <button id="playBtn" class="td-play" type="button" aria-label="Play" disabled>▶</button>
-                <input id="audioSeek" class="td-seek" type="range" min="0" max="1000" value="0" aria-label="Seek" disabled />
-                <span id="audioTime" class="td-time">0:00</span>
-              </div>
-              <audio id="audioPlayer"></audio>
-            </div>
-
+          <div class="td-screen">
+            <iframe id="demoFrame" src="demos/Demo1_SnowFoxfire/?embed=1" title="MoHeat Evo interactive demo" loading="lazy" allow="autoplay; fullscreen; serial" allowfullscreen></iframe>
           </div>
         </div>
+        <p class="td-foot">Headphones on. Have a MoHeat Evo? <a id="demoOpen" href="demos/Demo1_SnowFoxfire/" target="_blank" rel="noopener">Open the full demo and connect ↗</a></p>
       </div>
     </section>
 

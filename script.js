@@ -4,133 +4,16 @@ const io = new IntersectionObserver((entries)=>{
 },{threshold:.12});
 revealEls.forEach(el=>io.observe(el));
 
-// Stereo audio → per-ear thermal preview.
-// The slider sets the stimulus (−100 cool … 0 off … +100 warm); each channel's level decides how much of it that ear gets.
-// No sound (no file yet, silence, pause, end) means Off.
-const SMOOTH = .06;
-const WARM = '255,99,69', COOL = '96,178,255';
-const demo = document.getElementById('thermalDemo');
-const temp = document.getElementById('tempRange');
-const tempValue = document.getElementById('tempValue');
-const channels = [0, 1].map((i) => {
-  const gauge = document.querySelector(`[data-ch="${i}"]`);
-  return {
-    ear: document.querySelector(i ? '.right-ear' : '.left-ear'),
-    aura: document.querySelector(i ? '.td-aura-r' : '.td-aura-l'),
-    value: gauge.querySelector('.heat-value'),
-    meter: gauge.querySelector('.td-meter i'),
-    v: 0,
-  };
-});
-const describe = (v) => {
-  const a = Math.round(Math.abs(v));
-  return a === 0 ? 'Off' : `${a}% ${v < 0 ? 'cooling' : 'warmth'}`;
-};
-const renderEar = (ch) => {
-  const a = Math.round(Math.abs(ch.v));
-  const cool = ch.v < 0;
-  const rgb = cool ? COOL : WARM;
-  ch.value.textContent = describe(ch.v);
-  ch.value.classList.toggle('cool', cool && a > 0);
-  ch.meter.style.width = `${a}%`;
-  ch.meter.style.background = `rgb(${rgb})`;
-  ch.aura.style.background = `radial-gradient(closest-side, rgba(${rgb},.45), transparent)`;
-  ch.aura.style.opacity = a / 100;
-  ch.ear.style.boxShadow = `0 0 35px rgba(${rgb},${a === 0 ? 0 : Math.max(.12, a/100)})`;
-  ch.ear.style.background = cool
-    ? `radial-gradient(circle at 50% 50%, rgba(${Math.round(224-a*.9)},${Math.round(236-a*.4)},255,1), #eee8e7 70%)`
-    : `radial-gradient(circle at 50% 50%, rgba(255,${Math.round(224-a*.8)},${Math.round(212-a)},1), #eee8e7 70%)`;
-};
-const updateTemp = () => {
-  if (Math.abs(Number(temp.value)) < 6) temp.value = 0; // snap to Off near the centre
-  const v = Number(temp.value);
-  tempValue.textContent = describe(v);
-  tempValue.classList.toggle('cool', v < 0);
-};
-temp.addEventListener('input', updateTemp); updateTemp();
-
-const audio = document.getElementById('audioPlayer');
-const fileInput = document.getElementById('audioFile');
-const fileName = document.getElementById('audioName');
-const drop = document.querySelector('.td-drop');
-const playBtn = document.getElementById('playBtn');
-const seek = document.getElementById('audioSeek');
-const timeLabel = document.getElementById('audioTime');
-const demoStatus = document.getElementById('tdStatus');
-const time = new Float32Array(2048);
-let ctx, analysers, objectUrl;
-
-const setupAudio = () => {
-  ctx = new AudioContext();
-  const source = ctx.createMediaElementSource(audio);
-  const splitter = ctx.createChannelSplitter(2);
-  source.connect(ctx.destination);
-  source.connect(splitter);
-  analysers = [0, 1].map((i) => {
-    const an = ctx.createAnalyser();
-    an.fftSize = 2048;
-    splitter.connect(an, i);
-    return an;
+// Interactive demo: the menu on the left swaps the embedded player (demos/<name>/?embed=1). Demo 1 is the default.
+const demoFrame = document.getElementById('demoFrame');
+const demoOpen = document.getElementById('demoOpen');
+document.querySelectorAll('.td-item').forEach((item) => {
+  item.addEventListener('click', () => {
+    if (item.classList.contains('is-active')) return;
+    document.querySelectorAll('.td-item').forEach((x) => x.classList.toggle('is-active', x === item));
+    demoFrame.src = `${item.dataset.demo}?embed=1`;
+    demoOpen.href = item.dataset.demo;
   });
-};
-
-const channelLevel = (an) => {
-  an.getFloatTimeDomainData(time);
-  let sum = 0;
-  for (const s of time) sum += s * s;
-  const db = 10 * Math.log10(sum / time.length + 1e-12);
-  return Math.min(1, Math.max(0, (db + 50) / 40)); // -50 dB → 0, -10 dB → 1
-};
-
-const tick = () => {
-  const setting = Number(temp.value);
-  channels.forEach((ch, i) => {
-    const target = analysers && !audio.paused ? setting * channelLevel(analysers[i]) : 0;
-    // Thermal inertia: temperature follows the audio slowly rather than frame by frame.
-    ch.v += (target - ch.v) * SMOOTH;
-    if (Math.abs(ch.v - target) < .5) ch.v = target;
-    renderEar(ch);
-  });
-  requestAnimationFrame(tick);
-};
-tick();
-
-const loadFile = (file) => {
-  if (!file || (file.type && !file.type.startsWith('audio/'))) return;
-  if (objectUrl) URL.revokeObjectURL(objectUrl);
-  objectUrl = URL.createObjectURL(file);
-  audio.src = objectUrl;
-  fileName.textContent = file.name;
-  playBtn.disabled = seek.disabled = false;
-  if (!ctx) setupAudio();
-  ctx.resume();
-  audio.play();
-};
-fileInput.addEventListener('change', () => loadFile(fileInput.files[0]));
-drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('is-over'); });
-drop.addEventListener('dragleave', () => drop.classList.remove('is-over'));
-drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove('is-over'); loadFile(e.dataTransfer.files[0]); });
-
-const fmt = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
-const syncPlayer = () => {
-  const playing = !audio.paused;
-  demo.classList.toggle('is-playing', playing);
-  playBtn.classList.toggle('is-playing', playing);
-  playBtn.textContent = playing ? '❚❚' : '▶';
-  playBtn.setAttribute('aria-label', playing ? 'Pause' : 'Play');
-  demoStatus.textContent = playing ? 'Live thermal preview' : audio.ended ? 'Finished · feedback off' : audio.src ? 'Paused · feedback off' : 'Waiting for audio';
-};
-playBtn.addEventListener('click', () => { if (audio.paused) { ctx && ctx.resume(); audio.play(); } else audio.pause(); });
-['play', 'pause', 'ended'].forEach((e) => audio.addEventListener(e, syncPlayer));
-audio.addEventListener('timeupdate', () => {
-  const p = audio.duration ? audio.currentTime / audio.duration : 0;
-  seek.value = p * 1000;
-  seek.style.setProperty('--p', `${p * 100}%`);
-  timeLabel.textContent = fmt(audio.currentTime);
-});
-seek.addEventListener('input', () => {
-  if (audio.duration) audio.currentTime = seek.value / 1000 * audio.duration;
-  seek.style.setProperty('--p', `${seek.value / 10}%`);
 });
 
 const modal = document.getElementById('videoModal');
