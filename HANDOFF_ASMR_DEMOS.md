@@ -40,6 +40,7 @@ demos/nobunaga-suntory/Demo07_KyotoIzakaya/                Demo 7《信長と家
 demos/nobunaga-suntory/Demo08_YamazakiDistillery/          Demo 8《信長と家康、山崎蒸溜所へ》（完成）
 demos/nobunaga-suntory/Demo05_GifuCastle/                   Demo 5《信長の岐阜城へようこそ》（完成）
 demos/all-ages/Demo10_CaveSpring/                 纯交互解谜《火をともして、ひみつの泉へ》（可玩，等 Seedance 背景）
+demos/all-ages/Demo28_SnowFoxLullaby/             纯交互哄睡《ふたりの、こもりうた》（小雪 × 焔 续篇，复用 Demo 1 美术 + 声音，0 credits）
 demos/healing/Demo11_Naomi/                      纯交互治愈小游戏《ナオミと、ふわふわの一日》（用户家的猫 Naomi，Seedance 美术）
 demos/for-women/Demo12_LateCall/                   纯交互深夜电话《もしもし、きこえる？》（原创男偶像 蓮，ElevenLabs）
 demos/for-women/Demo20_HinataHandshake/           纯交互握手会《あと10秒だけ、ね？》（原创男偶像 陽向，ElevenLabs）
@@ -354,6 +355,18 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 表情：`scripts/prepare_art.py`（按路径用 Demo 12 的函数）切口型/眨眼小块；外公说话帧生成时被放大了，用眼睛和鼻子区域求缩放（0.87）再切嘴；眨眼用固定偏移（局部搜索会漂）。
 - **冷热改为双层 + DUAL（2026-11-08）**：人声层 = 听筒贴耳时这只耳朵的热度 = 0.1 + 0.8 × 声音包络（起 0.06 s / 落 0.3 s；对着别处喊的句子 ×0.35；免提时没有人声热）；环境层 = 门（左凉）、围巾（两侧暖）、雪人（右凉）。每只耳朵冷、热各自计算，发 `DUAL …`。`FAMILY.both()` = 同耳冷热同时出现的帧数。
 - **2026-11-08 用户说太长，拆成两集**（同一通电话）：第 1 集 = 本文件夹（打电话 → 外公抢听筒 → 包裹 → 开门 → 围巾，结尾外公"看看我的蓝箱子"→「つづく」，约 2:50）；第 2 集 = `demos/healing/Demo16_FamilyCall2/`《じいちゃんの、ゆきだるま》（开场围巾已围着、免提 → 小雪人 → 听筒回耳边 → 过年 → 不肯先挂，约 2:05）。Demo16 文件夹只有页面和封面：`<base href="../Demo15_FamilyCall/">` + `<body data-part="2">`，代码/美术/配音全用第 1 集的（`game.js` 里 `PART`）。两集都已加入 `nav.js` 和官网菜单（缩略图按文件夹命名）。
+
+### Demo28_SnowFoxLullaby ✅ 可玩 —《ふたりの、こもりうた / A Lullaby for Two》（纯交互，2026-11-08）
+- 小雪 × 焔 的续篇：雪夜你睡不着，两人比赛哄你睡觉。用户从 4 个剧情方案里选了 A（之后的新 Demo 一律先出方案，见设计总则 §8）。
+- 流程：先选"有点热 / 有点冷"，决定谁先来。
+  - 小雪在左耳：闭眼长按 → 雪声 → 凉的"ふぅー"。
+  - 焔在右耳：转耳朵 → 暖的"はぁー"。
+  - 然后两人挤到同一只左耳，同时说话（DUAL 同耳一冷一热）。
+  - 选谁留下：留小雪，焔去看地炉，地炉变暖；留焔，小雪去关门，冷风停。
+  - 最后你说"おやすみ"，两人一左一右同时回答。自动通关约 93–97 s，两条分支 0 报错。
+- 冷热：小雪的声音是凉的（雪精灵，属于 §0.2 的特例），焔的声音是暖的；吐息、靠近、前方地炉（暖）、开着的门（冷）构成环境层。
+- 素材：Demo 1 的立绘和房间背景**按路径**引用（`../Demo01_SnowFoxfire/media/art/`），在 canvas 里分层叠加，表情和口型按各自的声音电平切帧。0 Seedance。配音用 koyuki r1_b + homura r1_c 合成 22 句（两人同时说的句子各配一份）。
+- 测试：`?auto&pick=0|1`；`LULLABY.peek(view)`。
 
 ### Demo20_HinataHandshake ✅ 可玩 —《あと10秒だけ、ね？ / Just Ten More Seconds?》（纯交互握手会，2026-11-08）
 - 女性向男偶像系列第一位：**陽向**（19 岁，年下・腹黑：人前甜、耳边黑）。造型 = 用户定的粉毛设定图（`Demo16_HandshakeEvent/assets/art/hinata_pink_sheet.png`，复制为 `assets/art/ref_hinata.png`）。`Demo16_HandshakeEvent/`（三位男偶像的设计 / 试听工作区，未进 git）在三位都做完后，于 2026-11-08 经用户同意移到了废纸篓。

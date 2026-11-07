@@ -1,0 +1,46 @@
+/* ふたりの、こもりうた — on top of shared/game.css: snowy-night navy + snow blue (Koyuki) + foxfire orange (Homura). */
+:root { --bg: #0b0f1e; --panel: #131a2e; --panel-2: #1c2540; --line: #2d3a5e; --gold: #ffc27a; }
+.bar { background: #0e1426; }
+.brand span { color: #9fd0ff; }
+.btn.primary { background: linear-gradient(135deg, #5a8dff, #ff8a3d); }
+.vv { bottom: auto; top: .6cqw; }
+
+/* cover */
+.intro::before { background: linear-gradient(to right, rgba(11, 15, 30, .84), rgba(11, 15, 30, .5) 42%, rgba(11, 15, 30, 0) 62%); }
+body.cover-only .intro::before { background: linear-gradient(to right, rgba(11, 15, 30, .78), rgba(11, 15, 30, .38) 42%, rgba(11, 15, 30, 0) 60%); }
+body.cover-only .cover-copy { margin-top: 0 !important; }
+.intro .hero.a { position: absolute; width: 1px; height: 1px; }
+.intro h1 { background: linear-gradient(100deg, #e8f4ff 0%, #9fd0ff 38%, #ffffff 55%, #ffb36b 78%, #ff7a3d 100%); -webkit-background-clip: text; background-clip: text; }
+.intro .chip.p { background: rgba(120, 150, 255, .18); color: #eef3ff; border-color: rgba(255, 194, 122, .55); }
+.intro .cleared { color: #f4f7ff; background: rgba(60, 90, 180, .32); border-color: rgba(255, 194, 122, .6); }
+
+/* subtitles (sizes from series.css) + speaker label */
+.subs { position: absolute; z-index: 3; display: flex; justify-content: center; pointer-events: none; opacity: 0; transition: opacity .25s; }
+.subs.show { opacity: 1; }
+.subs .line { display: flex; flex-direction: column; align-items: center; background: rgba(11, 15, 30, .64); }
+.subs .ja { color: #fff; font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif; font-weight: 700; }
+.subs .en { color: #d9e2f5; font-family: Inter, sans-serif; }
+.subs .who { display: inline-block; margin-right: .6em; padding: 0 .5em; border-radius: .5em; font-size: .78em; vertical-align: .08em; color: #0b0f1e; background: #ffb36b; }
+.subs .who.k { background: #a9d4ff; }
+.subs .who.kh { background: linear-gradient(90deg, #a9d4ff, #ffb36b); }
+
+/* your turn: choices / action / hold */
+.choices, .act { position: absolute; left: 50%; bottom: 12cqw; transform: translate(-50%, .6cqw); z-index: 4; opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s; }
+.choices.show, .act.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.choices { display: flex; gap: 1.2cqw; }
+.ch, .act-btn { cursor: pointer; border-radius: 1.4cqw; border: 1px solid rgba(255, 194, 122, .55); background: rgba(16, 22, 44, .8); color: #fff; padding: 1cqw 2cqw;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background .15s, transform .15s; user-select: none; -webkit-user-select: none; touch-action: none; }
+.ch:hover, .act-btn:hover { background: rgba(70, 100, 200, .55); transform: translateY(-2px); }
+.ch b, .act-btn b { display: block; font: 700 clamp(11px, 1.6cqw, 26px)/1.3 "Zen Maru Gothic", "Noto Sans JP", sans-serif; }
+.ch span, .act-btn span { display: block; font: 500 clamp(9px, 1.05cqw, 16px)/1.3 Inter, sans-serif; color: #d9e2f5; }
+.act-btn { display: grid; grid-template-columns: auto auto; grid-template-rows: auto auto; column-gap: 1cqw; align-items: center; text-align: left; animation: nudge 1.6s ease-in-out infinite; }
+.act-btn i { grid-row: span 2; font-style: normal; font-size: clamp(18px, 2.6cqw, 40px); }
+.act-btn.hold { grid-template-rows: auto auto auto; }
+.act-btn.hold.down { background: rgba(70, 100, 200, .7); transform: scale(.97); }
+.act-btn .bar { grid-column: 2; display: block; height: .45cqw; min-height: 4px; margin-top: .5cqw; border-radius: 9px; background: rgba(255, 255, 255, .15); overflow: hidden; }
+.act-btn .bar u { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #a9d4ff, #ffb36b); }
+@keyframes nudge { 50% { box-shadow: 0 0 1.6cqw rgba(255, 194, 122, .6); } }
+.stage:has(.intro:not(.hidden)) :is(.choices, .act, .subs, .hud-top) { display: none !important; }
+@container (max-width: 620px) {
+  .choices { flex-direction: column; bottom: 14cqw; } .ch b, .act-btn b { font-size: 3.2cqw; } .ch span, .act-btn span { font-size: 2.3cqw; }
+}
