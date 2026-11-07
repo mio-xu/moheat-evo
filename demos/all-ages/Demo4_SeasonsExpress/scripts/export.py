@@ -48,7 +48,7 @@ def main():
                 segments=[dict(t0=a, t1=b, key=k, ja=ja, en=en, left=l, right=r) for a, b, k, ja, en, l, r in S.SEGMENTS],
                 chaos=[dict(t0=a, t1=b, left=l, right=r) for a, b, l, r in S.CHAOS], cues=S.VISUAL_CUES,
                 radarRate=RADAR_RATE, sources=sources,
-                credits=dict(art="Train & scenery art: regenerated art pack (project/generated_art). Season vortex: user-supplied Seedance artwork. Sound: procedurally generated."))
+                credits=dict(art="Art: train & scenery generated with OpenAI image generation (Codex) · season vortex: Seedance · every sound is generated procedurally"))
     geo = json.load(open(os.path.join(ROOT, "assets", "train_interior", "window_geometry.json")))
     csv_text = open(os.path.join(ROOT, "thermal", "thermal_4ch.csv")).read()
     with open(os.path.join(MEDIA, "data.js"), "w") as f:

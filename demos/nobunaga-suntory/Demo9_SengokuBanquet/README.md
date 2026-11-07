@@ -41,4 +41,4 @@ heat follows voice energy (r = 0.99 / 0.83), laugh 0.70 > speech 0.55 > whisper 
 16 left↔right switches · mix exactly 150.000 s @ 48 kHz.
 
 ## Credits
-Voice: VOICEVOX:青山龍星 / VOICEVOX:黒沢冴白. Original script, koto phrase and SFX (synthesised). Art: ChatGPT, original designs.
+Voice: ElevenLabs (since 2026-11-08; earlier VOICEVOX:青山龍星 / 黒沢冴白). Original script, koto phrase and SFX (synthesised). Art: ChatGPT, original designs.

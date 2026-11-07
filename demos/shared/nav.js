@@ -25,6 +25,16 @@
     { cat: 'nobunaga-suntory', dir: 'Demo8_YamazakiDistillery', ja: '信長と家康、山崎蒸溜所へ', en: 'Two Warlords at the Yamazaki Distillery', group: 4, ep: 4 },
     { cat: 'nobunaga-suntory', dir: 'Demo9_SengokuBanquet', ja: '安土最後の酒宴', en: 'The Last Banquet at Azuchi', group: 4, ep: 5 },
   ];
+  // rights notes shown under each demo's cover credits (full pages only); the full list is the site's credits.html
+  const HIST = 'Oda Nobunaga and Tokugawa Ieyasu are portrayed as fictional characters', ADULT = 'お酒は20歳になってから · 20+ only';
+  const RIGHTS = {
+    Demo1_SnowFoxfire: 'Art: ChatGPT (OpenAI) · original characters', Demo2_FanMeeting: 'Art: ChatGPT (OpenAI) · original character and song',
+    Demo5_GifuCastle: `${HIST} · art: ChatGPT (OpenAI)`,
+    Demo6_FutureWhisky: `${HIST} · Suntory, Yamazaki, Hibiki and Hakushu (names and bottle designs) are trademarks of Suntory Holdings Limited · ${ADULT}`,
+    Demo7_KyotoIzakaya: `${HIST} · art: ChatGPT (OpenAI) · ${ADULT}`,
+    Demo8_YamazakiDistillery: `${HIST} · Suntory and Yamazaki are trademarks of Suntory Holdings Limited · ${ADULT}`,
+    Demo9_SengokuBanquet: `${HIST} · art: ChatGPT (OpenAI) · ${ADULT}`,
+  };
   const GROUPS = ['全年齢 · All ages', '癒し · Healing', '男性向け · For him', '女性向け · For her', '信長シリーズ · Nobunaga Series'];   // numbers are the list order
   const qs = new URLSearchParams(location.search);
   if (qs.has('embed') || qs.has('cover') || qs.has('render')) return;
@@ -39,6 +49,8 @@
     root.style.setProperty('--fit-below', `${Math.max(0, col.getBoundingClientRect().height - stage.getBoundingClientRect().height)}px`);
   };
   fit(); addEventListener('resize', fit); addEventListener('load', fit); setTimeout(fit, 600);
+  { const dir = (DEMOS.find((d) => location.pathname.includes(`/${d.dir}/`)) || {}).dir, cr = document.getElementById('credits');
+    if (cr && RIGHTS[dir] && !document.querySelector('.dn-rights')) { const r = document.createElement('p'); r.className = 'draft dn-rights'; r.textContent = RIGHTS[dir]; cr.after(r); } }
   const bar = document.querySelector('header.bar'); if (!bar) return;
   const cur = DEMOS.findIndex((d) => location.pathname.includes(`/${d.dir}/`));
   const href = (d) => `../../${d.cat}/${d.dir}/`, thumb = (i) => `../../../assets/images/demos/${DEMOS[i].dir}.jpg`;   // pages live at demos/<cat>/<dir>/   // named by folder, so inserting a demo renames nothing
@@ -62,6 +74,7 @@
   .dn-tabs button:hover{color:#fff;border-color:rgba(255,255,255,.35)}
   .dn-tabs button[aria-selected=true]{border-color:#ff9a7a;background:rgba(255,140,110,.16);color:#ffd2c4}
   .dn-panel section[hidden]{display:none}
+  .dn-foot{margin:14px 4px 2px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08);font:500 12px/1.4 Inter,sans-serif;color:#a99e93}.dn-foot a{color:#ffc4b2}
   .dn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
   .dn-card{display:block;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:inherit;text-decoration:none;transition:transform .15s,border-color .15s}
   .dn-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.35)}
@@ -86,7 +99,8 @@
   panel.innerHTML = `<div class="dn-tabs" role="tablist"><button type="button" role="tab" data-g="all">すべて · All<i>${DEMOS.length}</i></button>`
     + GROUPS.map((g, gi) => `<button type="button" role="tab" data-g="${gi}">${g}<i>${count(gi)}</i></button>`).join('') + '</div>'
     + GROUPS.map((g, gi) => `<section data-g="${gi}"><h4>${g}${span(gi)}</h4><div class="dn-grid">` + DEMOS.map((d, i) => d.group !== gi ? '' :
-    `<a class="dn-card${i === cur ? ' is-cur' : ''}" href="${href(d)}"><img src="${thumb(i)}" alt="" loading="lazy"><span><em>Demo ${i + 1}${d.ep ? ' · Ep ' + d.ep + ' / 5' : ''}${i === cur ? ' · now playing' : ''}</em><b>${d.ja}</b><small>${d.en}</small></span></a>`).join('') + '</div></section>').join('');
+    `<a class="dn-card${i === cur ? ' is-cur' : ''}" href="${href(d)}"><img src="${thumb(i)}" alt="" loading="lazy"><span><em>Demo ${i + 1}${d.ep ? ' · Ep ' + d.ep + ' / 5' : ''}${i === cur ? ' · now playing' : ''}</em><b>${d.ja}</b><small>${d.en}</small></span></a>`).join('') + '</div></section>').join('')
+    + '<p class="dn-foot"><a href="../../../credits.html">Credits · 権利表記</a> · voices, art, music, trademarks · © 2026 MoHeat Evo</p>';
   const show = (g) => { panel.querySelectorAll('.dn-tabs button').forEach((b) => b.setAttribute('aria-selected', b.dataset.g === String(g))); panel.querySelectorAll('section').forEach((x) => { x.hidden = g !== 'all' && x.dataset.g !== String(g); }); };
   panel.querySelector('.dn-tabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { e.stopPropagation(); show(b.dataset.g); } });
   show(cur >= 0 ? DEMOS[cur].group : 'all');

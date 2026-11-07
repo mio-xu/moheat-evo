@@ -30,4 +30,4 @@ python3 scripts/render_mp4.py        # → video/final/final_future_whisky_150s.
 `scripts/check.py` → `analysis/qa_report.json`: no clipped / overlapping lines, your 9 lines text-only, ja + en for all 43 lines,
 whispers at the correct ear, heat follows voice energy, alternation, 3000 rows ending at `stop`, mix exactly 150 s @ 48 kHz.
 
-Voice: VOICEVOX:青山龍星 / VOICEVOX:黒沢冴白 · Suntory whisky artwork: provided by the user.
+Voice: ElevenLabs (since 2026-11-08; earlier VOICEVOX:青山龍星 / 黒沢冴白) · Suntory whisky artwork: provided by the user; Suntory, Yamazaki, Hibiki and Hakushu are trademarks of Suntory Holdings Limited.

@@ -95,7 +95,7 @@ def main():
         timing.append(dict(i=i, t=c["t"], who=c["who"], kind=k, dur=round(dur, 3)))
     json.dump(timing, open(os.path.join(AUD, "voice_timing.json"), "w"), indent=1)
     credits = [f"VOICEVOX:{V.PERSONA[w]['speaker']}" for w in "NI"]
-    json.dump(dict(backend="voicevox", credits=credits), open(os.path.join(MEDIA, "voice.json"), "w"), ensure_ascii=False)
+    json.dump(dict(backend="elevenlabs", credits=["ElevenLabs"]), open(os.path.join(MEDIA, "voice.json"), "w"), ensure_ascii=False)
     for name, x in [("N_voice", VO["N"]), ("I_voice", VO["I"]), ("C_cool", cool), ("F_warm", warm)]:
         B.write_wav(os.path.join(STEMS, name + ".wav"), x)
     print("rendering binaural…", flush=True)
