@@ -162,7 +162,7 @@
   }
 
   // the cover: every text in .intro that l10n.js translates ("" = hidden); the title shrinks when the new text is longer
-  const COVER = '.intro h1, .intro p:not(.draft):not(.cleared):not(.dn-rights), .intro .chip, .intro button:not(.opt), .intro .opt:not(:has(small))';
+  const COVER = '.intro h1, .intro p:not(.draft):not(.cleared):not(.dn-rights), .intro .chip, .intro button:not(.opt):not(.msub-lang), .intro .opt:not(:has(small))';
   const units = (s) => [...s].reduce((n, c) => n + (/[　-鿿가-힯＀-￯]/.test(c) ? 1 : c === ' ' ? .3 : .56), 0);
   function cover(el) {
     if (el.closest('.ix-toggle') || el.querySelector(COVER)) return;   // a box of chips: the chips themselves
@@ -284,6 +284,12 @@
     color: #fff; font: 700 clamp(10px, 1.1cqw, 16px)/1.2 "Noto Sans JP", Inter, system-ui, sans-serif; backdrop-filter: blur(4px); white-space: nowrap; }
   .hud-btn.msub-btn { font: inherit; font-weight: 700; }
   .msub-btn:hover { background: rgba(255, 255, 255, .18); }
+  .msub-row { display: flex; justify-content: center; gap: .5cqw; margin-top: .9cqw; }
+  .msub-lang { cursor: pointer; border-radius: 999px; padding: .3cqw 1cqw; border: 1px solid rgba(255, 255, 255, .35); background: rgba(10, 8, 16, .45);
+    color: rgba(255, 255, 255, .8); font: 600 clamp(10px, 1.05cqw, 15px)/1.3 Inter, "Noto Sans JP", "PingFang SC", sans-serif; backdrop-filter: blur(4px); }
+  .msub-lang:hover { background: rgba(255, 255, 255, .15); }
+  .msub-lang.on { background: rgba(255, 255, 255, .9); color: #17121f; border-color: transparent; }
+  @container (max-width: 620px) { .msub-lang { font-size: 2.3cqw; padding: .5cqw 1.8cqw; } }
   @container (max-width: 620px) { .msub-btn:not(.hud-btn) { font-size: 2.4cqw; padding: 1cqw 2cqw; } }`;
   document.head.appendChild(css);
 
@@ -301,14 +307,28 @@
     const ix = () => { const c = stage.querySelector(':scope > .ix-chip'); if (c) w.appendChild(c); return c; };
     if (!ix()) { let n = 0; const t = setInterval(() => { if (ix() || ++n > 40) clearInterval(t); }, 250); }
   }
+  // language row on the cover, under the Start button (user: choose the language right when you come in)
+  let row = null;
+  function coverRow() {
+    const anchor = document.querySelector('.intro .intro-actions'); if (!anchor) return;
+    row = document.createElement('div'); row.className = 'msub-row'; row.setAttribute('role', 'group'); row.setAttribute('aria-label', 'Language');
+    anchor.after(row);
+  }
+  function fillRow() {
+    if (!row) return;
+    row.innerHTML = langs().map((l) => `<button type="button" class="msub-lang" data-l="${l}" lang="${LANGS[l]?.bcp || l}">${LANGS[l]?.name || l}</button>`).join('');
+    row.querySelectorAll('button').forEach((b) => b.addEventListener('click', (e) => { e.stopPropagation(); set(b.dataset.l); }));
+  }
   function select() { sel = document.getElementById('subMode'); if (sel) sel.addEventListener('change', () => set(sel.value)); }   // Demo 1–9 side panel
   function fill() {
+    fillRow();
     if (sel) sel.innerHTML = options(true);
   }
   function apply() {
     root.classList.add('msub');
     for (const c of [...root.classList]) if (c.startsWith('msub-')) root.classList.remove(c);
     root.classList.add(`msub-${lang}`);
+    row?.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.l === lang));
     if (btn) btn.textContent = `🌐 ${lang === 'off' ? 'OFF' : LANGS[lang]?.short || lang}`;   // globe = language (user: no 字)
     if (sel && sel.value !== lang) { sel.value = lang; sel.dispatchEvent(new Event('change')); }   // the demo re-renders its lines (ja + en for other languages)
     renderAll(); chrome(); root.lang = LANGS[lang]?.bcp || 'en';
@@ -333,7 +353,7 @@
   };
 
   function init() {
-    select(); button(); fill(); watch();
+    select(); button(); coverRow(); fill(); watch();
     if (sel) { sel.value = lang; sel.dispatchEvent(new Event('change')); }   // the demo drops its old ja + en mode
     apply();
     const me = document.currentScript?.src || [...document.scripts].map((x) => x.src).find((x) => /shared\/subs\.js/.test(x));

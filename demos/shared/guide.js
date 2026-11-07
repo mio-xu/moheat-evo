@@ -10,9 +10,9 @@
   if (['embed', 'cover', 'render', 'auto', 'autoplay'].some((k) => QS.has(k))) return;
   const KEY = 'moheat.guide';
   const STEPS = [
-    { sel: null, en: 'Welcome! Put on headphones: you will hear the story in 3D and, with MoHeat Evo, feel warmth and coolness on each ear. Here is a 30-second tour.',
-      ja: 'ようこそ！ヘッドホンをつけてください。立体音響で物語を聴き、MoHeat Evo をつなぐと左右の耳で温かさ・冷たさを感じられます。30 秒で画面の使い方をご紹介します。',
-      zh: '欢迎！请戴上耳机：你会听到立体声的故事，连接 MoHeat Evo 后还能在左右耳感受到冷和热。下面用 30 秒介绍一下界面。' },
+    { sel: null, en: 'Welcome! Put on headphones: you will hear the story in 3D and, with MoHeat Evo, feel warmth and coolness on each ear. Choose your language, then a 30-second tour.',
+      ja: 'ようこそ！ヘッドホンをつけてください。立体音響で物語を聴き、MoHeat Evo をつなぐと左右の耳で温かさ・冷たさを感じられます。言語を選んだら、30 秒で画面の使い方をご紹介します。',
+      zh: '欢迎！请戴上耳机：你会听到立体声的故事，连接 MoHeat Evo 后还能在左右耳感受到冷和热。先选择语言，再用 30 秒介绍一下界面。' },
     { sel: 'header .device, #connectBtn', en: 'Connect MoHeat Evo here (desktop Chrome / Edge, USB or Bluetooth). Without it you can still watch and listen.',
       ja: 'ここで MoHeat Evo をつなぎます（パソコンの Chrome / Edge、USB または Bluetooth）。つながなくても、見る・聴くことはできます。',
       zh: '在这里连接 MoHeat Evo（电脑上的 Chrome / Edge，USB 或蓝牙）。不连接也可以观看和收听。' },
@@ -44,7 +44,8 @@
   .mg-tip button { cursor: pointer; border-radius: 999px; padding: 6px 14px; font-family: inherit; font-weight: 600; font-size: 13px; line-height: 1; border: 1px solid rgba(255, 255, 255, .25); background: transparent; color: #e9dff3; }
   .mg-tip button.mg-go { background: linear-gradient(135deg, #ffd58a, #ff9f6e); color: #2a1606; border: 0; margin-left: auto; }
   .mg-tip button.mg-skip { border: 0; color: #b8a9c9; padding-left: 0; }
-  .mg-help { min-width: 30px; }`;
+  .mg-help { min-width: 30px; }
+  .mg-langs { display: flex; gap: 6px; margin: -4px 0 12px; } .mg-langs button.on { background: #f5eefb; color: #17121f; border-color: transparent; }`;
   document.head.appendChild(css);
 
   let i = 0, list = [], veil, hole, tip;
@@ -67,6 +68,12 @@
       ${last ? '' : `<button type="button" class="mg-skip">${T(BTN.skip)}</button>`}${i ? `<button type="button" class="mg-back">${T(BTN.back)}</button>` : ''}
       <button type="button" class="mg-go">${T(last ? BTN.done : BTN.next)}</button></div>`;
     tip.querySelector('p').textContent = T(s);
+    if (i === 0 && window.MoHeatSub) {   // step 1: choose the language first (user), the rest of the tour follows it
+      const row = document.createElement('div'); row.className = 'mg-langs';
+      row.innerHTML = window.MoHeatSub.langs.map((l) => `<button type="button" data-l="${l}" class="${l === window.MoHeatSub.lang ? 'on' : ''}">${window.MoHeatSub.LANGS[l]?.name || l}</button>`).join('');
+      row.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { window.MoHeatSub.set(b.dataset.l); render(); }));
+      tip.querySelector('p').after(row);
+    }
     tip.querySelector('.mg-go').onclick = () => go(1);
     tip.querySelector('.mg-back')?.addEventListener('click', () => go(-1));
     tip.querySelector('.mg-skip')?.addEventListener('click', () => close());

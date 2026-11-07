@@ -398,9 +398,9 @@ main.layout
     **不显示进度**（用户 2026-11-08）：游戏类代码里的 `#steps` 可以照写（剧情代码会用到），含 `#steps` 的卡片由 series.css 统一隐藏；新 Demo 不必再做进度卡片。Demo23 的对话状态卡片不算进度。
 ```
 
-**使用引导**（用户 2026-11-08）：`shared/guide.js` 在第一次打开任何 Demo 时依次高亮介绍设备连接、STOP、🌐 语言、⛶ 全屏、开始 / 语音回答、雷达、冷热表、强度，可「跳过」，看完或跳过后不再自动出现，顶栏「?」可重看。新 Demo 只要按本节的结构写就自动生效；要加一步，在 `STEPS` 里加一条（选择器 + en / ja / zh）。
+**使用引导**（用户 2026-11-08）：`shared/guide.js` 在第一次打开任何 Demo 时先让用户选语言，再依次高亮介绍设备连接、STOP、🌐 语言、⛶ 全屏、开始 / 语音回答、雷达、冷热表、强度，可「跳过」，看完或跳过后不再自动出现，顶栏「?」可重看。新 Demo 只要按本节的结构写就自动生效；要加一步，在 `STEPS` 里加一条（选择器 + en / ja / zh）。
 
-**2. 封面 `.intro .cover-copy`（从上到下）**：`p.kicker`（MoHeat Evo · Binaural ASMR × Thermal Haptics；信长系列另加 `p.series`）→ `h1`（日文标题，带假名，有冲击力）→ `p.en`（英文标题 — 一句副标题）→ `p.cast` 里 2–3 个 `.chip`（角色 / 冷热来源，每个「日文 English · cool/warm」）→ `.intro-actions`（`#startBtn.btn.primary.big`「▶ はじめる · Start」——**不写时长**（用户 2026-11-08）；直播间可写「▶ 配信を見る · Watch」+ `#lrBtn`「🎧 Left / Right check」）→ `p.hint`（耳机 · 麦克风 · 连接设备）→ `p.draft#credits`（配音 / 美术署名）。其他语言的版本全部写在 `l10n.js` 的 `text.ja / en / zh`，标题过长会自动缩小到放得下。
+**2. 封面 `.intro .cover-copy`（从上到下）**：`p.kicker`（MoHeat Evo · Binaural ASMR × Thermal Haptics；信长系列另加 `p.series`）→ `h1`（日文标题，带假名，有冲击力）→ `p.en`（英文标题 — 一句副标题）→ `p.cast` 里 2–3 个 `.chip`（角色 / 冷热来源，每个「日文 English · cool/warm」）→ `.intro-actions`（`#startBtn.btn.primary.big`「▶ はじめる · Start」——**不写时长**（用户 2026-11-08）；直播间可写「▶ 配信を見る · Watch」+ `#lrBtn`「🎧 Left / Right check」）→（subs.js 自动插入语言选择「English · 日本語 · 简体中文」，当前语言高亮，用户 2026-11-08：进入时就能选）→ `p.hint`（耳机 · 麦克风 · 连接设备）→ `p.draft#credits`（配音 / 美术署名）。其他语言的版本全部写在 `l10n.js` 的 `text.ja / en / zh`，标题过长会自动缩小到放得下。
 
 **3. 舞台上的元素统一写法**（`subs.js` 才能切换语言、`voice.js` 才能用语音回答）：
 - 字幕：`#subs > .line > .ja + .en`（`.who` 写说话人）；对话气泡：`#bubble > b + span`。
