@@ -27,10 +27,15 @@
   const fresh = () => ({ started: false, done: false, t: 0, clock: 0, callT: 0, inCall: false, ear: 0, speaker: false, view: 'room',
     doorCold: 0, scarf: 0, scarfOn: false, snow: 0, snowOn: false, who: '', step: 0, fade: 0, lv: 0, gift: false });
   let S = fresh(), run = 0;
-  const STEPS = [
+  // two episodes of the same call: part 1 (call → grandpa → parcel → scarf) and part 2 (snowman → New Year → nobody hangs up).
+  // Part 2's page (demos/Demo16_FamilyCall2/) sets <body data-part="2"> and <base href="../Demo15_FamilyCall/">, so all files are shared.
+  const PART = +(document.body.dataset.part || QS.get('part') || 1);
+  const STEPS = PART === 2 ? [
+    ['snowman', 'じいちゃんの雪だるま', "Grandpa's snowman"], ['phone', '受話器を耳に', 'Phone back to your ear'],
+    ['newyear', 'お正月の約束', 'A New Year promise'], ['bye', 'なかなか切れない', 'Nobody hangs up'],
+  ] : [
     ['call', 'おばあちゃんちに電話', 'Call home'], ['hello', 'おばあちゃんが出た', 'Grandma answers'], ['gp', 'おじいちゃんも', 'Grandpa too'],
-    ['parcel', '荷物が届いた', 'A parcel arrives'], ['gifts', 'マフラーと雪だるま', 'A scarf and a snowman'], ['newyear', 'お正月の約束', 'A New Year promise'],
-    ['bye', 'なかなか切れない', "Nobody hangs up"],
+    ['parcel', '荷物が届いた', 'A parcel arrives'], ['scarf', 'ばあばのマフラー', "Grandma's scarf"],
   ];
   function setStep(i) { S.step = i; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
 
@@ -102,6 +107,7 @@
     const my = ++run;
     const L = -1.45, R = 1.45;
     try {
+      if (PART === 2) return await part2(my, L, R);
       // your flat on a winter evening; their number is in your favourites
       S.view = 'room'; setStep(0); SND.loop('heater', -.3, 2.4)?.set(.035); SND.loop('room', 0, 3)?.set(.04);
       await sleep(.8);
@@ -152,8 +158,20 @@
       await sleep(1.2); await say('g11');
       await speak('「あったかい！」って言ってみて', 'Tell her "It\'s so warm!"', '🧣 あったかい！', "It's so warm!");
       await say('g12');
+      // to be continued: grandpa wants you to open his blue box
+      S.view = 'box'; await say('p05'); await sleep(.6);
+      await caption('⛄ つづく — 第2話「じいちゃんの、ゆきだるま」', "To be continued — Part 2: Grandpa's Little Snowman", 3);
+      S.fade = 1; await sleep(2.6); finish();
+    } catch (e) { if (e.message !== 'stopped') console.error(e); }
+  }
+  async function part2(my, L, R) {
+    try {
+      // the same call, a minute later: they are on speaker on your table, grandma's scarf is round your neck, the parcel is open
+      S.view = 'box'; setStep(0); SND.loop('heater', -.3, 2.4)?.set(.035); SND.loop('room', 0, 3)?.set(.04);
+      S.inCall = true; SND.phoneOn(L); SND.phoneSpeaker(); S.speaker = true; S.ear = 0; S.scarfOn = true; SND.loop('home')?.set(.25);
+      await caption('🧣 ばあばのマフラーを巻いたまま、電話はスピーカーで…', "Still wrapped in Grandma's scarf, the call on speaker…", 2.6);
       // grandpa's refrigerated snowman: right cheek cool, the scarf keeps the left warm
-      S.view = 'box'; await say('p05');
+      await say('p05');
       await action('🧊', '青い箱をあける', 'Open the blue box', { x0: 900, x1: 1920, y0: 200, y1: 1080 });
       SND.fx.cooler(.1); S.view = 'cooler'; await sleep(1.4);
       S.view = 'snow'; await say('p06'); await say('g13');
@@ -165,16 +183,16 @@
       await say('p09');
       // phone back to your ear (the snowman goes back in its box)
       S.snowOn = false; SND.fx.cooler(.1);
-      S.view = 'duo'; await say('g14');
+      setStep(1); S.view = 'duo'; await say('g14');
       await action('📱', '受話器を耳にあてる', 'Hold the phone to your ear');
       SND.fx.beep(); SND.fx.rustle(L, .3); SND.phoneEar(L); S.speaker = false; S.ear = -1;
-      setStep(5); await sleep(.4);
+      setStep(2); await sleep(.4);
       await say('p10');
       const ny = await choice([['帰るよ！', "I'll come home!"], ['…まだわからない', "…I'm not sure yet"]]);
       if (!ny) { await say('g15a'); await say('p11a'); } else await say('g15b');
       await say('g16'); await say('p12');
       // nobody wants to hang up first
-      setStep(6);
+      setStep(3);
       await say('g17'); await say('p13'); await sleep(1.6);
       await say('g18'); await say('p14'); await say('g19');
       await speak('「またね、大好きだよ」って言ってみて', 'Say "See you soon, love you"', '💗 またね、大好き', 'See you, love you');
@@ -356,7 +374,9 @@
     S.done = true; S.started = false; run++; stopOutput(); SND.phoneOff();
     for (const k of ['room', 'heater', 'home']) SND.loop(k)?.stop();
     sub('', ''); $('callPill').classList.remove('show'); $('dialer').classList.remove('show');
-    const c = $('cleared'); c.hidden = false; c.textContent = '💗 また電話してね · Call them again soon';
+    const c = $('cleared'); c.hidden = false;
+    if (PART === 2) c.textContent = '💗 また電話してね · Call them again soon';
+    else c.innerHTML = '⛄ つづく · To be continued → <a href="../Demo16_FamilyCall2/">第2話「じいちゃんの、ゆきだるま」 · Part 2</a>';
     $('startBtn').textContent = '↺ もう一度 · Play again'; $('intro').classList.remove('hidden');
   }
   function start() {
@@ -371,7 +391,7 @@
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
   let coverCv = null;
   function drawCover() {   // the couple moved to the right half (title on the left): blurred copy behind, sharp copy with a feathered left edge
-    const im = IMG.duo_call; if (!im) { drawFallback('duo', S.t); return; }
+    const im = PART === 2 ? IMG.duo_bye : IMG.duo_call; if (!im) { drawFallback('duo', S.t); return; }
     if (!coverCv) {
       coverCv = document.createElement('canvas'); coverCv.width = W; coverCv.height = H; const c = coverCv.getContext('2d');
       c.filter = 'blur(18px) brightness(.8)'; c.drawImage(im, -60, -60, W + 120, H + 120); c.filter = 'none';

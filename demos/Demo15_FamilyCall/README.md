@@ -1,4 +1,7 @@
-# もしもし、おばあちゃん？ · Hello, Grandma?
+# もしもし、おばあちゃん？ · Hello, Grandma? (Part 1 of 2)
+
+The call is split into two episodes (2026-11-08): Part 1 here (call → grandpa grabs the phone → parcel → front door → scarf, ends with "open my blue box!" — to be continued);
+Part 2 is [`../Demo16_FamilyCall2/`](../Demo16_FamilyCall2/) (snowman → phone back to your ear → New Year → nobody hangs up). One `game.js` runs both (`PART`, from `<body data-part>` or `?part=`).
 
 An interactive phone call home to **grandma Hana and grandpa Gen** (original characters) in their snowy countryside house.
 No timeline, no MP4: their lines are VOICEVOX files played live through a phone filter (at your ear, or on speaker on the table);

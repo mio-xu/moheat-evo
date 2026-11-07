@@ -27,3 +27,4 @@ body.cover-only .intro::before { background: linear-gradient(to right, rgba(40, 
 @keyframes nudge { 50% { box-shadow: 0 0 1.6cqw rgba(255, 190, 140, .6); } }
 .stage:has(.intro:not(.hidden)) .dialer { display: none !important; }
 .vv { top: .6cqw; left: 1.2cqw; right: auto; transform: none; text-align: left; }
+.intro .cleared a { color: #fff; font-weight: 700; text-decoration: underline; text-underline-offset: .2em; }
