@@ -306,7 +306,7 @@
       return enabled && playing ? { waiting: false, boost: cheer } : null;
     }
     if (!cur) {
-      if (enabled && playing && t > lastT && t - lastT < .6) {
+      if (enabled && playing && !window.MoHeatScrubbing && t > lastT && t - lastT < .6) {
         const g = gates.find((x) => !fired.has(x) && lastT < x.t && t >= x.t);
         if (g) start(g);
       }

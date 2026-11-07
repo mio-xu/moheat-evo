@@ -302,3 +302,6 @@ Every full demo page waits for the viewer at hand-picked moments (cover toggle �
 - Hook in each demo.js `loop()`: `MoHeatInteract.tick(t, media)` + `MoHeatInteract.out(th, ix)` (Demo 5–9 use the earlier tick-only form). Gates sit on dialogue gaps → audio and thermal CSVs unchanged.
 - Off in `?embed`, `?cover`, `?render` → homepage player and MP4s stay linear.
 - Note: Demo 3's demo.css paints every `.stage canvas` black → the cheer layer overrides it (`.stage canvas.ix-fx{background:transparent}`).
+
+### Timeline drag (`demos/shared/scrub.js`)
+All nine pages load it (also in `?embed`): drag the timeline to scrub (mouse or touch). It replays each demo's own `click` seek at the pointer, pauses during the drag, resumes on release, shows a time bubble, and sets `window.MoHeatScrubbing` so interact.js opens no gate mid-drag.
