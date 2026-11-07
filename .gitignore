@@ -47,3 +47,4 @@ demos/for-women/Demo21_JinLounge/assets/
 demos/for-women/Demo21_JinLounge/audio/
 # Local secrets written by `elevenlabs onboard`
 /.env.local
+/tools/eleven/out/

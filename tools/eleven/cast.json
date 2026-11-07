@@ -1,0 +1,54 @@
+{
+ "_doc": "All ElevenLabs character voices. persona = the user's character brief (zh, shown on the audition page); description = Voice Design prompt (en); sample = Japanese audition text with eleven audio tags (100-1000 chars); compare = current takes (repo paths) shown next to the previews; voice_id = set by pick.py after the user confirms. Tools: audition.py / pick.py / tts.py in this folder. Sample must be at least 100 characters.",
+ "hinata": {
+  "name": "陽向 Hinata",
+  "demos": [
+   "for-women/Demo20_HinataHandshake"
+  ],
+  "persona": "19 岁，偶像团体年下成员，人前甜美可爱，贴耳时腹黑、坏心眼（年下・腹黒）",
+  "voice_id": "lODKQ6pXINFtajDz9nqR",
+  "confirmed": "2026-11-08"
+ },
+ "ren": {
+  "name": "蓮 Ren",
+  "demos": [
+   "for-women/Demo12_LateCall"
+  ],
+  "persona": "24 岁，人气偶像团体主唱；银白狼尾、黑高领长大衣；深夜下雪天打电话，温柔、成熟、有点害羞，耳语时贴心又撩",
+  "description": "A Japanese man, 24, the lead vocalist of a popular idol group. Gentle, warm, mature young tenor-baritone with a silky singer's tone and a little natural breathiness; calm, tender and slightly shy, talking softly on the phone late at night. When he whispers it becomes close, husky and intimate. Native Japanese speaker. Clean close-mic recording, no background noise.",
+  "sample": "[softly] …もしもし？ ごめん、こんな時間に。起こしちゃった？ [warmly] よかった。…なんか、声が聞きたくなって。ねえ、窓の外、見てみて。雪、降ってない？ [whispers] …今から言うこと、誰にも内緒ね。ステージから、ずっと探してた。…きみのこと。 [chuckles softly] …ふふ。ずるいな、その声。",
+  "compare": [
+   "demos/for-women/Demo12_LateCall/media/voice/c02.m4a",
+   "demos/for-women/Demo12_LateCall/media/voice/c13.m4a"
+  ],
+  "voice_id": null
+ },
+ "jin": {
+  "name": "迅 Jin",
+  "demos": [
+   "for-women/Demo21_JinLounge"
+  ],
+  "persona": "23 岁，霸道富家继承人（道明寺型），酒红发、黑皮夹克、墨镜；霸道直接・邪魅狂狷，不是傲娇；演唱会后的私人包厢",
+  "description": "A Japanese man, 23, a domineering rich heir and idol. Low, rich, confident baritone with a slightly rough, lazy and dangerous charm; blunt and commanding, short sentences, a smirk in the voice. Not cold, not tsundere: sure of himself and openly possessive. Close up he drops into a low, husky murmur. Native Japanese speaker. Clean close-mic recording, no background noise.",
+  "sample": "[annoyed] 遅えよ。 [smirks] …俺を待たせていいのは、お前だけだ。突っ立ってねえで、こっち来い。今日のライブ、どこ見てた？ [firmly] 目、逸らすな。 [chuckles] …顔、真っ赤じゃねえか。可愛いな、お前。 [whispers] …今日はもう、帰さねえから。",
+  "compare": [
+   "demos/for-women/Demo21_JinLounge/media/voice/j01.m4a",
+   "demos/for-women/Demo21_JinLounge/media/voice/j10.m4a"
+  ],
+  "voice_id": null
+ },
+ "staff_f": {
+  "name": "スタッフ（女）Event staff",
+  "demos": [
+   "for-women/Demo20_HinataHandshake"
+  ],
+  "persona": "握手会的女性工作人员：20 多岁，礼貌、干练、声音稍微抬高好在会场里听清",
+  "description": "A Japanese woman in her twenties working as staff at an idol handshake event. Bright, polite, businesslike announcer voice, slightly raised so it carries over a busy hall; friendly but efficient. Native Japanese speaker. Clean recording.",
+  "sample": "次の方、どうぞー！ はい、こちらへお進みくださーい。お荷物はこちらのカゴにお願いしまーす。 そろそろお時間でーす。 お時間でーす、お手を離してくださーい。 はい、ありがとうございましたー！ 次の方、どうぞー！ 列は二列でお願いしまーす。走らないでくださーい、ゆっくりお進みくださーい。",
+  "compare": [
+   "demos/for-women/Demo20_HinataHandshake/media/voice/s01.m4a",
+   "demos/for-women/Demo20_HinataHandshake/media/voice/s03.m4a"
+  ],
+  "voice_id": null
+ }
+}
