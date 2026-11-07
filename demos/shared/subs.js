@@ -176,9 +176,14 @@
     el.classList.toggle('msub-hide', v === '');
     const sp = v == null && !el.children.length ? pickSplit(el.dataset.morig) : null;
     if (sp) { el.textContent = sp; el.dataset.mshown = sp; return; }
-    if (v == null || v === '') { if (el.innerHTML !== el.dataset.mhtml) el.innerHTML = el.dataset.mhtml; delete el.dataset.mshown; el.style.fontSize = ''; return; }
+    if (v == null || v === '') { if (el.innerHTML !== el.dataset.mhtml) el.innerHTML = el.dataset.mhtml; delete el.dataset.mshown; el.style.removeProperty('font-size'); return; }
     el.textContent = v; el.dataset.mshown = v;
-    if (el.dataset.mcap) { el.style.fontSize = ''; const f = Math.min(1, Math.max(.42, +el.dataset.mcap / units(v))); if (f < 1) el.style.fontSize = `${parseFloat(getComputedStyle(el).fontSize) * f}px`; }
+    if (el.dataset.mcap) {   // the title: shrink by length, then until it really fits the cover's width (wide fonts, long English titles)
+      el.style.removeProperty('font-size'); const f = Math.min(1, Math.max(.42, +el.dataset.mcap / units(v))); if (f < 1) el.style.setProperty('font-size', `${parseFloat(getComputedStyle(el).fontSize) * f}px`, 'important');
+      const box = el.closest('.cover-copy') || el.parentElement, fit = () => { const room = box.clientWidth * .96, need = Math.max(el.scrollWidth, el.getBoundingClientRect().width);
+        if (room > 0 && need > room) el.style.setProperty('font-size', `${parseFloat(getComputedStyle(el).fontSize) * Math.max(.4, room / need)}px`, 'important'); };
+      fit(); requestAnimationFrame(fit);
+    }
   }
 
   // "日本語 <small>English</small>" in one element: the progress list (<li>ja · <small>en</small>), Demo 1–9 scene titles
@@ -329,7 +334,7 @@
     if (sel) { sel.value = lang; sel.dispatchEvent(new Event('change')); }   // the demo drops its old ja + en mode
     apply();
     const me = document.currentScript?.src || [...document.scripts].map((x) => x.src).find((x) => /shared\/subs\.js/.test(x));
-    if (me) { const c = document.createElement('script'); c.src = me.replace(/subs\.js(\?.*)?$/, 'l10n_common.js?v=2'); c.onload = () => { maps = {}; apply(); }; document.head.appendChild(c); }
+    if (me) { const c = document.createElement('script'); c.src = me.replace(/subs\.js(\?.*)?$/, 'l10n_common.js?v=3'); c.onload = () => { maps = {}; apply(); }; document.head.appendChild(c); }
     const s = document.createElement('script');   // relative to the page (or its <base>): the demo's own languages
     s.src = 'l10n.js?v=2';
     s.onload = () => {

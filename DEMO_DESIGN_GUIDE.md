@@ -330,11 +330,8 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 ## 7. 页面与版式
 
 - **以最近一个同类 Demo 为模板**复制（女性向：Demo21 / 22 的 `index.html` + `style.css` + `main.js` + `audio.js` + `lines.js` + `l10n.js`），共用 `../../shared/game.css`、`../../shared/series.css`、`../../shared/nav.js`、`../../../device.js`。
-- **固定结构**：
-  - 顶栏：品牌、设备连接、■ STOP。
-  - 左侧：16:9 舞台，内含字幕、选择 / 动作按钮、两侧冷热光晕、封面层。
-  - 右侧：Sounds around you、Thermal output、Progress、Intensity 四张卡片。
-- **一屏检查**：在 1280×720、1440×800、1920×1080 下 `scrollHeight <= innerHeight`。
+- **固定结构**：见 §7.3 UI 规范（所有 Demo 一样，新 Demo 必须照做）。
+- **一屏检查**：在 1280×720、1440×800、1920×1080 下 `scrollHeight <= innerHeight`，**右侧栏也不能出现内部滚动**（§7.3）。
 - **URL 参数**：
   - `?embed=1`：只显示舞台，官网菜单用。
   - `?cover=1`：封面。
@@ -355,6 +352,46 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 - **没有 Web Serial 的浏览器**（所有手机）：`nav.js` 给页面加上 `html.no-serial`，隐藏设备连接控件，只留 ■ STOP。
 - **小播放器**（宽度 ≤ 620 px）：封面只留标题、标签和按钮，字号随播放器宽度缩放；「あなたも参加する」开关缩小，不能超出画面。
 - **验收**：在 390×844、844×390、768×1024、1440×800 四种尺寸下，页面滚动和横向溢出都为 0；官网首页在手机上横向溢出也为 0。
+
+### 7.3 UI 规范（所有 Demo 统一，用户 2026-11-08：今后的新 Demo 都按同样的 UI）
+
+整套界面由共用文件负责：`shared/series.css`（尺寸、一屏、右侧栏、封面字号）、`shared/nav.js`（顶栏的 Demo 切换、一屏测量）、`shared/subs.js`（显示语言、「字」按钮）、`shared/voice.js`（语音回答）、`shared/game.css`（游戏类的基础样式）、`shared/interact.js`（影片类的互动和进度卡片）。**新 Demo 只写自己的内容，不另做一套 UI。**
+
+**1. 页面骨架（HTML 结构固定，class / id 不改名）**
+```
+header.bar
+  a.brand  "MoHeat <span>Evo</span> <em>ASMR · 主题</em>"     主题 = 英文短语（Live stream / VIP lounge / Nobunaga Series…），翻译放 l10n
+  （nav.js 自动插入 ‹ Demos n/26 › 切换）
+  .device  #portSelect · #addPort「+ Add」 · #connectBtn「Connect」 · #deviceStatus
+  #estop「■ STOP」
+main.layout
+  section.stage-col
+    .stage#stage（16:9）  画面 canvas / video · 封面 .intro · 字幕 #subs · 回答 .choices / .act · 提示 #toast · 目标 .hud-goal（左上）· 右上 HUD（.hud-top：🔊 + 「字」）· 两侧冷热光晕 .glow
+    .transport + .legend   只有影片类（时间轴 Demo）有
+  aside.side（固定 4 张卡片，顺序不变）
+    1 .card  Sounds around you        #radar（声源雷达）
+    2 .card  Thermal output           #cmd + L/R cool / warm 四条表 + .note（一两句说明这个 Demo 的冷热来源）
+    3 .card  Progress                 #steps（游戏类由 main.js 写；影片类由 interact.js 按场景自动生成）；直播间叫 Stream、实时对话叫 Conversation
+    4 .card  设置                      Intensity（+ 影片类的 Device lead）· Send to device —— **不放字幕下拉框**（只用舞台上的「字」按钮）
+```
+
+**2. 封面 `.intro .cover-copy`（从上到下）**：`p.kicker`（MoHeat Evo · Binaural ASMR × Thermal Haptics；信长系列另加 `p.series`）→ `h1`（日文标题，带假名，有冲击力）→ `p.en`（英文标题 — 一句副标题）→ `p.cast` 里 2–3 个 `.chip`（角色 / 冷热来源，每个「日文 English · cool/warm」）→ `.intro-actions`（`#startBtn.btn.primary.big`「▶ 日文 · English」+ `#lrBtn`「🎧 Left / Right check」）→ `p.hint`（耳机 · 麦克风 · 连接设备）→ `p.draft#credits`（配音 / 美术署名）。其他语言的版本全部写在 `l10n.js` 的 `text.ja / en / zh`，标题过长会自动缩小到放得下。
+
+**3. 舞台上的元素统一写法**（`subs.js` 才能切换语言、`voice.js` 才能用语音回答）：
+- 字幕：`#subs > .line > .ja + .en`（`.who` 写说话人）；对话气泡：`#bubble > b + span`。
+- 选项：`.choices > button.ch > b(日文) + span(English)`；动作：`.act > button.act-btn`（`<i>图标</i><b>日文</b><span>English</span>`，长按加 `.hold`）；直播的弹幕 / 礼物：`button.chip-c`；说一句：`#micGate button`。
+- 只写在一个元素里的双语文字一律写成「日本語 · English」；进度、场景标题写成「日本語 · <small>English</small>」。
+- 画在 canvas 上的字（道具标签、方向提示）也要在 `l10n.js` 里有翻译；日英两行的标签，另一种语言那一行的翻译写 `""`（不画）。
+- 互动成功的弹出反馈 `pop(日文, English)` 两个参数都要给。
+
+**4. 视觉**：尺寸全部用 `cqw`（随舞台宽度缩放，series.css 已定义字幕 / 封面 / 按钮的字号）；顶栏、右侧卡片的配色和字体用共用样式，**每个系列只换主题色和标题字体**（全年龄 / 癒し / 女性向 / 男性向：Zen Maru Gothic；信长系列：Shippori Mincho B1 + 金色），不另做布局。
+
+**5. 尺寸与验收**：
+- 桌面（宽 > 1100px）：舞台取放得下的最大 16:9，右侧栏高度 = 窗口高度，雷达卡片自动伸缩（其余卡片保持原高）；矮屏（高 < 760px）隐藏冷热说明 `.note`。1280×720、1440×800、1920×1080 下页面不滚动、右侧栏不滚动、雷达图高度 ≥ 70px。
+- 手机 / 平板：按 §7.1。
+- 上线前用 `?sub=en / ja / zh` 各看一次封面和右侧栏，`node tools/l10n/check_missing.js zh <文件夹>` 没有可见的漏翻。
+
+**6. 新 Demo 的起点**：游戏类复制 `for-women/Demo21_JinLounge`（或同类最近的 Demo）的 `index.html` 骨架，影片类复制 `nobunaga-suntory/Demo05_GifuCastle`；只改内容（标题、角色、卡片里的说明、Progress 的阶段），不动结构和 class。
 
 ### 7.2 共用文件的版本号
 
