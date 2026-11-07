@@ -1,0 +1,29 @@
+/* Family call — on top of Demo 10's demo.css and Demo 12's call.css (both by path): warm kotatsu palette, favourites card. */
+:root { --bg: #20160f; --panel: #2b1f16; --panel-2: #36281c; --line: #4a3726; --gold: #ffc98a; }
+.bar { background: #241910; }
+.brand span { color: #ffb070; }
+.btn.primary { background: linear-gradient(135deg, #ff9a5a, #ff7a9a); }
+.vv { bottom: auto; top: .6cqw; }
+.intro::before { background: linear-gradient(to right, rgba(40, 22, 10, .78), rgba(40, 22, 10, .42) 42%, rgba(40, 22, 10, 0) 62%); }
+body.cover-only .intro::before { background: linear-gradient(to right, rgba(40, 22, 10, .74), rgba(40, 22, 10, .3) 44%, rgba(40, 22, 10, 0) 60%); }
+.intro h1 { background: linear-gradient(100deg, #fff1d6 0%, #ffffff 50%, #ffc9a8 100%); -webkit-background-clip: text; background-clip: text; }
+.intro .chip.p { background: rgba(255, 176, 112, .18); color: #ffe9d2; border-color: rgba(255, 176, 112, .55); }
+.intro .cleared { color: #fff4e8; background: rgba(255, 140, 90, .22); border-color: rgba(255, 190, 150, .6); }
+.incoming { background: rgba(48, 30, 18, .84); border-color: rgba(255, 200, 150, .4); }
+.incoming .avatar { background: url("media/art/duo_call.webp") 42% 22% / 260% auto no-repeat, #6b4a32; box-shadow: 0 0 0 .3cqw rgba(255, 200, 150, .6); animation: none; }
+.incoming small { color: #ffd9b0; }
+.incoming span { color: #f3dcc6; }
+.subs .line { background: rgba(30, 18, 10, .62); }
+.subs .en { color: #f3dcc6; }
+.subs[data-who="gm"] .ja::before { content: "ばあば　"; color: #ffb3c6; font-size: .8em; }
+.subs[data-who="gp"] .ja::before { content: "じいじ　"; color: #a8d0ff; font-size: .8em; }
+.ch, .act-btn, .mic-gate button { border-color: rgba(255, 210, 170, .55); background: rgba(48, 30, 18, .8); }
+.ch:hover, .act-btn:hover, .mic-gate button:hover { background: rgba(220, 120, 70, .55); }
+.ch span, .act-btn span, .mic-gate .say span { color: #f3dcc6; }
+.mic-gate .say { background: rgba(30, 18, 10, .6); }
+.mic-gate .mic i { background: #ffc98a; }
+.call-pill { background: rgba(40, 24, 12, .62); border-color: rgba(255, 200, 150, .35); }
+.call-pill span { color: #f3dcc6; } .call-pill em { color: #ffc9a8; }
+@keyframes nudge { 50% { box-shadow: 0 0 1.6cqw rgba(255, 190, 140, .6); } }
+.stage:has(.intro:not(.hidden)) .dialer { display: none !important; }
+.vv { top: .6cqw; left: 1.2cqw; right: auto; transform: none; text-align: left; }
