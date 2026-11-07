@@ -53,15 +53,24 @@ const PAL = { N: '255,96,60', I: '120,225,170' };
 const BGW = 1536, BGH = 1024;
 let BGX = { ox: 0, oy: 0, k: 1 };
 const bx = (x) => BGX.ox + x * BGX.k, by = (y) => BGX.oy + y * BGX.k;
-const WINDOW = [430, 100, 1090, 540];          // the izakaya's window on the Kamo River (bg coords)
+const WINDOW = A.zoomRect || null;              // camera push target in bg coords (Demo 7: the window on the Kamo River)
+const BGFX = A.bgfx || {};                      // per background: snow / mist / dust / fireflies
 const BGS = A.cues.filter((c) => c.kind === 'bg');
 const zoomAt = (t) => { const c = cueOf(t, (x) => x.kind === 'zoom', 0); return c ? smooth((t - c.t) / 2.6) * smooth((c.t + c.dur - t) / 2.2) : 0; };
-const snowAt = (t) => { const b = BGS.filter((c) => c.t <= t).pop(); return (b && b.name === 'd7_bg_pontocho' ? 1 : 0) * smooth((20.6 - t) / 1.2 + 1) + zoomAt(t) * .8; };
+function fxAt(t) {   // weather of the current background, cross-faded with the previous one
+  const out = {}; let cur = null, prev = null;
+  for (const c of BGS) if (c.t <= t) { prev = cur; cur = c; }
+  const f = cur ? smooth((t - cur.t) / 1.4) : 0;
+  if (prev && BGFX[prev.name]) out[BGFX[prev.name]] = (out[BGFX[prev.name]] || 0) + (1 - f);
+  if (cur && BGFX[cur.name]) out[BGFX[cur.name]] = (out[BGFX[cur.name]] || 0) + f;
+  if (A.zoomFx) out[A.zoomFx] = Math.max(out[A.zoomFx] || 0, zoomAt(t) * .8);
+  return out;
+}
 
 function drawBg(ctx, name, alpha, shift, z) {
   if (!ok(name) || alpha <= 0) return;
   const k0 = (W + 90) / BGW, ox0 = -45 + clamp(shift, -45, 45), oy0 = -(BGH * k0 - H) * .3;
-  const [wx0, wy0, wx1, wy1] = WINDOW, k1 = W / (wx1 - wx0), ox1 = -wx0 * k1, oy1 = -wy0 * k1 - ((wy1 - wy0) * k1 - H) / 2;
+  const [wx0, wy0, wx1, wy1] = WINDOW || [0, 0, BGW, BGH], k1 = W / (wx1 - wx0), ox1 = -wx0 * k1, oy1 = -wy0 * k1 - ((wy1 - wy0) * k1 - H) / 2;
   const k = lerp(k0, k1, z), ox = lerp(ox0, ox1, z), oy = lerp(oy0, oy1, z);
   BGX = { ox, oy, k };
   ctx.save(); ctx.globalAlpha = alpha; ctx.drawImage(IMG[name], ox, oy, BGW * k, BGH * k); ctx.restore();
@@ -73,9 +82,8 @@ function drawBackground(ctx, t, shift) {
   ctx.fillStyle = '#0b0d16'; ctx.fillRect(0, 0, W, H);
   if (prev && fade < 1) drawBg(ctx, prev.name, 1, shift, 0);
   if (cur) drawBg(ctx, cur.name, fade, shift, z);
-  // snow: falling over the alley, and blowing in through the open window
-  const snow = snowAt(t);
-  if (snow > .01) {
+  const fx = fxAt(t), snow = fx.snow || 0;
+  if (snow > .01) {   // snow falling / blowing in, drifting with the cold wind
     const wind = sample(A.cool.az, A.fps, t) / 90;
     ctx.save(); ctx.fillStyle = 'rgba(245,248,255,.85)';
     for (let i = 0; i < 220 * snow; i++) {
@@ -85,8 +93,35 @@ function drawBackground(ctx, t, shift) {
     }
     ctx.restore();
   }
+  if ((fx.mist || 0) > .01) {   // slow banks of mist (valley morning, waterfall spray)
+    ctx.save();
+    for (let i = 0; i < 7; i++) {
+      const x = ((hash(i) * (W + 800) + t * (18 + 10 * hash(i + 2))) % (W + 800)) - 400, y = H * (.3 + .45 * hash(i + 4)), r = 260 + 200 * hash(i + 6);
+      const g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, `rgba(235,242,245,${.22 * fx.mist})`); g.addColorStop(1, 'rgba(235,242,245,0)');
+      ctx.fillStyle = g; ctx.fillRect(x - r, y - r, 2 * r, 2 * r);
+    }
+    ctx.restore();
+  }
+  if ((fx.dust || 0) > .01) {   // dust motes in the warehouse light shafts
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 90; i++) {
+      const x = hash(i) * W + Math.sin(t * .3 + i) * 30, y = ((hash(i + 3) * H - t * (6 + 8 * hash(i + 5))) % H + H) % H;
+      ctx.fillStyle = `rgba(255,230,180,${.35 * fx.dust * (.5 + .5 * Math.sin(t * 1.3 + i))})`; ctx.beginPath(); ctx.arc(x, y, 1 + 1.6 * hash(i + 7), 0, 7); ctx.fill();
+    }
+    ctx.restore();
+  }
+  if ((fx.fireflies || 0) > .01) {   // fireflies over the reeds
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 40; i++) {
+      const x = hash(i) * W + Math.sin(t * .5 + i * 1.7) * 60, y = H * (.45 + .3 * hash(i + 2)) + Math.sin(t * .8 + i) * 25;
+      const on = Math.max(0, Math.sin(t * (1.2 + hash(i + 4)) + i * 2.3)) ** 3 * fx.fireflies;
+      const g = ctx.createRadialGradient(x, y, 0, x, y, 16); g.addColorStop(0, `rgba(210,255,140,${.9 * on})`); g.addColorStop(1, 'rgba(210,255,140,0)');
+      ctx.fillStyle = g; ctx.fillRect(x - 16, y - 16, 32, 32);
+    }
+    ctx.restore();
+  }
   // gentle night grade + vignette (the art is already warm)
-  ctx.fillStyle = `rgba(12,24,48,${.06 + .1 * snow})`; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = `rgba(12,24,48,${.06 + .1 * snow + (A.nightGrade || 0)})`; ctx.fillRect(0, 0, W, H);
   const v = ctx.createRadialGradient(W / 2, H / 2, H * .4, W / 2, H / 2, H * .98);
   v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(8,4,0,.42)');
   ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
@@ -264,12 +299,12 @@ function emit(st, t, dt) {   // gold sparkle on big laughs (no breath haze on wh
 }
 
 // ---------------------------------------------------------------- ambience visuals at their own positions
-const PROP = { d7_prop_beer: ['生ビール', 'Draft beer'], d7_prop_yakitori: ['焼き鳥', 'Yakitori'], d7_prop_highball: ['ハイボール', 'Highball'], d7_prop_atsukan: ['あつかん', 'Hot sake'] };
-const STEAMY = new Set(['d7_prop_yakitori', 'd7_prop_atsukan']);
+const PROP = A.propNames || {}, PSIZE = A.propSize || {};       // name card (ja with kana, en) and height per prop
+const STEAMY = new Set(A.steamy || []);
 function drawProp(ctx, t) {   // today's drink / dish on the tatami between the two lords
   const c = cueOf(t, (x) => x.kind === 'prop', 0); if (!c || !ok(c.name)) return;
   const age = t - c.t, rest = c.t + c.dur - t, vis = smooth(age / .8) * smooth(rest / .8);
-  const im = IMG[c.name], h = c.name === 'd7_prop_yakitori' ? 250 : 330, w = im.naturalWidth * h / im.naturalHeight;
+  const im = IMG[c.name], h = PSIZE[c.name] || 330, w = im.naturalWidth * h / im.naturalHeight;
   const x = W / 2, y = H - 175 + (1 - vis) * 60 + Math.sin(t * 1.1) * 3;
   ctx.save(); ctx.globalAlpha = vis;
   const g = ctx.createRadialGradient(x, y - h * .45, 10, x, y - h * .45, h * .9);
@@ -278,7 +313,7 @@ function drawProp(ctx, t) {   // today's drink / dish on the tatami between the 
   ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 30; ctx.shadowOffsetY = 12;
   ctx.drawImage(im, x - w / 2, y - h, w, h);
   ctx.restore();
-  if (STEAMY.has(c.name)) steamWisps(ctx, x + (c.name === 'd7_prop_atsukan' ? -60 : 0), y - h * .62, t, vis * .9);
+  if (STEAMY.has(c.name)) steamWisps(ctx, x + (A.steamDx || {})[c.name] || x, y - h * .62, t, vis * .9);
   if (age < 3.2 && PROP[c.name]) {   // name card (ja with kana + en)
     ctx.save(); ctx.globalAlpha = vis * smooth((3.2 - age) / .6); ctx.textAlign = 'center';
     ctx.shadowColor = 'rgba(0,0,0,.8)'; ctx.shadowBlur = 12;
@@ -300,6 +335,19 @@ function drawWarmth(ctx, t, dt) {   // charcoal grill / hot-sake steam at the wa
     spawn({ kind: 'ember', x: gx + (Math.random() - .5) * 220, y: gy + 80, vx: (Math.random() - .5) * 40, vy: -120 - Math.random() * 140, size: 2 + Math.random() * 3, life: 0, max: 1.6, a: 1 });
   if (Math.random() < dt * (wc.kind === 'steam' ? 6 : 3) * vis)
     spawn({ kind: 'steam', x: gx + (Math.random() - .5) * 160, y: gy, vx: (Math.random() - .5) * 20, vy: -40, size: 40, grow: 70, life: 0, max: 2.6, a: .8, seed: Math.random() * 6 });
+}
+
+function drawBoat(ctx, t, dt) {   // e.g. the cormorant-fishing fire boat gliding from left to right
+  const c = cueOf(t, (x) => x.kind === 'boat', 0); if (!c || !ok(c.name)) return;
+  const p = clamp((t - c.t) / c.dur, 0, 1), im = IMG[c.name], h = c.h || 240, w = im.naturalWidth * h / im.naturalHeight;
+  const x = lerp(-w, W, p), y = (c.y || 560) + Math.sin(t * 1.6) * 5;
+  const fx = x + w * (c.fireX || .88), fy = y + h * (c.fireY || .3);
+  const g = ctx.createRadialGradient(fx, fy, 10, fx, fy, 420); g.addColorStop(0, 'rgba(255,170,70,.55)'); g.addColorStop(1, 'rgba(255,120,40,0)');
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = g; ctx.fillRect(fx - 420, fy - 420, 840, 840);
+  const r = ctx.createLinearGradient(0, y + h, 0, y + h + 220); r.addColorStop(0, 'rgba(255,150,60,.35)'); r.addColorStop(1, 'rgba(255,150,60,0)');   // reflection
+  ctx.fillStyle = r; ctx.fillRect(fx - 60, y + h, 120, 220); ctx.restore();
+  ctx.drawImage(im, x, y, w, h);
+  if (Math.random() < dt * 40) spawn({ kind: 'ember', x: fx + (Math.random() - .5) * 40, y: fy, vx: (Math.random() - .5) * 60, vy: -80 - Math.random() * 120, size: 2 + Math.random() * 3, life: 0, max: 1.6, a: 1 });
 }
 
 function drawSlip(ctx, t, dt) {   // the golden time slip: they appear in it at the start and vanish in it at the end
@@ -391,6 +439,7 @@ function frame(t, dt) {
   const talker = sts.filter((s) => s.line && t <= s.line.t + s.line.dur).sort((a, b) => b.mouth - a.mouth)[0];
   camYaw += ((talker ? clamp(talker.az, -50, 50) * .12 : 0) - camYaw) * clamp(dt * 1.2, 0, 1);
   drawBackground(ctx, t, -camYaw * 5);
+  drawBoat(ctx, t, dt);
   goldDrift(t, dt);
   ctx.save(); ctx.translate(-camYaw * 8, 0);
   // the one at your ear is drawn last (closest)

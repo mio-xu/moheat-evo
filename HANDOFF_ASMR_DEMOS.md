@@ -34,8 +34,8 @@ demos/Demo3_ShiningSmileConcert/         Demo 3《Shining Smile Melody — Ice &
 demos/Demo4_SeasonsExpress/              Demo 4《四季暴走列車 / The Runaway Seasons Express》（原 `Demo_SeasonsExpress/`）
 demos/Demo5_SengokuBanquet/              Demo 5《安土最後の酒宴》
 demos/Demo7_KyotoIzakaya/                Demo 7《信長と家康、京都の居酒屋へ》（完成）
-demos/Demo8_YamazakiDistillery/          Demo 8《信長と家康、山崎蒸溜所へ》（策划中：剧本 + Seedance 命令，等用户的关键帧和 clip）
-demos/Demo9_GifuCastle/                   Demo 9《信長の岐阜城へようこそ》（策划中：剧本 + Seedance 命令，等用户的关键帧和 clip）
+demos/Demo8_YamazakiDistillery/          Demo 8《信長と家康、山崎蒸溜所へ》（完成）
+demos/Demo9_GifuCastle/                   Demo 9《信長の岐阜城へようこそ》（完成）
 HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
 ```
@@ -210,7 +210,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
   - **冷热**：冷是雪夜风（左右交替）、冰啤、嗨棒、窗外河风；热是两人的声音，加上炭火（左前）和热燗蒸汽（右）。QA 全部通过：左右切换 23 次、相反温度 36 段、0 冲突。
   - **注意**：暖的环境音不要和同侧那位大名的台词重叠，否则 QA 的"声音和热的相关性"会掉到 0.7 以下；把暖源放在说话者的另一侧。
   - 你的字幕台词 7 句；`render_mp4.py --at …` 可以只渲染预览静帧；封面用 `--timeout=7000` 截图；官网菜单已加第 7 项。
-### Demo 8 · `demos/Demo8_YamazakiDistillery/` 📝 策划中 —《信長と家康、山崎蒸溜所へ》
+### Demo 8 · `demos/Demo8_YamazakiDistillery/` ✅ 完成 —《信長と家康、山崎蒸溜所へ》
 - 用户（2026-11-07）：信长和家康穿越到现代，京都居酒屋和三得利山崎蒸馏所"各做一个，剧情不一样"。两部都和 Demo 6（你带威士忌去安土）呼应；Demo 8 是时间环：两人尝到这酒，才认出是"那晚在安土喝过的"。
 - 每个文件夹里有：`README.md`（剧情、角色位置、冷热来源、管线）、`storyboard/script_150s.md`（日英台词 + 时间 + 冷热）、`Seedance素材命令.md`（Demo 7 有 14 个镜头 K01–K14，Demo 8 有 12 个镜头 Y01–Y12）。
 - 画面由用户制作：先用 ChatGPT 或任意生图工具做关键帧（以 Demo 5 的 `N_Character.png` / `I_Character.png` 和表情、姿势图为人物参考），再用 Seedance 图生视频。交付位置：`assets/keyframes/`、`video/seedance/`。
@@ -230,7 +230,13 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - Seedance 的口型不会和配音对上：长台词剪在说话镜头上，耳语用遮嘴或侧脸构图。
 - Demo 8 涉及三得利商标：AI 画面里不出现可读的商标，酒瓶用 Demo 6 的真实图合成；公开前需向三得利确认。
 
-### Demo 9 · `demos/Demo9_GifuCastle/` 📝 策划中 —《信長の岐阜城へようこそ》
+### Demo 9 · `demos/Demo9_GifuCastle/` ✅ 完成 —《信長の岐阜城へようこそ》
+- **Demo 8 / 9 已完成（2026-11-07）**：
+  - **共用播放器**：Demo 7 的 `demo.js` 已改成通用版，三个 Demo 都用它。各 Demo 的不同之处写在时间轴模块的 `VIS` 里，由 `make_export` 传给播放器：每个背景的天气（`bgfx`：snow / mist / dust / fireflies）、推近镜头（`zoomRect`）、道具的日英名称和尺寸、哪些道具冒热气。新增 `boat` 类提示，让图片横穿画面并带篝火光（Demo 9 的鹈饲船）。
+  - **素材**：Demo 8 的 6 张、Demo 9 的 8 张都已收进各自的 `assets/`。Demo 8 品酒时的山崎酒瓶用 Demo 6 抠好的图，干杯的嗨棒用 Demo 7 的。
+  - **规则**：暖的环境音放在说话者**同一侧**，并和他的台词对齐（Demo 8 的蒸馏器）；如果放在不说话的那一侧，那位大名的"声音和热的相关性"会掉到 0.6。冷的放在对侧。你的字幕台词那里各加一阵冷风，增加左右切换。
+  - **QA 全部通过**：Demo 8 左右切换 21 次、相反温度 37 段；Demo 9 左右切换 22 次、相反温度 45 段。
+  - 渲染端口：Demo 7 是 8771，Demo 8 是 8772，Demo 9 是 8773。官网菜单已有 9 项。三个 Demo 的封面都补了暖色 `.chip.h` 样式。
 - 用户（2026-11-07）："再来个岐阜城的？"。设定：1569 年夏天的岐阜城（刚改名、开始用"天下布武"印），你是来自未来的客人，信长亲自导览，盟友家康同行。灵感来自弗洛伊斯 1569 年访问岐阜：信长亲自带他参观宫殿和山顶，还亲手上菜。
 - 场景顺序：山脚宫殿、庭院瀑布 → 登金华山顶看浓尾平原 → 信长亲手点茶、家康拿到冰室的冰 → 夜晚长良川鹈饲 → 送你一张盖了"天下布武"印的纸。画风和 Demo 5 一样（浮世绘金箔），11 个镜头 G01–G11。
 - 冷热亮点：鹈饲的篝火船从左划到右，热感跟着船从左耳移到右耳。冷：瀑布水雾、山顶大风（左→右）、冰室之冰、夜晚河风。

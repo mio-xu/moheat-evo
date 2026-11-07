@@ -109,6 +109,13 @@ CUES = [
     L(135.0, "-", "koto", dur=15.0, outro=True),
 ]
 
+# ---------------------------------------------------------------- player config (read by the shared demo.js)
+VIS = dict(
+    bgfx={"d7_bg_pontocho": "snow"}, zoomRect=[430, 100, 1090, 540], zoomFx="snow",      # camera push to the window, snow blowing in
+    propNames={"d7_prop_beer": ["生ビール", "Draft beer"], "d7_prop_yakitori": ["焼き鳥", "Yakitori"],
+               "d7_prop_highball": ["ハイボール", "Highball"], "d7_prop_atsukan": ["あつかん", "Hot sake"]},
+    propSize={"d7_prop_yakitori": 250}, steamy=["d7_prop_yakitori", "d7_prop_atsukan"], steamDx={"d7_prop_atsukan": -60}, nightGrade=0.0)
+
 # ---------------------------------------------------------------- positions (t, az, d)
 SEAT = {"N": (-38.0, 1.15), "I": (38.0, 1.15)}
 EAR = {"N": (-87.0, 0.17), "I": (87.0, 0.17)}

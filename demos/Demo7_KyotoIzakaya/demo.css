@@ -92,6 +92,7 @@ button, select, input { font: inherit; color: inherit; }
 .chip.n { background: rgba(255,100,60,.18); color: #ffd0bd; border: 1px solid rgba(255,130,90,.5); }
 .chip.i { background: rgba(110,220,170,.15); color: #c9f3dc; border: 1px solid rgba(130,220,170,.45); }
 .chip.k { background: rgba(79,179,255,.18); color: #bfe4ff; border: 1px solid rgba(120,190,255,.45); }
+.chip.h { background: rgba(255,150,60,.18); color: #ffd9b0; border: 1px solid rgba(255,170,90,.5); }
 .intro-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 6px; }
 .intro .hint { margin: 6px 0 0; color: #dccaa4; font-size: clamp(11px, .9vw, 13px); }
 .intro .draft { margin: 0; color: #a8946c; font-size: 11px; }
