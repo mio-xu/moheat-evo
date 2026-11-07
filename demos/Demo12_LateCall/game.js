@@ -207,7 +207,7 @@
     const open = talking ? clamp((S.lv - .008) * 45) : 0;
     FW.mouth = ease(FW.mouth, open, dt, .035, .07);
     FW.shy = ease(FW.shy, S.shy ? 1 : 0, dt, .25, .35);
-    FW.blink = ease(FW.blink, t < blinkUntil && FW.shy < .3 ? 1 : 0, dt, .025, .05);
+    FW.blink = ease(FW.blink, t < blinkUntil && !talking ? 1 : 0, dt, .025, .05);
   }
   const BASE = { call: 'ren_call', close: 'ren_close', door: 'ren_door', hug: 'ren_door' };
   function drawView(view, t, alpha) {
@@ -218,7 +218,7 @@
     if (!im) { ctx.fillStyle = '#1b1d36'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
     ctx.drawImage(im, ox, oy, W * z, H * z);
     const patch = (pn, w) => { const p = IMG[pn], at = PATCH[pn]; if (!p || !at || w < .01) return; ctx.globalAlpha = alpha * Math.min(1, w); ctx.drawImage(p, ox + at[0] * z, oy + at[1] * z, p.width * z, p.height * z); };
-    if (view === 'call') { patch('ren_call_shy_eyes', FW.shy); patch('ren_call_blink_eyes', FW.blink); patch('ren_call_talk_mouth', FW.mouth); }
+    if (view === 'call') { patch('ren_call_blink_eyeL', FW.blink); patch('ren_call_blink_eyeR', FW.blink); patch('ren_call_talk_mouth', FW.mouth); }
     if (view === 'close') patch('ren_close_talk_mouth', FW.mouth);
     if (view === 'door' || view === 'hug') patch('ren_door_talk_mouth', FW.mouth);
     ctx.globalAlpha = 1;

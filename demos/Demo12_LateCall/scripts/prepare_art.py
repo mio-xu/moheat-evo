@@ -18,8 +18,8 @@ FULL = ['bg_room', 'bg_room_open', 'ren_call', 'ren_close', 'ren_door']
 # patch: (base, source frame, centre x, y, radius x, y, tilt in degrees) — measured on the 1920×1080 base
 PATCHES = {
     'ren_call_talk_mouth': ('ren_call', 'ren_call_talk', 1305, 405, 85, 48, -12),
-    'ren_call_blink_eyes': ('ren_call', 'ren_call_blink', 1258, 272, 150, 62, -23),
-    'ren_call_shy_eyes': ('ren_call', 'ren_call_shy', 1250, 300, 185, 105, -23),
+    'ren_call_blink_eyeL': ('ren_call', 'ren_call_blink', 1188, 300, 58, 30, -12),   # one small patch per eye: no hair strands inside
+    'ren_call_blink_eyeR': ('ren_call', 'ren_call_blink', 1328, 244, 54, 28, -14),
     'ren_close_talk_mouth': ('ren_close', 'ren_close_talk', 1305, 568, 112, 56, -10),
     'ren_door_talk_mouth': ('ren_door', 'ren_door_talk', 950, 432, 80, 46, -8),
 }
@@ -51,7 +51,7 @@ def main():
     for n in FULL:
         if has(n): load(n).save(os.path.join(DST, n + '.webp'), quality=86, method=6); print('full', n)
     for old in os.listdir(DST):                     # whole-frame face swaps from the first version
-        if old.endswith(('_talk.webp', '_blink.webp', '_shy.webp')): os.remove(os.path.join(DST, old))
+        if old.endswith(('_talk.webp', '_blink.webp', '_shy.webp', '_eyes.webp')): os.remove(os.path.join(DST, old))
     meta, bases = {}, {}
     for name, (bn, fn, cx, cy, rx, ry, deg) in PATCHES.items():
         if not (has(bn) and has(fn)): print('missing', name); continue
