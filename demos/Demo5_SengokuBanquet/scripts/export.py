@@ -15,8 +15,9 @@ def main():
     timing = json.load(open(os.path.join(AUD, "voice_timing.json")))
     items = []
     for c, tm in zip(BQ.CUES, timing):
-        if c["kind"] not in ("say", "whisper", "laugh"): continue
-        items.append(dict(t0=c["t"], t1=c["t"] + max(tm["dur"], .9) + .45, who=c["who"], ja=c["ja"], en=c["en"], kind=c["kind"]))
+        if c["kind"] not in ("say", "whisper", "laugh", "you"): continue
+        items.append(dict(t0=c["t"], t1=c["t"] + max(tm["dur"], .9) + (.2 if c["kind"] == "you" else .45), who=c["who"], ja=c["ja"], en=c["en"], kind=c["kind"]))
+    items.sort(key=lambda it: it["t0"])
     os.makedirs(os.path.join(ROOT, "video"), exist_ok=True)
     for lang in ("ja", "en"):
         vtt, srt = ["WEBVTT", ""], []

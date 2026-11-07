@@ -61,8 +61,10 @@ def main():
     rep["2_no_cut_or_overlap"] = dict(problems=bad, ok=not bad)
     # 3 subtitles
     anim = json.load(open(os.path.join(ROOT, "media", "anim.json")))
-    subs_ok = len(anim["subs"]) == len(lines) and all(s["ja"] and s["en"] for s in anim["subs"]) and not os.path.exists(os.path.join(ROOT, "media", "subs_zh.vtt"))
-    rep["3_subtitles_ja_en"] = dict(lines=len(anim["subs"]), ok=subs_ok)
+    you = [c for c in BQ.CUES if c["kind"] == "you"]                     # your own lines: subtitles only
+    subs_ok = len(anim["subs"]) == len(lines) + len(you) and all(s["ja"] and s["en"] for s in anim["subs"]) and not os.path.exists(os.path.join(ROOT, "media", "subs_zh.vtt"))
+    you_clash = [c["t"] for c in you if any(l["t"] - .2 < c["t"] < l["t"] + tm["dur"] - .2 for l, tm in lines)]   # yours should sit in the gaps
+    rep["3_subtitles_ja_en"] = dict(lines=len(anim["subs"]), voiced=len(lines), yours=len(you), yours_over_a_voice=you_clash, ok=subs_ok)
     # 4 lip sync
     lip = []
     for c, tm in lines:

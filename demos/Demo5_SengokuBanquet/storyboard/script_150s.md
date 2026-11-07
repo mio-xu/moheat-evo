@@ -14,6 +14,7 @@ Voices (locked): 信長 = VOICEVOX 青山龍星, −1.5 st post shift · 家康 
 | 12.0 | 2.9 | 家康 | say | polite | gentle bow, soft and low | right +38°, 1.15 m | you (viewer) | ようこそ、お越しくだされた。 | Welcome. We are honoured you came. |
 | 15.6 | 5.8 | 家康 | say | calm | calm, formal | right +38°, 1.15 m | you (viewer) | この家康、今宵はお相伴つかまつる。 | I, Ieyasu, shall keep you company tonight. |
 | 22.0 | 1.9 | 信長 | say | tease | teasing, amused | left -38°, 1.15 m | Ieyasu | 堅いのう、家康。 | So stiff, Ieyasu. |
+| 0.4 | 1.9 | あなた (subtitle only) | you |  |  |  |  | 失礼します……。 | Excuse me… |
 
 ## 二　熱燗で乾杯 / A toast of warm sake  (24–50 s)
 
@@ -28,6 +29,8 @@ Voices (locked): 信長 = VOICEVOX 青山龍星, −1.5 st post shift · 家康 
 | 39.6 | 2.2 | 信長 | say | tease | playful provocation | left -46°, 0.75 m | you (viewer) | どうした、まだ飲めるであろう？ | What's this? Surely you can drink more? |
 | 42.8 | 4.2 | 家康 | say | concern | kind, protective, close on your right | right +50°, 0.60 m | you (viewer) | 無理はなさらず。まずは、ひとくち。 | Don't push yourself. Just a sip, to start. |
 | 47.5 | 0.9 | 家康 | laugh | chuckle | soft chuckle | right +50°, 0.61 m | you (viewer) | ほっほっほ。 | Ho ho ho. |
+| 36.2 | 1.4 | あなた (subtitle only) | you |  |  |  |  | 乾杯！ | Cheers! |
+| 48.6 | 2.1 | あなた (subtitle only) | you |  |  |  |  | ……では、ひとくちだけ。 | …Just a sip, then. |
 
 ## 三　耳元の密談 / Secrets at your ear  (50–82 s)
 
@@ -40,6 +43,7 @@ Voices (locked): 信長 = VOICEVOX 青山龍星, −1.5 st post shift · 家康 
 | 68.2 | 5.4 | 家康 | whisper | whisper | confiding, at your right ear, hand by his mouth | right +87°, 0.17 m — AT THE EAR | you (viewer) | …信長様は、ああ見えて寂しがりでな。 | …For all his bluster, Lord Nobunaga gets lonely. |
 | 74.0 | 4.7 | 家康 | whisper | whisper | warm, fatherly | right +87°, 0.17 m — AT THE EAR | you (viewer) | 今宵は、ゆるりと付き合うてくだされ。 | So stay with him tonight, at your ease. |
 | 79.0 | 3.2 | 信長 | say | suspicious | mock-suspicious, from his seat | left -38°, 1.15 m | Ieyasu | 何をこそこそ話しておる。 | What are you two whispering about? |
+| 59.7 | 1.7 | あなた (subtitle only) | you |  |  |  |  | その先……ですか？ | Beyond…? |
 
 ## 四　風が変わる / The wind turns  (82–104 s)
 
@@ -66,6 +70,8 @@ Voices (locked): 信長 = VOICEVOX 青山龍星, −1.5 st post shift · 家康 
 | 115.0 | 2.7 | 信長 | whisper | whisper | intimate, at your left ear | left -87°, 0.17 m — AT THE EAR | you (viewer) | …雨の音を聞け。悪くなかろう。 | …Listen to the rain. Not bad, is it? |
 | 119.0 | 2.9 | 信長 | whisper | whisper | wistful — a hint of foreboding | left -87°, 0.17 m — AT THE EAR | you (viewer) | この一夜は、二度とは来ぬ。 | A night like this never comes twice. |
 | 122.6 | 0.9 | 信長 | laugh | earlaugh | soft laugh into your ear | left -87°, 0.18 m — AT THE EAR | you (viewer) | ふっふっふ… | Heh heh heh… |
+| 111.0 | 2.4 | あなた (subtitle only) | you |  |  |  |  | ……あったかい。 | …So warm. |
+| 124.4 | 3.6 | あなた (subtitle only) | you |  |  |  |  | ……ずっと、ここにいたいです。 | …I wish I could stay here forever. |
 
 ## 六　最後の盃 / The last cup  (129–150 s)
 
@@ -77,6 +83,7 @@ Voices (locked): 信長 = VOICEVOX 青山龍星, −1.5 st post shift · 家康 
 | 144.0 | 2.6 | 信長 | say | soft | gentle, unusually soft | left -38°, 1.15 m | you (viewer) | うむ。…また、飲もうぞ。 | Mm. …Let us drink again. |
 | 147.0 | 1.0 | — | clink |  |  |  |  |  |  |
 | 146.0 | 4.0 | — | koto |  |  |  |  |  |  |
+| 146.9 | 2.6 | あなた (subtitle only) | you |  |  |  |  | はい、必ず。 | Yes — I promise. |
 
 ## Thermal design
 

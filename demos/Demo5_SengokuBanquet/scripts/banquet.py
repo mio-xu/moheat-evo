@@ -23,7 +23,7 @@ SCENES = [  # (t, no, ja, en)
     (104.0, "五", "雨の夜", "A night of rain"),
     (129.0, "六", "最後の盃", "The last cup"),
 ]
-NAMES = {"N": {"ja": "信長", "en": "Nobunaga"}, "I": {"ja": "家康", "en": "Ieyasu"}}
+NAMES = {"N": {"ja": "信長", "en": "Nobunaga"}, "I": {"ja": "家康", "en": "Ieyasu"}, "Y": {"ja": "あなた", "en": "You"}}
 
 
 def L(t, who, kind, ja="", en="", emo="calm", tts=None, to="you", tone="", **kw):
@@ -117,6 +117,14 @@ CUES = [
       tts="うむ。…また、のもうぞ。", tone="gentle, unusually soft"),
     L(147.0, "-", "clink", dur=1.0),
     L(146.0, "-", "koto", dur=4.0, outro=True),
+    # ── you (first person): subtitles only, no voice — placed in the gaps, answering the lords (user, 2026-11-07) ──
+    L(0.4, "Y", "you", "失礼します……。", "Excuse me…", dur=1.9),
+    L(36.2, "Y", "you", "乾杯！", "Cheers!", dur=1.4),
+    L(48.6, "Y", "you", "……では、ひとくちだけ。", "…Just a sip, then.", dur=2.1),
+    L(59.7, "Y", "you", "その先……ですか？", "Beyond…?", dur=1.7),
+    L(111.0, "Y", "you", "……あったかい。", "…So warm.", dur=2.4),
+    L(124.4, "Y", "you", "……ずっと、ここにいたいです。", "…I wish I could stay here forever.", dur=3.6),
+    L(146.9, "Y", "you", "はい、必ず。", "Yes — I promise.", dur=2.6),
 ]
 
 # ---------------------------------------------------------------- positions (t, az, d)

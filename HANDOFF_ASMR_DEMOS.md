@@ -167,6 +167,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
   - **以后可选**：如果 ChatGPT 有额度，可按 `ChatGPT素材命令.md` 生成同名文件替换程序绘制的图，然后运行 `export.py` 和 `render_mp4.py`。
 
 ### Demo 5 · `demos/Demo5_SengokuBanquet/` ✅ 完成 —《安土最後の酒宴 / The Last Banquet at Azuchi》
+- **第一人称台词（2026-11-07，用户："少了我的参与"）**：`banquet.py` 的 `CUES` 末尾追加了 7 句 `Y`（你）的台词，只出字幕、不配音，都放在两位大名说话的空档里并回应他们：失礼します／乾杯／ひとくちだけ／その先……ですか？／あったかい／ずっとここにいたい／はい、必ず。追加在末尾是为了让已配音台词的序号（`TAKE`）不变。`build_audio`、`export`、`docs`、`check_sync`、CSS 都已支持 `you` 类型；QA 检查你的台词是否压在配音上。
 - **方向**：以 `demo5.jpg` 设定板为准，**B 细密浮世绘·金箔装饰风**、写实成年人比例（Q 版已淘汰，见 `project/discarded_chibi_drafts/`）。
 - **角色与冷热**：織田信長坐左前方 → 他的声音主要驱动 **L_Heat**；徳川家康坐右前方 → **R_Heat**。冷感来自风/雨/冰镇等环境（按设定板：冷气、风、雨；热：火焰、热酒蒸汽、炭火）。
 - **已有素材**（用户仍在陆续生成，开工前先 `ls assets/*/` 确认）：`assets/characters/N_Character.png`、`I_Character.png`、`N_bust_base.png`、`I_bust_base.png`、`N_ear.png`、`I_ear.png`；`assets/stage/banquet_bg.png`。

@@ -16,7 +16,10 @@
   "ok": true
  },
  "3_subtitles_ja_en": {
-  "lines": 30,
+  "lines": 37,
+  "voiced": 30,
+  "yours": 7,
+  "yours_over_a_voice": [],
   "ok": true
  },
  "4_lip_sync": {

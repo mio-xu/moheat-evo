@@ -5,7 +5,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import banquet as BQ
 
-WHO = {"N": "信長", "I": "家康", "C": "❄ cold", "F": "🔥 warm", "-": "—"}
+WHO = {"N": "信長", "I": "家康", "Y": "あなた (subtitle only)", "C": "❄ cold", "F": "🔥 warm", "-": "—"}
 TO = {"you": "you (viewer)", "I": "Ieyasu", "N": "Nobunaga"}
 
 

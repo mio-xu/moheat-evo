@@ -54,7 +54,7 @@ button, select, input { font: inherit; color: inherit; }
 .subs .ja { font-family: "Shippori Mincho B1", "Noto Sans JP", serif; font-weight: 800; font-size: clamp(14px, 2.1vw, 30px); text-shadow: 0 2px 6px rgba(0,0,0,.6); }
 .subs .en { font-size: clamp(11px, 1.3vw, 19px); color: #efe3c8; }
 .subs .who { font-weight: 800; margin-right: .5em; }
-.subs .who.N { color: var(--n); } .subs .who.I { color: var(--i); }
+.subs .who.N { color: var(--n); } .subs .who.I { color: var(--i); } .subs .who.Y { color: #f3e6c8; opacity: .85; }
 .subs .laugh { font-style: italic; }
 
 .scene-title { position: absolute; top: 5%; left: 4%; padding: .4em 1em; border-left: 3px solid var(--gold); background: rgba(18,10,4,.5); font-family: "Shippori Mincho B1", serif; font-weight: 800; font-size: clamp(12px, 1.4vw, 20px); opacity: 0; transform: translateY(-6px); transition: opacity .6s, transform .6s; pointer-events: none; }

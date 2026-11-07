@@ -176,6 +176,8 @@ def main():
         elif k == "thunder": place(foley, c["t"], thunder(c["dur"])); dur = c["dur"]
         elif k == "koto":
             x = koto(c["dur"], c.get("outro", False)); i0 = int(c["t"] * SR); music[i0:i0 + len(x)] += x[:N - i0]; dur = c["dur"]
+        elif k == "you": dur = c["dur"]            # your own line: subtitle only, no sound
+        else: dur = c.get("dur", 0.0)
         timing.append(dict(i=i, t=c["t"], who=c["who"], kind=k, dur=round(dur, 3)))
     for w in "NI":
         seq = [x for x in timing if x["who"] == w and x["kind"] in ("say", "whisper", "laugh")]
