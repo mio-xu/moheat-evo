@@ -71,7 +71,7 @@ CUES = [
       tts="うかいじゃ。かがりびの、ふねが、くるぞ！", pose="alert"),
     L(87.6, "N", "laugh", "わっはっは！", "Ha ha ha!", "laugh", tts="わっはっはっは", pose="laugh"),
     L(85.6, "-", "zoom", dur=24.0),                                          # camera pushes up to the open side of the pavilion (VIS zoomRect)
-    L(89.0, "-", "boat", name="d9_prop_ukai_boat", dur=16.0, y=318, h=200, bgY=303, bgH=153, fireX=.9, fireY=.3),   # bg coords, clipped to the opening
+    L(89.0, "-", "boat", name="d9_prop_ukai_boat", dur=16.0, y=318, h=200, bgY=385, bgH=165, fireX=.9, fireY=.3),   # bg coords, clipped to the opening
     L(89.0, "F", "brazier", dur=16.0, az=-80, az1=80, d=1.3, gain=1.0),      # the fire basket's heat travels LEFT → RIGHT with the boat
     L(106.0, "C", "wind", dur=6.0, az=-60, d=1.3, gain=.7),                  # river breeze LEFT while Ieyasu (RIGHT) speaks
     L(106.0, "I", "say", "火と水が、こんなにも美しいとは……。", "Who knew fire and water could be so beautiful…", "thoughtful",

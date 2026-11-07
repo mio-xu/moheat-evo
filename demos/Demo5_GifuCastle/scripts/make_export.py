@@ -65,7 +65,7 @@ def main():
                 chars={"N": src("N", "N_voice.wav"), "I": src("I", "I_voice.wav")}, cool=src("C", "C_cool.wav"), warm=src("F", "F_warm.wav"),
                 cues=[dict(t=c["t"], who=c["who"], kind=c["kind"], emo=c.get("emo"), pose=c.get("pose"), dur=round(tm["dur"], 2),
                            az=c.get("az"), az1=c.get("az1"), d=c.get("d"), name=c.get("name"),
-                           **{k: c[k] for k in ("y", "h", "fireX", "fireY") if k in c}) for c, tm in zip(WK.CUES, timing)],
+                           **{k: c[k] for k in ("y", "h", "bgY", "bgH", "fireX", "fireY") if k in c}) for c, tm in zip(WK.CUES, timing)],
                 voice=json.load(open(os.path.join(MEDIA, "voice.json"))), **getattr(WK, "VIS", {}))
     s_art = os.path.join(SENGOKU, "media", "art")
     base = os.path.relpath(s_art, ROOT) + "/"
