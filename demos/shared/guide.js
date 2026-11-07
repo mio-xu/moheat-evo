@@ -21,7 +21,7 @@
     { sel: '.msub-btn:not(.mfs-btn)', en: 'Language: tap to switch English / 日本語 / 中文. Subtitles, buttons and voice answers follow.',
       ja: '言語：タップで English / 日本語 / 中文 を切り替え。字幕・ボタン・声での回答もその言語になります。',
       zh: '语言：点一下在 English / 日本語 / 中文 之间切换，字幕、按钮和语音回答都会跟着变。' },
-    { sel: '.mfs-btn', en: 'Fullscreen (or press F). Esc to leave.', ja: '全画面表示（F キーでも）。Esc で戻ります。', zh: '全屏（也可以按 F 键），按 Esc 退出。' },
+    { sel: '.mfs-btn', en: 'Fullscreen (or press F) — only the picture. Space pauses, Esc leaves.', ja: '全画面表示（F キーでも）。画面だけになります。スペースで一時停止、Esc で戻ります。', zh: '全屏（也可以按 F 键），只显示画面。空格暂停，Esc 退出。' },
     { sel: '#startBtn', en: 'Start here. When it is your turn, tap an answer — or simply say it out loud (microphone).',
       ja: 'ここからスタート。あなたの番では、ボタンをタップするか、声に出して答えてもOK（マイク）。',
       zh: '从这里开始。轮到你时，点选答案，或者直接说出来也可以（麦克风）。' },

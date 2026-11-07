@@ -389,7 +389,7 @@ header.bar
   #estop「■ STOP」
 main.layout
   section.stage-col
-    .stage#stage（16:9）  画面 canvas / video · 封面 .intro · 字幕 #subs · 回答 .choices / .act · 提示 #toast · 目标 .hud-goal（左上）· 右上 HUD（.hud-top：🔊 + 🌐+ ⛶ 全屏，shared/fullscreen.js 自动加，F 键切换）· 两侧冷热光晕 .glow
+    .stage#stage（16:9）  画面 canvas / video · 封面 .intro · 字幕 #subs · 回答 .choices / .act · 提示 #toast · 目标 .hud-goal（左上）· 右上 HUD（.hud-top：🔊 + 🌐+ ⛶ 全屏，shared/fullscreen.js 自动加，F 键切换；全屏只显示画面，不显示播放条，影片类用空格暂停）· 两侧冷热光晕 .glow
     .transport + .legend   只有影片类（时间轴 Demo）有
   aside.side（固定 3 张卡片，顺序不变）
     1 .card  Sounds around you        #radar（声源雷达）
