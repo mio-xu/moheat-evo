@@ -210,12 +210,55 @@
     FW.blink = ease(FW.blink, t < blinkUntil && !talking ? 1 : 0, dt, .025, .05);
   }
   const BASE = { call: 'ren_call', close: 'ren_close', door: 'ren_door', hug: 'ren_door' };
+  // ---- animated loops (Seedance video, first frame = last frame = the still) — used whenever loaded, else still + face patches
+  const CLIP_NAMES = ['v_call_idle', 'v_call_talk', 'v_call_shy', 'v_close_whisper', 'v_door_idle', 'v_door_talk', 'v_room_open'];
+  const CLIP = {};
+  if (!QS.has('stills')) for (const n of CLIP_NAMES) {
+    const v = document.createElement('video'); Object.assign(v, { muted: true, loop: true, playsInline: true, preload: 'auto', src: `media/video/${n}.mp4?v=1` });
+    v.setAttribute('playsinline', ''); v.addEventListener('error', () => { delete CLIP[n]; }); CLIP[n] = v;
+  }
+  const clipOK = (n) => n && CLIP[n] && CLIP[n].readyState >= 2;
+  function wantClip(view) {
+    if (view === 'call') return talking ? (S.shy ? 'v_call_shy' : 'v_call_talk') : 'v_call_idle';
+    if (view === 'close') return 'v_close_whisper';
+    if (view === 'door' || view === 'hug') return talking ? 'v_door_talk' : 'v_door_idle';
+    if (view === 'room' && S.windowOpen) return 'v_room_open';
+    return null;
+  }
+  const VS = {};   // per view: current clip, previous clip, crossfade
+  function clips(dt) {
+    const used = new Set();
+    for (const view of new Set([viewA, viewB])) {
+      const st = VS[view] || (VS[view] = { cur: null, prev: null, k: 1 }), want = wantClip(view);
+      if (want && !clipOK(want)) { st.cur = null; st.prev = null; st.k = 1; }   // clip missing → still + face patches
+      else if (want !== st.cur && clipOK(want)) {
+        st.prev = st.cur; st.cur = want; st.k = 0;
+        if (want === 'v_call_shy') CLIP[want].currentTime = 0;   // the shy glance plays from its start
+      }
+      st.k = Math.min(1, st.k + dt / .3);
+      if (st.cur) used.add(st.cur); if (st.prev && st.k < 1) used.add(st.prev);
+    }
+    for (const [n, v] of Object.entries(CLIP)) {
+      if (used.has(n)) { if (v.paused) v.play().catch(() => {}); } else if (!v.paused) v.pause();
+    }
+  }
+  function drawClip(n, ox, oy, z, a) {
+    const v = CLIP[n]; if (!clipOK(n)) return false;
+    const h = W * z * v.videoHeight / v.videoWidth;          // fill the width, centre vertically
+    ctx.globalAlpha = a; ctx.drawImage(v, ox, oy + (H * z - h) / 2, W * z, h); return true;
+  }
   function drawView(view, t, alpha) {
     const name = view === 'room' ? (S.windowOpen ? 'bg_room_open' : 'bg_room') : BASE[view], im = IMG[name] || IMG.bg_room;
     const z = view === 'hug' ? 1.12 : view === 'close' ? 1.02 + .01 * Math.sin(t * .5) : 1.0 + .004 * Math.sin(t * .4);
     const ox = W / 2 - W * z / 2, oy = H / 2 - H * z / 2 - (view === 'hug' ? 40 : 0);
     ctx.globalAlpha = alpha;
     if (!im) { ctx.fillStyle = '#1b1d36'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
+    const st = VS[view];
+    if (st && st.cur && clipOK(st.cur)) {             // animated
+      if (st.prev && st.k < 1 && drawClip(st.prev, ox, oy, z, alpha)) drawClip(st.cur, ox, oy, z, alpha * st.k);
+      else drawClip(st.cur, ox, oy, z, alpha);
+      ctx.globalAlpha = 1; return;
+    }
     ctx.drawImage(im, ox, oy, W * z, H * z);
     const patch = (pn, w) => { const p = IMG[pn], at = PATCH[pn]; if (!p || !at || w < .01) return; ctx.globalAlpha = alpha * Math.min(1, w); ctx.drawImage(p, ox + at[0] * z, oy + at[1] * z, p.width * z, p.height * z); };
     if (view === 'call') { patch('ren_call_blink_eyeL', FW.blink); patch('ren_call_blink_eyeR', FW.blink); patch('ren_call_talk_mouth', FW.mouth); }
@@ -228,6 +271,7 @@
     if (t > blinkAt) { blinkUntil = t + .13; blinkAt = t + rnd(2.5, 5); }
     faces(t, dt);
     if (S.view !== viewB) { viewA = viewB; viewB = S.view; mix = 0; }
+    clips(dt);
     mix = Math.min(1, mix + dt / .6);
     if (mix < 1) drawView(viewA, t, 1);
     drawView(viewB, t, mix < 1 ? mix : 1);

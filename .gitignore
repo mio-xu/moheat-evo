@@ -34,3 +34,7 @@ demos/Demo12_LateCall/project/gen_*.log
 demos/Demo14_LiveStream/assets/art/
 demos/Demo14_LiveStream/audio/
 demos/Demo14_LiveStream/project/gen_*.log
+demos/Demo15_FamilyCall/assets/art/
+demos/Demo15_FamilyCall/audio/
+demos/Demo15_FamilyCall/project/gen_*.log
+demos/Demo12_LateCall/assets/video/

@@ -149,8 +149,64 @@ def scenes(names):
     print('balance:', m.unwrap(m.call('GET', '/credits/balance')))
 
 
+# ---------------------------------------------------------------- animation: seamless loops (first frame = last frame = the base picture)
+# The base picture is passed by the URL of its own generation in this account (no upload needed).
+VLOOK = ("Japanese anime cel animation. Keep EXACTLY the art style, the character, the framing, the colours and the background of the "
+         "input image. Locked-off camera: no zoom, no pan, no camera shake. The clip starts and ends on exactly this frame, so it loops "
+         "seamlessly. Gentle, natural, subtle motion only; the face keeps its exact proportions.")
+VAVOID = ("Avoid: morphing, face distortion, changing face shape, changing hair style, extra fingers, warped hands, flicker, new objects, "
+          "text, subtitles, logo, watermark, camera movement, fast motion.")
+VIDEOS = {   # name: (base generation, seconds, motion)
+    'v_call_idle': ('ren_call', 5, "He listens on the phone with a gentle smile, mouth closed. Slow natural breathing, one natural blink, a few hair strands and the coat collar sway slightly in the cold wind, snow keeps falling softly."),
+    'v_call_talk': ('ren_call_talk', 5, "He talks softly and warmly into the phone: natural mouth movement as if speaking Japanese, small relaxed nods, a natural blink, hair strands sway slightly, snow keeps falling."),
+    'v_call_shy': ('ren_call_talk', 5, "He laughs shyly while talking on the phone: glances away to the side for a moment with a light pink blush only on his cheeks, a small embarrassed laugh, then looks back at the viewer with a soft smile. Snow keeps falling."),
+    'v_close_whisper': ('ren_close', 5, "He whispers softly into the phone, very close: lips moving slightly as he whispers, slow half-lidded blinks, a tiny tilt of the head, gentle breathing, the city lights behind twinkle softly."),
+    'v_door_idle': ('ren_door', 5, "He stands at the open door a little out of breath from running: shoulders rise and fall, small puffs of white breath in the cold air, snowflakes drift behind him, a shy happy smile, one natural blink."),
+    'v_door_talk': ('ren_door', 5, "He talks happily and a little shyly: natural mouth movement as if speaking, a small laugh, white breath in the cold air, snowflakes drift behind him, a natural blink."),
+    'v_room_open': ('bg_room_open', 5, "No people. The sheer curtains billow gently in the wind from the open window, snow falls outside and a few flakes drift into the dark room, the city lights twinkle."),
+}
+
+
+def videos(names, model='seedance-2.5-lite'):
+    print('balance:', m.unwrap(m.call('GET', '/credits/balance')))
+    log = json.load(open(m.LOG)) if os.path.exists(m.LOG) else {}
+    os.makedirs(os.path.join(ROOT, 'assets', 'video'), exist_ok=True)
+    for name in names:
+        dst = os.path.join(ROOT, 'assets', 'video', name + '.mp4')
+        if os.path.exists(dst): print('exists', name); continue
+        base, sec, motion = VIDEOS[name]
+        url = m.unwrap(m.call('GET', f"/generations/{log[base]['generation']}"))['outputs'][0]['url']
+        body = {'model': model, 'mode': 'image-to-video', 'prompt': '\n\n'.join([VLOOK, motion, VAVOID]),
+                'inputs': [{'type': 'image', 'url': url}, {'type': 'image', 'url': url}],
+                'parameters': {'resolution': '720p', 'aspect_ratio': '16:9', 'duration_seconds': sec, 'image_mode': 'first-last-frame'}, 'max_cost_credits': 80}
+        print(name, 'quote', m.unwrap(m.call('POST', '/quotes', body)))
+        idem = f'moheat-d12-{name}-{model}-v1'.replace('_', '-').replace('.', '')
+        g = None
+        for path in ('/videos', '/generations'):
+            try: g = m.unwrap(m.call('POST', path, body, {'Idempotency-Key': idem}, tries=200)); break   # 429 = another job on the account: wait in line
+            except SystemExit as e:
+                if '404' not in str(e) and '405' not in str(e): raise
+        print(f'[{name}] generation {g["id"]} cost {g.get("credits")}')
+        log[name] = {'generation': g['id'], 'idempotency_key': idem}; json.dump(log, open(m.LOG, 'w'), indent=1)
+        wait_video(g['id'], dst, name)
+    print('balance:', m.unwrap(m.call('GET', '/credits/balance')))
+
+
+def wait_video(gid, dst, name):
+    """video generations report 'expired' as soon as they are done (it is the signed link's state) → download whenever an output exists."""
+    import time, urllib.request
+    while True:
+        time.sleep(12)
+        g = m.unwrap(m.call('GET', f'/generations/{gid}'))
+        if g.get('outputs'):
+            tmp = dst + '.part'; urllib.request.urlretrieve(g['outputs'][0]['url'], tmp); os.replace(tmp, dst); print('  saved', name); return
+        if g['status'] in ('pending', 'processing'): print('  …', g['status']); continue
+        raise SystemExit(f'  {name} {g["status"]}: {g.get("error")}')
+
+
 if __name__ == '__main__':
     a = sys.argv[1:]
+    if a[:1] == ['video']: videos(a[1:] or list(VIDEOS)); sys.exit()
     if a[:1] == ['scenes']: scenes(a[1:] or list(SCENES)); sys.exit()
     if a[:1] == ['design']: design(a[1:] or list(DESIGNS))
     elif a[:1] == ['style']: styles(a[1:] or list(STYLES))
