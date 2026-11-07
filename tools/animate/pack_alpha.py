@@ -42,6 +42,13 @@ zy, zx = np.where(zone > 0.01)
 zb = (zx.min(), zy.min(), zx.max() + 1, zy.max() + 1)
 print("frames", len(frames), "head zone", zb)
 
+# the matte may only change a thin band around the still's outline (head motion is a few px):
+# inside = always opaque (the matte sometimes drops holes in faces → background flashes through), far outside = always clear
+band = 25
+core = cv2.erode((m0 > 250).astype(np.uint8), np.ones((band, band), np.uint8)).astype(np.float32)
+core = cv2.GaussianBlur(core, (0, 0), 4) * 255
+outer = cv2.GaussianBlur(cv2.dilate((m0 > 8).astype(np.uint8), np.ones((band, band), np.uint8)).astype(np.float32), (0, 0), 4)
+
 sess = new_session("isnet-anime")
 enc = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{w}x{h * 2}",
                         "-r", fps, "-i", "-", "-i", a.clip, "-map", "0:v", "-map", "1:a?", "-c:a", "copy",
@@ -54,6 +61,7 @@ for k, f in enumerate(frames):
     al = m0.astype(np.float32).copy()
     zz = zone[y0:y1, x0:x1]
     al[y0:y1, x0:x1] = al[y0:y1, x0:x1] * (1 - zz) + head * zz
+    al = np.maximum(al, core) * outer
     if prev is not None:
         al = 0.6 * al + 0.4 * prev  # damp edge flicker
     prev = al
