@@ -14,26 +14,31 @@ C = {'__file__': os.path.join(D11, 'scripts', 'make_jobs.py')}; exec(src, C)
 STYLE, LOOK, NAOMI, AVOID, R_STYLE = C['STYLE'], C['LOOK'], C['NAOMI'], C['AVOID'], C['R_STYLE']
 D11ART = lambda n: os.path.join(D11, 'assets', 'art', n + '.png')
 
-POV = ("First-person view through the eyes of the cat Naomi: the camera is LOW, about 25 cm above the surface she stands on, "
-       "slightly wide-angle, as if the viewer IS the cat. At most her own two fluffy WHITE mitten front paws show at the bottom edge. "
-       "Wide 16:9 game scene. Keep the lower 20 % calm (subtitles go there). No text, no logo, no watermark, no UI.")
+POV = ("STRICT FIRST-PERSON VIEW: the camera IS the cat Naomi's own eyes. The camera is LOW, about 25 cm above the surface she "
+       "stands on, slightly wide-angle. Naomi's body, head and face are NOT in the picture (the viewer is inside her). The ONLY parts "
+       "of her that show are the tips of her own two fluffy WHITE mitten front paws resting at the very bottom edge of the frame, seen "
+       "from above, close to the camera. Wide 16:9 game scene. Keep the lower 20 % calm (subtitles go there). No text, no logo, no "
+       "watermark, no UI.")
+FUR = ("Her fur colour is a soft BLUE-GREY (cool bluish grey, like a Russian Blue tint, never neutral or brownish grey) with white.")
 OWNER = ("The cat's owner, a young woman in her twenties, appears ONLY partly (legs, slippers, hands or sweater) and her face is NEVER "
          "shown: cream chunky cable-knit sweater, soft grey sweatpants, fluffy beige slippers, gentle slim hands with short natural nails.")
 R_ROOM = "Image 2 is the LAYOUT reference: the SAME cozy apartment (same window, curtains, plant, rug, shelf, colours) seen from a new spot."
-R_CAT = "Image 3 is the CHARACTER SHEET of Naomi: copy her exact face, markings, colours and art style wherever she appears."
-AVOID_POV = AVOID.replace(', human,', ',') + ", showing the owner's face, extra paws, full cat body in front of the camera."
+R_CAT = "Image 3 is the CHARACTER SHEET of Naomi: copy her exact face, markings and art style for her REFLECTION (but make the grey a clearer blue-grey)."
+AVOID_POV = AVOID.replace(', human,', ',') + ", showing the owner's face, a cat sitting in front of the camera, the cat's body or head in the scene, more than two paws, neutral grey fur."
 
 jobs = {}
 def job(i, name, refs, *parts):
     jobs[f'{i:02d}'] = {'name': name, 'ratio': '16:9', 'refs': refs, 'prompt': '\n\n'.join(parts)}
 
 job(1, 'window_sill', [STYLE, D11ART('bg_room_day'), D11ART('naomi_sit')], R_STYLE + ' ' + R_ROOM + ' ' + R_CAT, LOOK, POV,
-    "Naomi sits on the wide wooden WINDOWSILL on a WINTER morning. LEFT half: the big window glass very close to her, with delicate white "
-    "frost flowers on the lower corners of the pane; outside a pale blue sky and snowy rooftops. Bright golden winter sunlight streams "
-    "in through the glass from the upper left, a warm sunbeam falls across the sill and her white paws. On the glass, a soft, faint, "
-    "semi-transparent REFLECTION of Naomi's own face (blue-grey and white, white inverted-V blaze, pink nose, big olive-green eyes) "
-    "looking back at the viewer. RIGHT half: the cozy living room seen from the sill height, slightly blurred (round cream rug, low shelf, "
-    "little cat tower), empty. Cold blue glass on the left, warm gold light on the right: a clear cool-and-warm contrast.", NAOMI, AVOID_POV)
+    "Seen through Naomi's eyes as she sits on the wide wooden WINDOWSILL on a WINTER morning, looking slightly to the left at the "
+    "window. LEFT half: the big window glass very close to the camera, with delicate white frost flowers on the lower corners of the "
+    "pane; outside a pale blue sky and snowy rooftops. Bright golden winter sunlight streams in through the glass from the upper left; a "
+    "warm sunbeam falls across the sill and across her two white paw tips at the bottom edge. Naomi appears ONLY as a soft, faint, "
+    "semi-transparent REFLECTION in the window glass: her face looking back at the viewer, close and centred in the glass, her own "
+    "eyes meeting ours. RIGHT half: the cozy living room seen from the sill height, slightly blurred (round cream rug, low shelf, "
+    "little cat tower, fairy lights), empty. Cold blue glass on the left, warm gold light on the right: a clear cool-and-warm contrast. "
+    "Her reflection: ", FUR, NAOMI, AVOID_POV)
 
 if __name__ == '__main__':
     json.dump(jobs, open(os.path.join(ROOT, 'project', 'seedance_jobs.json'), 'w'), indent=1, ensure_ascii=False)
