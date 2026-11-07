@@ -14,5 +14,17 @@
  "design_D_cocoa": {
   "generation": "api_eeffc94509cf7ebc5f1f6b0ed81b008f1b05d0ab32c38e6d2152e663cb2914e9",
   "idempotency_key": "moheat-d14-design-D-cocoa-v1"
+ },
+ "mint_live": {
+  "generation": "api_2923b5a03625316726918810baa9d6e97f4be26033b2417059dccfe5dec92e6b",
+  "idempotency_key": "moheat-d14-mint-live-v1"
+ },
+ "mint_live_talk": {
+  "generation": "api_ce5e7fe435bcb9d8fe24cd55e6e2cf39698332ade5ddcd8d36aa3a41eec0c601",
+  "idempotency_key": "moheat-d14-mint-live-talk-v1"
+ },
+ "mint_live_blink": {
+  "generation": "api_206fc7bdc7a842ccca56f3ca244e74c4a0bab78596c7964227021a79f6638314",
+  "idempotency_key": "moheat-d14-mint-live-blink-v1"
  }
 }
