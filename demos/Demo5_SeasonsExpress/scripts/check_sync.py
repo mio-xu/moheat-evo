@@ -109,14 +109,14 @@ def main():
         float(np.abs(np.diff(Lh[sp])).max()) < .05 and rows[-1]["command"] == "stop"
     check("Calm spring ending, everything 0 at 150 s", calm,
           f"126–150 s: no cooling, max heat {max(Lh[sp].max(), Rh[sp].max()):.2f}, max step {np.abs(np.diff(Lh[sp])).max():.3f}/frame; "
-          f"audio {rms(126, 146):.1f} dBFS vs chaos {rms(90, 107.5):.1f} dBFS; last command '{rows[-1]['command']}'")
+          f"audio {rms(126, 146):.1f} dBFS vs chaos {rms(90, 108.5):.1f} dBFS; last command '{rows[-1]['command']}'")
 
     # 6 sound position == thermal side (binaural ILD of the driving stems)
     pos = []
-    for name, a_, b_, want in (("winter_wind", 1.8, 10.8, "L"), ("tropical_rain", 39, 46, "L"), ("tropical_rain", 58.5, 60.5, "R"),
-                               ("summer_breeze", 16, 34, "R"), ("fire_crackling", 65.4, 72.1, "R"), ("fire_crackling", 78.8, 86.6, "L"),
+    for name, a_, b_, want in (("winter_wind", .6, 2.8, "L"), ("winter_wind", 4.0, 5.4, "R"), ("tropical_rain", 39, 46, "L"), ("tropical_rain", 58.5, 60.5, "R"),
+                               ("summer_breeze", 15, 23, "R"), ("summer_breeze", 24.5, 25.8, "L"), ("fire_crackling", 65.4, 72.1, "R"), ("fire_crackling", 78.8, 86.6, "L"),
                                ("ice_cracking", 65.4, 72.1, "L"), ("ice_cracking", 78.8, 86.6, "R"), ("lava", 65.4, 72.1, "R"), ("lava", 78.8, 86.6, "L"),
-                               ("fire_crackling", 94.1, 96.4, "R"), ("steam", 97.2, 98.8, "L"), ("winter_wind", 114.6, 117, "R")):
+                               ("fire_crackling", 98.3, 99.6, "R"), ("steam", 100.2, 101.3, "L"), ("winter_wind", 112.8, 114.1, "R"), ("lava", 104.3, 105.6, "L"), ("summer_breeze", 114.8, 116.1, "R")):
         d = ild(name, a_, b_); ok = (d > 3) if want == "L" else (d < -3)
         pos.append(dict(source=name, window=[a_, b_], expected=want, ild_db=round(d, 1), ok=ok))
     check("Each driving sound is heard on the side it heats/cools (binaural ILD > 3 dB)", all(p["ok"] for p in pos),
@@ -126,11 +126,22 @@ def main():
     feat = list(csv.DictReader(open(os.path.join(ROOT, "analysis", "audio_features.csv"))))
     lags = {}
     for k, col, v in (("L_cool", "intent_coolL", Lc), ("R_heat", "intent_heatR", Rh)):
-        x = np.array([float(r[col]) for r in feat]); best = max(range(-40, 41), key=lambda s: np.corrcoef(np.roll(v, s)[50:-50], x[50:-50])[0, 1])
-        lags[k] = dict(lag_s=best / RATE, corr=round(float(np.corrcoef(np.roll(v, best)[50:-50], x[50:-50])[0, 1]), 3))
-    check("Thermal leads the sound by the device latency (cool 0.35 s, heat 0.60 s)",
+        x = np.array([float(r[col]) for r in feat]); a0, a1 = 50, int(88 * RATE)   # smooth part (the 2 s chaos + dead time blur a correlation estimate)
+        best = max(range(-40, 41), key=lambda s: np.corrcoef(np.roll(v, s)[a0:a1], x[a0:a1])[0, 1])
+        lags[k] = dict(lag_s=best / RATE, corr=round(float(np.corrcoef(np.roll(v, best)[a0:a1], x[a0:a1])[0, 1]), 3))
+    check("Thermal leads the sound by the device latency (cool 0.35 s, heat 0.60 s; measured on 0–88 s)",
           abs(lags["L_cool"]["lag_s"] - .35) <= .1 and abs(lags["R_heat"]["lag_s"] - .6) <= .1,
           f"L cool: lead {lags['L_cool']['lag_s']:.2f} s (r = {lags['L_cool']['corr']}); R heat: lead {lags['R_heat']['lag_s']:.2f} s (r = {lags['R_heat']['corr']})")
+
+    rows = [r for r in S.CHAOS_FILM if r[2] != "dark"]
+    lens = [r[1] - r[0] for r in rows[:-1]]
+    flips = 0
+    for kind, l_, r_ in (("cool", Lc, Rc), ("heat", Lh, Rh)):
+        side = np.sign(np.convolve(l_ - r_, np.ones(6) / 6, "same"))[win(t, 90, 125)]
+        side = side[np.abs(np.convolve(l_ - r_, np.ones(6) / 6, "same"))[win(t, 90, 125)] > .2]
+        flips += int(np.sum(side[1:] != side[:-1]))
+    check("Seasons out of control switch about every 2 s (sound, picture and thermal together)", max(lens) <= 2.6 and flips >= 8,
+          f"{len(rows)} rows, {min(lens):.1f}–{max(lens):.1f} s each; left/right flips of cooling or warming in 90–125 s: {flips}")
 
     excl = [n for n, s in S.SOURCES.items() if s["role"] == "none"]
     check("Music / train / waves / thunder / birds never drive thermal", True, ", ".join(excl) + " (excluded by role in seasons.py)")
@@ -156,9 +167,9 @@ def write_md(res):
                 ("62–73", "Tunnel: ice left / lava right", "cool: ice cracks + icy wind", "heat: fire + lava"),
                 ("73–77", "Tunnel: neutral", "—", "—"),
                 ("77–90", "Tunnel reversed", "heat: fire + lava + steam", "cool: ice cracks + icy wind"),
-                ("90–107.5", "Seasons out of control", "cool → heat (steam, breeze, lava)", "heat (fire) → cool (rain, ice) → cool (wind)"),
-                ("107.5–111.5", "Blackout", "**0**", "**0**"),
-                ("111.5–125", "Out of control (2)", "heat: fire, then cool: ice", "heat: steam, then cool: wind, then heat: breeze"),
+                ("90–108.5", "Seasons out of control (a new season every 2 s)", "winter → lava → storm → summer → ice → steam → winter → lava → storm", "summer → ice → steam → winter → lava → storm → summer → ice → summer"),
+                ("108.5–110.5", "Power cut (dark car, stars outside)", "**0**", "**0**"),
+                ("110.5–125", "Out of control (2), every 2 s, then spring", "spring → lava → ice → storm → summer → spring", "steam → winter → summer → lava → ice → spring"),
                 ("125–150", "Cherry blossom station", "gentle warmth (spring breeze) → 0", "gentle warmth → 0")):
         L.append("| " + " | ".join(row) + " |")
     L += ["", "Designed (not audio-derived) envelopes: `sunlight_right`, `frost_residual_left` — see `thermal/thermal_mapping_config.json`.",

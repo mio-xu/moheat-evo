@@ -245,7 +245,15 @@ def train_interior():
     rattle = np.zeros(N)
     for t in poisson(lambda t: 1.5 * float(speed(t)) + .05):
         m = int(.02 * SR); B.place(rattle, t, bp(white(m), 1500, 5000) * decay(m, .004) * .4)
-    return hum * (.4 + .6 * speed(t_all)) + rattle
+    out = hum * (.4 + .6 * speed(t_all)) + rattle
+    a, b = S.SILENCE                                                       # the power cut: sweep down into it, back up after
+    n = int(1.3 * SR); f = np.geomspace(320, 35, n)
+    down = (np.sin(2 * np.pi * np.cumsum(f) / SR) + .5 * np.sin(4 * np.pi * np.cumsum(f) / SR)) * np.linspace(1, .2, n) * .35
+    down += bp(white(n), 300, 2500) * np.linspace(.6, 0, n) * .15
+    B.place(out, a - 1.3, down)
+    n = int(.55 * SR); f = np.geomspace(40, 420, n)
+    B.place(out, b, np.sin(2 * np.pi * np.cumsum(f) / SR) * np.linspace(.2, 1, n) * .3)
+    return out
 
 
 NOTE = lambda m: 440 * 2 ** ((m - 69) / 12)

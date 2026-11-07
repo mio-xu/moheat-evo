@@ -48,7 +48,7 @@ The player draws, back to front:
 **Shared timing:**
 - The train sways on every rail joint, using the same speed integral as the wheel clacks in the mix.
 - The station slides in as the train brakes (139–146 s).
-- 107.5–111.5 s goes dark with the lamps dying and flickering back.
+- 108.5–110.5 s is a power cut: a power-down sweep, the lamps die and the car goes dark, but the glass shows a starry sky streaming past. It is 2 s of total silence with all thermal channels at 0, then a power-up sweep. It used to be 4 s of black, which looked like the end of the film.
 - Each window's season comes from `seasons.py` (`SEGMENTS` + `CHAOS`), the same table that places the sounds, so what you see on a side is what you hear and feel there.
 
 **Previews:** `python3 scripts/render_mp4.py --at 10,30,75` renders stills to `video/clips/preview/`.
@@ -91,7 +91,7 @@ Play on the device without a browser:
 
 | Drives cooling | Drives heating | Never drives thermal |
 |---|---|---|
-| winter_wind, snow, ice_cracking, tropical_rain, water_drops | summer_breeze, fire_crackling, lava, steam, spring_breeze (weight 0.22) | ocean_waves, thunder, birds, train_wheels, train_interior, background_music |
+| winter_wind, snow, ice_cracking, tropical_rain, water_drops | summer_breeze, fire_crackling, lava, steam, spring_breeze (power weight 0.05: a calm ending) | ocean_waves, thunder, birds, train_wheels, train_interior, background_music |
 
 Silent visuals use **designed envelopes**, marked `audio_derived: false` in the config:
 - `sunlight_right`: sunshine through the right window, 13–52 s.
@@ -99,23 +99,26 @@ Silent visuals use **designed envelopes**, marked `audio_derived: false` in the 
 
 ## Thermal
 The thermal controller works in this order:
-1. Per-source RMS (50 ms) feeds Demo 1's `level()`: gate, curve, hold, attack and release.
-2. Each source is multiplied by its weight and by Demo 2's ear split, using the **same azimuth as the binaural render**.
-3. The sources are summed per ear and per mode.
-4. A soft saturation keeps sustained scenes at about 0.7, which avoids dose-limiter chopping.
+1. Per source, the 50 ms power of its own dry stem is weighted and split between the ears with Demo 2's ear split, using the **same azimuth as the binaural render**.
+2. The powers are summed per ear and per mode, then turned into a drive once: dB → gate 30 dB under the 99.5th percentile → curve 1.5 → hold 0.12 s, attack 0.08 s, release 0.5 s → peak 0.95.
+   - A gust is therefore felt as a gust, and a loud scene is stronger than a quiet one.
+   - An earlier version summed per-source levels that were each already normalised, so every scene flattened to a constant ≈ 0.8.
+3. The silent visuals (sunlight, which flickers with passing clouds, and melting frost) are combined with the audio drive as a soft union.
+4. Every source has a 2–3 s gust or pulse rhythm (`PULSE` in seasons.py). The winter blizzard (wind, snow, ice) sweeps left ↔ right every 2–3 s, and the summer breeze swings to the left twice.
 5. Device lead: cool 0.35 s, heat 0.60 s.
 6. Per-ear arbitration ensures that **each ear is only cooling or heating at any moment**.
 7. Dose limit: 8 s window, 0.85 maximum.
-8. The blackout (107.5–111.5 s) is forced to exactly 0, then PWM conversion (cool 35–80, heat 0–200).
+8. The power cut (108.5–110.5 s) is forced to exactly 0, then PWM conversion (cool 35–80, heat 0–200).
 
 ## Acceptance (analysis/synchronization_report.md)
 | Check | Result |
 |---|---|
-| ≥ 4 clear left/right moves | 12 |
-| ≥ 2 opposite-temperature moments | 9 segments |
+| ≥ 4 clear left/right moves | 32 (incl. 4 winter sweeps) |
+| ≥ 2 opposite-temperature moments | 16 segments |
 | Ice/fire reversal | L cool / R heat, then a neutral gap, then L heat / R cool |
 | Silent segment | Audio −∞ dB and all channels 0 |
-| Spring ending | Calm (heat ≤ 0.26, no cooling) and 0 at 150 s |
+| Spring ending | Calm (heat ≤ 0.32, no cooling) and 0 at 150 s |
+| Fast chaos | 15 rows of 2–2.5 s, 22 left/right flips of cool or warm |
 | Same-ear conflicts | 0 |
 | Every driving sound is lateralised to the side it heats or cools | ILD > 3 dB, 1.5 kHz+ |
 

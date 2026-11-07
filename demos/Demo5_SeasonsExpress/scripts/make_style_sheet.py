@@ -53,7 +53,7 @@ def main():
     W, H = 1536, 1024
     sheet = Image.new("RGB", (W, H), (255, 246, 236))
     d = ImageDraw.Draw(sheet)
-    d.text((W // 2, 52), "季節が、暴走する。  The Runaway Seasons Express", fill=(111, 74, 90), font=ImageFont.truetype(FONT, 46), anchor="mm")
+    d.text((W // 2, 52), "季節が暴走する魔法の列車  /  The Runaway Seasons Express", fill=(111, 74, 90), font=ImageFont.truetype(FONT, 46), anchor="mm")
     d.text((W // 2, 100), "MoHeat Evo thermal ASMR · Demo 5 · style sheet", fill=(160, 120, 135), font=ImageFont.truetype(FONT, 22), anchor="mm")
     tw, th, gap, x0, y0 = 464, 309, 36, 36, 140
     small = ImageFont.truetype(FONT, 22)

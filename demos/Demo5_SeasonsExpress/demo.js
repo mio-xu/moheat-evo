@@ -71,7 +71,7 @@ const LOOKS = {
   lava: { layers: [['tunnel_lava_wall', 1.5]], glass: [], wx: 'embers', tint: '255,130,60' },
   steam: { layers: [['tunnel_lava_wall', 1.5]], glass: [['fog_overlay', .9, 'drift']], wx: 'embers', tint: '255,220,210' },
   tunnel_dark: { layers: [], glass: [], wx: 'tunnel_lights', tint: null, fill: '#17141f' },
-  dark: { layers: [], glass: [], wx: null, tint: null, fill: '#020205' },
+  dark: { layers: [], glass: [], wx: 'stars', tint: null, fill: '#070b22' },   // power cut: the car is dark, the stars keep streaming past
   spring: { layers: L3('spring'), glass: [], wx: 'petals', tint: '255,205,225' },
 };
 const CHAOS_LOOK = { winter: 'winter', summer: 'summer', lava: 'lava', ice: 'ice', storm: 'storm', steam: 'steam', spring: 'spring', dark: 'dark' };
@@ -79,7 +79,7 @@ const CHAOS_LOOK = { winter: 'winter', summer: 'summer', lava: 'lava', ice: 'ice
 const TRACK = { L: [[0, 'winter', 0], [20, 'winter_thaw', 0], [45, 'storm', 2.5], [63, 'after_rain', 3], [70, 'ice', .7], [80, 'tunnel_dark', .6], [83, 'lava', .6]],
                 R: [[0, 'winter', 0], [20, 'summer', 2.0], [45, 'rainforest_sun', 2.5], [57, 'storm', 4], [70, 'lava', .7], [80, 'tunnel_dark', .6], [83, 'ice', .6]] };
 for (const s of ['L', 'R']) TRACK[s] = TRACK[s].map(([t, k, f]) => [TW(t), k, f]);   // authored on the brief grid
-for (const c of A.chaos) { TRACK.L.push([c.t0, CHAOS_LOOK[c.left], c.t0 === A.chaos[0].t0 ? .8 : .3]); TRACK.R.push([c.t0, CHAOS_LOOK[c.right], c.t0 === A.chaos[0].t0 ? .8 : .3]); }
+for (const c of A.chaos) { TRACK.L.push([c.t0, CHAOS_LOOK[c.left], c.t0 === A.chaos[0].t0 ? .6 : .22]); TRACK.R.push([c.t0, CHAOS_LOOK[c.right], c.t0 === A.chaos[0].t0 ? .6 : .22]); }
 for (const s of ['L', 'R']) { TRACK[s].push([TW(125), 'spring', 2]); TRACK[s].sort((a, b) => a[0] - b[0]); }
 function lookAt(side, t) {
   const tr = TRACK[side]; let i = 0;
@@ -130,6 +130,13 @@ function drawWeather(c, kind, box, t, dir, alpha) {
       const x = box.x0 + (((hash(i) * bw + dir * sp * .7 + t * 30) % bw) + bw) % bw, y = box.y0 + ((hash(i + 3) * bh + t * (30 + hash(i) * 30)) % bh), s = 14 + hash(i + 8) * 14;
       c.save(); c.translate(x, y); c.rotate(t * (1 + hash(i)) + i); c.drawImage(IMG.fx_sakura_petal, -s / 2, -s / 2, s, s); c.restore();
     }
+  } else if (kind === 'stars') {
+    const g = c.createLinearGradient(0, box.y0, 0, box.y1); g.addColorStop(0, '#0b1240'); g.addColorStop(1, '#1b1033');
+    c.fillStyle = g; c.fillRect(box.x0, box.y0, bw, bh);
+    for (let i = 0; i < 160; i++) {
+      const r = .8 + hash(i + 2) * 2.2, x = box.x0 + (((hash(i) * bw + dir * sp * (.15 + r * .25)) % bw) + bw) % bw, y = box.y0 + hash(i + 5) * bh;
+      c.fillStyle = `rgba(230,236,255,${.35 + .65 * (.5 + .5 * Math.sin(t * (2 + hash(i) * 4) + i))})`; c.beginPath(); c.arc(x, y, r, 0, 7); c.fill();
+    }
   } else if (kind === 'tunnel_lights') {
     const gap = 520, off = ((dir * sp * 1.5) % gap + gap) % gap;
     for (let x = box.x0 - gap + off; x < box.x1 + gap; x += gap) {
@@ -139,6 +146,8 @@ function drawWeather(c, kind, box, t, dir, alpha) {
   }
   c.restore();
 }
+const WX_SRC = { snow: 'winter_wind', snow_light: 'snow', rain: 'tropical_rain', embers: 'fire_crackling', sun: 'summer_breeze', petals: 'spring_breeze' };
+const gust = (kind, t) => { const s = WX_SRC[kind] && A.sources[WX_SRC[kind]]; return s ? clamp(.35 + .9 * sample(s.env, A.radarRate, t), .35, 1.15) : 1; };   // weather breathes with its sound
 function drawLook(c, key, side, t, alpha) {
   const L = LOOKS[key]; if (!L || alpha <= .005) return;
   const box = BOX[side], dir = side === 'L' ? -1 : 1, bh = box.y1 - box.y0;
@@ -148,7 +157,7 @@ function drawLook(c, key, side, t, alpha) {
   for (const [name, f] of L.layers) drawLayer(c, name, box, f, dir, t, k, top);
   if (key === 'spring' && side === 'R') drawStation(c, box, t, k, top);
   c.restore();
-  drawWeather(c, L.wx, box, t, dir, alpha);
+  drawWeather(c, L.wx, box, t, dir, alpha * gust(L.wx, t));
   for (const [name, a0, mode] of L.glass) {
     const a = evalA(a0, t) * alpha; if (a <= .01 || !ok(name)) continue;
     c.save(); c.globalAlpha = a; if (name === 'heat_haze_overlay') c.globalCompositeOperation = 'lighter';
@@ -316,16 +325,19 @@ function frame(t, dt) {
   c.save(); c.translate(W / 2, H / 2 + rk.y); c.rotate(rk.r); c.scale(1.012, 1.012); c.translate(-W / 2, -H / 2);
   drawWindow(c, 'L', t); drawWindow(c, 'R', t);
   drawDoorGlass(c, t);
+  // power cut: the lamps die and the car goes dark (the windows stay lit by the stars, so the film clearly goes on)
+  const f = lampFlicker(t), dark = inSilence(t) ? 1 : (t >= A.silence[0] - .6 && t < A.silence[0]) || (t >= A.silence[1] && t < A.silence[1] + .8) ? (1 - f) * .75 : 0;
+  if (dark > 0) c.filter = `brightness(${(1 - .82 * dark).toFixed(3)}) saturate(${(1 - .4 * dark).toFixed(3)})`;
   drawInterior(c, t);
+  if (dark > 0) c.filter = 'none';
   windowSpill(c, t);
   lampGlow(c, t);
+  if (dark > 0) c.filter = `brightness(${(1 - .82 * dark).toFixed(3)})`;
   drawClock(c, t);
   drawTableProps(c, t);
+  if (dark > 0) c.filter = 'none';
   emitFx(t, dt); updateParts(dt); drawParts(c);
   c.restore();
-  // blackout: the lamps die, total silence, then they flicker back
-  const f = lampFlicker(t), dark = inSilence(t) ? 1 : (t >= A.silence[0] - .6 && t < A.silence[0]) || (t >= A.silence[1] && t < A.silence[1] + .8) ? (1 - f) * .75 : 0;
-  if (dark > 0) { c.fillStyle = `rgba(2,2,6,${inSilence(t) ? .97 : dark})`; c.fillRect(0, 0, W, H); }
   const th = thermalAt(t + offsetMs / 1000);
   if (!QS.has('clean')) thermalEdges(c, th);   // ?clean=1: reference stills for video generation (no UI overlays)
   return { th };

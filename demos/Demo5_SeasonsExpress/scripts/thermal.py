@@ -2,7 +2,7 @@
 
   python3 scripts/thermal.py          (after build_audio.py)
 
-COOL  ← RMS of winter_wind, snow, ice_cracking, tropical_rain, water_drops (each its own dry stem)
+COOL  ← power of winter_wind, snow, ice_cracking, tropical_rain, water_drops (each its own dry stem, summed per ear)
 HEAT  ← RMS of summer_breeze, fire_crackling, lava, steam, spring_breeze
         + designed envelopes for silent visuals (sunlight through the right window, melting frost on the left);
           these are marked as designed in the config, never presented as audio-derived.
@@ -32,9 +32,9 @@ T2 = load_path("demo2_thermal", os.path.join(D2_TOOLS, "thermal.py"))
 CFG = dict(T1.CFG)
 CFG.update(dict(
     RATE=S.RATE, N_SAMPLES=int(S.DURATION * S.RATE),
-    GATE_BELOW_REF=32, REF_PCT=90, CURVE=1.6, HOLD=.20, ATTACK=.12, RELEASE=.80,   # ambience: slower than voices
+    REF_PCT=99.5, SPAN_DB=30, CURVE=1.5, PEAK=.95, HOLD=.12, ATTACK=.08, RELEASE=.50,   # ambience, but quick enough for 2–3 s gusts
     SIDE_EXP_FAR=2.5, SIDE_EXP_NEAR=4.0,
-    DOSE_WIN=8.0, DOSE_MAX=.85, CAP=1.0, SUSTAIN=.70, SAT_K=1.6,
+    DOSE_WIN=8.0, DOSE_MAX=.85, CAP=1.0,
     SILENCE=list(S.SILENCE),
 ))
 
@@ -51,23 +51,34 @@ def features(times):
 def run():
     rate = CFG["RATE"]; times = np.arange(CFG["N_SAMPLES"]) / rate
     F = features(times)
-    acc = {k: np.zeros(len(times)) for k in ("coolL", "coolR", "heatL", "heatR")}
+    # Per ear and per mode, the POWER of the driving stems is summed (each weighted and split by its own azimuth), then
+    # turned into a drive once: a gust is felt as a gust, a loud scene is stronger than a quiet one, and several sources
+    # in one scene no longer flatten each other (summing already-normalised levels saturated at a constant ~0.8).
+    power = {k: np.full(len(times), 1e-12) for k in ("coolL", "coolR", "heatL", "heatR")}
     contrib = {}
     for name, s in S.SOURCES.items():
         if s["role"] == "none": continue
         az = S.azimuth(name, times)
         wl, wr = T2.ear_weights(az, np.full(len(times), s["d"]), CFG)
-        v = F[name]["level"] * s["w"]
-        contrib[name] = (v * wl, v * wr)
-        acc[s["role"] + "L"] += v * wl; acc[s["role"] + "R"] += v * wr
+        ms = 10 ** (F[name]["db"] / 10) * s["w"]
+        power[s["role"] + "L"] += ms * wl; power[s["role"] + "R"] += ms * wr
+        v = F[name]["level"] * s["w"]; contrib[name] = (v * wl, v * wr)          # plot only
+    drive = {}
+    for role in ("cool", "heat"):
+        dbL, dbR = (10 * np.log10(power[role + sd]) for sd in "LR")
+        both = np.concatenate([dbL, dbR]); act = both[both > -90]
+        ref = np.percentile(act, CFG["REF_PCT"]); gate = ref - CFG["SPAN_DB"]
+        for sd, d in (("L", dbL), ("R", dbR)):
+            u = np.clip((d - gate) / (ref - gate), 0, 1) ** CFG["CURVE"]
+            hold = int(CFG["HOLD"] * rate)
+            held = np.array([u[max(0, i - hold): i + 1].max() for i in range(len(u))])
+            drive[role + sd] = T1.one_pole(held, rate, CFG["ATTACK"], CFG["RELEASE"]) * CFG["PEAK"]
+        print(f"{role}: reference {ref:.1f} dB, gate {gate:.1f} dB")
     for name, dsg in S.DESIGNED.items():
         v = T1.one_pole(S.designed(name, times), rate, .3, .6)
         contrib[name] = (v, np.zeros_like(v)) if dsg["side"] == "L" else (np.zeros_like(v), v)
-        acc[dsg["role"] + dsg["side"]] += v
-    # ambience is sustained: soft-saturate the summed drive so a full scene sits at ~SUSTAIN and only stacked /
-    # transient peaks reach 1.0 (otherwise the 8 s dose limiter chops long scenes into on/off blocks)
-    k = CFG["SAT_K"]; sat = lambda x: CFG["SUSTAIN"] * (1 - np.exp(-k * x)) / (1 - np.exp(-k))
-    intent = {k_: np.clip(sat(v), 0, 1) for k_, v in acc.items()}
+        k_ = dsg["role"] + dsg["side"]; drive[k_] = 1 - (1 - drive[k_]) * (1 - v)       # soft union with the audio drive
+    intent = {k_: np.clip(v, 0, 1) for k_, v in drive.items()}
 
     cap = lambda v: np.minimum(v, 1.0) * CFG["CAP"]
     cL, cR = (cap(T1.lead(intent[k], CFG["COOL_LEAD"], rate)) for k in ("coolL", "coolR"))
