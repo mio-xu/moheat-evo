@@ -65,10 +65,10 @@ The player draws, back to front:
 - The player (`TW()` in demo.js) and the audio use the same remap.
 
 **Car:** a panorama glass observation car (user, 2026-11-07).
-- Above the wooden wainscot and sill, the side walls and the whole arched roof are glass.
+- Above a low wooden wainscot and sill (0.8 m below eye level, roughly seat-cushion height), the side walls and the whole arched roof are glass.
 - The glass is held by arched wooden ribs every 0.78 m, longitudinal brass bars and a roof spine that carries the lamps.
 - Each side's scenery fills its half of the frame, so the seasons are visible beside you and overhead.
-- The scenery is anchored to eye level: the layers' horizon (y≈590) sits at the vanishing point and is drawn at 1.05×.
+- The scenery is anchored to eye level: the layers' horizon (y≈590) sits at the vanishing point and is drawn at 1.35×, tall enough to fill the low glass.
 
 ## Pipeline
 ```

@@ -51,7 +51,7 @@ def wall_pts(side, ab):            # side wall plane X = side*HW, (Z, Y)
 
 
 # ------------------------------------------------------------------ geometry pieces
-SILL = -0.36                      # glass starts above the wainscot / window sill
+SILL = -0.80                      # glass starts just above a low wainscot / sill (user: the lower part was too high)
 RIBS = np.arange(0.62, ZEND - .05, .78)
 
 
@@ -92,7 +92,7 @@ def lower_wall(side):
     lo = wall_pts(s, [(Z0, FLOOR), (ZEND, FLOOR), (ZEND, SILL), (Z0, SILL)])
     out = P(poly(lo), "url(#wainscot)")
     for z in np.arange(0.6, ZEND, .62):
-        pan = wall_pts(s, rrect_plane(z + .05, z + .55, FLOOR + .18, SILL - .14, .06, 4))
+        pan = wall_pts(s, rrect_plane(z + .05, z + .55, FLOOR + .07, SILL - .07, .06, 4))
         out += P(poly(pan), WOOD_S, op=.45) + P(poly(pan), stroke=WOOD_L, sw=f(4 / z), op=.7)
     # sill shelf along the whole glass wall (top face is visible from the seat)
     sill = prs([(s * HW, SILL, Z0), (s * HW, SILL, ZEND), (s * (HW - .11), SILL, ZEND), (s * (HW - .11), SILL, Z0)])
@@ -319,7 +319,7 @@ def scene_svg(glass_green=False, lit=False, only=None):
     body += table()
     if only == "table": body = table()
     # for the player: each side's scenery fills its half of the frame (the glass is everywhere above the sill)
-    win = [[(0, 0), (W / 2, 0), (W / 2, 690), (0, 690)], [(W / 2, 0), (W, 0), (W, 690), (W / 2, 690)]]
+    win = [[(0, 0), (W / 2, 0), (W / 2, 900), (0, 900)], [(W / 2, 0), (W, 0), (W, 900), (W / 2, 900)]]
     green_door = P(poly(door_glass), "#00FF00") if glass_green else ""
     mask = ('<mask id="cut" maskUnits="userSpaceOnUse" x="0" y="0" width="1536" height="1024">'
             f'<rect width="1536" height="1024" fill="white"/>{P(poly(door_glass), "black")}</mask>')

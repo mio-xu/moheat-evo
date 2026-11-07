@@ -144,7 +144,7 @@ function drawLook(c, key, side, t, alpha) {
   const box = BOX[side], dir = side === 'L' ? -1 : 1, bh = box.y1 - box.y0;
   c.save(); c.globalAlpha = alpha;
   if (L.fill) { c.fillStyle = L.fill; c.fillRect(box.x0, box.y0, box.x1 - box.x0, bh); }
-  const wall = L.layers.length === 1, k = wall ? bh * 1.1 / 1024 : 1.05, top = wall ? box.y0 - bh * .05 : EYE - 590 * k;   // layer horizon (y≈590) at eye level
+  const wall = L.layers.length === 1, k = wall ? bh * 1.1 / 1024 : 1.35, top = wall ? box.y0 - bh * .05 : EYE - 590 * k;   // layer horizon (y≈590) at eye level, tall enough for the low sill
   for (const [name, f] of L.layers) drawLayer(c, name, box, f, dir, t, k, top);
   if (key === 'spring' && side === 'R') drawStation(c, box, t, k, top);
   c.restore();
