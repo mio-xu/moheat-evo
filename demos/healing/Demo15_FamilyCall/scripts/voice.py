@@ -15,11 +15,14 @@ OVERRIDE = {
     'g12': '[giggles] ふふふ、よかったぁ。夜なべして編んだかいがあったわ',
     'g19': '[giggles] ふふ、いやよ。あんたから切って？',
     'g20': '[softly] おばあちゃんも、だーいすきよ',
+    'g21': '[exasperated] もう、おじいさん！ 冷やしてどうするんね。[warmly] …箱の底にカイロも入れといたけん、左のほっぺにあてんさい',
+    'g22': '[giggles] ふふ、あったかいのとつめたいの、いっぺんじゃね',
     'p00': '[surprised] なにぃ？ 孫じゃと！？',
     'p04b': '[excited] ほうか！ [chuckles] ふっふっふ…それならええもんがあるぞ',
     'p08b': '[proudly] …どうじゃ、つめたかろう！ [laughs heartily] わっはっは',
     'p11a': '[moved] …そうか。…そうか',
     'p14': '[shy] …ばあさんから切れ',
+    'p17': '[grumbling] なんじゃ、ばあさんばっかり…。[excited] ほれ、雪だるまも左にくっつけてみい！ カイロに負けんぞ！',
 }
 src = open(os.path.join(ROOT, 'lines.js'), encoding='utf-8').read()
 LINES = json.loads(src[src.index('= {') + 2:src.rindex('}') + 1])

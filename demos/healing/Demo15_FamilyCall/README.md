@@ -13,12 +13,15 @@ and an **ambient layer** — front door (left cool), scarf (both warm), snowman 
 
 | Moment | Thermal |
 |---|---|
-| You call their landline; the phone at your left ear | left warm |
+| Your room is cold (both ears a little cool) until you switch the heater on (front, a little left) | both cool → mild warm, left a bit more |
+| You call their landline; the phone at your left ear | left warm, following their loudness |
 | Grandma shouts for grandpa, he runs over and grabs the receiver; they end up sharing it cheek to cheek | left warm |
-| Their parcel arrives mid-call: put them on speaker, open the front door (left) | left cool |
+| Their parcel arrives mid-call: put them on speaker (the receiver's warmth fades slowly), open the front door (left) | left warm fades, then left cool |
 | Wrap grandma's hand-knitted scarf around your neck | both ears warm (slowly, like wool) |
 | Grandpa's refrigerated mini snowman, pressed to your right cheek | right cool, left still warm |
-| Phone back to your ear, a New Year promise, nobody wants to hang up first | left warmest, right warm |
+| Grandma: "Why chill them?" — the hand warmer she hid in the box, on your left cheek | left warmer, right cool |
+| Grandpa won't lose: the snowman moves to your left cheek too | left warm + cool at once (DUAL), right warms back |
+| Phone back to your ear, a New Year promise, nobody wants to hang up first; after hanging up the receiver's warmth lingers | left warmest, right warm; left fades slowly |
 
 Files: `index.html`, `style.css` (+ Demo 10's `demo.css` and Demo 12's `call.css` by path), `main.js` (story, choices / mic / actions, thermal, device),
 `audio.js` (Demo 12's CallAudio copied and extended: speakerphone, dial / ringback / pickup, grandpa running through the phone, parcel sounds),

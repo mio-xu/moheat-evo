@@ -25,7 +25,7 @@
 
   // ---------------------------------------------------------------- state
   const fresh = () => ({ started: false, done: false, t: 0, clock: 0, callT: 0, inCall: false, ear: 0, speaker: false, view: 'room',
-    doorCold: 0, scarf: 0, scarfOn: false, snow: 0, snowOn: false, who: '', step: 0, fade: 0, lv: 0, gift: false });
+    doorCold: 0, scarf: 0, scarfOn: false, snowL: 0, snowR: 0, snowOn: '', roomCold: 0, heat: 0, heatOn: false, kairo: 0, kairoOn: false, glow: 0, who: '', step: 0, fade: 0, lv: 0, gift: false });
   let S = fresh(), run = 0;
   // two episodes of the same call: part 1 (call → grandpa → parcel → scarf) and part 2 (snowman → New Year → nobody hangs up).
   // Part 2's page (demos/healing/Demo16_FamilyCall2/) sets <body data-part="2"> and <base href="./">, so all files are shared.
@@ -109,8 +109,12 @@
     try {
       if (PART === 2) return await part2(my, L, R);
       // your flat on a winter evening; their number is in your favourites
-      S.view = 'room'; setStep(0); SND.loop('heater', -.3, 2.4)?.set(.035); SND.loop('room', 0, 3)?.set(.04);
+      // you just got home: the room is cold until you switch the heater on (front, a little left)
+      S.view = 'room'; setStep(0); SND.loop('room', 0, 3)?.set(.04); S.roomCold = 1;
       await sleep(.8);
+      await action('🔥', 'ヒーターをつける', 'Switch the heater on', { x0: 760, x1: 1060, y0: 540, y1: 800 });
+      SND.fx.click(-.3); SND.loop('heater', -.3, 2.4)?.set(.035); S.heatOn = true; S.roomCold = 0;
+      await sleep(2.2);
       $('dialer').classList.add('show');
       await new Promise((res) => { $('callBtn').onclick = res; });
       $('dialer').classList.remove('show');
@@ -141,7 +145,7 @@
       SND.fx.bellHome(-.8); await sleep(1.6);
       await say('g09');
       await action('🔈', 'スピーカーにして置く', 'Put them on speaker');
-      SND.fx.beep(); SND.fx.rustle(L, .3); SND.phoneSpeaker(); S.speaker = true; S.ear = 0; S.view = 'room';
+      SND.fx.beep(); SND.fx.rustle(L, .3); SND.phoneSpeaker(); S.speaker = true; S.ear = 0; S.glow = 1; S.view = 'room';
       await sleep(.5);
       await action('🚪', '玄関をあける', 'Open the door', { x0: 0, x1: 700, y0: 0, y1: 1000 });
       SND.fx.steps(.1, -.8, 5); await sleep(2.1); SND.fx.door(-.8); S.doorCold = 1; SND.fx.gust();
@@ -168,7 +172,7 @@
     try {
       // the same call, a minute later: they are on speaker on your table, grandma's scarf is round your neck, the parcel is open
       S.view = 'box'; setStep(0); SND.loop('heater', -.3, 2.4)?.set(.035); SND.loop('room', 0, 3)?.set(.04);
-      S.inCall = true; SND.phoneOn(L); SND.phoneSpeaker(); S.speaker = true; S.ear = 0; S.scarfOn = true; SND.loop('home')?.set(.25);
+      S.inCall = true; SND.phoneOn(L); SND.phoneSpeaker(); S.speaker = true; S.ear = 0; S.scarfOn = true; S.heatOn = true; S.heat = 1; SND.loop('home')?.set(.25);
       await caption('🧣 ばあばのマフラーを巻いたまま、電話はスピーカーで…', "Still wrapped in Grandma's scarf, the call on speaker…", 2.6);
       // grandpa's refrigerated snowman: right cheek cool, the scarf keeps the left warm
       await say('p05');
@@ -177,12 +181,21 @@
       S.view = 'snow'; await say('p06'); await say('g13');
       S.view = 'cooler'; await say('p07'); await say('p08');
       await action('⛄', '右のほっぺにピタッ', 'Press it to your right cheek', { x0: 960, x1: 1920, y0: 0, y1: 1080 });
-      SND.fx.squish(R); S.snowOn = true; await sleep(1.4);
+      SND.fx.squish(R); S.snowOn = 'R'; await sleep(1.4);
       await say('p08b');
       await choice([['つめたーい！', 'So cold!'], ['かわいい！', 'So cute!']]);
+      // grandma's answer: the hand warmer she hid at the bottom of the box, on your left cheek (left warm, right cool)
+      await say('g21');
+      await action('🔥', 'カイロを左のほっぺに', 'Hand warmer to your left cheek', { x0: 0, x1: 960, y0: 0, y1: 1080 });
+      SND.fx.kairo(L); S.kairoOn = true; await sleep(2.4);
+      // grandpa won't lose: the snowman moves to the left too — warm and cool on the same ear (DUAL); the right cheek warms back up
+      await say('p17');
+      await action('⛄', '雪だるまを左のほっぺへ', 'Move the snowman to your left cheek', { x0: 0, x1: 960, y0: 0, y1: 1080 });
+      SND.fx.squish(L); S.snowOn = 'L'; await sleep(1.6);
+      await say('g22');
       await say('p09');
-      // phone back to your ear (the snowman goes back in its box)
-      S.snowOn = false; SND.fx.cooler(.1);
+      // phone back to your ear (the snowman goes back in its box, the hand warmer into your pocket)
+      S.snowOn = ''; S.kairoOn = false; SND.fx.cooler(.1);
       setStep(1); S.view = 'duo'; await say('g14');
       await action('📱', '受話器を耳にあてる', 'Hold the phone to your ear');
       SND.fx.beep(); SND.fx.rustle(L, .3); SND.phoneEar(L); S.speaker = false; S.ear = -1;
@@ -200,8 +213,8 @@
       await say('g20'); await say('p15'); await sleep(.8);
       await say('p16');
       await action('📴', '電話を切る', 'Hang up');
-      SND.fx.hangup(L); await sleep(.4); SND.phoneOff(); S.inCall = false; S.ear = 0; SND.loop('home')?.stop();
-      S.view = 'room'; await sleep(2.2); SND.fx.chime();
+      SND.fx.hangup(L); await sleep(.4); SND.phoneOff(); S.inCall = false; S.ear = 0; S.glow = 1; SND.loop('home')?.stop();
+      S.view = 'room'; await sleep(4.5); SND.fx.chime();
       S.fade = 1; await sleep(3.2); finish();
     } catch (e) { if (e.message !== 'stopped') console.error(e); }
   }
@@ -213,7 +226,11 @@
     S.lv = SND.voiceLevel();
     S.doorCold = Math.max(0, S.doorCold - dt / 6);
     S.scarf += ((S.scarfOn ? 1 : 0) - S.scarf) * (1 - Math.exp(-dt / 2.5));    // wool warms up slowly
-    S.snow += ((S.snowOn ? 1 : 0) - S.snow) * (1 - Math.exp(-dt / (S.snowOn ? .4 : 1.2)));
+    S.snowR += ((S.snowOn === 'R' ? 1 : 0) - S.snowR) * (1 - Math.exp(-dt / (S.snowOn === 'R' ? .4 : 1.6)));   // a cold cheek warms back up slowly
+    S.snowL += ((S.snowOn === 'L' ? 1 : 0) - S.snowL) * (1 - Math.exp(-dt / (S.snowOn === 'L' ? .4 : 1.6)));
+    S.heat += ((S.heatOn ? 1 : 0) - S.heat) * (1 - Math.exp(-dt / 4));          // a fan heater takes a few seconds to reach you
+    S.kairo += ((S.kairoOn ? 1 : 0) - S.kairo) * (1 - Math.exp(-dt / (S.kairoOn ? 1.5 : 4)));
+    S.glow = Math.max(0, S.glow - dt / 7);                                        // a receiver just off your ear stays warm for a while
     if (micWait) {
       const ml = micState === 'on' ? micLevel() : 0; floor = ml < floor ? ml : floor + (ml - floor) * dt * .05;
       const loud = micState === 'on' && ml > Math.max(.02, floor * 4);
@@ -226,7 +243,9 @@
   // Two layers, sent with the firmware's DUAL command (heat and cool are independent on each ear, 2026-11-08):
   //  · VOICE: a voice right at your ear (the receiver pressed to it) warms that ear, following its loudness — louder = warmer,
   //    a pause lets it ease off; a voice shouting away from the receiver is weak; on speaker (on the table) the voice is not close: no voice heat.
-  //  · AMBIENT: the world around you — the cold from the front door (left), grandma's scarf (both warm), grandpa's snowman (right cool).
+  //  · AMBIENT: the world around you — your cold room until the fan heater (front left) warms it, the cold from the front door (left),
+  //    grandma's scarf (both warm), grandpa's snowman (right cheek, later left), grandma's hand warmer (left cheek), the receiver's
+  //    lingering warmth after it leaves your ear (speaker / hang-up).
   //    Ambient cool and voice warmth can be on the same ear at the same time.
   let vEnv = 0;
   function layers(dt) {
@@ -236,8 +255,13 @@
     vEnv += (lv - vEnv) * (1 - Math.exp(-dt / (lv > vEnv ? .06 : .3)));
     if (S.inCall && S.ear && !S.speaker) add(S.ear * 1.45, 'h', .1 + .8 * vEnv, S.who === 'gp' ? '👴' : '👵', 'voice');   // the receiver itself is a little warm
     if (S.doorCold > 0) add(-1.0, 'c', .75 * S.doorCold, '🚪', 'env');
-    if (S.scarf > .01) { add(-1.3, 'h', .45 * S.scarf, '🧣', 'env'); add(1.3, 'h', .45 * S.scarf, '🧣', 'env'); }
-    if (S.snow > .01) add(1.45, 'c', .85 * S.snow, '⛄', 'env');
+    if (S.scarf > .01) { add(-1.3, 'h', .35 * S.scarf, '🧣', 'env'); add(1.3, 'h', .35 * S.scarf, '🧣', 'env'); }
+    if (S.snowR > .01) add(1.45, 'c', .85 * S.snowR, '⛄', 'env');
+    if (S.snowL > .01) add(-1.45, 'c', .85 * S.snowL, '⛄', 'env');
+    if (S.kairo > .01) add(-1.45, 'h', .45 * S.kairo, '🔥', 'env');
+    if (S.roomCold > 0) { add(-1.3, 'c', .3 * S.roomCold, '❄️', 'env'); add(1.3, 'c', .3 * S.roomCold, '❄️', 'env'); }
+    if (S.heat > .01) add(-.3, 'h', .12 * S.heat, '♨️', 'env');
+    if (S.glow > .01 && !(S.inCall && S.ear && !S.speaker)) add(-1.45, 'h', .4 * S.glow * S.glow, '📱', 'env');
     return out;
   }
   const chan = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
@@ -296,10 +320,14 @@
       const g = ctx.createRadialGradient(W / 2, H + 120, 100, W / 2, H + 120, 900); g.addColorStop(0, `rgba(255,140,90,${.32 * S.scarf})`); g.addColorStop(1, 'rgba(255,140,90,0)');
       ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
     }
-    if (S.snow > .05) {      // cool tint on the right where the snowman is
-      const g = ctx.createLinearGradient(W, 0, W * .55, 0); g.addColorStop(0, `rgba(140,200,255,${.4 * S.snow})`); g.addColorStop(1, 'rgba(140,200,255,0)');
-      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    if (S.started && S.heat < .98 && (viewA === 'room' || viewB === 'room')) {   // the heater in your room: elements dark until you switch it on
+      ctx.globalAlpha = (viewB === 'room' ? (mix < 1 ? mix : 1) : 1 - mix) * .82 * (1 - S.heat); ctx.fillStyle = '#3b302a';
+      ctx.beginPath(); ctx.roundRect(840, 590, 140, 132, 10); ctx.fill(); ctx.globalAlpha = 1;
     }
+    const edge = (x0, x1, rgb, a) => { if (a < .05) return; const g = ctx.createLinearGradient(x0, 0, x1, 0); g.addColorStop(0, `rgba(${rgb},${a})`); g.addColorStop(1, `rgba(${rgb},0)`); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); };
+    edge(W, W * .55, '140,200,255', .4 * S.snowR);      // cool tint on the side where the snowman is
+    edge(0, W * .45, '255,150,90', .3 * S.kairo);       // grandma's hand warmer on the left
+    edge(0, W * .45, '140,200,255', .3 * S.snowL);
     if (S.gift && Math.random() < dt * 5) hearts.push({ x: rnd(300, W - 300), y: H + 20, vy: rnd(90, 150), s: rnd(.6, 1.2), life: 0 });
     for (const h of hearts) { h.life += dt; h.y -= h.vy * dt; }
     hearts = hearts.filter((h) => h.life < 8);
