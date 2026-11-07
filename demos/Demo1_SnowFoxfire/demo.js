@@ -159,11 +159,12 @@ function updateParts(dt) {
   parts = parts.filter((q) => q.life < q.max);
 }
 function drawParts(ctx) {
+  if (fxFade <= .001) return;   // the clean last scene
   ctx.save(); ctx.globalCompositeOperation = 'lighter';
   for (const q of parts) {
     const k = q.life / q.max, a = Math.sin(Math.PI * Math.min(1, k * 1.2)) * q.a * fxFade;
     if (q.kind === 'frost' || q.kind === 'haze') {
-      const fa = q.a * Math.min(1, k * 2.6) * Math.pow(1 - k, 1.3);
+      const fa = q.a * Math.min(1, k * 2.6) * Math.pow(1 - k, 1.3) * fxFade;
       ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(Math.atan2(q.vy, q.vx)); ctx.scale(1.9, 1);
       const g = ctx.createRadialGradient(0, 0, 0, 0, 0, q.size);
       if (q.kind === 'frost') { g.addColorStop(0, `rgba(228,242,255,${fa * .42})`); g.addColorStop(.6, `rgba(200,228,255,${fa * .16})`); g.addColorStop(1, 'rgba(190,225,255,0)'); }
