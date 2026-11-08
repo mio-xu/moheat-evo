@@ -82,6 +82,7 @@ def cutout(path, erase=(), keep=(), ai=False):
     k = 2; Hs, Ws = H // k, W // k
     gk = grad[:Hs * k, :Ws * k].reshape(Hs, k, Ws, k).max((1, 3))           # max-pool: a thin line still blocks
     dk = diff[:Hs * k, :Ws * k].reshape(Hs, k, Ws, k).max((1, 3))
+    bgsat = float(bgc.max() - bgc.min())   # the plain bg may be a slightly warm grey (Demo20 #cec7c4, colourfulness 10): compare with IT, not with 0
     satk = (im.max(2) - im.min(2))[:Hs * k, :Ws * k].reshape(Hs, k, Ws, k).mean((1, 3))   # colourfulness: the plain bg is a pure grey
     cand = (dk < 40) & (gk < 9)
     seen = np.zeros_like(cand); pocket = np.zeros_like(cand); lab = np.zeros(cand.shape, np.int32); n = 0
@@ -97,7 +98,7 @@ def cutout(path, erase=(), keep=(), ai=False):
         ys_, xs_ = zip(*pts)
         if edge or (len(pts) > 120 and dk[list(ys_), list(xs_)].mean() < 10):   # enclosed gaps only if really the plain bg colour
             seen[list(ys_), list(xs_)] = True
-        elif len(pts) >= 6 and dk[list(ys_), list(xs_)].mean() < 12 and satk[list(ys_), list(xs_)].mean() < 7:   # a small pocket of the plain (pure grey) background between hair and body — not lavender / silver hair shadow
+        elif len(pts) >= 6 and dk[list(ys_), list(xs_)].mean() < 12 and abs(satk[list(ys_), list(xs_)].mean() - bgsat) < 7:   # a small pocket of the plain (pure grey) background between hair and body — not lavender / silver hair shadow
             pocket[list(ys_), list(xs_)] = True
     for x0, y0, x1, y1 in keep: seen[y0 // k:y1 // k + 1, x0 // k:x1 // k + 1] = False   # grey things that belong to the figure (steam)
     bgm = np.zeros((H, W), np.float32)
@@ -132,7 +133,7 @@ def cutout(path, erase=(), keep=(), ai=False):
         # background colour are background too — the clothes' grey shading deep inside the figure is left alone
         small_out = Image.fromarray(outside[::4, ::4].astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(31))   # ±60 px
         near = np.asarray(small_out.resize((W, H), Image.NEAREST), bool) | (m < .98)
-        neutral = (im.max(2) - im.min(2)) < 8          # the plain background is a pure grey; silver / lavender hair shading is not
+        neutral = np.abs((im.max(2) - im.min(2)) - bgsat) < 8   # as colourful as the plain background (pure or warm grey); silver / lavender hair shading is not
         bgish = near & (diff < 12) & neutral
         alpha[bgish] = np.minimum(alpha[bgish], soft[bgish])
     for x0, y0, x1, y1 in erase: alpha[y0:y1, x0:x1] = 0   # things drawn that belong to another layer (a fire, a table)
@@ -174,7 +175,7 @@ for name, p in cfg["poses"].items():
     pcfg["size"] = list(size)
     for kind, key in (("mouth", "talk"), ("eyes", "blink")):
         if p.get(key) and os.path.exists(src(p[key])):
-            e = {"name": f"{name}_{kind}", "base": p["src"], "frame": p[key], "kind": kind}
+            e = {"name": f"{name}_{kind}", "base": p["src"], "frame": p[key], "kind": kind, "_size": list(size)}
             if p.get(f"near_{kind}"): e["near"] = p[f"near_{kind}"]
             if p.get(f"centre_{kind}"): e["centre"], e["radius"] = p[f"centre_{kind}"], p[f"radius_{kind}"]   # fixed ellipse, no search
             if p.get(f"regions_{kind}"): e["regions"] = p[f"regions_{kind}"]   # fixed ellipses (both eyes), e.g. the masks of a masked edit
@@ -188,9 +189,14 @@ os.makedirs(os.path.join(D, "assets"), exist_ok=True); _poses.save(os.path.join(
 print("poses side by side: assets/poses_preview.jpg (check face / style / clothes / props match across close-ups and wide shots)")
 if pcfg["patches"]:
     tmp = os.path.join(D, "assets", "patches_cfg"); os.makedirs(os.path.join(tmp, "project"), exist_ok=True); os.makedirs(os.path.join(tmp, "assets"), exist_ok=True)
-    json.dump(pcfg, open(os.path.join(tmp, "project", "patches.json"), "w"))
-    subprocess.run([sys.executable, os.path.join(HERE, "face_patches.py"), tmp] + (["--preview"] if a.preview else []), check=True)
-    meta = json.load(open(os.path.join(pcfg["dst"], "patches.json")))
+    # face_patches works in ONE picture size per run: poses of another size (extended by tools/art/extend_pose.py, wider) get their
+    # own run — squeezing them into the last pose's size put Demo24's blanket / left mouth + eye patches in the wrong place
+    groups, meta = {}, {}
+    for e in pcfg["patches"]: groups.setdefault(tuple(e["_size"]), []).append({k: v for k, v in e.items() if k != "_size"})
+    for sz, es in groups.items():
+        json.dump({**pcfg, "size": list(sz), "patches": es}, open(os.path.join(tmp, "project", "patches.json"), "w"))
+        subprocess.run([sys.executable, os.path.join(HERE, "face_patches.py"), tmp] + (["--preview"] if a.preview else []), check=True)
+        meta.update(json.load(open(os.path.join(pcfg["dst"], "patches.json"))))
     for e in pcfg["patches"]:
         pn = e["name"]; pose = poses[pn.rsplit("_", 1)[0]]; x, y, w, h = meta[pn]; bx, by = pose["box"][:2]; f = pose["f"]
         im = Image.open(os.path.join(pcfg["dst"], pn + ".webp"))
