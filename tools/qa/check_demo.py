@@ -314,6 +314,15 @@ navaway = re.findall(r'location(?:\.href)?\s*=\s*[^;\n]*Demo\d{2}|location\.(?:a
 row('G5', 'end', 'FAIL' if (not end_static or navaway) else 'PASS',
     'navigates to another demo at the end' if navaway else 'no "↺ もう一度 · Play again" on its own cover at the end' if not end_static else 'ends on its own cover (static)', navaway)
 
+# ---------------------------------------------------------------- G5 media budget (tools/qa/media_budget.py; user 2026-11-08: demo switching slow)
+try:
+    sys.path.insert(0, os.path.join(REPO, 'tools', 'qa')); import media_budget
+    mo, mt = media_budget.check(D)
+    row('G5', 'media', 'WARN' if mo or mt > media_budget.TOTAL_KB else 'PASS',
+        f'{len(mo)} file(s) over the media budget, media {mt} KB' if mo else f'every file within budget, media {mt} KB',
+        [f'{r}: {kb} KB > {lim} KB — {how}' for r, kb, lim, how in mo[:8]] + ([f'… {len(mo) - 8} more (python3 tools/qa/media_budget.py {REL})'] if len(mo) > 8 else []))
+except Exception as e: row('G5', 'media', 'WARN', f'media_budget.py failed: {e}')
+
 # ---------------------------------------------------------------- G7 release / G8 hygiene
 if ORIG:
     row('G7', 'release', 'SKIP', f'staging folder (remake of {ORIG}): cover / thumbs / menu are checked on {ORIG} after merge_remake.py')
