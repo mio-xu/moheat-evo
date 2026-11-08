@@ -18,6 +18,8 @@ _sp = importlib.util.spec_from_file_location('eleven_tts', os.path.join(HERE, 't
 TAG = re.compile(r'\[[^\]]*\]')
 AF = 'loudnorm=I=-18:TP=-2'                       # same as the ja takes of Demo22 / 43
 RESERVE = int(os.environ.get('MOHEAT_EL_RESERVE', '12000'))   # chars to keep on the ElevenLabs account; 0 = no check
+FILM_AF = ('silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse,'
+           'adelay=20,apad=pad_dur=0.05,' + AF)          # film dry takes: trimmed like the films' ja takes, then the same loudnorm
 BR = '64k'                                        # rollout 2026-11-09: dubs at 64 kb/s mono AAC (speech, half the size → small enough for git / Pages)
 
 
@@ -95,4 +97,17 @@ def render(lines, lang, out_dir, cache_p, count_only=False, af=AF, br=BR):
         if f.endswith('.m4a') and f[:-4] not in lines: os.remove(os.path.join(out_dir, f))
     json.dump(dict(lang=lang, text={k: v[1] for k, v in lines.items()}, dur=durs), open(os.path.join(out_dir, 'index.json'), 'w'), ensure_ascii=False, indent=1)
     print(f'[{lang}] {len(durs)} lines, {round(sum(durs.values()), 1)} s', flush=True)
+    return durs
+
+
+def export_ja(wavs, out_dir, texts=None, af=AF, br=BR):
+    """Film demos: the ja takes already sit in the film's cache as WAVs → the same dry per-line files as the dubs (0 credits).
+    wavs = {lid: wav path}; writes <out_dir>/<lid>.m4a (same loudnorm / bitrate as render()) + index.json."""
+    os.makedirs(out_dir, exist_ok=True); durs = {}
+    for lid, wav in wavs.items():
+        m4a = os.path.join(out_dir, lid + '.m4a')
+        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', wav, '-ac', '1', '-af', af, '-ar', '48000', '-c:a', 'aac', '-b:a', br, m4a], check=True)
+        durs[lid] = dur(m4a)
+    json.dump(dict(lang='ja', text=texts or {}, dur=durs), open(os.path.join(out_dir, 'index.json'), 'w'), ensure_ascii=False, indent=1)
+    print(f'[ja] exported {len(durs)} cached takes, {round(sum(durs.values()), 1)} s (0 credits)', flush=True)
     return durs

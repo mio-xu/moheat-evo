@@ -227,5 +227,57 @@ def main():
     print("mix loudness:", " ".join(l.strip() for l in r[r.rfind("Summary:"):].splitlines() if l.strip().startswith(("I:", "Peak:"))))
 
 
+# ---------------------------------------------------------------- dubbed takes (user 2026-11-09: every demo voiced in ja / en / zh)
+# python3 tools/build_audio.py --lang ja|en|zh [--count] → media/voice/<lang>/c<NN>.m4a (NN = index in FM.CUES) + index.json: one dry
+# mono file per spoken line (say / whisper; the ElevenLabs song stays ja), same voice / settings / tag / trim / level (say −19, whisper
+# −24 dB) as the film. ja = the film's cached takes (no credits); en / zh = the subtitle text with the ja tag moved in (tools/eleven/dub.py).
+# Inputs for the per-language re-mix (shared timeline = the longest language per line; ROLLOUT 3b). Not mixed into the film yet.
+DUB_NAMES = {"zh": [("绫音", "Ayane"), ("綾音", "Ayane")]}
+DUB_OVERRIDE = {}                                  # (lang, cue id) → hand-tagged text when retag() is not good enough
+
+
+def dub(lang, count_only=False):
+    import importlib.util
+    E = B.el()
+    sp = importlib.util.spec_from_file_location("dub", os.path.join(ROOT, "..", "..", "..", "tools", "eleven", "dub.py"))
+    D = importlib.util.module_from_spec(sp); sp.loader.exec_module(D)
+    cues = {f"c{i:02d}": c for i, c in enumerate(FM.CUES) if c["kind"] in ("say", "whisper")}
+    vid = E.voice(B.EL_CAST["A"]); lines = {}
+    for k, c in cues.items():
+        tagged = B.el_text(c["tts"], "A", c["kind"] == "whisper", c["expr"])
+        lines[k] = (vid, tagged if lang == "ja" else DUB_OVERRIDE.get((lang, k)) or D.retag(tagged, D.names(c[lang], lang, DUB_NAMES), lang))
+    need = 0 if lang == "ja" else sum(len(t) for k, (v, t) in lines.items() if not os.path.exists(os.path.join(B.CACHE, f"el_{lang}_{D.key(v, lang, t)}.wav")))
+    print(f"[{lang}] {len(lines)} lines, {D.chars(lines)} chars; to render now: {need}" + (" (ja = cached film takes, 0 credits)" if lang == "ja" else ""))
+    if count_only: return
+    if need and D.RESERVE:
+        sub = E.client().user.subscription.get(); left = sub.character_limit - sub.character_count
+        if left - need < D.RESERVE: raise SystemExit(f"[{lang}] STOP: {need} chars would leave {left - need:,} < reserve {D.RESERVE:,}")
+    out = os.path.join(MEDIA, "voice", lang); os.makedirs(out, exist_ok=True); durs = {}
+    for k, c in cues.items():
+        v, text = lines[k]
+        if lang == "ja": x = B.tts(c["tts"], "A", whisper=(c["kind"] == "whisper"), expr=c["expr"])
+        else:
+            wav = os.path.join(B.CACHE, f"el_{lang}_{D.key(v, lang, text)}.wav")
+            if not os.path.exists(wav):
+                import io
+                from scipy.signal import resample_poly
+                sr0, y = wavfile.read(io.BytesIO(E.speak(text, v, lang=lang)))
+                wavfile.write(wav, SR, (np.clip(resample_poly(y.astype(np.float64) / 32768, SR, sr0), -1, 1) * 32767).astype(np.int16))
+                print("voiced", lang, k, text, flush=True)
+            x = wavfile.read(wav)[1].astype(np.float64) / 32768.0
+            e = B.env_follow(x, 40); idx = np.where(e > 0.01)[0]
+            x = x[max(0, idx[0] - 480): idx[-1] + 2400] if len(idx) else x
+            a, b = int(.01 * SR), int(.06 * SR); x[:a] *= np.linspace(0, 1, a); x[-b:] *= np.linspace(1, 0, b)
+        x = norm_to(x, -24 if c["kind"] == "whisper" else -19)
+        x *= min(1.0, db(-2) / (np.max(np.abs(x)) + 1e-9))       # dry file: peak ≤ −2 dBFS (the film's limiter does this in the mix)
+        tmp = os.path.join(out, k + ".wav"); wavfile.write(tmp, SR, (np.clip(x, -1, 1) * 32767).astype(np.int16))
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", tmp, "-c:a", "aac", "-b:a", D.BR, os.path.join(out, k + ".m4a")], check=True)
+        os.remove(tmp); durs[k] = round(len(x) / SR, 3)
+    json.dump(dict(lang=lang, text={k: v[1] for k, v in lines.items()}, sub={k: c[lang] for k, c in cues.items()},
+                   t={k: c["t"] for k, c in cues.items()}, dur=durs), open(os.path.join(out, "index.json"), "w"), ensure_ascii=False, indent=1)
+    print(f"[{lang}] {len(durs)} lines, {round(sum(durs.values()), 1)} s")
+
+
 if __name__ == "__main__":
-    main()
+    if "--lang" in sys.argv: dub(sys.argv[sys.argv.index("--lang") + 1], "--count" in sys.argv)
+    else: main()
