@@ -27,16 +27,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/door_mouth.webp?v=871cd18b",
-     "rect": [
-      776,
-      414,
-      198,
-      131
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/door_eyes.webp?v=57a131e1",
      "rect": [
       632,
@@ -45,6 +35,50 @@ window.MOHEAT_LAYERS = {
       183
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/door_mouth0.webp?v=7af8aa3a",
+     "rect": [
+      763,
+      385,
+      227,
+      193
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/door_mouth1.webp?v=da049153",
+     "rect": [
+      763,
+      385,
+      227,
+      193
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/door_mouth2.webp?v=3cefbe85",
+     "rect": [
+      763,
+      385,
+      227,
+      193
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/door_mouth3.webp?v=244714ee",
+     "rect": [
+      763,
+      385,
+      227,
+      193
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -75,16 +109,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/towel_mouth.webp?v=fa5c2fde",
-     "rect": [
-      808,
-      384,
-      166,
-      106
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/towel_eyes.webp?v=58b9ad84",
      "rect": [
       680,
@@ -93,6 +117,50 @@ window.MOHEAT_LAYERS = {
       156
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/towel_mouth0.webp?v=26584e59",
+     "rect": [
+      783,
+      345,
+      218,
+      184
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/towel_mouth1.webp?v=cbbcfd10",
+     "rect": [
+      783,
+      345,
+      218,
+      184
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/towel_mouth2.webp?v=de796002",
+     "rect": [
+      783,
+      345,
+      218,
+      184
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/towel_mouth3.webp?v=e82b1213",
+     "rect": [
+      783,
+      345,
+      218,
+      184
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -125,16 +193,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/dryer_mouth.webp?v=68052218",
-     "rect": [
-      745,
-      267,
-      207,
-      148
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/dryer_eyes.webp?v=732f18a1",
      "rect": [
       653,
@@ -143,6 +201,50 @@ window.MOHEAT_LAYERS = {
       150
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/dryer_mouth0.webp?v=b8122af0",
+     "rect": [
+      760,
+      267,
+      174,
+      146
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/dryer_mouth1.webp?v=bc9673fa",
+     "rect": [
+      760,
+      267,
+      174,
+      146
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/dryer_mouth2.webp?v=9681dcaf",
+     "rect": [
+      760,
+      267,
+      174,
+      146
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/dryer_mouth3.webp?v=7bda208a",
+     "rect": [
+      760,
+      267,
+      174,
+      146
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -173,16 +275,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/glasses_mouth.webp?v=03cac8b2",
-     "rect": [
-      657,
-      443,
-      207,
-      151
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/glasses_eyes.webp?v=74eb92e8",
      "rect": [
       487,
@@ -191,6 +283,50 @@ window.MOHEAT_LAYERS = {
       192
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/glasses_mouth0.webp?v=25055c5e",
+     "rect": [
+      622,
+      387,
+      292,
+      246
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/glasses_mouth1.webp?v=2d63f4ed",
+     "rect": [
+      622,
+      387,
+      292,
+      246
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/glasses_mouth2.webp?v=b1e5ccf4",
+     "rect": [
+      622,
+      387,
+      292,
+      246
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/glasses_mouth3.webp?v=4ebdb5f9",
+     "rect": [
+      622,
+      387,
+      292,
+      246
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -221,14 +357,48 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/whisper_mouth.webp?v=9170159d",
+     "src": "art/whisper_mouth0.webp?v=135fb72d",
      "rect": [
-      236,
-      446,
-      188,
-      112
+      211,
+      396,
+      249,
+      209
      ],
-     "kind": "mouth"
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/whisper_mouth1.webp?v=63249ddd",
+     "rect": [
+      211,
+      396,
+      249,
+      209
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/whisper_mouth2.webp?v=75c61770",
+     "rect": [
+      211,
+      396,
+      249,
+      209
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/whisper_mouth3.webp?v=034be800",
+     "rect": [
+      211,
+      396,
+      249,
+      209
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -258,16 +428,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/window_mouth.webp?v=1bed2697",
-     "rect": [
-      915,
-      322,
-      249,
-      179
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/window_eyes.webp?v=a5aad4bf",
      "rect": [
       795,
@@ -276,6 +436,50 @@ window.MOHEAT_LAYERS = {
       189
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/window_mouth0.webp?v=6b6b545e",
+     "rect": [
+      928,
+      321,
+      211,
+      178
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/window_mouth1.webp?v=815d6fb5",
+     "rect": [
+      928,
+      321,
+      211,
+      178
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/window_mouth2.webp?v=20f79b1a",
+     "rect": [
+      928,
+      321,
+      211,
+      178
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/window_mouth3.webp?v=01735b08",
+     "rect": [
+      928,
+      321,
+      211,
+      178
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   }

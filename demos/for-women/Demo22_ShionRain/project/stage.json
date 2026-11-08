@@ -18,13 +18,15 @@
    "near_mouth": [
     1310,
     522
-   ]
+   ],
+   "mouth": "lp"
   },
   "towel": {
    "src": "shion_towel",
    "talk": "shion_towel_talk",
    "blink": "shion_towel_blink",
-   "matte": "ai"
+   "matte": "ai",
+   "mouth": "lp"
   },
   "dryer": {
    "src": "shion_dryer_ext",
@@ -52,7 +54,8 @@
      92,
      46
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "window": {
    "src": "shion_window_ext",
@@ -80,7 +83,8 @@
      92,
      48
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "glasses": {
    "src": "shion_glasses",
@@ -90,12 +94,14 @@
    "near_mouth": [
     1150,
     640
-   ]
+   ],
+   "mouth": "lp"
   },
   "whisper": {
    "src": "shion_whisper",
    "talk": "shion_whisper_talk",
-   "matte": "ai"
+   "matte": "ai",
+   "mouth": "lp"
   }
  },
  "views": {
