@@ -1,0 +1,63 @@
+{
+ "opt_naomi_a": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 88,
+  "usage": {
+   "input_tokens": 3286,
+   "input_tokens_details": {
+    "image_tokens": 3042,
+    "text_tokens": 244
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 10656
+  },
+  "out": [
+   2560,
+   1440
+  ],
+  "prior_usage": [
+   {
+    "input_tokens": 3308,
+    "input_tokens_details": {
+     "image_tokens": 3042,
+     "text_tokens": 266
+    },
+    "output_tokens": 7370,
+    "output_tokens_details": {
+     "image_tokens": 7370,
+     "text_tokens": 0
+    },
+    "total_tokens": 10678
+   }
+  ]
+ },
+ "opt_naomi_b": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 102,
+  "usage": {
+   "input_tokens": 3310,
+   "input_tokens_details": {
+    "image_tokens": 3042,
+    "text_tokens": 268
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 10680
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ }
+}

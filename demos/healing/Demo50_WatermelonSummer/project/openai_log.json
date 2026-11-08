@@ -1,0 +1,140 @@
+{
+ "opt_grandma_a": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 80,
+  "usage": {
+   "input_tokens": 1734,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 226
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9104
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "opt_grandma_b": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 91,
+  "usage": {
+   "input_tokens": 1736,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 228
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9106
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "opt_grandma_c": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 78,
+  "usage": {
+   "input_tokens": 1740,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 232
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9110
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "opt_grandpa_a": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 75,
+  "usage": {
+   "input_tokens": 1727,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 219
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9097
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "opt_grandpa_b": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 91,
+  "usage": {
+   "input_tokens": 1730,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 222
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9100
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "opt_grandpa_c": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 71,
+  "usage": {
+   "input_tokens": 1728,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 220
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9098
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ }
+}

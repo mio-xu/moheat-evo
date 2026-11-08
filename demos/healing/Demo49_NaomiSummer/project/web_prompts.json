@@ -1,0 +1,17 @@
+{
+ "_doc": "Design OPTIONS for the user to pick (user 2026-11-09: the user picks every character design from an option sheet; nothing else is\ndrawn for these characters until the pick is relayed). Writes this demo's project/web_prompts.json option jobs (opt_<char>_<a|b|c>),\nrendered with python3 tools/openai/images.py <demo> <jobs…> --quality medium (cheap: options only; the picked design is redrawn at\nhigh quality as the base pose later). Same file in Demo46–50; the table for this folder is chosen by the folder name.\nRun: python3 scripts/design_options.py",
+ "opt_naomi_a": {
+  "ref": [
+   "ref_naomi_close",
+   "ref_naomi_sit"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nImage 1 and 2 are the user's REAL cat Naomi: draw exactly this cat — a long-haired blue-grey and white bicolour cat, white inverted-V blaze on the forehead, white ruff, chest, belly and mittens, darker grey plush tail, big round olive / yellow-green eyes, small pink nose, no collar, no clothes. A realistic cat on four legs (not anthropomorphic), high-finish healing visual-novel illustration, warm afternoon summer light.\n\nNaomi on a hot summer afternoon in a Japanese tatami room (she stays exactly herself — only the summer props around her differ).\n\nOption A (props set A): Naomi lying flat like a cat-loaf on a cool bamboo summer mat, a small white electric fan with a mesh guard and a little paper streamer behind her, a glass wind chime hanging at the window.\n\nWide 16:9 illustration of the whole little scene in a sunny Japanese tatami room (Naomi with ALL the props named above clearly visible around her). No text, no letters, no logo, no watermark, no UI."
+ },
+ "opt_naomi_b": {
+  "ref": [
+   "ref_naomi_close",
+   "ref_naomi_sit"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nImage 1 and 2 are the user's REAL cat Naomi: draw exactly this cat — a long-haired blue-grey and white bicolour cat, white inverted-V blaze on the forehead, white ruff, chest, belly and mittens, darker grey plush tail, big round olive / yellow-green eyes, small pink nose, no collar, no clothes. A realistic cat on four legs (not anthropomorphic), high-finish healing visual-novel illustration, warm afternoon summer light.\n\nNaomi on a hot summer afternoon in a Japanese tatami room (she stays exactly herself — only the summer props around her differ).\n\nOption B (props set B): Naomi sitting beside a towel-wrapped cold water bottle, her cheek close to it, a round paper uchiwa fan and a slice of watermelon on a plate nearby, a mosquito-coil pig on the windowsill.\n\nWide 16:9 illustration of the whole little scene in a sunny Japanese tatami room (Naomi with ALL the props named above clearly visible around her). No text, no letters, no logo, no watermark, no UI."
+ }
+}

@@ -1,0 +1,660 @@
+{
+ "src": "assets/art",
+ "hooks": {
+  "view": "PALACE.S.view",
+  "lv": "PALACE.S.lv",
+  "who": "PALACE.S.who"
+ },
+ "bgs": {
+  "pond": {
+   "src": "bg_pond",
+   "fire": [
+    0.5,
+    0.5
+   ]
+  },
+  "chamber": {
+   "src": "bg_chamber",
+   "fire": [
+    0.9,
+    0.62
+   ]
+  },
+  "terrace": {
+   "src": "bg_terrace",
+   "fire": [
+    0.74,
+    0.62
+   ]
+  },
+  "corridor": {
+   "src": "bg_corridor",
+   "fire": [
+    0.5,
+    0.5
+   ]
+  },
+  "dawn": {
+   "src": "bg_dawn",
+   "fire": [
+    0.5,
+    0.5
+   ]
+  }
+ },
+ "poses": {
+  "jin_base": {
+   "src": "jin_base",
+   "blink": "jin_base_blink",
+   "character": "jin",
+   "look": "crossover_palace",
+   "centre_mouth": [
+    1284,
+    452
+   ],
+   "radius_mouth": [
+    27,
+    14
+   ],
+   "regions_eyes": [
+    [
+     1197,
+     374,
+     42,
+     29
+    ],
+    [
+     1309,
+     330,
+     42,
+     29
+    ]
+   ],
+   "lp": {
+    "view": {
+     "rotate": "auto"
+    },
+    "teeth": {
+     "alpha": 0.75,
+     "band": 0.05,
+     "tongue_a": 0.5
+    }
+   }
+  },
+  "jin_ear": {
+   "src": "jin_ear",
+   "blink": "jin_ear_blink",
+   "character": "jin",
+   "look": "crossover_palace",
+   "centre_mouth": [
+    1255,
+    690
+   ],
+   "radius_mouth": [
+    40,
+    19
+   ],
+   "regions_eyes": [
+    [
+     1060,
+     575,
+     55,
+     38
+    ],
+    [
+     1260,
+     475,
+     55,
+     38
+    ]
+   ],
+   "lp": {
+    "view": {
+     "rotate": "auto"
+    },
+    "teeth": {
+     "alpha": 0.75,
+     "band": 0.05,
+     "tongue_a": 0.5
+    }
+   }
+  },
+  "shion_base": {
+   "src": "shion_base",
+   "blink": "shion_base_blink",
+   "matte": "green",
+   "character": "shion",
+   "look": "crossover_palace",
+   "centre_mouth": [
+    1253,
+    422
+   ],
+   "radius_mouth": [
+    27,
+    14
+   ],
+   "regions_eyes": [
+    [
+     1160,
+     342,
+     40,
+     29
+    ],
+    [
+     1252,
+     307,
+     40,
+     29
+    ]
+   ],
+   "lp": {
+    "view": {
+     "rotate": "auto"
+    },
+    "teeth": {
+     "alpha": 0.75,
+     "band": 0.05,
+     "tongue_a": 0.5
+    }
+   }
+  },
+  "shion_ear": {
+   "src": "shion_ear",
+   "blink": "shion_ear_blink",
+   "matte": "green",
+   "character": "shion",
+   "look": "crossover_palace",
+   "centre_mouth": [
+    838,
+    621
+   ],
+   "radius_mouth": [
+    38,
+    18
+   ],
+   "regions_eyes": [
+    [
+     688,
+     479,
+     55,
+     38
+    ],
+    [
+     855,
+     412,
+     55,
+     38
+    ]
+   ],
+   "lp": {
+    "view": {
+     "rotate": "auto"
+    },
+    "teeth": {
+     "alpha": 0.75,
+     "band": 0.05,
+     "tongue_a": 0.5
+    }
+   }
+  },
+  "saku_base": {
+   "src": "saku_base",
+   "blink": "saku_base_blink",
+   "matte": "green",
+   "character": "saku",
+   "look": "crossover_palace",
+   "centre_mouth": [
+    1278,
+    411
+   ],
+   "radius_mouth": [
+    27,
+    14
+   ],
+   "regions_eyes": [
+    [
+     1216,
+     327,
+     42,
+     29
+    ],
+    [
+     1322,
+     311,
+     42,
+     29
+    ]
+   ],
+   "lp": {
+    "view": {
+     "rotate": "auto"
+    },
+    "teeth": {
+     "alpha": 0.75,
+     "band": 0.05,
+     "tongue_a": 0.5
+    }
+   }
+  },
+  "saku_ear": {
+   "src": "saku_ear",
+   "blink": "saku_ear_blink",
+   "matte": "green",
+   "character": "saku",
+   "look": "crossover_palace",
+   "centre_mouth": [
+    1600,
+    645
+   ],
+   "radius_mouth": [
+    38,
+    18
+   ],
+   "regions_eyes": [
+    [
+     1545,
+     480,
+     55,
+     38
+    ],
+    [
+     1720,
+     510,
+     52,
+     38
+    ]
+   ],
+   "lp": {
+    "view": {
+     "rotate": "auto"
+    },
+    "teeth": {
+     "alpha": 0.75,
+     "band": 0.05,
+     "tongue_a": 0.5
+    }
+   }
+  }
+ },
+ "views": {
+  "pond_K": {
+   "still": "saku_pond",
+   "pose": "saku_base",
+   "bg": "pond",
+   "fire": null,
+   "who": "K"
+  },
+  "chamber_J": {
+   "still": "jin_chamber",
+   "pose": "jin_base",
+   "bg": "chamber",
+   "fire": [
+    0.9,
+    0.62
+   ],
+   "who": "J"
+  },
+  "chamber_J_ear": {
+   "still": "jin_warmer",
+   "pose": "jin_ear",
+   "bg": "chamber",
+   "fire": [
+    0.9,
+    0.62
+   ],
+   "who": "J"
+  },
+  "terrace_S": {
+   "still": "shion_terrace",
+   "pose": "shion_base",
+   "bg": "terrace",
+   "fire": [
+    0.74,
+    0.62
+   ],
+   "who": "S"
+  },
+  "terrace_S_ear": {
+   "still": "shion_whisper",
+   "pose": "shion_ear",
+   "bg": "terrace",
+   "fire": [
+    0.74,
+    0.62
+   ],
+   "who": "S"
+  },
+  "corridor_K": {
+   "still": "saku_corridor",
+   "pose": "saku_base",
+   "bg": "corridor",
+   "fire": null,
+   "who": "K"
+  },
+  "corridor_K_ear": {
+   "still": "saku_shh",
+   "pose": "saku_ear",
+   "bg": "corridor",
+   "fire": null,
+   "who": "K"
+  },
+  "end_J": {
+   "still": "jin_dawn",
+   "pose": "jin_ear",
+   "bg": "dawn",
+   "fire": null,
+   "who": "J"
+  },
+  "end_S": {
+   "still": "shion_dawn",
+   "pose": "shion_ear",
+   "bg": "dawn",
+   "fire": null,
+   "who": "S"
+  },
+  "end_K": {
+   "still": "saku_dawn",
+   "pose": "saku_ear",
+   "bg": "dawn",
+   "fire": null,
+   "who": "K"
+  },
+  "t_pond_J": {
+   "still": "t_pond_J",
+   "pose": "jin_base",
+   "bg": "pond",
+   "fire": null,
+   "who": "J",
+   "small": true
+  },
+  "t_pond_S": {
+   "still": "t_pond_S",
+   "pose": "shion_base",
+   "bg": "pond",
+   "fire": null,
+   "who": "S",
+   "small": true
+  },
+  "t_pond_Se": {
+   "still": "t_pond_Se",
+   "pose": "shion_ear",
+   "bg": "pond",
+   "fire": null,
+   "who": "S",
+   "small": true
+  },
+  "t_pond_Ke": {
+   "still": "t_pond_Ke",
+   "pose": "saku_ear",
+   "bg": "pond",
+   "fire": null,
+   "who": "K",
+   "small": true
+  },
+  "t_pond_3": {
+   "still": "t_pond_3",
+   "pose": "jin_base",
+   "bg": "pond",
+   "fire": null,
+   "who": "J",
+   "x": 0.5,
+   "y": 1.0,
+   "height": 0.92,
+   "more": [
+    {
+     "pose": "shion_base",
+     "x": 0.2,
+     "y": 1.0,
+     "height": 0.9,
+     "who": "S"
+    },
+    {
+     "pose": "saku_base",
+     "x": 0.8,
+     "y": 1.0,
+     "height": 0.9,
+     "who": "K"
+    }
+   ],
+   "small": true
+  },
+  "t_chamber_S": {
+   "still": "t_chamber_S",
+   "pose": "shion_base",
+   "bg": "chamber",
+   "fire": [
+    0.9,
+    0.62
+   ],
+   "who": "S",
+   "small": true
+  },
+  "t_chamber_Se": {
+   "still": "t_chamber_Se",
+   "pose": "shion_ear",
+   "bg": "chamber",
+   "fire": [
+    0.9,
+    0.62
+   ],
+   "who": "S",
+   "small": true
+  },
+  "t_chamber_K": {
+   "still": "t_chamber_K",
+   "pose": "saku_base",
+   "bg": "chamber",
+   "fire": [
+    0.9,
+    0.62
+   ],
+   "who": "K",
+   "small": true
+  },
+  "t_chamber_Ke": {
+   "still": "t_chamber_Ke",
+   "pose": "saku_ear",
+   "bg": "chamber",
+   "fire": [
+    0.9,
+    0.62
+   ],
+   "who": "K",
+   "small": true
+  },
+  "t_chamber_3": {
+   "still": "t_chamber_3",
+   "pose": "jin_base",
+   "bg": "chamber",
+   "fire": [
+    0.9,
+    0.62
+   ],
+   "who": "J",
+   "x": 0.5,
+   "y": 1.0,
+   "height": 0.92,
+   "more": [
+    {
+     "pose": "shion_base",
+     "x": 0.2,
+     "y": 1.0,
+     "height": 0.9,
+     "who": "S"
+    },
+    {
+     "pose": "saku_base",
+     "x": 0.8,
+     "y": 1.0,
+     "height": 0.9,
+     "who": "K"
+    }
+   ],
+   "small": true
+  },
+  "t_terrace_J": {
+   "still": "t_terrace_J",
+   "pose": "jin_base",
+   "bg": "terrace",
+   "fire": [
+    0.74,
+    0.62
+   ],
+   "who": "J",
+   "small": true
+  },
+  "t_terrace_K": {
+   "still": "t_terrace_K",
+   "pose": "saku_base",
+   "bg": "terrace",
+   "fire": [
+    0.74,
+    0.62
+   ],
+   "who": "K",
+   "small": true
+  },
+  "t_terrace_Ke": {
+   "still": "t_terrace_Ke",
+   "pose": "saku_ear",
+   "bg": "terrace",
+   "fire": [
+    0.74,
+    0.62
+   ],
+   "who": "K",
+   "small": true
+  },
+  "t_terrace_3": {
+   "still": "t_terrace_3",
+   "pose": "jin_base",
+   "bg": "terrace",
+   "fire": [
+    0.74,
+    0.62
+   ],
+   "who": "J",
+   "x": 0.5,
+   "y": 1.0,
+   "height": 0.92,
+   "more": [
+    {
+     "pose": "shion_base",
+     "x": 0.2,
+     "y": 1.0,
+     "height": 0.9,
+     "who": "S"
+    },
+    {
+     "pose": "saku_base",
+     "x": 0.8,
+     "y": 1.0,
+     "height": 0.9,
+     "who": "K"
+    }
+   ],
+   "small": true
+  },
+  "t_corridor_J": {
+   "still": "t_corridor_J",
+   "pose": "jin_base",
+   "bg": "corridor",
+   "fire": null,
+   "who": "J",
+   "small": true
+  },
+  "t_corridor_S": {
+   "still": "t_corridor_S",
+   "pose": "shion_base",
+   "bg": "corridor",
+   "fire": null,
+   "who": "S",
+   "small": true
+  },
+  "t_corridor_Se": {
+   "still": "t_corridor_Se",
+   "pose": "shion_ear",
+   "bg": "corridor",
+   "fire": null,
+   "who": "S",
+   "small": true
+  },
+  "t_corridor_3": {
+   "still": "t_corridor_3",
+   "pose": "jin_base",
+   "bg": "corridor",
+   "fire": null,
+   "who": "J",
+   "x": 0.5,
+   "y": 1.0,
+   "height": 0.92,
+   "more": [
+    {
+     "pose": "shion_base",
+     "x": 0.2,
+     "y": 1.0,
+     "height": 0.9,
+     "who": "S"
+    },
+    {
+     "pose": "saku_base",
+     "x": 0.8,
+     "y": 1.0,
+     "height": 0.9,
+     "who": "K"
+    }
+   ],
+   "small": true
+  },
+  "t_dawn_J": {
+   "still": "t_dawn_J",
+   "pose": "jin_base",
+   "bg": "dawn",
+   "fire": null,
+   "who": "J",
+   "small": true
+  },
+  "t_dawn_S": {
+   "still": "t_dawn_S",
+   "pose": "shion_base",
+   "bg": "dawn",
+   "fire": null,
+   "who": "S",
+   "small": true
+  },
+  "t_dawn_K": {
+   "still": "t_dawn_K",
+   "pose": "saku_base",
+   "bg": "dawn",
+   "fire": null,
+   "who": "K",
+   "small": true
+  },
+  "dawn_3": {
+   "still": "trio_dawn",
+   "pose": "jin_base",
+   "bg": "dawn",
+   "fire": null,
+   "who": "J",
+   "x": 0.5,
+   "y": 1.0,
+   "height": 0.92,
+   "more": [
+    {
+     "pose": "shion_base",
+     "x": 0.2,
+     "y": 1.0,
+     "height": 0.9,
+     "who": "S"
+    },
+    {
+     "pose": "saku_base",
+     "x": 0.8,
+     "y": 1.0,
+     "height": 0.9,
+     "who": "K"
+    }
+   ]
+  }
+ }
+}

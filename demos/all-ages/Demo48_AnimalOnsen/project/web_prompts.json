@@ -1,0 +1,87 @@
+{
+ "_doc": "Design OPTIONS for the user to pick (user 2026-11-09: the user picks every character design from an option sheet; nothing else is\ndrawn for these characters until the pick is relayed). Writes this demo's project/web_prompts.json option jobs (opt_<char>_<a|b|c>),\nrendered with python3 tools/openai/images.py <demo> <jobs…> --quality medium (cheap: options only; the picked design is redrawn at\nhigh quality as the base pose later). Same file in Demo46–50; the table for this folder is chosen by the folder name.\nRun: python3 scripts/design_options.py",
+ "opt_yuzujii_a": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nYuzu-jii: an old CAPYBARA who owns the little animal hot spring — slow, calm, kind grandpa, half-closed sleepy eyes (a NEW character).\n\nDesign A: a round capybara with a small yuzu citrus on his head and a folded towel, half-closed contented eyes.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_yuzujii_b": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nYuzu-jii: an old CAPYBARA who owns the little animal hot spring — slow, calm, kind grandpa, half-closed sleepy eyes (a NEW character).\n\nDesign B: a capybara in a short indigo happi coat (onsen staff), holding a wooden bucket, a tiny grey moustache-like fur tuft.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_yuzujii_c": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nYuzu-jii: an old CAPYBARA who owns the little animal hot spring — slow, calm, kind grandpa, half-closed sleepy eyes (a NEW character).\n\nDesign C: a capybara with a woven straw hat and a tenugui towel around his neck, holding a long wooden ladle.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_penguin_a": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nA penguin guest who wants the water 'almost cold'.\n\nDesign A: a little Adelie penguin with a blue floatie ring.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_penguin_b": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nA penguin guest who wants the water 'almost cold'.\n\nDesign B: a fluffy grey emperor-penguin chick with a tiny towel on its head.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_penguin_c": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nA penguin guest who wants the water 'almost cold'.\n\nDesign C: a rockhopper penguin with yellow crest feathers and a small bucket.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_monkeys_a": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nA snow-monkey family guest: a parent who wants it HOT and a little child who wants it lukewarm (both together in one picture).\n\nDesign A: Japanese macaques with red faces and fluffy grey-brown fur, the baby clinging to the parent.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_monkeys_b": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nA snow-monkey family guest: a parent who wants it HOT and a little child who wants it lukewarm (both together in one picture).\n\nDesign B: the same monkeys each with a folded tenugui towel on the head.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_monkeys_c": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nA snow-monkey family guest: a parent who wants it HOT and a little child who wants it lukewarm (both together in one picture).\n\nDesign C: rounder chibi monkeys with autumn maple leaves in their fur.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_fox_a": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nA fox guest, a bit vain about its tail.\n\nDesign A: a red fox with a red maple leaf on its head.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_fox_b": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nA fox guest, a bit vain about its tail.\n\nDesign B: a fox wearing a little light-blue yukata.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_fox_c": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nA fox guest, a bit vain about its tail.\n\nDesign C: a fluffy fox with a white-tipped tail curled around it and a small bell collar.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ }
+}

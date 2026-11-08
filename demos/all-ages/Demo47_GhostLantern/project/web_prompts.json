@@ -1,0 +1,66 @@
+{
+ "_doc": "Design OPTIONS for the user to pick (user 2026-11-09: the user picks every character design from an option sheet; nothing else is\ndrawn for these characters until the pick is relayed). Writes this demo's project/web_prompts.json option jobs (opt_<char>_<a|b|c>),\nrendered with python3 tools/openai/images.py <demo> <jobs…> --quality medium (cheap: options only; the picked design is redrawn at\nhigh quality as the base pose later). Same file in Demo46–50; the table for this folder is chosen by the folder name.\nRun: python3 scripts/design_options.py",
+ "opt_bonchan_a": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nBon-chan: a talking paper-lantern yokai (chochin-obake) the player carries by its handle — a NEW mascot: cheerful, brave, a little boastful; the candle inside glows WARM ORANGE (it is the warm light of the game).\n\nDesign A: a classic red-and-white paper lantern with one big friendly eye and a long playful tongue sticking out, tiny stubby arms, a black wooden handle on top.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_bonchan_b": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nBon-chan: a talking paper-lantern yokai (chochin-obake) the player carries by its handle — a NEW mascot: cheerful, brave, a little boastful; the candle inside glows WARM ORANGE (it is the warm light of the game).\n\nDesign B: a round orange paper lantern with two big sparkly eyes and pink blush cheeks, a little candle flame on top like a hair tuft, a tiny smile.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_bonchan_c": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nBon-chan: a talking paper-lantern yokai (chochin-obake) the player carries by its handle — a NEW mascot: cheerful, brave, a little boastful; the candle inside glows WARM ORANGE (it is the warm light of the game).\n\nDesign C: a yellow lantern with a cat-like face (small ears at the top rim), little paws, a red ribbon tied on the handle.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_ghosts_a": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nThe small ghosts of the spooky house: THREE little mischievous ghosts side by side as a group — all cute, round, giggling pranksters, cold-looking (pale blue-white glow) but adorable.\n\nDesign A: three classic white sheet ghosts, round like mochi, dot eyes and little smiles, one wears the white triangle headband, one has a tiny blush.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_ghosts_b": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nThe small ghosts of the spooky house: THREE little mischievous ghosts side by side as a group — all cute, round, giggling pranksters, cold-looking (pale blue-white glow) but adorable.\n\nDesign B: three pastel wisp ghosts (pale blue, lavender, mint) with soft-serve-like curling tails, one with little cat ears.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_ghosts_c": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nThe small ghosts of the spooky house: THREE little mischievous ghosts side by side as a group — all cute, round, giggling pranksters, cold-looking (pale blue-white glow) but adorable.\n\nDesign C: a yokai trio: a one-eyed hopping paper umbrella ghost (karakasa), a round white ghost, and a small cold blue will-o'-wisp flame with a face.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_yurari_a": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nYurari: a shy little ghost GIRL who just wants a friend (a child, cute, floating, translucent at the bottom, no feet; her touch is cool — a snow-spirit-like special setting). Gentle and lonely, not scary.\n\nDesign A: a pale blue-white summer kimono, long straight black hair with blunt bangs, a white triangle headband, big sad-sweet eyes.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_yurari_b": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nYurari: a shy little ghost GIRL who just wants a friend (a child, cute, floating, translucent at the bottom, no feet; her touch is cool — a snow-spirit-like special setting). Gentle and lonely, not scary.\n\nDesign B: a pale lavender yukata with a goldfish pattern, a short white bob, translucent sleeves that fade into mist.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_yurari_c": {
+  "ref": [
+   "style_kohaku",
+   "style_snowfox"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nYurari: a shy little ghost GIRL who just wants a friend (a child, cute, floating, translucent at the bottom, no feet; her touch is cool — a snow-spirit-like special setting). Gentle and lonely, not scary.\n\nDesign C: a pastel summer dress with a straw hat and a ribbon, long white hair, her legs fading into a soft mist.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ }
+}

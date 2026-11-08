@@ -1,0 +1,39 @@
+{
+ "_doc": "Design OPTIONS for the user to pick (user 2026-11-09: the user picks every character design from an option sheet; nothing else is\ndrawn for these characters until the pick is relayed). Writes this demo's project/web_prompts.json option jobs (opt_<char>_<a|b|c>),\nrendered with python3 tools/openai/images.py <demo> <jobs…> --quality medium (cheap: options only; the picked design is redrawn at\nhigh quality as the base pose later). Same file in Demo46–50; the table for this folder is chosen by the folder name.\nRun: python3 scripts/design_options.py",
+ "opt_grandma_a": {
+  "ref": [
+   "ref_gm_call"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference.\n\nArt style EXACTLY like image 1: soft cel, hand-drawn feel, flat colour with one soft-edged shadow, warm brown lineart, about 5 heads tall, round and cute (not chibi). Keep the FACE, hair, glasses (if any) and body shape exactly as in image 1 — the same person; only the clothes change to summer clothes of the Japanese countryside today.\n\nGrandma Hana (the same grandma as image 1: same face, glasses if she wears them, hair bun, small round figure, warm smile).\n\nOutfit A: a light beige short-sleeve cardigan over a floral blouse, a pale apron, a wide straw sun hat.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_grandma_b": {
+  "ref": [
+   "ref_gm_call"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference.\n\nArt style EXACTLY like image 1: soft cel, hand-drawn feel, flat colour with one soft-edged shadow, warm brown lineart, about 5 heads tall, round and cute (not chibi). Keep the FACE, hair, glasses (if any) and body shape exactly as in image 1 — the same person; only the clothes change to summer clothes of the Japanese countryside today.\n\nGrandma Hana (the same grandma as image 1: same face, glasses if she wears them, hair bun, small round figure, warm smile).\n\nOutfit B: an indigo cotton samue-style top and loose trousers, a striped apron, a tenugui scarf on her head.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_grandma_c": {
+  "ref": [
+   "ref_gm_call"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference.\n\nArt style EXACTLY like image 1: soft cel, hand-drawn feel, flat colour with one soft-edged shadow, warm brown lineart, about 5 heads tall, round and cute (not chibi). Keep the FACE, hair, glasses (if any) and body shape exactly as in image 1 — the same person; only the clothes change to summer clothes of the Japanese countryside today.\n\nGrandma Hana (the same grandma as image 1: same face, glasses if she wears them, hair bun, small round figure, warm smile).\n\nOutfit C: a soft pastel short-sleeve housedress with small flowers, a white kappogi-style apron, a paper uchiwa fan in hand.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_grandpa_a": {
+  "ref": [
+   "ref_gp_snow"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference.\n\nArt style EXACTLY like image 1: soft cel, hand-drawn feel, flat colour with one soft-edged shadow, warm brown lineart, about 5 heads tall, round and cute (not chibi). Keep the FACE, hair, glasses (if any) and body shape exactly as in image 1 — the same person; only the clothes change to summer clothes of the Japanese countryside today.\n\nGrandpa Gen (the same grandpa as image 1: same face, hair, eyebrows, sturdy build, big laugh).\n\nOutfit A: a navy jinbei (short summer kimono top and shorts) and a straw hat, wooden geta.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_grandpa_b": {
+  "ref": [
+   "ref_gp_snow"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference.\n\nArt style EXACTLY like image 1: soft cel, hand-drawn feel, flat colour with one soft-edged shadow, warm brown lineart, about 5 heads tall, round and cute (not chibi). Keep the FACE, hair, glasses (if any) and body shape exactly as in image 1 — the same person; only the clothes change to summer clothes of the Japanese countryside today.\n\nGrandpa Gen (the same grandpa as image 1: same face, hair, eyebrows, sturdy build, big laugh).\n\nOutfit B: a white undershirt, khaki work trousers, a towel around his neck, a straw hat, rubber boots.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "opt_grandpa_c": {
+  "ref": [
+   "ref_gp_snow"
+  ],
+  "prompt": "Image 1 is the STYLE and CHARACTER reference.\n\nArt style EXACTLY like image 1: soft cel, hand-drawn feel, flat colour with one soft-edged shadow, warm brown lineart, about 5 heads tall, round and cute (not chibi). Keep the FACE, hair, glasses (if any) and body shape exactly as in image 1 — the same person; only the clothes change to summer clothes of the Japanese countryside today.\n\nGrandpa Gen (the same grandpa as image 1: same face, hair, eyebrows, sturdy build, big laugh).\n\nOutfit C: an indigo samue work suit, a woven straw hat on his back, holding a big striped watermelon.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ }
+}

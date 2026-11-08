@@ -256,23 +256,38 @@
   "model": "gpt-image-2",
   "size": "2560x1440",
   "quality": "high",
-  "seconds": 77,
+  "seconds": 67,
   "usage": {
-   "input_tokens": 3434,
+   "input_tokens": 3469,
    "input_tokens_details": {
     "image_tokens": 2960,
-    "text_tokens": 474
+    "text_tokens": 509
    },
    "output_tokens": 7370,
    "output_tokens_details": {
     "image_tokens": 7370,
     "text_tokens": 0
    },
-   "total_tokens": 10804
+   "total_tokens": 10839
   },
   "out": [
    2560,
    1440
+  ],
+  "prior_usage": [
+   {
+    "input_tokens": 3434,
+    "input_tokens_details": {
+     "image_tokens": 2960,
+     "text_tokens": 474
+    },
+    "output_tokens": 7370,
+    "output_tokens_details": {
+     "image_tokens": 7370,
+     "text_tokens": 0
+    },
+    "total_tokens": 10804
+   }
   ]
  },
  "saku_ear": {
@@ -315,6 +330,190 @@
     "text_tokens": 0
    },
    "total_tokens": 9009
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "jin_base_blink": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "medium",
+  "seconds": 37,
+  "usage": {
+   "input_tokens": 1604,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 96
+   },
+   "output_tokens": 1843,
+   "output_tokens_details": {
+    "image_tokens": 1843,
+    "text_tokens": 0
+   },
+   "total_tokens": 3447
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "shion_base_blink": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "medium",
+  "seconds": 37,
+  "usage": {
+   "input_tokens": 1604,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 96
+   },
+   "output_tokens": 1843,
+   "output_tokens_details": {
+    "image_tokens": 1843,
+    "text_tokens": 0
+   },
+   "total_tokens": 3447
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "saku_base_blink": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "medium",
+  "seconds": 39,
+  "usage": {
+   "input_tokens": 1604,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 96
+   },
+   "output_tokens": 1843,
+   "output_tokens_details": {
+    "image_tokens": 1843,
+    "text_tokens": 0
+   },
+   "total_tokens": 3447
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "jin_ear_blink": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "medium",
+  "seconds": 39,
+  "usage": {
+   "input_tokens": 1604,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 96
+   },
+   "output_tokens": 1843,
+   "output_tokens_details": {
+    "image_tokens": 1843,
+    "text_tokens": 0
+   },
+   "total_tokens": 3447
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "shion_ear_blink": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "medium",
+  "seconds": 41,
+  "usage": {
+   "input_tokens": 1604,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 96
+   },
+   "output_tokens": 1843,
+   "output_tokens_details": {
+    "image_tokens": 1843,
+    "text_tokens": 0
+   },
+   "total_tokens": 3447
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "saku_ear_blink": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "medium",
+  "seconds": 41,
+  "usage": {
+   "input_tokens": 1604,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 96
+   },
+   "output_tokens": 1843,
+   "output_tokens_details": {
+    "image_tokens": 1843,
+    "text_tokens": 0
+   },
+   "total_tokens": 3447
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "cover_art": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 88,
+  "usage": {
+   "input_tokens": 4924,
+   "input_tokens_details": {
+    "image_tokens": 4524,
+    "text_tokens": 400
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 12294
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "shion_base": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 97,
+  "usage": {
+   "input_tokens": 1617,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 109
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8987
   },
   "out": [
    2560,

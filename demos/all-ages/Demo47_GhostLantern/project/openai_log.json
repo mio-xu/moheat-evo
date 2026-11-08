@@ -1,0 +1,209 @@
+{
+ "opt_bonchan_a": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 61,
+  "usage": {
+   "input_tokens": 2730,
+   "input_tokens_details": {
+    "image_tokens": 2468,
+    "text_tokens": 262
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 10100
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "opt_bonchan_b": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 80,
+  "usage": {
+   "input_tokens": 2729,
+   "input_tokens_details": {
+    "image_tokens": 2468,
+    "text_tokens": 261
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 10099
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "opt_bonchan_c": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 63,
+  "usage": {
+   "input_tokens": 2725,
+   "input_tokens_details": {
+    "image_tokens": 2468,
+    "text_tokens": 257
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 10095
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "opt_ghosts_a": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 66,
+  "usage": {
+   "input_tokens": 2715,
+   "input_tokens_details": {
+    "image_tokens": 2468,
+    "text_tokens": 247
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 10085
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "opt_ghosts_b": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 69,
+  "usage": {
+   "input_tokens": 2712,
+   "input_tokens_details": {
+    "image_tokens": 2468,
+    "text_tokens": 244
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 10082
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "opt_ghosts_c": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 70,
+  "usage": {
+   "input_tokens": 2721,
+   "input_tokens_details": {
+    "image_tokens": 2468,
+    "text_tokens": 253
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 10091
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "opt_yurari_a": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 58,
+  "usage": {
+   "input_tokens": 2720,
+   "input_tokens_details": {
+    "image_tokens": 2468,
+    "text_tokens": 252
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 10090
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "opt_yurari_b": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 65,
+  "usage": {
+   "input_tokens": 2715,
+   "input_tokens_details": {
+    "image_tokens": 2468,
+    "text_tokens": 247
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 10085
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "opt_yurari_c": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 70,
+  "usage": {
+   "input_tokens": 2716,
+   "input_tokens_details": {
+    "image_tokens": 2468,
+    "text_tokens": 248
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 10086
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ }
+}

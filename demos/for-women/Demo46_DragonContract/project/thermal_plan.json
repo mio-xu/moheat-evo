@@ -1,0 +1,29 @@
+{
+ "_doc": "Demo46 thermal plan (firmware DUAL; DEMO_DESIGN_GUIDE §3) — format as Demo44/45 (tools/thermal/plan_sim.py). az: 0 front, -90 LEFT ear, +90 RIGHT ear. Special setting (told in g07, visible: the wing's inner membrane glows faint orange): a dragon's wing holds fire inside, so his closed wing is WARM at your left ear. Magic smoke (Hinata's entrance) and the glowing book = no temperature.",
+ "voice": {"formula": "(0.1 + 0.8 × loudness) × distance", "distance": {"left_ear": 1.0, "right_ear": 1.0, "near": 0.6, "left": 0.28, "right": 0.6, "front": 0.28, "far_right": 0.1}, "az": {"left_ear": -90, "right_ear": 90, "near": 0, "front": 0, "left": -60, "right": 55, "far_right": 70}, "front_split": 0.5},
+ "smoothing": {"warm_rise": 0.4, "warm_fall": 0.5, "cool_rise": 0.2, "cool_fall": 0.35},
+ "events": {
+  "@study":       {"why": "the study at night: fireplace on the RIGHT, frosted tall window on the LEFT", "set": {"fire": ["warm", 70, 0.25], "window": ["cool", -70, 0.18]}},
+  "@smoke":       {"why": "Hinata appears in a puff of black smoke: no temperature", "set": {}},
+  "@tea":         {"why": "the cup of hot black tea held up in front of your face (steam)", "set": {"tea": ["warm", 0, 0.4]}},
+  "@tea_off":     {"why": "you've drunk; the cup goes down", "set": {"tea": ["warm", 0, 0]}},
+  "@valley":      {"why": "the cliff edge of the dragon valley at dusk: hard wind from the LEFT (north peaks)", "set": {"fire": ["warm", 70, 0], "window": ["cool", -70, 0], "wind": ["cool", -80, 0.5]}},
+  "@takeoff_gust":{"why": "he spreads his wings and leaps: the downdraft of the wings hits you = the COLD PEAK, both ears", "pulse": ["cool", 0, 0.9, 0.15, 1.6, 1.2], "secs": 2.2},
+  "@breath":      {"why": "his dragon breath lights the stone beacon AHEAD of you (real fire, a few metres away) = the WARM PEAK, then the beacon burns on", "pulse": ["warm", 0, 0.82, 0.4, 1.4, 2.0], "set": {"beacon": ["warm", 0, 0.28]}, "secs": 3.0},
+  "@wing":        {"why": "silent: his wing closes around you from the LEFT — the wind is cut and the wing's inner fire warms your left ear (told in g07): left ear cold → warm in < 1 s", "set": {"wind": ["cool", -80, 0.04], "wing": ["warm", -85, 0.45]}, "secs": 2.4},
+  "@wing_hold":   {"why": "stay inside the wing (hold)", "set": {}, "during_hold": true},
+  "@lake":        {"why": "the frozen lake: cold ice under you and the still night air, both ears", "set": {"beacon": ["warm", 0, 0], "wing": ["warm", -85, 0], "wind": ["cool", -80, 0], "ice": ["cool", 0, 0.3]}},
+  "@song_far":    {"why": "his song begins far away across the ice on the RIGHT (his voice: barely warm at this distance)", "set": {}},
+  "@song_near":   {"why": "he has walked up to you, on your right", "set": {}},
+  "@cloak":       {"why": "half his cloak around you: the ice-cold air is cut, the cloth warms both sides a little", "set": {"ice": ["cool", 0, 0.12], "cloak": ["warm", 0, 0.15]}},
+  "@night":       {"why": "the study late at night: the fire burned low on the RIGHT, the frosted window on the LEFT", "set": {"ice": ["cool", 0, 0], "cloak": ["warm", 0, 0], "fire": ["warm", 70, 0.15], "window": ["cool", -70, 0.2]}},
+  "@sunrise":     {"why": "dawn: the sun through the frosted window (left, front-left), embers on the right, cold morning air", "set": {"window": ["cool", -70, 0.1], "sun": ["warm", -30, 0.16], "fire": ["warm", 70, 0.08]}}
+ },
+ "places": {"study": ["@study"], "valley": ["@valley", "@breath"], "lake": ["@lake"], "dawn": ["@sunrise"]},
+ "showcase": {
+  "fast_switch": "valley: @wing (left ear: cliff wind .5 cool → wing .45 warm, silent, < 1 s) — the special setting is told in g07 and visible (orange glow inside the wing)",
+  "peak": "valley: @takeoff_gust .9 cool both ears; @breath .82 warm ahead",
+  "direction": "valley: wind from the LEFT; study: window LEFT cool / fire RIGHT warm; lake: his song walks in from the far right",
+  "same_ear_dual": "study: h06 at the right ear by the fire vs the window cool on the left; night: window cool + voice; dawn: sun + morning chill"
+ }
+}

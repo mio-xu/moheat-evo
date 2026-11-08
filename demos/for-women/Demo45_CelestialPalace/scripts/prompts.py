@@ -6,7 +6,7 @@ Characters = special versions of three for-women leads (face, hair colour, perso
 changed — docs/proposals/2026-11-08_crossover.md F1-East: an UNNAMED fictional East, 蒼月国・白露宮; no real dynasty markers).
 References COPIED into assets/art/ (never linked): ref_jin (Demo21 jin_gaze = lock_face) + ref_jin_close (jin_sheet), ref_shion (Demo22
 shion_door) + ref_shion_close (ref_shion = lock_face), ref_saku (Demo30 saku_ref = lock_face) + ref_saku_close (crop of ref_saku).
-Step 1: two design options each (design_<c>_a / _b → project/designs_contact.jpg) → pick → <c>_base.png. Picks 2026-11-09 (prepro; team picks per the user's taste): Jin A (gold-dragon black robe, topknot + gold crown, long red hair), Shion B (lavender star-chart robe, half-up bun + silver hairstick, glasses = his anchor), Saku A (navy shadow-guard outfit, high ponytail, fox mask on the side of his head). Step 2: close poses reference
+Step 1: two design options each (design_<c>_a / _b → project/designs_contact.jpg) → pick → <c>_base.png. Picks = USER DECISION 2026-11-09 (overrides the team's first picks Shion B / Saku A, whose poses / blinks were discarded → assets/art/discarded/): Jin A (gold-dragon black robe, topknot + gold crown), Shion A WITHOUT glasses (user: 古代人不会戴眼镜 — shion_base = masked edit of design_shion_a removing the glasses and their chain), Saku B (black hooded cloak, low tie, fox mask at the belt). Anachronistic accessories (glasses, sunglasses, earbuds…) are dropped in historical / fantasy settings unless the story explains them (guide §11.1). Step 2: close poses reference
 the pick; blinks = masked edits (face_points.json); mouths = LivePortrait sets (no talk variants).
 Screens (character cards): Jin (dark, wine-red hair, black robe) light grey #c8c8c8; Shion (platinum hair, white robe) and Saku
 chroma GREEN #00B140 ("matte": "green"). Style = for-women style card (style_3 soft cel, otome card finish, idol-handsome men).
@@ -27,7 +27,7 @@ CHAR = {
     'jin': ("Jin: the exact young man from images 1-2 — vivid wine-red / crimson hair, sharp golden eyes, a cocky confident face with a "
             "dangerous half-smile, fair skin. Identity: the crown prince of the realm, feared as a tyrant — domineering, blunt, protective."),
     'shion': ("Shion: the exact young man from images 1-2 — long platinum-blonde hair, calm grey-violet eyes, a small BEAUTY MARK under his "
-              "RIGHT eye, an elegant gentle face with a mysterious smile, fair skin. Identity: the realm's imperial astrologer and strategist "
+              "RIGHT eye, an elegant gentle face with a mysterious smile, fair skin. NO glasses, NO monocle (an ancient setting). Identity: the realm's imperial astrologer and strategist "
               "— polite, soft-spoken, dangerous under the courtesy."),
     'saku': ("Saku: the exact young man from images 1-2 — soft fluffy chestnut-brown hair, bright honey-brown eyes, a small MOLE under his "
              "LEFT eye, a playful teasing grin, fair skin. Identity: the crown prince's shadow guard — teasing in private, deadly serious "
@@ -113,8 +113,9 @@ POSES = {
                 "cheek, face in three-quarter view, a possessive, softened half-smile, golden eyes on the viewer; one hand low near the "
                 "bottom edge holds a small round bronze hand-warmer (a little warm glow) near the viewer's cheek but BELOW his own chin. "
                 "Nothing across his face. Mouth CLOSED.", None),
-    'shion_ear': ('shion', "An intimate close-up: he leans in very near the viewer at the LEFT side of the picture, toward the viewer's left "
-                  "ear, face in three-quarter view, half-lidded calm eyes looking sideways at the viewer, a soft dangerous smile; the "
+    'shion_ear': ('shion', "An intimate close-up: he leans in very near the viewer from the viewer's LEFT: his face is in the LEFT THIRD of the "
+                  "picture (left of centre), his head and shoulders tilted toward the picture's centre as he brings his lips to the "
+                  "viewer's left ear, face in three-quarter view turned toward the right of the picture, half-lidded calm eyes looking sideways at the viewer, a soft dangerous smile; the "
                   "feather fan held low near the bottom edge. Nothing across his face, the beauty mark under his right eye visible. "
                   "Mouth CLOSED.", "Lighting on him: cool silver moonlight from the LEFT, a little warm amber from the RIGHT."),
     'saku_ear': ('saku', "An intimate close-up: he stands very near the viewer at the RIGHT side of the picture, leaning toward the viewer's "
@@ -150,6 +151,11 @@ out["cover_art"] = {"ref": ["jin_base", "shion_base", "saku_base"], "prompt": "\
     "the right with his fox mask; a small cute white MOON RABBIT (round, fluffy, friendly, glowing faintly) sits on Shion's shoulder. The "
     "LEFT third of the picture is calm dark night sky and snowy roofs (space for a title), no figures there. Faces large and clear, full "
     "heads inside the frame.", END])}
+# user 2026-11-09: Shion A without the glasses (and their chain) = his base pose; masked so everything else stays pixel-identical
+out["shion_base"] = {"ref": "design_shion_a", "mask": "1220,255,100,60;1300,300,34,60;1325,370,34,60;1350,440,34,60;1380,500,34,40",
+                     "prompt": EDIT.format(what="remove his glasses and the thin chain hanging from them completely: his bare eyes, eyelids, lashes, brows, "
+                                                  "nose and the skin around them exactly as they are, the beauty mark kept, no frame marks, no nose-pad dents, "
+                                                  "the hair and robe where the chain was simply continue")}
 FP = os.path.join(ROOT, "project/face_points.json")
 if os.path.exists(FP):
     for v, f in json.load(open(FP)).items():
