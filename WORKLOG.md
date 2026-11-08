@@ -7,6 +7,23 @@
 
 ---
 
+## 2026-11-08 · ミント「おみみ専門店」接管 Demo14_MintStream（原 Demo37）· 后台 agent（统筹会话审查）
+
+**做了什么**（接 moheat-evo-55 的交接）
+- 出图（OpenAI gpt-image-2，品红幕）：补出 `mint_goodnight`，量 7 个姿势的脸写 `project/face_points.json`，14 张遮罩差分（张嘴 / 闭眼）；7 个姿势是同一个人、earL / earR 在对的耳朵边、没有多余道具（`assets/poses_preview.jpg`）。
+- `project/stage.json`（`"matte": "magenta"`、`regions_eyes`、`centre_mouth`）→ `build_stage.py`：0 截断、贴片全过、0 品红残留；2 倍看过嘴和发丝边缘。
+- 页面修正：`main.js` 缺 `thermal()`（页面开始后就卡住）、`finish()` 清 `S.fade`（封面不黑）、分层后不再整页漂移、薄荷喷雾紧接着暖手（同一只耳朵热→冷）、右耳画面弹幕移到左边、观看人数 / 位置标签三语（`T()` + `make_l10n.py`）、`project/qa.json`（弹幕是观众自己的语言）。
+- 合并：旧 Demo14 备份 `~/Desktop/MoHeat Evo 备份/for-men/Demo14_MintStream_20261108-1509/`；Demo37 → `demos/for-men/Demo14_MintStream`；封面、三语缩略图、nav.js 标题（?v=41）、官网菜单、credits、README、`.gitignore`。提交 7128905（有问题，见下）+ 修复 f7822a3 + 本条。
+- `tools/openai/images.py`：写用量记录前重新读文件（并行出图不再互相覆盖）。
+
+**测试**：`check_demo.py --full`（两条分支）0 FAIL；`check_mouth.js` 两条分支 lip-sync OK；`check_motion.js` OK；`check_mobile.html?only=Demo14` 7 种尺寸 0 问题；`?sub=ja / zh` 标签和字幕都对；结束回到本 Demo 封面「↺ Play again」。
+
+**花费**：OpenAI 本 Demo 共 22 张 2560×1440 high（约 $4.4，`project/openai_log.json`），Seedance 0。
+
+**问题**（§11.1 已写）：临时索引提交时 HEAD 变了，7128905 把 ad48144（手机界面大改）撤回并被推上线 → f7822a3 修复；页面缺函数；并行出图日志覆盖；弹幕挡脸。
+
+**下一步**：`tools/eleven/cast.json` 里 cocoa / hinata_s / luna 的 `compare` 试听文件还指向旧 Demo14 的 `media/voice/c01…l11.m4a`（已不在仓库，在备份里），只是试听参考，需要时改路径；`tools/cleanup/audit.py` 的 `Demo14_MintStream/project/box_*.jpg` 条目已无匹配，可删。
+
 ## 2026-11-08 · 制作流程 v2 + 一个 QA 入口 tools/qa/check_demo.py · 后台 agent（统筹会话安排）
 
 **做了什么**

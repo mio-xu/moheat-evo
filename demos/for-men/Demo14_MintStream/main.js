@@ -190,8 +190,10 @@
       await go(null, earView(B), () => {});
       S.hand = 1; SND.fx.massage(B);
       await say('m11', EAR(B));
-      S.hand = 0;
-      setTimeout(() => { if (my === run) { S.mist = 1; SND.fx.mist(); setTimeout(() => (S.mist = 0), 2400); } }, 200);   // "…しゅっ" — her warm hands just left ear B: hot → cold on the same ear in ~1 s
+      // her warm hands leave ear B and the cool mist goes on at once, a quiet beat before she speaks again:
+      // hot → cold on the same ear within ~2 s (DUAL showcase); then her whisper warms that ear again over the mist
+      S.hand = 0; S.mist = 1; SND.fx.mist(); setTimeout(() => { if (my === run) S.mist = 0; }, 3000);
+      await sleep(1.8); alive(my);
       await say('m12', EAR(B));
       alive(my); await sleep(.4);
 

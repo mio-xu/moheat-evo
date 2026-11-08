@@ -650,6 +650,10 @@ main.layout
 - **长按按钮挡住了要看的东西**（Demo19：「見つめる」按钮正好盖在画面中央的蓝色火焰上）→ 要盯着画面某处的互动，按钮放到旁边（`.act.side`）；每个互动都截一张图看按钮挡没挡住主角 / 道具。
 - **`?auto=1` 测试卡在第一句**（自动开始时 AudioContext 还是 suspended，台词的 `onended` 永远不来）→ 测试标签页里先真实点击一次「Start」（computer 点击，不是 JS `click()`），之后同一个标签页里的 `?auto` 都能自动开始。
 - **共用文档被写成 0 字节**（2026-11-08 14:52，嘴部 QA 会话：`open(p,'w').write(f(open(p).read()))`——Python 先执行 `open(p,'w')` 把文件清空，再去读，读到空串；`f` 里的断言失败后文件就停在 0 字节，别的会话未提交的整段改写也一起没了，靠会话记录里的命令和 scratchpad 文件重建）→ 改文件一律**先读进变量、处理完、检查长度再写**：`s=open(p).read(); t=f(s); assert len(t)>len(s)*.9; open(p,'w').write(t)`；改共用文档前先 `cp` 一份到 scratchpad。〔G7〕
+- **临时索引提交时 HEAD 已经变了，提交把别人的整个提交撤销了**（Demo14 ミント合并 7128905：`git read-tree HEAD` 之后、`git commit` 之前，另一个会话提交了手机界面大改 ad48144；用临时索引 `git commit` 时父提交是新的 HEAD，树却是旧的 → ad48144 的 guide.js / series.css / nav.js / check_mobile.html 全部被撤回，还被定时推送推上线了；统筹会话发现后用 3 路合并修好 f7822a3）→ 临时索引提交一律用 plumbing：记下 `BASE=$(git rev-parse HEAD)` → `git read-tree $BASE` → 只放自己的路径 → `git write-tree` → `git commit-tree <tree> -p $BASE` → `git update-ref refs/heads/main <new> $BASE`（HEAD 变了就失败，从新的 HEAD 重做）；提交前 `git diff $BASE <tree> --stat` 只能出现自己的路径。HEAD 只往前走，不要 `git reset` 自己的提交（统筹会话的推送可能已经带走了）。
+- **页面提交时缺了一个函数，打开后只停在第一帧**（Demo37 ミント：`main.js` 调用 `thermal()` 却没写这个函数，开始后每帧报错，画面停在封面构图、冷热表全 0；上一个会话提交前没开过页面）→ 页面代码提交前至少开一次、按开始、看控制台；`python3 tools/qa/check_demo.py <demo>` 的 G6 runtime 会报出来〔check_demo: runtime〕。
+- **两个 `tools/openai/images.py` 同时出同一个 Demo 的图，用量记录互相覆盖**（张嘴、闭眼两批并行，`project/openai_log.json` 丢了 7 条）→ 已修：每张图写记录前重新读一次文件。
+- **直播弹幕栏挡住特写的脸**（ミント「右耳」画面：她的脸在画面右边，右上角的弹幕盖住眼睛和梵天）→ 每个画面截一张图，看覆盖层（弹幕、礼物卡片、按钮）挡没挡住脸和道具；人物在右边的画面弹幕换到左边（`.chat.left`）〔CHECKLIST〕。
 
 ## 12. 资源清理与文件结构
 

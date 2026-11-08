@@ -7,7 +7,7 @@
 ## Automatic (check_demo.py)
 
 <!-- qa:auto -->
-Last run: `python3 tools/qa/check_demo.py demos/for-men/Demo14_MintStream` · 2026-11-08 15:14 · **PASS** (0 fail, 2 warn)
+Last run: `python3 tools/qa/check_demo.py demos/for-men/Demo14_MintStream --full` · 2026-11-08 15:24 · **PASS** (0 fail, 3 warn)
 
 | gate | check | result | summary |
 |---|---|---|---|
@@ -26,8 +26,13 @@ Last run: `python3 tools/qa/check_demo.py demos/for-men/Demo14_MintStream` · 20
 | G6 | runtime | PASS | 0 errors, 0 failed requests in 137 s (?auto=1, zh) |
 | G6 | l10n-live | PASS | no "[MoHeatSub] no zh" during the playthrough |
 | G6 | end-live | PASS | back on its own cover with Play again after 137 s |
-| G6 | thermal | WARN | no fast hot↔cold switch on one ear (≤ 3 s) — 1182 commands · peak heat 88% · peak cool 56% · simultaneous yes · L-heat/R-cool split yes · fast switch: none |
+| G6 | thermal | WARN | no fast hot↔cold switch on one ear (≤ 3 s) — 1132 commands · peak heat 88% · peak cool 56% · simultaneous yes · L-heat/R-cool split yes · fast switch: none |
+| G6 | alt runtime | PASS | 0 errors, 0 failed requests in 142 s (?auto=1, zh) |
+| G6 | alt l10n-live | PASS | no "[MoHeatSub] no zh" during the playthrough |
+| G6 | alt end-live | PASS | back on its own cover with Play again after 142 s |
+| G6 | alt thermal | WARN | no fast hot↔cold switch on one ear (≤ 3 s) — 1197 commands · peak heat 88% · peak cool 60% · simultaneous yes · L-heat/R-cool split yes · fast switch: none |
 | G6 | mobile | PASS | 7 sizes: one screen, ≥ 44 px, guide on screen |
+| G6 | mouth | PASS | mouth opens only while talking |
 | G7 | release | PASS | cover, thumbs, menu, credits |
 | G8 | hygiene | PASS | assets ignored, no big files, budget logged, checklist present |
 <!-- /qa:auto -->
