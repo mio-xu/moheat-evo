@@ -7,6 +7,12 @@
 
 ---
 
+## 2026-11-09 · 三语配音上线 第 1 阶段：只渲染 en / zh（agent `dub-rollout`，统筹分派）
+- **做了什么**：按 scratchpad `dub/ROLLOUT.md` 的顺序给 22 个常规 Demo + familycall kit + 信长 talk kit + staging Demo46/47/48/50 渲染了逐句 en / zh 配音（ElevenLabs，和 ja 同一个 voice id / eleven_v4 / stability .4 / similarity .8 / seed 7 / 情绪标签，名字保持日式）。每个 Demo 的配音脚本都能 `--lang en|zh [--count]`（互动：`scripts/voice.py`；familycall：`Demo15_FamilyCall/scripts/voice.py`；talk kit：`Demo23_NobunagaTalk/scripts/voice.py`；电影 01/02/05–09：`--lang ja|en|zh`，ja = 从电影缓存导出、不花额度）→ `media/voice/<lang>/<id>.m4a` + `index.json`。`tools/eleven/dub.py`：64 kb/s、保留线守卫（`MOHEAT_EL_RESERVE` 12k）、`encode()` 峰值 > −1 dBFS 自动限幅重编码、`export_ja()` / `FILM_AF`、`PRON` 发音表（Ieyasu → en "Ee-yeh-yah-soo" / zh "依叶亚斯"，STT 验证）。
+- **状态**：页面都还没接（仍播 ja）。< 2 MB / 语言的都进了 git；talk kit（~7.5 MB / 语言）和 Demo46（~4.6 MB）在 `.gitignore`，留在本机。ElevenLabs 余额 26,598（2026-12-08 重置）。
+- **下一步**：UI v2 发布后按 ROLLOUT §4 接 `MoHeatVoice`（声音语言设置，默认跟字幕）；电影按 §6a 用"每句取三语最长"的共用时间线重混 `mix.<lang>.m4a`；超 2 MB 的配音上线前要决定是否入库。需要重新卡时间的句子：ROLLOUT §6c。
+- **问题**：额度接口滞后（按它判断会超支）；64k AAC 在吹气句上过冲、只降增益会让句子变小 → 教训写进 DEMO_DESIGN_GUIDE §11.1 G2，并已做进 dub.py。信长两人的 zh 带日语口音（Scribe 偶尔识别成 jpn / wuu），换 stability 或加 Mandarin 标签实测无明显改善。
+
 ## 2026-11-09 · Demo47–50 美术合成 G4（agent `compose`，统筹分派）
 - **做了什么**：四个新 Demo 的分层合成全部完成并提交：Demo47 鬼屋提灯（4361eeea、2aea8c84、a2eb5aa0）、Demo48 动物温泉（52310622）、Demo49 ナオミの夏（d5970d9b、4b4b6bca）、Demo50 西瓜（1047f604、4b4b6bca）。每个 Demo：`project/face_points.json`（网格量眼 / 嘴）→ `scripts/variant_prompts.py` 遮罩合成眨眼（`images.py --composite`）→ `scripts/make_stage.py` → build_stage → lp_mouths（Q 版 / 动物 / 胡子一律 `warp: false`）→ check_cut_body / check_patches / check_art / style_card 全 0 FAIL；联系图 `project/stills_contact.jpg`（副本在协调者 scratchpad `prepro/PICKS/`）。工具：`check_art.py` 新增 full-edge（d9a4de32、16a4b67b），`build_stage.py` 新增 `"shadow"`（接触影 + AO，烘进每画面背景）和 `"no_green"`（00594932）；§11.1 加两条。Demo44 / Demo46 full-edge 只改摆位（124df251、a3bc5528）。Demo48 猴子台词按 stability 0.3 重配（m01–m04）。
 - **状态**：G4 完成，页面（UI v2，G5）还没做：Demo47 / 48 是游戏（精灵由页面移动），Demo49 / 50 是故事。花费 OpenAI：47 ≈ $6.6、48 ≈ $5.7、49 ≈ $5.7、50 ≈ $3.7（各 ≤ $15）。
