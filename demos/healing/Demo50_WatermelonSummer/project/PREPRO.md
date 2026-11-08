@@ -12,5 +12,23 @@ Pre-production by `prepro`, 2026-11-09 — **design stage only**. Same faces as 
 - Face points + blinks (grandma's eyes are drawn closed in a smile; grandpa needs a blink), mouth sets (grandpa's mouth sits under his moustache: `warp: false` likely), stage, watermelon props, page (UI v2).
 After the picks: script (G1), lines (hana / gen voices, unchanged), thermal plan, plates (bus stop, river, yard + veranda, rice field at night), poses, build stage.
 
+## G4 composition (agent `compose`, 2026-11-09) — DONE
+- Face points (`project/face_points.json`); grandpa's masked blinks (base / melon, `scripts/variant_prompts.py`). Grandma's eyes are drawn
+  closed in her smile (her look since Demo15) → no blink by design (qa.json note).
+- Mouth sets: grandma = LivePortrait, small openings, rotate auto (her night copy: warp:false, LP opened only the middle); grandpa =
+  warp:false on the short line UNDER his moustache + `hide` = the moustache polygon (the moustache stays over the opening) + `search` so the
+  moustache outline is not taken for the mouth line (first melon set opened under the moustache).
+- Night (part 5): `scripts/night_grade.py` moon-graded copies of both poses (own mouth sets); the stream plate gets a soft depth of field
+  (style card: line density 0.22 vs the family anchor 0.09 → ok).
+- `scripts/make_stage.py` → 13 views per the shot list (bus stop near / left ear, stream front / melon from the right / duo, yard front /
+  blindfold duo, veranda near / uchiwa at your left ear / duo, rice fields at night ×3). Grandpa with the melon is a full figure scaled to
+  the same face size as his knees-up base (eye distance), feet below the frame.
+- Checks: check_cut_body 0 · check_patches 0 · check_art 0 FAIL (WARN: grandpa_melon "outfit colour" = his bare legs vs the shorts, same
+  look) · style_card ok.
+- Contact sheet: `project/stills_contact.jpg`.
+
+## Left (G5+)
+- Page (UI v2), watermelon split / fireflies / mosquito net / fan in code, check_mouth / check_motion / plan_sim on the page.
+
 ## Spend (2026-11-09)
-OpenAI ≈ $3.3 / $15 · ElevenLabs ≈ 0.8k chars.
+OpenAI ≈ $3.8 / $15 (G4: 2 masked blinks ≈ $0.45) · ElevenLabs ≈ 0.8k chars.

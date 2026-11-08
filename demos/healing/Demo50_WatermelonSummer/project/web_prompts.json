@@ -67,5 +67,17 @@
  "grandpa_melon": {
   "ref": "grandpa_base",
   "prompt": "Image 1 is the CHARACTER and STYLE reference: the same character, same design, same art style.\n\nArt style EXACTLY like image 1: soft cel, hand-drawn feel, flat colour with one soft-edged shadow, warm brown lineart, about 5 heads tall, round and cute (not chibi). Same person, face, hair, glasses (if any) and outfit as image 1.\n\nGrandpa proudly holding up a big striped watermelon in both hands at chest height, water dripping, a proud grin with mouth closed, standing at the RIGHT side of the picture.\n\nPlain flat CHROMA-KEY GREEN background (#00B140), one even colour, no shadow, nothing green on the character. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "grandpa_base_blink": {
+  "ref": "grandpa_base",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, straw hat, eyebrows, moustache, clothes, colours, lighting and background — and change ONLY BOTH of grandpa's eyes: closed in a natural soft blink (a short curved closed-lid line on each eye, no pupil visible), same skin, his bushy white eyebrows unchanged. Do not move, zoom or crop the picture.",
+  "mask": "1203,296,34,32;1319,294,32,32",
+  "composite": true
+ },
+ "grandpa_melon_blink": {
+  "ref": "grandpa_melon",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, straw hat, eyebrows, moustache, clothes, colours, lighting and background — and change ONLY BOTH of grandpa's eyes: closed in a natural soft blink (a short curved closed-lid line on each eye, no pupil visible), same skin, his bushy white eyebrows unchanged. Do not move, zoom or crop the picture.",
+  "mask": "1735,240,26,24;1822,238,26,24",
+  "composite": true
  }
 }

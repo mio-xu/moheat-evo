@@ -1,0 +1,6 @@
+{
+ "notes": {
+  "eyes": "grandma's eyes are drawn closed in her smile (her look since Demo15 / 16 / 29) — no blink patch by design; grandpa blinks.",
+  "mouths": "grandpa's mouth is a short line under his moustache → warp:false on that line + hide = the moustache polygon (the moustache stays over the opening); grandma = LivePortrait set with small openings (rotate auto)."
+ }
+}

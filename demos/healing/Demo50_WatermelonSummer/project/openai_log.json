@@ -320,5 +320,51 @@
    2560,
    1440
   ]
+ },
+ "grandpa_base_blink": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 65,
+  "usage": {
+   "input_tokens": 1600,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 92
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8970
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "grandpa_melon_blink": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 67,
+  "usage": {
+   "input_tokens": 1600,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 92
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8970
+  },
+  "out": [
+   2560,
+   1440
+  ]
  }
 }
