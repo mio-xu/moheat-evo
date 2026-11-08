@@ -203,3 +203,41 @@ JOBS3.update({
     'nagisa_popsicle_talk': (EDIT.format(what=TALK), 'nagisa_popsicle'), 'nagisa_popsicle_blink': (EDIT.format(what=BLINK), 'nagisa_popsicle'),
     'nagisa_fan_talk': (EDIT.format(what=TALK), 'nagisa_fan'), 'nagisa_fan_blink': (EDIT.format(what=BLINK), 'nagisa_fan'),
 })
+
+
+# ================================================================ painted firework sprites for the fireworks middle layer (user 2026-11-08:
+# 「更加的华丽，壮观」). Text-to-image (no upload). Pure black background → drawn additively (black = invisible) by main.js.
+FW_LOOK = ("A single large Japanese summer firework (hanabi) bursting in the night sky, seen from far away, perfectly centred, the whole burst "
+           "inside the frame with a black margin. Anime film background-art style (like a high-quality anime movie), luminous glowing "
+           "sparks with fine bright trails, rich saturated colours, a soft glow around the burst. PURE BLACK background (#000000) "
+           "everywhere outside the burst: no sky colour, no stars, no smoke, no clouds, no ground, no buildings, no people, no text.")
+FIREWORKS = {
+    'fw_kiku_gold':     "A chrysanthemum (kiku) shell: hundreds of long golden trails radiating evenly from the centre, the tips turning red-orange.",
+    'fw_botan_pink':    "A peony (botan) shell: a dense sphere of bright pink and magenta stars with a white-hot inner core, short trails.",
+    'fw_yanagi_gold':   "A willow (yanagi) shell: long drooping golden-amber trails falling like a weeping willow, glittering at the ends.",
+    'fw_yae_blue':      "A double-layered (yae-zaki) shell: an outer sphere of electric blue stars and an inner sphere of white-green stars.",
+    'fw_senrin':        "A thousand-ring (senrin) shell: many small twinkling bursts in gold, silver, pink and green scattered in a round cluster.",
+    'fw_ring_purple':   "A ring (wa) shell: a crisp ring of violet and lilac stars with a small bright cyan core in the middle.",
+    'fw_heart_pink':    "A heart-shaped firework: bright pink-red stars forming a clear heart outline, a few gold sparkles inside.",
+    'fw_kamuro_silver': "A kamuro shell: a huge dense crown of silver-white glittering trails, very bright, crackling sparkles.",
+}
+
+
+def fireworks(names):
+    print('balance:', m.unwrap(m.call('GET', '/credits/balance')), flush=True)
+    import time
+    jobs = []
+    for name in names:
+        dst = os.path.join(m.OUT, name + '.png')
+        if os.path.exists(dst): print('EXISTS — rename the old file first:', name); continue
+        body = {'model': 'gpt-image-2', 'mode': 'text-to-image', 'prompt': FW_LOOK + '\n\n' + FIREWORKS[name],
+                'parameters': {'resolution': '1K', 'aspect_ratio': '1:1'}, 'max_cost_credits': 40}
+        idem = f'moheat-d31-{name}-v1'.replace('_', '-')
+        g = m.unwrap(m.call('POST', '/images', body, {'Idempotency-Key': idem}))
+        print(f'[{name}] generation {g["id"]} cost {g.get("credits")}', flush=True); jobs.append((g['id'], dst, name))
+    for gid, dst, name in jobs: m.wait_save(gid, dst, name)
+    print('balance:', m.unwrap(m.call('GET', '/credits/balance')), flush=True)
+
+
+if __name__ == '__main__' and sys.argv[1:2] == ['fireworks']:
+    fireworks(sys.argv[2:] or list(FIREWORKS))

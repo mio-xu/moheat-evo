@@ -88,19 +88,19 @@
    ]
   },
   "whisper": {
-   "src": "nagisa_whisper",
-   "talk": "nagisa_whisper_talk",
+   "src": "nagisa_whisper2_flat",
+   "talk": "nagisa_whisper2_talk_flat",
    "centre_mouth": [
-    2080,
-    712
+    1640,
+    852
    ],
    "radius_mouth": [
-    70,
-    45
+    60,
+    40
    ]
   },
   "shoulder": {
-   "src": "nagisa_shoulder"
+   "src": "nagisa_shoulder2_flat"
   }
  },
  "views": {

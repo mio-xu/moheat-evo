@@ -53,12 +53,18 @@ def clean(path):
     edge = (a < .97)[..., None]
     rgb = np.where(edge & (w[..., None] > .08), fill, rgb)
     a = np.where((a < .97) & (w < .08), a * .3, a)   # a lone edge pixel with no solid figure nearby: mostly background → fade it
-    # light specks along thin strands: pixels next to transparency that are clearly lighter than the figure around them are mixed
-    # with the studio grey (anti-aliasing) → take the figure's colour and fade them (v2 left a dotted light outline on hair)
-    band = grow(a < .3, 7) & (a > 0)
-    flum = fill.mean(2)
-    light = band & (rgb.mean(2) > flum + 18) & (w > .08)
-    rgb = np.where(light[..., None], fill, rgb); a = np.where(light, a * .55, a)
+    # MATTING near the edge (v3, user: 头发抠图部分还是有些没处理好的 — v2's thresholds left a light fuzz on every strand and a grey
+    # wedge inside a loop of hair): the picture was drawn on the known studio grey BG, so each edge pixel is C = α·F + (1−α)·BG with
+    # F = the figure colour next to it. Rebuild C, project it onto the BG→F line → the true α; colour = F. A pixel that is really
+    # background (≈ BG) gets α ≈ 0 by itself, wherever it is near the edge.
+    BG = np.array([200., 200., 200.])
+    band = grow(a < .5, 25) & (a > 0) & (w > .08)
+    C = a[..., None] * im[..., :3] + (1 - a[..., None]) * BG          # the original pixel over the studio grey
+    v = fill - BG; d2 = (v * v).sum(2)
+    alpha = np.clip(((C - BG) * v).sum(2) / np.maximum(d2, 1), 0, 1)
+    ok = band & (d2 > 45 ** 2)   # only where the figure colour is clearly unlike the grey (light skin / pale props keep their alpha)
+    a = np.where(ok, np.minimum(a, np.clip((alpha - .08) / .84, 0, 1)), a)
+    rgb = np.where(ok[..., None], fill, rgb)
     out = np.dstack([np.clip(rgb, 0, 255), np.clip(a * 255, 0, 255)]).astype(np.uint8)
     Image.fromarray(out).save(path, quality=88, method=6)
     return int(((im[..., 3] > 0) & (a == 0)).sum())
@@ -68,15 +74,15 @@ src = open(os.path.join(ROOT, 'media', 'layers.js')).read()
 D = json.loads(src[src.index('= {') + 2:src.rindex('}') + 1])
 done = set()
 for stem, v in D['views'].items():
-    c = v['char']; p = os.path.join(ROOT, 'media', c['src'])
+    c = v['char']; p = os.path.join(ROOT, 'media', c['src'].split('?')[0])   # build_stage adds ?v=<hash> to the paths
     if p not in done: print('cleaned', c['src'], clean(p), 'px'); done.add(p)
 # flat stills, same maths as build_stage.py (fire null → centred zoom)
 FW, FH = 1920, 1080
 for stem, v in D['views'].items():
     z = v['bg'].get('zoom') or 1; ox = oy = (1 - z) / 2
-    bg = Image.open(os.path.join(ROOT, 'media', v['bg']['src'])).convert('RGB')
+    bg = Image.open(os.path.join(ROOT, 'media', v['bg']['src'].split('?')[0])).convert('RGB')
     flat = bg.resize((round(FW * z), round(FH * z)), Image.LANCZOS).crop((round(-ox * FW), round(-oy * FH), round(-ox * FW) + FW, round(-oy * FH) + FH)).convert('RGBA')
-    c = v['char']; ch = Image.open(os.path.join(ROOT, 'media', c['src'])).convert('RGBA')
+    c = v['char']; ch = Image.open(os.path.join(ROOT, 'media', c['src'].split('?')[0])).convert('RGBA')
     hpx = c['height'] * FH; wpx = hpx * c['w'] / c['h']; ch = ch.resize((round(wpx), round(hpx)), Image.LANCZOS)
     flat.paste(ch, (round(c['x'] * FW - wpx / 2), round(c['y'] * FH - hpx)), ch)
     flat.convert('RGB').save(os.path.join(ART, stem + '.jpg'), quality=88)

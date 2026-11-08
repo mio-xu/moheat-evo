@@ -115,14 +115,39 @@
   }
   // far fireworks over the town on your right: a bloom of light now, the boom a little later
   let fwTimer = 0, fwCol = '255,196,90';
-  // shared/fireworks.js: shells rise from the horizon and burst, clipped to the part of the sky that is empty in each view
-  // (she sits left in 'fireworks', right in 'laugh', leans on your left shoulder in 'shoulder'; 'whisper' is too close: light only)
-  const SKY = {   // measured on the flat stills (px): clear of her hair, the water tank, the door and the railing
-    fireworks: [[990, 0, 1560, 530], [1560, 0, 1920, 95]], laugh: [[440, 0, 870, 520], [200, 0, 440, 150]], shoulder: [[1200, 0, 1780, 560]] };
+  // fireworks = a MIDDLE LAYER (user 2026-11-08): painted bursts (media/art/fw_*.jpg, Seedance) + code sparks from shared/fireworks.js,
+  // shown only in the open sky of the rooftop plate (media/art/sky_roof.png, scripts/make_sky_mask.py) with Nagisa (and you, in the
+  // close-ups) cut out — built per view from the layer data (background zoom, character placement), so she always stays on top.
+  const FW_SPRITES = ['fw_kiku_gold', 'fw_botan_pink', 'fw_yanagi_gold', 'fw_yae_blue', 'fw_senrin', 'fw_ring_purple', 'fw_heart_pink', 'fw_kamuro_silver'];
   const FWS = window.MoHeatFireworks.create();
-  FWS.onBurst = (b) => { S.flash = Math.max(S.flash, .7 * b.big); fwCol = b.col.join(','); const my = run;   // the light at once, the boom ~0.6 s later (far away)
+  for (const n of FW_SPRITES) { const im = new Image(); im.onload = () => FWS.sprites.push(im); im.src = `media/art/${n}.jpg?v=1`; }
+  const FW_VIEWS = ['fireworks', 'whisper', 'shoulder', 'laugh'], HORIZON = 342 / 720;
+  const skyImg = new Image(); skyImg.src = 'media/art/sky_roof.png?v=2';
+  const FWM = {};   // view → { mask: canvas, area: { pick, bottom } }
+  function fwMask(view) {
+    if (FWM[view] !== undefined) return FWM[view];
+    const L = window.MOHEAT_LAYERS?.views?.['nagisa_' + view]; if (!L || !skyImg.complete || !skyImg.naturalWidth) return null;
+    const z = L.bg.zoom || 1, ox = (1 - z) / 2 * W, oy = (1 - z) / 2 * H;
+    const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
+    g.drawImage(skyImg, ox, oy, W * z, H * z);
+    FWM[view] = null;   // until the character image is in
+    const ch = new Image(); ch.onload = () => {
+      const C = L.char, hp = C.height * H, wp = hp * C.w / C.h;
+      g.globalCompositeOperation = 'destination-out'; g.shadowColor = '#000'; g.shadowBlur = 14;   // a soft margin round her
+      g.drawImage(ch, C.x * W - wp / 2, C.y * H - hp, wp, hp);
+      const d = g.getImageData(0, 0, W, H).data, pts = [];   // burst points: well inside the open sky, upper part
+      for (let y = Math.round(H * .16); y < H * .42; y += 24)   // bursts open in the middle band of the sky (not cut by the top edge)
+         for (let x = 30; x < W - 30; x += 24) if (d[(y * W + x) * 4 + 3] > 230) pts.push([x, y]);
+      const bottom = oy + HORIZON * H * z;
+      FWM[view] = { mask: c, area: pts.length ? { pick: () => { const p = pts[Math.random() * pts.length | 0]; return [p[0] + (Math.random() - .5) * 20, Math.min(p[1], bottom - 140)]; }, bottom } : null };
+    };
+    ch.src = 'media/' + L.char.src;
+    return null;
+  }
+  FWS.onBurst = (b) => { S.flash = Math.max(S.flash, .8 * b.big); fwCol = b.col.join(','); fwAt = [b.x, b.y]; const my = run;   // the light at once, the boom ~0.6 s later (far away)
     setTimeout(() => { if (my === run) SND.fx.firework(.9 + Math.random() * .4, .6 + .4 * b.big); }, 550 + Math.random() * 250); };
-  const salvo = (n, big) => FWS.salvo(SKY[S.view] || SKY.fireworks, n, big);
+  let fwAt = [W * .7, H * .25];
+  const salvo = (n, big) => { const m = fwMask(FW_VIEWS.includes(S.view) ? S.view : 'fireworks'); if (m?.area) FWS.salvo(m.area, n, big); };
   function fireworks(on) {
     clearTimeout(fwTimer); if (!on) return;
     const my = run;
@@ -336,10 +361,10 @@
       if (S.drop && S.drop.k < 1) { const [x, y] = at(BALL[S.drop.i]); ctx.fillStyle = `rgba(255,170,80,${1 - S.drop.k})`; ctx.beginPath(); ctx.arc(x, y + 260 * S.drop.k * S.drop.k, 7, 0, 7); ctx.fill(); }
     }
     if (S.flash > 0 && ['fireworks', 'whisper', 'shoulder', 'laugh'].includes(S.view)) {   // the burst lights up the night (colour of the last shell)
-      const a = Math.min(1, S.flash) * .28, g = ctx.createRadialGradient(W * .75, H * .25, 40, W * .75, H * .25, 1100);
+      const a = Math.min(1, S.flash) * .28, g = ctx.createRadialGradient(fwAt[0], fwAt[1], 40, fwAt[0], fwAt[1], 1300);   // lit from the last burst
       g.addColorStop(0, `rgba(${fwCol},${a})`); g.addColorStop(1, `rgba(${fwCol},0)`); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
     }
-    FWS.update(dt); FWS.draw(ctx, SKY[S.view] || null);
+    FWS.update(dt); if (FW_VIEWS.includes(S.view)) FWS.drawLayer(ctx, fwMask(S.view)?.mask);
     if (S.fade) { S.fadeA = Math.min(1, (S.fadeA || 0) + dt / 3); ctx.fillStyle = `rgba(8,12,30,${S.fadeA})`; ctx.fillRect(0, 0, W, H); }
   }
 
@@ -418,6 +443,7 @@
   }
   function start() {
     SND.init(); SND.loadVoices(Object.keys(LINES));
+    FW_VIEWS.forEach(fwMask);   // build the fireworks masks early (needs the layer data + images)
     S = fresh(); S.started = true; viewA = viewB = 'arrive'; mix = 1; cur = null; pending = null; iceK = fanK = nearK = leanK = 0; ballK = [0, 0]; $('cleared').hidden = true;
     $('intro').classList.add('hidden'); window.NAGISA.done = false;
     story();

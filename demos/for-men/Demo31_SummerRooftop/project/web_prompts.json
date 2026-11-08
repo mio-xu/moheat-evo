@@ -80,5 +80,55 @@
    "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her lips: parted a little more, as in the middle of a whispered word. Do not move, zoom or crop the picture.",
    "ref": "nagisa_whisper"
   }
+ },
+ "nagisa_whisper2": {
+  "ref": [
+   "nagisa_ref",
+   "nagisa_sparkler"
+  ],
+  "prompt": "Image 1 (wide shot) and image 2 (close-up) show the SAME character in the exact art style to match. Keep EXACTLY the same face (eye shape, amber eyes, brows, nose, mouth, jaw), the same chestnut red-brown hair colour and texture, the high ponytail with the plain orange hair tie, the slightly tanned skin, the same navy-blue yukata with small white-and-orange firework patterns and the orange obi; the same flat cel shading with one shadow tone and the same thin coloured lineart. Do NOT render more realistically: no soft painterly shading, no glossy or lighter hair, no older-looking face.\n\nNagisa, 20, the viewer's tomboyish childhood friend: chestnut-brown hair in a high ponytail tied with a plain orange hair tie, short side-swept bangs, a few loose strands, bright amber eyes, slightly tanned skin, a sporty slim build; a navy-blue yukata with small white-and-orange firework patterns and a simple orange half-width obi.\n\nAn intimate close-up event illustration: she leans in from the LEFT to whisper into the viewer's left ear, her face large and in three-quarter profile facing RIGHT, eyes half closed, deeply blushing, lips slightly apart; one hand resting on the viewer's shoulder at the lower edge.\n\nPlain flat light-grey studio background (#c8c8c8), completely empty: no floor line, no shadow on the background, no scenery, no props except what she holds. Lighting as on a summer-night rooftop: cool blue night light from the upper RIGHT, a soft warm light from the LEFT (an open door), soft contrast.\n\nWide 16:9 illustration. No text, no letters, no logo, no watermark, no UI.\n\nAvoid: chibi, childish face, realistic photo, 3D render, glossy, bloom, extra fingers, deformed hands, text, a second person."
+ },
+ "nagisa_shoulder2": {
+  "ref": [
+   "nagisa_ref",
+   "nagisa_sparkler"
+  ],
+  "prompt": "Image 1 (wide shot) and image 2 (close-up) show the SAME character in the exact art style to match. Keep EXACTLY the same face (eye shape, amber eyes, brows, nose, mouth, jaw), the same chestnut red-brown hair colour and texture, the high ponytail with the plain orange hair tie, the slightly tanned skin, the same navy-blue yukata with small white-and-orange firework patterns and the orange obi; the same flat cel shading with one shadow tone and the same thin coloured lineart. Do NOT render more realistically: no soft painterly shading, no glossy or lighter hair, no older-looking face.\n\nNagisa, 20, the viewer's tomboyish childhood friend: chestnut-brown hair in a high ponytail tied with a plain orange hair tie, short side-swept bangs, a few loose strands, bright amber eyes, slightly tanned skin, a sporty slim build; a navy-blue yukata with small white-and-orange firework patterns and a simple orange half-width obi.\n\nAn intimate close-up event illustration seen from very close: she leans her forehead against the viewer's LEFT shoulder (the dark T-shirt shoulder at the lower left): we see the top of her head, her ponytail and orange hair tie, her red ear peeking out, her hand gripping the viewer's sleeve.\n\nPlain flat light-grey studio background (#c8c8c8), completely empty: no floor line, no shadow on the background, no scenery, no props except what she holds. Lighting as on a summer-night rooftop: cool blue night light from the upper RIGHT, a soft warm light from the LEFT (an open door), soft contrast.\n\nWide 16:9 illustration. No text, no letters, no logo, no watermark, no UI.\n\nAvoid: chibi, childish face, realistic photo, 3D render, glossy, bloom, extra fingers, deformed hands, text."
+ },
+ "nagisa_whisper2_talk": {
+  "ref": "nagisa_whisper2",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her lips: parted a little more, as in the middle of a whispered word. Do not move, zoom or crop the picture."
+ },
+ "fw_kiku_gold": {
+  "ref": null,
+  "prompt": "A single large Japanese summer firework (hanabi) bursting in the night sky, seen from far away, perfectly centred, the whole burst inside the frame with a black margin. Anime film background-art style (like a high-quality anime movie), luminous glowing sparks with fine bright trails, rich saturated colours, a soft glow around the burst. PURE BLACK background (#000000) everywhere outside the burst: no sky colour, no stars, no smoke, no clouds, no ground, no buildings, no people, no text.\n\nA chrysanthemum (kiku) shell: hundreds of long golden trails radiating evenly from the centre, the tips turning red-orange."
+ },
+ "fw_botan_pink": {
+  "ref": null,
+  "prompt": "A single large Japanese summer firework (hanabi) bursting in the night sky, seen from far away, perfectly centred, the whole burst inside the frame with a black margin. Anime film background-art style (like a high-quality anime movie), luminous glowing sparks with fine bright trails, rich saturated colours, a soft glow around the burst. PURE BLACK background (#000000) everywhere outside the burst: no sky colour, no stars, no smoke, no clouds, no ground, no buildings, no people, no text.\n\nA peony (botan) shell: a dense sphere of bright pink and magenta stars with a white-hot inner core, short trails."
+ },
+ "fw_yanagi_gold": {
+  "ref": null,
+  "prompt": "A single large Japanese summer firework (hanabi) bursting in the night sky, seen from far away, perfectly centred, the whole burst inside the frame with a black margin. Anime film background-art style (like a high-quality anime movie), luminous glowing sparks with fine bright trails, rich saturated colours, a soft glow around the burst. PURE BLACK background (#000000) everywhere outside the burst: no sky colour, no stars, no smoke, no clouds, no ground, no buildings, no people, no text.\n\nA willow (yanagi) shell: long drooping golden-amber trails falling like a weeping willow, glittering at the ends."
+ },
+ "fw_yae_blue": {
+  "ref": null,
+  "prompt": "A single large Japanese summer firework (hanabi) bursting in the night sky, seen from far away, perfectly centred, the whole burst inside the frame with a black margin. Anime film background-art style (like a high-quality anime movie), luminous glowing sparks with fine bright trails, rich saturated colours, a soft glow around the burst. PURE BLACK background (#000000) everywhere outside the burst: no sky colour, no stars, no smoke, no clouds, no ground, no buildings, no people, no text.\n\nA double-layered (yae-zaki) shell: an outer sphere of electric blue stars and an inner sphere of white-green stars."
+ },
+ "fw_senrin": {
+  "ref": null,
+  "prompt": "A single large Japanese summer firework (hanabi) bursting in the night sky, seen from far away, perfectly centred, the whole burst inside the frame with a black margin. Anime film background-art style (like a high-quality anime movie), luminous glowing sparks with fine bright trails, rich saturated colours, a soft glow around the burst. PURE BLACK background (#000000) everywhere outside the burst: no sky colour, no stars, no smoke, no clouds, no ground, no buildings, no people, no text.\n\nA thousand-ring (senrin) shell: many small twinkling bursts in gold, silver, pink and green scattered in a round cluster."
+ },
+ "fw_ring_purple": {
+  "ref": null,
+  "prompt": "A single large Japanese summer firework (hanabi) bursting in the night sky, seen from far away, perfectly centred, the whole burst inside the frame with a black margin. Anime film background-art style (like a high-quality anime movie), luminous glowing sparks with fine bright trails, rich saturated colours, a soft glow around the burst. PURE BLACK background (#000000) everywhere outside the burst: no sky colour, no stars, no smoke, no clouds, no ground, no buildings, no people, no text.\n\nA ring (wa) shell: a crisp ring of violet and lilac stars with a small bright cyan core in the middle."
+ },
+ "fw_heart_pink": {
+  "ref": null,
+  "prompt": "A single large Japanese summer firework (hanabi) bursting in the night sky, seen from far away, perfectly centred, the whole burst inside the frame with a black margin. Anime film background-art style (like a high-quality anime movie), luminous glowing sparks with fine bright trails, rich saturated colours, a soft glow around the burst. PURE BLACK background (#000000) everywhere outside the burst: no sky colour, no stars, no smoke, no clouds, no ground, no buildings, no people, no text.\n\nA heart-shaped firework: bright pink-red stars forming a clear heart outline, a few gold sparkles inside."
+ },
+ "fw_kamuro_silver": {
+  "ref": null,
+  "prompt": "A single large Japanese summer firework (hanabi) bursting in the night sky, seen from far away, perfectly centred, the whole burst inside the frame with a black margin. Anime film background-art style (like a high-quality anime movie), luminous glowing sparks with fine bright trails, rich saturated colours, a soft glow around the burst. PURE BLACK background (#000000) everywhere outside the burst: no sky colour, no stars, no smoke, no clouds, no ground, no buildings, no people, no text.\n\nA kamuro shell: a huge dense crown of silver-white glittering trails, very bright, crackling sparkles."
  }
 }
