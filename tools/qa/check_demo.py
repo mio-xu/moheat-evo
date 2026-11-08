@@ -24,6 +24,7 @@ What is checked (id → lesson / rule):
   files      every local file the page / its code names exists (static 404 scan)
   cache      ?v= of shared files = the highest on the site and newer than the file's last change; same for the demo's own files
              (§11.1 mouth that did not move: shared/layers.js changed without a bump; media/layers.js rebuilt without a bump)
+  l10n-flash (G6, browser) no Japanese painted before the chosen language: tools/qa/l10n_flash.js, en / zh, desktop / phone, demo switch
   l10n       l10n.js with ja / en / zh; static scan (tools/l10n/check_missing.js) = WARN; runtime '[MoHeatSub] no zh' = FAIL; ko = INFO
   voice      shared/voice.js loaded (answers by voice, judged)
   end        story ends on its OWN cover with Play again (static + runtime), never navigates to another demo
@@ -466,6 +467,19 @@ if not A.quick and 'shared/shell.js' in read(os.path.join(D, 'index.html')):
         row('G6', 'shell', 'FAIL' if bad else 'PASS', f'{len(bad)} shell problem(s)' if bad else f'pure run ends in {r.get("secs")} s, no mic, ←/→ gated, pause, seek {"ok" if sk else "n/a (no chapters)"}', bad + r.get('errors', []))
     except Exception: row('G6', 'shell', 'WARN', 'check_shell.js gave no result', [sh.stderr.strip()[-300:]])
 elif not A.quick: row('G6', 'shell', 'WARN', 'page does not load demos/shared/shell.js yet (pure / interactive mode, pause, seek, ← / →)')
+
+# ---------------------------------------------------------------- G6 l10n-flash (tools/qa/l10n_flash.js, guide §2.2; user 2026-11-08: switching demos
+# showed the Japanese cover first): EN and 中文 at desktop + phone size, opened twice in one tab (= arriving from another demo); every frame
+# from first paint is sampled — a Japanese text painted and then replaced by the translation = FAIL
+if not A.quick and os.path.exists(os.path.join(D, 'index.html')):
+    lf = subprocess.run(['node', os.path.join(REPO, 'tools', 'qa', 'l10n_flash.js'), D, D, '--secs', '3'], capture_output=True, text=True)
+    try:
+        r = json.loads(lf.stdout.strip().splitlines()[-1])
+        bad = [f'{x["lang"]} {x["size"]}{" (switch)" if x["switched"] else ""}: ' + ', '.join(f'「{f["text"]}」@{f["ms"]} ms' for f in x['flash'][:3]) for x in r['runs'] if x['flash']]
+        dead = [f'{x["lang"]} {x["size"]}: {x["error"]}' for x in r['runs'] if x.get('error')] + r.get('errors', [])
+        row('G6', 'l10n-flash', 'FAIL' if bad else 'WARN' if dead else 'PASS',
+            f'{len(bad)} run(s) painted Japanese before the chosen language' if bad else 'no Japanese painted before the chosen language (en / zh, desktop / phone, switch)', bad + dead)
+    except Exception: row('G6', 'l10n-flash', 'WARN', 'l10n_flash.js gave no result', [lf.stderr.strip()[-300:]])
 
 # ---------------------------------------------------------------- G7 cover composition (tools/web/check_cover.py, guide §7.3 封面构图标准)
 if not A.quick:

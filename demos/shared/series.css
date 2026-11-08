@@ -201,3 +201,10 @@
 @container (max-width: 620px) { .intro .ix-toggle { font-size: 2.4cqw !important; margin-top: .4cqw !important; padding: .3em .8em !important; } }
 /* no progress card in the UI (user 2026-11-08): the game demos still write #steps, the card is just not shown */
 .side > .card:has(#steps) { display: none !important; }
+/* display language (user 2026-11-08: switching demos showed the Japanese cover first, then the chosen language): the cover text is
+   hidden (visibility, so nothing moves) until shared/subs.js has applied the language and sets html.l10n-ready, then fades in;
+   fail-safe: shown after 2.5 s whatever happens. Pages without subs.js (?cover / ?render exports) get l10n-ready from nav.js.
+   Check: python3 tools/qa/check_demo.py <demo> (G6 l10n-flash, node tools/qa/l10n_flash.js). */
+html:not(.l10n-ready) .intro :is(h1, h2, h3, p, li, .chip, button, .opt, label, .series, .kicker, .hint, .en) { visibility: hidden; opacity: 0; animation: moheat-l10n-failsafe 0s 2.5s forwards; }
+html.l10n-fade .intro :is(h1, h2, h3, p, li, .chip, button, .opt, label, .series, .kicker, .hint, .en) { transition: opacity .15s ease-out; }
+@keyframes moheat-l10n-failsafe { to { visibility: visible; opacity: 1; } }

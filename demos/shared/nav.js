@@ -52,8 +52,9 @@
   const qs = new URLSearchParams(location.search);
   { const me = document.currentScript?.src;   // subtitle language EN / 日本語 / 中文 (also in ?embed): shared/subs.js next to this file
     const shot = qs.has('cover') && qs.has('sub');   // per-language thumbnail export (tools/web/thumbs.py): only the display language
-    if (me && !window.MoHeatSub && (shot || (!qs.has('cover') && !qs.has('render')))) for (const f of shot ? ['subs.js?v=14'] : ['subs.js?v=14', 'fullscreen.js?v=4', 'guide.js?v=6', 'thermocheck.js?v=2']) {   // display language + ⛶ fullscreen + first-visit guide + 🌡 thermal check (tools/web/bump.py updates these numbers)
-      const s = document.createElement('script'); s.src = me.replace(/nav\.js(\?.*)?$/, f); s.async = false; document.head.appendChild(s); } }
+    if (me && !window.MoHeatSub && (shot || (!qs.has('cover') && !qs.has('render')))) for (const f of shot ? ['subs.js?v=2c64739a'] : ['subs.js?v=2c64739a', 'fullscreen.js?v=4', 'guide.js?v=6', 'thermocheck.js?v=2']) {   // display language + ⛶ fullscreen + first-visit guide + 🌡 thermal check (tools/web/bump.py updates these numbers)
+      const s = document.createElement('script'); s.src = me.replace(/nav\.js(\?.*)?$/, f); s.async = false; document.head.appendChild(s); } 
+    else if (!window.MoHeatSub) document.documentElement.classList.add('l10n-ready'); }   // no subs.js (?cover / ?render): the cover text shows as is (series.css hides it until l10n-ready)
   if (qs.has('embed') || qs.has('cover') || qs.has('render')) return;
   { const me = document.currentScript?.src;   // drag gestures on phones (stroke / pet / rub / aim): no page scroll, zoom, swipe-back (shared/gesture.js, guide §7.1)
     if (me && !window.MoHeatGesture) { const s = document.createElement('script'); s.src = me.replace(/nav\.js(\?.*)?$/, 'gesture.js?v=1'); s.async = false; document.head.appendChild(s); } }

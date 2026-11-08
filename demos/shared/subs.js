@@ -9,8 +9,8 @@
 //     (interact.js cards, .ix-btn) show the chosen part; the cover (.intro: title, tagline, chips, buttons, hint) from l10n.js.
 //   · data: <demo>/l10n.js — window.MOHEAT_L10N = { langs, text: { <lang>: { "<text as on the page>": "…" } },
 //     names: { "<ja name>": { <lang>: "…" } }, voice: { <lang>: { "<ja answer>": ["same meaning", …] } } }. Missing → English.
-//   · choice: the 🌐 language button on the stage (each tap = next language), the demo's Subtitles select (Demo 1–9, + Off), ?sub=<lang>. Saved in sessionStorage
-//     'moheat.sublang' (all demos, this visit only — a new visit starts in English); a demo without that language shows English. shared/voice.js listens in the same language.
+//   · choice: the 🌐 language button on the stage (each tap = next language), the demo's Subtitles select (Demo 1–9, + Off), ?sub=<lang>. Saved in localStorage
+//     'moheat.sublang' (all demos, every later visit; sessionStorage in kiosk mode / when storage is blocked; default English); a demo without that language shows English. shared/voice.js listens in the same language.
 (() => {
   if (window.MoHeatSub) return;
   const QS = new URLSearchParams(location.search);
@@ -38,10 +38,12 @@
   /** value for language l from { en, zh, … }, following the fallback chain (zh-Hant → zh → en) */
   const pickL = (obj, l) => { if (!obj) return undefined; for (const x of chain(l)) if (obj[x] != null) return obj[x]; return undefined; };
   const KEY = 'moheat.sublang';
-  // the choice lasts for this browser session only (user 2026-11-08: default English) — every new visit starts in English
-  try { localStorage.removeItem(KEY); } catch {}   // older builds kept it for good
-  const load = () => { try { return sessionStorage.getItem(KEY); } catch { return null; } };
-  const save = (v) => { try { sessionStorage.setItem(KEY, v); } catch {} };
+  // English by default; once picked, the language is REMEMBERED in this browser for every demo and every later visit (user 2026-11-08,
+  // replaces "this session only"): localStorage, else sessionStorage, else English; ?sub=<lang> overrides one page load.
+  // Kiosk mode (shared/kiosk.js): this session only — its per-visitor reset writes the staff default to sessionStorage.
+  const KIOSK = (() => { try { const k = QS.get('kiosk') ?? localStorage.getItem('moheat.kiosk'); return !!k && k !== '0'; } catch { return false; } })();
+  const load = () => { if (!KIOSK) try { const v = localStorage.getItem(KEY); if (v) return v; } catch {} try { return sessionStorage.getItem(KEY); } catch { return null; } };
+  const save = (v) => { try { sessionStorage.setItem(KEY, v); } catch {} if (!KIOSK) try { localStorage.setItem(KEY, v); } catch {} };
   const L10N = () => window.MOHEAT_L10N || {};
   const langs = () => { const l = (L10N().langs || DEFAULT_LANGS).filter((x) => LANGS[x]); return l.includes('en') ? l : ['en', ...l]; };
   let pref = QS.get('sub') || load() || 'en';   // what the viewer chose (any demo)
@@ -355,19 +357,26 @@
     missing: () => [...missing],
   };
 
+  // html.l10n-ready: the cover text is in the chosen language → shared/series.css shows it (hidden until then: no flash of the page's
+  // Japanese when switching demos); set once l10n_common.js and the demo's l10n.js are applied or failed, 1.5 s at most
+  let pending = 2;
+  const ready = () => { if (root.classList.contains('l10n-ready')) return; root.classList.add('l10n-fade', 'l10n-ready'); setTimeout(() => root.classList.remove('l10n-fade'), 400); };
+  const loaded = () => { if (--pending <= 0) ready(); };
+  setTimeout(ready, 1500);
   function init() {
     select(); if (!SHOT) { button(); coverRow(); } fill(); watch();
     if (sel) { sel.value = lang; sel.dispatchEvent(new Event('change')); }   // the demo drops its old ja + en mode
     apply();
     const me = document.currentScript?.src || [...document.scripts].map((x) => x.src).find((x) => /shared\/subs\.js/.test(x));
-    if (me) { const c = document.createElement('script'); c.src = me.replace(/subs\.js(\?.*)?$/, 'l10n_common.js?v=5'); c.onload = () => { maps = {}; apply(); }; document.head.appendChild(c); }
+    if (me) { const c = document.createElement('script'); c.src = me.replace(/subs\.js(\?.*)?$/, 'l10n_common.js?v=5'); c.onload = () => { maps = {}; apply(); loaded(); }; c.onerror = loaded; document.head.appendChild(c); } else loaded();
     const s = document.createElement('script');   // relative to the page (or its <base>): the demo's own languages
     s.src = 'l10n.js?v=3';
     s.onload = () => {
       maps = {}; missing.clear(); lang = eff(); fill();
       containers().forEach((c) => delete c.dataset.msub); document.querySelectorAll('[data-mlang]').forEach((e) => { e.dataset.mlang = ''; });
-      apply();
+      apply(); loaded();
     };
+    s.onerror = loaded;   // a demo without l10n.js: the page text is all there is
     document.head.appendChild(s);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
