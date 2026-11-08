@@ -25,7 +25,7 @@ import cv2, numpy as np
 from PIL import Image, ImageDraw
 import lp_pose                # chdir → ~/ml/LivePortrait (paths above are absolute)
 
-LIPS = [.1, .2, .34]; PAD = 1.5   # lips capped: at .42 the widest level went soft / jagged; normal speech sits on lv1–lv2
+LIPS = [.1, .2, .34]; PAD = 1.5; MINH = .26   # lips capped: at .42 the widest level went soft / jagged; normal speech sits on lv1–lv2
 cfg = json.load(open(os.path.join(D, "project", "stage.json")))
 SRC = os.path.join(D, cfg.get("src", "assets/art")); OUT = os.path.join(D, "assets", "lp_mouths"); os.makedirs(OUT, exist_ok=True)
 poses = {k: v for k, v in cfg["poses"].items() if (k in ONLY if ONLY else v.get("mouth") == "lp")}
@@ -60,20 +60,23 @@ def opening(Sn, S0, B, a):
     The opening = where the render changed most (palette-free: warm photo teeth on a pale face are invisible to a colour test, Demo17 whisper).
     LivePortrait draws photo teeth / a noisy interior there; only its OUTLINE is used. Returns None if nothing opened."""
     ch = cv2.GaussianBlur(np.abs(Sn - S0).max(2), (0, 0), 1.5)
-    h = ((ch > max(16, ch[a > 100].max() * .35)) & (a > 100)).astype(np.uint8)
+    sv = cv2.GaussianBlur(Sn, (0, 0), 1); val = sv.max(2) / 255; sat = (sv.max(2) - sv.min(2)) / np.maximum(sv.max(2), 1)
+    teeth = (((sat < .2) & (val > .55)) | (val < .5)) & (ch > 12)        # the render's teeth / dark interior belong to the opening too (Demo18 taiko)
+    h = (((ch > max(16, ch[a > 100].max() * .35)) | teeth) & (a > 100)).astype(np.uint8)
     h = cv2.morphologyEx(h, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 9)))
     cy_, cx_ = (np.array(a.shape) - 1) / 2; yy, xx = np.mgrid[0:a.shape[0], 0:a.shape[1]]
     h &= (((xx - cx_) / (cx_ * .7)) ** 2 + ((yy - cy_) / (cy_ * .62)) ** 2 < 1).astype(np.uint8)   # never the nostril / hair / jaw inside the block
     n, lab, st, _ = cv2.connectedComponentsWithStats(h, 8)
     if n < 2 or st[1:, cv2.CC_STAT_AREA].max() < 24: return None
-    k = 1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA])); ys, xs = np.where(lab == k)
+    big = 1 + np.where(st[1:, cv2.CC_STAT_AREA] >= .15 * st[1:, cv2.CC_STAT_AREA].max())[0]   # the opening may come in pieces (dark corner + teeth, Demo18 taiko)
+    ys, xs = np.where(np.isin(lab, big))
     c = np.array([xs.mean(), ys.mean()]); u, _, _ = np.linalg.svd(np.cov(np.stack([xs - c[0], ys - c[1]])))
     ax = u[:, 0] * (1 if u[0, 0] >= 0 else -1); nr = np.array([-ax[1], ax[0]])
     du = (xs - c[0]) * ax[0] + (ys - c[1]) * ax[1]; dv = (xs - c[0]) * nr[0] + (ys - c[1]) * nr[1]
     u0, u1 = du.min(), du.max(); bins = np.arange(0, int(u1 - u0) + 1); top, bot = np.full(len(bins), np.nan), np.full(len(bins), np.nan)
     for i in bins:
         m = np.abs(du - (u0 + i)) < 1.5
-        if m.any(): top[i], bot[i] = np.percentile(dv[m], 12), np.percentile(dv[m], 88)
+        if m.any(): top[i], bot[i] = np.percentile(dv[m], 6), np.percentile(dv[m], 94)
     ok = ~np.isnan(top); top = np.interp(bins, bins[ok], top[ok]); bot = np.interp(bins, bins[ok], bot[ok])
     sig = max(2, len(bins) * .1); top, bot = smooth1(top, sig), smooth1(bot, sig)
     # the closed line, along the same axis: the darkest row of the drawing in each position
@@ -83,6 +86,9 @@ def opening(Sn, S0, B, a):
         vals = cv2.remap(gb, xq.astype(np.float32).reshape(-1, 1), yq.astype(np.float32).reshape(-1, 1), cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE).ravel()
         line.append(float(vs[int(np.argmin(vals))]))
     line = smooth1(np.clip(line, top.min() - 2, bot.max() + 2), sig)
+    # readable at any size (user: Jin "doesn't move" — too subtle): the widest opening is at least MINH of the mouth's width, mostly
+    # downwards (the jaw drops); LivePortrait opens some anime faces only a sliver (Demo18 taiko)
+    n_ = len(bins); top = np.minimum(top, line - MINH * .3 * n_); bot = np.maximum(bot, line + MINH * .7 * n_)
     return dict(c=c, ax=ax, nr=nr, u0=u0, top=top, bot=bot, line=line)
 
 
@@ -107,8 +113,8 @@ def drawn_lens(B, a, wm, lift=.12, drop=.22):
 
 def lens_mask(L, f, shape):
     """the opening at fraction f of the widest one: edges pulled towards the drawn closed line; ends taper, so the corners stay on the drawn line"""
-    n = len(L["top"]); e = np.sin(np.linspace(0, np.pi, n)) ** .55; b = L["line"]
-    top = b + (L["top"] - b) * f * e; bot = b + (L["bot"] - b) * f * e
+    n = len(L["top"]); e = np.sin(np.linspace(0, np.pi, n)) ** .55; e2 = np.sin(np.linspace(0, np.pi, n)) ** .85; b = L["line"]
+    top = b + (L["top"] - b) * f * e; bot = b + (L["bot"] - b) * f * e2   # rounder lower edge (the jaw), not a flat slab
     uu = L["u0"] + np.arange(n); P = lambda v: L["c"] + np.outer(uu, L["ax"]) + np.outer(v, L["nr"])
     poly = np.concatenate([P(top), P(bot)[::-1]]); S_ = 4
     m = np.zeros((shape[0] * S_, shape[1] * S_), np.uint8); cv2.fillPoly(m, [np.round(poly * S_).astype(np.int32)], 255)
@@ -132,7 +138,9 @@ def refine(B, S0, Sk, a, L, f):
     if not len(ys): return out
     t = np.clip((np.arange(m.shape[0]) - ys[0]) / max(1, ys[-1] - ys[0]), 0, 1)[:, None, None]
     deep, tongue = np.array([104, 34, 48], np.float32), np.array([196, 96, 104], np.float32)
-    fill = deep + (tongue - deep) * np.clip((t - .5) / .5, 0, 1)
+    ring = (a > 20) & (a < 120); skin = np.median(B[ring] if ring.sum() > 30 else B.reshape(-1, 3), 0)
+    tint = np.clip(skin / np.array([244, 206, 190], np.float32), .45, 1.15)   # the scene's light on the skin (blue bar light, Demo19 flame; night)
+    fill = (deep + (tongue - deep) * np.clip((t - .5) / .5, 0, 1)) * tint
     skinside = (a > 150) & (B[..., 1] <= B[..., 0] + 4)   # the drawing's own line colour, never the chroma background at a profile's edge (Demo25 pray: green rim)
     line = np.percentile(B[skinside] if skinside.sum() > 50 else B.reshape(-1, 3), 2, axis=0); upper = np.clip(1.15 - t * 1.0, .35, 1)   # the upper edge is drawn darker, as anime mouths are
     edge = np.clip(cv2.GaussianBlur(cv2.dilate(m, np.ones((3, 3), np.uint8)), (0, 0), .7) - m, 0, 1)[..., None]

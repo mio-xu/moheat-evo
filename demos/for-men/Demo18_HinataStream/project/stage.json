@@ -52,7 +52,8 @@
    "near_eyes": [
     1280,
     372
-   ]
+   ],
+   "mouth": "lp"
   },
   "race": {
    "src": "hin_race",
@@ -88,7 +89,8 @@
    "near_eyes": [
     1302,
     368
-   ]
+   ],
+   "mouth": "lp"
   },
   "booth": {
    "src": "hin_booth_ext",
@@ -116,7 +118,8 @@
      113,
      87
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "can": {
    "src": "hin_can",
@@ -134,7 +137,8 @@
    "near_eyes": [
     1288,
     420
-   ]
+   ],
+   "mouth": "lp"
   }
  },
  "views": {

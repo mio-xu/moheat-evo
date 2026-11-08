@@ -144,7 +144,7 @@ void main(){
   const blinkLog = [];
   addEventListener('pointermove', (e) => { tx = (e.clientX / innerWidth - .5) * 2; ty = (e.clientY / innerHeight - .5) * 2; }, { passive: true });
   addEventListener('deviceorientation', (e) => { if (e.gamma == null) return; tx = Math.max(-1, Math.min(1, e.gamma / 25)); ty = Math.max(-1, Math.min(1, (e.beta - 45) / 25)); });
-  let lastT = 0, t = 0, frameT = -1, flick = 1, env = 0, mouth = 0, mouthOpen = false, mouthHold = 0, talk = 0, lastTgt = 0, lastV = 0, peak = .012, openedAt = 0, lvl = 1, lvlHold = 0, blinkUntil = 0, nextBlink = 2;
+  let lastT = 0, t = 0, frameT = -1, flick = 1, env = 0, mouth = 0, mouthOpen = false, mouthHold = 0, talk = 0, lastTgt = 0, lastV = 0, peak = .012, openedAt = 0, lvl = 1, lvlHold = 0, vAvg = .02, blinkUntil = 0, nextBlink = 2;
   function step(now) {
     t = now / 1000; const dt = Math.min(.05, t - lastT || .016); lastT = t;
     flick = 1 + .10 * Math.sin(t * 7.3) + .07 * Math.sin(t * 13.1 + 1.7) + .05 * Math.sin(t * 23.7 + .4);
@@ -163,7 +163,9 @@ void main(){
       mouthOpen = !mouthOpen; mouthHold = t + (mouthOpen ? .06 : .09); if (mouthOpen) openedAt = t; }
     mouth = mouthOpen ? 1 : 0;   // a hard switch: any in-between alpha shows both lip lines
     // mouth sets (mouth_lv): how wide, from the loudness — normal speech on levels 1–2, only loud peaks reach the widest; held ≥ 80 ms
-    if (mouthOpen && t >= lvlHold) { const amp = Math.min(1, tgt) * Math.min(1, rel), want = amp > .93 ? 3 : amp > .62 ? 2 : 1;
+    // (the voice level against its own running average while talking: a peak is a syllable, not "loud speech" — Demo18 sat on lv3 51 %)
+    if (tgt > .05 && v > 0) vAvg += (v - vAvg) * (1 - Math.exp(-dt / 3));
+    if (mouthOpen && t >= lvlHold) { const amp = v > 0 ? v / Math.max(vAvg, 1e-4) : tgt * 1.6, want = amp > 2.1 ? 3 : amp > 1.1 ? 2 : 1;
       if (want !== lvl) { lvl = want; lvlHold = t + .08; } }
     lastTgt = tgt; lastV = v / peak;
     talk += (tgt - talk) * (1 - Math.exp(-dt / .12));   // smooth: drives the talking bob only
