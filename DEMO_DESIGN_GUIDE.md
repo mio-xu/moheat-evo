@@ -149,6 +149,8 @@
 | 女性向 · 男偶像（Demo12、20–22） | **3 号柔和赛璐璐**：细的彩色线、柔和赛璐璐阴影、乙女游戏卡面的完成度 | 7–7.5 头身美男，下颌线清楚 | 夜景散景，**一个角色一个主色**：蓮 雪夜蓝紫、陽向 粉 / 奶油亮色、迅 酒红 + 黑高对比、紫苑 薰衣草紫 + 台灯琥珀、ガク（Demo24 直播间）篝火琥珀 + 冬夜墨绿 / 藏青 | Demo12 `style_3_softcel.png` + 每位角色的设定图；Demo20 / 22 `seedance.py` 的 `LOOK` |
 | 信長シリーズ（Demo5–9） | 浮世绘风动漫插画 + 金箔装饰，线条精细，电影感光线 | 坐姿立绘（共用 Demo9 的人物图） | 矿物色：朱红、靛蓝、深绿、金 | Demo7 `make_image_kit.py` 的 `STYLE` |
 
+**类别风格卡**（用户 2026-11-08：每个类别的整体设计风格保持一致）：每个类别一张 `demos/<类别>/_kit/style.json`（+ `STYLE.md` 给人看、`style.js` = `window.MOHEAT_STYLE` 给页面 / 封面读），内容：每个系列的**画风锚**（look 提示词 + 锚定 Demo 的封面 / 主画面和它们的统计）、主题色、字体、音乐音效基调、冷 = 蓝白 / 热 = 橙红。数据写在 `tools/art/style_card.py` 的 `CARDS` 里，改完 `python3 tools/art/style_card.py build`；新 Demo 先加进它的系列。`check_demo` 的 **G7 style** 行把封面和主画面跟本系列的锚比（饱和度、对比度、线条密度；明暗和色相随场景 / 角色主色变，只记录不判）→ 跑偏是 WARN，打开 `demos/<类别>/_kit/style_family.jpg`（`style_card.py sheet` 生成的全家福）对比，改画 / 提示词，不改数字。**穿越篇沿用本类别画风**，只换服装和世界观（Demo43 在 for-men 的 streamer 系列里）。界面 / 封面从 `style.js` 读主题色和字体（共用外壳的会话接入）。
+
 ### 5.2 通用原则
 
 - **一个系列只有一个"风格锚"**：一张风格参考图，加上一段 `LOOK` 提示词，每张图都原样复用。角色图生成时，设定图放在 image 1。换了锚，整个系列就会散。
@@ -485,6 +487,7 @@ python3 tools/qa/check_demo.py <demo> --checklist        # 同时写 / 刷新 pr
 | S11 | **远景加大动作**：远景的嘴 / 眨眼画得更明显 | check_demo **far-motion** |
 | S12 | **先审 1–2 张再批量**：1 个完整画面打样（底图 + 嘴套 + 眨眼 + 合成 + 页面播放）审过才铺开 | G3 门禁；CHECKLIST |
 | S13 | **每个 Demo 记账**：`project/openai_log.json`（images.py / extend_pose.py 自动写，重跑也记 `prior_usage`）、Seedance credits 写进 README | `balances.py --budget`；hygiene 行 |
+| S15 | **换装 / 换发型要由剧情交代**（用户 2026-11-08）：每套造型在角色卡 `looks[]` 登记（id、参考图、服装、发型、在哪一场为什么换）；`stage.json` 每个姿势写 `"look"`（多人时加 `"character"`），剧本镜头表每场写 look；同一段剧情里的近景 / 远景用同一套，拿的东西、头饰跟着一致 | check_demo **looks**（发色在所有姿势里一致；服装颜色只在同一个 look 里比，粗查）+ `poses_preview.jpg` 逐项看 |
 | S14 | **到上限先停**：OpenAI 80 % 预警，超过 10 美元 / Seedance 1500 credits 停下交给用户 | `balances.py --demo <demo>` 退出码 1 / 2 → hygiene WARN |
 
 ### 6.6 效率工具与多会话协作（提效标准 13 条，用户 2026-11-08 认可）

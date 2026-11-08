@@ -5,6 +5,7 @@
   python3 tools/art/prompts/fill.py --list                                   # templates + their fields
 
   <template>  base_pose | full_figure | lock_face_edit | masked_blink | masked_outpaint | empty_plate (tools/art/prompts/<name>.txt)
+  look_id=<x> uses the card's looks[] entry x (outfit / hairstyle set) on top of the base look wording.
   <id>        docs/characters/<id>.md (its ```json block): fills {look} (the card's "## Look (prompt wording)" paragraph), {style}
               (series_style), {backdrop_colour} / {backdrop_name} (backdrop), {name_en}; anything else comes from field=value.
   --job       also writes the job {ref, prompt[, mask]} into <demo>/project/web_prompts.json (read, then tmp + os.replace), ready for
@@ -51,7 +52,9 @@ def main(a):
     c = card(cid) if cid else {}
     if c:
         b = c.get('backdrop') or {}
-        vals.setdefault('look', c['_look']); vals.setdefault('style', c.get('series_style', ''))
+        lk = next((x for x in c.get('looks') or [] if x.get('id') == vals.get('look_id')), None)   # look_id=<id>: an outfit / hairstyle set of the card
+        vals.setdefault('look', c['_look'] + (f" Outfit and hairstyle in this scene (look \"{lk['id']}\"): {lk.get('outfit', '')} {lk.get('hair_style', '')}".rstrip() if lk else ''))
+        vals.setdefault('style', c.get('series_style', ''))
         vals.setdefault('name_en', c.get('name_en', cid))
         if b.get('colour'):
             vals.setdefault('backdrop_colour', b['colour']); vals.setdefault('backdrop_name', NAMES.get(b['colour'].lower(), 'plain'))

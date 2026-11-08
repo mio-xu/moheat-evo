@@ -27,6 +27,9 @@ the **voice** (ElevenLabs voice_id + settings + tag habits), **speech habits** (
 | `speech` | `first_person`, `endings` [...], `habits` [...] |
 | `thermal` | how the character maps to warm / cool (voice warm at the ear unless a special setting, e.g. snow spirit = cool) |
 | `notes` | anything else (history, name variants, cautions) |
+| `looks` (optional) | outfit / hairstyle sets (user 2026-11-08: changes inside one demo are fine when the story motivates them): `[{"id": "yukata", "demos": [...], "refs": [...], "outfit": "…", "hair_style": "…", "story": "where / why the change happens"}]`. No `looks` = one look, `default` = `colours.outfit`. Face, eye colour and hair colour never change between looks |
+
+Looks in a demo: each `project/stage.json` pose declares `"look": "<id>"` (and `"character": "<id>"` when several people share a demo); `tools/art/check_art.py` (check_demo G4 `looks`) compares hair colour across ALL poses of a character and outfit colour only within one look; `poses_preview.jpg` is still looked at by eye. The script's shot list has a `look` column. `fill.py … look=<id>` adds that look's outfit / hairstyle to the prompt.
 
 3. `## Look (prompt wording)` — a reusable English prompt fragment, condensed from the prompts that drew the character.
 4. `## Personality and speech` — 2–5 bullets with 1–2 quoted lines from `lines.js`.

@@ -22,9 +22,11 @@
 | Special-setting exception | (e.g. her breath is cool: told in scene …, consistent to the end) |
 
 ## 3. Scenes and shot list (write BEFORE drawing — §6.5 S5)
-| # | Scene / place | Shot (far / mid / close / ear) | Where "you" are | Character side + pose | Holding | NOT holding / not in the layer | Who talks | Plate | Pose (new / lock-face edit) |
-|---|---|---|---|---|---|---|---|---|---|
-| 1 | | | | | | | | | |
+| # | Scene / place | Shot (far / mid / close / ear) | Where "you" are | Character side + pose | Look (outfit / hairstyle id, card looks[]) | Holding | NOT holding / not in the layer | Who talks | Plate | Pose (new / lock-face edit) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | | | | | default | | | | | |
+
+A look change must be motivated on screen or in a line (scene # and why); continuity: props / headwear follow the look.
 
 ## 4. Thermal table (DUAL)
 | Time / line | Source (physical, visible on screen) | Ear L | Ear R | Cool / warm | Peak | Why plausible |

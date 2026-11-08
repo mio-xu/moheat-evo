@@ -81,7 +81,7 @@ def main():
     ap.add_argument('--hunks', nargs=2, action='append', default=[], metavar=('PATH', 'REGEX'))
     ap.add_argument('--patch', action='append', default=[])
     ap.add_argument('--dry', action='store_true'); ap.add_argument('--force-add', action='store_true'); ap.add_argument('--no-trailer', action='store_true')
-    a = ap.parse_args()
+    a = ap.parse_intermixed_args()   # paths may follow --hunks / --patch
     if a.msgfile:
         if a.message: a.paths.insert(0, a.message)
         a.message = open(a.msgfile).read()
