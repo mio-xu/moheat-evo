@@ -8,14 +8,15 @@ the set, so a redrawn mouth is never compared with the original line.
   ~/ml/LivePortrait/.venv/bin/python tools/art/lp_mouths.py <demo> [pose …] [--probe] [--force] [--sheet]
 
 Poses: those named on the command line, else every pose with "mouth": "lp" in project/stage.json. Per pose (all optional):
-  "lp": { "view": {"box", "rotate", "scale"} (what LivePortrait is shown: crop / turn / shrink the face first when it finds no face),
+  "lp": { "view": {"box", "rotate" (degrees or "auto": level the mouth), "scale"} (what LivePortrait is shown: crop / turn / shrink the face first when it finds no face),
           "lips": [.1, .2, .34] (LivePortrait opening per level; lower = safer on anime faces), "minh": .26 (smallest height of the widest
           opening, fraction of the mouth width: lower for realistic / adult faces, Demo24 Gaku .16), "light": 0..1 (interior blended
           toward a shaded skin tone: pastel styles, Demo20 .4), "pad": 1.5 (block size around the moving part),
           "centre": [x, y] + "radius": [rx, ry] (fixed block, source px), "src": other picture to warp (must be the same size),
           "warp": false (no LivePortrait: the opening grows on the DRAWN closed line, "lift" .12 / "drop" .22 of the mouth width — strong
           profiles, fingers over the mouth), "hide": [[[x, y], …]] (source px polygons in front of the mouth: the opening is clipped),
-          "drawn_open": true (drawn with the teeth showing: the drawn grin is the starting shape), "teeth": false | {…} (below) }
+          "drawn_open": true (drawn with the teeth showing: the drawn grin is the starting shape), "fang": [[[x, y], …]] (source px polygons of a
+          drawn fang, kept on the upper lip at every level), "teeth": false | {…} (below) }
 A pose drawn open with a "quiet" (closed) variant: the quiet patch is pasted first, so the set is warped from the closed face.
 Writes <demo>/assets/lp_mouths/<pose>_lv<k>.png (k = 0 closed … n widest, RGBA, source px, full block) + lp_mouths.json; then
 python3 tools/art/build_stage.py <demo> takes them for poses with "mouth": "lp". --probe = only say which poses have a detectable face.
@@ -165,12 +166,12 @@ def taper(n, lo, hi):
     return np.clip((np.sin(np.linspace(0, np.pi, n)) - lo) / (hi - lo), 0, 1) ** .7
 
 
-def teeth_masks(L, f, shape, T, tongue=0.):
+def teeth_masks(L, f, shape, T, tongue=0., cap=.4):
     """anime teeth (user 2026-11-08: a wide open mouth with no teeth looked scary, "but don't make it realistic"): ONE flat upper band
     hanging from the opening's top edge (same thickness T, same left / right ends at every level, so it stays put while talking; never
     above the top edge = never over the lip line) + optionally a tongue mound on the bottom edge. Both clipped to the opening."""
     top, bot, P = lens_edges(L, f); n = len(top); h = np.maximum(bot - top, 0)
-    tb = top + np.minimum(T * taper(n, .35, .62), h * .4)   # never more than ~half the opening: the dark gap stays readable
+    tb = top + np.minimum(T * taper(n, .35, .62), h * cap)   # never more than ~half the opening: the dark gap stays readable
     tm = poly_mask(np.concatenate([P(top - 1.5), P(tb)[::-1]]), shape)   # starts 1.5 px above the edge, the opening clips it (no gap under the line)
     gm = None
     if tongue > 0:
@@ -209,7 +210,7 @@ def refine(B, S0, Sk, a, L, f, light=0., teeth=None, tongue_f=0.):
     if teeth:   # colours from this character's own skin under this scene's light: a low-saturation, lighter version of it
         lum = lambda c: float(c @ np.array([.3, .59, .11], np.float32)); g = lum(skin)
         tc = g + (skin - g) * teeth.get("sat", .45); tc = tc * min(246 / max(tc.max(), 1), max(1.0, g * teeth.get("bright", 1.07) / max(lum(tc), 1)))
-        tm, gm = teeth_masks(L, f, B.shape[:2], teeth["T"], tongue_f)
+        tm, gm = teeth_masks(L, f, B.shape[:2], teeth["T"], tongue_f, teeth.get("cap", .4))
         if gm is not None:   # a hint of tongue at the bottom of the widest opening only
             tg = np.array(LP_TONGUE, np.float32) * tint; tg = tg + (skin * np.array([.92, .7, .72], np.float32) - tg) * light
             out = out + (tg - out) * (gm * m)[..., None] * teeth.get("tongue_a", .65)
@@ -233,6 +234,12 @@ for name, p in poses.items():
     # "view": {"box": [x0, y0, x1, y1], "rotate": deg, "scale": s} — LivePortrait sees this crop of the picture, turned upright / made
     # smaller with a margin (its face detector misses tilted or very large close-up faces: Demo43 hinata_ear); results are mapped back
     vw = lp.get("view"); A = None; lp_path = path
+    if vw and vw.get("rotate") == "auto":   # level the mouth: the angle of LivePortrait's mouth-corner landmarks on a first pass
+        try: p0 = lp_pose.Puppet(path, share=share)
+        except SystemExit as e: print(f"{name}: NO FACE ({e})"); meta.pop(name, None); continue
+        share = share or p0; c1_, c2_ = p0.lmk[48], p0.lmk[66]; dx_, dy_ = c2_ - c1_
+        if dx_ < 0: dx_, dy_ = -dx_, -dy_
+        vw = {**vw, "rotate": float(np.degrees(np.arctan2(dy_, dx_)))}; print(f"{name}: auto rotate {vw['rotate']:.1f}")
     if vw:
         src_im = cv2.imread(path); bx0, by0, bx1, by1 = vw.get("box", [0, 0, src_im.shape[1], src_im.shape[0]]); sc = vw.get("scale", 1.)
         vwW, vwH = round((bx1 - bx0) * sc), round((by1 - by0) * sc)
@@ -288,11 +295,20 @@ for name, p in poses.items():
     tcfg = lp.get("teeth", {}); tcfg = None if (tcfg is False or "--no-teeth" in flags or L is None) else dict(tcfg)
     if tcfg is not None:
         t1, b1, _ = lens_edges(L, 1.); mid = len(t1) // 2; tcfg["T"] = min(len(t1) * tcfg.get("band", .06), float(b1[mid] - t1[mid]) * .34)
-        if "top0" in L: tcfg["T"] = max(tcfg["T"], float(L["bot0"][mid] - L["top0"][mid]) * .6)   # drawn grin: the band keeps the drawn teeth's height
+        if "top0" in L: tcfg["T"] = max(tcfg["T"], float(L["bot0"][mid] - L["top0"][mid]) * .72); tcfg.setdefault("cap", .72)   # drawn grin: the band keeps the drawn teeth's height (no jump grin → dark slab)
     for k, S in enumerate([C0] + [q[y0:y1, x0:x1] for q in SS]):
         tk = tcfg if (tcfg and k >= (1 if lp.get("drawn_open") else 2)) else None   # drawn with teeth: from the first level
         tg = tcfg.get("tongue", .5) if (tcfg and k == len(lips)) else 0.
         rgb = np.clip(refine(B, C0, S, a, L, lips[k - 1] / lips[-1], lp.get("light", 0.), tk, tg) if k else B, 0, 255).astype(np.uint8)   # lv0 = the base's own pixels: the block is invisible in silence
+        if k and L is not None and lp.get("fang"):   # the drawn fang stays on the upper lip at every level (Hinata's trait: Demo18 / 43); it follows the lip's upper edge
+            t_f, _, _ = lens_edges(L, lips[k - 1] / lips[-1]); t_0, _, _ = lens_edges(L, 0.); rf = rgb.astype(np.float32)
+            for poly in lp["fang"]:
+                q = np.array(poly, np.float32) - [x0, y0]; fm = cv2.GaussianBlur(poly_mask(q, a.shape), (0, 0), .5); cq = q.mean(0)
+                idx = int(np.clip(round(float((cq - L["c"]) @ L["ax"] - L["u0"])), 0, len(t_f) - 1)); dl = float(t_f[idx] - t_0[idx])
+                Mf = np.float32([[1, 0, L["nr"][0] * dl], [0, 1, L["nr"][1] * dl]])
+                Bs = cv2.warpAffine(B, Mf, (a.shape[1], a.shape[0]), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE); ms = cv2.warpAffine(fm, Mf, (a.shape[1], a.shape[0]), flags=cv2.INTER_LINEAR)[..., None]
+                rf = rf + (Bs - rf) * ms
+            rgb = np.clip(rf, 0, 255).astype(np.uint8)
         Image.fromarray(np.dstack([rgb, a])).save(os.path.join(OUT, f"{name}_lv{k}.png"))
     meta[name] = {"rect": [x0, y0, w, h], "levels": len(lips), "lips": lips, "size": [W, H], "source": os.path.relpath(path, D),
                   "teeth": tcfg is not None, "warp": bool(lp.get("warp", True)),   # check_patches.py NO-TEETH
