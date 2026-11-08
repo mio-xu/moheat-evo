@@ -409,7 +409,10 @@
     sub('', ''); $('callPill').classList.remove('show'); $('dialer').classList.remove('show');
     const c = $('cleared'); c.hidden = false;
     if (PART === 2) c.textContent = '💗 また電話してね · Call them again soon';
-    else c.innerHTML = '⛄ つづく · To be continued → <a href="../Demo16_FamilyCall2/">第2話「じいちゃんの、ゆきだるま」 · Part 2</a>';
+    else {   // the next episode's address comes from nav.js (its DEMOS order = the ›-button): no other demo's path in this story
+      const nx = document.querySelector('.dnav .dn-step[aria-label="Next demo"]:not([aria-disabled])');
+      c.innerHTML = '⛄ つづく · To be continued → ' + (nx ? `<a href="${nx.getAttribute('href')}">第2話「じいちゃんの、ゆきだるま」 · Part 2</a>` : '第2話「じいちゃんの、ゆきだるま」 · Part 2');
+    }
     $('startBtn').textContent = '↺ もう一度 · Play again'; $('intro').classList.remove('hidden');
   }
   function start() {
