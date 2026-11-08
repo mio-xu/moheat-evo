@@ -50,3 +50,4 @@
 | 44 | 游戏机爪子的动画好奇怪，还是高质量生成素材来做 | Demo38 抓娃娃机：生成的机台 / 爪子 / 玩偶素材分层做动画（或 §6.3 动态 CG） | 🔄 会话 60 |
 | 45 | 手机版本都要改成不需要下滑的，一开始的指南不要跑到手机按不到的地方 | 全部 Demo 手机竖 / 横屏一屏无滚动；guide.js 提示框始终在屏幕内可点 | 🔄 后台 agent |
 | 46 | Keep the Nobunaga AI demo as THREE separate demos: one where you only talk with Nobunaga, one only with Ieyasu, and one multi-person round-table (座談会) | 三个独立 Demo、共用 Demo23 的引擎 / 剧本 / 声音：Demo23「信長と、語らう」（信长，原网址）、Demo41_IeyasuTalk「家康と、語らう」、Demo42_SengokuRoundtable「信長と家康の、座談会」；封面只选地点；nav.js / 官网菜单 / credits / 三语缩略图；私密实时版 /live · /live/ieyasu · /live/roundtable（同一密码和上限）；页面由 `scripts/pages.js` 生成 | ✅ |
+| 47 | 你推荐的都挺好的，直接按照顺序，逐步派 agent 去做，不要同时做，做完一个确认没问题再做下一个 | 依次制作（一次只做一个）：① 男·架空东方 风雪客栈（ミント / ひなた / 渚）→ ② 男·西幻 魔法学院（椿 / ココア / ルナ）→ ③ 女·架空东方 月宫天女（迅 / 紫苑 / 朔）→ ④ 女·西幻 龙与精灵（陽向 / 岳 / 蓮）→ ⑤ 全年龄 鬼屋提灯 → ⑥ 全年龄 动物温泉 → ⑦ Naomi 夏天的电风扇 → ⑧ 爷爷奶奶 暑假劈西瓜；方案见 docs/proposals/2026-11-08_crossover.md、proposals/2026-11-08_allages_healing_proposals.md | 🔄 ① 制作中 |
