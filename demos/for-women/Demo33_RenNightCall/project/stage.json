@@ -1,17 +1,83 @@
 {
  "src": "assets/art",
  "skipVideo": "media/video/",
- "bgs": { "street": { "src": "bg_street" }, "window": { "src": "bg_window" }, "door": { "src": "bg_door" } },
+ "bgs": {
+  "street": {
+   "src": "bg_street"
+  },
+  "window": {
+   "src": "bg_window"
+  },
+  "door": {
+   "src": "bg_door"
+  }
+ },
  "poses": {
-  "call":  { "src": "ren_call",  "talk": "ren_call_talk",  "blink": "ren_call_blink",  "matte": "ai" },
-  "close": { "src": "ren_close", "talk": "ren_close_talk", "blink": "ren_close_blink", "matte": "ai" },
-  "door":  { "src": "ren_door",  "talk": "ren_door_talk",  "blink": "ren_door_blink",  "matte": "ai" },
-  "hug":   { "src": "ren_hug",   "talk": "ren_hug_talk",   "matte": "ai" }
+  "call": {
+   "src": "ren_call",
+   "talk": "ren_call_talk",
+   "blink": "ren_call_blink",
+   "matte": "ai"
+  },
+  "close": {
+   "src": "ren_close",
+   "talk": "ren_close_talk",
+   "blink": "ren_close_blink",
+   "matte": "ai"
+  },
+  "door": {
+   "src": "ren_door",
+   "talk": "ren_door_talk",
+   "blink": "ren_door_blink",
+   "matte": "ai"
+  },
+  "hug": {
+   "src": "ren_hug",
+   "talk": "ren_hug_talk",
+   "matte": "ai"
+  }
  },
  "views": {
-  "call":  { "still": "ren_call.webp",  "pose": "call",  "bg": "street", "fire": null, "x": 0.62, "y": 1.02, "height": 1.0 },
-  "close": { "still": "ren_close.webp", "pose": "close", "bg": "window", "fire": null, "x": 0.55, "y": 1.02, "height": 1.02 },
-  "door":  { "still": "ren_door.webp",  "pose": "door",  "bg": "door",   "fire": null, "x": 0.5,  "y": 1.02, "height": 1.0 },
-  "hug":   { "still": "ren_hug.webp",   "pose": "hug",   "bg": "door",   "fire": null, "zoom": 1.2, "x": 0.5, "y": 1.02, "height": 1.02 }
+  "call": {
+   "still": "ren_call.webp",
+   "pose": "call",
+   "bg": "street",
+   "fire": null,
+   "x": 0.62,
+   "y": 1.02,
+   "height": 1.0
+  },
+  "close": {
+   "still": "ren_close.webp",
+   "pose": "close",
+   "bg": "window",
+   "fire": null,
+   "x": 0.55,
+   "y": 1.02,
+   "height": 1.02
+  },
+  "door": {
+   "still": "ren_door.webp",
+   "pose": "door",
+   "bg": "door",
+   "fire": null,
+   "x": 0.5,
+   "y": 1.02,
+   "height": 1.0
+  },
+  "hug": {
+   "still": "ren_hug.webp",
+   "pose": "hug",
+   "bg": "door",
+   "fire": null,
+   "zoom": 1.2,
+   "x": 0.5,
+   "y": 1.02,
+   "height": 1.02
+  }
+ },
+ "hooks": {
+  "view": "CALL.S.view",
+  "mouth": "CALL.FW.mouth"
  }
 }

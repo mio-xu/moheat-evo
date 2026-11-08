@@ -17,7 +17,7 @@
 //            bg: { src, depth?, fire: [x, y] (fire in the plate, fraction), zoom? },
 //            char: { src, w, h, x, y, height } (anchored at its bottom centre: x, y = frame fraction, height = fraction of the frame),
 //            patches: [ { src, rect: [x, y, w, h] in char pixels, kind: "mouth" | "eyes" } ] } }
-// Data hooks (optional): hooks: { view: "HINA.S.view", mouth: "HINA.FW.mouth" (0..1), level / raw: paths } — where the base demo keeps its state.
+// Data hooks (optional): hooks: { view: "HINA.S.view", mouth: "HINA.FW.mouth" (0..1) | lv: "JIN.S.lv" (+ lvGain, default 25), level / raw: paths } — where the base demo keeps its state.
 // Hooks (optional): MoHeatLayers.level() → 0..1 talking envelope (default window.STREAM.S.env), MoHeatLayers.raw() → raw voice level
 // (default window.STREAM.S.lv), MoHeatLayers.current() → the view on screen (default window.STREAM.S.view).
 // ?flat (or ?cover / ?stills / ?render) = the page's own stills. No WebGL or a layer still loading = the page's own still too.
@@ -30,7 +30,9 @@
   const H = D.hooks || {};   // per page: where the base demo keeps its state (default: Demo24-style window.STREAM)
   API.level = API.level || (() => +(H.level ? get(H.level) : window.STREAM?.S?.env) || 0);
   API.raw = API.raw || (() => +(H.raw ? get(H.raw) : window.STREAM?.S?.lv) || 0);
-  API.mouth = API.mouth || (H.mouth ? () => +get(H.mouth) || 0 : null);   // a ready 0..1 mouth opening (e.g. Demo20's FW.mouth)
+  API.mouth = API.mouth || (H.mouth ? () => +get(H.mouth) || 0                                // a ready 0..1 mouth opening (Demo20 / 12's FW.mouth)
+    : H.lv ? () => Math.max(0, Math.min(1, ((+get(H.lv) || 0) - .006) * (H.lvGain || 25)))       // or the raw voice level (Demo21 / 22's S.lv)
+    : null);
   API.current = API.current || (() => (H.view ? get(H.view) : window.STREAM?.S?.view) || Object.values(D.views)[0].view);
 
   if (D.skipVideo) {   // the base demo's own clips are not part of this page: no requests, an 'error' instead

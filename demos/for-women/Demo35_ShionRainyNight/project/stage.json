@@ -1,21 +1,116 @@
 {
  "src": "assets/art",
  "skipVideo": "media/video/",
- "bgs": { "door": { "src": "bg_door" }, "room": { "src": "bg_room" } },
+ "bgs": {
+  "door": {
+   "src": "bg_door"
+  },
+  "room": {
+   "src": "bg_room"
+  }
+ },
  "poses": {
-  "door":    { "src": "shion_door",    "talk": "shion_door_talk",    "blink": "shion_door_blink",    "matte": "ai" },
-  "towel":   { "src": "shion_towel",   "talk": "shion_towel_talk",   "blink": "shion_towel_blink",   "matte": "ai" },
-  "dryer":   { "src": "shion_dryer",   "talk": "shion_dryer_talk",   "blink": "shion_dryer_blink",   "matte": "ai" },
-  "window":  { "src": "shion_window",  "talk": "shion_dryer_talk",   "blink": "shion_dryer_blink",   "matte": "ai" },
-  "glasses": { "src": "shion_glasses", "talk": "shion_glasses_talk", "blink": "shion_glasses_blink", "matte": "ai" },
-  "whisper": { "src": "shion_whisper", "talk": "shion_whisper_talk", "matte": "ai" }
+  "door": {
+   "src": "shion_door",
+   "talk": "shion_door_talk",
+   "blink": "shion_door_blink",
+   "matte": "ai"
+  },
+  "towel": {
+   "src": "shion_towel",
+   "talk": "shion_towel_talk",
+   "blink": "shion_towel_blink",
+   "matte": "ai"
+  },
+  "dryer": {
+   "src": "shion_dryer",
+   "talk": "shion_dryer_talk",
+   "blink": "shion_dryer_blink",
+   "matte": "ai"
+  },
+  "window": {
+   "src": "shion_window",
+   "talk": "shion_dryer_talk",
+   "blink": "shion_dryer_blink",
+   "matte": "ai"
+  },
+  "glasses": {
+   "src": "shion_glasses",
+   "talk": "shion_glasses_talk",
+   "blink": "shion_glasses_blink",
+   "matte": "ai"
+  },
+  "whisper": {
+   "src": "shion_whisper",
+   "talk": "shion_whisper_talk",
+   "matte": "ai"
+  }
  },
  "views": {
-  "door":    { "still": "shion_door",    "pose": "door",    "bg": "door", "fire": null, "x": 0.45, "y": 1.02, "height": 1.0 },
-  "towel":   { "still": "shion_towel",   "alias": [], "pose": "towel",   "bg": "room", "fire": null, "zoom": 1.15, "x": 0.5, "y": 1.02, "height": 1.02 },
-  "dryer":   { "still": "shion_dryer",   "alias": ["dryerR"], "pose": "dryer",   "bg": "room", "fire": null, "x": 0.52, "y": 1.02, "height": 1.0 },
-  "glasses": { "still": "shion_glasses", "pose": "glasses", "bg": "room", "fire": null, "zoom": 1.2, "x": 0.5, "y": 1.02, "height": 1.02 },
-  "whisper": { "still": "shion_whisper", "pose": "whisper", "bg": "room", "fire": null, "zoom": 1.3, "x": 0.5, "y": 1.02, "height": 1.02 },
-  "window":  { "still": "shion_window",  "pose": "window",  "bg": "room", "fire": null, "x": 0.52, "y": 1.02, "height": 1.0 }
+  "door": {
+   "still": "shion_door",
+   "pose": "door",
+   "bg": "door",
+   "fire": null,
+   "x": 0.45,
+   "y": 1.02,
+   "height": 1.0
+  },
+  "towel": {
+   "still": "shion_towel",
+   "alias": [],
+   "pose": "towel",
+   "bg": "room",
+   "fire": null,
+   "zoom": 1.15,
+   "x": 0.5,
+   "y": 1.02,
+   "height": 1.02
+  },
+  "dryer": {
+   "still": "shion_dryer",
+   "alias": [
+    "dryerR"
+   ],
+   "pose": "dryer",
+   "bg": "room",
+   "fire": null,
+   "x": 0.52,
+   "y": 1.02,
+   "height": 1.0
+  },
+  "glasses": {
+   "still": "shion_glasses",
+   "pose": "glasses",
+   "bg": "room",
+   "fire": null,
+   "zoom": 1.2,
+   "x": 0.5,
+   "y": 1.02,
+   "height": 1.02
+  },
+  "whisper": {
+   "still": "shion_whisper",
+   "pose": "whisper",
+   "bg": "room",
+   "fire": null,
+   "zoom": 1.3,
+   "x": 0.5,
+   "y": 1.02,
+   "height": 1.02
+  },
+  "window": {
+   "still": "shion_window",
+   "pose": "window",
+   "bg": "room",
+   "fire": null,
+   "x": 0.52,
+   "y": 1.02,
+   "height": 1.0
+  }
+ },
+ "hooks": {
+  "view": "SHION.S.view",
+  "lv": "SHION.S.lv"
  }
 }

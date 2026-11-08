@@ -1,23 +1,125 @@
 {
  "src": "assets/art",
  "skipVideo": "media/video/",
- "bgs": { "lounge": { "src": "bg_lounge" } },
+ "bgs": {
+  "lounge": {
+   "src": "bg_lounge"
+  }
+ },
  "poses": {
-  "lounge":  { "src": "jin_lounge",  "talk": "jin_lounge_talk",  "matte": "ai" },
-  "gaze":    { "src": "jin_gaze",    "talk": "jin_gaze_talk", "blink": "jin_gaze_blink", "matte": "ai" },
-  "can":     { "src": "jin_can",     "talk": "jin_gaze_talk", "blink": "jin_gaze_blink", "matte": "ai" },
-  "wrist":   { "src": "jin_wrist",   "talk": "jin_gaze_talk", "blink": "jin_gaze_blink", "matte": "ai" },
-  "jacket":  { "src": "jin_jacket",  "talk": "jin_gaze_talk", "blink": "jin_gaze_blink", "matte": "ai" },
-  "glasses": { "src": "jin_glasses", "talk": "jin_glasses_talk", "matte": "ai" },
-  "whisper": { "src": "jin_whisper", "talk": "jin_whisper_talk", "matte": "ai" }
+  "lounge": {
+   "src": "jin_lounge",
+   "talk": "jin_lounge_talk",
+   "matte": "ai"
+  },
+  "gaze": {
+   "src": "jin_gaze",
+   "talk": "jin_gaze_talk",
+   "blink": "jin_gaze_blink",
+   "matte": "ai"
+  },
+  "can": {
+   "src": "jin_can",
+   "talk": "jin_gaze_talk",
+   "blink": "jin_gaze_blink",
+   "matte": "ai"
+  },
+  "wrist": {
+   "src": "jin_wrist",
+   "talk": "jin_gaze_talk",
+   "blink": "jin_gaze_blink",
+   "matte": "ai"
+  },
+  "jacket": {
+   "src": "jin_jacket",
+   "talk": "jin_gaze_talk",
+   "blink": "jin_gaze_blink",
+   "matte": "ai"
+  },
+  "glasses": {
+   "src": "jin_glasses",
+   "talk": "jin_glasses_talk",
+   "matte": "ai"
+  },
+  "whisper": {
+   "src": "jin_whisper",
+   "talk": "jin_whisper_talk",
+   "matte": "ai"
+  }
  },
  "views": {
-  "lounge":  { "still": "jin_lounge",  "pose": "lounge",  "bg": "lounge", "fire": null, "x": 0.45, "y": 1.02, "height": 1.0 },
-  "can":     { "still": "jin_can",     "pose": "can",     "bg": "lounge", "fire": null, "zoom": 1.2, "x": 0.5, "y": 1.02, "height": 1.02 },
-  "wrist":   { "still": "jin_wrist",   "pose": "wrist",   "bg": "lounge", "fire": null, "zoom": 1.2, "x": 0.5, "y": 1.02, "height": 1.02 },
-  "glasses": { "still": "jin_glasses", "pose": "glasses", "bg": "lounge", "fire": null, "zoom": 1.25, "x": 0.5, "y": 1.02, "height": 1.02 },
-  "gaze":    { "still": "jin_gaze",    "pose": "gaze",    "bg": "lounge", "fire": null, "zoom": 1.2, "x": 0.5, "y": 1.02, "height": 1.02 },
-  "whisper": { "still": "jin_whisper", "pose": "whisper", "bg": "lounge", "fire": null, "zoom": 1.3, "x": 0.55, "y": 1.02, "height": 1.02 },
-  "jacket":  { "still": "jin_jacket",  "pose": "jacket",  "bg": "lounge", "fire": null, "zoom": 1.1, "x": 0.5, "y": 1.02, "height": 1.02 }
+  "lounge": {
+   "still": "jin_lounge",
+   "pose": "lounge",
+   "bg": "lounge",
+   "fire": null,
+   "x": 0.45,
+   "y": 1.02,
+   "height": 1.0
+  },
+  "can": {
+   "still": "jin_can",
+   "pose": "can",
+   "bg": "lounge",
+   "fire": null,
+   "zoom": 1.2,
+   "x": 0.5,
+   "y": 1.02,
+   "height": 1.02
+  },
+  "wrist": {
+   "still": "jin_wrist",
+   "pose": "wrist",
+   "bg": "lounge",
+   "fire": null,
+   "zoom": 1.2,
+   "x": 0.5,
+   "y": 1.02,
+   "height": 1.02
+  },
+  "glasses": {
+   "still": "jin_glasses",
+   "pose": "glasses",
+   "bg": "lounge",
+   "fire": null,
+   "zoom": 1.25,
+   "x": 0.5,
+   "y": 1.02,
+   "height": 1.02
+  },
+  "gaze": {
+   "still": "jin_gaze",
+   "pose": "gaze",
+   "bg": "lounge",
+   "fire": null,
+   "zoom": 1.2,
+   "x": 0.5,
+   "y": 1.02,
+   "height": 1.02
+  },
+  "whisper": {
+   "still": "jin_whisper",
+   "pose": "whisper",
+   "bg": "lounge",
+   "fire": null,
+   "zoom": 1.3,
+   "x": 0.55,
+   "y": 1.02,
+   "height": 1.02
+  },
+  "jacket": {
+   "still": "jin_jacket",
+   "pose": "jacket",
+   "bg": "lounge",
+   "fire": null,
+   "zoom": 1.1,
+   "x": 0.5,
+   "y": 1.02,
+   "height": 1.02
+  }
+ },
+ "hooks": {
+  "view": "JIN.S.view",
+  "lv": "JIN.S.lv"
  }
 }
