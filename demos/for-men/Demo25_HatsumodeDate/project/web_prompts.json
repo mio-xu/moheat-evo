@@ -162,5 +162,28 @@
   "ref": "tsubaki_close_blink",
   "mask": "1991,576,140,100",
   "prompt": "Edit this exact image. Keep EVERYTHING identical and change ONLY the eye on the right side of the picture: FULLY closed in a natural blink, exactly like her other (already closed) eye — upper eyelid all the way down, lashes visible, no iris showing. Do not move, zoom or crop the picture."
+ },
+ "tsubaki_stole2": {
+  "ref": [
+   "tsubaki_stole",
+   "tsubaki_close"
+  ],
+  "mask": "520,1120,660,440;300,1200,300,240",
+  "prompt": "Edit image 1. Keep her face, eyes, hair, hair ornament, the furisode on the right side of the picture, the gold obi, the art style, the colours and the flat chroma-green background exactly as they are, same framing and size; do not move, zoom or crop the picture. Change ONLY the big white fur shape she is hugging in the lower left. Replace it with the viewer's own shoulder seen from a first-person angle, so that it clearly reads as a person she is leaning on: the shoulder and upper arm of a dark charcoal winter coat, exactly the same dark coat as the one in image 2 (image 2 is only the reference for that coat), filling the lower left foreground and running out of the picture at the bottom and left. Her cheek rests on top of that dark coat shoulder. Her white fur stole is draped over the dark coat shoulder like a scarf shared by two people: a band of soft white fur, about a hand wide, lying across the coat shoulder and continuing to her own shoulder on the right. Her slender hand rests lightly on the dark coat, on top of the stole's edge, fingers relaxed. No other person's face or head is visible."
+ },
+ "tsubaki_stole2_talk": {
+  "ref": "tsubaki_stole2",
+  "mask": "1178,732,80,54",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture."
+ },
+ "tsubaki_stole2_blink": {
+  "ref": "tsubaki_stole2",
+  "mask": "910,612,110,74;1180,424,118,78",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY BOTH of her eyes: FULLY closed in a natural blink (upper eyelids all the way down on both eyes, lashes visible, no iris showing, same skin tone and lighting); her bangs stay exactly as they are. Do not move, zoom or crop the picture."
+ },
+ "tsubaki_close_hair": {
+  "ref": "tsubaki_close_clean",
+  "mask": "2395,515,70,100",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — her face, hair, the dark coat, colours, lineart and the flat chroma-green background — and change ONLY the ends of her long silver-white hair strands on the right side of her hair (just above the dark coat): they currently stop in a straight vertical cut. Let those strands end naturally in soft tapered tips, a few thin loose strands, falling down onto the dark coat, on the same flat green background. Nothing else is drawn there (no neck, no skin, no person). Do not move, zoom or crop the picture."
  }
 }

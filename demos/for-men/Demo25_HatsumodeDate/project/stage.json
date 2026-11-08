@@ -158,18 +158,10 @@
    ]
   },
   "close": {
-   "src": "tsubaki_close",
+   "src": "tsubaki_close_hair",
    "talk": "tsubaki_close_talk",
    "blink": "tsubaki_close_blink2",
    "matte": "green",
-   "erase": [
-    [
-     2290,
-     0,
-     2560,
-     975
-    ]
-   ],
    "centre_mouth": [
     1739,
     787
@@ -243,30 +235,30 @@
    ]
   },
   "stole": {
-   "src": "tsubaki_stole",
-   "talk": "tsubaki_stole_talk",
-   "blink": "tsubaki_stole_blink",
+   "src": "tsubaki_stole2",
+   "talk": "tsubaki_stole2_talk",
+   "blink": "tsubaki_stole2_blink",
    "matte": "green",
    "centre_mouth": [
-    1175,
-    752
+    1180,
+    746
    ],
    "radius_mouth": [
-    60,
-    40
+    66,
+    42
    ],
    "regions_eyes": [
     [
-     916,
-     624,
-     107,
-     87
+     925,
+     628,
+     108,
+     74
     ],
     [
-     1169,
-     429,
-     116,
-     87
+     1178,
+     438,
+     128,
+     84
     ]
    ]
   }
