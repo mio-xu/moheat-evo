@@ -208,11 +208,17 @@ def strip_comments(t):
 for r in local_refs:
     p = resolve(r)
     if not os.path.exists(p): missing.append(f'index.html: {r}')
+# `PREFIX + 'file.webp'` (e.g. const ART = '../_kit/art/') — resolve the prefix constant from the same file, else the bare
+# file name was looked up next to the page and reported as a false 404 (2026-11-08: banquet_bg.webp in Demo23 / 41 / 42).
+CONST = re.compile(r'''\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*['"`]([^'"`$]*/)['"`]''')
 for p, t in code.items():
     base = os.path.join(D, 'media') if p == LJ else (os.path.dirname(p) if p.endswith('.css') else D)
-    for m in PATH.finditer(strip_comments(t)):
+    tc = strip_comments(t); consts = dict(CONST.findall(tc))
+    for m in PATH.finditer(tc):
         s = m.group(1)
         if '${' in s or s.startswith(('http', '//')): continue
+        pre = re.search(r'([A-Za-z_$][\w$]*)\s*\+\s*$', tc[max(0, m.start() - 60):m.start()])
+        if pre and pre.group(1) in consts: s = consts[pre.group(1)] + s
         q = os.path.normpath(os.path.join(base, s))
         if not os.path.exists(q) and not os.path.exists(os.path.normpath(os.path.join(os.path.dirname(p), s))):
             missing.append(f'{os.path.relpath(p, D)}: {s}')
