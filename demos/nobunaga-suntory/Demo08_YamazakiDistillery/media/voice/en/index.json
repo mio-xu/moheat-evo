@@ -1,0 +1,41 @@
+{
+ "lang": "en",
+ "text": {
+  "c04": "[suspicious] A misty valley… and a strangely good scent.",
+  "c06": "[calmly] I hear water. This must be a land of fine springs.",
+  "c11": "[surprised] Great tubs, breathing and bubbling.",
+  "c12": "[whispers] It smells of sweet barley.",
+  "c15": "[excited] Look! Giant copper helmets, all in a row!",
+  "c16": "[excited] Hot! Hotter than a smithy!",
+  "c19": "[thoughtfully] Turning sake into cloud with fire… and back into drops.",
+  "c24": "[softly] …So quiet. The casks are sleeping.",
+  "c27": "[whispers] They call it the angels' share.",
+  "c29": "[whispers] Those angels drink before me?",
+  "c35": "[surprised] Cold… such clear water. This water is the soul of the sake.",
+  "c40": "[suspicious] …Wait. I know this scent.",
+  "c42": "[surprised] My lord — that night at Azuchi… the sake this one brought us!",
+  "c44": "[excited] So this is where it was born!",
+  "c48": "[excited] Cheers!",
+  "c49": "[politely] Cheers!",
+  "c56": "[politely] I would like to take a cask home to Azuchi."
+ },
+ "dur": {
+  "c04": 3.974,
+  "c06": 3.958,
+  "c11": 3.026,
+  "c12": 2.109,
+  "c15": 3.432,
+  "c16": 2.358,
+  "c19": 4.81,
+  "c24": 3.063,
+  "c27": 2.276,
+  "c29": 2.196,
+  "c35": 5.539,
+  "c40": 2.632,
+  "c42": 4.574,
+  "c44": 2.193,
+  "c48": 0.897,
+  "c49": 0.752,
+  "c56": 2.519
+ }
+}
