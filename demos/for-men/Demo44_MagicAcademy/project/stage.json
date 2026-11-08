@@ -49,7 +49,6 @@
    "matte": "green",
    "character": "tsubaki",
    "look": "crossover_academy",
-   "mouth": "lp",
    "centre_mouth": [
     1300,
     352
@@ -71,7 +70,8 @@
      46,
      32
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "tsubaki_broom": {
    "src": "tsubaki_broom",
@@ -79,7 +79,6 @@
    "matte": "green",
    "character": "tsubaki",
    "look": "crossover_academy",
-   "mouth": "lp",
    "centre_mouth": [
     896,
     475
@@ -106,7 +105,8 @@
     "view": {
      "rotate": "auto"
     }
-   }
+   },
+   "mouth": "lp"
   },
   "cocoa_base": {
    "src": "cocoa_base",
@@ -114,7 +114,6 @@
    "matte": "green",
    "character": "cocoa",
    "look": "crossover_academy",
-   "mouth": "lp",
    "centre_mouth": [
     1320,
     427
@@ -136,7 +135,8 @@
      48,
      34
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "cocoa_ear": {
    "src": "cocoa_ear",
@@ -144,7 +144,6 @@
    "matte": "green",
    "character": "cocoa",
    "look": "crossover_academy",
-   "mouth": "lp",
    "centre_mouth": [
     1208,
     641
@@ -171,7 +170,8 @@
     "view": {
      "rotate": "auto"
     }
-   }
+   },
+   "mouth": "lp"
   },
   "luna_base": {
    "src": "luna_base",
@@ -179,7 +179,6 @@
    "matte": "green",
    "character": "luna",
    "look": "crossover_academy",
-   "mouth": "lp",
    "centre_mouth": [
     1257,
     470
@@ -201,7 +200,8 @@
      42,
      32
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "luna_ear": {
    "src": "luna_ear",
@@ -209,7 +209,6 @@
    "matte": "green",
    "character": "luna",
    "look": "crossover_academy",
-   "mouth": "lp",
    "centre_mouth": [
     1311,
     557
@@ -236,7 +235,8 @@
     "view": {
      "rotate": "auto"
     }
-   }
+   },
+   "mouth": "lp"
   },
   "cocoa_blow": {
    "src": "cocoa_ear_blow",
@@ -296,6 +296,9 @@
     0.78,
     0.86
    ],
+   "x": 0.66,
+   "y": 1.0,
+   "height": 1.0,
    "who": "C"
   },
   "lab_C_blow": {
@@ -306,6 +309,9 @@
     0.78,
     0.86
    ],
+   "x": 0.66,
+   "y": 1.0,
+   "height": 1.0,
    "who": "C"
   },
   "tower_L": {
@@ -340,6 +346,9 @@
    "pose": "cocoa_ear",
    "bg": "dawn",
    "fire": null,
+   "x": 0.66,
+   "y": 1.0,
+   "height": 1.0,
    "who": "C"
   },
   "end_L": {

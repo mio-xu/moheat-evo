@@ -35,10 +35,11 @@ cfg = {"src": "assets/art", "hooks": {"view": "ACAD.S.view", "lv": "ACAD.S.lv", 
        "bgs": {k: {"src": f"bg_{k}", "fire": v or [.5, .5]} for k, v in BGS.items()}, "poses": {}, "views": {}}
 for p in POSES:
     f = FP[p]; c = p.split('_')[0]
-    cfg["poses"][p] = {"src": p, "blink": f"{p}_blink", "matte": "green", "character": c, "look": "crossover_academy", "mouth": "lp",
+    cfg["poses"][p] = {"src": p, "blink": f"{p}_blink", "matte": "green", "character": c, "look": "crossover_academy",
                        "centre_mouth": f["mouth"][:2], "radius_mouth": [round(f["mouth"][2] * .8), round(f["mouth"][3] * .8)],
                        "regions_eyes": [[e[0], e[1], round(e[2] * 1.05), round(e[3] * 1.05)] for e in f["eyes"]]}
     if p in LP: cfg["poses"][p]["lp"] = LP[p]
+    if not os.environ.get('NOLP'): cfg["poses"][p]["mouth"] = "lp"   # NOLP=1: first build only (lp_mouths.py needs media/layers.js first)
 # her blow (pursed lips, a silent moment: no line plays) = the mug pose's own masked edit; shares its blink (same face, same pixels)
 fe = FP['cocoa_ear']
 cfg["poses"]["cocoa_blow"] = {"src": "cocoa_ear_blow", "blink": "cocoa_ear_blink", "matte": "green", "character": "cocoa", "look": "crossover_academy",

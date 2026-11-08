@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Thermal plan simulator for pre-production (DEMO_DESIGN_GUIDE §3 DUAL, §6 G1 thermal table) — before any page exists.
 
-  python3 tools/thermal/plan_sim.py <demo folder> [--alt] [--plot]
+  python3 tools/thermal/plan_sim.py <demo folder> [--alt] [--plot] [--lang ja|en|zh]
 
 Reads <demo>/scripts/script_data.py (STEPS: beats = [line id, position] · {interaction} · ['@event'] · ['window', who, qid]; L = lines)
 and <demo>/project/thermal_plan.json (voice distances, smoothing, events), takes each line's real loudness from
@@ -19,6 +19,7 @@ import importlib.util, json, math, os, subprocess, sys
 import numpy as np
 
 D = os.path.abspath(sys.argv[1]); ALT = '--alt' in sys.argv
+VLANG = sys.argv[sys.argv.index('--lang') + 1] if '--lang' in sys.argv else 'ja'   # voices per language: media/voice/<lang>/
 sp = importlib.util.spec_from_file_location('sd', os.path.join(D, 'scripts', 'script_data.py')); SD = importlib.util.module_from_spec(sp); sp.loader.exec_module(SD)
 PLAN = json.load(open(os.path.join(D, 'project', 'thermal_plan.json'), encoding='utf-8'))
 EV, VO, SM = PLAN['events'], PLAN['voice'], PLAN['smoothing']
@@ -26,7 +27,8 @@ FPS = 20
 
 
 def loud(lid):
-    p = os.path.join(D, 'media', 'voice', lid + '.m4a')
+    p = os.path.join(D, 'media', 'voice', VLANG, lid + '.m4a')
+    if not os.path.exists(p): p = os.path.join(D, 'media', 'voice', lid + '.m4a')   # older single-language layout
     if not os.path.exists(p): raise SystemExit(f'missing voice {p} (run scripts/voice.py first)')
     raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', p, '-ac', '1', '-ar', '16000', '-f', 's16le', '-'], capture_output=True).stdout
     x = np.frombuffer(raw, np.int16).astype(np.float32) / 32768
@@ -121,7 +123,7 @@ for i in range(N):
         y[c] += (target[i, c] - y[c]) * min(1, (1 / FPS) / tc)
     out[i] = y
 # --- write
-csv = os.path.join(D, 'project', 'thermal_preview' + ('_alt' if ALT else '') + '.csv')
+csv = os.path.join(D, 'project', 'thermal_preview' + ('_alt' if ALT else '') + ('' if VLANG == 'ja' else '_' + VLANG) + '.csv')
 with open(csv, 'w') as f:
     f.write('t,LC,LH,RC,RH,dual,legacy\n')
     for i in range(N):
