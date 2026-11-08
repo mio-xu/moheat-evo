@@ -76,7 +76,7 @@ function measure(f, touch, scope) {
     if (inScroller) (el.closest('label') || el).scrollIntoView({ block: 'nearest', inline: 'nearest' });   // a control further down the side panel: scroll it into view first
     const q = el.getBoundingClientRect(), hit = doc.elementFromPoint(q.left + q.width / 2, q.top + q.height / 2);
     if (!hit || !(el.contains(hit) || el.closest('label')?.contains(hit))) { out.covered = (out.covered || 0) + 1; return; }   // under the cover / another layer: not on screen for the user
-    if (!tappable(doc, el)) small.push(`${name(el)} ${Math.round(q.width)}×${Math.round(q.height)}`);
+    if (!tappable(doc, el)) { const t = el.matches('input[type=checkbox], input[type=radio]') && el.closest('label') || el, r = t.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2; small.push(`${name(el)} ${Math.round(q.width)}×${Math.round(q.height)} [${[[0, 0], [-21, 0], [21, 0], [0, -21], [0, 21]].map(([dx, dy]) => { const h = doc.elementFromPoint(cx + dx, cy + dy); return h ? (h.id || String(h.className).slice(0, 20) || h.tagName) : '-'; }).join(' ')} @${Math.round(r.top)}+${Math.round(r.height)}]`); }
   });
   out.small = small; out.off = off;
   return out;
