@@ -311,5 +311,18 @@
   "demos": [
    "for-women/Demo30_SakuFestival"
   ]
+ },
+ "nagisa": {
+  "name": "早瀬渚 Nagisa",
+  "persona": "男性向 · 夏夜屋顶（Demo31）：20 岁，你的青梅竹马，暑假回老家。平时 T 恤运动鞋、像哥们一样嘴硬（ツンデレ寄り），今晚难得穿了浴衣，害羞就骂\"バカ\"、马上换话题，告白只说一半",
+  "description": "A Japanese woman of twenty, a tomboyish childhood friend. Slightly low, clear and husky young female voice with a boyish, sporty edge; blunt, teasing and fast-talking, a little rough, says \"baka\" easily, but when embarrassed she gets flustered, mumbles and her voice goes soft and shy. Close to the ear she becomes a quiet, breathy, nervous whisper. Native Japanese speaker. Clean close-mic recording, no background noise.",
+  "sample": "[teasing] よっ、やっぱここにいた。 …なに見てんの、浴衣？ [annoyed] べ、別にあんたに見せるために着たんじゃないし！ お母さんが無理やり… [laughs] ほら、半分あげる。溶ける前に食べなって。 [whispers] …ねえ、さっきの花火の音で聞こえなかったでしょ。…もう一回は、言わないからね。",
+  "demos": [
+   "for-men/Demo31_SummerRooftop"
+  ],
+  "compare": [],
+  "voice_id": "IRIujaFF31qohpDbrkrj",
+  "confirmed": "2026-11-08",
+  "pick": "r1_b"
  }
 }
