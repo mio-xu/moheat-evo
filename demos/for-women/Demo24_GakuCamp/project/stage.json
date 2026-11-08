@@ -18,7 +18,16 @@
    "near_eyes": [
     1244,
     440
-   ]
+   ],
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.18,
+     0.26
+    ],
+    "minh": 0.16
+   }
   },
   "coffee": {
    "src": "gaku_coffee",
@@ -39,7 +48,16 @@
      1500,
      1020
     ]
-   ]
+   ],
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.18,
+     0.26
+    ],
+    "minh": 0.16
+   }
   },
   "imo": {
    "src": "gaku_imo",
@@ -52,7 +70,16 @@
    "near_eyes": [
     1244,
     440
-   ]
+   ],
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.18,
+     0.26
+    ],
+    "minh": 0.16
+   }
   },
   "blanket": {
    "src": "gaku_blanket_ext",
@@ -65,7 +92,16 @@
    "near_eyes": [
     1244,
     440
-   ]
+   ],
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.18,
+     0.26
+    ],
+    "minh": 0.16
+   }
   },
   "bye": {
    "src": "gaku_bye",
@@ -78,7 +114,16 @@
    "near_eyes": [
     1244,
     440
-   ]
+   ],
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.18,
+     0.26
+    ],
+    "minh": 0.16
+   }
   },
   "log": {
    "src": "gaku_log_clean",
@@ -91,7 +136,16 @@
    "near_eyes": [
     1167,
     384
-   ]
+   ],
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.18,
+     0.26
+    ],
+    "minh": 0.16
+   }
   },
   "left": {
    "src": "gaku_left_ext",
@@ -114,7 +168,16 @@
      82,
      52
     ]
-   ]
+   ],
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.18,
+     0.26
+    ],
+    "minh": 0.16
+   }
   },
   "whisper": {
    "src": "gaku_whisper",
@@ -122,7 +185,16 @@
    "near_mouth": [
     1100,
     850
-   ]
+   ],
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.18,
+     0.26
+    ],
+    "minh": 0.16
+   }
   }
  },
  "views": {

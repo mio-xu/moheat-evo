@@ -8,7 +8,8 @@ the set, so a redrawn mouth is never compared with the original line.
   ~/ml/LivePortrait/.venv/bin/python tools/art/lp_mouths.py <demo> [pose …] [--probe] [--force] [--sheet]
 
 Poses: those named on the command line, else every pose with "mouth": "lp" in project/stage.json. Per pose (all optional):
-  "lp": { "lips": [.15, .3, .5] (opening of each level; lower = safer on anime faces), "pad": 1.5 (block size around the moving part),
+  "lp": { "lips": [.1, .2, .34] (LivePortrait opening per level; lower = safer on anime faces), "minh": .26 (smallest height of the widest
+          opening, fraction of the mouth width: lower for realistic / adult faces, Demo24 Gaku .16), "pad": 1.5 (block size around the moving part),
           "centre": [x, y] + "radius": [rx, ry] (fixed block, source px), "src": other picture to warp (must be the same size) }
 A pose drawn open with a "quiet" (closed) variant: the quiet patch is pasted first, so the set is warped from the closed face.
 Writes <demo>/assets/lp_mouths/<pose>_lv<k>.png (k = 0 closed … n widest, RGBA, source px, full block) + lp_mouths.json; then
@@ -56,7 +57,7 @@ def smooth1(v, sig):
     return cv2.GaussianBlur(np.asarray(v, np.float32).reshape(-1, 1), (0, 0), sigmaX=1, sigmaY=max(.5, sig), borderType=cv2.BORDER_REPLICATE).ravel()
 
 
-def opening(Sn, S0, B, a):
+def opening(Sn, S0, B, a, minh=None):
     """the widest level's opening as a clean lens: axis (PCA of the opening), per-position top / bottom edges, the drawn closed line.
     The opening = where the render changed most (palette-free: warm photo teeth on a pale face are invisible to a colour test, Demo17 whisper).
     LivePortrait draws photo teeth / a noisy interior there; only its OUTLINE is used. Returns None if nothing opened."""
@@ -89,7 +90,7 @@ def opening(Sn, S0, B, a):
     line = smooth1(np.clip(line, top.min() - 2, bot.max() + 2), sig)
     # readable at any size (user: Jin "doesn't move" — too subtle): the widest opening is at least MINH of the mouth's width, mostly
     # downwards (the jaw drops); LivePortrait opens some anime faces only a sliver (Demo18 taiko)
-    n_ = len(bins); top = np.minimum(top, line - MINH * .3 * n_); bot = np.maximum(bot, line + MINH * .7 * n_)
+    n_ = len(bins); mh = MINH if minh is None else minh; top = np.minimum(top, line - mh * .3 * n_); bot = np.maximum(bot, line + mh * .7 * n_)
     return dict(c=c, ax=ax, nr=nr, u0=u0, top=top, bot=bot, line=line)
 
 
@@ -182,7 +183,7 @@ for name, p in poses.items():
     border = max(a[0].max(), a[-1].max(), a[:, 0].max(), a[:, -1].max())
     if border > 4: a = (np.clip((a.astype(np.float32) - border) / (255 - border), 0, 1) * 255).astype(np.uint8)
     B = np.asarray(Image.open(path).convert("RGB"), np.float32)[y0:y1, x0:x1]; C0 = S0[y0:y1, x0:x1]
-    L = opening(SS[-1][y0:y1, x0:x1], C0, B, a); kind = "render"
+    L = opening(SS[-1][y0:y1, x0:x1], C0, B, a, lp.get("minh")); kind = "render"
     if L is None: L = drawn_lens(B, a, wm if not lp.get("centre") else rx); kind = "drawn line"
     if L is None: print(f"{name}: WARN no opening found (render kept as is)"); kind = "none"
     for k, S in enumerate([C0] + [q[y0:y1, x0:x1] for q in SS]):
