@@ -7,6 +7,16 @@
 
 ---
 
+## 2026-11-09（凌晨）· 嘴套加动画风牙齿 + 最后 8 个旧差分姿势全部改成嘴套 + 统筹 QA 第 3 轮嘴部问题（agent `mouth2`）
+- **用户反馈**：①「张大嘴没有牙齿有点吓人，但不要写实」②「只准看着我（Demo21 Jin）有些嘴还没改」。
+- **工具** `tools/art/lp_mouths.py`：默认第 2、3 档一条平涂上排牙（不画单颗牙、裁在开口里、两档同厚同位置），最宽档一点舌头，颜色取自角色皮肤（含场景光）；`"teeth": false` / `--no-teeth` 关闭，`"teeth": {alpha, band, …}` 收淡（岳 Demo24、朔 Demo30：alpha .75）。难的脸：`"view"`（裁 / 转正 / 缩小；`rotate: "auto"` 按嘴角自动转正）、`"warp": false`（不用 LP，开口沿画好的闭嘴线，端点就是画好的嘴角；`lift` / `drop` / `dark` / `search`）、`"hide"`（手指多边形）、`"drawn_open"`（露齿笑作起始形状）、`"fang"`（虎牙每档贴回上唇）、`"feather"`（硬边块）。`check_patches.py` 新增 OLD-MOUTH / NO-TEETH（FAIL，例外写 `project/qa.json` `mouth_exceptions`）；check_demo G4 提示、CHECKLIST / SCRIPT 模板、指南 §6 第 5 步 ④、§6.5 S6 / S9、§11.1（2 条）已更新。
+- **8 个旧差分姿势 → 嘴套**：Demo18 wave / race（drawn_open + fang）、Demo21 wrist（view 转正）、Demo43 hinata_ear（warp:false + fang）、Demo20 hands（warp:false + hide）、Demo30 breath（warp:false，侧脸）、Demo25 pray（warp:false，Demo25 没花 OpenAI）、Demo31 laugh（整张 quiet 作源 + feather 7 + warp:false）。**OpenAI 花费 $0**。现在 13 个分层 Demo 的所有说话姿势都是嘴套，check_patches 全部 0 问题。
+- **QA 第 3 轮修复**：Demo31 laugh 玻璃环（软羽化边透出画好的大嘴）、Demo12 close / hug 与 Demo20 lean 嘴角断线（warp:false）、Demo18 / 43 虎牙和露齿笑跳动（fang + drawn_open）、Demo31 sparkler 下唇糊 / whisper 粗弧、Demo21 全部 / Demo19 lean+whisper / Demo25 close+stole / Demo24 whisper 歪脸开口跑出嘴角（view auto 或 warp:false）。
+- **验证**：每个 Demo check_patches 0；check_mouth（14 17 18 19 25 31 43 24 30）/ drive_story（12 20 21 22）通过；每个姿势在真实图层上真 2 倍看过。审查图（scratchpad `mouth2/final/`）：`<Demo>_before_after.jpg`（改前 / 改后，改造姿势显示旧差分）、`<Demo>_2x_real_layers.jpg`（真实图层 2 倍 lv0–3）。
+- **提交**：工具 63356c8 / c68a3e0a / 3bf7352a，check_demo、指南 ×2、偏好各一；Demo 各一（部分 Demo 因 QA 修复有第二个提交）。Demo31 的 layers.js 只提交了嘴部条目（fix4 的 char_popsicle / 眼睛改动留给 fix4）。
+- **已知 / 下一步**：牙带两端在 2 倍下是斜切角（统一风格，可接受）；Demo31 laugh 说话时开口是普通大小（原画大笑只在静止画里）；Demo19 lean 第 1 档左嘴角还有极小的台阶。
+- **问题**：机器负载很高（其他会话 100+ Chrome，load 200–350），LP 和浏览器检查很慢，一次 STUCK-OPEN 和两次 Chrome 起不来都是负载造成（重跑通过）；第一轮审图看的是缩小总览图，漏掉了 QA 第 3 轮的问题 → 已写进 §11.1：真实图层 + 真 2 倍逐姿势看。
+
 ## 2026-11-09（凌晨）· QA 第 3 轮画面修复（agent `fix4`）
 - **做了什么**：Demo19 / Demo22 分层画面不再被页面缩放漂移（LIVE 守卫）；Demo20 握手、Demo22 耳语（Demo21 手腕已随嘴型提交 7d84c1eb）改位置 / 放大，最大视差不再露背景；Demo22 右耳吹风改用不翻转的剧照；Demo20 右耳贴近做成独立镜头 `hina_lean_r`（只翻人物、背景不翻、去掉星形耳钉，自己的 LivePortrait 嘴套 `lean_r` + 眨眼）；Demo24 热气按镜头淡出、软圆；Demo12 拥抱粉框（缩放 < 1 留边）修好；Demo31 冰棍 / 手 / 袖口描边清掉；Demo18 race 青色边光改为场景紫色并变薄、booth 手和玩偶的灰绿边清掉；Demo22 whisper / Demo30 whisper_R / Demo31 laugh 加遮罩眨眼（OpenAI 3 张，约 $0.6）。提交：e4dd6a0c、bc848e4d、927ec7ae、Demo30 眨眼、b58b0509、df08b219、5ce30258、bf270eeb、edfd0834（§11.1）。
 - **状态**：各 Demo `node tools/art/check_motion.js` 全部 motion OK（无 FRAME-DRIFT / EDGE-GAP）；Demo20 check_patches OK。Demo20 queue 画面不改：剧本里排队画面本来就没有陽向（`project/layers.md`），柜台前的黑发男子是排在你前面的人。
