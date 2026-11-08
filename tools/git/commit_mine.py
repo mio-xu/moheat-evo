@@ -7,11 +7,20 @@ HEAD, adds only what you name, and moves HEAD forward with an old-value check (`
 someone else's staged files and never moves HEAD backwards.
 
   python3 tools/git/commit_mine.py "<message>" <path> [<path> …]          # whole files / folders as they are on disk (deleted = removed)
-  python3 tools/git/commit_mine.py "<message>" --hunks <path> <regex>     # only the hunks of `git diff HEAD -- <path>` whose text matches
+  python3 tools/git/commit_mine.py "<message>" --hunks <path> <regex>     # only YOUR change blocks of <path> (= --match <path> <regex>)
+  python3 tools/git/commit_mine.py "<message>" --lines <path> 120-140     # only the change blocks at these working-file lines
   python3 tools/git/commit_mine.py "<message>" --patch my.diff            # a patch against HEAD (e.g. `git diff HEAD -- f > my.diff`, edited)
   python3 tools/git/commit_mine.py -F msg.txt <paths…>                    # message from a file
   MOHEAT_AGENT=<id>: warn when a path is claimed by another agent (tools/git/claim.py, docs/CLAIMS.md)
-  options: --dry (show what would go in, commit nothing) · --force-add (add ignored files) · --no-trailer
+  options: --dry / --dry-run (show what would go in, commit nothing) · --force-add (add ignored files) · --no-trailer
+
+Exact hunk selection (2026-11-08: twice the old --hunks swept a neighbour's WORKLOG entry / guide edit into another agent's commit,
+because `git diff` merges edits ≤ 6 lines apart into ONE hunk with 3 lines of context): the file is diffed against HEAD with
+`-U0`, so every contiguous block of changed lines is its own block. A block is selected when one of its +/- lines matches a
+--match / --hunks regex or lies in a --lines range (working-file line numbers; a pure removal counts at the line where it was).
+Every selected block is printed. If a selected block also holds a changed line that matches NO selector, nothing is committed
+(exit 4): that line may be someone else's — widen the selector if it is yours, or commit a hand-made --patch. The commit then
+gets HEAD's file with only the selected blocks replaced by the working-file lines (no `git apply`, no context to drift).
 
   --hunks / --patch / paths can be mixed and repeated. Paths may hold spaces (quote them in zsh: "demos/x/My file.md").
   The message gets the Co-Authored-By trailer from $COMMIT_TRAILER if set (or pass it in the message yourself).
@@ -40,19 +49,74 @@ def rel(p):
     return r
 
 
-def hunks_of(path, pattern):
-    """`git diff HEAD -- path` split into header + hunks; keep the hunks whose +/- lines match the regex."""
-    d = git('diff', '--no-color', '--no-ext-diff', 'HEAD', '--', path)
-    if not d: return '', 0, 0
-    head, hs, cur = [], [], None
-    for ln in d.splitlines(keepends=True):
-        if ln.startswith('@@'):
-            cur = [ln]; hs.append(cur)
-        elif cur is None: head.append(ln)
-        else: cur.append(ln)
-    rx = re.compile(pattern)
-    keep = [h for h in hs if any(rx.search(l[1:]) for l in h[1:] if l[:1] in '+-')]
-    return (''.join(head) + ''.join(''.join(h) for h in keep)) if keep else '', len(keep), len(hs)
+def gitb(*a, env=None, inp=None):
+    r = subprocess.run(['git', *a], cwd=ROOT, env=env, input=inp, capture_output=True)
+    if r.returncode: raise SystemExit(f'git {" ".join(a[:3])} … failed: {r.stderr.decode(errors="replace").strip()[:400]}')
+    return r.stdout
+
+
+HH = re.compile(rb'^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@')
+
+
+def blocks_of(path, old='HEAD'):
+    """`git diff -U0 HEAD -- path` → [(a, b, c, d, [(sign, new_line_no, text)])]: HEAD lines a..a+b-1 became working lines c..c+d-1."""
+    d = gitb('diff', '-U0', '--inter-hunk-context=0', '--no-color', '--no-ext-diff', '--no-textconv', '--no-renames', old, '--', path)
+    out, cur = [], None
+    for ln in d.split(b'\n'):
+        m = HH.match(ln)
+        if m:
+            a, b, c, dd = int(m[1]), int(m[2] if m[2] is not None else 1), int(m[3]), int(m[4] if m[4] is not None else 1)
+            cur = (a, b, c, dd, []); out.append(cur); n = c
+        elif cur is not None and ln[:1] in (b'+', b'-'):
+            if ln[:1] == b'+': cur[4].append(('+', n, ln[1:].decode('utf-8', 'replace'))); n += 1
+            else: cur[4].append(('-', max(cur[2], 1) if cur[3] == 0 else cur[2], ln[1:].decode('utf-8', 'replace')))
+    return out
+
+
+def select(path, sels, old='HEAD'):
+    """sels = [('match', regex) | ('lines', (lo, hi))]. Returns (new file bytes or None, report lines). Exit 4 on a mixed block."""
+    rx = any(k == 'match' for k, _ in sels)
+
+    def direct(n, text):
+        return any((k == 'match' and re.search(v, text)) or (k == 'lines' and v[0] <= n <= v[1]) for k, v in sels)
+    bl = blocks_of(path, old)
+    if not bl:
+        if not subprocess.run(['git', 'cat-file', '-e', f'{old}:{path}'], cwd=ROOT, capture_output=True).returncode: return None, [f'{path}: no changes against HEAD']
+        raise SystemExit(f'{path}: not in HEAD (new file) — commit it as a whole path, not --hunks / --lines')
+    keep, mixed, rep = [], [], []
+    for blk in bl:
+        a, b, c, d, lines = blk
+        real = [direct(n, t) for _, n, t in lines]
+        if not any(real): continue
+        # the old text of a line you rewrote never holds your new marker: in a block that ADDS lines, its removed lines count as
+        # yours under a --match selector (the added lines decide); a pure removal must match itself; --lines judges every line
+        adds = any(sg == '+' for sg, _, _ in lines)
+        hit = [h or (sg == '-' and adds and rx) for h, (sg, _, _) in zip(real, lines)]
+        keep.append(blk)
+        rep.append(f'  ── {path} block @@ -{a},{b} +{c},{d} @@ (selected)')
+        for (sg, n, t), h in zip(lines, hit):
+            rep.append(f'  {"  " if h else "✗ "}{sg}{n:>5} {t[:150]}')
+        if not all(hit): mixed.append(f'{path} @@ -{a},{b} +{c},{d} @@: {hit.count(False)} changed line(s) match no selector (✗)')
+    sd = ' | '.join(f'/{v}/' if k == 'match' else f'lines {v[0]}-{v[1]}' for k, v in sels)
+    rep.insert(0, f'· {path}: {len(keep)} of {len(bl)} change block(s) selected by {sd}')
+    if mixed:
+        print('\n'.join(rep))
+        _refuse(mixed)
+    if not keep: return None, rep
+    head = gitb('cat-file', 'blob', f'{old}:{path}').splitlines(keepends=True)
+    work = open(os.path.join(ROOT, path), 'rb').read().splitlines(keepends=True)
+    res, i = [], 0   # i = next HEAD line (0-based) not yet copied
+    for a, b, c, d, _ in keep:
+        start = a - 1 if b else a          # b == 0: pure insertion AFTER HEAD line a
+        res += head[i:start]; res += work[c - 1:c - 1 + d] if d else []; i = start + b
+    res += head[i:]
+    return b''.join(res), rep
+
+
+def _refuse(mixed):
+    print('refused — a selected block also holds changed lines that match no selector (✗; maybe another agent\'s edit):\n  ' + '\n  '.join(mixed)
+          + '\n  widen --match / --lines if those lines are yours, or commit a hand-made --patch. Nothing committed.')
+    sys.exit(4)
 
 
 def build(old, a, env):
@@ -63,10 +127,13 @@ def build(old, a, env):
             git('add', *(['-f'] if a.force_add else []), '-A', '--', p, env=env)
         else:
             git('rm', '--cached', '-r', '-q', '--ignore-unmatch', '--', p, env=env)
-    for path, pat in a.hunks:
-        patch, k, n = hunks_of(path, pat)
-        notes.append(f'{path}: {k} of {n} hunk(s) match /{pat}/')
-        if patch: git('apply', '--cached', '--recount', '--whitespace=nowarn', env=env, inp=patch)
+    for path, sels in a.sel.items():
+        data, rep = select(path, sels, old)
+        notes.extend(rep)
+        if data is not None:
+            mode = (git('ls-tree', old, '--', path).split() or ['100644'])[0]
+            sha = gitb('hash-object', '-w', '--stdin', inp=data).decode().strip()
+            git('update-index', '--add', '--cacheinfo', f'{mode},{sha},{path}', env=env)
     for pf in a.patch:
         git('apply', '--cached', '--recount', '--whitespace=nowarn', env=env, inp=open(pf).read())
         notes.append(f'patch {pf} applied')
@@ -78,17 +145,24 @@ def main():
     ap.add_argument('message', nargs='?')
     ap.add_argument('paths', nargs='*')
     ap.add_argument('-F', dest='msgfile')
-    ap.add_argument('--hunks', nargs=2, action='append', default=[], metavar=('PATH', 'REGEX'))
+    ap.add_argument('--hunks', '--match', dest='hunks', nargs=2, action='append', default=[], metavar=('PATH', 'REGEX'))
+    ap.add_argument('--lines', nargs=2, action='append', default=[], metavar=('PATH', 'A-B'))
     ap.add_argument('--patch', action='append', default=[])
-    ap.add_argument('--dry', action='store_true'); ap.add_argument('--force-add', action='store_true'); ap.add_argument('--no-trailer', action='store_true')
+    ap.add_argument('--dry', '--dry-run', dest='dry', action='store_true'); ap.add_argument('--force-add', action='store_true'); ap.add_argument('--no-trailer', action='store_true')
     a = ap.parse_intermixed_args()   # paths may follow --hunks / --patch
     if a.msgfile:
         if a.message: a.paths.insert(0, a.message)
         a.message = open(a.msgfile).read()
     if not a.message or not a.message.strip(): raise SystemExit('a commit message is required')
-    if not (a.paths or a.hunks or a.patch): raise SystemExit('name the paths (or --hunks / --patch) to commit — never everything')
+    if not (a.paths or a.hunks or a.lines or a.patch): raise SystemExit('name the paths (or --hunks / --lines / --patch) to commit — never everything')
     a.paths = [rel(p) for p in a.paths]
-    a.hunks = [(rel(p), r) for p, r in a.hunks]
+    a.sel = {}
+    for p, r in a.hunks: re.compile(r); a.sel.setdefault(rel(p), []).append(('match', r))
+    for p, r in a.lines:
+        m = re.fullmatch(r'(\d+)(?:-(\d+))?', r.strip())
+        if not m: raise SystemExit(f'--lines {p} {r}: give A-B (working-file line numbers)')
+        a.sel.setdefault(rel(p), []).append(('lines', (int(m[1]), int(m[2] or m[1]))))
+    a.hunks = list(a.sel.items())
     a.patch = [os.path.abspath(p) for p in a.patch]
     msg = a.message.rstrip() + '\n'
     tr = os.environ.get('COMMIT_TRAILER')
@@ -105,7 +179,7 @@ def main():
         for attempt in range(3):
             old = git('rev-parse', 'HEAD').strip()
             tree, notes = build(old, a, env)
-            for n in notes: print('·', n)
+            for n in notes: print(n)
             changed = git('diff-tree', '-r', '--name-status', '--no-renames', old, tree, env=env)
             if not changed.strip():
                 print('nothing to commit: the named paths / hunks equal HEAD (empty commit refused)'); sys.exit(3)
