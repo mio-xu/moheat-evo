@@ -54,7 +54,7 @@ window.MOHEAT_LAYERS = {
    },
    "char": {
     "src": "art/char_popsicle.webp",
-    "w": 1335,
+    "w": 1343,
     "h": 1440,
     "x": 0.56,
     "y": 1.04,
@@ -64,7 +64,7 @@ window.MOHEAT_LAYERS = {
     {
      "src": "art/popsicle_mouth.webp",
      "rect": [
-      566,
+      574,
       555,
       204,
       154
@@ -74,7 +74,7 @@ window.MOHEAT_LAYERS = {
     {
      "src": "art/popsicle_eyes.webp",
      "rect": [
-      436,
+      444,
       366,
       398,
       219

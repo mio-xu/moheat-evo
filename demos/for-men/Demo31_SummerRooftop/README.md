@@ -31,7 +31,13 @@ firework-pattern yukata, orange obi; `project/designs_contact.jpg`), personality
 - `?auto=1` / `?auto=1&alt=1` test both branches, `?flat` = flat stills, `?cover=1` poster.
 
 ## Status (2026-11-08)
-- Done: story, 22 voiced lines, page, sound, thermal, 3 languages, voice answers; both branches run end to end (0 errors).
-- Art: layered **arrive** view done (bg_roof + nagisa_ref + mouth / blink patches, 100 credits). The other 7 views still use the first
-  flat stills (made before the standard was set; 200 credits). The remaining 13 layered images (325 credits) wait for Seedance's daily
-  upload limit (website + API, reached 2026-11-08). Then: stage.json for all views, build, test, cover, thumbnails, menu.
+- **Done and in the menu** (nav.js DEMOS after Demo25, site menu, credits, cover, thumbnails). Both branches pass (`?auto=1` 2:26,
+  `?auto=1&alt=1` 2:17, 0 errors).
+- Art: 8 layered views — `bg_roof` + `nagisa_ref` (Seedance web) and 15 poses / variants (OpenAI gpt-image-2 API, `scripts/gpt_image.py`;
+  new demos: `tools/openai/images.py`). Build: `python3 tools/art/build_stage.py demos/for-men/Demo31_SummerRooftop` **then**
+  `python3 demos/for-men/Demo31_SummerRooftop/scripts/clean_cutout.py` (night-scene cleaning: grey fringe, enclosed grey patches,
+  light specks on thin strands; flat stills recomposed). `keep` boxes protect the arrive forearm and the popsicle hand (light skin at
+  the picture edge). Sparkler pose: `scripts/flatten_bg.py` first (its "plain" background came back as a gradient).
+- Fireworks: `demos/shared/fireworks.js` (rising shells, 6 burst shapes, additive trails), clipped to each view's empty sky (`SKY` in main.js).
+- Video: none (§6.3); candidates only if wanted after playing (she leans in to whisper — 64 credits).
+- Cost: Seedance ≈ 345 credits (200 of them on the first flat stills, before the layered standard); OpenAI ≈ 22 images 2560×1440 high.
