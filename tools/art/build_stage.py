@@ -51,7 +51,7 @@ def cutout(path, erase=(), keep=(), ai=False):
     gk = grad[:Hs * k, :Ws * k].reshape(Hs, k, Ws, k).max((1, 3))           # max-pool: a thin line still blocks
     dk = diff[:Hs * k, :Ws * k].reshape(Hs, k, Ws, k).max((1, 3))
     cand = (dk < 40) & (gk < 9)
-    seen = np.zeros_like(cand); lab = np.zeros(cand.shape, np.int32); n = 0
+    seen = np.zeros_like(cand); pocket = np.zeros_like(cand); lab = np.zeros(cand.shape, np.int32); n = 0
     for y0, x0 in zip(*np.where(cand)):
         if lab[y0, x0]: continue
         n += 1; stack = [(y0, x0)]; lab[y0, x0] = n; pts = []; edge = False
@@ -64,6 +64,8 @@ def cutout(path, erase=(), keep=(), ai=False):
         ys_, xs_ = zip(*pts)
         if edge or (len(pts) > 120 and dk[list(ys_), list(xs_)].mean() < 10):   # enclosed gaps only if really the plain bg colour
             seen[list(ys_), list(xs_)] = True
+        elif len(pts) >= 6 and dk[list(ys_), list(xs_)].mean() < 12:   # a small pocket of the plain background (between hair and body)
+            pocket[list(ys_), list(xs_)] = True
     for x0, y0, x1, y1 in keep: seen[y0 // k:y1 // k + 1, x0 // k:x1 // k + 1] = False   # grey things that belong to the figure (steam)
     bgm = np.zeros((H, W), np.float32)
     bgm[:Hs * k, :Ws * k] = np.repeat(np.repeat(seen, k, 0), k, 1)
@@ -90,6 +92,14 @@ def cutout(path, erase=(), keep=(), ai=False):
                 if 0 <= yy < Hs and 0 <= xx < Ws and low[yy, xx] and not out[yy, xx]: out[yy, xx] = True; stack.append((yy, xx))
         outside = np.zeros((H, W), bool); outside[:Hs * k, :Ws * k] = np.repeat(np.repeat(out, k, 0), k, 1)
         alpha = np.where(outside, np.minimum(m, alpha), 1.0)      # outside the outline: the model's soft edge; inside: solid
+        pk = np.zeros((H, W), bool); pk[:Hs * k, :Ws * k] = np.repeat(np.repeat(pocket, k, 0), k, 1)
+        alpha[pk] = np.minimum(alpha[pk], soft[pk])   # …but pockets of the plain background inside it are cut out (user: grey left between hair and body)
+        # near the outline (hair strands, the hair / shoulder junction) and where the model itself is unsure, pixels of the plain
+        # background colour are background too — the clothes' grey shading deep inside the figure is left alone
+        small_out = Image.fromarray(outside[::4, ::4].astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(31))   # ±60 px
+        near = np.asarray(small_out.resize((W, H), Image.NEAREST), bool) | (m < .98)
+        bgish = near & (diff < 14)
+        alpha[bgish] = np.minimum(alpha[bgish], soft[bgish])
     for x0, y0, x1, y1 in erase: alpha[y0:y1, x0:x1] = 0   # things drawn that belong to another layer (a fire, a table)
     # unmix the grey fringe: C = a·F + (1−a)·BG  →  F = (C − (1−a)·BG) / a
     a3 = np.maximum(alpha, .05)[..., None]
@@ -173,6 +183,14 @@ for vname, v in cfg["views"].items():
                                 "char": {"src": p["src"], "w": p["w"], "h": p["h"], "x": v["x"], "y": v["y"], "height": v["height"]},
                                 "patches": [{k: pt[k] for k in ("src", "rect", "kind")} for pt in p["patches"]]}
     print(f"view {vname}: bg zoom {z:.2f}, still media/art/{stem}{ext}")
+import hashlib
+def _v(rel):   # "art/x.webp" → "art/x.webp?v=<content hash>"
+    f = os.path.join(D, "media", rel.split("?")[0])
+    return rel.split("?")[0] + "?v=" + hashlib.md5(open(f, "rb").read()).hexdigest()[:8] if os.path.exists(f) else rel
+for _vw in data["views"].values():
+    _vw["bg"]["src"] = _v(_vw["bg"]["src"]); _vw["char"]["src"] = _v(_vw["char"]["src"])
+    if _vw["bg"].get("depth"): _vw["bg"]["depth"] = _v(_vw["bg"]["depth"])
+    for _pt in _vw["patches"]: _pt["src"] = _v(_pt["src"])
 open(out(os.path.join(D, "media", "layers.js")), "w").write(
     "// Layer data for ../../shared/layers.js — written by tools/art/build_stage.py from project/stage.json (do not edit by hand).\n"
     "window.MOHEAT_LAYERS = " + json.dumps(data, ensure_ascii=False, indent=1) + ";\n")
