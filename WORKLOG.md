@@ -7,6 +7,22 @@
 
 ---
 
+## 2026-11-08 · 手机全屏 → 提示横屏 · 后台 agent（统筹会话安排）
+
+**做了什么**（用户：「手机上点全屏时自动提示横屏，让用户把手机横过来」；iPhone 上也显示转动动画 +「请把手机横过来，体验更好」）
+- `demos/shared/fullscreen.js`（?v=4）：触屏且屏幕短边 ≤ 600 px 算手机。点 ⛶ → 进入全屏（iPhone 没有 Fullscreen API，用原来的铺满窗口模式）→ 试 `screen.orientation.lock('landscape')`（失败就忽略）→ 还竖着就盖一层卡片（转动的手机动画、当前显示语言的文字，字符串在 `ROT`，已写 en / ja / zh / ko），横过来自动消失，竖回去再出现；「继续竖屏观看」关掉后本次全屏不再出现。全屏画面在安全区内取最大 16:9；退出时解锁方向。不暂停、不重载，桌面不变。
+- `demos/shared/guide.js`（?v=6）：⛶ 那一步加了手机横屏的说明。
+- `tools/web/check_mobile.html`：手机尺寸（短边 ≤ 600）新增全屏检查（`?fs=0` 跳过）；iframe 不是真手机，用 `MoHeatFullscreen.testPhone = true`。
+- `DEMO_DESIGN_GUIDE.md` §7.1 加规则，`USER_PREFERENCES.md` 加偏好（那一行被 49daf09 一起提交了，内容没问题）。
+
+**测试**（自己的 http.server + headless Chrome，390×844 ↔ 844×390，模拟触屏和方向变化）：Demo24 / Demo31（分层）、Demo17（直播间）、Demo01（影片）、Demo11、Demo23：卡片出现、语言正确（en / ja / zh）、横过来消失、画面 693×390（16:9 占满高度）、⤡ 点得到、无页面滚动、canvas 没有重建、Demo01 的 video 时间继续走、竖回去卡片再现、「继续竖屏」生效、退出恢复；桌面 1440×900 没有卡片。`check_mobile.html?only=Demo24,Demo17,Demo01,Demo23&sizes=390x844,844x390,1440x900&guide=0` 0 问题。
+
+**没测到（要真机）**：headless 里 `orientation.lock` 不可用（locked 一直 false），Android 真锁定没测过；iPhone Safari 没测过（铺满窗口 + 转屏 + 地址栏 + 刘海安全区）；手机系统旋转锁打开时的提示是否够清楚。
+
+**问题**：`shared/voice.js` 的 `place()` 在 `pill.parentNode` 为 null 时抛 getComputedStyle TypeError（Demo24 不进全屏 8 秒内 42 次，Demo17 / Demo11 也有），不是本次改动造成的，未修，需要有人处理。
+
+**下一步**：真机确认上面三项；全部 Demo 跑一遍 `check_mobile.html`（本次只跑了 4 个）。
+
 ## 2026-11-08 · 引擎 P0 + P1：Demo 之间零依赖（方案 B）· 后台 agent
 
 **做了什么**

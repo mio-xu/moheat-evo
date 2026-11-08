@@ -7,6 +7,7 @@
           ?only=Demo21,Demo05   only these folders (substring match)
           ?sizes=390x844,844x390   other sizes (default: the 4 phone / tablet sizes + 3 desktop sizes)
           ?guide=0 / ?play=0       skip the guide tour / the "after Start" pass
+          ?fs=0                    skip the phone ⛶ check (390×844 / 844×390: picture fills, rotate card upright, none sideways)
           ?resume=1                continue an interrupted run (results are kept in localStorage per sizes/only; the tab may be closed by others)
           ?serial=1                keep the device controls (a browser WITH Web Serial in a narrow window, e.g. desktop Chrome)
   Each demo is loaded in a same-origin iframe of the given size (window resizing does not work in a maximised Chrome, §11.1).
@@ -106,6 +107,26 @@ async function guide(f, touch) {
   if (doc.querySelector('.mg-tip')) { issues.push('tour did not end'); G.close(); }
   return { steps: n, issues };
 }
+// phone ⛶ (shared/fullscreen.js, §7.1): the picture = the largest 16:9 on screen, ⛶ / ⤡ reachable; upright → the "turn your phone" card
+// (its button on screen, 44 px, tappable), sideways → no card; leaving fullscreen removes it. The iframe is not a real phone → testPhone.
+async function fullscreen(f) {
+  const win = f.contentWindow, doc = f.contentDocument, F = win.MoHeatFullscreen, issues = []; if (!F) return { issues: ['no MoHeatFullscreen'] };
+  F.testPhone = true; F.set(true); await wait(1900);
+  const W = win.innerWidth, H = win.innerHeight, st = (doc.querySelector('.stage-col .stage') || doc.querySelector('.stage')).getBoundingClientRect();
+  const fit = Math.min(W, H * 16 / 9); if (Math.abs(st.width - fit) > 2 || st.left < -1 || st.top < -1 || st.right > W + 1 || st.bottom > H + 1) issues.push(`picture ${Math.round(st.width)}×${Math.round(st.height)} (want ${Math.round(fit)} wide, on screen)`);
+  const card = doc.querySelector('.mfs-rot'), upright = H > W;
+  if (upright && !card) issues.push('no rotate card in portrait');
+  if (!upright && card) issues.push('rotate card in landscape');
+  const b = upright ? card?.querySelector('button') : doc.querySelector('.mfs-btn');
+  if (b) { const r = b.getBoundingClientRect(), hit = doc.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+    if (r.left < 0 || r.top < 0 || r.right > W || r.bottom > H) issues.push(`${upright ? 'continue-in-portrait' : '⤡'} off-screen`);
+    if (!b.contains(hit) && !tappable(doc, b)) issues.push(`${upright ? 'continue-in-portrait' : '⤡'} covered`);
+    if (upright && r.height < 43.5) issues.push(`continue-in-portrait ${Math.round(r.height)}px`); }
+  if (doc.scrollingElement.scrollHeight > H || doc.scrollingElement.scrollWidth > W) issues.push('page scrolls in fullscreen');
+  F.set(false); await wait(300); F.testPhone = false;
+  if (doc.querySelector('.mfs-rot') || doc.documentElement.classList.contains('mfs')) issues.push('card / fullscreen left over after exit');
+  return { issues };
+}
 async function play(f) {
   const doc = f.contentDocument, b = doc.getElementById('startBtn');
   if (!b || !shown(f.contentWindow, b)) return false;
@@ -168,9 +189,10 @@ async function answers(f, touch) {   // one box at a time (a demo shows either a
       }
       if (touch && QS.get('guide') !== '0') r.guide = await guide(f, touch);
       if (QS.get('play') !== '0' && await play(f)) { r.play = measure(f, touch); await wait(400); r.answers = await answers(f, touch); }
+      if (touch && Math.min(w, h) <= 600 && QS.get('fs') !== '0') r.fs = await fullscreen(f);   // phones: ⛶ + rotate card
       f.remove();
       RESULTS.push(r); try { localStorage.setItem(KEEP, JSON.stringify(RESULTS)); } catch {}
-      const scroll = (m) => m && (m.scrollY > 0 || m.scrollX > 0), fail = scroll(r.cover) || scroll(r.play) || r.cover.off.length || (r.play?.off.length) || (r.drawer?.off.length) || (r.drawer?.small.length) || (r.guide?.issues?.length) || (r.answers?.off.length) || (touch && (r.cover.small.length || r.play?.small.length || r.answers?.small.length));
+      const scroll = (m) => m && (m.scrollY > 0 || m.scrollX > 0), fail = scroll(r.cover) || scroll(r.play) || r.cover.off.length || (r.play?.off.length) || (r.drawer?.off.length) || (r.drawer?.small.length) || (r.guide?.issues?.length) || (r.answers?.off.length) || (r.fs?.issues?.length) || (touch && (r.cover.small.length || r.play?.small.length || r.answers?.small.length));
       if (fail) bad++;
       const td = document.createElement('td'); td.className = fail ? 'bad' : 'ok';
       const fm = (m) => `${m.scrollY > 0 ? 'Y+' + m.scrollY + ' ' : ''}${m.scrollX > 0 ? 'X+' + m.scrollX + ' ' : ''}${m.stage || ''}`;
@@ -179,7 +201,8 @@ async function answers(f, touch) {   // one box at a time (a demo shows either a
         + (r.cover.small.length ? `<br><small>&lt;44: ${r.cover.small.join(', ')}</small>` : '') + (r.play?.small.length ? `<br><small>&lt;44 (play): ${r.play.small.join(', ')}</small>` : '')
         + (r.drawer?.off.length || r.drawer?.small.length ? `<br><small>drawer: ${[...r.drawer.off, ...r.drawer.small].join(', ')}</small>` : '')
         + (r.answers?.off.length ? `<br><small>answers off: ${r.answers.off.join(', ')}</small>` : '') + (r.answers?.small.length ? `<br><small>answers &lt;44: ${r.answers.small.join(', ')}</small>` : '')
-        + (r.guide?.issues?.length ? `<br><small>guide: ${r.guide.issues.join('; ')}</small>` : '');
+        + (r.guide?.issues?.length ? `<br><small>guide: ${r.guide.issues.join('; ')}</small>` : '')
+        + (r.fs?.issues?.length ? `<br><small>fullscreen: ${r.fs.issues.join('; ')}</small>` : '');
       tr.appendChild(td);
     }
   }
