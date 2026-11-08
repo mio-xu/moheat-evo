@@ -6,21 +6,40 @@ Two versions in one folder (user, 2026-11-08: a free placeholder on the site, th
 |---|---|---|
 | URL | `demos/nobunaga-suntory/Demo23_NobunagaTalk/` (GitHub Pages, in the menu) | `http://localhost:8771/live` (only via `server.py`, password) |
 | Page | `index.html` + `lines.js` (script) + `scripted.js` (brain) | `live/index.html` (`<base href="../">`) + `live/live.js` (brain) |
-| Lines | fixed script, tea room by the hearth, Nobunaga + Ieyasu, about 2 min | written live by an ElevenLabs agent (Claude), any cast / place |
+| Lines | fixed scripts: 5 places × (both / Nobunaga only / Ieyasu only), about 2 min each | written live by an ElevenLabs agent (Claude), same 5 places × 3 casts |
 | Voices | pre-rendered once: `media/voice/*.m4a` (`scripts/voice.py`) | ElevenLabs TTS per line through `server.py` |
 | Cost per play | 0 | ≈ 600–700 ElevenLabs credits |
 
 Shared engine (both pages): `main.js` (pictures, positions — they walk around you —, HRTF voices, DUAL thermal, radar, device,
 your turn by speech recognition or typing), `scenes.js`, `audio.js`, `style.css`, `l10n.js`. Art: Demo 5 / 9 by path.
 
+## Cover (both pages, same UI)
+- Pick the **place** (5 short buttons: 🌇 天守 Gifu keep at sunset · 🍵 茶室 tea room · 🍶 先斗町 Kyoto izakaya · 🥃 山崎 Yamazaki
+  distillery · 🌕 安土 Azuchi banquet) and **who** (ふたり both · 信長のみ · 家康のみ); remembered in localStorage (`moheat.talk.*`).
+  The warm / cool chips on the cover and the Thermal output note follow the place (`scenes.js` `chips` / `note`). Language = the
+  shared 🌐 / cover language row (EN / 日本語 / 中文); speech recognition uses the same language (no separate "you speak" picker).
+- Phone / small player (≤ 620 px): title, the place row, then cast + Start in one row, all ≥ 44 px; ≤ 940 px drops the small print.
+
 ## Public scripted preview (no server, no keys)
+- `lines.js` `scenes.<place>`: one duo script per place; each solo plays that character's duo lines plus a few solo-only lines
+  (`"in": ["N"]` / `["I"]`; duo-only lines `["NI"]`). Topics come from the place (sunset view, Gifu's name, the Tenka Fubu seal,
+  konpeito, cormorant fires · tea caddies, tea · yakitori, snow on the Kamo, Honnoji, highball vs warm sake · casks, Rikyu's Taian,
+  the stills, an iced glass · gold screens, the moon, the ship across the sea, a wish).
+- Thermal per place (DUAL): voices warm the ear they speak at; place events show off fast hot ↔ cold, direction and cool + warm on one
+  ear at once: Gifu — mountain gust from the right, a fan at the left ear while a whisper warms it; Kyoto — warm sake in front, window
+  opened on the snow (right cold) while Ieyasu whispers left, door gust from behind; Yamazaki — stills' heat from the left + misty gust
+  from the front, an iced glass at the right ear during a whisper; Azuchi — a brazier to the right, then the night wind from the front.
 - After every beat it is your turn: say anything (speech recognition in the display language EN / 日本語 / 中文) or type, or stay
   silent (9 s). A short **bridge line** acknowledges it — chosen by a light keyword layer (`lines.js` `topics`: yes / no on yes-no
-  questions, tea, sake, the realm, warm / cold, the future, praise, leaving) or a generic / silence one, never twice — spoken by
+  questions, then the place's own topics — view / sweets, food / snow, whisky / mist, moon / sea & dreams —, then tea, sake, the
+  realm, warm / cold, the future, praise, leaving; a place can replace a shared pool, e.g. "sake" while they are drinking) or a generic / silence one, never twice — spoken by
   whoever opens the next beat, and the script goes on. "■ End" → a leaving bridge + the farewell.
-- Script draft with positions, thermal notes and the bridge pool: `project/script_scripted.md`. Edit `lines.js`, then
-  `python3 scripts/voice.py --count` and `python3 scripts/voice.py` (only changed lines are rendered; cache `audio/voice_cache.json`).
-- First render 2026-11-08: 52 lines, 1,495 characters.
+- Script draft with positions, thermal notes, which cast plays each line, and the bridges: `project/script_scripted.md`
+  (regenerate: `python3 scripts/script_md.py`). Edit `lines.js`, then `python3 scripts/voice.py --count` and
+  `python3 scripts/voice.py [--max-chars=N]` (only changed lines are rendered; cache `audio/voice_cache.json`; refuses below the
+  `limits.json` month reserve or above `--max-chars`).
+- Renders 2026-11-08: tea room 52 lines / 1,495 characters; 5 places × 3 casts +178 lines / 5,580 characters sent (ElevenLabs
+  billed 2,305 credits). 229 voice files in total.
 - Cover says "台本プレビュー · Preview · scripted".
 
 ## Private live talk
@@ -36,6 +55,7 @@ your turn by speech recognition or typing), `scenes.js`, `audio.js`, `style.css`
   The static files in git hold no key or secret; on GitHub Pages `live/` only says "Private page — open it through server.py".
 
 ### How the live brain works
+- **Dry run (no cost)**: `node scripts/prompt_dry.js <place> <NI|N|I>` prints the prompt and first message the page would send; `--all` checks every place × cast.
 - **Brain**: a text-only ElevenLabs agent (`agent.json`, LLM claude-sonnet-5-5, created by `scripts/setup_agent.py`). The real prompt is built per session in `scenes.js` (place, cast, rules) and sent as an override. Output lines: `N|position|[tag] せりふ|English`, `@|gust` / `@|fire` for events, `#END` to finish.
 - **Ears**: the browser's speech recognition (日本語 / English / 中文); a turn ends after ~1.2 s of quiet. 14 s of silence → they nudge you (twice at most).
 - **Voices**: each line goes to `server.py` → ElevenLabs TTS (`eleven_v4`, confirmed voices nobunaga r1_a / ieyasu r1_a) as soon as it is parsed → played on the speaker's own HRTF panner.

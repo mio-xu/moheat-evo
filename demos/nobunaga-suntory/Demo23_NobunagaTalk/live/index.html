@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho+B1:wght@600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../shared/game.css?v=1" />
-  <link rel="stylesheet" href="style.css?v=2" />
+  <link rel="stylesheet" href="style.css?v=3" />
   <link rel="stylesheet" href="../../shared/series.css?v=8" />
 </head>
 <body>
@@ -50,10 +50,10 @@
             <h1><span>信長と、</span><span>語らう</span></h1>
             <p class="en">Talk with Nobunaga — live, unscripted, about two minutes</p>
             <div class="pick">
-              <p><small>相手 · With</small><span id="pickCast"></span></p>
               <p><small>場所 · Where</small><span id="pickScene"></span></p>
-              <p><small>あなたの言葉 · You speak</small><span id="pickLang"></span></p>
+              <p><small>相手 · With</small><span id="pickCast"></span></p>
             </div>
+            <p class="cast" id="coverChips"></p>
             <p class="cleared" id="cleared" hidden></p>
             <div class="intro-actions">
               <button class="btn primary big" id="startBtn" type="button">▶ 語らう · Start</button>
@@ -76,7 +76,7 @@
           <div class="meter-row"><span>R cool</span><div class="m cool"><i id="mRc"></i></div><b id="vRc">0</b></div>
           <div class="meter-row"><span>R warm</span><div class="m heat"><i id="mRh"></i></div><b id="vRh">0</b></div>
         </div>
-        <p class="note">Live (DUAL): a voice warms the ear it speaks at, with its loudness, strongest right at your ear. They walk around you while they talk; the place adds its own warm / cool (hearth, lanterns, wind).</p>
+        <p class="note" id="thermNote">Live (DUAL): a voice warms the ear it speaks at, with its loudness, strongest right at your ear. They walk around you while they talk; the place adds its own warm / cool (hearth, lanterns, wind).</p>
       </div>
       <div class="card">
         <div class="card-head"><span id="phase">Conversation</span><b id="clock" class="mono">0:00</b></div>
@@ -91,10 +91,10 @@
   </main>
 
   <script src="../../../device.js?v=2"></script>
-  <script src="scenes.js?v=2"></script>
-  <script src="audio.js?v=2"></script>
+  <script src="scenes.js?v=3"></script>
+  <script src="audio.js?v=3"></script>
   <script src="live/live.js?v=1"></script>
-  <script src="main.js?v=3"></script>
+  <script src="main.js?v=4"></script>
   <script src="../../shared/nav.js?v=37"></script>
 </body>
 </html>

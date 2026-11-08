@@ -3,32 +3,49 @@
 // gust / fire = the events the characters may trigger (an "@" line); each says what it does to the ears.
 window.TALK = (() => {
   const ART = '../Demo09_SengokuBanquet/media/art/';
+  // short: the picker label (icon + a word; en / zh in l10n.js) · chips: the cover's warm / cool sources [icon, ja, en, k] · note: the
+  // Thermal output card's note (en; ja / zh in l10n.js) · events: k 'c' cool / 'h' warm (default: gust = cool, else warm), fx = sound
+  // (audio.js fx), icon = radar icon, dur = seconds (default 5).
   const SCENES = [
-    { id: 'gifu', ja: '岐阜城・天守の夕暮れ', en: 'Gifu Castle, the keep at sunset', bg: '../Demo05_GifuCastle/media/art/d9_bg_summit.webp',
-      place: '永禄十二年（1569年）夏、岐阜城の天守の最上階。朱塗りの欄干の向こうに夕陽が沈み、長良川と濃尾平野が金色に光る。山風がときおり右手から吹き上がる。',
-      topics: ['「天下布武」の印を作ったばかりのこと', '眼下に広がる国々の眺めと、天下の行く末', '「岐阜」という名を自分で付けた話', '未来から来た客人の暮らしへの好奇心', '南蛮渡来の珍しい品（地球儀、金平糖、ビロードのマント）'],
+    { id: 'gifu', ja: '岐阜城・天守の夕暮れ', en: 'Gifu Castle, the keep at sunset', short: '🌇 天守', bg: '../Demo05_GifuCastle/media/art/d9_bg_summit.webp',
+      place: '永禄十二年（1569年）夏、岐阜城の天守の最上階。朱塗りの欄干の向こうに夕陽が沈み、長良川と濃尾平野が金色に光る。山風がときおり右手から吹き上がる。日が沈むと長良川に鵜飼の篝火が灯る。',
+      topics: ['「天下布武」の印を作ったばかりのこと', '眼下に広がる長良川と濃尾平野の眺めと、天下の行く末', '「岐阜」という名を自分で付けた話', '長良川の鵜飼', '南蛮渡来の珍しい品（金平糖、地球儀、ビロードのマント）', '未来から来た客人の暮らしへの好奇心'],
       amb: [{ az: 0, k: 'h', s: .16, icon: '🌇', ja: '夕陽' }, { az: 1.3, k: 'c', s: .2, icon: '🍃', ja: '山風' }],
-      sound: { wind: .55, birds: .25 }, events: { gust: { az: 1.2, s: .75, ja: '強い山風が吹き上がる（右から冷たい）' } } },
-    { id: 'tea', ja: '岐阜城・茶室の囲炉裏', en: 'The tea room by the hearth', bg: '../Demo05_GifuCastle/media/art/d9_bg_tearoom.webp',
+      chips: [['🌇', '夕陽', 'sunset', 'h'], ['🍃', '山風', 'mountain wind', 'k'], ['🪭', '扇', 'fan', 'k']],
+      note: 'DUAL: a voice warms the ear it speaks at, strongest right at your ear. The sunset in front is warm, the mountain wind from the right is cool, and a fan cools one ear while a whisper warms it.',
+      sound: { wind: .55, birds: .25 },
+      events: { gust: { az: 1.2, s: .75, ja: '強い山風が吹き上がる（右から冷たい）' }, fanL: { az: -1.35, s: .5, k: 'c', fx: 'fan', icon: '🪭', ja: '扇で客人の左耳へ風を送る（左耳が涼しい）' }, fanR: { az: 1.35, s: .5, k: 'c', fx: 'fan', icon: '🪭', ja: '扇で客人の右耳へ風を送る（右耳が涼しい）' } } },
+    { id: 'tea', ja: '岐阜城・茶室の囲炉裏', en: 'The tea room by the hearth', short: '🍵 茶室', bg: '../Demo05_GifuCastle/media/art/d9_bg_tearoom.webp',
       place: '岐阜城の茶室。正面の囲炉裏で炭が赤く熾り、茶釜が湯気を立てている。丸窓の外は夕焼け。背後の障子からすきま風。',
       topics: ['名物の茶器（つくも茄子など）を集めている話', '茶の湯で家臣に褒美を与える「御茶湯御政道」', '客人に一服点てようという誘い', '戦の合間の静けさ', '未来の世でも茶を飲むのかという好奇心'],
       amb: [{ az: 0, k: 'h', s: .26, icon: '🔥', ja: '囲炉裏' }, { az: -2.4, k: 'c', s: .1, icon: '🌬', ja: 'すきま風' }],
+      chips: [['🔥', '囲炉裏', 'hearth', 'h'], ['🍵', '茶', 'tea', 'h'], ['🌬', 'すきま風', 'draught', 'k']],
+      note: 'DUAL: a voice warms the ear it speaks at, with its loudness, strongest right at your ear. The hearth in front is warm, the draught through the shoji behind you is cool.',
       sound: { fire: .5, kettle: .35 }, events: { fire: { az: 0, s: .5, ja: '炭を足して火が強くなる（正面から暖かい）' }, gust: { az: -2.4, s: .5, ja: '背後の障子からすきま風（後ろ左から冷たい）' } } },
-    { id: 'kyoto', ja: '京都・先斗町の居酒屋', en: 'A Kyoto izakaya in Pontocho', bg: '../Demo07_KyotoIzakaya/media/art/d7_bg_izakaya.webp',
-      place: '現代の京都、冬の夜。四百年後の世に迷い込んだ二人を、客人（ユーザー）が先斗町の小さな居酒屋に案内した。卓上に熱燗と焼き鳥、窓の外は雪の鴨川。店内は暖かいが、窓際は冷える。',
-      topics: ['四百年後の京の町の変わりよう', '熱燗の旨さと、未来の酒（ビール、ハイボール）への驚き', '焼き鳥や品書きへの興味', '雪の鴨川の景色', '客人の暮らしや仕事への好奇心'],
+    { id: 'kyoto', ja: '京都・先斗町の居酒屋', en: 'A Kyoto izakaya in Pontocho', short: '🍶 先斗町', bg: '../Demo07_KyotoIzakaya/media/art/d7_bg_izakaya.webp',
+      place: '現代の京都、冬の夜。四百年後の世に迷い込んだ武将を、客人（ユーザー）が先斗町の小さな居酒屋に案内した。卓上に熱燗と焼き鳥、窓の外は雪の鴨川。店内は暖かいが、窓際は冷える。',
+      topics: ['四百年後の京の町の変わりよう', '熱燗の旨さと、未来の酒（ビール、ハイボール）への驚き', '焼き鳥や品書きへの興味', '雪の鴨川の景色', '京にあった本能寺（信長はなぜか背筋が寒くなる。家康は話をそらす）', '客人の暮らしや仕事への好奇心'],
       amb: [{ az: 0, k: 'h', s: .14, icon: '🍶', ja: '熱燗' }, { az: 1.1, k: 'c', s: .16, icon: '❄️', ja: '雪の窓' }],
-      sound: { chatter: .35, fire: .15 }, events: { gust: { az: 2.7, s: .6, ja: '入口の戸が開いて雪混じりの風（後ろから冷たい）' }, fire: { az: 0, s: .35, ja: 'お代わりの熱燗が届く（正面から湯気）' } } },
-    { id: 'yamazaki', ja: '山崎蒸溜所・霧の朝', en: 'Yamazaki Distillery, a misty morning', bg: '../Demo08_YamazakiDistillery/media/art/d8_bg_tasting.webp',
-      place: '現代、霧の朝の山崎蒸溜所（京都と大阪の間、天王山のふもと）。試飲室の窓の向こうに霧の山々。開いた窓から冷たく湿った朝の空気。卓上にはウイスキーのグラス。',
-      topics: ['山崎の地（天王山、名水、千利休ゆかりの待庵）の話', '樽で何年も眠る酒への驚き', 'ウイスキーの香りと、戦国の酒との違い', '霧の山々の眺め', '客人の好きな飲み方'],
+      chips: [['🍶', '熱燗', 'warm sake', 'h'], ['❄️', '雪の窓', 'snowy window', 'k'], ['🚪', '戸口', 'door', 'k']],
+      note: 'DUAL: a voice warms the ear it speaks at, strongest right at your ear. Warm sake in front; the snowy window on the right and the door behind you let the cold in.',
+      sound: { chatter: .35, fire: .15 },
+      events: { gust: { az: 2.7, s: .6, ja: '入口の戸が開いて雪混じりの風（後ろから冷たい）' }, fire: { az: 0, s: .35, icon: '🍶', ja: 'お代わりの熱燗が届く（正面から湯気）' }, window: { az: 1.1, s: .7, k: 'c', fx: 'gust', icon: '❄️', ja: '窓を開けて雪の鴨川を見る（右から冷たい）' } } },
+    { id: 'yamazaki', ja: '山崎蒸溜所・霧の朝', en: 'Yamazaki Distillery, a misty morning', short: '🥃 山崎', bg: '../Demo08_YamazakiDistillery/media/art/d8_bg_tasting.webp',
+      place: '現代、霧の朝の山崎蒸溜所（京都と大阪の間、天王山のふもと）。試飲室の窓の向こうに霧の山々。開いた窓から冷たく湿った朝の空気。左手の扉の奥は蒸溜釜の部屋で、開くと熱気が来る。卓上にはウイスキーのグラスと氷。',
+      topics: ['山崎の地（天王山、名水、千利休ゆかりの待庵）の話', '樽で何年も眠る酒への驚き', 'ウイスキーの香りと、戦国の酒との違い', '霧の山々の眺め', '蒸溜釜の熱気', '客人の好きな飲み方'],
       amb: [{ az: 0, k: 'c', s: .18, icon: '🌫', ja: '霧の朝風' }, { az: -1.2, k: 'h', s: .1, icon: '🏮', ja: '行灯' }],
-      sound: { wind: .3, birds: .4 }, events: { gust: { az: .3, s: .6, ja: '霧を含んだ風が窓から流れ込む（正面から冷たい）' } } },
-    { id: 'azuchi', ja: '安土城・月夜の酒宴', en: 'Azuchi Castle, a moonlit banquet', bg: ART + 'banquet_bg.webp', bgGust: ART + 'banquet_bg_wind.webp',
+      chips: [['🌫', '霧の朝風', 'misty air', 'k'], ['♨️', '蒸溜釜', 'stills', 'h'], ['🧊', '氷の杯', 'iced glass', 'k']],
+      note: 'DUAL: a voice warms the ear it speaks at, strongest right at your ear. The misty morning air in front is cool, heat from the stills comes from the left, and an iced glass can touch one ear.',
+      sound: { wind: .3, birds: .4 },
+      events: { gust: { az: .3, s: .6, ja: '霧を含んだ風が窓から流れ込む（正面から冷たい）' }, still: { az: -1.3, s: .55, k: 'h', fx: 'steam', icon: '♨️', ja: '蒸溜室の扉が開いて熱気が来る（左から暖かい）' }, glass: { az: 1.4, s: .7, k: 'c', fx: 'clink', icon: '🧊', dur: 4, ja: '氷の入った杯を客人の右耳に近づける（右耳が冷たい）' } } },
+    { id: 'azuchi', ja: '安土城・月夜の酒宴', en: 'Azuchi Castle, a moonlit banquet', short: '🌕 安土', bg: ART + 'banquet_bg.webp', bgGust: ART + 'banquet_bg_wind.webp',
       place: '天正十年（1582年）春、安土城の大広間。満月、金屏風、左右に行灯。盃には温めた酒。開け放った正面から夜風が入る。',
-      topics: ['天下統一の先に見ている夢（南蛮、海の向こう）', '今宵の月と酒', '家臣や家康との思い出', '未来の世での自分の評判への好奇心', '客人の願いを聞く'],
+      topics: ['天下統一の先に見ている夢（南蛮、海の向こう）', '今宵の月と酒', '金と朱の七重の天主', '家臣や家康との思い出', '未来の世での自分の評判への好奇心', '客人の願いを聞く'],
       amb: [{ az: -1.1, k: 'h', s: .12, icon: '🏮', ja: '行灯' }, { az: 1.1, k: 'h', s: .12, icon: '🏮', ja: '行灯' }, { az: 0, k: 'c', s: .12, icon: '🌙', ja: '夜風' }],
-      sound: { wind: .35, crickets: .3 }, events: { gust: { az: 0, s: .7, ja: '夜風が強まり行灯が揺れる（正面から冷たい）' } } },
+      chips: [['🏮', '行灯', 'lanterns', 'h'], ['🔥', '火鉢', 'brazier', 'h'], ['🌙', '夜風', 'night wind', 'k']],
+      note: 'DUAL: a voice warms the ear it speaks at, strongest right at your ear. Lanterns warm both sides, a brazier comes to your right, and the night wind blows in from the front.',
+      sound: { wind: .35, crickets: .3 },
+      events: { gust: { az: 0, s: .7, ja: '夜風が強まり行灯が揺れる（正面から冷たい）' }, fire: { az: 1.2, s: .55, ja: '火鉢を客人の右に置く（右から暖かい）' } } },
   ];
 
   const CAST = {
@@ -79,6 +96,7 @@ ${evs}
 - 客人が言ったことの中身に必ず具体的に反応してから話を進める。決まり文句の繰り返しは禁止。
 - ターンの最後は客人が答えたくなる問いかけや誘いで終える（客人が話す番を作る）。
 - 位置を頻繁に変える：同じ位置で続けて話すのは2行まで。毎ターン少なくとも1回は移動し、内緒話・からかい・褒め言葉では耳元へ、景色や外の話では window へ、驚かせたい時は behind へ。左右の耳を使い分ける。${multi ? '二人が同じ位置に同時にいないこと。一人が耳元にいる間、もう一人は seat / near / window / 反対側で待つ。' : ''}
+- 話題は必ずこの場所に結びつける（ここで見えるもの・聞こえるもの・暖かいもの冷たいもの・この地の歴史）。客人が別の話をしても、中身に応えたあと、この場の何かに絡めて戻す。
 - 現実にありえる範囲で：武将は時代の人物として振る舞い（現代の場面では「四百年後に来た」ことを面白がる）、AIや台本であることには触れない。
 - 客人が中国語や英語で話しても内容を理解し、返事は日本語（たまに相手の言葉を一言まねて面白がってよい）。
 - 下品・残酷な描写、実在の現代人物や政治の話題は、武将らしく軽くかわして場の話題に戻す。

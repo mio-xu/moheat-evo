@@ -12,16 +12,40 @@
 .intro .series { color: #ffe9b8; background: rgba(217, 168, 74, .16); border: 1px solid rgba(217, 168, 74, .55); }
 .intro h1 { font-family: "Shippori Mincho B1", serif !important; font-weight: 800; background: linear-gradient(100deg, #fff2cc 0%, #ffffff 40%, #e0a940 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .intro .cleared { color: #fff6e0; background: rgba(168, 50, 28, .35); border-color: rgba(255, 180, 120, .6); }
-.pick { display: grid; gap: .55cqw; margin: .3cqw 0; }
-.pick p { margin: 0; display: flex; align-items: center; gap: .7cqw; justify-content: center; flex-wrap: wrap; }
-.pick small { width: 100%; font: 700 clamp(7px, .78cqw, 14px)/1.2 Inter, sans-serif; letter-spacing: .12em; text-transform: uppercase; color: var(--soft); }
-.pick span { display: flex; gap: .5cqw; flex-wrap: wrap; justify-content: center; }
-.opt { cursor: pointer; border-radius: 999px; padding: .35em 1em; border: 1px solid rgba(217, 168, 74, .45); background: rgba(20, 12, 5, .7); color: #f4ead6;
-  font: 700 clamp(8px, .95cqw, 17px)/1.25 "Noto Sans JP", Inter, sans-serif; transition: background .15s, border-color .15s; }
+/* cover picker, the same on both pages: place (5, short labels) × cast (both / Nobunaga only / Ieyasu only). One row each. */
+.pick { display: grid; gap: .5cqw; margin: .2cqw 0; }
+.pick p { margin: 0; display: flex; align-items: center; gap: .7cqw; justify-content: center; }
+.pick small { flex: 0 0 auto; min-width: 4.2em; text-align: right; font: 700 clamp(7px, .78cqw, 14px)/1.2 Inter, "Noto Sans JP", sans-serif; letter-spacing: .12em; text-transform: uppercase; color: var(--soft); }
+.pick span { display: flex; gap: .45cqw; flex-wrap: wrap; justify-content: center; }
+.opt { cursor: pointer; border-radius: 999px; padding: .4em .95em; border: 1px solid rgba(217, 168, 74, .45); background: rgba(20, 12, 5, .7); color: #f4ead6;
+  display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; touch-action: manipulation;
+  font: 700 clamp(9px, 1.02cqw, 18px)/1.25 "Noto Sans JP", Inter, sans-serif; transition: background .15s, border-color .15s; }
 .opt small { display: inline; width: auto; margin-left: .4em; font: 500 .8em/1 Inter, sans-serif; letter-spacing: 0; text-transform: none; color: #d8c49c; }
 .opt:hover { border-color: #ffd58a; }
 .opt.on { background: linear-gradient(135deg, rgba(168, 50, 28, .85), rgba(217, 168, 74, .75)); border-color: #ffd58a; color: #fff; }
 .opt.on small { color: #fff3d6; }
+@media (pointer: coarse), (max-width: 1100px) { .opt, .intro .intro-actions .btn, .endbtn { min-height: 44px; min-width: 44px; } }   /* fingers (phones, tablets): 44 px tap targets */
+@container (max-width: 940px) {   /* short player (phone landscape, tablet, small window): keep the picker, drop the small print */
+  .intro:has(.pick) :is(.series, .hint, .draft, .en) { display: none !important; }
+  .intro:has(.pick) h1 span { display: inline; }
+  .intro:has(.pick) .cover-copy { gap: .7cqw !important; }
+}
+@container (max-width: 620px) {   /* phone / small player: title, place row, then cast + Start in one row; 44 px targets */
+  .intro:has(.pick)::before { background: rgba(14, 8, 3, .66); }
+  .intro:has(.pick) .cover-copy { margin: 0 2cqw !important; max-width: 96cqw !important; gap: 1.6cqw !important; flex-flow: row wrap !important; justify-content: center !important; }
+  .intro:has(.pick) .cover-copy > * { flex: 0 0 100%; }
+  .intro:has(.pick) :is(.pick, .intro-actions) { display: contents !important; }
+  .intro:has(.pick) :is(.series, .en, .preview-tag, .cast, #lrBtn, .mtc-btn) { display: none !important; }
+  .intro:has(.pick) h1 span { display: inline; }
+  .intro:has(.pick) .pick p { flex: 0 0 100%; }
+  .intro:has(.pick) .pick p:nth-child(2) { flex: 0 1 auto; }
+  .intro:has(.pick) #startBtn { flex: 0 0 auto; min-height: 44px; font-size: 3.2cqw !important; padding: 0 1.1em !important; }
+  .intro:has(.pick) .cleared { order: -1; }
+  .intro:has(.pick):has(.cleared:not([hidden])) h1 { display: none; }   /* after a talk: the farewell line takes the title's place */
+  .pick small { display: none; }
+  .pick span { flex-wrap: nowrap; gap: 1cqw; }
+  .opt { min-height: 44px; min-width: 44px; padding: 0 .65em; font-size: 3.1cqw; }
+}
 .intro .hint.warn { color: #ffb4a0; }
 
 /* subtitles (sizes from series.css) */

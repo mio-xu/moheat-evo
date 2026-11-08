@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho+B1:wght@600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../shared/game.css?v=1" />
-  <link rel="stylesheet" href="style.css?v=2" />
+  <link rel="stylesheet" href="style.css?v=3" />
   <link rel="stylesheet" href="../../shared/series.css?v=8" />
 </head>
 <body>
@@ -46,8 +46,12 @@
           <div class="cover-copy">
             <p class="series">信長シリーズ 特別編 · Nobunaga Series</p>
             <h1><span>信長と、</span><span>語らう</span></h1>
-            <p class="en">Talk with Nobunaga — tea by the hearth with Nobunaga and Ieyasu</p>
-            <p class="cast"><span class="chip p">⚔ 信長・家康 · Nobunaga &amp; Ieyasu</span><span class="chip h">🔥 囲炉裏・声 · warm</span><span class="chip k">🌬 すきま風 · cool</span></p>
+            <p class="en">Talk with Nobunaga — pick a place, and who you talk with</p>
+            <div class="pick">
+              <p><small>場所 · Where</small><span id="pickScene"></span></p>
+              <p><small>相手 · With</small><span id="pickCast"></span></p>
+            </div>
+            <p class="cast" id="coverChips"></p>
             <p class="preview-tag">台本プレビュー · Preview · scripted</p>
             <p class="cleared" id="cleared" hidden></p>
             <div class="intro-actions">
@@ -55,7 +59,7 @@
               <button class="btn" id="lrBtn" type="button">🎧 Left / Right check</button>
             </div>
             <p class="hint" id="budget">They speak first, then wait for you · answer with your voice or type · headphones + microphone</p>
-            <p class="draft" id="credits">A scripted preview of the live AI talk: they answer anything you say and steer back to the script · voices ElevenLabs · art ChatGPT (OpenAI)</p>
+            <p class="draft" id="credits">A scripted preview of the live AI talk: five places, they answer anything you say and steer back to the script · voices ElevenLabs · art ChatGPT (OpenAI)</p>
           </div>
         </div>
       </div>
@@ -71,7 +75,7 @@
           <div class="meter-row"><span>R cool</span><div class="m cool"><i id="mRc"></i></div><b id="vRc">0</b></div>
           <div class="meter-row"><span>R warm</span><div class="m heat"><i id="mRh"></i></div><b id="vRh">0</b></div>
         </div>
-        <p class="note">DUAL: a voice warms the ear it speaks at, with its loudness, strongest right at your ear. The hearth in front is warm, the draught through the shoji behind you is cool.</p>
+        <p class="note" id="thermNote">DUAL: a voice warms the ear it speaks at, with its loudness, strongest right at your ear. The hearth in front is warm, the draught through the shoji behind you is cool.</p>
       </div>
       <div class="card">
         <div class="card-head"><span id="phase">Conversation</span><b id="clock" class="mono">0:00</b></div>
@@ -86,11 +90,11 @@
   </main>
 
   <script src="../../../device.js?v=2"></script>
-  <script src="scenes.js?v=2"></script>
-  <script src="audio.js?v=2"></script>
-  <script src="lines.js?v=1"></script>
-  <script src="scripted.js?v=1"></script>
-  <script src="main.js?v=3"></script>
+  <script src="scenes.js?v=3"></script>
+  <script src="audio.js?v=3"></script>
+  <script src="lines.js?v=2"></script>
+  <script src="scripted.js?v=2"></script>
+  <script src="main.js?v=4"></script>
   <script src="../../shared/nav.js?v=37"></script>
 </body>
 </html>

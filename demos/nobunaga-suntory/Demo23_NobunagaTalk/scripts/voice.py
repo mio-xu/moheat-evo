@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Voices of the scripted (public) talk: every line and bridge of ../lines.js → media/voice/<id>.m4a (mono AAC), rendered ONCE with
+"""Voices of the scripted (public) talk: every line and bridge of ../lines.js (5 places × 3 casts) → media/voice/<id>.m4a (mono AAC), rendered ONCE with
 ElevenLabs (handoff §4 standard via tools/eleven/tts.py: eleven_v4, ja, stability 0.4, similarity 0.8, seed 7; confirmed voices
 nobunaga r1_a / ieyasu r1_a). The page plays the files, so the public page costs nothing at run time.
 Only lines whose text or voice changed are (re)synthesized (cache: audio/voice_cache.json).
@@ -12,15 +12,22 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REPO = os.path.abspath(os.path.join(ROOT, '..', '..', '..'))
 sp = importlib.util.spec_from_file_location('eleven', os.path.join(REPO, 'tools', 'eleven', 'tts.py')); E = importlib.util.module_from_spec(sp); sp.loader.exec_module(E)
 src = open(os.path.join(ROOT, 'lines.js'), encoding='utf-8').read()
-S = json.loads(src[src.index('TALK_SCRIPT = ') + 14:src.rindex('}') + 1])
+S = json.loads(src[src.index('window.TALK_SCRIPT = ') + 21:src.rindex('}') + 1])
 
-items = {}   # id → (who, tagged text)
-for b in S['beats']:
-    for l in b['lines']:
-        if 'id' in l: items[l['id']] = (l['who'], l['ja'])
-for who, kinds in S['bridges'].items():
-    for lst in kinds.values():
-        for l in lst: items[l['id']] = (who, l['ja'])
+items = {}   # id → (who, tagged text); every place's beats + the shared and per-place bridges
+def add(lid, who, text):
+    if lid in items and items[lid] != (who, text): sys.exit(f'{lid}: one id, two texts')
+    items[lid] = (who, text)
+def bridges(B):
+    for who, kinds in (B or {}).items():
+        for lst in kinds.values():
+            for l in lst: add(l['id'], who, l['ja'])
+bridges(S['bridges'])
+for place in S['scenes'].values():
+    for b in place['beats']:
+        for l in b['lines']:
+            if 'id' in l: add(l['id'], l['who'], l['ja'])
+    bridges(place.get('bridges'))
 
 out_dir = os.path.join(ROOT, 'media', 'voice'); os.makedirs(out_dir, exist_ok=True)
 cache_p = os.path.join(ROOT, 'audio', 'voice_cache.json'); os.makedirs(os.path.dirname(cache_p), exist_ok=True)
@@ -38,6 +45,8 @@ L = json.load(open(os.path.join(ROOT, 'limits.json')))
 s = E.client().user.subscription.get(); left = s.character_limit - s.character_count
 print(f'month: {left} left, reserve {L["month_reserve_chars"]}')
 if left - chars < L['month_reserve_chars']: sys.exit('refused: would go below the monthly reserve (limits.json)')
+CAP = next((int(a.split('=')[1]) for a in sys.argv if a.startswith('--max-chars=')), None)   # a job budget: stop before going over it
+if CAP is not None and chars > CAP: sys.exit(f'refused: {chars} characters > --max-chars={CAP}')
 
 for lid, who, text, key in todo:
     m4a = os.path.join(out_dir, f'{lid}.m4a')

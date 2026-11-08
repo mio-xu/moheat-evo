@@ -18,24 +18,29 @@
   const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000));
   const store = { get: (k, d) => { try { return JSON.parse(localStorage.getItem(`moheat.${k}`)) ?? d; } catch { return d; } }, set: (k, v) => { try { localStorage.setItem(`moheat.${k}`, JSON.stringify(v)); } catch {} } };
 
-  // ---------------------------------------------------------------- picker (cover; the scripted page has a fixed cast and place)
-  const CASTS = [['N', '信長', 'Nobunaga'], ['I', '家康', 'Ieyasu'], ['NI', '三人で', 'all three']];
-  const LANGS = [['ja-JP', '日本語'], ['en-US', 'English'], ['zh-CN', '中文']];
-  const pick = B.fixed ? { ...B.fixed } : { cast: store.get('talk.cast', 'N'), scene: store.get('talk.scene', 'gifu'), lang: store.get('talk.lang', 'ja-JP') };
-  if (!T.SCENES.find((s) => s.id === pick.scene)) pick.scene = 'gifu';
+  // ---------------------------------------------------------------- picker (cover, the same on both pages): place × cast
+  // (user 2026-11-08: choose the place, and Nobunaga only / Ieyasu only / both). Labels: ja + <small>en</small> → shared/subs.js shows
+  // one language (zh from l10n.js); place labels are short (icon + a word) so five fit in one row on a phone.
+  const CASTS = [['NI', 'ふたり', 'Both'], ['N', '信長のみ', 'Nobunaga'], ['I', '家康のみ', 'Ieyasu']];
+  const pick = B.fixed ? { ...B.fixed } : { cast: store.get('talk.cast', 'NI'), scene: store.get('talk.scene', 'tea') };
+  if (!T.SCENES.find((s) => s.id === pick.scene)) pick.scene = 'tea';
+  if (!CASTS.find((c) => c[0] === pick.cast)) pick.cast = 'NI';
   function picker() {
     if ($('pickCast')) {
-      const opt = (k, v, ja, en) => `<button type="button" class="opt${pick[k] === v ? ' on' : ''}" data-k="${k}" data-v="${v}">${ja}${en ? `<small>${en}</small>` : ''}</button>`;
+      const opt = (k, v, ja, en) => `<button type="button" class="opt${pick[k] === v ? ' on' : ''}" data-k="${k}" data-v="${v}" aria-pressed="${pick[k] === v}">${ja}${en ? `<small>${en}</small>` : ''}</button>`;
+      $('pickScene').innerHTML = T.SCENES.map((s) => opt('scene', s.id, s.short || s.ja, '')).join('');
       $('pickCast').innerHTML = CASTS.map(([v, ja, en]) => opt('cast', v, ja, en)).join('');
-      $('pickScene').innerHTML = T.SCENES.map((s) => opt('scene', s.id, s.ja, '')).join('');
-      $('pickLang').innerHTML = LANGS.map(([v, ja]) => opt('lang', v, ja, '')).join('');
-      document.querySelectorAll('.opt').forEach((b) => b.addEventListener('click', () => { pick[b.dataset.k] = b.dataset.v; store.set(`talk.${b.dataset.k}`, b.dataset.v); picker(); coverChars(); }));
+      document.querySelectorAll('.pick .opt').forEach((b) => b.addEventListener('click', () => { if (S && S.started) return; pick[b.dataset.k] = b.dataset.v; store.set(`talk.${b.dataset.k}`, b.dataset.v); picker(); coverChars(); }));
     }
-    $('posInfo').textContent = scene().ja;
+    const sc = scene();
+    $('posInfo').textContent = sc.ja;
+    if ($('placeName')) $('placeName').textContent = sc.ja;
+    if ($('coverChips')) $('coverChips').innerHTML = (sc.chips || []).map(([ic, ja, en, k]) => `<span class="chip ${k}">${ic} ${ja} · ${en}</span>`).join('');
+    if ($('thermNote') && sc.note) $('thermNote').textContent = sc.note;
   }
   const scene = () => T.SCENES.find((s) => s.id === pick.scene);
-  // the language you speak: the live page's own picker, otherwise the display language (shared/subs.js: EN default / 日本語 / 中文)
-  const recLang = () => pick.lang || window.MoHeatSub?.speech?.() || 'en-US';
+  // the language you speak = the display language (shared/subs.js: EN default / 日本語 / 中文)
+  const recLang = () => window.MoHeatSub?.speech?.() || 'en-US';
 
   // ---------------------------------------------------------------- art (Demo 9's, by path) + backgrounds (Demo 5 / 7 / 8 / 9)
   const IMG = {};
@@ -127,7 +132,8 @@
     let key = parts[k]; if (!T.POS[key]) { key = S.ch[who].key; } else k++;
     push({ who, key, ja: parts[k] || '', en: parts[k + 1] || '' });
   }
-  function pushEvent(k) { if (S && scene().events[k]) { Q.push({ ev: k }); log('sys', '', k === 'gust' ? shown('🌬 風', '🌬 A gust') : shown('🔥 火', '🔥 Warmth')); kick(); } }   // logged in script order
+  const evCold = (k, ev) => (ev.k ? ev.k === 'c' : k === 'gust');   // gust = cool, fire = warm, others say k: 'c' | 'h'
+  function pushEvent(k) { const ev = S && scene().events[k]; if (ev) { Q.push({ ev: k }); log('sys', '', evCold(k, ev) ? shown('🌬 風', '🌬 A gust') : shown('🔥 火', '🔥 Warmth')); kick(); } }   // logged in script order
   function limitHit(why) { if (!S || S.limitMsg) return; S.limitMsg = why; S.endAfter = true; log('sys', '', `${why[0]} ${why[1]}`); }
 
   let playing = false;
@@ -178,8 +184,9 @@
   }
   function event(k) {
     const ev = scene().events[k]; if (!ev) return;
-    S.events.push({ k, az: ev.az, s: ev.s, t0: S.t, dur: 5 });
-    if (k === 'gust') SND.fx.gust(ev.az); else SND.fx.fire(ev.az);
+    const cold = evCold(k, ev);
+    S.events.push({ k, az: ev.az, s: ev.s, t0: S.t, dur: ev.dur || 5, c: cold ? 'c' : 'h', icon: ev.icon || (cold ? '🌬' : '🔥') });
+    (SND.fx[ev.fx] || (cold ? SND.fx.gust : SND.fx.fire))(ev.az);
   }
 
   // ---------------------------------------------------------------- your turn: speech recognition (or typing)
@@ -336,7 +343,8 @@
   //  · VOICE: a voice is warm. Loudness (0.1 + 0.8 × level) at the speaker's direction, × 1 at your ear (≤ 15 cm), × 0.6 within
   //    60 cm, × 0.3 at the seat, × 0.1 from the window; × 0.6 straight in front (shared by both ears). Silent at your ear: his breath, 0.15.
   //  · PLACE: only what is really there — the sunset and mountain wind, the hearth, the warm sake and the snowy window, the misty
-  //    morning air, the lanterns and the night wind — plus the gusts / fire the characters bring about (a few seconds).
+  //    morning air, the lanterns and the night wind — plus the events the characters bring about for a few seconds (scenes.js events:
+  //    gusts, more charcoal, a fan at one ear, an opened window, the stills' heat, an iced glass at your ear, a brazier).
   function sources() {
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S || !S.started) return out;
@@ -348,7 +356,7 @@
     }
     const fade = S.done ? 0 : clamp(S.t / 3);
     for (const a of scene().amb) add(a.az, a.k, a.s * fade, a.icon);
-    for (const e of S.events) { const x = (S.t - e.t0) / e.dur, env = x < .25 ? x / .25 : 1 - (x - .25) / .75; add(e.az, e.k === 'gust' ? 'c' : 'h', e.s * clamp(env), e.k === 'gust' ? '🌬' : '🔥'); }
+    for (const e of S.events) { const x = (S.t - e.t0) / e.dur, env = x < .25 ? x / .25 : 1 - (x - .25) / .75; add(e.az, e.c, e.s * clamp(env), e.icon); }
     return out;
   }
   const ear = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
