@@ -33,6 +33,30 @@ out_dir = os.path.join(ROOT, '..', '_kit', 'talk', 'media', 'voice'); os.makedir
 cache_p = os.path.join(ROOT, 'audio', 'voice_cache.json'); os.makedirs(os.path.dirname(cache_p), exist_ok=True)
 cache = json.load(open(cache_p)) if os.path.exists(cache_p) else {}
 VOICE = {'N': 'nobunaga', 'I': 'ieyasu'}
+# Dubbed takes (user 2026-11-09: every demo voiced in ja / en / zh): python3 scripts/voice.py --lang en|zh [--count]
+#   → _kit/talk/media/voice/<lang>/<id>.m4a + index.json (tools/eleven/dub.py: same voices / settings, the ja [tag] moved into the line's
+#   own en / zh text; names stay Japanese-style; dub.PRON respellings, e.g. Ieyasu). The reserve guard is dub.RESERVE (12k), not limits.json.
+#   zh accent test 2026-11-09 (3 lines × stability .25 / .4 / .7 / an "[in standard Mandarin]" tag, Scribe): no clear gain → standard settings.
+DUB_NAMES = {'zh': [('织田信长', 'Oda Nobunaga'), ('信长', 'Nobunaga'), ('德川家康', 'Tokugawa Ieyasu'), ('家康', 'Ieyasu')]}
+DUB_OVERRIDE = {}                                                   # (lang, id) → hand-tagged text when retag() is not good enough
+LANG = sys.argv[sys.argv.index('--lang') + 1] if '--lang' in sys.argv else 'ja'
+if LANG != 'ja':
+    sp = importlib.util.spec_from_file_location('dub', os.path.join(REPO, 'tools', 'eleven', 'dub.py')); D = importlib.util.module_from_spec(sp); sp.loader.exec_module(D)
+    TXT = {}
+    def _walk(B):
+        for kinds in (B or {}).values():
+            for lst in kinds.values():
+                for l in lst: TXT[l['id']] = l
+    _walk(S['bridges'])
+    for place in S['scenes'].values():
+        for b in place['beats']:
+            for l in b['lines']:
+                if 'id' in l: TXT[l['id']] = l
+        _walk(place.get('bridges'))
+    lines = {lid: (E.voice(VOICE[who]), DUB_OVERRIDE.get((LANG, lid)) or D.retag(ja, D.names(TXT[lid][LANG], LANG, DUB_NAMES), LANG))
+             for lid, (who, ja) in items.items()}
+    D.render(lines, LANG, os.path.join(out_dir, LANG), os.path.join(ROOT, 'audio', f'voice_cache.{LANG}.json'), count_only='--count' in sys.argv)
+    sys.exit()
 todo = []
 for lid, (who, text) in items.items():
     key = f'eleven|{E.voice(VOICE[who])}|{E.MODEL}|{E.SEED}|{text}'
