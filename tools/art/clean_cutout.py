@@ -15,7 +15,8 @@ Pillow + numpy only.
 
 --unmix (v4, 2026-11-08, Demo24 Gaku: v3 left thin dark strands half transparent, fingers with a see-through rim and holes in a
 light fur collar): a difference key against the backdrop, only in a 10 px band at the cut-out edge and around enclosed backdrop
-blobs. alpha from the distance to the backdrop (dark / coloured pixels stay solid, light grey / white halo goes), then the mix ratio
+blobs. alpha from the distance to the backdrop (dark / coloured pixels stay solid, light grey / white halo goes; on a mid / dark grey backdrop the band is 6 px and the
+halo = pixels within 20 of the backdrop), then the mix ratio
 along backdrop → neighbouring figure colour (tinted halo next to blue / brown hair), colour = the figure next to it. The backdrop is read
 per pose from the corners of the raw pose image (stage.json src), else --bg. --only char_a,char_b limits it to those layers
 (re-running on an already clean layer is harmless but not needed).
@@ -47,15 +48,22 @@ def unmix(path, BG, reach=10, soft=55., floor=8.):
     rgb, a = im[..., :3], im[..., 3] / 255
     BG = np.array(BG, np.float32)
     d = np.abs(rgb - BG).max(2); sat = rgb.max(2) - rgb.min(2); lum = rgb.mean(2)
+    light = BG.mean() > 150; bsat = float(BG.max() - BG.min())
+    if not light: reach = min(reach, 6)                               # mid / dark backdrop: grey clothing nearby is ambiguous, stay close
     band = ndimage.binary_dilation(a < .1, iterations=reach) & (a > 0)
     lab, n = ndimage.label((d < 16) & (sat < 12) & (a > 0))          # enclosed backdrop blobs (hair loops, gaps by the ear)
-    if n:
+    if n and light:   # not on mid / dark backdrops: there garment shading has the backdrop colour (Demo22 towel lost half its shadow)
         area = ndimage.sum(np.ones_like(lab), lab, range(1, n + 1))
         big = np.zeros(n + 1, bool); big[1:] = area >= 40
         band |= ndimage.binary_dilation(big[lab], iterations=4) & (a > 0)
-    halo = (sat < 22) & (lum > BG.mean() - 28)                        # light grey / white outline + backdrop
-    al = np.clip((d - floor) / soft, 0, 1)
-    al = np.where((sat >= 26) | (lum < 100), 1, al)
+    if light:
+        halo = (sat < 22) & (lum > BG.mean() - 28)                    # light grey / white outline + backdrop
+        al = np.clip((d - floor) / soft, 0, 1)
+        al = np.where((sat >= 26) | (lum < 100), 1, al)
+    else:   # mid / dark grey (Demo12 / 21 / 22, 2026-11-08): the halo is the backdrop itself, a dull ring around light hair / skin
+        halo = (d < 20) & (sat < 14 + bsat)
+        al = np.clip((d - 12) / 40, 0, 1)
+        al = np.where(sat >= 26 + bsat, 1, al)
     al = np.where(halo, 0, al)
     na = np.where(band, np.minimum(a, al), a)
     F = BG + (rgb - BG) / np.maximum(al, .05)[..., None]              # C = a F + (1 - a) BG
@@ -74,15 +82,12 @@ def unmix(path, BG, reach=10, soft=55., floor=8.):
 
 
 def pose_key(stem):
-    """backdrop colour of the raw pose behind media/art/char_<pose>.webp: median of its four corners (stage.json src), else --bg."""
-    try:
-        cfg = json.load(open(os.path.join(ROOT, 'project', 'stage.json')))
-        src = cfg['poses'][stem[5:]]['src']; d = os.path.join(ROOT, cfg.get('src', 'assets/art'))
-        f = next(os.path.join(d, n) for n in os.listdir(d) if os.path.splitext(n)[0] == src)
-        r = np.asarray(Image.open(f).convert('RGB'))
-        return np.median(np.concatenate([r[:40, :40].reshape(-1, 3), r[:40, -40:].reshape(-1, 3), r[-40:, :40].reshape(-1, 3), r[-40:, -40:].reshape(-1, 3)]), 0)
-    except Exception:
-        return STUDIO
+    """backdrop colour of the raw pose behind media/art/char_<pose>.webp — the same reading as check_art.py's fringe check (plain raw
+    corners, else the stage.json matte colour); --bg overrides; None = unknown (the layer is skipped)."""
+    if '--bg' in sys.argv: return STUDIO
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import check_art
+    k = check_art.backdrop(ROOT, check_art.stage(ROOT), stem[5:])
+    return None if k is None else np.array(k, np.float32)
 
 
 def grow(mask, size):
@@ -142,12 +147,20 @@ for stem, v in D['views'].items():
     c = v['char']; p = os.path.join(ROOT, 'media', c['src'].split('?')[0])   # build_stage adds ?v=<hash> to the paths
     stem = os.path.splitext(os.path.basename(p))[0]
     if p in done or (ONLY and stem not in ONLY): continue
-    if UNMIX: k = pose_key(stem); print('unmixed', c['src'], 'backdrop', tuple(int(x) for x in k), unmix(p, k), 'px')
+    if UNMIX:
+        k = pose_key(stem)
+        if k is None: print('skipped', c['src'], '(backdrop unknown: pass --bg R,G,B)'); continue
+        print('unmixed', c['src'], 'backdrop', tuple(int(x) for x in k), unmix(p, k), 'px')
     else: print('cleaned', c['src'], clean(p), 'px')
     done.add(p)
-# flat stills, same maths as build_stage.py (fire null → centred zoom)
+# flat stills, same maths as build_stage.py (fire null → centred zoom). Only views whose char layer was cleaned now (--only), with the
+# file name / size stage.json gives (still "x.webp", "small": true — v1 always wrote <stem>.jpg at full size)
 FW, FH = 1920, 1080
+try: SV = {os.path.splitext(w.get('still', k))[0]: w for k, w in json.load(open(os.path.join(ROOT, 'project', 'stage.json')))['views'].items()}
+except Exception: SV = {}
+n_flat = 0
 for stem, v in D['views'].items():
+    if os.path.join(ROOT, 'media', v['char']['src'].split('?')[0]) not in done or v.get('more'): continue   # multi-figure views: build_stage
     # same zoom / offset as build_stage.py: a view with "fire" pins the bg's fire point to the view's fire point (v1 ignored it and
     # rewrote Demo24's fire views with the wrong crop of the plate, 2026-11-08)
     z = v['bg'].get('zoom') or 1; f, bf = v.get('fire'), v['bg'].get('fire')
@@ -160,5 +173,8 @@ for stem, v in D['views'].items():
     c = v['char']; ch = Image.open(os.path.join(ROOT, 'media', c['src'].split('?')[0])).convert('RGBA')
     hpx = c['height'] * FH; wpx = hpx * c['w'] / c['h']; ch = ch.resize((round(wpx), round(hpx)), Image.LANCZOS)
     flat.paste(ch, (round(c['x'] * FW - wpx / 2), round(c['y'] * FH - hpx)), ch)
-    flat.convert('RGB').save(os.path.join(ART, stem + '.jpg'), quality=88)
-print('flat stills rewritten:', len(D['views']))
+    sv = SV.get(stem, {}); ext = os.path.splitext(sv.get('still', ''))[1] or '.jpg'
+    flat = flat.convert('RGB')
+    if sv.get('small'): flat = flat.resize((FW // 2, FH // 2), Image.LANCZOS)
+    flat.save(os.path.join(ART, stem + ext), quality=80 if sv.get('small') else 88); n_flat += 1
+print('flat stills rewritten:', n_flat)

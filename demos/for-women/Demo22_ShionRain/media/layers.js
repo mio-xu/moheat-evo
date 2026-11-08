@@ -12,7 +12,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_door.webp?v=bac6aa39",
+    "src": "art/char_door.webp?v=a285c6b6",
     "w": 1700,
     "h": 1347,
     "x": 0.45,
@@ -178,7 +178,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_dryer.webp?v=c07cc2eb",
+    "src": "art/char_dryer.webp?v=c60bfc15",
     "w": 1700,
     "h": 954,
     "x": 0.6071,
@@ -260,7 +260,7 @@ window.MOHEAT_LAYERS = {
     "zoom": 1.2
    },
    "char": {
-    "src": "art/char_glasses.webp?v=f3fd24be",
+    "src": "art/char_glasses.webp?v=d68198d1",
     "w": 1700,
     "h": 1097,
     "x": 0.5,
@@ -342,7 +342,7 @@ window.MOHEAT_LAYERS = {
     "zoom": 1.3
    },
    "char": {
-    "src": "art/char_whisper.webp?v=5a32c79e",
+    "src": "art/char_whisper.webp?v=256453d2",
     "w": 1700,
     "h": 961,
     "x": 0.5,
@@ -413,7 +413,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_window.webp?v=faa3e3c8",
+    "src": "art/char_window.webp?v=664b18b7",
     "w": 1700,
     "h": 1150,
     "x": 0.5158,
