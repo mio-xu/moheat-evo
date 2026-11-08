@@ -17,6 +17,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 _sp = importlib.util.spec_from_file_location('eleven_tts', os.path.join(HERE, 'tts.py')); E = importlib.util.module_from_spec(_sp); _sp.loader.exec_module(E)
 TAG = re.compile(r'\[[^\]]*\]')
 AF = 'loudnorm=I=-18:TP=-2'                       # same as the ja takes of Demo22 / 43
+RESERVE = int(os.environ.get('MOHEAT_EL_RESERVE', '12000'))   # chars to keep on the ElevenLabs account; 0 = no check
+BR = '64k'                                        # rollout 2026-11-09: dubs at 64 kb/s mono AAC (speech, half the size → small enough for git / Pages)
 
 
 def lang_arg(argv=sys.argv, default='ja'):
@@ -68,19 +70,24 @@ def dur(p):
     return round(float(r.stdout.strip().strip(',')), 3)
 
 
-def render(lines, lang, out_dir, cache_p, count_only=False, af=AF):
+def render(lines, lang, out_dir, cache_p, count_only=False, af=AF, br=BR):
     """lines = {lid: (voice_id, tagged text[, ffmpeg -af])}. Synthesises only what changed; returns {lid: duration}."""
     os.makedirs(out_dir, exist_ok=True); os.makedirs(os.path.dirname(cache_p), exist_ok=True)
     cache = json.load(open(cache_p)) if os.path.exists(cache_p) else {}
     todo = [k for k, (vid, t, *_) in lines.items() if cache.get(k) != key(vid, lang, t) or not os.path.exists(os.path.join(out_dir, k + '.m4a'))]
     print(f'[{lang}] {len(lines)} lines, {chars(lines)} chars in total; to render now: {len(todo)} lines, {sum(len(lines[k][1]) for k in todo)} chars', flush=True)
     if count_only: return {}
+    need = sum(len(lines[k][1]) for k in todo)
+    if need and RESERVE:                                          # quota guard: never dip into the reserve (rollout 2026-11-09)
+        sub = E.client().user.subscription.get(); left = sub.character_limit - sub.character_count
+        print(f'[{lang}] account: {left:,} chars left, reserve {RESERVE:,}', flush=True)
+        if left - need < RESERVE: raise SystemExit(f'[{lang}] STOP: {need} chars would leave {left - need:,} < reserve {RESERVE:,}')
     durs = {}
     for lid, (vid, text, *rest) in lines.items():
         m4a = os.path.join(out_dir, lid + '.m4a')
         if lid in todo:
             with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as f: f.write(E.speak(text, vid, lang=lang)); wav = f.name
-            subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', wav, '-ac', '1', '-af', rest[0] if rest else af, '-ar', '48000', '-c:a', 'aac', '-b:a', '112k', m4a], check=True)
+            subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', wav, '-ac', '1', '-af', rest[0] if rest else af, '-ar', '48000', '-c:a', 'aac', '-b:a', br, m4a], check=True)
             os.remove(wav); cache[lid] = key(vid, lang, text); print('voiced', lang, lid, text, flush=True)
             tmp = cache_p + '.tmp'; json.dump(cache, open(tmp, 'w'), ensure_ascii=False, indent=1); os.replace(tmp, cache_p)
         durs[lid] = dur(m4a)

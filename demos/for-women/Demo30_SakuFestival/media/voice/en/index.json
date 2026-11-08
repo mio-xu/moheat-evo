@@ -1,0 +1,43 @@
+{
+ "lang": "en",
+ "text": {
+  "k01": "[shouting playfully] Hey, over here! [laughs] …Honestly, you get lost every single year.",
+  "k02": "[casually] Here, your hand. [softly] …Don't get lost.",
+  "k03": "[laughs] That yakisoba stall is scorching. [sighs] …Way too many people. Let's go up.",
+  "k04": "[exhales] Phew. [softly] …We used to come up here a lot, the two of us.",
+  "k05": "[teasing] You're hot, right? I'll fan you.",
+  "k06": "[playfully] Better? …Here, the other side too.",
+  "k07a": "[laughs softly] Yes, yes, princess. …Honestly, what am I going to do with you.",
+  "k07b": "[teasing] Nope. [softly] Tonight, let me do it.",
+  "k08": "[cheerfully] I got shaved ice. Matcha with red beans. [teasing] …Here, say aah.",
+  "k09a": "[chuckles] …You're obedient tonight. Cold?",
+  "k09b": "[laughs softly] Don't be shy. …Come on, it's melting.",
+  "k10": "[mischievously] Hey. Did you know your breath goes cold after shaved ice?",
+  "k11": "[whispers] …See? Cold, right? [chuckles softly] …Your face is red.",
+  "k12": "[softly] We watch the fireworks together every year, but this year—",
+  "k13": "[whispers] …This year, I wanted to watch them not as your childhood friend. …Right beside you.",
+  "k14": "[softly] [nervous] …Let me hear your answer.",
+  "k15a": "[whispers] …Next year, and the year after. [chuckles softly] Keep the place next to me free.",
+  "k15b": "[whispers] …Forever, then. I'm not going back to being just your childhood friend."
+ },
+ "dur": {
+  "k01": 5.8,
+  "k02": 3.2,
+  "k03": 7.6,
+  "k04": 5.1,
+  "k05": 2.72,
+  "k06": 3.2,
+  "k07a": 6.1,
+  "k07b": 3.4,
+  "k08": 5.4,
+  "k09a": 3.8,
+  "k09b": 4.8,
+  "k10": 4.3,
+  "k11": 5.2,
+  "k12": 4.1,
+  "k13": 5.6,
+  "k14": 2.08,
+  "k15a": 6.0,
+  "k15b": 4.4
+ }
+}
