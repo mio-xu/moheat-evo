@@ -98,7 +98,8 @@
  },
  "shion_ear_blink": {
   "ref": "shion_ear",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY BOTH of his eyes: FULLY closed in a natural soft blink (upper eyelids all the way down on both eyes, lashes visible, no iris visible, same skin tone and lighting); his bangs stay exactly as they are. Do not move, zoom or crop the picture."
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY BOTH of his eyes: FULLY closed in a natural soft blink (upper eyelids all the way down on both eyes, lashes visible, no iris visible, same skin tone and lighting); his bangs stay exactly as they are. Do not move, zoom or crop the picture.",
+  "mask": "733,462,50,34;883,387,50,34"
  },
  "saku_ear": {
   "ref": [
@@ -109,7 +110,8 @@
  },
  "saku_ear_blink": {
   "ref": "saku_ear",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY BOTH of his eyes: FULLY closed in a natural soft blink (upper eyelids all the way down on both eyes, lashes visible, no iris visible, same skin tone and lighting); his bangs stay exactly as they are. Do not move, zoom or crop the picture."
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY BOTH of his eyes: FULLY closed in a natural soft blink (upper eyelids all the way down on both eyes, lashes visible, no iris visible, same skin tone and lighting); his bangs stay exactly as they are. Do not move, zoom or crop the picture.",
+  "mask": "1229,374,50,34;1358,362,48,34"
  },
  "cover_art": {
   "ref": [

@@ -307,7 +307,7 @@
   "model": "gpt-image-2",
   "size": "2560x1440",
   "quality": "high",
-  "seconds": 69,
+  "seconds": 98,
   "usage": {
    "input_tokens": 3499,
    "input_tokens_details": {
@@ -324,6 +324,21 @@
   "out": [
    2560,
    1440
+  ],
+  "prior_usage": [
+   {
+    "input_tokens": 3499,
+    "input_tokens_details": {
+     "image_tokens": 3025,
+     "text_tokens": 474
+    },
+    "output_tokens": 7370,
+    "output_tokens_details": {
+     "image_tokens": 7370,
+     "text_tokens": 0
+    },
+    "total_tokens": 10869
+   }
   ]
  },
  "bg_dawn": {
@@ -375,47 +390,77 @@
  "shion_base_blink": {
   "model": "gpt-image-2",
   "size": "2560x1440",
-  "quality": "medium",
-  "seconds": 37,
+  "quality": "high",
+  "seconds": 103,
   "usage": {
    "input_tokens": 1604,
    "input_tokens_details": {
     "image_tokens": 1508,
     "text_tokens": 96
    },
-   "output_tokens": 1843,
+   "output_tokens": 7370,
    "output_tokens_details": {
-    "image_tokens": 1843,
+    "image_tokens": 7370,
     "text_tokens": 0
    },
-   "total_tokens": 3447
+   "total_tokens": 8974
   },
   "out": [
    2560,
    1440
+  ],
+  "prior_usage": [
+   {
+    "input_tokens": 1604,
+    "input_tokens_details": {
+     "image_tokens": 1508,
+     "text_tokens": 96
+    },
+    "output_tokens": 1843,
+    "output_tokens_details": {
+     "image_tokens": 1843,
+     "text_tokens": 0
+    },
+    "total_tokens": 3447
+   }
   ]
  },
  "saku_base_blink": {
   "model": "gpt-image-2",
   "size": "2560x1440",
-  "quality": "medium",
-  "seconds": 39,
+  "quality": "high",
+  "seconds": 87,
   "usage": {
    "input_tokens": 1604,
    "input_tokens_details": {
     "image_tokens": 1508,
     "text_tokens": 96
    },
-   "output_tokens": 1843,
+   "output_tokens": 7370,
    "output_tokens_details": {
-    "image_tokens": 1843,
+    "image_tokens": 7370,
     "text_tokens": 0
    },
-   "total_tokens": 3447
+   "total_tokens": 8974
   },
   "out": [
    2560,
    1440
+  ],
+  "prior_usage": [
+   {
+    "input_tokens": 1604,
+    "input_tokens_details": {
+     "image_tokens": 1508,
+     "text_tokens": 96
+    },
+    "output_tokens": 1843,
+    "output_tokens_details": {
+     "image_tokens": 1843,
+     "text_tokens": 0
+    },
+    "total_tokens": 3447
+   }
   ]
  },
  "jin_ear_blink": {
@@ -444,54 +489,84 @@
  "shion_ear_blink": {
   "model": "gpt-image-2",
   "size": "2560x1440",
-  "quality": "medium",
-  "seconds": 41,
+  "quality": "high",
+  "seconds": 73,
   "usage": {
    "input_tokens": 1604,
    "input_tokens_details": {
     "image_tokens": 1508,
     "text_tokens": 96
    },
-   "output_tokens": 1843,
+   "output_tokens": 7370,
    "output_tokens_details": {
-    "image_tokens": 1843,
+    "image_tokens": 7370,
     "text_tokens": 0
    },
-   "total_tokens": 3447
+   "total_tokens": 8974
   },
   "out": [
    2560,
    1440
+  ],
+  "prior_usage": [
+   {
+    "input_tokens": 1604,
+    "input_tokens_details": {
+     "image_tokens": 1508,
+     "text_tokens": 96
+    },
+    "output_tokens": 1843,
+    "output_tokens_details": {
+     "image_tokens": 1843,
+     "text_tokens": 0
+    },
+    "total_tokens": 3447
+   }
   ]
  },
  "saku_ear_blink": {
   "model": "gpt-image-2",
   "size": "2560x1440",
-  "quality": "medium",
-  "seconds": 41,
+  "quality": "high",
+  "seconds": 89,
   "usage": {
    "input_tokens": 1604,
    "input_tokens_details": {
     "image_tokens": 1508,
     "text_tokens": 96
    },
-   "output_tokens": 1843,
+   "output_tokens": 7370,
    "output_tokens_details": {
-    "image_tokens": 1843,
+    "image_tokens": 7370,
     "text_tokens": 0
    },
-   "total_tokens": 3447
+   "total_tokens": 8974
   },
   "out": [
    2560,
    1440
+  ],
+  "prior_usage": [
+   {
+    "input_tokens": 1604,
+    "input_tokens_details": {
+     "image_tokens": 1508,
+     "text_tokens": 96
+    },
+    "output_tokens": 1843,
+    "output_tokens_details": {
+     "image_tokens": 1843,
+     "text_tokens": 0
+    },
+    "total_tokens": 3447
+   }
   ]
  },
  "cover_art": {
   "model": "gpt-image-2",
   "size": "2560x1440",
   "quality": "high",
-  "seconds": 88,
+  "seconds": 119,
   "usage": {
    "input_tokens": 4924,
    "input_tokens_details": {
@@ -508,6 +583,21 @@
   "out": [
    2560,
    1440
+  ],
+  "prior_usage": [
+   {
+    "input_tokens": 4924,
+    "input_tokens_details": {
+     "image_tokens": 4524,
+     "text_tokens": 400
+    },
+    "output_tokens": 7370,
+    "output_tokens_details": {
+     "image_tokens": 7370,
+     "text_tokens": 0
+    },
+    "total_tokens": 12294
+   }
   ]
  },
  "shion_base": {

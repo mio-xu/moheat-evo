@@ -79,7 +79,8 @@
      "band": 0.05,
      "tongue_a": 0.5
     }
-   }
+   },
+   "mouth": "lp"
   },
   "jin_ear": {
    "src": "jin_ear",
@@ -117,7 +118,8 @@
      "band": 0.05,
      "tongue_a": 0.5
     }
-   }
+   },
+   "mouth": "lp"
   },
   "shion_base": {
    "src": "shion_base",
@@ -126,25 +128,25 @@
    "character": "shion",
    "look": "crossover_palace",
    "centre_mouth": [
-    1253,
-    422
+    1255,
+    327
    ],
    "radius_mouth": [
-    27,
-    14
+    26,
+    13
    ],
    "regions_eyes": [
     [
-     1160,
-     342,
-     40,
-     29
+     1175,
+     250,
+     38,
+     27
     ],
     [
-     1252,
-     307,
-     40,
-     29
+     1270,
+     212,
+     38,
+     27
     ]
    ],
    "lp": {
@@ -156,7 +158,8 @@
      "band": 0.05,
      "tongue_a": 0.5
     }
-   }
+   },
+   "mouth": "lp"
   },
   "shion_ear": {
    "src": "shion_ear",
@@ -165,25 +168,25 @@
    "character": "shion",
    "look": "crossover_palace",
    "centre_mouth": [
-    838,
-    621
+    875,
+    579
    ],
    "radius_mouth": [
-    38,
-    18
+    35,
+    16
    ],
    "regions_eyes": [
     [
-     688,
-     479,
-     55,
-     38
+     733,
+     462,
+     52,
+     36
     ],
     [
-     855,
-     412,
-     55,
-     38
+     883,
+     387,
+     52,
+     36
     ]
    ],
    "lp": {
@@ -195,7 +198,8 @@
      "band": 0.05,
      "tongue_a": 0.5
     }
-   }
+   },
+   "mouth": "lp"
   },
   "saku_base": {
    "src": "saku_base",
@@ -204,23 +208,23 @@
    "character": "saku",
    "look": "crossover_palace",
    "centre_mouth": [
-    1278,
-    411
+    1267,
+    337
    ],
    "radius_mouth": [
     27,
-    14
+    13
    ],
    "regions_eyes": [
     [
-     1216,
-     327,
+     1202,
+     262,
      42,
      29
     ],
     [
-     1322,
-     311,
+     1307,
+     247,
      42,
      29
     ]
@@ -234,7 +238,8 @@
      "band": 0.05,
      "tongue_a": 0.5
     }
-   }
+   },
+   "mouth": "lp"
   },
   "saku_ear": {
    "src": "saku_ear",
@@ -243,25 +248,25 @@
    "character": "saku",
    "look": "crossover_palace",
    "centre_mouth": [
-    1600,
-    645
+    1304,
+    487
    ],
    "radius_mouth": [
-    38,
-    18
+    35,
+    16
    ],
    "regions_eyes": [
     [
-     1545,
-     480,
-     55,
-     38
+     1229,
+     374,
+     52,
+     36
     ],
     [
-     1720,
-     510,
-     52,
-     38
+     1358,
+     362,
+     50,
+     36
     ]
    ],
    "lp": {
@@ -273,7 +278,8 @@
      "band": 0.05,
      "tongue_a": 0.5
     }
-   }
+   },
+   "mouth": "lp"
   }
  },
  "views": {
@@ -302,6 +308,9 @@
     0.9,
     0.62
    ],
+   "x": 0.64,
+   "y": 1.0,
+   "height": 1.0,
    "who": "J"
   },
   "terrace_S": {
@@ -322,6 +331,9 @@
     0.74,
     0.62
    ],
+   "x": 0.36,
+   "y": 1.0,
+   "height": 1.0,
    "who": "S"
   },
   "corridor_K": {
@@ -336,6 +348,9 @@
    "pose": "saku_ear",
    "bg": "corridor",
    "fire": null,
+   "x": 0.66,
+   "y": 1.0,
+   "height": 1.0,
    "who": "K"
   },
   "end_J": {
@@ -343,6 +358,9 @@
    "pose": "jin_ear",
    "bg": "dawn",
    "fire": null,
+   "x": 0.64,
+   "y": 1.0,
+   "height": 1.0,
    "who": "J"
   },
   "end_S": {
@@ -350,6 +368,9 @@
    "pose": "shion_ear",
    "bg": "dawn",
    "fire": null,
+   "x": 0.36,
+   "y": 1.0,
+   "height": 1.0,
    "who": "S"
   },
   "end_K": {
@@ -357,6 +378,9 @@
    "pose": "saku_ear",
    "bg": "dawn",
    "fire": null,
+   "x": 0.66,
+   "y": 1.0,
+   "height": 1.0,
    "who": "K"
   },
   "t_pond_J": {
@@ -380,6 +404,9 @@
    "pose": "shion_ear",
    "bg": "pond",
    "fire": null,
+   "x": 0.36,
+   "y": 1.0,
+   "height": 1.0,
    "who": "S",
    "small": true
   },
@@ -388,6 +415,9 @@
    "pose": "saku_ear",
    "bg": "pond",
    "fire": null,
+   "x": 0.66,
+   "y": 1.0,
+   "height": 1.0,
    "who": "K",
    "small": true
   },
@@ -437,6 +467,9 @@
     0.9,
     0.62
    ],
+   "x": 0.36,
+   "y": 1.0,
+   "height": 1.0,
    "who": "S",
    "small": true
   },
@@ -459,6 +492,9 @@
     0.9,
     0.62
    ],
+   "x": 0.66,
+   "y": 1.0,
+   "height": 1.0,
    "who": "K",
    "small": true
   },
@@ -522,6 +558,9 @@
     0.74,
     0.62
    ],
+   "x": 0.66,
+   "y": 1.0,
+   "height": 1.0,
    "who": "K",
    "small": true
   },
@@ -576,6 +615,9 @@
    "pose": "shion_ear",
    "bg": "corridor",
    "fire": null,
+   "x": 0.36,
+   "y": 1.0,
+   "height": 1.0,
    "who": "S",
    "small": true
   },
