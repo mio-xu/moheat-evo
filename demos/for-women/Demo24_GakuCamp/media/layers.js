@@ -8,7 +8,7 @@ window.MOHEAT_LAYERS = {
     0.74
    ],
    "bg": {
-    "src": "art/bg_camp.webp",
+    "src": "art/bg_camp.webp?v=203b43b8",
     "fire": [
      0.773,
      0.687
@@ -20,7 +20,13 @@ window.MOHEAT_LAYERS = {
     "h": 1317,
     "x": 0.43,
     "y": 1.04,
-    "height": 1.0
+    "height": 1.0,
+    "box": [
+     321,
+     0,
+     2180,
+     1440
+    ]
    },
    "patches": [
     {
@@ -52,7 +58,7 @@ window.MOHEAT_LAYERS = {
     0.8
    ],
    "bg": {
-    "src": "art/bg_camp.webp",
+    "src": "art/bg_camp.webp?v=203b43b8",
     "fire": [
      0.773,
      0.687
@@ -64,7 +70,13 @@ window.MOHEAT_LAYERS = {
     "h": 1195,
     "x": 0.42,
     "y": 1.04,
-    "height": 1.0
+    "height": 1.0,
+    "box": [
+     405,
+     11,
+     2436,
+     1440
+    ]
    },
    "patches": [
     {
@@ -96,38 +108,44 @@ window.MOHEAT_LAYERS = {
     0.62
    ],
    "bg": {
-    "src": "art/bg_camp.webp",
+    "src": "art/bg_camp.webp?v=203b43b8",
     "fire": [
      0.773,
      0.687
     ]
    },
    "char": {
-    "src": "art/char_left.webp",
+    "src": "art/char_left.webp?v=11d8e0e8",
     "w": 1700,
-    "h": 956,
-    "x": 0.3,
+    "h": 879,
+    "x": 0.3462,
     "y": 1.02,
-    "height": 1.05
+    "height": 1.05,
+    "box": [
+     0,
+     0,
+     2786,
+     1440
+    ]
    },
    "patches": [
     {
-     "src": "art/left_mouth.webp",
+     "src": "art/left_mouth.webp?v=c308d264",
      "rect": [
-      679,
-      505,
-      166,
-      98
+      624,
+      464,
+      153,
+      90
      ],
      "kind": "mouth"
     },
     {
-     "src": "art/left_eyes.webp",
+     "src": "art/left_eyes.webp?v=0d7cf264",
      "rect": [
-      485,
-      263,
-      403,
-      181
+      445,
+      242,
+      370,
+      167
      ],
      "kind": "eyes"
     }
@@ -140,7 +158,7 @@ window.MOHEAT_LAYERS = {
     0.55
    ],
    "bg": {
-    "src": "art/bg_camp.webp",
+    "src": "art/bg_camp.webp?v=203b43b8",
     "fire": [
      0.773,
      0.687
@@ -152,7 +170,13 @@ window.MOHEAT_LAYERS = {
     "h": 1318,
     "x": 0.43,
     "y": 1.12,
-    "height": 1.3
+    "height": 1.3,
+    "box": [
+     321,
+     0,
+     2178,
+     1440
+    ]
    },
    "patches": [
     {
@@ -184,7 +208,7 @@ window.MOHEAT_LAYERS = {
     0.63
    ],
    "bg": {
-    "src": "art/bg_camp.webp",
+    "src": "art/bg_camp.webp?v=203b43b8",
     "fire": [
      0.773,
      0.687
@@ -196,7 +220,13 @@ window.MOHEAT_LAYERS = {
     "h": 1277,
     "x": 0.55,
     "y": 1.2,
-    "height": 1.08
+    "height": 1.08,
+    "box": [
+     261,
+     0,
+     2178,
+     1440
+    ]
    },
    "patches": [
     {
@@ -228,38 +258,44 @@ window.MOHEAT_LAYERS = {
     0.63
    ],
    "bg": {
-    "src": "art/bg_camp.webp",
+    "src": "art/bg_camp.webp?v=203b43b8",
     "fire": [
      0.773,
      0.687
     ]
    },
    "char": {
-    "src": "art/char_blanket.webp",
+    "src": "art/char_blanket.webp?v=7fc0459e",
     "w": 1700,
-    "h": 953,
-    "x": 0.43,
+    "h": 915,
+    "x": 0.4527,
     "y": 1.06,
-    "height": 1.08
+    "height": 1.08,
+    "box": [
+     0,
+     5,
+     2667,
+     1440
+    ]
    },
    "patches": [
     {
-     "src": "art/blanket_mouth.webp",
+     "src": "art/blanket_mouth.webp?v=cce4f3fd",
      "rect": [
-      776,
-      376,
-      130,
-      81
+      745,
+      361,
+      125,
+      78
      ],
      "kind": "mouth"
     },
     {
-     "src": "art/blanket_eyes.webp",
+     "src": "art/blanket_eyes.webp?v=9f931841",
      "rect": [
-      693,
-      245,
-      236,
-      90
+      665,
+      235,
+      227,
+      87
      ],
      "kind": "eyes"
     }
@@ -272,7 +308,7 @@ window.MOHEAT_LAYERS = {
     0.7
    ],
    "bg": {
-    "src": "art/bg_camp.webp",
+    "src": "art/bg_camp.webp?v=203b43b8",
     "fire": [
      0.773,
      0.687
@@ -284,7 +320,13 @@ window.MOHEAT_LAYERS = {
     "h": 978,
     "x": 0.58,
     "y": 1.03,
-    "height": 1.05
+    "height": 1.05,
+    "box": [
+     56,
+     0,
+     2560,
+     1440
+    ]
    },
    "patches": [
     {
@@ -306,7 +348,7 @@ window.MOHEAT_LAYERS = {
     0.7
    ],
    "bg": {
-    "src": "art/bg_camp.webp",
+    "src": "art/bg_camp.webp?v=203b43b8",
     "fire": [
      0.773,
      0.687
@@ -318,7 +360,13 @@ window.MOHEAT_LAYERS = {
     "h": 1226,
     "x": 0.43,
     "y": 1.04,
-    "height": 1.0
+    "height": 1.0,
+    "box": [
+     247,
+     0,
+     2244,
+     1440
+    ]
    },
    "patches": [
     {

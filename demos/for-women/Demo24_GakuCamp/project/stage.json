@@ -55,9 +55,9 @@
    ]
   },
   "blanket": {
-   "src": "gaku_blanket",
-   "talk": "gaku_ref_talk",
-   "blink": "gaku_ref_blink",
+   "src": "gaku_blanket_ext",
+   "talk": "gaku_blanket_ext_talk",
+   "blink": "gaku_blanket_ext_blink",
    "near_mouth": [
     1262,
     631
@@ -102,9 +102,9 @@
    ]
   },
   "left": {
-   "src": "gaku_left",
-   "talk": "gaku_left_talk",
-   "blink": "gaku_left_blink",
+   "src": "gaku_left_ext",
+   "talk": "gaku_left_ext_talk",
+   "blink": "gaku_left_ext_blink",
    "near_mouth": [
     1133,
     848
@@ -152,7 +152,7 @@
     0.76,
     0.62
    ],
-   "x": 0.3,
+   "x": 0.3462,
    "y": 1.02,
    "height": 1.05
   },
@@ -188,7 +188,7 @@
     0.94,
     0.63
    ],
-   "x": 0.43,
+   "x": 0.4527,
    "y": 1.06,
    "height": 1.08
   },
