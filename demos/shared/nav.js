@@ -51,7 +51,7 @@
   const qs = new URLSearchParams(location.search);
   { const me = document.currentScript?.src;   // subtitle language EN / 日本語 / 中文 (also in ?embed): shared/subs.js next to this file
     const shot = qs.has('cover') && qs.has('sub');   // per-language thumbnail export (tools/web/thumbs.py): only the display language
-    if (me && !window.MoHeatSub && (shot || (!qs.has('cover') && !qs.has('render')))) for (const f of shot ? ['subs.js?v=14'] : ['subs.js?v=14', 'fullscreen.js?v=3', 'guide.js?v=4', 'thermocheck.js?v=2']) {   // display language + ⛶ fullscreen + first-visit guide + 🌡 thermal check (tools/web/bump.py updates these numbers)
+    if (me && !window.MoHeatSub && (shot || (!qs.has('cover') && !qs.has('render')))) for (const f of shot ? ['subs.js?v=14'] : ['subs.js?v=14', 'fullscreen.js?v=3', 'guide.js?v=5', 'thermocheck.js?v=2']) {   // display language + ⛶ fullscreen + first-visit guide + 🌡 thermal check (tools/web/bump.py updates these numbers)
       const s = document.createElement('script'); s.src = me.replace(/nav\.js(\?.*)?$/, f); s.async = false; document.head.appendChild(s); } }
   if (qs.has('embed') || qs.has('cover') || qs.has('render')) return;
   // one screen: measure the bar and what sits below the stage, series.css sizes the stage and the side panel from these
@@ -61,14 +61,42 @@
     if (!lay || !stage) return;
     root.classList.add('fit');   // first, so the column is no longer stretched to the side panel's height when measured
     const col = stage.closest('.stage-col') || stage.parentElement, cs = getComputedStyle(lay);
-    root.style.setProperty('--fit-bar', `${bar ? bar.offsetHeight : 0}px`);
+    root.style.setProperty('--fit-bar', `${bar && getComputedStyle(bar).position !== 'fixed' ? bar.offsetHeight : 0}px`);   // landscape phones: the bar is a column on the left (series.css)
     root.style.setProperty('--fit-pad', `${parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)}px`);
-    root.style.setProperty('--fit-below', `${Math.max(0, col.getBoundingClientRect().height - stage.getBoundingClientRect().height)}px`);
+    const below = Math.max(0, col.getBoundingClientRect().height - stage.getBoundingClientRect().height);
+    root.style.setProperty('--fit-below', `${below}px`);
+    // responsive side panel (≤ 1100 px): "below" the player when at least 220 px are left under the full-width player (portrait phones / tablets),
+    // otherwise a "drawer" that slides in from the right (landscape phones / tablets) — the player always keeps its largest 16:9 size
+    const side = document.querySelector('aside.side');
+    if (side && matchMedia('(max-width: 1100px)').matches) {
+      const barH = parseFloat(root.style.getPropertyValue('--fit-bar')) || 0, barW = bar && getComputedStyle(bar).position === 'fixed' ? bar.offsetWidth : 0;
+      const W = innerWidth - barW - 16, H = innerHeight - barH - 16, stageH = Math.min(W * 9 / 16, Math.max(0, H - below));
+      const drawer = H - stageH - below < 220;
+      root.classList.toggle('lay-drawer', drawer); root.classList.toggle('lay-below', !drawer);
+      if (!drawer) root.classList.remove('side-open');
+    } else root.classList.remove('lay-drawer', 'lay-below', 'side-open');
   };
   fit(); addEventListener('resize', fit); addEventListener('load', fit); setTimeout(fit, 600);
+  // touch: a long press on a hold button / the picture must not open the callout menu (the hold would be cancelled)
+  addEventListener('contextmenu', (e) => { if (e.target.closest?.('.stage :is(.hold, .act-btn, .ch, canvas, video, img)')) e.preventDefault(); });
   { const dir = (DEMOS.find((d) => location.pathname.includes(`/${d.dir}/`)) || {}).dir, cr = document.getElementById('credits');
     if (cr && RIGHTS[dir] && !document.querySelector('.dn-rights')) { const r = document.createElement('p'); r.className = 'draft dn-rights'; r.textContent = RIGHTS[dir]; cr.after(r); } }
   const bar = document.querySelector('header.bar'); if (!bar) return;
+  // compact top bar (≤ 1100 px, series.css): 🎛 opens the side panel as a drawer when it has no room under the player; 🔌 opens the device controls
+  // (port / Add / Connect, only in browsers with Web Serial) as a small menu instead of a second row
+  const T3 = (o) => { const l = window.MoHeatSub?.lang || 'en'; return o[l] || o.en; };
+  const PANEL = { en: 'Sound map, thermal output & settings', ja: '音の位置・温冷・設定', zh: '声音位置、冷热输出和设置' }, DEV = { en: 'Connect MoHeat Evo', ja: 'MoHeat Evo をつなぐ', zh: '连接 MoHeat Evo' };
+  const mini = (cls, icon, tip, onTap) => { const b = document.createElement('button'); b.type = 'button'; b.className = `btn sm ${cls}`; b.textContent = icon;
+    const lab = () => { b.title = T3(tip); b.setAttribute('aria-label', T3(tip)); }; lab(); addEventListener('moheat:sublang', lab);
+    b.addEventListener('click', (e) => { e.stopPropagation(); onTap(); }); const stop = document.getElementById('estop'); stop ? stop.before(b) : bar.appendChild(b); return b; };
+  const toggle = (c, v) => { root.classList.toggle(c, v); dispatchEvent(new Event('resize')); };
+  if (document.querySelector('aside.side')) mini('mside-btn', '🎛', PANEL, () => toggle('side-open', !root.classList.contains('side-open')));
+  if (bar.querySelector('.device')) mini('mdev-btn', '🔌', DEV, () => toggle('dev-open', !root.classList.contains('dev-open')));
+  document.addEventListener('click', (e) => {   // tap outside closes the drawer / the device menu
+    if (root.classList.contains('side-open') && !e.target.closest('aside.side, .mside-btn, .mg-tip')) toggle('side-open', false);
+    if (root.classList.contains('dev-open') && !e.target.closest('.bar .device, .mdev-btn')) toggle('dev-open', false);
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { root.classList.remove('side-open', 'dev-open'); } });
   const cur = DEMOS.findIndex((d) => location.pathname.includes(`/${d.dir}/`));
   const href = (d) => `../../${d.cat}/${d.dir}/`, thumb = (i, l) => `../../../assets/images/demos/${DEMOS[i].dir}${l ? '.' + l : ''}.jpg`;   // pages live at demos/<cat>/<dir>/   // named by folder, so inserting a demo renames nothing
 
@@ -80,7 +108,7 @@
   .dnav a.dn-step{padding:0;width:32px;font-size:17px}
   .dnav a.dn-step[aria-disabled=true]{opacity:.3;pointer-events:none}
   .dnav a.dn-step:hover,.dnav button:hover,.dnav button[aria-expanded=true]{border-color:#ff9a7a;background:rgba(255,140,110,.14)}
-  .dn-panel{position:fixed;left:50%;top:62px;transform:translateX(-50%);width:min(980px,calc(100vw - 24px));max-height:calc(100vh - 80px);overflow:auto;z-index:50;
+  .dn-panel{position:fixed;left:50%;top:calc(var(--fit-bar,54px) + 8px);transform:translateX(-50%);width:min(980px,calc(100vw - 24px));max-height:calc(100dvh - var(--fit-bar,54px) - 16px);overflow:auto;z-index:50;
     padding:16px;border-radius:18px;background:rgba(20,13,16,.97);border:1px solid rgba(255,255,255,.12);box-shadow:0 24px 70px rgba(0,0,0,.6);color:#f4ece8}
   .dn-panel[hidden]{display:none}
   .dn-panel h4{margin:6px 4px 10px;font:800 11px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#ffab93}
@@ -103,7 +131,7 @@
   .dn-card b{display:block;margin-top:4px;font:700 14px/1.3 "Noto Sans JP",sans-serif}
   .dn-card small{display:block;margin-top:2px;font:500 12px/1.3 Inter,sans-serif;color:#cbbfb8}
   .dn-card small.dn-now{color:#ffd58a;font-weight:600}   /* under the title, so every card's title lines up */
-  @media (max-width:700px){.dnav .dn-label{display:none}.dn-panel{top:110px}.dn-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dn-card b{font-size:12.5px}.dn-card small{display:none}}`;
+  @media (max-width:700px){.dnav .dn-label{display:none}.dn-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dn-card b{font-size:12.5px}.dn-card small{display:none}}`;
   document.head.appendChild(css);
 
   // the switcher shows ONE language, the display language of shared/subs.js (user: it showed Japanese + small English)
