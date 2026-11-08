@@ -174,3 +174,7 @@
    Check: python3 tools/qa/check_demo.py <demo> (G6 l10n-flash, node tools/qa/l10n_flash.js). */
 html.l10n-fade .intro :is(h1, h2, h3, p, li, .chip, button, .opt, label, .series, .kicker, .hint, .en) { transition: opacity .15s ease-out; }
 @keyframes moheat-l10n-failsafe { to { visibility: visible; opacity: 1; } }
+
+/* UI v2 (DEMO_DESIGN_GUIDE §7.3): the page's own cover HTML / stage never paints before the shared interface is on — this stylesheet is
+   in <head>, so it holds from the first frame (shell.js runs at the end of <body>; 300 ms of Japanese cover text otherwise, l10n-flash) */
+html:not(.u2-on) .stage > *, .stage .intro, .stage .vv { visibility: hidden !important; }
