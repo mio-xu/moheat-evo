@@ -16,11 +16,15 @@
 - [ ] Story built on the character's core identity; cast / voice / look unchanged on a remake
 
 ## Manual — G1 script + thermal
+- [ ] `project/script.md` (template `tools/qa/SCRIPT_TEMPLATE.md`): world rule card, shot list (where "you" are, what is held / not held, far / close), thermal table — reviewed BEFORE any art · by / date:
+- [ ] §0.1 成品要求 checked line by line: a "wow" sight per scene, thermal sources visible on screen, physics (thermal / sound / motion / light / space); magic: rule card, cold = blue-white / hot = orange-red, first use shown slowly, no higher intensity, ≥ half real sources
 - [ ] Every thermal moment has a physical source next to that ear (no heat for "spicy" / "blushing"); a human voice is warm, strongest at the ear
 - [ ] DUAL showcase planned: fast hot↔cold on one ear · strong peaks · clear left / right direction · cool + heat at the same time
 - [ ] Every answer is a 2-way choice and can be said aloud (voice judged, close in meaning passes)
 
 ## Manual — G3 / G4 art (look at 100 % / 2×, not thumbnails)
+- [ ] Lock-face reference (`docs/characters/<id>.md` refs.lock_face) sent with every new pose; backdrop by the card (light / silver hair → green, green hair → magenta, never grey for light hair)
+- [ ] ONE fully finished sample view (plate + mouth set + blink + composite + playing in the page) approved before the batch · by / date:
 - [ ] `assets/poses_preview.jpg`: same person in every close-up and wide shot — hair, eyes, face, accessories, clothes, line / shading style; story continuity (glasses off stays off)
 - [ ] No extra props / background pieces drawn into a pose (cups, door frames, someone else's hand)
 - [ ] `assets/patch_check/mouths.jpg`: each mouth closed | open at 2× — no double lip, no jump, opens on the closed mouth
@@ -29,6 +33,7 @@
 - [ ] Animation physics: geometry computed first (park / grab heights, travel > 0, nothing clipped); the WHOLE sequence rendered frame by frame with a virtual clock (not one frame); pivots / hinges, never squashed; props in front / behind correctly (claw, fireworks behind buildings), nothing floats
 
 ## Manual — G6 play
+- [ ] §0.1 成品要求 again on the finished demo: fun / striking, DUAL showcase felt, flawless at 2×, real-world physics, special settings told in the story
 - [ ] Watched one talking stretch and blinks myself (mouth follows syllables, closes in pauses; both eyes blink)
 - [ ] Played on a phone-size view: answer buttons, long-press and mic usable; guide never off-screen
 - [ ] EN / 日本語 / 中文 each seen once on the cover and in play (room for 한국어: strings in `l10n.js`, language in `shared/subs.js` LANGS)
