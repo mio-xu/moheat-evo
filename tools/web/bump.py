@@ -16,8 +16,10 @@ the same way. --name ignores the folder (for per-demo files such as l10n.js / ma
 sha1>, so a version can never be forgotten or stale — run it after editing; unchanged files keep the same value (no churn).
   python3 tools/web/bump.py --auto demos/shared/nav.js        # only references to these files
   python3 tools/web/bump.py --auto                            # every ?v= reference of the site (numbers become hashes)
-  python3 tools/web/bump.py --check                           # list stale references (hash ≠ content, or a number lower than
-                                                              # another page's number for the same file); exit 1 if any
+  python3 tools/web/bump.py --check [--shared]                # list stale references (hash ≠ content, a number lower than
+                                                              # another page's number for the same file, or a number set before
+                                                              # the file's last commit / while it is edited — git pickaxe);
+                                                              # --shared: the git test only for demos/shared/ files; exit 1 if any
 Commit the page edits with `python3 tools/git/commit_mine.py "<msg>" --hunks <page> '\?v='` (only the version hunks).
 
 --stage: other Claude sessions may have uncommitted edits in the same pages. With --stage the same bump is applied to the
@@ -76,8 +78,35 @@ def bump_text(path, text, targets, names, auto=False):
     return REF.sub(sub, text), hits
 
 
-def check():
-    """Stale ?v=: a hash that is not the file's content hash, or a number lower than another reference's number to the same file."""
+_CT = {}
+
+
+def _ct(*args):
+    """commit time (int) of `git log -1 <args>`, cached; 0 if none."""
+    if args not in _CT:
+        r = subprocess.run(['git', 'log', '-1', '--format=%ct', *args], cwd=ROOT, capture_output=True, text=True)
+        _CT[args] = int(r.stdout.strip() or 0)
+    return _CT[args]
+
+
+def _dirty(rel):
+    return bool(subprocess.run(['git', 'status', '--porcelain', '--', rel], cwd=ROOT, capture_output=True, text=True).stdout.strip())
+
+
+def number_older(page_rel, ref, v, q):
+    """A numbered ?v= is stale when the file was committed (or is edited now) AFTER the page last got this exact `<name>?v=<n>` text
+    (2026-11-08: 35 pages loaded cover.js?v=1 after cover.js changed — every page had the same number, so the old
+    "lower than another page" rule saw nothing)."""
+    qrel = os.path.relpath(q, ROOT)
+    set_at = _ct('-S', f'{os.path.basename(ref)}?v={v}', '--', page_rel)
+    if not set_at: return False                       # page / ref not committed yet: nothing to compare with
+    changed = _ct('--', qrel)
+    return changed > set_at or (_dirty(qrel) and not _dirty(page_rel))
+
+
+def check(shared_only=False):
+    """Stale ?v=: a hash that is not the file's content hash, a number lower than another reference's number to the same file, or a
+    number set before the file's last change (number_older)."""
     refs = []
     for path in site_files():
         text = open(path, encoding='utf-8').read(); base = base_of(path, text)
@@ -91,6 +120,8 @@ def check():
     for page, ref, v, q in refs:
         if not v.isdigit() and v != chash(q): bad.append(f'{page}: {ref}?v={v} — content is now {chash(q)}')
         elif v.isdigit() and int(v) < top[q]: bad.append(f'{page}: {ref}?v={v} — another page uses ?v={top[q]}')
+        elif v.isdigit() and (not shared_only or os.path.relpath(q, ROOT).startswith('demos/shared/')) and number_older(page, ref, v, q):
+            bad.append(f'{page}: {ref}?v={v} — {os.path.relpath(q, ROOT)} changed after this number was set (fix: --auto <file>)')
     for b in bad: print(b)
     n_hash = sum(1 for r in refs if not r[2].isdigit())
     print(f'{len(bad)} stale of {len(refs)} reference(s) ({n_hash} content-hash, {len(refs) - n_hash} numbered)')
@@ -99,7 +130,7 @@ def check():
 
 def main():
     args = sys.argv[1:]
-    if '--check' in args: sys.exit(check())
+    if '--check' in args: sys.exit(check('--shared' in args))
     dry, stage, auto = '--dry' in args, '--stage' in args, '--auto' in args
     names, targets, it = set(), set(), iter([a for a in args if a not in ('--dry', '--stage', '--auto')])
     for a in it:
