@@ -729,6 +729,10 @@ main.layout
 - **从剪贴板读东西，泄露了用户的 API key** → 永远不读剪贴板；密钥只从约定的文件读（`~/.seedance_key`、`~/.openai_key`），输出里不打印任何可能含密钥的字符串。〔永久规则〕
 - **本地服务器把整个仓库（含 `.env.local` 的 API key）当静态文件提供**（Demo23 `server.py`；开隧道给手机用就等于公开 key）→ 任何持有 key 的服务器：所有路径都要登录 cookie，dot 文件、`local/`、`*.py`、`*.command`、`*.log` 一律 404，关目录列表；上线前用 curl 逐个试 `/.env.local`、`/.git/config`、`/api/*`（无 cookie 应 401）。〔G7 · 带服务器的 Demo〕
 
+**G2 配音（ElevenLabs）**
+- **额度接口滞后，按它判断会超支**（2026-11-09 三语配音批量渲染：`user.subscription.get()` 在 1,500 字的英文渲染之后只少了 2 字，整批 ≈ 46.7k 字（按 `--count`）只显示扣了 ≈ 21k）→ 余额只当参考：每个 Demo 先 `--count`，自己记账（`--count` 的合计是上限），批量前后各跑一次 `python3 tools/report/balances.py`；保留线按自己的账和接口里**更小**的那个算。〔`tools/eleven/dub.py` render() 的保留线守卫（`MOHEAT_EL_RESERVE`，默认 12k）· CHECKLIST：配音前 --count〕
+- **64 kb/s AAC 在吹气 / 爆破音 / 气声句上过冲到 0 dBFS 以上**（Demo17 zh c11 `[blows softly]`：loudnorm TP=-2 之后，解码出来仍比满幅高约 8 dB；只降增益修峰值，结果这句比 ja 小了 8 dB）→ 峰值超了用**限幅器**重编码，不要整体降增益；修完再比一次和 ja 的平均电平（差 > 4 dB 就拉回）。〔`tools/eleven/dub.py` encode()：编码后测峰值，> −1 dBFS 自动走 alimiter 重编码〕
+
 **G3 出图（Seedance / OpenAI / 网页端）**
 - **生成"成功"了但其实没出图**（合并 5 条）：① Seedance 网页上传额度用完时生成按钮变灰，脚本照样"点击成功"；② API 输出链接 30–60 分钟失效，引用它的 7 张差分全失败（岳）；③ 上传被限流后，网页端上传和 "Edit" 也一样失败（额度共用）；④ API 被整体限流时 `call()` 按 Retry-After 等了约 20 小时、没有输出（Demo31 烟花）；⑤ 后台命令里又套了一层 `( … ) &`，外层 shell 退出时子进程被一起结束，日志只有第一行（Demo40）→ 先 `probe` / 只发一次上传探测，429 或 Retry-After 很长就立刻按顺序换 OpenAI API（`tools/openai/images.py`）；底图一出来，同一批差分和同脸姿势当场一起提交；网页端每次提交后确认历史里真的多了一张卡片；长任务整条命令放后台（工具的后台模式 / `nohup`），不再在里面加 `&`；**判断成败只看输出文件**（有没有新图、尺寸对不对），不看脚本返回值。〔G3〕
 - **新图和旧图重名，脚本跳过了**（Demo31：`gpt_image.py` 见到同名旧整图输出 exists，后面的差分全做在旧图上）→ 新一轮出图前先把旧图改名（`flat_*`），脚本输出里的 `exists` 当成错误处理。〔G3〕

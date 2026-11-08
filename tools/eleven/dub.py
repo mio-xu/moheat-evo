@@ -77,6 +77,22 @@ def dur(p):
     return round(float(r.stdout.strip().strip(',')), 3)
 
 
+def peak(p):
+    r = subprocess.run(['ffmpeg', '-hide_banner', '-nostats', '-i', p, '-af', 'volumedetect', '-f', 'null', '-'], capture_output=True, text=True).stderr
+    m = re.search(r'max_volume: (-?[\d.]+)', r); return float(m.group(1)) if m else 0.0
+
+
+def encode(wav, m4a, af, br):
+    """WAV → mono AAC with `af`; then peak ≤ −1 dBFS: 64 kb/s AAC overshoots on breath / plosive / blow bursts even after
+    loudnorm TP=-2 (2026-11-09: Demo17 zh c11 decoded at +8 dB over full scale) → re-encode through a limiter, never by lowering the
+    gain (that left such lines 8 dB too quiet). DEMO_DESIGN_GUIDE §11.1 G2."""
+    for lim in (None, .75, .6, .5):
+        f = af if lim is None else f'{af},alimiter=limit={lim}:attack=1:release=50:level=disabled'
+        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', wav, '-ac', '1', '-af', f, '-ar', '48000', '-c:a', 'aac', '-b:a', br, m4a], check=True)
+        if peak(m4a) <= -1.0: return
+    print('  ! peak still > -1 dBFS:', m4a, flush=True)
+
+
 def render(lines, lang, out_dir, cache_p, count_only=False, af=AF, br=BR):
     """lines = {lid: (voice_id, tagged text[, ffmpeg -af])}. Synthesises only what changed; returns {lid: duration}."""
     os.makedirs(out_dir, exist_ok=True); os.makedirs(os.path.dirname(cache_p), exist_ok=True)
@@ -94,7 +110,7 @@ def render(lines, lang, out_dir, cache_p, count_only=False, af=AF, br=BR):
         m4a = os.path.join(out_dir, lid + '.m4a')
         if lid in todo:
             with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as f: f.write(E.speak(text, vid, lang=lang)); wav = f.name
-            subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', wav, '-ac', '1', '-af', rest[0] if rest else af, '-ar', '48000', '-c:a', 'aac', '-b:a', br, m4a], check=True)
+            encode(wav, m4a, rest[0] if rest else af, br)
             os.remove(wav); cache[lid] = key(vid, lang, text); print('voiced', lang, lid, text, flush=True)
             tmp = cache_p + '.tmp'; json.dump(cache, open(tmp, 'w'), ensure_ascii=False, indent=1); os.replace(tmp, cache_p)
         durs[lid] = dur(m4a)
@@ -111,7 +127,7 @@ def export_ja(wavs, out_dir, texts=None, af=AF, br=BR):
     os.makedirs(out_dir, exist_ok=True); durs = {}
     for lid, wav in wavs.items():
         m4a = os.path.join(out_dir, lid + '.m4a')
-        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', wav, '-ac', '1', '-af', af, '-ar', '48000', '-c:a', 'aac', '-b:a', br, m4a], check=True)
+        encode(wav, m4a, af, br)
         durs[lid] = dur(m4a)
     json.dump(dict(lang='ja', text=texts or {}, dur=durs), open(os.path.join(out_dir, 'index.json'), 'w'), ensure_ascii=False, indent=1)
     print(f'[ja] exported {len(durs)} cached takes, {round(sum(durs.values()), 1)} s (0 credits)', flush=True)
