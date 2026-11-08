@@ -243,8 +243,8 @@
     ],
     "lift": 0.08,
     "drop": 0.26,
-    "dark": 16,
-    "light": 0.3
+    "dark": 7,
+    "light": 0.65
    }
   },
   "grandpa_night": {
@@ -280,7 +280,7 @@
     ],
     "lift": 0.06,
     "drop": 0.32,
-    "dark": 20,
+    "dark": 7,
     "hide": [
      [
       [
@@ -329,7 +329,8 @@
     "search": [
      32,
      9
-    ]
+    ],
+    "light": 0.65
    }
   }
  },
@@ -338,6 +339,14 @@
    "still": "gm_busstop",
    "bg": "busstop",
    "fire": null,
+   "shadow": {
+    "color": [
+     86,
+     70,
+     52
+    ],
+    "ao": 0.3
+   },
    "pose": "grandma_base",
    "x": 0.55,
    "y": 1.05,
@@ -348,6 +357,14 @@
    "still": "gm_busstop_ear",
    "bg": "busstop",
    "fire": null,
+   "shadow": {
+    "color": [
+     86,
+     70,
+     52
+    ],
+    "ao": 0.3
+   },
    "pose": "grandma_base",
    "x": 0.3,
    "y": 1.1,
@@ -358,6 +375,14 @@
    "still": "gp_stream",
    "bg": "stream",
    "fire": null,
+   "shadow": {
+    "color": [
+     60,
+     72,
+     58
+    ],
+    "ao": 0.3
+   },
    "pose": "grandpa_base",
    "x": 0.5,
    "y": 1.05,
@@ -368,6 +393,14 @@
    "still": "gp_melon",
    "bg": "stream",
    "fire": null,
+   "shadow": {
+    "color": [
+     60,
+     72,
+     58
+    ],
+    "ao": 0.3
+   },
    "pose": "grandpa_melon",
    "x": 0.66,
    "y": 1.3148984468339306,
@@ -378,6 +411,14 @@
    "still": "stream_duo",
    "bg": "stream",
    "fire": null,
+   "shadow": {
+    "color": [
+     60,
+     72,
+     58
+    ],
+    "ao": 0.3
+   },
    "pose": "grandma_base",
    "x": 0.2,
    "y": 1.05,
@@ -397,6 +438,15 @@
    "still": "gp_yard",
    "bg": "yard",
    "fire": null,
+   "shadow": {
+    "color": [
+     92,
+     60,
+     36
+    ],
+    "ao": 0.32,
+    "dx": 0.02
+   },
    "pose": "grandpa_base",
    "x": 0.45,
    "y": 1.05,
@@ -407,6 +457,15 @@
    "still": "yard_duo",
    "bg": "yard",
    "fire": null,
+   "shadow": {
+    "color": [
+     92,
+     60,
+     36
+    ],
+    "ao": 0.32,
+    "dx": 0.02
+   },
    "pose": "grandma_base",
    "x": 0.2,
    "y": 1.05,
@@ -426,6 +485,15 @@
    "still": "gm_engawa",
    "bg": "yard",
    "fire": null,
+   "shadow": {
+    "color": [
+     92,
+     60,
+     36
+    ],
+    "ao": 0.32,
+    "dx": 0.02
+   },
    "pose": "grandma_base",
    "x": 0.45,
    "y": 1.05,
@@ -436,6 +504,15 @@
    "still": "gm_fan",
    "bg": "yard",
    "fire": null,
+   "shadow": {
+    "color": [
+     92,
+     60,
+     36
+    ],
+    "ao": 0.32,
+    "dx": 0.02
+   },
    "pose": "grandma_fan",
    "x": 0.3,
    "y": 1.04,
@@ -446,6 +523,15 @@
    "still": "engawa_duo",
    "bg": "yard",
    "fire": null,
+   "shadow": {
+    "color": [
+     92,
+     60,
+     36
+    ],
+    "ao": 0.32,
+    "dx": 0.02
+   },
    "pose": "grandma_base",
    "x": 0.25,
    "y": 1.05,
@@ -465,6 +551,14 @@
    "still": "gp_night",
    "bg": "field_night",
    "fire": null,
+   "shadow": {
+    "color": [
+     26,
+     34,
+     62
+    ],
+    "ao": 0.35
+   },
    "pose": "grandpa_night",
    "x": 0.55,
    "y": 1.05,
@@ -475,6 +569,14 @@
    "still": "gm_night",
    "bg": "field_night",
    "fire": null,
+   "shadow": {
+    "color": [
+     26,
+     34,
+     62
+    ],
+    "ao": 0.35
+   },
    "pose": "grandma_night",
    "x": 0.45,
    "y": 1.05,
@@ -485,6 +587,14 @@
    "still": "night_duo",
    "bg": "field_night",
    "fire": null,
+   "shadow": {
+    "color": [
+     26,
+     34,
+     62
+    ],
+    "ao": 0.35
+   },
    "pose": "grandma_night",
    "x": 0.25,
    "y": 1.05,

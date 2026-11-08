@@ -5,19 +5,19 @@ window.MOHEAT_LAYERS = {
    "view": "day_pancake",
    "fire": null,
    "bg": {
-    "src": "art/bg_day.webp?v=7c6dffc9",
+    "src": "art/bg_day__day_pancake.webp?v=8175dd61",
     "fire": [
      0.529,
      0.709
     ]
    },
    "char": {
-    "src": "art/char_naomi_pancake.webp?v=0a1d1830",
+    "src": "art/char_naomi_pancake.webp?v=4a23be75",
     "w": 1700,
     "h": 618,
     "x": 0.42,
     "y": 0.94,
-    "height": 0.4,
+    "height": 0.275,
     "box": [
      89,
      256,
@@ -41,7 +41,7 @@ window.MOHEAT_LAYERS = {
    "more": [
     {
      "char": {
-      "src": "art/char_prop_bottle.webp?v=8390abb1",
+      "src": "art/char_prop_bottle.webp?v=d49a7057",
       "w": 684,
       "h": 1311,
       "x": 0.91,
@@ -63,19 +63,19 @@ window.MOHEAT_LAYERS = {
    "view": "day_bat",
    "fire": null,
    "bg": {
-    "src": "art/bg_day.webp?v=7c6dffc9",
+    "src": "art/bg_day__day_bat.webp?v=845d9fcd",
     "fire": [
      0.529,
      0.709
     ]
    },
    "char": {
-    "src": "art/char_naomi_bat.webp?v=350aa357",
+    "src": "art/char_naomi_bat.webp?v=bc8665e7",
     "w": 1215,
     "h": 1396,
-    "x": 0.62,
-    "y": 0.975,
-    "height": 0.62,
+    "x": 0.61,
+    "y": 0.96,
+    "height": 0.643,
     "box": [
      567,
      15,
@@ -99,7 +99,7 @@ window.MOHEAT_LAYERS = {
    "more": [
     {
      "char": {
-      "src": "art/char_prop_bottle.webp?v=8390abb1",
+      "src": "art/char_prop_bottle.webp?v=d49a7057",
       "w": 684,
       "h": 1311,
       "x": 0.91,
@@ -121,14 +121,14 @@ window.MOHEAT_LAYERS = {
    "view": "day_bottle",
    "fire": null,
    "bg": {
-    "src": "art/bg_day.webp?v=7c6dffc9",
+    "src": "art/bg_day__day_bottle.webp?v=fdcbec3f",
     "fire": [
      0.529,
      0.709
     ]
    },
    "char": {
-    "src": "art/char_prop_bottle.webp?v=8390abb1",
+    "src": "art/char_prop_bottle.webp?v=d49a7057",
     "w": 684,
     "h": 1311,
     "x": 0.4,
@@ -146,12 +146,12 @@ window.MOHEAT_LAYERS = {
    "more": [
     {
      "char": {
-      "src": "art/char_naomi_bottle.webp?v=1a8b7446",
+      "src": "art/char_naomi_bottle.webp?v=245600fc",
       "w": 1700,
       "h": 756,
       "x": 0.665,
       "y": 0.95,
-      "height": 0.42,
+      "height": 0.4,
       "box": [
        107,
        182,
@@ -179,19 +179,19 @@ window.MOHEAT_LAYERS = {
    "view": "rain_startle",
    "fire": null,
    "bg": {
-    "src": "art/bg_rain.webp?v=ef3f9b8f",
+    "src": "art/bg_rain__rain_startle.webp?v=7fa5a5a1",
     "fire": [
      0.31,
      0.296
     ]
    },
    "char": {
-    "src": "art/char_naomi_startle_rain.webp?v=c681e52d",
+    "src": "art/char_naomi_startle_rain.webp?v=f3e9d5b6",
     "w": 1700,
     "h": 1070,
     "x": 0.27,
     "y": 0.95,
-    "height": 0.45,
+    "height": 0.498,
     "box": [
      174,
      77,
@@ -202,7 +202,7 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/naomi_startle_rain_eyes.webp?v=929612a8",
+     "src": "art/naomi_startle_rain_eyes.webp?v=aac5cb68",
      "rect": [
       1125,
       378,
@@ -215,7 +215,7 @@ window.MOHEAT_LAYERS = {
    "more": [
     {
      "char": {
-      "src": "art/char_prop_bottle_rain.webp?v=36006657",
+      "src": "art/char_prop_bottle_rain.webp?v=a6c6f97a",
       "w": 684,
       "h": 1311,
       "x": 0.66,
@@ -237,14 +237,14 @@ window.MOHEAT_LAYERS = {
    "view": "night_shoulder",
    "fire": null,
    "bg": {
-    "src": "art/bg_night.webp?v=8c399d27",
+    "src": "art/bg_night__night_shoulder.webp?v=3d4d5560",
     "fire": [
      0.561,
      0.245
     ]
    },
    "char": {
-    "src": "art/char_naomi_shoulder_night.webp?v=c4e458e1",
+    "src": "art/char_naomi_shoulder_night.webp?v=fd32a493",
     "w": 1700,
     "h": 970,
     "x": 0.43,
@@ -260,7 +260,7 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/naomi_shoulder_night_eyes.webp?v=1196c0f0",
+     "src": "art/naomi_shoulder_night_eyes.webp?v=4897c6c3",
      "rect": [
       234,
       319,
@@ -275,22 +275,22 @@ window.MOHEAT_LAYERS = {
    "view": "night_pancake",
    "fire": null,
    "bg": {
-    "src": "art/bg_night.webp?v=8c399d27",
+    "src": "art/bg_night__night_pancake.webp?v=dde9a631",
     "fire": [
      0.561,
      0.245
     ]
    },
    "char": {
-    "src": "art/char_naomi_pancake_night.webp?v=6e4ada76",
+    "src": "art/char_naomi_pancake_night.webp?v=162deae3",
     "w": 1700,
-    "h": 618,
+    "h": 621,
     "x": 0.45,
     "y": 0.94,
-    "height": 0.4,
+    "height": 0.275,
     "box": [
      89,
-     256,
+     252,
      2490,
      1129
     ],
@@ -298,10 +298,10 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/naomi_pancake_night_eyes.webp?v=5d45b908",
+     "src": "art/naomi_pancake_night_eyes.webp?v=11398d65",
      "rect": [
       806,
-      252,
+      255,
       418,
       224
      ],
@@ -311,7 +311,7 @@ window.MOHEAT_LAYERS = {
    "more": [
     {
      "char": {
-      "src": "art/char_prop_bottle_night.webp?v=29d96c6a",
+      "src": "art/char_prop_bottle_night.webp?v=f8fb883b",
       "w": 684,
       "h": 1311,
       "x": 0.78,

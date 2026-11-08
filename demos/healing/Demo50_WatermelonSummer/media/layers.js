@@ -5,7 +5,7 @@ window.MOHEAT_LAYERS = {
    "view": "bus_H",
    "fire": null,
    "bg": {
-    "src": "art/bg_busstop.webp?v=77d4334b",
+    "src": "art/bg_busstop__bus_H.webp?v=0a957f8a",
     "fire": [
      0.639,
      0.853
@@ -77,7 +77,7 @@ window.MOHEAT_LAYERS = {
    "view": "bus_H_ear",
    "fire": null,
    "bg": {
-    "src": "art/bg_busstop.webp?v=77d4334b",
+    "src": "art/bg_busstop__bus_H_ear.webp?v=1fe17fc2",
     "fire": [
      0.639,
      0.853
@@ -149,7 +149,7 @@ window.MOHEAT_LAYERS = {
    "view": "river_G",
    "fire": null,
    "bg": {
-    "src": "art/bg_stream.webp?v=d93db13c",
+    "src": "art/bg_stream__river_G.webp?v=448b2866",
     "fire": [
      0.666,
      0.389
@@ -231,7 +231,7 @@ window.MOHEAT_LAYERS = {
    "view": "river_G_melon",
    "fire": null,
    "bg": {
-    "src": "art/bg_stream.webp?v=d93db13c",
+    "src": "art/bg_stream__river_G_melon.webp?v=28c3e826",
     "fire": [
      0.666,
      0.389
@@ -313,7 +313,7 @@ window.MOHEAT_LAYERS = {
    "view": "river_duo",
    "fire": null,
    "bg": {
-    "src": "art/bg_stream.webp?v=d93db13c",
+    "src": "art/bg_stream__river_duo.webp?v=cfefb2c7",
     "fire": [
      0.666,
      0.389
@@ -460,7 +460,7 @@ window.MOHEAT_LAYERS = {
    "view": "yard_G",
    "fire": null,
    "bg": {
-    "src": "art/bg_yard.webp?v=a6dc4b67",
+    "src": "art/bg_yard__yard_G.webp?v=3f821c8b",
     "fire": [
      0.49,
      0.451
@@ -542,7 +542,7 @@ window.MOHEAT_LAYERS = {
    "view": "yard_duo",
    "fire": null,
    "bg": {
-    "src": "art/bg_yard.webp?v=a6dc4b67",
+    "src": "art/bg_yard__yard_duo.webp?v=0072d521",
     "fire": [
      0.49,
      0.451
@@ -689,7 +689,7 @@ window.MOHEAT_LAYERS = {
    "view": "engawa_H",
    "fire": null,
    "bg": {
-    "src": "art/bg_yard.webp?v=a6dc4b67",
+    "src": "art/bg_yard__engawa_H.webp?v=d0fe8a16",
     "fire": [
      0.49,
      0.451
@@ -761,7 +761,7 @@ window.MOHEAT_LAYERS = {
    "view": "engawa_fan",
    "fire": null,
    "bg": {
-    "src": "art/bg_yard.webp?v=a6dc4b67",
+    "src": "art/bg_yard__engawa_fan.webp?v=6ea4ae59",
     "fire": [
      0.49,
      0.451
@@ -833,7 +833,7 @@ window.MOHEAT_LAYERS = {
    "view": "engawa_duo",
    "fire": null,
    "bg": {
-    "src": "art/bg_yard.webp?v=a6dc4b67",
+    "src": "art/bg_yard__engawa_duo.webp?v=fb37aeeb",
     "fire": [
      0.49,
      0.451
@@ -980,14 +980,14 @@ window.MOHEAT_LAYERS = {
    "view": "night_G",
    "fire": null,
    "bg": {
-    "src": "art/bg_field_night.webp?v=36e93385",
+    "src": "art/bg_field_night__night_G.webp?v=50be6eb3",
     "fire": [
      0.571,
      0.494
     ]
    },
    "char": {
-    "src": "art/char_grandpa_night.webp?v=ae1bf4b4",
+    "src": "art/char_grandpa_night.webp?v=5bad7c50",
     "w": 920,
     "h": 1395,
     "x": 0.55,
@@ -1003,7 +1003,7 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/grandpa_night_eyes.webp?v=9ad714ac",
+     "src": "art/grandpa_night_eyes.webp?v=6fe602b9",
      "rect": [
       287,
       198,
@@ -1013,7 +1013,7 @@ window.MOHEAT_LAYERS = {
      "kind": "eyes"
     },
     {
-     "src": "art/grandpa_night_mouth0.webp?v=9fe74943",
+     "src": "art/grandpa_night_mouth0.webp?v=6484ddff",
      "rect": [
       349,
       336,
@@ -1024,7 +1024,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/grandpa_night_mouth1.webp?v=fc03dd6d",
+     "src": "art/grandpa_night_mouth1.webp?v=c9a3b195",
      "rect": [
       349,
       336,
@@ -1035,7 +1035,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/grandpa_night_mouth2.webp?v=222d478a",
+     "src": "art/grandpa_night_mouth2.webp?v=21bdcdad",
      "rect": [
       349,
       336,
@@ -1046,7 +1046,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/grandpa_night_mouth3.webp?v=b2ed4bf2",
+     "src": "art/grandpa_night_mouth3.webp?v=456a818f",
      "rect": [
       349,
       336,
@@ -1062,14 +1062,14 @@ window.MOHEAT_LAYERS = {
    "view": "night_H",
    "fire": null,
    "bg": {
-    "src": "art/bg_field_night.webp?v=36e93385",
+    "src": "art/bg_field_night__night_H.webp?v=8ab4c410",
     "fire": [
      0.571,
      0.494
     ]
    },
    "char": {
-    "src": "art/char_grandma_night.webp?v=939b391f",
+    "src": "art/char_grandma_night.webp?v=8873d9fa",
     "w": 602,
     "h": 1393,
     "x": 0.45,
@@ -1085,7 +1085,7 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/grandma_night_mouth0.webp?v=892fbeb6",
+     "src": "art/grandma_night_mouth0.webp?v=5162e78f",
      "rect": [
       298,
       280,
@@ -1096,7 +1096,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/grandma_night_mouth1.webp?v=6ae0911b",
+     "src": "art/grandma_night_mouth1.webp?v=b4d00a6a",
      "rect": [
       298,
       280,
@@ -1107,7 +1107,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/grandma_night_mouth2.webp?v=54144ad4",
+     "src": "art/grandma_night_mouth2.webp?v=0a296020",
      "rect": [
       298,
       280,
@@ -1118,7 +1118,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/grandma_night_mouth3.webp?v=850fe6ac",
+     "src": "art/grandma_night_mouth3.webp?v=5b76f902",
      "rect": [
       298,
       280,
@@ -1134,14 +1134,14 @@ window.MOHEAT_LAYERS = {
    "view": "night_duo",
    "fire": null,
    "bg": {
-    "src": "art/bg_field_night.webp?v=36e93385",
+    "src": "art/bg_field_night__night_duo.webp?v=e3ec5559",
     "fire": [
      0.571,
      0.494
     ]
    },
    "char": {
-    "src": "art/char_grandma_night.webp?v=939b391f",
+    "src": "art/char_grandma_night.webp?v=8873d9fa",
     "w": 602,
     "h": 1393,
     "x": 0.25,
@@ -1157,7 +1157,7 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/grandma_night_mouth0.webp?v=892fbeb6",
+     "src": "art/grandma_night_mouth0.webp?v=5162e78f",
      "rect": [
       298,
       280,
@@ -1168,7 +1168,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/grandma_night_mouth1.webp?v=6ae0911b",
+     "src": "art/grandma_night_mouth1.webp?v=b4d00a6a",
      "rect": [
       298,
       280,
@@ -1179,7 +1179,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/grandma_night_mouth2.webp?v=54144ad4",
+     "src": "art/grandma_night_mouth2.webp?v=0a296020",
      "rect": [
       298,
       280,
@@ -1190,7 +1190,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/grandma_night_mouth3.webp?v=850fe6ac",
+     "src": "art/grandma_night_mouth3.webp?v=5b76f902",
      "rect": [
       298,
       280,
@@ -1204,7 +1204,7 @@ window.MOHEAT_LAYERS = {
    "more": [
     {
      "char": {
-      "src": "art/char_grandpa_night.webp?v=ae1bf4b4",
+      "src": "art/char_grandpa_night.webp?v=5bad7c50",
       "w": 920,
       "h": 1395,
       "x": 0.76,
@@ -1220,7 +1220,7 @@ window.MOHEAT_LAYERS = {
      },
      "patches": [
       {
-       "src": "art/grandpa_night_eyes.webp?v=9ad714ac",
+       "src": "art/grandpa_night_eyes.webp?v=6fe602b9",
        "rect": [
         287,
         198,
@@ -1230,7 +1230,7 @@ window.MOHEAT_LAYERS = {
        "kind": "eyes"
       },
       {
-       "src": "art/grandpa_night_mouth0.webp?v=9fe74943",
+       "src": "art/grandpa_night_mouth0.webp?v=6484ddff",
        "rect": [
         349,
         336,
@@ -1241,7 +1241,7 @@ window.MOHEAT_LAYERS = {
        "level": 0
       },
       {
-       "src": "art/grandpa_night_mouth1.webp?v=fc03dd6d",
+       "src": "art/grandpa_night_mouth1.webp?v=c9a3b195",
        "rect": [
         349,
         336,
@@ -1252,7 +1252,7 @@ window.MOHEAT_LAYERS = {
        "level": 1
       },
       {
-       "src": "art/grandpa_night_mouth2.webp?v=222d478a",
+       "src": "art/grandpa_night_mouth2.webp?v=21bdcdad",
        "rect": [
         349,
         336,
@@ -1263,7 +1263,7 @@ window.MOHEAT_LAYERS = {
        "level": 2
       },
       {
-       "src": "art/grandpa_night_mouth3.webp?v=b2ed4bf2",
+       "src": "art/grandpa_night_mouth3.webp?v=456a818f",
        "rect": [
         349,
         336,

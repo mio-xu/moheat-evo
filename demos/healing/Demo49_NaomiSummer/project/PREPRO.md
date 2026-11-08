@@ -25,6 +25,10 @@ After the pick: script (N1), Naomi sounds (user's recordings if possible, else D
   No 'fire' indoors. The fan stays in the plate (spinning blades = optional code overlay at G5).
 - Checks: check_cut_body 0 · check_patches 0 (NO-MOUTH = by design) · check_art 0 FAIL (WARN looks: the rain-graded copy is darker — lighting,
   not a different cat) · style_card ok.
+- Coordinator QA round 2: one camera distance → Naomi's head (eye distance) the same size in every room view (`make_stage.py` E = .1; the
+  bottle prop stays .5); contact shadows + AO under her and the bottle (build_stage `"shadow"`, warm by day / grey in the rain / lamp-warm at
+  night, offset away from the window light); the graded copies un-mix the magenta before grading (no pale rim); `"no_green": true` keys her
+  mauve fur without the green rim the magenta un-mixing left (the earlier clean_cutout --unmix is no longer needed).
 - Contact sheet: `project/stills_contact.jpg`.
 
 ## Left (G5+)

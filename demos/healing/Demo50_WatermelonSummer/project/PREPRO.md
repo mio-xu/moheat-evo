@@ -25,6 +25,10 @@ After the picks: script (G1), lines (hana / gen voices, unchanged), thermal plan
   the same face size as his knees-up base (eye distance), feet below the frame.
 - Checks: check_cut_body 0 · check_patches 0 · check_art 0 FAIL (WARN: grandpa_melon "outfit colour" = his bare legs vs the shorts, same
   look) · style_card ok.
+- Coordinator QA round 2: ONE night grade for both (`night_grade.py`: half desaturated, highlights rolled off to ≤ 45 % so her apron never
+  out-shines the window / fireflies, moon-blue tint, a thin rim on the moon side; figure mean ≈ 65–98 vs plate p99 82); the night mouth sets
+  use a low "dark" + light .65 (fainter lines); ambient-occlusion pools at the frame bottom under the knees-up figures (build_stage `"shadow"`,
+  their feet are below the frame).
 - Contact sheet: `project/stills_contact.jpg`.
 
 ## Left (G5+)

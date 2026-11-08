@@ -13,7 +13,7 @@ for t in ('day', 'rain', 'night'):
     Image.open(os.path.join(ART, f'bg_room_{t}_nob.png')).convert('RGB').filter(ImageFilter.GaussianBlur(3.5)).save(os.path.join(ART, f'bg_room_{t}_soft.png'))
 # (gain, lift, desaturation): her fur is a warm mauve-grey in every reference — a colour gain alone pushed it to violet (rain) / pink (night),
 # so the grade first pulls the colour toward its own grey, then dims and tints only a little
-GRADE = {'rain': (np.array([.70, .71, .74], np.float32), np.array([2, 3, 6], np.float32), .35),
+GRADE = {'rain': (np.array([.70, .70, .71], np.float32), np.array([3, 3, 5], np.float32), .55),
          'night': (np.array([.74, .70, .66], np.float32), np.array([4, 3, 4], np.float32), .3)}
 USE = {'rain': ['naomi_startle', 'prop_bottle'], 'night': ['naomi_shoulder', 'naomi_pancake', 'prop_bottle']}
 for t, poses in USE.items():
@@ -23,8 +23,12 @@ for t, poses in USE.items():
             p = os.path.join(ART, pose + suf + '.png')
             if not os.path.exists(p): continue
             im = np.asarray(Image.open(p).convert('RGB')).astype(np.float32)
-            key = np.minimum(im[..., 0], im[..., 2]) - im[..., 1]; a = np.clip((key - 60) / 80, 0, 1)[..., None]   # 1 = magenta screen
-            g = im.mean(2, keepdims=True); f = im + (g - im) * de
-            out = (f * gain + lift) * (1 - a) + im * a
+            # each pixel = fur × (1 − a) + screen × a (a from how magenta it is): un-mix, grade only the fur part, re-mix — so the soft fur
+            # tips are graded too (grading only the solid pixels left a pale ungraded rim; grading the screen mix gave the keyer a green fringe)
+            scr = np.median(np.concatenate([im[0], im[-1], im[:, 0], im[:, -1]]), 0); key = np.minimum(im[..., 0], im[..., 2]) - im[..., 1]
+            a = np.clip((key - 8) / max(40.0, float(min(scr[0], scr[2]) - scr[1]) - 8), 0, 1)[..., None]
+            fur = np.clip((im - scr * a) / np.maximum(1 - a, .05), 0, 255)
+            g = fur.mean(2, keepdims=True); f = fur + (g - fur) * de
+            out = (f * gain + lift) * (1 - a) + scr * a
             Image.fromarray(out.clip(0, 255).astype(np.uint8)).save(os.path.join(ART, f'{pose}_{t}{suf}.png'))
     print(t, poses)

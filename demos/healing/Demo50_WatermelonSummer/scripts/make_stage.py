@@ -23,14 +23,14 @@ GM = lambda f: {"view": {"rotate": "auto"}, "lips": [.08, .16, .26], "light": .3
 GP = lambda f: {"warp": False, "centre": [f['mouth'][0], f['mouth'][1] + 2], "radius": [round(f['mouth'][2] * 2.4), 30], "lift": .06, "drop": .32,
                 "dark": 20, "hide": [f['moustache']], "teeth": {"alpha": .75, "band": .05, "tongue_a": .5},
                 "search": [round(f['mouth'][2] * 1.6), 9]}   # look for the mouth line only right around it (the moustache's lower outline is darker and longer)
-GMN = lambda f: {"warp": False, "centre": f['mouth'][:2], "radius": [round(f['mouth'][2] * 2.2), 34], "lift": .08, "drop": .26, "dark": 16, "light": .3}   # graded copy: LP's render opened only the middle
+GMN = lambda f: {"warp": False, "centre": f['mouth'][:2], "radius": [round(f['mouth'][2] * 2.2), 34], "lift": .08, "drop": .26, "dark": 7, "light": .65}   # graded copy (dimmer: low "dark"): LP's render opened only the middle
 POSES = {
     'grandma_base': pose('grandma_base', 'grandma_base', 'grandma', GM(FP['grandma_base'])),
     'grandma_fan': pose('grandma_fan', 'grandma_fan', 'grandma', GM(FP['grandma_fan'])),
     'grandpa_base': pose('grandpa_base', 'grandpa_base', 'grandpa', GP(FP['grandpa_base'])),
     'grandpa_melon': pose('grandpa_melon', 'grandpa_melon', 'grandpa', GP(FP['grandpa_melon'])),
     'grandma_night': pose('grandma_base_night', 'grandma_base', 'grandma', GMN(FP['grandma_base'])),
-    'grandpa_night': pose('grandpa_base_night', 'grandpa_base', 'grandpa', GP(FP['grandpa_base'])),
+    'grandpa_night': pose('grandpa_base_night', 'grandpa_base', 'grandpa', dict(GP(FP["grandpa_base"]), dark=7, light=.65)),   # moon-graded: fainter line
 }
 F = lambda p, x, y, h, who: {'pose': p, 'x': x, 'y': y, 'height': h, 'who': who}
 H = lambda x=.5, h=.95, p='grandma_base': F(p, x, 1.05, h, 'H')
@@ -52,10 +52,14 @@ VIEWS = {   # view: (still, bg, main figure, more figures)
     'night_H': ('gm_night', 'field_night', H(.45, .95, 'grandma_night'), []),
     'night_duo': ('night_duo', 'field_night', H(.25, .84, 'grandma_night'), [G(.76, .88, 'grandpa_night')]),
 }
+# ground contact (build_stage "shadow"): the busts are cut at the knees below the frame → only the ambient-occlusion pool at the frame
+# bottom; coloured by each plate's light (noon dirt, dappled stream, low evening sun from the left on the yard, moonlit field)
+SHADOW = {'busstop': {"color": [86, 70, 52], "ao": .3}, 'stream': {"color": [60, 72, 58], "ao": .3},
+          'yard': {"color": [92, 60, 36], "ao": .32, "dx": .02}, 'field_night': {"color": [26, 34, 62], "ao": .35}}
 cfg = {"src": "assets/art", "hooks": {"view": "SUIKA.S.view", "who": "SUIKA.S.who"},
        "bgs": {k: {"src": f"bg_{k}" + ("_soft" if k == "stream" else ""), "fire": v} for k, v in BGS.items()}, "poses": POSES, "views": {}}
 for v, (still, bg, main, more) in VIEWS.items():
-    d = {"still": still, "bg": bg, "fire": BGS[bg]}; d.update(main)
+    d = {"still": still, "bg": bg, "fire": BGS[bg], "shadow": SHADOW[bg]}; d.update(main)
     if more: d["more"] = more
     cfg["views"][v] = d
 json.dump(cfg, open(os.path.join(ROOT, 'project', 'stage.json'), 'w'), indent=1)
