@@ -8,7 +8,7 @@ Testers of the MoHeat Evo demos. Devs build, testers only find and report bugs, 
 - Save screenshots and evidence in the session scratchpad, in a folder named after your role.
 - Read first: `CLAUDE.md`, `USER_PREFERENCES.md`, `DEMO_DESIGN_GUIDE.md` §6 制作流程 v2, §6.4, §7, §9.
 
-**Tools**: `python3 tools/qa/check_demo.py <demo> [--quick|--full]`, `node tools/qa/drive_story.js` (demos without `?auto`), `node tools/art/check_mouth.js`, `node tools/art/check_motion.js`, `python3 tools/art/check_patches.py`, `python3 tools/art/check_cut_body.py`, `tools/web/check_mobile.html`, `python3 tools/qa/check_deps.py`.
+**What to test**: the coordinator runs `python3 tools/qa/changed.py <last tested commit>` (demos × areas → roles). **Tools**: `python3 tools/qa/check_demo.py <demo> [--quick|--full]`, `node tools/qa/drive_story.js` (demos without `?auto`), `node tools/art/check_mouth.js`, `node tools/art/check_motion.js`, `python3 tools/art/check_patches.py`, `python3 tools/art/check_cut_body.py`, `tools/web/check_mobile.html`, `python3 tools/qa/check_deps.py`, `python3 tools/art/check_art.py <demo> --verbose`, `python3 tools/art/style_card.py check <demo>` (+ `demos/<cat>/_kit/style_family.jpg`). All tools: `tools/README.md`.
 
 **Roles**
 | Role | Covers |
