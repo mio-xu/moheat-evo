@@ -93,4 +93,10 @@ demos/all-ages/Demo04_SeasonsExpress*/assets/motion_check/
 demos/all-ages/Demo04_SeasonsExpress*/assets/mouth_check/
 demos/all-ages/Demo04_SeasonsExpress_v2/audio/
 demos/all-ages/Demo04_SeasonsExpress_v2/video/
+
+# Dubbed en / zh voice takes (user 2026-11-09, comparison only; tools/eleven/dub.py): Demo43's are ~13 MB per language → kept local
+# (re-render: python3 scripts/voice.py --lang en|zh); Demo01's film has no per-line ja files in git → its per-line takes stay local too.
+demos/for-men/Demo43_BlizzardInn/media/voice/en/
+demos/for-men/Demo43_BlizzardInn/media/voice/zh/
+demos/all-ages/Demo01_SnowFoxfire/media/voice/
 demos/for-women/Demo45_CelestialPalace/assets/

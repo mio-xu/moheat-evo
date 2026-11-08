@@ -4,7 +4,7 @@
     sp = importlib.util.spec_from_file_location('eleven', os.path.join(REPO, 'tools', 'eleven', 'tts.py')); E = importlib.util.module_from_spec(sp); sp.loader.exec_module(E)
     wav = E.speak('[whispers] …ねえ', E.voice('ren'))     # mono 24 kHz WAV bytes
 
-Standard (handoff §4 "配音标准：ElevenLabs"): eleven_v4, ja, stability 0.4, similarity 0.8, seed 7, audio tags in the text."""
+Standard (handoff §4 "配音标准：ElevenLabs"): eleven_v4, ja (lang='en' / 'zh' for dubbed takes, tools/eleven/dub.py), stability 0.4, similarity 0.8, seed 7, audio tags in the text."""
 import io, json, os, wave
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -37,9 +37,9 @@ def voice(char):
     return v
 
 
-def speak(text, voice_id, seed=SEED, stability=.4, similarity=.8):
+def speak(text, voice_id, seed=SEED, stability=.4, similarity=.8, lang='ja'):
     from elevenlabs import VoiceSettings
-    pcm = b''.join(client().text_to_speech.convert(text=text, voice_id=voice_id, model_id=MODEL, language_code='ja', seed=seed,
+    pcm = b''.join(client().text_to_speech.convert(text=text, voice_id=voice_id, model_id=MODEL, language_code=lang, seed=seed,
                                                    output_format='pcm_24000', voice_settings=VoiceSettings(stability=stability, similarity_boost=similarity)))
     b = io.BytesIO()
     with wave.open(b, 'wb') as w: w.setnchannels(1); w.setsampwidth(2); w.setframerate(24000); w.writeframes(pcm)

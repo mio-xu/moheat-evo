@@ -1,0 +1,35 @@
+{
+ "lang": "en",
+ "text": {
+  "s01": "[surprised] …You're soaked. [softly] No umbrella? [sighs softly] …Honestly. Come here.",
+  "s02": "[softly] Hold still. [chuckles softly] …If you catch a cold, I'm the one who suffers.",
+  "s03": "[warmly] Your hair is cold. …Let's dry it properly. Sit here.",
+  "s04": "[softly] Tell me if it's too hot. …Left side first.",
+  "s05": "[softly] Your hair smells like mine now. [chuckles softly] …I don't mind that.",
+  "s06": "[playful] …You didn't hear me?",
+  "s07": "[whispers] Then just once more. …I've been holding back from touching you like this for a long time.",
+  "s08": "[softly] The other side too. …Turn this way.",
+  "s09": "[warmly] Cool air to finish. [chuckles softly] …There, silky.",
+  "s10": "[softly] May I take my glasses off? [low voice] …I want to see your face properly.",
+  "s11": "[softly] The rain doesn't look like it'll stop.",
+  "s12a": "[chuckles softly] I see. …Then I'll lend you an umbrella. [playful] You can bring it back tomorrow.",
+  "s12b": "[warmly] …Good girl. [softly] Stay here until the rain stops.",
+  "s13": "[whispers] …I wish it would never stop."
+ },
+ "dur": {
+  "s01": 6.3,
+  "s02": 6.0,
+  "s03": 4.3,
+  "s04": 3.4,
+  "s05": 4.6,
+  "s06": 1.44,
+  "s07": 5.7,
+  "s08": 2.88,
+  "s09": 5.0,
+  "s10": 4.6,
+  "s11": 2.4,
+  "s12a": 5.9,
+  "s12b": 3.9,
+  "s13": 2.16
+ }
+}

@@ -2,7 +2,7 @@
 """Voices of Demo43: ElevenLabs with each character's confirmed voice (tools/eleven/cast.json — mint r1_a, hinata_s r1_b, nagisa r1_b;
 HANDOFF §4: eleven_v4, ja, stability 0.4, similarity 0.8, seed 7). Text + delivery tags: scripts/script_data.py (L / TAGGED).
 → media/voice/<id>.m4a (mono AAC) + media/voice.js. Only lines whose text or voice changed are (re)synthesized (audio/voice_cache.json).
-  python3 scripts/voice.py [--count]"""
+  python3 scripts/voice.py [--count]          python3 scripts/voice.py --lang en|zh [--count]   (dubbed takes, see below)"""
 import importlib.util, json, os, subprocess, sys, tempfile
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REPO = os.path.abspath(os.path.join(ROOT, '..', '..', '..'))
@@ -14,6 +14,16 @@ out_dir = os.path.join(ROOT, 'media', 'voice'); os.makedirs(out_dir, exist_ok=Tr
 cache_p = os.path.join(ROOT, 'audio', 'voice_cache.json'); os.makedirs(os.path.dirname(cache_p), exist_ok=True)
 cache = json.load(open(cache_p)) if os.path.exists(cache_p) else {}
 VOICES = {k: E.voice(v) for k, v in CAST.items()}
+# Dubbed takes (user 2026-11-09, comparison only — the page plays ja): python3 scripts/voice.py --lang en|zh [--count]
+#   → media/voice/<lang>/<id>.m4a + index.json (tools/eleven/dub.py: same voice / settings, the ja tags moved into the en / zh text)
+NAMES = {'zh': [('薄荷大夫', 'Mint大夫'), ('我是薄荷', '我是Mint'), ('…薄荷。就是薄荷的那个', '…Mint。就是薄荷的那个'), ('渚', 'Nagisa'), ('日向', 'Hinata')]}
+OVERRIDE = {}                                                       # (lang, id) → hand-tagged text when retag() is not good enough
+LANG = sys.argv[sys.argv.index('--lang') + 1] if '--lang' in sys.argv else 'ja'
+if LANG != 'ja':
+    D = load('dub', os.path.join(REPO, 'tools', 'eleven', 'dub.py')); col = {'en': 2, 'zh': 3}[LANG]
+    lines = {k: (VOICES[v[0]], OVERRIDE.get((LANG, k)) or D.retag(v[1], D.names(v[col], LANG, NAMES), LANG)) for k, v in SD.L.items() if v[col].strip()}
+    D.render(lines, LANG, os.path.join(out_dir, LANG), os.path.join(ROOT, 'audio', f'voice_cache.{LANG}.json'), count_only='--count' in sys.argv)
+    sys.exit()
 todo = [k for k, v in SD.L.items() if cache.get(k) != f'eleven|{VOICES[v[0]]}|{E.MODEL}|{E.SEED}|{v[1]}' or not os.path.exists(os.path.join(out_dir, k + '.m4a'))]
 if '--count' in sys.argv: print(len(todo), 'lines to render,', sum(len(SD.L[k][1]) for k in todo), 'chars'); sys.exit()
 
