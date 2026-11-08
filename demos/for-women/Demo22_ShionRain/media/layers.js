@@ -60,7 +60,7 @@ window.MOHEAT_LAYERS = {
     "zoom": 1.15
    },
    "char": {
-    "src": "art/char_towel.webp?v=2ac10527",
+    "src": "art/char_towel.webp?v=af023107",
     "w": 1700,
     "h": 956,
     "x": 0.5,
@@ -110,7 +110,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_dryer.webp?v=d86fe8d8",
+    "src": "art/char_dryer.webp?v=c07cc2eb",
     "w": 1700,
     "h": 954,
     "x": 0.6071,
@@ -243,7 +243,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_window.webp?v=65d9ad91",
+    "src": "art/char_window.webp?v=faa3e3c8",
     "w": 1700,
     "h": 1150,
     "x": 0.5158,

@@ -4,7 +4,7 @@ but between "your" out-of-focus hair strands (bottom left of the dryer / window 
 and half of the lower glasses lens stayed grey (QA 2026-11-08). Here, on media/art/char_<pose>.webp:
   · small enclosed holes in the hair zone are filled with the nearest strand's colour, darkened (the shadow between strands);
   · inside the lens rim the remaining grey is cleared, so the lens is see-through everywhere.
-Then ?v= in media/layers.js and the flat stills are redone (same maths as build_stage.py). Pillow + numpy + scipy.
+Also puts the towel back at the top of the towel view (the matte had dropped it). Then ?v= in media/layers.js and the flat stills are redone (same maths as build_stage.py). Pillow + numpy + scipy.
   python3 demos/for-women/Demo22_ShionRain/scripts/fill_hair_pockets.py
 """
 import hashlib, json, os, re
@@ -34,6 +34,20 @@ for pose, (zone, maxa, lens) in JOBS.items():
         for i, sz in enumerate(ndimage.sum(np.ones_like(l2), l2, range(1, m + 1)), 1):
             if sz < 500: im[..., 3][l2 == i] = 0
     Image.fromarray(im).save(p, quality=90, method=6); print(f'{pose}: {cnt} holes filled ({int(fill.sum())} px)')
+# towel: the matte dropped the towel draped over the top of the picture ("your" towel, drawn light on the dark studio grey), the arms then ended
+# in a ragged cut in mid-air. Everything light above this polyline in the source (px) goes back into the character layer.
+TOWEL_EDGE = [(0, 530), (150, 505), (262, 400), (340, 215), (620, 130), (1280, 95), (1950, 130), (2230, 215), (2320, 420), (2430, 520), (2560, 545)]
+_t = open(os.path.join(D, 'media', 'layers.js'), encoding='utf-8').read(); _c = json.loads(_t[_t.index('= {') + 2:_t.rindex('}') + 1])['views']['shion_towel']['char']
+_src = Image.open(os.path.join(D, 'assets', 'art', json.load(open(os.path.join(D, 'project', 'stage.json'), encoding='utf-8'))['poses']['towel']['src'] + '.png')).convert('RGB')
+_m = Image.new('L', _src.size, 0); ImageDraw.Draw(_m).polygon(TOWEL_EDGE + [(_src.width, 0), (0, 0)], fill=255)
+_lum = np.asarray(_src, np.float32).mean(2); _mask = (np.asarray(_m) > 127) & (_lum > 112)
+_mask = ndimage.binary_closing(ndimage.binary_opening(_mask, iterations=1), iterations=3)
+_soft = ndimage.gaussian_filter(_mask.astype(np.float32), 1.0) * 255
+x0, y0, x1, y1 = _c['box']; _size = (_c['w'], _c['h'])
+_crop = Image.fromarray(np.dstack([np.asarray(_src), _soft.clip(0, 255).astype(np.uint8)]).astype(np.uint8), 'RGBA').crop((x0, y0, x1, y1)).resize(_size, Image.LANCZOS)
+_p = os.path.join(ART, 'char_towel.webp'); _ch = np.asarray(Image.open(_p).convert('RGBA')).copy(); _n = np.asarray(_crop)
+_take = (_n[..., 3] > _ch[..., 3]) & (_ch[..., 3] < 250)   # only where the figure is not already there (arms and hair stay in front)
+_ch[_take] = _n[_take]; Image.fromarray(_ch).save(_p, quality=90, method=6); print('towel restored', int(_take.sum()), 'px'); JOBS = {**JOBS, 'towel': None}
 # ?v= + flat stills
 lj = os.path.join(D, 'media', 'layers.js'); s = open(lj, encoding='utf-8').read(); cfg = json.load(open(os.path.join(D, 'project', 'stage.json'), encoding='utf-8'))
 for pose in JOBS: s = re.sub(rf'art/char_{pose}\.webp\?v=[0-9a-f]+', f'art/char_{pose}.webp?v=' + hashlib.md5(open(os.path.join(ART, f'char_{pose}.webp'), 'rb').read()).hexdigest()[:8], s)
