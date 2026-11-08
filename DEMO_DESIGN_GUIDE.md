@@ -431,6 +431,7 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 - **验收**：在 390×844、844×390、768×1024、1440×800 四种尺寸下，页面滚动和横向溢出都为 0；官网首页在手机上横向溢出也为 0。
 
 ### 7.3 UI 规范（所有 Demo 统一，用户 2026-11-08：今后的新 Demo 都按同样的 UI）
+- **结束 = 回到本 Demo 自己的封面**（用户 2026-11-08）：剧情播完后显示本 Demo 的封面，开始按钮改成「↺ もう一度 · Play again」（subs.js 按当前语言显示），不要「下一个 Demo」按钮、不要自动跳到别的 Demo。换 Demo 只用顶栏的 ‹ › 和作品列表。
 
 整套界面由共用文件负责：`shared/series.css`（尺寸、一屏、右侧栏、封面字号）、`shared/nav.js`（顶栏的 Demo 切换、一屏测量）、`shared/subs.js`（显示语言、🌐 语言按钮）、`shared/voice.js`（语音回答）、`shared/game.css`（游戏类的基础样式）、`shared/interact.js`（影片类的互动和进度卡片）。**新 Demo 只写自己的内容，不另做一套 UI。**
 
