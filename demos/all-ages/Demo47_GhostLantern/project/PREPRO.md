@@ -4,7 +4,7 @@ Pre-production by `prepro`, 2026-11-09 — **design stage only** (user 2026-11-0
 
 ## Done
 - New characters registered in `tools/eleven/cast.json` (bonchan, yurari) + 3 Voice Design auditions each (`tools/eleven/out/<char>/r1_*.mp3`; 8 s clips in the scratchpad PICKS folder).
-- Design options `project/designs_options.jpg` (ぼんちゃん / the small ghosts / ゆらり × A / B / C; `scripts/design_options.py`). Recommendation ぼんちゃん B · ghosts B · ゆらり B.
+- Design options `project/designs_options.jpg` (ぼんちゃん / the small ghosts / ゆらり × A / B / C; `scripts/design_options.py`). Recommendation was ぼんちゃん B · ghosts B · ゆらり B; **USER PICK (2026-11-09): ぼんちゃん C (yellow cat-faced lantern, red ribbon) · ghosts C (karakasa umbrella yokai + white ghost + blue flame) · ゆらり B (white bob, goldfish yukata)** → `assets/art/<c>_base.png`. Voices still pending.
 
 ## Left
 After the picks: `project/script.md` (proposal A2: 5 stages, ghosts are cool = special setting told in a line, the lantern is warm, the dark storehouse stage), lines + voices (pick.py the chosen voices), thermal plan + plan_sim, plates (gate, corridor, tatami room, storehouse), sprites, build stage (UI v2 notes as in Demo44 PREPRO).

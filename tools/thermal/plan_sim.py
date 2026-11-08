@@ -63,7 +63,7 @@ for st in SD.STEPS:
             opts = b.get('options') or []
             if opts:
                 o = opts[-1] if ALT else opts[0]
-                for lid in o['then']:
+                for lid in o.get('then', []):
                     add_line(lid, o.get('ear') or o.get('pos') or st.get('pos', 'front'))
         elif b[0] == 'window':
             add_line(b[2], st.get('pos', 'near')); T += 4.0

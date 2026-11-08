@@ -1,5 +1,5 @@
 {
- "_doc": "Design OPTIONS for the user to pick (user 2026-11-09: the user picks every character design from an option sheet; nothing else is\ndrawn for these characters until the pick is relayed). Writes this demo's project/web_prompts.json option jobs (opt_<char>_<a|b|c>),\nrendered with python3 tools/openai/images.py <demo> <jobs…> --quality medium (cheap: options only; the picked design is redrawn at\nhigh quality as the base pose later). Same file in Demo46–50; the table for this folder is chosen by the folder name.\nRun: python3 scripts/design_options.py",
+ "_doc": "USER PICKS (relayed 2026-11-09): Demo48 = ゆずじい A · penguin B · monkeys C · fox B (light-blue yukata; made to read clearly unlike\nDemo10's Kohaku: no red neck rope / bell — the option has none — plus a folded onsen towel on its head and a light-blue flower clip:\nfox_base = masked edit of opt_fox_b, job \"fox_base\" below) → assets/art/<c>_base.png.\n\nDesign OPTIONS for the user to pick (user 2026-11-09: the user picks every character design from an option sheet; nothing else is\ndrawn for these characters until the pick is relayed). Writes this demo's project/web_prompts.json option jobs (opt_<char>_<a|b|c>),\nrendered with python3 tools/openai/images.py <demo> <jobs…> --quality medium (cheap: options only; the picked design is redrawn at\nhigh quality as the base pose later). Same file in Demo46–50; the table for this folder is chosen by the folder name.\nRun: python3 scripts/design_options.py",
  "opt_yuzujii_a": {
   "ref": [
    "style_kohaku",
@@ -83,5 +83,10 @@
    "style_snowfox"
   ],
   "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nA fox guest, a bit vain about its tail.\n\nDesign C: a fluffy fox with a white-tipped tail curled around it and a small bell collar.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "fox_base": {
+  "ref": "opt_fox_b",
+  "mask": "1150,220,360,200",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — the fox, its face, eyes, fur colour, light-blue yukata, pose, tail, framing and background — and ONLY add a small neatly folded white onsen towel resting on top of its head between the ears, and a tiny light-blue flower clip on its left ear. No red rope, no bell, no collar. Do not move, zoom or crop the picture."
  }
 }

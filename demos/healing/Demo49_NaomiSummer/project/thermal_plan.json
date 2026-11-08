@@ -1,0 +1,15 @@
+{
+ "_doc": "Demo49 thermal plan (DUAL), real sources only. Timeline-ish but interaction-driven; build stage drives it.",
+ "events": {
+  "@heat": {"why": "humid summer afternoon", "set": {"heat": ["warm", 0, 0.25]}},
+  "@fan_on": {"why": "the oscillating fan: cool air sweeping LEFT ↔ RIGHT every 4 s (moving source), heat felt less where it blows", "sweep_loop": ["cool", -90, 90, 4.0, 0.45]},
+  "@bottle": {"why": "the towel-wrapped ice-water bottle right in front of your face", "set": {"bottle": ["cool", 20, 0.4]}},
+  "@naomi_cheek": {"why": "Naomi's warm cheek against your right side", "set": {"naomi": ["warm", 80, 0.3]}},
+  "@uchiwa": {"why": "you fan yourself: gentle cool puffs, front", "pulse": ["cool", 0, 0.35, 0.1, 0.3, 0.4]},
+  "@rain_open": {"why": "rain air blowing in at the LEFT window (if left open)", "set": {"rain": ["cool", -80, 0.4], "heat": ["warm", 0, 0.1]}},
+  "@rain_closed": {"why": "window shut: no wind, muggy again", "set": {"rain": ["cool", -80, 0], "heat": ["warm", 0, 0.3]}},
+  "@squeeze": {"why": "startled by thunder, Naomi squeezes against your LEFT side", "set": {"naomi": ["warm", -80, 0.45]}},
+  "@shoulder": {"why": "night: Naomi on your shoulder, purring at your LEFT ear; the fan on low sweeps the right", "set": {"naomi": ["warm", -90, 0.5], "heat": ["warm", 0, 0.08]}, "sweep_loop": ["cool", 30, 90, 4.0, 0.25]}
+ },
+ "showcase": {"fast_switch": "the fan's sweep passing an ear in the heat: warm-only → cool-dominant → warm again every 2 s", "peak": "ice bottle + fan full speed in front", "direction": "fan sweep left ↔ right; rain from the left window; Naomi left / right", "same_ear_dual": "heat + fan on each ear; at night Naomi warm left ear + fan cool passing"}
+}

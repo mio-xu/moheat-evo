@@ -1,0 +1,18 @@
+{
+ "_doc": "Demo47 thermal plan (DUAL). A game, not a timeline: the build stage drives these sources from the game state. Special setting (told in b03 and y02): ghosts are COOL (like the snow spirit, guide §0 rule 2 exception) — a ghost's cold reaches the ear on its side 1.5–2 s before it arrives (cool rise 0.2 s), a touch = a short cold puff. Bon-chan's candle is WARM and is where you point it. Every other source is real.",
+ "sources": {
+  "ghost": {"kind": "cool", "az": "its side (left -90 / right +90 / behind = both)", "level": "0 → 0.55 as it approaches (distance), 0.9 puff 0.4 s on a touch", "why": "special setting: ghosts are chilly (told on screen + in lines)"},
+  "lantern": {"kind": "warm", "az": "the side you turn it to (left / right; held up = both)", "level": 0.5, "why": "a real candle in the paper lantern, ~30 cm from your head"},
+  "bonchan_voice": {"kind": "warm", "az": "near (in your hand, front-low)", "level": "voice formula × 0.6", "why": "voice + candle"},
+  "yurari_voice": {"kind": "cool", "az": "left ear", "level": "voice loudness × 0.6 (cool)", "why": "special setting: her whisper is cool (she is a ghost; told in y02)"},
+  "draught": {"kind": "cool", "az": "one side, no giggle (false alarm)", "level": 0.35, "why": "a real draught + wind chime through the sliding doors"},
+  "summer_night": {"kind": "warm", "az": "both", "level": 0.12, "why": "warm summer night air at the gate and at the end"},
+  "dark_stage": {"kind": "-", "az": "-", "level": "-", "why": "stage 4: screen dark, the same thermal cues = the only direction info"}
+ },
+ "showcase": {
+  "fast_switch": "a ghost's cool on one ear → you turn the lantern → warm on the same ear within ~1 s (cool + warm, then warm only as it flees)",
+  "peak": "a ghost touching your ear: 0.9 cold puff",
+  "direction": "left / right / behind (both ears) ghosts; the dark storehouse is played by ear",
+  "same_ear_dual": "the moment the lantern turns onto a cold ear: cool (ghost) + warm (candle) on one ear; Yurari's cool whisper next to the warm lantern at the end"
+ }
+}

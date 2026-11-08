@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Design OPTIONS for the user to pick (user 2026-11-09: the user picks every character design from an option sheet; nothing else is
+"""USER PICKS (relayed 2026-11-09): Demo48 = ゆずじい A · penguin B · monkeys C · fox B (light-blue yukata; made to read clearly unlike
+Demo10's Kohaku: no red neck rope / bell — the option has none — plus a folded onsen towel on its head and a light-blue flower clip:
+fox_base = masked edit of opt_fox_b, job "fox_base" below) → assets/art/<c>_base.png.
+
+Design OPTIONS for the user to pick (user 2026-11-09: the user picks every character design from an option sheet; nothing else is
 drawn for these characters until the pick is relayed). Writes this demo's project/web_prompts.json option jobs (opt_<char>_<a|b|c>),
 rendered with python3 tools/openai/images.py <demo> <jobs…> --quality medium (cheap: options only; the picked design is redrawn at
 high quality as the base pose later). Same file in Demo46–50; the table for this folder is chosen by the folder name.
@@ -88,5 +92,9 @@ for c, (refs, desc, opts) in cfg['chars'].items():
         end = END if NAME != 'Demo49_NaomiSummer' else ("Wide 16:9 illustration of the whole little scene in a sunny Japanese tatami room (Naomi with ALL the props "
               "named above clearly visible around her). No text, no letters, no logo, no watermark, no UI.")
         out[f"opt_{c}_{o}"] = {"ref": refs, "prompt": "\n\n".join([lead, cfg['style'], desc, look, end])}
+if NAME == 'Demo48_AnimalOnsen':
+    out['fox_base'] = {'ref': 'opt_fox_b', 'mask': '1150,220,360,200', 'prompt': ("Edit this exact image. Keep EVERYTHING identical — the fox, its face, eyes, fur colour, "
+        "light-blue yukata, pose, tail, framing and background — and ONLY add a small neatly folded white onsen towel resting on top of its head between "
+        "the ears, and a tiny light-blue flower clip on its left ear. No red rope, no bell, no collar. Do not move, zoom or crop the picture.")}
 json.dump(out, open(os.path.join(ROOT, 'project', 'web_prompts.json'), 'w'), ensure_ascii=False, indent=1)
 print(NAME, len(out) - 1, 'option jobs:', ' '.join(k for k in out if k != '_doc'))

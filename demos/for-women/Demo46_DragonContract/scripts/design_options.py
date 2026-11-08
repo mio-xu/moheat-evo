@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Design OPTIONS for the user to pick (user 2026-11-09: the user picks every character design from an option sheet; nothing else is
+"""USER PICKS (relayed 2026-11-09): Demo46 = 陽向 C · 岳 C · 蓮 A (copied to assets/art/<c>_base.png; on the #d8d8d8 option backdrop —
+redraw on the card's screen (陽向 / 蓮 green #00B140) before the cut-out stage if the grey edge shows).
+
+Design OPTIONS for the user to pick (user 2026-11-09: the user picks every character design from an option sheet; nothing else is
 drawn for these characters until the pick is relayed). Writes this demo's project/web_prompts.json option jobs (opt_<char>_<a|b|c>),
 rendered with python3 tools/openai/images.py <demo> <jobs…> --quality medium (cheap: options only; the picked design is redrawn at
 high quality as the base pose later). Same file in Demo46–50; the table for this folder is chosen by the folder name.
