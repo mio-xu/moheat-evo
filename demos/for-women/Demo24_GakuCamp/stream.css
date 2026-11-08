@@ -1,0 +1,134 @@
+/* Copied from demos/for-men/Demo14_MintStream/style.css (2026-11-08) so this page no longer depends on Demo14, which is being replaced. */
+/* Live stream room — on top of Demo 10's demo.css (by path): night lavender palette, stream UI (LIVE head, chat, Super Chats), lobby. */
+:root { --bg: #16122a; --panel: #1f1a36; --panel-2: #2a2444; --line: #3d355a; --gold: #c9b8ff; --mint: #8ee6d0; --cocoa: #ff9fbf; }
+.bar { background: #19152e; }
+.brand span { color: #b49bff; }
+.btn.primary { background: linear-gradient(135deg, #7fd8c8, #b49bff 50%, #ff9fbf); color: #1a1430; }
+.vv { bottom: auto !important; top: 4.2cqw !important; left: 1.4cqw !important; right: auto !important; opacity: .75; }
+.stage:not(.on-air) .vv { display: none; }
+
+/* cover: two streamers, title in the middle */
+.intro::before { background: none; }
+.intro { align-items: flex-end !important; }
+.intro h1 span { display: inline !important; }
+.intro h1 { font-size: clamp(18px, 4.6cqw, 92px) !important; }
+.intro .cover-copy { max-width: 70cqw !important; margin: 0 auto 3.2cqw !important; }
+.intro h1 { background: linear-gradient(100deg, #c9fff1 0%, #ffffff 50%, #ffd0e2 100%); -webkit-background-clip: text; background-clip: text; }
+.intro .chip.p { background: rgba(180, 155, 255, .18); color: #e7deff; border-color: rgba(180, 155, 255, .55); }
+@container (max-width: 620px) { .intro .cover-copy { max-width: 92cqw !important; margin-bottom: 2cqw !important; } }
+
+/* LIVE head */
+.live-head { position: absolute; left: 1.4cqw; top: 1.3cqw; z-index: 3; display: flex; align-items: center; gap: .7cqw; color: #fff; pointer-events: none;
+  font: 600 clamp(8px, 1.05cqw, 16px)/1.2 Inter, "Noto Sans JP", sans-serif; }
+.live-head .live { background: #ff3b5c; padding: .25cqw .7cqw; border-radius: .4cqw; font-weight: 800; letter-spacing: .05em; animation: livepulse 2s ease-in-out infinite; }
+@keyframes livepulse { 50% { opacity: .75; } }
+.live-head .viewers { background: rgba(12, 10, 26, .55); padding: .25cqw .7cqw; border-radius: .4cqw; font-family: "JetBrains Mono", monospace; }
+.live-head .ch-name { font: 700 clamp(9px, 1.25cqw, 20px)/1.2 "Zen Maru Gothic", sans-serif; text-shadow: 0 1px 6px rgba(0, 0, 0, .6); }
+.live-head .ch-title { color: #e2daf5; text-shadow: 0 1px 6px rgba(0, 0, 0, .6); }
+.stage:not(.on-air) :is(.live-head, .chat, .hearts, .subs, .act, .hud-top) { display: none !important; }
+
+/* chat column (right quarter of the picture is kept calm for it) */
+.chat { position: absolute; right: 0; top: 0; bottom: 0; width: 25cqw; z-index: 3; display: flex; flex-direction: column;
+  background: linear-gradient(to right, rgba(16, 12, 32, .35), rgba(16, 12, 32, .72)); border-left: 1px solid rgba(220, 205, 255, .15);
+  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); font: 500 clamp(8px, 1cqw, 15px)/1.4 "Noto Sans JP", Inter, sans-serif; color: #eee8f8; }
+.chat-head { padding: 1.1cqw 1.2cqw .7cqw; font-weight: 700; color: #cfc4ea; border-bottom: 1px solid rgba(220, 205, 255, .12); }
+.chat-list { flex: 1; margin: 0; padding: .6cqw 1.1cqw; list-style: none; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; gap: .35cqw; }
+.chat-list li { opacity: 0; transform: translateY(.6cqw); transition: opacity .3s, transform .3s; word-break: break-word; }
+.chat-list li.in { opacity: 1; transform: none; }
+.chat-list li b { font-weight: 700; margin-right: .2em; }
+.chat-list li.you b { color: #fff; background: linear-gradient(135deg, #7fd8c8, #b49bff); color: #1a1430; padding: 0 .4em; border-radius: .3em; }
+.chat-list li.you span { color: #fff; font-weight: 700; }
+.chat-list li.sc { border-radius: .6cqw; overflow: hidden; background: #f3a33b; color: #2a1608; }
+.chat-list li.sc.mint { background: #5fd3b8; color: #08241e; } .chat-list li.sc.cocoa { background: #ff8fb3; color: #2b0c18; }
+.chat-list li.sc .sc-top { display: flex; justify-content: space-between; padding: .35cqw .7cqw; background: rgba(0, 0, 0, .12); font-weight: 700; }
+.chat-list li.sc .sc-top em { font-style: normal; font-family: "JetBrains Mono", monospace; }
+.chat-list li.sc .sc-msg { display: block; padding: .35cqw .7cqw .45cqw; font-weight: 700; }
+.chat-input { padding: .7cqw 1cqw 1cqw; border-top: 1px solid rgba(220, 205, 255, .12); background: rgba(12, 10, 26, .5); transition: background .3s; }
+.chat-input.turn { background: rgba(60, 44, 110, .7); box-shadow: inset 0 0 0 1px rgba(200, 185, 255, .45); }
+.chat-hint { margin: 0 0 .5cqw; font-weight: 700; color: #fff; display: none; } .chat-hint small { color: #cfc4ea; font-weight: 500; }
+.chat-input.turn .chat-hint { display: block; }
+.chips { display: flex; flex-direction: column; gap: .45cqw; }
+.chip-c { cursor: pointer; text-align: left; border-radius: .8cqw; border: 1px solid rgba(220, 205, 255, .55); background: rgba(255, 255, 255, .1); color: #fff; padding: .5cqw .8cqw;
+  animation: nudge 1.6s ease-in-out infinite; transition: background .15s, transform .15s; }
+.chip-c:hover { background: rgba(180, 155, 255, .45); transform: translateY(-1px); }
+.chip-c b { display: block; font: 700 clamp(9px, 1.15cqw, 18px)/1.3 "Zen Maru Gothic", "Noto Sans JP", sans-serif; }
+.chip-c span { display: block; font: 500 clamp(7.5px, .85cqw, 13px)/1.3 Inter, sans-serif; color: #d9d0f5; }
+.chip-c.gift { background: rgba(255, 190, 90, .22); border-color: rgba(255, 210, 130, .8); }
+.chip-c.gift:hover { background: rgba(255, 190, 90, .5); }
+@keyframes nudge { 50% { box-shadow: 0 0 1.2cqw rgba(200, 185, 255, .55); } }
+.chat-row { display: flex; align-items: center; gap: .5cqw; margin-top: .5cqw; }
+.chat-row .me { font-weight: 800; font-size: .85em; padding: .1em .45em; border-radius: .3em; background: linear-gradient(135deg, #7fd8c8, #b49bff); color: #1a1430; }
+.chat-row .fake-input { flex: 1; padding: .35cqw .6cqw; border-radius: 999px; background: rgba(255, 255, 255, .08); color: #9d93b8; font-size: .9em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gift-btn { cursor: pointer; border: 0; background: rgba(255, 255, 255, .1); border-radius: 50%; width: 2.4cqw; height: 2.4cqw; min-width: 20px; min-height: 20px; font-size: clamp(10px, 1.2cqw, 18px); }
+.gift-btn.pulse { background: #ffbf5a; animation: gpulse 1s ease-in-out infinite; }
+@keyframes gpulse { 50% { transform: scale(1.15); box-shadow: 0 0 1cqw rgba(255, 191, 90, .8); } }
+.gifts { display: none; }
+
+/* floating hearts */
+.hearts { position: absolute; right: 25cqw; bottom: 6cqw; width: 8cqw; height: 40cqw; z-index: 3; pointer-events: none; }
+.hearts i { position: absolute; bottom: 0; font-style: normal; font-size: clamp(12px, 2cqw, 32px); animation: floatup 3s ease-out forwards; }
+@keyframes floatup { 0% { transform: translateY(0) scale(.6); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(-36cqw) translateX(2cqw) scale(1.1); opacity: 0; } }
+
+/* subtitles over the picture only (not the chat) */
+.subs { position: absolute; z-index: 3; display: flex; justify-content: center; pointer-events: none; opacity: 0; transition: opacity .25s; left: 3% !important; right: 28% !important; }
+.subs.show { opacity: 1; }
+.subs .line { display: flex; flex-direction: column; align-items: center; background: rgba(12, 10, 26, .62); }
+.subs .ja { color: #fff; font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif; font-weight: 700; }
+.subs .en { color: #d9d0f5; font-family: Inter, sans-serif; }
+
+/* big action button */
+.act { position: absolute; left: 37.5%; bottom: 13cqw; transform: translate(-50%, .6cqw); z-index: 4; opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s; }
+.act.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.act-btn { cursor: pointer; display: grid; grid-template-columns: auto auto; grid-template-rows: auto auto; column-gap: 1cqw; align-items: center; text-align: left;
+  border-radius: 1.4cqw; border: 1px solid rgba(220, 205, 255, .55); background: rgba(22, 18, 44, .78); color: #fff; padding: 1cqw 2cqw; animation: nudge 1.6s ease-in-out infinite; }
+.act-btn:hover { background: rgba(120, 95, 220, .55); }
+.act-btn i { grid-row: span 2; font-style: normal; font-size: clamp(18px, 2.6cqw, 40px); }
+.act-btn b { display: block; font: 700 clamp(11px, 1.6cqw, 26px)/1.3 "Zen Maru Gothic", "Noto Sans JP", sans-serif; }
+.act-btn span { display: block; font: 500 clamp(9px, 1.05cqw, 16px)/1.3 Inter, sans-serif; color: #d9d0f5; }
+
+/* lobby: pick a stream */
+.lobby, .ended { position: absolute; inset: 0; z-index: 6; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 1.6cqw;
+  background: radial-gradient(ellipse at 50% 30%, #2d2552, #120e24 75%); color: #fff; }
+.lobby.show, .ended.show { display: flex; }
+.ended { background: rgba(12, 9, 24, .78); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.lobby-title, .e-title { margin: 0; font: 700 clamp(12px, 2cqw, 32px)/1.3 "Zen Maru Gothic", "Noto Sans JP", sans-serif; }
+.e-sub { margin: 0; font: 700 clamp(10px, 1.5cqw, 24px)/1.3 "Zen Maru Gothic", sans-serif; color: #ffd0e2; }
+.e-actions { display: flex; gap: 1cqw; flex-wrap: wrap; justify-content: center; }
+.e-actions .btn { font-size: clamp(10px, 1.2cqw, 20px); }
+.lobby-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6cqw; }
+.ch-card { cursor: pointer; width: 40cqw; padding: 0 0 .8cqw; border-radius: 1.4cqw; overflow: hidden; text-align: left; color: #fff; border: 1px solid rgba(220, 205, 255, .3);
+  background: rgba(30, 24, 56, .85); display: flex; flex-direction: column; gap: .5cqw; transition: transform .2s, box-shadow .2s; }
+.ch-card:hover { transform: translateY(-.4cqw); box-shadow: 0 1.4cqw 3cqw rgba(0, 0, 0, .45), 0 0 0 2px var(--c); }
+.ch-card.mint { --c: var(--mint); } .ch-card.cocoa { --c: var(--cocoa); } .ch-card.hinata { --c: #ffb35a; } .ch-card.luna { --c: #8fb0ff; }
+.ch-card .thumb { position: relative; display: block; aspect-ratio: 16 / 6; background: #2a2444 center / cover no-repeat; }
+.ch-card .thumb { background-position: 25% 30%; }
+.chat-list li.sc.hinata { background: #ffb35a; color: #2b1404; } .chat-list li.sc.luna { background: #8fb0ff; color: #0b1430; }
+.ch-card .badge { position: absolute; left: .8cqw; top: .8cqw; font: 800 clamp(7px, .9cqw, 14px)/1 Inter; font-style: normal; background: #ff3b5c; padding: .3cqw .6cqw; border-radius: .3cqw; }
+.ch-card .count { position: absolute; left: .8cqw; bottom: .8cqw; font: 600 clamp(7px, .9cqw, 14px)/1 "JetBrains Mono", monospace; font-style: normal; background: rgba(0, 0, 0, .55); padding: .3cqw .6cqw; border-radius: .3cqw; }
+.ch-card > b { padding: 0 1.2cqw; font: 700 clamp(11px, 1.7cqw, 28px)/1.2 "Zen Maru Gothic", sans-serif; color: var(--c); }
+.ch-card > b small { font: 500 clamp(8px, .95cqw, 15px) Inter, sans-serif; color: #d9d0f5; }
+.ch-card .what { padding: 0 1.2cqw; font: 500 clamp(8px, 1cqw, 16px)/1.4 "Noto Sans JP", Inter, sans-serif; color: #e6def8; }
+.ch-card .tags { padding: 0 1.2cqw; display: flex; flex-wrap: wrap; gap: .4cqw; }
+.ch-card .tags i { font-style: normal; font: 600 clamp(7px, .8cqw, 13px)/1 Inter, "Noto Sans JP", sans-serif; padding: .35cqw .6cqw; border-radius: 999px; }
+.ch-card .tags .k { background: rgba(79, 179, 255, .2); color: #bfe4ff; } .ch-card .tags .h { background: rgba(255, 122, 69, .2); color: #ffd2bf; }
+.lobby-back { cursor: pointer; border: 0; background: none; color: #b8acd6; font: 500 clamp(8px, 1cqw, 16px) Inter, sans-serif; }
+@container (max-width: 620px) {
+  .chat { width: 30cqw; font-size: 2cqw; } .hearts { right: 30cqw; } .subs { right: 32% !important; }
+  .chip-c b { font-size: 2.3cqw; } .chip-c span { font-size: 1.7cqw; }
+  .ch-card { width: 45cqw; } .ch-card .what, .ch-card .tags { display: none; }
+  .live-head { font-size: 2cqw; } .live-head .ch-title { display: none; } .live-head .ch-name { font-size: 2.3cqw; }
+}
+.hud-top { right: 26cqw !important; }
+@container (max-width: 620px) { .hud-top { right: 31cqw !important; } }
+
+/* one streamer per demo: she is on the left of her frame, the title goes on the right */
+body[data-ch] .intro { align-items: center !important; justify-content: flex-start !important; }
+body[data-ch] .intro .cover-copy { margin: 0 2.5cqw 0 50cqw !important; max-width: 46cqw !important; }
+body[data-ch] .intro h1 span { display: block !important; }
+body[data-ch] .intro h1 { font-size: clamp(18px, 5cqw, 96px) !important; }
+body[data-ch="mint"] .intro h1 { background-image: linear-gradient(100deg, #b8fff0, #ffffff 60%, #9fe3ff); }   /* round 4: teal (night aquarium) */
+body[data-ch="cocoa"] .intro h1 { background-image: linear-gradient(100deg, #ffe0cc, #ffffff 55%, #ffc2d8); }
+body[data-ch="hinata"] .intro h1 { background-image: linear-gradient(100deg, #ffd38a, #ffffff 55%, #ff9a8a); }
+body[data-ch="luna"] .intro h1 { background-image: linear-gradient(100deg, #c8d6ff, #ffffff 55%, #ff9fb4); }   /* round 4: navy + wine red (jazz bar) */
+a.btn { text-decoration: none; display: inline-flex; align-items: center; }
+@container (max-width: 620px) { body[data-ch] .intro .cover-copy { margin: 0 2cqw 0 46cqw !important; max-width: 52cqw !important; } body[data-ch] .intro h1 { font-size: 5.6cqw !important; } }
