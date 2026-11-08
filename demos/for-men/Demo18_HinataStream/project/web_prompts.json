@@ -117,5 +117,26 @@
   "ref": "hin_can",
   "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, hair strands, cap, clothes, colours, lighting and the green background — and change ONLY her eyes: both gently closed in a natural blink (curved lids, lashes visible); hair and cap unchanged. Do not move, zoom or crop the picture.",
   "mask": "1200,445,80,55;1375,395,80,55"
+ },
+ "bg_crane_empty": {
+  "ref": "bg_crane",
+  "prompt": "Edit this exact image. Keep EVERYTHING else identical. Inside the glass box: remove the hanging crane claw and its cable and housing completely (show the empty pink-lit ceiling of the glass box and the back wall there), and replace the big white cat plushie at the front left of the pile with more of the other small plush toys, so the pile continues naturally. Do not move, zoom or crop the picture.",
+  "mask": "650,330,210,280;235,840,190,200"
+ },
+ "prop_claw_open": {
+  "ref": "ref_hinata",
+  "prompt": "Image 1 is the STYLE reference: the same soft cel animation style, thin coloured lineart, flat colours with one soft shadow tone, hand-drawn feel, not glossy. Plain flat chroma-key GREEN background (#00B140), completely even, nothing green on the object, the whole object inside the frame with a margin, front view, centred, no shadow on the background, no text.\n\nA UFO-catcher (crane game) claw: a small rounded pastel-pink motor housing with a little dark window, three thin silver metal prongs hanging below it, OPEN (spread apart), a short thin black cable going straight up from the top of the housing to the top edge of the picture. Vertical, symmetric, square 1:1 picture."
+ },
+ "prop_claw_closed": {
+  "ref": "prop_claw_open",
+  "prompt": "Edit this exact image. Keep the housing, cable, size, position and the green background identical and change ONLY the three metal prongs: now CLOSED (curled inward, their tips almost touching under the housing). Do not move, zoom or crop.",
+  "mask": "512,700,330,260"
+ },
+ "prop_cat": {
+  "ref": [
+   "ref_hinata",
+   "hin_can"
+  ],
+  "prompt": "Image 1 is the STYLE reference and image 2 shows the exact plush toy (the small white cat plushie she hugs): the same soft cel animation style, thin coloured lineart, flat colours with one soft shadow tone, hand-drawn feel, not glossy. Plain flat chroma-key GREEN background (#00B140), completely even, nothing green on the object, the whole object inside the frame with a margin, front view, centred, no shadow on the background, no text.\n\nThe same small white cat plushie alone: round head, small pink inner ears, dot eyes, a tiny smile, pink paw pads, sitting upright, front view. Square 1:1 picture."
  }
 }

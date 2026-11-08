@@ -117,6 +117,8 @@ window.HTAudio = (() => {
     coin: (az = -.3) => shot(az, 1, .2, (o) => { tone(o, 3900, .3, .05, 0); tone(o, 5200, .25, .04, .09); burst(o, .04, .2, 2500, 'bandpass', 3, .25); }, 1),
     whirr: () => shot(-.5, 1.2, .1, (o) => { const s = new OscillatorNode(ac, { type: 'square', frequency: 140 }), f = new BiquadFilterNode(ac, { type: 'lowpass', frequency: 600 }), g = ac.createGain(); g.gain.value = .03; s.connect(f).connect(g).connect(o); s.start(); s.stop(ac.currentTime + .25); }, .5),
     drop: () => shot(-.5, 1.3, .15, (o) => { tone(o, 300, .6, .04, 0, 'square', .01); burst(o, .08, .3, 800, 'bandpass', 1, .7); }, 1.2),
+    clack: () => shot(-.5, 1.2, .15, (o) => { burst(o, .03, .6, 2600, 'bandpass', 3); tone(o, 900, .12, .05, .02, 'square', .002); }, .6),
+    plop: () => shot(-.6, 1.3, .15, (o) => { burst(o, .12, .45, 380, 'lowpass', .8); burst(o, .06, .2, 900, 'bandpass', 1, .12); }, .8),
     jingle: () => shot(-.3, 1.4, .3, (o) => [1047, 1319, 1568, 2093, 1568, 2093].forEach((f, i) => tone(o, f, .22, .06, i * .1, 'square', .003)), 1.5),
     beep: (k = 1) => shot(0, 1, .1, (o) => tone(o, 1200 * k, .15, .08, 0, 'sine', .003), .4),
     shutter: () => shot(0, .8, .1, (o) => { burst(o, .03, .6, 3200, 'bandpass', 2); burst(o, .04, .45, 1800, 'bandpass', 2, .07); }, .5),

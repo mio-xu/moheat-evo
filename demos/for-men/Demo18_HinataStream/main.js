@@ -147,14 +147,30 @@
       setStep(3); await go(null, 'crane'); await sleep(.3);
       await say('h09', FRONT_R);
       for (let tryN = 1; tryN <= 2; tryN++) {
-        S.crane = { x: 0, drop: 0, tryN, won: false };
+        const C = CR; C.tryN = tryN; C.label = true; C.won = false;
         SND.fx.coin(-.3);
-        await hold('🕹', 'アームを動かす（長押し）', 'Move the claw (press and hold)', 2.2, (down, k) => { S.crane.x = k; if (down && Math.random() < .25) SND.fx.whirr(); });
-        SND.fx.drop(); S.crane.drop = 1; await sleep(1.4); alive(my);
-        if (tryN === 1) { S.crane.slip = 1; await sleep(.4); await say('h10x', FRONT_R); }
-        else { S.crane.won = true; SND.fx.jingle(); await sleep(.6); await say('h10', FRONT_R); }
+        // hold: the claw glides along the rail toward the cat (eased), whirring; it sways a little when it stops
+        await hold('🕹', 'アームを動かす（長押し）', 'Move the claw (press and hold)', 2.2, (down, k) => {
+          C.x = CLAW.park.x + (CAT.pile.x - CLAW.park.x) * ease(k); if (down && Math.random() < .2) SND.fx.whirr(); });
+        C.swing = .12; alive(my);
+        SND.fx.drop(); await tween(C, 'y', grabY(), 1.3); alive(my);          // down
+        SND.fx.clack(); await tween(C, 'closeK', 1, .35); C.swing = .05;
+        C.carry = true; SND.fx.whirr();
+        if (tryN === 1) {   // up — then the cat slips halfway and bounces back into the pile
+          await tween(C, 'y', CLAW.park.y + 150, .9); alive(my);
+          C.carry = false; C.swing = .18; SND.fx.plop();
+          await tween(CR, 'catY', CAT.pile.y, .55, bounce); await tween(C, 'closeK', 0, .3); alive(my);
+          await tween(C, 'y', CLAW.park.y, .6); await tween(C, 'x', CLAW.park.x, .9);
+          await say('h10x', FRONT_R);
+        } else {           // up, across to the prize chute, open: the cat drops in
+          await tween(C, 'y', CLAW.park.y, 1.0); alive(my);
+          await tween(C, 'x', CLAW.chute.x, 1.1); C.swing = .1; alive(my);
+          C.carry = false; tween(C, 'closeK', 0, .3); SND.fx.plop();
+          await tween(CR, 'catY', CLAW.chute.dropY, .6, (u) => u * u); CR.catGone = true; C.won = true;
+          SND.fx.jingle(); await sleep(.6); await say('h10', FRONT_R);
+        }
       }
-      S.crane = null;
+      CR.label = false;
 
       // 5 · purikura: cramped — her cheek right next to your right ear; three flashes
       setStep(4); await go(null, 'booth'); arcade?.set(.18, .8); await sleep(.3);
@@ -274,6 +290,47 @@
     ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + (exact ? 0 : 4 * Math.sin(t * .9)), W, dh); ctx.restore();
     ctx.globalAlpha = 1;
   }
+  // ---------------------------------------------------------------- the crane game as layers (user: "make it with high-quality generated
+  // assets"): a generated claw (closing = its prongs squeezed in code; the generated closed claw redrew the housing) + cat plushie (scripts/props.py), the plate without its painted claw and cat
+  // (bg_crane_empty), animated here — eased moves, a cable from the ceiling, a pendulum sway, grab / lift / slip / prize chute.
+  const PROP = {}; for (const n of ['prop_claw_open', 'prop_cat']) { const im = new Image(); im.onload = () => { PROP[n] = im; }; im.src = `media/art/${n}.webp?v=1`; }
+  const CLAW = { w: 300, park: { x: 600, y: 150 }, ceiling: 118, chute: { x: 610, dropY: 1060 } };   // frame px (1920×1080), the glass box is x 15–720, y 115–750
+  const CAT = { w: 215, pile: { x: 172, y: 628 } };
+  const SPLIT = .635;   // housing bottom in prop_claw_open (measured): the prongs below it close by squeezing
+  const GLASS = [15, 115, 720, 750];
+  const freshCrane = () => ({ x: CLAW.park.x, y: CLAW.park.y, closeK: 0, carry: false, swing: 0, ang: 0, catX: CAT.pile.x, catY: CAT.pile.y, catGone: false, label: false, tryN: 0, won: false });
+  let CR = freshCrane();
+  const ease = (u) => (u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2);
+  const bounce = (u) => { const n = 7.5625, d = 2.75; if (u < 1 / d) return n * u * u; if (u < 2 / d) return n * (u -= 1.5 / d) * u + .75; if (u < 2.5 / d) return n * (u -= 2.25 / d) * u + .9375; return n * (u -= 2.625 / d) * u + .984375; };
+  const tween = (o, k, to, sec, fn = ease) => new Promise((res) => { const from = o[k], t0 = performance.now();
+    const step = () => { const u = Math.min(1, (performance.now() - t0) / (sec * 1000)); o[k] = from + (to - from) * fn(u); if (u < 1) requestAnimationFrame(step); else res(); }; requestAnimationFrame(step); });
+  const clawH = () => (PROP.prop_claw_open ? CLAW.w * PROP.prop_claw_open.height / PROP.prop_claw_open.width : 260);
+  const catH = () => (PROP.prop_cat ? CAT.w * PROP.prop_cat.height / PROP.prop_cat.width : 230);
+  const HEAD = -.02;   // the housing stops just above the cat's top (× cat height); the prongs hang down round the head and clamp its sides
+  const grabY = () => CR.catY - catH() / 2 + catH() * HEAD - clawH() * SPLIT;
+  function drawCrane(t, dt) {
+    const C = CR, ch = clawH(), cth = catH();
+    C.swing *= Math.exp(-dt * 1.6); C.ang = C.swing * Math.sin(t * 5.2);
+    if (C.carry) { C.catX = C.x; C.catY = C.y + ch * SPLIT - cth * HEAD + cth / 2; }
+    ctx.save(); ctx.beginPath(); ctx.rect(GLASS[0], GLASS[1], GLASS[2] - GLASS[0], GLASS[3] - GLASS[1]); ctx.clip();
+    const cat = PROP.prop_cat, claw = PROP.prop_claw_open;
+    const drawCat = () => { if (cat && !C.catGone) { ctx.save(); ctx.translate(C.catX, C.catY); ctx.rotate(C.carry ? C.ang * .6 : 0); ctx.drawImage(cat, -CAT.w / 2, -cth / 2, CAT.w, cth); ctx.restore(); } };
+    // cat → prongs → cable → housing. The prongs close by squeezing toward the centre, only to the head's width (prong span ≈ .9 × pw),
+    // so they clamp its sides. v1 squeezed them onto the face (looked like wires on the cat); v2 hid them behind it (no grip seen)
+    const ph = ch * SPLIT, pw = CLAW.w * (1 - .2 * C.closeK);
+    const part = (which) => { if (!claw) return; const sh = claw.height * SPLIT; ctx.save(); ctx.translate(C.x, C.y); ctx.rotate(C.ang);
+      if (which === 'top') ctx.drawImage(claw, 0, 0, claw.width, sh, -CLAW.w / 2, 0, CLAW.w, ph);
+      else for (const [u0, u1] of which === 'mid' ? [[.4, .6]] : [[0, .4], [.6, 1]])   // the front-centre prong (x .47–.52) goes BEHIND the cat
+        ctx.drawImage(claw, claw.width * u0, sh, claw.width * (u1 - u0), claw.height - sh, -pw / 2 + pw * u0, ph, pw * (u1 - u0), ch - ph);
+      ctx.restore(); };
+    part('mid'); drawCat(); part('side');
+    ctx.strokeStyle = 'rgba(40,30,50,.85)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(C.x, CLAW.ceiling); ctx.lineTo(C.x, C.y); ctx.stroke();
+    part('top');
+    ctx.restore();
+    if (C.label) label(`TRY ${C.tryN} / 2`, 370, 70, 52, '#9ff3ff');
+    if (C.won) label('GET!', 370, 420, 110, '#ffd36b');
+  }
+
   // ---------------------------------------------------------------- effects drawn on top of the layered still
   const speed = Array.from({ length: 70 }, () => ({ a: Math.random() * 7, r: Math.random(), v: .6 + Math.random() }));
   const steam = Array.from({ length: 24 }, () => ({ x: 0, y: 0, life: 0, v: 0 }));
@@ -301,13 +358,7 @@
         ctx.moveTo(W / 2 + Math.cos(s.a) * r0, H / 2 + Math.sin(s.a) * r0 * .6); ctx.lineTo(W / 2 + Math.cos(s.a) * r1, H / 2 + Math.sin(s.a) * r1 * .6); }
       ctx.stroke(); ctx.restore();
     }
-    if (S.crane) {   // the crane: which try, the claw going across, then down
-      label(`TRY ${S.crane.tryN} / 2`, W * .23, H * .1, 56, '#9ff3ff');
-      const cx = W * (.06 + .32 * S.crane.x), cy = H * (.12 + .38 * (S.crane.drop || 0));
-      ctx.save(); ctx.strokeStyle = 'rgba(230,230,250,.9)'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, cy);
-      ctx.moveTo(cx - 34, cy + 40); ctx.lineTo(cx, cy); ctx.lineTo(cx + 34, cy + 40); ctx.stroke(); ctx.restore();
-      if (S.crane.won) label('GET!', W * .23, H * .5, 110, '#ffd36b');
-    }
+    if (S.view === 'crane' || viewB === 'crane') drawCrane(t, dt);
     if (S.shots && S.shots.n) label(String(S.shots.n), W * .5, H * .3, 220, '#ffffff');
     if (S.flash > 0) { ctx.fillStyle = `rgba(255,255,255,${S.flash * .85})`; ctx.fillRect(0, 0, W, H); }
     if (canK > .05) {   // steam from the hot can at the left edge
@@ -393,6 +444,7 @@
   }
   function start() {
     SND.init(); SND.loadVoices(Object.keys(LINES));
+    CR = freshCrane();
     S = fresh(); S.started = true; viewA = viewB = 'arrive'; mix = 1; cur = null; pending = null; inK = 0; coldK = 1; fanK = cheekK = canK = 0; $('cleared').hidden = true;
     $('intro').classList.add('hidden'); window.ARCADE.done = false;
     story();
@@ -406,7 +458,7 @@
     ctx.drawImage(im, 640, 0, W, H);   // far enough right that her waving hand clears the title
     const g = ctx.createLinearGradient(560, 0, 1180, 0); g.addColorStop(0, 'rgba(20,12,38,1)'); g.addColorStop(1, 'rgba(20,12,38,0)'); ctx.fillStyle = g; ctx.fillRect(560, 0, 620, H);
   }
-  window.ARCADE = { get S() { return S; }, thermal: () => thermal(.05), both: () => both, log: cmdLog, done: false };
+  window.ARCADE = { get S() { return S; }, get crane() { return CR; }, thermal: () => thermal(.05), both: () => both, log: cmdLog, done: false };
   setStep(0);
   if (QS.has('cover')) { document.body.classList.add('cover-only'); artReady.then(drawCover); return; }
   if (QS.has('autoplay') || AUTO) { const ac = SND.init(); if (ac.state === 'running') start(); else ac.resume().then(() => { if (ac.state === 'running' && !S.started) start(); }).catch(() => {}); }

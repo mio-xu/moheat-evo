@@ -6,6 +6,26 @@
 > 用户偏好在 `USER_PREFERENCES.md`，整体状态在 `HANDOFF_ASMR_DEMOS.md`，用户任务清单在 `TASKS.md`。
 
 ---
+## 2026-11-08 · Demo18 ひなた抓娃娃机重做 + Demo39 ルナ（会话 moheat-evo-60）· 交接（统筹要求转后台）
+
+**Demo18_HinataStream（ゲーセンデート，已上线 73f870a）· 用户反馈「抓娃娃机动画很奇怪，用高质量生成素材做」**
+- 做法：抓娃娃机画面换成空机台背景 + 两个道具层，代码做动画（不用 Seedance）。素材（OpenAI gpt-image-2，`scripts/art.py` / `project/web_prompts.json`）：`assets/art/bg_crane_empty.png`（去掉爪子和白猫的机台，→ `media/art/bg_crane.webp`，stage.json 的 crane 背景）、`prop_claw_open.png`、`prop_cat.png`（绿幕 → `python3 demos/for-men/Demo18_HinataStream/scripts/props.py` → `media/art/prop_*.webp`）。`prop_claw_closed` 画得不配套（外壳变了）→ 不用，合拢靠代码挤爪。
+- 代码 `main.js`（约 296–331 行 `CLAW` / `CAT` / `drawCrane`，故事在约 150–175 行）：长按移动爪子 → 下降到 `grabY()` → 合拢 → 第 1 次提起后滑落（bounce）→ 第 2 次提到出口 → 掉下 → GET!。绘制顺序：中间那根爪（玩偶后面）→ 玩偶 → 两边的爪（前面，只收拢到头宽 `pw = w × (1 − .2·closeK)`）→ 吊绳 → 外壳。`CLAW.w = 300`，`HEAD = −.02`（外壳停在头顶上方）。`index.html` 里 `main.js?v=8`。
+- 状态：猫玩偶正常显示（之前以为没画，是取样时机不对）；放大检查过「刚抓住」一帧：两边的爪卡住头的两侧，看起来对；**中间爪移到玩偶后面（v=8）之后还没截图确认**，「提起来 / 移到出口 / 掉落」几帧也没放大看。没有发给统筹看帧。
+- 检查方法（避免截图延迟抓不到）：自己的新标签页打开 `http://localhost:8765/demos/for-men/Demo18_HinataStream/index.html?auto=1`，JS 里等 `ARCADE.S.view==='crane' && ARCADE.crane.carry`，然后 `window.requestAnimationFrame = f => 0` 冻结画面再放大截图（单次 JS 调用超过 45 秒会超时：先等到 taiko 结束再等 crane）。
+- 包厢（booth）画面的截断边：已用 `tools/art/extend_pose.py` 延长（`hin_booth_ext`，stage.json booth x .5865 y 1.041 h 1.041），`check_cut_body.py` 通过；`check_patches.py` 包厢贴片边缘差 6.2 / 9.8，**还没放大看** `demos/for-men/Demo18_HinataStream/assets/patch_check/booth_*.png`。注意：统筹说 QA 会话在查所有 Demo 的嘴（可能改 `shared/layers.js` / stage.json），重新 build Demo18 前先问统筹。
+- 下一步：① 按上面方法截 2 帧（抓住、提起来）发统筹；② 看 booth 贴片；③ 手机竖 / 横屏再跑一次 crane 长按；④ 本地提交，统筹推送。
+
+**Demo39_LunaBartender（ルナ秘密调酒师 → 合并进 Demo19_LunaStream）：还没开始做画面**
+- 现有：只有 `demos/for-men/Demo39_LunaBartender/project/script.md`（剧本，统筹已审）。
+- 要求：照 Demo18 的做法（分层：空背景 + 绿 / 灰幕姿势 + 遮罩差分 → `build_stage.py`）；声音 ElevenLabs `luna` r1_b（`1blqWrqFcJagS9nJcCXc`，不试音）；人物参考 `demos/for-men/Demo14_MintStream/assets/art/luna_*`（**要先复制进 Demo39**，Demo14 马上会被 Mint 新版替换）；DUAL：冰摇壶贴右脸、门口冷风左、flambé、爱尔兰咖啡、她坐在你左边；语音判定的干杯「说出来」；结尾回到自己的封面；关键画面先给统筹看再批量出；嘴 2 倍检查（只在说话时动、停顿闭上、没有双嘴 / 方框 / 接缝）；手机 390×844 / 844×390。
+- 合并：备份 `Demo19_LunaStream` 到 `~/Desktop/MoHeat Evo 备份/for-men/Demo19_LunaStream_<时间>/`（`cp -RL`），`git mv` 接管；**页面完全独立**：去掉 `<base href="../Demo14_MintStream/">`，html / js / css / 图 / 音频都不能从 Demo14 读；nav.js 标题、菜单、credits、`tools/web/thumbs.py`、TASKS #35/#37；合并后告诉统筹 moheat-evo-c9 和 moheat-evo-55。预算：OpenAI ≤ $10、Seedance ≤ 1500。
+
+**未提交、不是本会话该提交的**：`demos/for-men/Demo31_SummerRooftop/` 的 media / stage.json / layers.js 改动（stage.json 现在是 `*_flat_ext`，是别的会话的 extend_pose + QA 正在改，14:21 还有写入）。本会话只提交了 `tools/art/clean_cutout.py`（从 Demo31 移到 tools，Demo 文件夹是必填参数）和 Demo31 的 `scripts/clean_cutout.py` 包装。
+
+**花费**：Demo18 OpenAI 共约 17 张（`project/openai_log.json`，约 $3.4，含抓娃娃机 4 张、包厢延长 1 张）；Demo39 0；Seedance 0；ElevenLabs 本轮 0。没有在跑的出图 / 视频任务。
+
+---
 ## 2026-11-08 · 男性向 4 位女主播改剧情 + 椿分层重做（本会话：Demo25 / Demo17 / Demo37，Demo18 / 19 交给 moheat-evo-60）· 交接
 
 **用户的指令**（TASKS #33–37）：男性向直播间的女主角（ミント / ココア / ひなた / ルナ）只留一个直播间，其余改成像渚（Demo31）、椿（Demo25）那样丰富的剧情；人设（外表、性格、声音）不变，剧本重写；大小姐（椿 Demo25）剧本不改、画面改成新的分层做法；做好后**直接替换旧版上线**（同一网址，旧版备份到仓库外）。用户选定：ココア A 情人节前夜做巧克力 · ひなた B 游戏厅约会 · ルナ B 秘密调酒师 · ミント 仍是直播，形式换成 C「耳朵专门店」角色扮演直播。剧本初稿由统筹会话 moheat-evo-c9 代用户审过（用户醒来后可以再改）。

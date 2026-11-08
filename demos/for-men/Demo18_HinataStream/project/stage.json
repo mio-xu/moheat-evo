@@ -8,7 +8,7 @@
    "src": "bg_games"
   },
   "crane": {
-   "src": "bg_crane"
+   "src": "bg_crane_empty"
   },
   "booth": {
    "src": "bg_booth"
@@ -91,10 +91,10 @@
    ]
   },
   "booth": {
-   "src": "hin_booth",
+   "src": "hin_booth_ext",
    "matte": "green",
-   "talk": "hin_booth_talk",
-   "blink": "hin_booth_blink",
+   "talk": "hin_booth_talk_ext",
+   "blink": "hin_booth_blink_ext",
    "centre_mouth": [
     1400,
     680
@@ -170,9 +170,9 @@
    "pose": "booth",
    "bg": "booth",
    "fire": null,
-   "x": 0.56,
-   "y": 1.0,
-   "height": 1.0
+   "x": 0.5865,
+   "y": 1.041,
+   "height": 1.041
   },
   "street": {
    "still": "hinata_street",

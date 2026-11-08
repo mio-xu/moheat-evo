@@ -86,9 +86,32 @@ for pose, (m, e1, e2, k) in FACE.items():
     JOBS[pose + '_blink'] = EDIT.format(what="her eyes: both gently closed in a natural blink (curved lids, lashes visible); hair and cap unchanged")
     MASK[pose + '_talk'] = f"{m[0]},{m[1]},{round(85 * k)},{round(55 * k)}"
     MASK[pose + '_blink'] = f"{e1[0]},{e1[1]},{round(80 * k)},{round(55 * k)};{e2[0]},{e2[1]},{round(80 * k)},{round(55 * k)}"
+# the crane game as layers (user: "the claw-machine animation looks weird — make it with high-quality generated assets"):
+# the plate without its painted claw / white cat, the claw (open + closed) and the cat plushie as props on green, animated in main.js
+PROP = ("Image 1 is the STYLE reference: the same soft cel animation style, thin coloured lineart, flat colours with one soft shadow "
+        "tone, hand-drawn feel, not glossy. Plain flat chroma-key GREEN background (#00B140), completely even, nothing green on the object, "
+        "the whole object inside the frame with a margin, front view, centred, no shadow on the background, no text.")
+JOBS.update({
+    'bg_crane_empty': "Edit this exact image. Keep EVERYTHING else identical. Inside the glass box: remove the hanging crane claw and its "
+                      "cable and housing completely (show the empty pink-lit ceiling of the glass box and the back wall there), and "
+                      "replace the big white cat plushie at the front left of the pile with more of the other small plush toys, so the pile "
+                      "continues naturally. Do not move, zoom or crop the picture.",
+    'prop_claw_open': J(PROP, "A UFO-catcher (crane game) claw: a small rounded pastel-pink motor housing with a little dark window, three "
+                        "thin silver metal prongs hanging below it, OPEN (spread apart), a short thin black cable going straight up from "
+                        "the top of the housing to the top edge of the picture. Vertical, symmetric, square 1:1 picture."),
+    'prop_claw_closed': "Edit this exact image. Keep the housing, cable, size, position and the green background identical and change "
+                        "ONLY the three metal prongs: now CLOSED (curled inward, their tips almost touching under the housing). Do not "
+                        "move, zoom or crop.",
+    'prop_cat': J(PROP.replace("Image 1 is the STYLE reference", "Image 1 is the STYLE reference and image 2 shows the exact plush toy "
+                  "(the small white cat plushie she hugs)"), "The same small white cat plushie alone: round head, small pink inner ears, "
+                  "dot eyes, a tiny smile, pink paw pads, sitting upright, front view. Square 1:1 picture."),
+})
+MASK['bg_crane_empty'] = "650,330,210,280;235,840,190,200"
+MASK['prop_claw_closed'] = "512,700,330,260"
 REFS = {k: 'ref_hinata' for k in JOBS}
 REFS.update({k: ['ref_hinata', 'hin_ref'] for k in POSES})
 REFS.update({k: k.rsplit('_', 1)[0] for k in MASK})
+REFS.update({'bg_crane_empty': 'bg_crane', 'prop_claw_open': 'ref_hinata', 'prop_claw_closed': 'prop_claw_open', 'prop_cat': ['ref_hinata', 'hin_can']})
 out = {k: {'ref': REFS[k], 'prompt': v, **({'mask': MASK[k]} if k in MASK else {})} for k, v in JOBS.items()}
 json.dump(out, open(os.path.join(ROOT, 'project', 'web_prompts.json'), 'w'), ensure_ascii=False, indent=1)
 print(len(out), 'jobs')
