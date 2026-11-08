@@ -12,6 +12,8 @@ did not cover. check_demo.py runs it (G4 rows edge-margin / fringe / blink / far
   blink        per eyes patch: both eyes change (one-eye blink = FAIL), and the iris is gone under the closed lid (the patch is opaque
                over the iris and the iris pixels really change — "闭眼不露瞳孔"; a feathered / ghosted patch shows the iris through).
   looks        same hair colour in every pose of a character; same outfit colour only within one "look" (stage.json pose "look")
+  full-edge    a COMPLETE figure (that side clear in its sprite: feet / tail drawn) touching a frame edge in a view (WARN; busts cut
+               in their source are exempt) — Demo47 Bon-chan's feet flush on the bottom edge read as cut.
   far-motion   mouth opening / blink, measured as changed pixels on a 1920×1080 frame for each view: < 4 px tall = too small to read on a
                far shot → draw a bigger opening / lid for that pose (preference: 远景加大动作).
 """
@@ -21,6 +23,7 @@ from PIL import Image
 
 FRAME_H = 1080
 CUT_SKIP = 2               # px at the picture border not searched for straight cuts (the border itself is check_cut_body's)
+FULL_EDGE = 0.01           # full-edge: a complete figure must stay ≥ 1 % inside the frame edge (or be cropped deliberately)
 MARGIN_OK = 0.015          # a top / side cut edge must sit ≥ 1.5 % outside the frame (the bottom is anchored there on purpose)
 KEYS = {'green': (0, 177, 64), 'magenta': (255, 0, 255), 'grey': (200, 200, 200), 'gray': (200, 200, 200), 'midgrey': (112, 112, 112)}
 
@@ -182,6 +185,21 @@ def check(D, verbose=False):
             if ch is not None:
                 h_px = ch[0] * scale
                 if h_px < 3: out.append(('WARN', 'far-motion', f'{stem}: the blink changes {h_px:.1f} px on a 1080p frame — too small to read; bigger lids for this far shot'))
+    # full-edge: a COMPLETE figure (that side of the sprite is clear in its source: feet / tail / ears drawn) touching the frame edge in a
+    # view — feet flush on the bottom edge read as cut (Demo47 Bon-chan, coordinator 2026-11-09); busts cut in their source are exempt
+    for stem, v in views.items():
+        for c in [v.get('char')] + [m.get('char') for m in v.get('more', [])]:
+            if not c: continue
+            src = c['src'].split('?')[0]
+            if src not in cache:
+                try: cache[src] = img(D, c['src'])
+                except Exception: continue
+            al = cache[src][..., 3] > 128; hf = c['height']; wf = hf * (c['w'] / c['h']) * (9 / 16)
+            gap = {'bottom': 1 - c['y'], 'top': c['y'] - hf, 'left': c['x'] - wf / 2, 'right': 1 - (c['x'] + wf / 2)}   # frame fraction inside
+            clear = {'bottom': not al[-3:].any(), 'top': not al[:3].any(), 'left': not al[:, :3].any(), 'right': not al[:, -3:].any()}
+            for side in gap:
+                if clear[side] and gap[side] < FULL_EDGE:
+                    out.append(('WARN', 'full-edge', f'{stem}: {src} is complete at its {side} but touches the {side} frame edge ({gap[side]:.1%} inside) — add a margin (≥ {FULL_EDGE:.0%}) or crop it deliberately'))
     return out
 
 
