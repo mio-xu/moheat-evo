@@ -278,7 +278,7 @@ function drawCar(t, th, tv) {
     if (o < .999 && ok('car_base')) {   // the wooden panel still turning on its hinge
       const k = 1 - o, hx = (p.side === 'L') === (p.hinge === 'out') ? x0 : x1, nw = Math.max(1, w * k);
       c.drawImage(IMG.car_base, x0, y0, w, h, hx === x0 ? x0 : x1 - nw, y0, nw, h);
-      c.fillStyle = `rgba(30,15,5,${.45 * o})`; c.fillRect(hx === x0 ? x0 : x1 - nw, y0, nw, h);
+      c.globalCompositeOperation = 'source-atop'; c.fillStyle = `rgba(30,15,5,${.45 * o})`; c.fillRect(hx === x0 ? x0 : x1 - nw, y0, nw, h); c.globalCompositeOperation = 'source-over';   // shade only the wood, never the glass
     }
     c.restore();
   }

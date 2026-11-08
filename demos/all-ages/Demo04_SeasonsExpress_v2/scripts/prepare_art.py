@@ -74,15 +74,24 @@ def main():
     for x0, y0, x1, y1, n in boxes:
         X0, Y0, X1, Y1 = x0 * 4 - 4, y0 * 4 - 4, x1 * 4 + 4, y1 * 4 + 4
         X0, Y0, X1, Y1 = max(0, X0), max(0, Y0), min(W, X1), min(H, Y1)
-        sub = (d[Y0:Y1, X0:X1] > 60).astype(np.float32)
-        sub = np.asarray(Image.fromarray((sub * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(7)).filter(ImageFilter.GaussianBlur(2))).astype(np.float32) / 255
+        o_ = op[Y0:Y1, X0:X1].astype(np.int16)   # only the rune plates themselves (navy / cyan: blue > red) — not the re-shaded wood around them
+        plate = ((o_[..., 2] - o_[..., 0] > 6) & (d[Y0:Y1, X0:X1] > 40)).astype(np.uint8) * 255
+        plate = np.asarray(Image.fromarray(plate).filter(ImageFilter.MinFilter(7)).filter(ImageFilter.MaxFilter(7)).filter(ImageFilter.MaxFilter(5)).filter(ImageFilter.MinFilter(5)).filter(ImageFilter.MaxFilter(3)))   # open (drop thin frame reflections), close holes, 1 px rim
+        sub = np.asarray(Image.fromarray(plate).filter(ImageFilter.GaussianBlur(1.2))).astype(np.float32) / 255
         mask[Y0:Y1, X0:X1] = np.maximum(mask[Y0:Y1, X0:X1], sub)
         cx = (X0 + X1) / 2
         kind = "vent" if Y1 < H * .2 and abs(cx - W / 2) < W * .2 else "front" if abs(cx - W / 2) < W * .16 else "wall"
         side = "L" if cx < W / 2 else "R"
         panels.append(dict(box=[X0, Y0, X1, Y1], side=side, kind=kind, hinge="out" if kind == "wall" else "in"))
-    panels.sort(key=lambda p: (p["side"], -abs((p["box"][0] + p["box"][2]) / 2 - W / 2)))   # outer (near you) first
     mask *= (a > .5)
+    # the flipping panels = the plates themselves (tight boxes: squashing a loose box would warp the wood / ceiling around it)
+    panels = []
+    small = np.asarray(Image.fromarray((mask > .5).astype(np.uint8) * 255).resize((W // 4, H // 4), Image.BOX)) > 100
+    for x0, y0, x1, y1, n in components(small, 25):
+        X0, Y0, X1, Y1 = max(0, x0 * 4 - 3), max(0, y0 * 4 - 3), min(W, x1 * 4 + 3), min(H, y1 * 4 + 3); cx = (X0 + X1) / 2
+        kind = "vent" if Y1 < H * .2 and abs(cx - W / 2) < W * .2 else "front" if abs(cx - W / 2) < W * .16 else "wall"
+        panels.append(dict(box=[X0, Y0, X1, Y1], side="L" if cx < W / 2 else "R", kind=kind, hinge="out" if kind == "wall" else "in"))
+    panels.sort(key=lambda p: (p["side"], -abs((p["box"][0] + p["box"][2]) / 2 - W / 2)))   # outer (near you) first
 
     # rune layers: ice = as drawn (cyan-white glow), fire = the glow re-coloured orange-red, both premultiplied by the panel mask
     opf = op.astype(np.float32)
