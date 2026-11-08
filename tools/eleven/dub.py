@@ -53,9 +53,14 @@ def retag(tagged_ja, target, lang):
     return sep.join(((' '.join(out[j]) + ' ') if j in out else '') + u for j, u in enumerate(tu)).strip()
 
 
+# Pronunciation respellings for the TTS text only (subtitles unchanged), every demo; picked by Scribe STT (2026-11-09: plain "Ieyasu"
+# came out as "Iesu" / "Yasu" in en and 爷也斯 / 耶耶斯 in zh; these were transcribed back as Ieyasu / 家康 with both Nobunaga's and Ieyasu's voices).
+PRON = {'en': [('Ieyasu', 'Ee-yeh-yah-soo')], 'zh': [('Ieyasu', '依叶亚斯')]}
+
+
 def names(text, lang, table):
-    """table = {lang: [(from, to), …]} — applied in order (put longer phrases first)."""
-    for a, b in table.get(lang, []): text = text.replace(a, b)
+    """table = {lang: [(from, to), …]} — applied in order (put longer phrases first); then the shared PRON respellings."""
+    for a, b in table.get(lang, []) + PRON.get(lang, []): text = text.replace(a, b)
     return text
 
 
