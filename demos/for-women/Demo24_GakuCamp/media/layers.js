@@ -15,7 +15,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_sit.webp?v=aae33c09",
+    "src": "art/char_sit.webp?v=4eba9f70",
     "w": 1700,
     "h": 1317,
     "x": 0.43,
@@ -99,7 +99,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_log.webp?v=d8119199",
+    "src": "art/char_log.webp?v=113fc7b1",
     "w": 1700,
     "h": 1236,
     "x": 0.42,
@@ -267,7 +267,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_coffee.webp?v=975c5d78",
+    "src": "art/char_coffee.webp?v=1ee70a67",
     "w": 1700,
     "h": 1318,
     "x": 0.43,
@@ -351,7 +351,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_imo.webp?v=3660fd16",
+    "src": "art/char_imo.webp?v=467c9c8d",
     "w": 1700,
     "h": 1277,
     "x": 0.55,
@@ -593,7 +593,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_bye.webp?v=d4b368b1",
+    "src": "art/char_bye.webp?v=1635bf4c",
     "w": 1700,
     "h": 1226,
     "x": 0.43,

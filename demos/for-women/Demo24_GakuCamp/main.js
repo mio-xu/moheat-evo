@@ -32,7 +32,7 @@
 
   // ---------------------------------------------------------------- art (stills; video comes last)
   const IMG = {};
-  const artReady = Promise.all(CH.views.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/gaku_${n}.jpg?v=2`; })));
+  const artReady = Promise.all(CH.views.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/gaku_${n}.jpg?v=3`; })));
   // where the campfire is in each picture (fraction of width / height) — sparks rise from here; steam spots for the treats
   const FIRE = { live: [.9, .74], log: [.76, .8], left: [.76, .62], coffee: [.92, .55], imo: [.92, .63], blanket: [.94, .63], whisper_R: [.95, .7], bye: [.74, .7] };
   const STEAM = { coffee: [.44, .6], imo: [.2, .62] };
