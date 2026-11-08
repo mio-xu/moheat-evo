@@ -9,7 +9,8 @@ the set, so a redrawn mouth is never compared with the original line.
 
 Poses: those named on the command line, else every pose with "mouth": "lp" in project/stage.json. Per pose (all optional):
   "lp": { "lips": [.1, .2, .34] (LivePortrait opening per level; lower = safer on anime faces), "minh": .26 (smallest height of the widest
-          opening, fraction of the mouth width: lower for realistic / adult faces, Demo24 Gaku .16), "pad": 1.5 (block size around the moving part),
+          opening, fraction of the mouth width: lower for realistic / adult faces, Demo24 Gaku .16), "light": 0..1 (interior blended
+          toward a shaded skin tone: pastel styles, Demo20 .4), "pad": 1.5 (block size around the moving part),
           "centre": [x, y] + "radius": [rx, ry] (fixed block, source px), "src": other picture to warp (must be the same size) }
 A pose drawn open with a "quiet" (closed) variant: the quiet patch is pasted first, so the set is warped from the closed face.
 Writes <demo>/assets/lp_mouths/<pose>_lv<k>.png (k = 0 closed … n widest, RGBA, source px, full block) + lp_mouths.json; then
@@ -123,7 +124,7 @@ def lens_mask(L, f, shape):
     return cv2.resize(m, (shape[1], shape[0]), interpolation=cv2.INTER_AREA).astype(np.float32) / 255
 
 
-def refine(B, S0, Sk, a, L, f):
+def refine(B, S0, Sk, a, L, f, light=0.):
     """LivePortrait's 512 px render is soft and fills the opening with photo teeth. Keep its GEOMETRY, restore the drawing: where the
     render did not change, the base's own pixels (crisp lines, the corners as drawn); leftover teeth inpainted; the opening a clean flat anime lens."""
     change = cv2.GaussianBlur(np.abs(Sk - S0).max(2), (0, 0), 1.2)
@@ -143,6 +144,7 @@ def refine(B, S0, Sk, a, L, f):
     ring = (a > 20) & (a < 120); skin = np.median(B[ring] if ring.sum() > 30 else B.reshape(-1, 3), 0)
     tint = np.clip(skin / np.array([244, 206, 190], np.float32), .45, 1.15)   # the scene's light on the skin (blue bar light, Demo19 flame; night)
     fill = (deep + (tongue - deep) * np.clip((t - .5) / .5, 0, 1)) * tint
+    fill = fill + (skin * np.array([.86, .62, .66], np.float32) - fill) * light   # "light": a softer interior for pastel styles (Demo20)
     skinside = (a > 150) & (B[..., 1] <= B[..., 0] + 4)   # the drawing's own line colour, never the chroma background at a profile's edge (Demo25 pray: green rim)
     line = np.percentile(B[skinside] if skinside.sum() > 50 else B.reshape(-1, 3), 2, axis=0); upper = np.clip(1.15 - t * 1.0, .35, 1)   # the upper edge is drawn darker, as anime mouths are
     edge = np.clip(cv2.GaussianBlur(cv2.dilate(m, np.ones((3, 3), np.uint8)), (0, 0), .7) - m, 0, 1)[..., None]
@@ -187,7 +189,7 @@ for name, p in poses.items():
     if L is None: L = drawn_lens(B, a, wm if not lp.get("centre") else rx); kind = "drawn line"
     if L is None: print(f"{name}: WARN no opening found (render kept as is)"); kind = "none"
     for k, S in enumerate([C0] + [q[y0:y1, x0:x1] for q in SS]):
-        rgb = np.clip(refine(B, C0, S, a, L, lips[k - 1] / lips[-1]) if k else B, 0, 255).astype(np.uint8)   # lv0 = the base's own pixels: the block is invisible in silence
+        rgb = np.clip(refine(B, C0, S, a, L, lips[k - 1] / lips[-1], lp.get("light", 0.)) if k else B, 0, 255).astype(np.uint8)   # lv0 = the base's own pixels: the block is invisible in silence
         Image.fromarray(np.dstack([rgb, a])).save(os.path.join(OUT, f"{name}_lv{k}.png"))
     meta[name] = {"rect": [x0, y0, w, h], "levels": len(lips), "lips": lips, "size": [W, H], "source": os.path.relpath(path, D),
                   "of": hashlib.md5(open(os.path.join(SRC, p["src"] + ".png"), "rb").read()).hexdigest()[:10]}   # build_stage: stale if the pose changed

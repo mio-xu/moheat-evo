@@ -27,16 +27,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/booth_mouth.webp?v=ecd0ea85",
-     "rect": [
-      1097,
-      330,
-      148,
-      102
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/booth_eyes.webp?v=88502c6b",
      "rect": [
       1013,
@@ -45,6 +35,50 @@ window.MOHEAT_LAYERS = {
       128
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/booth_mouth0.webp?v=83f519aa",
+     "rect": [
+      1081,
+      304,
+      182,
+      154
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/booth_mouth1.webp?v=442df619",
+     "rect": [
+      1081,
+      304,
+      182,
+      154
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/booth_mouth2.webp?v=27f72f40",
+     "rect": [
+      1081,
+      304,
+      182,
+      154
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/booth_mouth3.webp?v=e44ac55e",
+     "rect": [
+      1081,
+      304,
+      182,
+      154
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -126,16 +160,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/lean_mouth.webp?v=0d15b481",
-     "rect": [
-      372,
-      525,
-      244,
-      147
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/lean_eyes.webp?v=c3034dd4",
      "rect": [
       171,
@@ -144,6 +168,50 @@ window.MOHEAT_LAYERS = {
       276
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/lean_mouth0.webp?v=656db916",
+     "rect": [
+      359,
+      480,
+      292,
+      245
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/lean_mouth1.webp?v=7668c8bb",
+     "rect": [
+      359,
+      480,
+      292,
+      245
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/lean_mouth2.webp?v=2faea932",
+     "rect": [
+      359,
+      480,
+      292,
+      245
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/lean_mouth3.webp?v=e0d153af",
+     "rect": [
+      359,
+      480,
+      292,
+      245
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -173,16 +241,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/wave_mouth.webp?v=4f8e6d59",
-     "rect": [
-      959,
-      291,
-      127,
-      84
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/wave_eyes.webp?v=802206f6",
      "rect": [
       884,
@@ -191,6 +249,50 @@ window.MOHEAT_LAYERS = {
       111
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/wave_mouth0.webp?v=0b2f4fc8",
+     "rect": [
+      943,
+      267,
+      158,
+      134
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/wave_mouth1.webp?v=3f5952e8",
+     "rect": [
+      943,
+      267,
+      158,
+      134
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/wave_mouth2.webp?v=c68f043b",
+     "rect": [
+      943,
+      267,
+      158,
+      134
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/wave_mouth3.webp?v=1cfec190",
+     "rect": [
+      943,
+      267,
+      158,
+      134
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   }
