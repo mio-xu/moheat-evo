@@ -23,13 +23,13 @@ from PIL import Image, ImageChops, ImageDraw
 D = os.path.abspath(sys.argv[1]); only = set(sys.argv[2:])
 t = open(os.path.join(D, "media", "layers.js")).read(); data = json.loads(t[t.index("{"):t.rindex("}") + 1])
 out = os.path.join(D, "assets", "patch_check"); os.makedirs(out, exist_ok=True)
-LIM = {"mouth": dict(seam=4.0, outer=6.0), "mouth_quiet": dict(seam=4.0, outer=6.0), "eyes": dict(seam=8.0, outer=40.0)}
+LIM = {"mouth": dict(seam=4.0, outer=6.0), "mouth_lv": dict(seam=4.0, outer=6.0), "mouth_quiet": dict(seam=4.0, outer=6.0), "eyes": dict(seam=8.0, outer=40.0)}
 flags, seen, mouths = [], set(), []
 for stem, v in data["views"].items():
     pose = v["char"]["src"].split("char_")[1].split(".")[0]
     if only and pose not in only: continue
     kinds = [p["kind"] for p in v.get("patches", [])]
-    if "mouth" not in kinds and "mouth_quiet" not in kinds:
+    if not {"mouth", "mouth_quiet", "mouth_lv"} & set(kinds):
         flags.append(f"NO-MOUTH {stem}: no mouth patch ({'+'.join(kinds) or 'no patches'}) — fine only if the face is hidden or nobody talks there")
     if pose in seen: continue
     seen.add(pose)
@@ -37,7 +37,7 @@ for stem, v in data["views"].items():
     except Exception as e: flags.append(f"READ {pose}: {e} (being rebuilt?)"); continue
     ca = np.asarray(ch.getchannel("A"), np.float32) / 255
     for p in v.get("patches", []):
-        x, y, w, h = p["rect"]; k = p["kind"]; lim = LIM.get(k, LIM["mouth"]); tag = f"{pose}/{k}"
+        x, y, w, h = p["rect"]; k = p["kind"]; lim = LIM.get(k, LIM["mouth"]); tag = f"{pose}/{k}" + (str(p["level"]) if "level" in p else "")
         if x < 0 or y < 0 or x + w > ch.width or y + h > ch.height:
             flags.append(f"BOUNDS {tag}: rect {p['rect']} outside the {ch.width}×{ch.height} character"); continue
         pad = max(w, h) // 2
@@ -64,7 +64,7 @@ for stem, v in data["views"].items():
         if border > .04: flags.append(f"BORDER {tag}: alpha {border:.2f} at the rectangle edge")
         sheet = Image.new("RGB", (a.width * 3 + 20, a.height), (0, 0, 0))
         for i, im in enumerate((a, b, d)): sheet.paste(im, (i * (a.width + 10), 0))
-        sheet.save(os.path.join(out, f"{pose}_{k}.png"))
+        sheet.save(os.path.join(out, f"{pose}_{k}{p.get('level', '')}.png"))
         print(f"{pose:10s} {k:11s} seam {seam:5.1f}  outer {outer:5.1f}  outside {outside * 100:4.1f} %  border {border:.2f}  assets/patch_check/{pose}_{k}.png")
         if k.startswith("mouth"):   # 2× close-up of the mouth on a dark plate: closed | open
             mb = (max(0, x - w // 4), max(0, y - h // 4), min(ch.width, x + w + w // 4), min(ch.height, y + h + h // 4))

@@ -47,7 +47,8 @@
      71,
      55
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "melt": {
    "src": "cocoa_melt",
@@ -75,7 +76,8 @@
      76,
      61
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "whisk": {
    "src": "cocoa_whisk",
@@ -103,7 +105,8 @@
      88,
      63
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "cookie": {
    "src": "cocoa_cookie",
@@ -131,7 +134,8 @@
      73,
      47
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "piping": {
    "src": "cocoa_piping",
@@ -159,7 +163,8 @@
      69,
      54
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "whisper": {
    "src": "cocoa_whisper",
@@ -187,7 +192,8 @@
      125,
      72
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "ending": {
    "src": "cocoa_ending",
@@ -215,7 +221,8 @@
      71,
      50
     ]
-   ]
+   ],
+   "mouth": "lp"
   }
  },
  "views": {

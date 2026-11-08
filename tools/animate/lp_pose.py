@@ -35,11 +35,11 @@ def fields(cls, d):
 
 
 class Puppet:
-    def __init__(self, still):
+    def __init__(self, still, share=None):   # share = another Puppet: reuse its loaded models (tools/art/lp_mouths.py, many poses in one run)
         args = ArgumentConfig()
         icfg, ccfg = fields(InferenceConfig, args.__dict__), fields(CropConfig, args.__dict__)
-        self.w = LivePortraitWrapper(inference_cfg=icfg)
-        self.cropper = Cropper(crop_cfg=ccfg)
+        self.w = share.w if share else LivePortraitWrapper(inference_cfg=icfg)
+        self.cropper = share.cropper if share else Cropper(crop_cfg=ccfg)
         self.dev = self.w.device
         bgr = cv2.imread(still)
         self.img = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
@@ -61,7 +61,7 @@ class Puppet:
         print(f"device={self.dev} eye0={self.eye0:.2f} lip0={self.lip0:.2f}")
 
     @torch.no_grad()
-    def frame(self, eye=1.0, lip=0.0, pitch=0., yaw=0., roll=0., gaze_x=0., gaze_y=0., smile=0., eyebrow=0.):
+    def frame(self, eye=1.0, lip=0.0, pitch=0., yaw=0., roll=0., gaze_x=0., gaze_y=0., smile=0., eyebrow=0., raw=False):   # raw: the 512 px face render, not pasted back
         i = self.info
         R_d = get_rotation_matrix(i['pitch'] + pitch, i['yaw'] + yaw, i['roll'] + roll)
         R = (R_d @ self.R_s.permute(0, 2, 1)) @ self.R_s
@@ -82,6 +82,7 @@ class Puppet:
             x_d = x_d + self.w.retarget_lip(self.x_s, self.w.calc_combined_lip_ratio([[lr]], self.lmk))
         x_d = self.w.stitching(self.x_s, x_d)
         out = self.w.parse_output(self.w.warp_decode(self.f_s, self.x_s, x_d)['out'])[0]
+        if raw: return out
         return paste_back(out, self.M, self.img, self.mask)
 
 

@@ -54,7 +54,7 @@ const freePort = () => new Promise((res) => { const s = net.createServer(); s.li
   await ev(`document.getElementById('startBtn').click(), 1`);
   // the sampler: every animation frame, while a layered still is drawn
   await ev(`(() => { const L = window.__mouth = []; const t0 = performance.now(); const f = () => { const s = MoHeatLayers.state();
-    L.push([(performance.now() - t0) / 1000, s.mouth, s.tgt, s.view, s.stem || '', s.patches.join('+'), s.rel]); if (L.length < 60 * ${SECS + 10}) requestAnimationFrame(f); }; requestAnimationFrame(f); return 1; })()`);
+    L.push([(performance.now() - t0) / 1000, s.mouth, s.tgt, s.view, s.stem || '', s.patches.join('+'), s.rel, s.level || 0]); if (L.length < 60 * ${SECS + 10}) requestAnimationFrame(f); }; requestAnimationFrame(f); return 1; })()`);
   const shots = {}; const outDir = path.join(DEMO, 'assets', 'mouth_check');
   const t0 = Date.now();
   while (Date.now() - t0 < SECS * 1000) {
@@ -88,7 +88,7 @@ const freePort = () => new Promise((res) => { const s = net.createServer(); s.li
   }
   for (const [view, v] of Object.entries(perView)) {
     if (!v.stem) { if (v.talk >= .6) issues.push(`UNMAPPED ${view}: talks ${v.talk.toFixed(1)} s in a view that is not in media/layers.js views / alias`); continue; }   // no character there (an empty queue) is fine
-    if (v.talk >= .6 && !v.pk.split('+').includes('mouth') && !v.pk.split('+').includes('mouth_quiet')) issues.push(`NO-PATCH ${view}: talks ${v.talk.toFixed(1)} s, no mouth patch`);
+    if (v.talk >= .6 && !v.pk.split('+').some((k) => /^mouth/.test(k))) issues.push(`NO-PATCH ${view}: talks ${v.talk.toFixed(1)} s, no mouth patch`);
     else if (v.talk >= .6 && v.open === 0) issues.push(`NO-MOVE ${view}: talks ${v.talk.toFixed(1)} s, the mouth never opens`);
   }
   if (talkFrames > 30 && half / talkFrames > .08) issues.push(`HALF ${(100 * half / talkFrames).toFixed(0)} % of talking frames have a half-faded mouth (double lips)`);
@@ -96,6 +96,8 @@ const freePort = () => new Promise((res) => { const s = net.createServer(); s.li
   console.log(`${REL}: ${L.length} frames, ${T.toFixed(0)} s (${(L.length / (T || 1)).toFixed(0)} fps)`);
   if (L.length / (T || 1) < 20) console.log('  (low frame rate: open / close timing is approximate)');
   for (const [view, v] of Object.entries(perView)) console.log(`  ${view.padEnd(12)} talking ${v.talk.toFixed(1).padStart(5)} s  open ${v.open.toFixed(1).padStart(5)} s  patches ${v.pk || '-'}`);
+  { const h = [0, 0, 0, 0, 0]; let n = 0; for (const r of L) if (r[1] >= .95 && r[7]) { h[Math.min(4, r[7])]++; n++; }   // mouth sets: how wide while open
+    if (n) console.log(`  mouth-set levels while open: ${h.slice(1).map((c, i) => `lv${i + 1} ${(100 * c / n).toFixed(0)} %`).filter((x) => !/ 0 %$/.test(x)).join(', ')}`); }
   if (Object.keys(shots).length) console.log(`  shots: ${path.relative(ROOT, outDir)}/ (${Object.keys(shots).join(', ')})`);
   console.log(issues.length ? issues.map((x) => '  ✗ ' + x).join('\n') : '  ✓ lip-sync OK');
   done(issues.length ? 1 : 0);

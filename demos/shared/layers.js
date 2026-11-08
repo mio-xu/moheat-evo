@@ -17,7 +17,8 @@
 //   views: { <still file stem>: { view, alias?: [other view names drawing the same still], fire: [x, y] (where the fire must appear, frame fraction) or null,
 //            bg: { src, depth?, fire: [x, y] (fire in the plate, fraction), zoom? },
 //            char: { src, w, h, x, y, height } (anchored at its bottom centre: x, y = frame fraction, height = fraction of the frame),
-//            patches: [ { src, rect: [x, y, w, h] in char pixels, kind: "mouth" | "eyes" | "mouth_quiet" } ] } }   (mouth_quiet: closed mouth over an open-mouth pose, shown in silence)
+//            patches: [ { src, rect: [x, y, w, h] in char pixels, kind: "mouth" | "eyes" | "mouth_quiet" | "mouth_lv", level? } ] } }   (mouth_quiet: closed mouth over an open-mouth pose, shown in silence;
+//            mouth_lv: a LivePortrait mouth SET, tools/art/lp_mouths.py — level 0 = closed, 1..n wider; exactly one block of the set is drawn)
 // Data hooks (optional): hooks: { view: "HINA.S.view", mouth: "HINA.FW.mouth" (0..1) | lv: "JIN.S.lv" (+ lvGain, default 25), level / raw: paths } — where the base demo keeps its state.
 // Hooks (optional): MoHeatLayers.level() → 0..1 talking envelope (default window.STREAM.S.env), MoHeatLayers.raw() → raw voice level
 // (default window.STREAM.S.lv), MoHeatLayers.current() → the view on screen (default window.STREAM.S.view).
@@ -115,6 +116,7 @@ void main(){
       o.bgT = newTex(); upload(o.bgT, b); if (d) { o.depT = newTex(); upload(o.depT, d); }
       o.ch = ch; o.ps = (c.patches || []).map((p, i) => ({ ...p, im: ps[i] })).filter((p) => p.im);
       o.order = [...o.ps.filter((p) => p.kind === 'eyes'), ...o.ps.filter((p) => p.kind !== 'eyes')];
+      o.nLv = Math.max(0, ...o.ps.filter((p) => p.kind === 'mouth_lv').map((p) => p.level || 0));
       // the plate's zoom + offset: its fire lands on the view's fire, never showing an edge
       const f = c.fire, bf = c.bg.fire; let z = c.bg.zoom || 1, ox, oy;
       if (f && bf) {
@@ -142,7 +144,7 @@ void main(){
   const blinkLog = [];
   addEventListener('pointermove', (e) => { tx = (e.clientX / innerWidth - .5) * 2; ty = (e.clientY / innerHeight - .5) * 2; }, { passive: true });
   addEventListener('deviceorientation', (e) => { if (e.gamma == null) return; tx = Math.max(-1, Math.min(1, e.gamma / 25)); ty = Math.max(-1, Math.min(1, (e.beta - 45) / 25)); });
-  let lastT = 0, t = 0, frameT = -1, flick = 1, env = 0, mouth = 0, mouthOpen = false, mouthHold = 0, talk = 0, lastTgt = 0, lastV = 0, peak = .012, openedAt = 0, blinkUntil = 0, nextBlink = 2;
+  let lastT = 0, t = 0, frameT = -1, flick = 1, env = 0, mouth = 0, mouthOpen = false, mouthHold = 0, talk = 0, lastTgt = 0, lastV = 0, peak = .012, openedAt = 0, lvl = 1, lvlHold = 0, blinkUntil = 0, nextBlink = 2;
   function step(now) {
     t = now / 1000; const dt = Math.min(.05, t - lastT || .016); lastT = t;
     flick = 1 + .10 * Math.sin(t * 7.3) + .07 * Math.sin(t * 13.1 + 1.7) + .05 * Math.sin(t * 23.7 + .4);
@@ -160,6 +162,9 @@ void main(){
     if (t >= mouthHold && (mouthOpen ? rel < .55 || tgt < .05 || t - openedAt > .45 : rel > .7 && tgt > .2)) {
       mouthOpen = !mouthOpen; mouthHold = t + (mouthOpen ? .06 : .09); if (mouthOpen) openedAt = t; }
     mouth = mouthOpen ? 1 : 0;   // a hard switch: any in-between alpha shows both lip lines
+    // mouth sets (mouth_lv): how wide, from the loudness — normal speech on levels 1–2, only loud peaks reach the widest; held ≥ 80 ms
+    if (mouthOpen && t >= lvlHold) { const amp = Math.min(1, tgt) * Math.min(1, rel), want = amp > .93 ? 3 : amp > .62 ? 2 : 1;
+      if (want !== lvl) { lvl = want; lvlHold = t + .08; } }
     lastTgt = tgt; lastV = v / peak;
     talk += (tgt - talk) * (1 - Math.exp(-dt / .12));   // smooth: drives the talking bob only
     // a view cut ends a blink and holds the next one ≥ 0.7 s (the cross-fade): eyes never close in the frame of a cut
@@ -184,7 +189,8 @@ void main(){
     // kind 'mouth_quiet' = a closed-mouth patch for a pose drawn mid-laugh / mid-word: shown while she / he is NOT talking.
     cx2.globalCompositeOperation = 'source-atop';
     for (const p of o.order) {
-      const a = p.kind === 'mouth' ? (active ? mouth : 0) : p.kind === 'mouth_quiet' ? 1 - (active ? mouth : 0) : (blinkOn() ? 1 : 0);
+      const a = p.kind === 'mouth_lv' ? (p.level === (active && mouthOpen ? Math.min(lvl, o.nLv) : 0) ? 1 : 0)   // one block of the set, always
+        : p.kind === 'mouth' ? (active ? mouth : 0) : p.kind === 'mouth_quiet' ? 1 - (active ? mouth : 0) : (blinkOn() ? 1 : 0);
       if (a > .01) { cx2.globalAlpha = a; cx2.drawImage(p.im, p.rect[0], p.rect[1], p.rect[2], p.rect[3]); cx2.globalAlpha = 1; }
     }
     cx2.globalCompositeOperation = 'source-over';
@@ -223,7 +229,7 @@ void main(){
   };
   API.motion = () => { const o = L[byView[API.current()]]; return { t, liveT, blink: blinkOn(), blinks: blinkLog.slice(), breath: breathY, phase: bph, flick,
     view: API.current(), stem: byView[API.current()], rect: o?.rect, neck: o?.neck, edge: o?.edge, live: o?.live, draw: lastDraw }; };   // tests
-  API.state = () => ({ mouth, open: mouthOpen, tgt: lastTgt, rel: lastV, env, blink: t < blinkUntil, view: API.current(), stem: byView[API.current()],
+  API.state = () => ({ mouth, open: mouthOpen, level: mouthOpen ? lvl : 0, tgt: lastTgt, rel: lastV, env, blink: t < blinkUntil, view: API.current(), stem: byView[API.current()],
     patches: (D.views[byView[API.current()]]?.patches || []).map((p) => p.kind) });   // tests (tools/art/check_mouth.js)
 
   // ---------------------------------------------------------------- the hook: a known still → its live composite (same place / size)

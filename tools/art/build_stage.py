@@ -7,7 +7,7 @@ Reads <demo>/project/stage.json:
     "bgs":   { "camp": { "src": "bg_camp", "fire": [0.75, 0.72] } },               fire in the plate (fraction); omit → found automatically
     "poses": { "sit": { "src": "gaku_ref", "talk": "gaku_ref_talk", "blink": "gaku_ref_blink", "near_mouth": [x, y], "near_eyes": [x, y],
                         "centre_mouth": [x, y], "radius_mouth": [rx, ry] (skip the search when it is pulled away by a hand / prop), "regions_eyes": [[cx, cy, rx, ry], …] (fixed ellipses),
-                        "erase": [[x0, y0, x1, y1]], "keep": [[x0, y0, x1, y1]] } },             erase = source boxes cleared (e.g. a fire drawn in the pose); keep = source boxes never keyed (grey steam, smoke); "matte": "ai" = outline from the isnet-anime model (~/ml/layers venv) for light / pastel figures ; "matte": "green" / "magenta" = chroma key for poses on #00B140 / #FF00FF (green-haired figures)
+                        "erase": [[x0, y0, x1, y1]], "keep": [[x0, y0, x1, y1]] } },             "mouth": "lp" = the mouth is a LivePortrait set (tools/art/lp_mouths.py, run first; talk / quiet are then not used); erase = source boxes cleared (e.g. a fire drawn in the pose); keep = source boxes never keyed (grey steam, smoke); "matte": "ai" = outline from the isnet-anime model (~/ml/layers venv) for light / pastel figures ; "matte": "green" / "magenta" = chroma key for poses on #00B140 / #FF00FF (green-haired figures)
     "views": { "live": { "still": "gaku_live", "pose": "sit", "bg": "camp", "fire": [0.9, 0.74], "x": 0.42, "y": 1.06, "height": 1.1 } } }
   view: still = the file the page draws (stem, or stem.ext; media/art/<still> is written as the flat fallback), alias = other view names
   that draw the same still (e.g. a mirrored side), fire = where the page expects the
@@ -19,7 +19,7 @@ Does:
   3. writes media/art/bg_<bg>.webp, char_<pose>.webp, <pose>_mouth.webp, <pose>_eyes.webp, the flat stills <still>.jpg and
      media/layers.js (data for demos/shared/layers.js)
 """
-import argparse, json, os, subprocess, sys
+import argparse, hashlib, json, os, subprocess, sys
 import numpy as np
 from PIL import Image, ImageFilter
 
@@ -176,6 +176,7 @@ for name, p in cfg["poses"].items():
     # "quiet": a CLOSED-mouth variant of a pose drawn mid-word / mid-laugh → patch kind mouth_quiet (shared/layers.js shows it while
     # nobody talks; keys near_mouth_quiet / centre_mouth_quiet + radius_mouth_quiet / regions_mouth_quiet like the others)
     for kind, key in (("mouth", "talk"), ("eyes", "blink"), ("mouth_quiet", "quiet")):
+        if p.get("mouth") == "lp" and kind != "eyes": continue   # the mouth set comes from tools/art/lp_mouths.py (below)
         if p.get(key) and os.path.exists(src(p[key])):
             e = {"name": f"{name}_{kind}", "base": p["src"], "frame": p[key], "kind": kind, "_size": list(size), "_pose": name}
             if p.get(f"near_{kind}"): e["near"] = p[f"near_{kind}"]
@@ -214,6 +215,26 @@ if pcfg["patches"]:
         pose["patches"].append({"src": f"art/{pn}.webp", "rect": [round((x - bx) * f), round((y - by) * f), im.width, im.height], "kind": e["kind"],
                                 "im": im})
 
+# "mouth": "lp" — a mouth SET from tools/art/lp_mouths.py: closed (= the pose's own pixels) + open levels warped by LivePortrait from
+# that same picture, all one fixed block, so the corners never jump (DEMO_DESIGN_GUIDE §6 mouth step). kind "mouth_lv" + level 0..n.
+LPD = os.path.join(D, "assets", "lp_mouths"); lpm = json.load(open(os.path.join(LPD, "lp_mouths.json"))) if os.path.exists(os.path.join(LPD, "lp_mouths.json")) else {}
+for name, p in cfg["poses"].items():
+    if p.get("mouth") != "lp": continue
+    m = lpm.get(name); run = f"~/ml/LivePortrait/.venv/bin/python tools/art/lp_mouths.py {sys.argv[1]} {name} --sheet"
+    if not m: sys.exit(f"pose {name}: \"mouth\": \"lp\" but no assets/lp_mouths/{name}_lv*.png — run {run}")
+    if m.get("of") and m["of"] != hashlib.md5(open(src(p["src"]), "rb").read()).hexdigest()[:10]:
+        sys.exit(f"pose {name}: {p['src']}.png changed after its mouth set was made — run {run}")
+    pose = poses[name]; x, y, w, h = m["rect"]; bx, by = pose["box"][:2]; f = pose["f"]; rx, ry = round((x - bx) * f), round((y - by) * f)
+    for k in range(m["levels"] + 1):
+        im = Image.open(os.path.join(LPD, f"{name}_lv{k}.png")).convert("RGBA").resize((max(1, round(w * f)), max(1, round(h * f))), Image.LANCZOS)
+        ca = pose["cut"].getchannel("A").crop((rx, ry, rx + im.width, ry + im.height))   # only where the character layer is solid
+        im.putalpha(Image.fromarray(np.minimum(np.asarray(im.getchannel("A")), np.asarray(ca)).astype(np.uint8)))
+        if p.get("matte") == "green":
+            q = np.asarray(im).copy(); q[..., 1] = np.minimum(q[..., 1], np.maximum(q[..., 0], q[..., 2]).astype(int) + 6).astype(np.uint8); im = Image.fromarray(q)
+        pn = f"{name}_mouth{k}"; im.save(out(os.path.join(ART, pn + ".webp")), quality=92, method=6)
+        pose["patches"].append({"src": f"art/{pn}.webp", "rect": [rx, ry, im.width, im.height], "kind": "mouth_lv", "level": k, "im": im})
+    print(f"pose {name}: LivePortrait mouth set, {m['levels']} open levels")
+
 # views: data for shared/layers.js + the flat fallback still (same placement maths as the page)
 FW, FH = 1920, 1080
 for vname, v in cfg["views"].items():
@@ -237,7 +258,7 @@ for vname, v in cfg["views"].items():
     data["views"][stem] = {"view": vname, **({"alias": v["alias"]} if v.get("alias") else {}), "fire": f,
                                 "bg": {"src": b["src"], "fire": bf, **({"zoom": v["zoom"]} if v.get("zoom") else {})},
                                 "char": {"src": p["src"], "w": p["w"], "h": p["h"], "x": v["x"], "y": v["y"], "height": v["height"], "box": [int(b) for b in p["box"]]},   # box = source px (tools/art/extend_pose.py)
-                                "patches": [{k: pt[k] for k in ("src", "rect", "kind")} for pt in p["patches"]]}
+                                "patches": [{k: pt[k] for k in ("src", "rect", "kind", "level") if k in pt} for pt in p["patches"]]}
     print(f"view {vname}: bg zoom {z:.2f}, still media/art/{stem}{ext}")
 import hashlib
 def _v(rel):   # "art/x.webp" → "art/x.webp?v=<content hash>"
