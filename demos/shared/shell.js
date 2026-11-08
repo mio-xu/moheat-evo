@@ -38,7 +38,8 @@
     const hide = document.createElement('style'); hide.id = 'moheat-ui2-early';   // nothing old shows, not even for one frame (the old cover HTML, the 🌐 ⛶ corner…)
     hide.textContent = `html.ui2 .stage .intro { visibility: hidden !important; pointer-events: none !important; }
       html.ui2 .stage { background: #0b0a12; }
-      html.ui2:not(.u2-on) .stage > *, html.ui2 .stage .vv { visibility: hidden !important; }`;   /* nothing of the old stage paints before the cover is on */   // no old stage image before the finished cover is on (Demo10 flashed one at 60 ms)
+      html.ui2:not(.u2-on) .stage > *, html.ui2 .stage .vv { visibility: hidden !important; }
+      html.ui2:not(.l10n-ready) aside.side { visibility: hidden; animation: u2l10n 0s 2.5s forwards; } @keyframes u2l10n { to { visibility: visible; } }`;   // the side panel waits for the display language (fail-safe 2.5 s)   /* nothing of the old stage paints before the cover is on */   // no old stage image before the finished cover is on (Demo10 flashed one at 60 ms)
     document.head.appendChild(hide);
   }
   const LS = { get(k, d) { try { const v = localStorage.getItem('moheat.' + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
@@ -449,7 +450,7 @@
   // ---------------------------------------------------------------- UI v2: the live adapter for demos/shared/ui2.js
   if (V2) {
     // UI2_V = content hash of ui2.js + ui2.css (python3 tools/web/bump.py --auto keeps it current: cat ui2.js ui2.css | shasum, 8 hex)
-    const UI2_V = '69418943';
+    const UI2_V = '7cd84e6d';
     const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = new URL(`ui2.css?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(css);
     const js = document.createElement('script'); js.src = new URL(`ui2.js?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(js);
     let started = false, cover = null, ui = null, relayout2 = () => {};

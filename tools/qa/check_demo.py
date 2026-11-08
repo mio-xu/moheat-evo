@@ -313,7 +313,8 @@ else:
          'ja / en / zh present, static scan clean') + ('' if ko else ' · ko not yet (room kept: subs.js LANGS)'), miss[:15] + ([f'… {len(miss) - 15} more'] if len(miss) > 15 else []))
 talks = os.path.exists(os.path.join(D, 'lines.js')) or 'lines.js' in html
 has_voice = 'shared/voice.js' in html
-row('G5', 'voice', 'PASS' if has_voice else 'FAIL' if talks else 'SKIP',
+if not has_voice and talks and 'voice' in QA.get('skip', {}): row('G5', 'voice', 'SKIP', QA['skip']['voice'])
+else: row('G5', 'voice', 'PASS' if has_voice else 'FAIL' if talks else 'SKIP',
     'shared/voice.js loaded (answers by voice, judged)' if has_voice else 'dialogue demo without shared/voice.js' if talks else 'no dialogue')
 end_static = re.search(r'もう一度 · Play again', alljs) is not None or 'shared/shell.js' in html   # UI v2: the shared interface shows ↺ Play again on the own cover
 navaway = re.findall(r'location(?:\.href)?\s*=\s*[^;\n]*Demo\d{2}|location\.(?:assign|replace)\([^)]*Demo\d{2}', alljs)

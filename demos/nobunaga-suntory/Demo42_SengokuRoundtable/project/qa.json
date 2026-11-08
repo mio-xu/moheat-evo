@@ -1,0 +1,5 @@
+{
+ "skip": {
+  "voice": "free talk: the talk kit (_kit/talk) runs its own speech recognition for every turn (open answers, not buttons) — shared/voice.js would start a second recognizer"
+ }
+}
