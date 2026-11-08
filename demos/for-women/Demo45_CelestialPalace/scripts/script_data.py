@@ -207,8 +207,8 @@ STEPS = [
         ['@chamber'], ['j01', 'front'], ['k10', 'left'], ['j02', 'front'],
         {'type': 'choice', 'options': [{'ja': '誰のものでもない', 'en': "I'm nobody's", 'zh': '我不属于任何人', 'then': ['j03a']},
                                        {'ja': '…あなたは？', 'en': '…And you are?', 'zh': '…你是谁？', 'then': ['j03b']}]},
-        ['j04', 'front'], ['@stoke'], ['j05', 'near'], ['@warmer_right'], ['j06', 'right_ear'], ['j07', 'right_ear'],
-        ['window', 'J', 'j08'], ['@warmer_off'], ['j09', 'near']]},
+        ['j04', 'front'], ['@stoke'], ['j05', 'near'], ['@warmer_right'], ['j06', 'right_ear'], ['j07', 'right_ear'], ['@warmer_off'],
+        ['window', 'J', 'j08'], ['j09', 'near']]},
     {'id': 'terrace', 'ja': '星見台', 'en': 'The star terrace', 'zh': '观星台', 'view': ['terrace_S', 'terrace_S_ear'], 'beats': [
         ['@terrace'], ['s01', 'front'], ['s02', 'front'], ['s03', 'front'], ['@by_incense'], ['s04', 'right'], ['s05', 'right'], ['s06', 'right'],
         ['@fan_right'], ['s07', 'right'], ['@lean_left'], ['s08', 'left_ear'],

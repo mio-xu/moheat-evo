@@ -274,5 +274,51 @@
    2560,
    1440
   ]
+ },
+ "saku_ear": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 69,
+  "usage": {
+   "input_tokens": 3499,
+   "input_tokens_details": {
+    "image_tokens": 3025,
+    "text_tokens": 474
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 10869
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "bg_dawn": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 70,
+  "usage": {
+   "input_tokens": 1639,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 131
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9009
+  },
+  "out": [
+   2560,
+   1440
+  ]
  }
 }

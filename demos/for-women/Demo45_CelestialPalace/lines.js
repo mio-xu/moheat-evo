@@ -870,12 +870,12 @@ window.PALACE_LINES = {
      "right_ear"
     ],
     [
+     "@warmer_off"
+    ],
+    [
      "window",
      "J",
      "j08"
-    ],
-    [
-     "@warmer_off"
     ],
     [
      "j09",

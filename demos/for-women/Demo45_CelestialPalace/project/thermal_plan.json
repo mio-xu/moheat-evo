@@ -1,25 +1,302 @@
 {
  "_doc": "Demo45 thermal plan (firmware DUAL; DEMO_DESIGN_GUIDE §3) — same format as Demo44 (tools/thermal/plan_sim.py). az: 0 front, -90 LEFT ear, +90 RIGHT ear. 'set' = ambient sources by name (level 0 removes), 'pulse' = [kind, az, level, rise, hold, fade], 'sweep' = [kind, az0, az1, secs, level]. Every source is physical and visible; the bronze mirror's light and the ring of light in the pond have NO temperature (rule card).",
- "voice": {"formula": "(0.1 + 0.8 × loudness) × distance", "distance": {"left_ear": 1.0, "right_ear": 1.0, "near": 0.6, "left": 0.28, "right": 0.6, "front": 0.28}, "az": {"left_ear": -90, "right_ear": 90, "near": 0, "front": 0, "left": -60, "right": 55}, "front_split": 0.5},
- "smoothing": {"warm_rise": 0.4, "warm_fall": 0.5, "cool_rise": 0.2, "cool_fall": 0.35},
- "events": {
-  "@mirror":      {"why": "the museum's bronze mirror flashes: light only, no temperature", "set": {"night": ["cool", 0, 0.15]}},
-  "@plunge":      {"why": "you drop through the ice into the frozen lotus pond: icy water on your skin and ears = the COLD PEAK, both ears", "set": {"water": ["cool", 0, 0.92]}},
-  "@pulled_out":  {"why": "Saku hauls you out (hold): out of the water, still soaked in the winter air", "set": {"water": ["cool", 0, 0.45]}, "during_hold": true},
-  "@cloak":       {"why": "his dry cloak around you: the wet cold drops, the cloth warms both sides a little", "set": {"water": ["cool", 0, 0.12], "cloak": ["warm", 0, 0.18]}},
-  "@chamber":     {"why": "the prince's chamber: snowy lattice window on the LEFT, big bronze brazier on the RIGHT", "set": {"night": ["cool", 0, 0], "water": ["cool", 0, 0], "cloak": ["warm", 0, 0], "window": ["cool", -75, 0.25], "brazier": ["warm", 65, 0.3]}},
-  "@stoke":       {"why": "he throws charcoal and pine on the brazier: the flames leap up front-right = the WARM PEAK", "pulse": ["warm", 40, 0.88, 0.3, 1.2, 1.8]},
-  "@warmer_right":{"why": "the bronze hand-warmer held to your RIGHT cheek", "set": {"warmer": ["warm", 90, 0.5]}},
-  "@warmer_off":  {"why": "he takes the hand-warmer back", "set": {"warmer": ["warm", 90, 0]}},
-  "@terrace":     {"why": "the open star terrace: night wind from the LEFT (gusting), a bronze incense burner on the RIGHT", "set": {"window": ["cool", -75, 0], "brazier": ["warm", 65, 0], "wind": ["cool", -80, 0.38], "incense": ["warm", 75, 0.2]}},
-  "@by_incense":  {"why": "he seats you beside the incense burner: it is close to your RIGHT cheek now, out of the wind", "set": {"incense": ["warm", 85, 0.5], "wind": ["cool", -80, 0.12]}},
-  "@fan_right":   {"why": "silent: his feather fan sweeps the incense warmth away and fans cold night air across your RIGHT cheek — right ear warm → cool in < 1 s", "set": {"incense": ["warm", 85, 0]}, "pulse": ["cool", 90, 0.7, 0.15, 1.6, 0.9]},
-  "@lean_left":   {"why": "he moves to your LEFT ear, into the north wind: his warm whisper + the cold wind on the same ear", "set": {"wind": ["cool", -80, 0.4], "incense": ["warm", 75, 0.15]}},
-  "@corridor":    {"why": "the moonlit corridor: cold night air both sides", "set": {"wind": ["cool", -80, 0], "incense": ["warm", 75, 0], "night": ["cool", 0, 0.18]}},
-  "@torches":     {"why": "assassins' torches pass along the garden path beyond the railing, LEFT → RIGHT, a few metres away (hold your breath)", "sweep": ["warm", -90, 90, 5.0, 0.32], "during_hold": true},
-  "@sunrise":     {"why": "dawn at the pond: the sun in front, the morning chill", "set": {"night": ["cool", 0, 0], "sun": ["warm", 0, 0.16], "morning": ["cool", 0, 0.14]}}
+ "voice": {
+  "formula": "(0.1 + 0.8 × loudness) × distance",
+  "distance": {
+   "left_ear": 1.0,
+   "right_ear": 1.0,
+   "near": 0.6,
+   "left": 0.28,
+   "right": 0.6,
+   "front": 0.28
+  },
+  "az": {
+   "left_ear": -90,
+   "right_ear": 90,
+   "near": 0,
+   "front": 0,
+   "left": -60,
+   "right": 55
+  },
+  "front_split": 0.5
  },
- "places": {"pond": ["@mirror", "@cloak"], "chamber": ["@chamber"], "terrace": ["@terrace"], "corridor": ["@corridor"], "dawn": ["@sunrise"]},
+ "smoothing": {
+  "warm_rise": 0.4,
+  "warm_fall": 0.5,
+  "cool_rise": 0.2,
+  "cool_fall": 0.35
+ },
+ "events": {
+  "@mirror": {
+   "why": "the museum's bronze mirror flashes: light only, no temperature",
+   "set": {
+    "night": [
+     "cool",
+     0,
+     0.15
+    ]
+   }
+  },
+  "@plunge": {
+   "why": "you drop through the ice into the frozen lotus pond: icy water on your skin and ears = the COLD PEAK (2.5 s), then you are standing in it, soaked",
+   "set": {
+    "night": [
+     "cool",
+     0,
+     0
+    ],
+    "water": [
+     "cool",
+     0,
+     0.55
+    ]
+   },
+   "pulse": [
+    "cool",
+    0,
+    0.37,
+    0.1,
+    2.5,
+    1.5
+   ]
+  },
+  "@pulled_out": {
+   "why": "Saku hauls you out (hold): out of the water, still soaked in the winter air",
+   "set": {
+    "water": [
+     "cool",
+     0,
+     0.4
+    ]
+   },
+   "during_hold": true
+  },
+  "@cloak": {
+   "why": "his dry cloak around you: the wet cold drops, the cloth warms both sides a little",
+   "set": {
+    "water": [
+     "cool",
+     0,
+     0.12
+    ],
+    "cloak": [
+     "warm",
+     0,
+     0.18
+    ],
+    "night": [
+     "cool",
+     0,
+     0.08
+    ]
+   }
+  },
+  "@chamber": {
+   "why": "the prince's chamber: snowy lattice window on the LEFT, big bronze brazier on the RIGHT",
+   "set": {
+    "night": [
+     "cool",
+     0,
+     0
+    ],
+    "water": [
+     "cool",
+     0,
+     0
+    ],
+    "cloak": [
+     "warm",
+     0,
+     0
+    ],
+    "window": [
+     "cool",
+     -75,
+     0.25
+    ],
+    "brazier": [
+     "warm",
+     65,
+     0.3
+    ]
+   }
+  },
+  "@stoke": {
+   "why": "he throws charcoal and pine on the brazier: the flames leap up front-right = the WARM PEAK",
+   "pulse": [
+    "warm",
+    40,
+    0.88,
+    0.3,
+    1.2,
+    1.8
+   ],
+   "secs": 2.0
+  },
+  "@warmer_right": {
+   "why": "the bronze hand-warmer held to your RIGHT cheek",
+   "set": {
+    "warmer": [
+     "warm",
+     90,
+     0.35
+    ]
+   }
+  },
+  "@warmer_off": {
+   "why": "he takes the hand-warmer back",
+   "set": {
+    "warmer": [
+     "warm",
+     90,
+     0
+    ]
+   }
+  },
+  "@terrace": {
+   "why": "the open star terrace: night wind from the LEFT (gusting), a bronze incense burner on the RIGHT",
+   "set": {
+    "window": [
+     "cool",
+     -75,
+     0
+    ],
+    "brazier": [
+     "warm",
+     65,
+     0
+    ],
+    "wind": [
+     "cool",
+     -80,
+     0.38
+    ],
+    "incense": [
+     "warm",
+     75,
+     0.2
+    ]
+   }
+  },
+  "@by_incense": {
+   "why": "he seats you beside the incense burner: it is close to your RIGHT cheek now, out of the wind",
+   "set": {
+    "incense": [
+     "warm",
+     85,
+     0.35
+    ],
+    "wind": [
+     "cool",
+     -80,
+     0.12
+    ]
+   }
+  },
+  "@fan_right": {
+   "why": "silent: his feather fan sweeps the incense warmth away and fans cold night air across your RIGHT cheek — right ear warm → cool in < 1 s",
+   "set": {
+    "incense": [
+     "warm",
+     85,
+     0
+    ]
+   },
+   "pulse": [
+    "cool",
+    90,
+    0.7,
+    0.15,
+    1.8,
+    0.9
+   ],
+   "secs": 2.4
+  },
+  "@lean_left": {
+   "why": "he moves to your LEFT ear, into the north wind: his warm whisper + the cold wind on the same ear",
+   "set": {
+    "wind": [
+     "cool",
+     -80,
+     0.4
+    ],
+    "incense": [
+     "warm",
+     75,
+     0.15
+    ]
+   }
+  },
+  "@corridor": {
+   "why": "the moonlit corridor: cold night air both sides",
+   "set": {
+    "wind": [
+     "cool",
+     -80,
+     0
+    ],
+    "incense": [
+     "warm",
+     75,
+     0
+    ],
+    "night": [
+     "cool",
+     0,
+     0.18
+    ]
+   }
+  },
+  "@torches": {
+   "why": "assassins' torches pass along the garden path beyond the railing, LEFT → RIGHT, a few metres away (hold your breath)",
+   "sweep": [
+    "warm",
+    -90,
+    90,
+    5.0,
+    0.32
+   ],
+   "during_hold": true
+  },
+  "@sunrise": {
+   "why": "dawn at the pond: the sun in front, the morning chill",
+   "set": {
+    "night": [
+     "cool",
+     0,
+     0
+    ],
+    "sun": [
+     "warm",
+     0,
+     0.16
+    ],
+    "morning": [
+     "cool",
+     0,
+     0.14
+    ]
+   }
+  }
+ },
+ "places": {
+  "pond": [
+   "@mirror",
+   "@cloak"
+  ],
+  "chamber": [
+   "@chamber"
+  ],
+  "terrace": [
+   "@terrace"
+  ],
+  "corridor": [
+   "@corridor"
+  ],
+  "dawn": [
+   "@sunrise"
+  ]
+ },
  "showcase": {
   "fast_switch": "terrace: @by_incense (right warm .5 + his voice) → @fan_right (right cool .7, incense gone) in a silent moment between s06 and s07",
   "peak": "pond: @plunge cold water .92 both ears; chamber: @stoke flame .88 front-right",
