@@ -397,7 +397,14 @@
   "persona": "全年龄 动物温泉的客人：猴子妈妈（要很烫）和小猴子（要温的），同一个声音用标签区分大人 / 小孩的语气",
   "description": "A lively snow-monkey mother in a cute family game, warm and bossy-funny, loves very hot baths, laughs easily. A bright, mid-pitched, energetic adult woman's voice with a playful edge. Native Japanese speaker. Clean close-mic recording, no background noise.",
   "sample": "[cheerful] あらあら、いいおんせん！ うちは あつーいのが すきなのよ！ [excited] もっと あつく、もっと あつく！ [laughs] あっはは、さいこう！ [softly] …でもね、この子は ぬるめが すきなの。 ほら、ごあいさつは？ [playful] もう、てれちゃって。 ありがとね、ちいさな おてつだいさん！",
-  "pick_pending": "r1_c (chosen 2026-11-09; voice slots full 30/30 — saving waits for a freed slot)"
+  "voice_id": "yPc0NYDQ3YY6sY4bxZwS",
+  "confirmed": "2026-11-09",
+  "pick": "reuse:staff_f",
+  "reuse": "User 2026-11-09: no new voice slot — the monkey mother reuses the account voice of スタッフ(女) (staff_f, Demo20 event staff, a minor off-category voice) with a different delivery: stability 0.3 (livelier) and playful / laughing / excited tags; the auditioned r1_c was not saved.",
+  "settings": {
+   "stability": 0.3,
+   "similarity_boost": 0.8
+  }
  },
  "fox": {
   "name": "キツネ Fox guest",
