@@ -1248,7 +1248,7 @@ window.MOHEAT_LAYERS = {
       "src": "art/char_shion_base.webp?v=698cea9e",
       "w": 1332,
       "h": 1435,
-      "x": 0.25,
+      "x": 0.285,
       "y": 1.0,
       "height": 0.86,
       "box": [
@@ -1821,7 +1821,7 @@ window.MOHEAT_LAYERS = {
       "src": "art/char_shion_base.webp?v=698cea9e",
       "w": 1332,
       "h": 1435,
-      "x": 0.25,
+      "x": 0.285,
       "y": 1.0,
       "height": 0.86,
       "box": [
@@ -2309,7 +2309,7 @@ window.MOHEAT_LAYERS = {
       "src": "art/char_shion_base.webp?v=698cea9e",
       "w": 1332,
       "h": 1435,
-      "x": 0.25,
+      "x": 0.285,
       "y": 1.0,
       "height": 0.86,
       "box": [
@@ -2785,7 +2785,7 @@ window.MOHEAT_LAYERS = {
       "src": "art/char_shion_base.webp?v=698cea9e",
       "w": 1332,
       "h": 1435,
-      "x": 0.25,
+      "x": 0.285,
       "y": 1.0,
       "height": 0.86,
       "box": [
@@ -3261,7 +3261,7 @@ window.MOHEAT_LAYERS = {
       "src": "art/char_shion_base.webp?v=698cea9e",
       "w": 1332,
       "h": 1435,
-      "x": 0.25,
+      "x": 0.285,
       "y": 1.0,
       "height": 0.86,
       "box": [

@@ -22,7 +22,7 @@ REUSE = {('pond', 'K'): 'pond_K', ('chamber', 'J'): 'chamber_J', ('terrace', 'S'
          ('dawn', 'Je'): 'end_J', ('dawn', 'Se'): 'end_S', ('dawn', 'Ke'): 'end_K', ('dawn', '3'): 'dawn_3'}
 EAR_AT = {'J': ('chamber', 'dawn')}   # Jin's close pose holds the hand-warmer: only in his chamber (and the ending)
 ONLY = {}
-TRIO = [('shion_base', .25, .86, 'S'), ('saku_base', .77, .88, 'K')]   # coordinator QA: Shion was cut by the left edge in t_terrace_3   # main figure = jin_base x .5, height .92
+TRIO = [('shion_base', .285, .86, 'S'), ('saku_base', .77, .88, 'K')]   # coordinator QA: Shion was cut by the left edge in t_terrace_3   # main figure = jin_base x .5, height .92
 for pl in ('pond', 'chamber', 'terrace', 'corridor', 'dawn'):
     for c in ONLY.get(pl, 'JSK'):
         if (pl, c) not in REUSE: VIEWS[f't_{pl}_{c}'] = (f't_{pl}_{c}', BASE[c], pl)
