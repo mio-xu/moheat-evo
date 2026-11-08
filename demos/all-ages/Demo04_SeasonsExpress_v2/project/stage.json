@@ -1,0 +1,184 @@
+{
+ "src": "assets/art",
+ "bgs": {
+  "holo": {
+   "src": "bg_holo",
+   "fire": null
+  }
+ },
+ "poses": {
+  "holo": {
+   "src": "cond_holo",
+   "blink": "cond_holo_blink",
+   "near_mouth": [
+    730,
+    695
+   ],
+   "near_eyes": [
+    735,
+    612
+   ],
+   "matte": "green",
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.2,
+     0.3
+    ],
+    "light": 0.4,
+    "warp": false,
+    "centre": [
+     730,
+     694
+    ],
+    "radius": [
+     70,
+     44
+    ],
+    "lift": 0.12,
+    "drop": 0.3,
+    "dark": 9
+   },
+   "regions_eyes": [
+    [
+     610.0,
+     612.0,
+     92.0,
+     95.0
+    ],
+    [
+     860.0,
+     610.0,
+     92.0,
+     95.0
+    ]
+   ]
+  },
+  "wave": {
+   "src": "cond_wave",
+   "blink": "cond_wave_blink",
+   "near_mouth": [
+    713,
+    520
+   ],
+   "near_eyes": [
+    723,
+    450
+   ],
+   "matte": "green",
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.2,
+     0.3
+    ],
+    "light": 0.4,
+    "warp": false,
+    "centre": [
+     713,
+     519
+    ],
+    "radius": [
+     52,
+     34
+    ],
+    "lift": 0.12,
+    "drop": 0.3,
+    "dark": 10
+   },
+   "regions_eyes": [
+    [
+     628.0,
+     450.0,
+     66.0,
+     64.0
+    ],
+    [
+     818.0,
+     450.0,
+     66.0,
+     64.0
+    ]
+   ]
+  },
+  "ear": {
+   "src": "cond_ear",
+   "blink": "cond_ear_blink",
+   "near_mouth": [
+    600,
+    948
+   ],
+   "near_eyes": [
+    652,
+    820
+   ],
+   "matte": "green",
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.2,
+     0.3
+    ],
+    "light": 0.4,
+    "warp": false,
+    "centre": [
+     597,
+     948
+    ],
+    "radius": [
+     78,
+     46
+    ],
+    "lift": 0.12,
+    "drop": 0.3,
+    "dark": 16
+   },
+   "regions_eyes": [
+    [
+     500.0,
+     790.0,
+     108.0,
+     118.0
+    ],
+    [
+     805.0,
+     852.0,
+     112.0,
+     115.0
+    ]
+   ]
+  }
+ },
+ "views": {
+  "holo": {
+   "still": "cond_holo_v",
+   "pose": "holo",
+   "bg": "holo",
+   "fire": null,
+   "x": 0.5,
+   "y": 1.0,
+   "height": 1.0
+  },
+  "wave": {
+   "still": "cond_wave_v",
+   "pose": "wave",
+   "bg": "holo",
+   "fire": null,
+   "x": 0.5,
+   "y": 0.98,
+   "height": 0.92
+  },
+  "ear": {
+   "still": "cond_ear_v",
+   "pose": "ear",
+   "bg": "holo",
+   "fire": null,
+   "x": 0.5,
+   "y": 1.0,
+   "height": 1.0
+  }
+ }
+}

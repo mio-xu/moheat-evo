@@ -327,5 +327,18 @@
   "voice_id": "IRIujaFF31qohpDbrkrj",
   "confirmed": "2026-11-08",
   "pick": "r1_b"
+ },
+ "halfy": {
+  "name": "ハルフユ車掌 Conductor Halfy",
+  "demos": [
+   "all-ages/Demo04_SeasonsExpress"
+  ],
+  "persona": "季节精灵小列车长（Q 版，半边雪半边太阳）：魔法列车的报站员，友好、俏皮、元气，像日本电车的车内广播但更可爱；中性的、孩子气的精灵声线；耳语时轻柔温暖",
+  "description": "A tiny, cheerful season-spirit train conductor in a cute fantasy anime story. Friendly, playful and bouncy announcer voice, bright and clear with a sing-song lilt at the ends of announcements, youthful gender-neutral anime-style voice, smiling while speaking, medium pace. Can drop into a soft, warm, close whisper. Clean studio recording, no background noise.",
+  "sample": "[cheerful] つぎは〜、ふゆ！ マフラー、しっかり巻いてね！ [playful] 手がつめたい？ あったかい紅茶をどうぞ！ [excited] わわっ、季節が暴走してる〜！ [whispers] ねえ…ほんものの、ぼくだよ。いっしょに「春！」ってさけんで。 [cheerful] とうちゃく〜！ 乗ってくれて、ありがとう！",
+  "compare": [],
+  "voice_id": "vjNv4mFdGd9ZFsf2MEK6",
+  "confirmed": "2026-11-09",
+  "pick": "r1_a"
  }
 }
