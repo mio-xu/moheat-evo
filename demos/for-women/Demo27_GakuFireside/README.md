@@ -28,5 +28,5 @@ layers instead of video: **≈ 425 Seedance credits, no video** (Demo24's plan w
 ## Status
 
 Tested in Chrome: both branches end to end (`?auto=1`, `?auto=1&alt=1`): all 8 views in order, 0 errors, no 404s; EN / 日本語 / 中文
-(no missing strings); one screen at 1470×779. Not in `nav.js` / the site menu yet — the user decides whether Demo27 replaces Demo24
-there. Video: none; candidates only if wanted after playing (sitting down beside you, the blanket over the mic — 64 each).
+(no missing strings); one screen at 1470×779. **In the menu in place of Demo24** (user, 2026-11-08: replace it): `nav.js` DEMOS, the site menu, thumbnails
+(`assets/images/demos/Demo27_GakuFireside*.jpg`). Demo24 stays in the repo as the backup (not listed). Video: none; candidates only if wanted after playing (sitting down beside you, the blanket over the mic — 64 each).

@@ -444,11 +444,11 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 镜头（用户 2026-11-08）：第一版麦克风放在椅子上、镜头太低，他看镜头像在往下看 → 改成**手机装在三脚架上、和他眼睛齐平，双耳麦克风夹在手机下面**，画面里不出现手机（你就是镜头）。做法：先按平视重出（模型把手机支架画进了画面），再用这批图做图生图编辑"去掉手机和支架、直视镜头"（提示词 `project/web_prompts.json` 的 `edit`）。静帧一共花了 700 credits。
 - 自动通关：两条分支都跑过（`?auto=1` / `?auto=1&alt=1`），0 报错。已加入 nav.js（女性向最后）、官网菜单、credits.html。动画（§4b）还没做，等用户反馈。
 
-### Demo27_GakuFireside ✅ 可玩（未上菜单）—《ガクの、焚き火キャンプ配信（レイヤー版）》（Demo24 用新做法重做，2026-11-08）
+### Demo27_GakuFireside ✅ 可玩（已替换菜单里的 Demo24）—《ガクの、焚き火キャンプ配信（レイヤー版）》（Demo24 用新做法重做，2026-11-08）
 
 - 新做法的第一个 Demo（DEMO_DESIGN_GUIDE §6.2 / §6.3）：一张空营地背景 + 8 个纯色底姿势（其中 4 个是 live 底图的"脸不变"编辑，共用脸部差分）+ Seedance 画的张嘴 / 闭眼差分 → 脸部差分块。没有视频，约 425 credits（Demo24 原计划 18 段 1152）。
 - 合成：`python3 tools/art/build_stage.py demos/for-women/Demo27_GakuFireside --preview`（Pillow + numpy，不占 GPU）；网页：`demos/shared/layers.js` 在 Demo24 的 `main.js` 画静帧的地方画分层合成（Demo24 的剧情 / 声音 / 冷热 / 翻译都按路径引用，不复制）。
-- 已测：两条分支自动跑完、0 报错、无 404、三种语言、一屏。**还没加进 nav.js / 官网菜单**：等用户决定菜单放 Demo24 还是 Demo27。
+- 已测：两条分支自动跑完、0 报错、无 404、三种语言、一屏。**用户 2026-11-08 决定直接替换 Demo24**：nav.js DEMOS、官网菜单、缩略图都换成 Demo27；Demo24 留在仓库作备份（不在菜单里）。
 - 坑：API 输出链接 30–60 分钟失效（第 2 批 7 张因此失败，未扣费），上传又限流 → 第 2 批改用网页端（`scripts/web_take.py`）。
 
 ### Demo25_HatsumodeDate ✅ 可玩 —《はじめての、初詣デート / My First Hatsumode》（男性向约会，纯交互，2026-11-08）
