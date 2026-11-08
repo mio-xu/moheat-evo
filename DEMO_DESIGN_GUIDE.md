@@ -575,6 +575,9 @@ main.layout
 - **OpenAI 安全审核拒绝了贴耳私语的差分**（"whispering into her ear" + 敞开的衬衫）→ 差分提示词只写嘴和眼的变化（"嘴微张，轻声说话"），不写亲密动作；被拒时换成中性的说法再试，不花额外费用。
 - **头发和身体交界的地方残留灰色底**（用户指出）：AI 抠图模式把轮廓里面全部填实，夹在发丝之间、头发和肩膀之间的小块底色也被留下了 → `build_stage.py` 已改：轮廓里被包围的底色小块抠掉；靠近外轮廓（±60px）或模型自己不确定的地方，颜色几乎等于底色的像素也抠掉（衣服内部的灰色阴影不受影响）。合成后把**每个姿势的头发边缘放大到 100% 看**。另外图片换了内容但文件名不变时浏览器会用旧图 → `media/layers.js` 里的图片路径现在带内容指纹 `?v=`。
 - **特写的嘴没对上**（用户指出，蓮特写、紫苑门口等）：模型重画张嘴图时会把嘴整体挪动、转角度（截取位置是对的，但张开的嘴不在原来的位置），说话时嘴会"跳"；紫苑门口那张的截取位置甚至完全错了 → 张嘴 / 闭眼差分一律用遮罩编辑（`images.py --mask`，只让嘴或眼周围的椭圆变化）；每次合成都跑 `tools/art/check_patches.py` 按 100% 逐张看。只看缩小的预览图是不够的。
+- **本地服务器把整个仓库（含 `.env.local` 里的 API key）都当静态文件提供**（Demo23 的 `server.py`：`SimpleHTTPRequestHandler(directory=REPO)`；只绑 127.0.0.1 时没事，一旦开隧道给手机用就等于公开 key）→ 任何持有 key 的服务器：所有路径都要登录 cookie，dot 文件、`local/`、`*.py`、`*.command`、`*.log` 一律 404，关目录列表；上线前用 curl 逐个试 `/.env.local`、`/.git/config`、`/api/*`（无 cookie 应 401）。
+- **数据文件头注释里的示例写法让 Python 解析失败**（`lines.js` 注释里有 `line = { … }`，`src.index('= {')` 找到的是注释）→ 从 JS 数据文件里取 JSON 时按唯一的变量名定位（`src.index('TALK_SCRIPT = ')`）。
+- **Chrome 测试时改窗口大小不生效**（窗口已最大化，`resize_window` 返回成功但 `innerWidth` 不变）→ 一屏检查改用同源 iframe（390×844 等尺寸）测量 `scrollHeight / scrollWidth`；桌面 Chrome 的 iframe 里设备连接栏会横向溢出（真机没有 Web Serial、`no-serial` 会隐藏它），不算页面问题。
 
 ## 12. 资源清理与文件结构
 

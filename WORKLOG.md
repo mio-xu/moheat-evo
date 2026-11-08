@@ -7,6 +7,23 @@
 
 ---
 
+## 2026-11-08 · Demo23 拆成公开剧本版 + 私密实时版 · 后台 agent（统筹会话审查）
+
+**做了什么**
+- `demos/nobunaga-suntory/Demo23_NobunagaTalk/` 现在是**公开剧本版**（进 nav.js、官网菜单、credits.html，缩略图 `assets/images/demos/Demo23_NobunagaTalk*.jpg`）：茶室の囲炉裏、信長 + 家康、6 段剧本（`lines.js`，草稿 `project/script_scripted.md`）；玩家说什么（按显示语言识别 / 打字 / 沉默 9 秒）都由下一个开口的人说一句过渡句（关键词：是/否、茶、酒、天下、冷暖、未来、夸奖、告辞，否则通用句）再接回剧本。声音 `media/voice/*.m4a` 用 `scripts/voice.py` 一次合成（52 句，1,495 字符）。运行时零成本、无服务器。
+- **私密实时版**移到 `live/index.html` + `live/live.js`；`server.py` 加密码登录（`~/.moheat_live_pass`，第一次启动生成并打印一次）、所有页面和 API 需要 cookie、不提供 `.env.local` / `.git` / `*.py` 等；`start_demo.command --remote` / `start_remote.command` 开 Cloudflare quick tunnel（没有启动过，需要 `brew install cloudflared`）。
+- `main.js` 改成两版共用的引擎，"大脑"是 `window.TALK_BRAIN`（`scripted.js` / `live/live.js`）；侧栏对话记录跟随显示语言。
+
+**现在的状态**
+- 公开页测试：英文打字 + 沉默跑完一遍，过渡句按话题选对、结尾正常、DUAL 指令在变、无 404（只有站点的 favicon）；中 / 日 / 英封面和字幕都切过，`MoHeatSub.missing()` 为空；1440×800、1280×720、1920×1080、手机横屏无滚动。
+- 私密页测试：无 cookie → 页面跳登录、`/api/*` 401；错误密码 401；登录后页面和状态正常，`/.env.local`、`server.py`、`local/usage.json` 404。没有开真正的付费对话。
+
+**下一步**
+- 用户第一次双击 `start_demo.command` 时会在终端看到密码；手机用要先 `brew install cloudflared`。
+- 可以照 `lines.js` 的格式给其他 4 个地点各写一套剧本（每套约 1,500 字符）。
+
+**问题**（教训已写进 `DEMO_DESIGN_GUIDE.md` §11.1）：旧 `server.py` 会把整个仓库（含 `.env.local`）当静态文件提供；`lines.js` 注释让 Python 解析失败；Chrome 窗口最大化时改尺寸无效，改用 iframe 测。
+
 ## 2026-11-08 · 分层做法定为标准；女性向 Demo 重做（岳、陽向完成，蓮 / 迅 / 紫苑待出图）· moheat-evo-24
 
 **做了什么**

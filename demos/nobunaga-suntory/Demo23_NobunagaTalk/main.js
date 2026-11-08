@@ -1,32 +1,41 @@
-// 『信長と、語らう』 — a live, unscripted conversation with Nobunaga, Ieyasu, or both (three of you), in one of five places.
-// Brain: a text-only ElevenLabs agent (Claude) over a WebSocket; the prompt is built per session (scenes.js) and asks for lines
-// "N|position|[tag] せりふ|English". Ears: the browser's speech recognition (your words never leave except as text to the agent).
-// Voices: our own ElevenLabs TTS per line (server.py, eleven_v4, the confirmed cast voices) → each character's own HRTF panner, so
-// every voice comes from where he stands and warms that ear with its loudness (DUAL). They open the talk, wait for you after each
-// turn, walk around you (seat / near / ears / sides / window / behind), and close it themselves after about two minutes.
+// 『信長と、語らう』 — talk with Nobunaga, Ieyasu, or both (three of you). This file is the ENGINE shared by both pages:
+// pictures, positions (they walk around you), HRTF voices, DUAL thermal, radar, device, your turn (speech recognition / typing).
+// The BRAIN that decides what they say is a separate file loaded before this one (window.TALK_BRAIN):
+//   · scripted.js (public page, index.html): a fixed script per place with pre-rendered voices; whatever you say, a short bridge
+//     line acknowledges it and the script goes on. No server, no keys, no cost.
+//   · live/live.js (private page served only by server.py after a password): a text-only ElevenLabs agent writes the lines live,
+//     server.py voices them (ElevenLabs TTS) within limits.json.
+// Brain interface: fixed? {cast, scene} · status(ui) · begin(scene, cast, E) → Promise<bool> · open() · ask(kind, said) with kind
+// 'user' | 'silent' | 'close' · voice(item) → Promise<AudioBuffer|null> · end() · limits {session_seconds} · showLimit · silenceSec · maxSilent.
+// Engine API for the brain (E): line(raw "N|pos|[tag] ja|en") · push({who, key, ja, en, id}) · event(k) · done() (turn complete) ·
+// endAfter() · limitHit([ja, en]) · log(cls, who, text) · scene() · S.
 (() => {
   const $ = (id) => document.getElementById(id);
   const QS = new URLSearchParams(location.search);
-  const SND = window.TKAudio, T = window.TALK, W = 1920, H = 1080;
+  const SND = window.TKAudio, T = window.TALK, B = window.TALK_BRAIN, W = 1920, H = 1080;
   const cv = $('scene'), ctx = cv.getContext('2d');
   const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v)), rnd = (a, b) => a + Math.random() * (b - a);
   const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000));
   const store = { get: (k, d) => { try { return JSON.parse(localStorage.getItem(`moheat.${k}`)) ?? d; } catch { return d; } }, set: (k, v) => { try { localStorage.setItem(`moheat.${k}`, JSON.stringify(v)); } catch {} } };
 
-  // ---------------------------------------------------------------- picker (cover)
+  // ---------------------------------------------------------------- picker (cover; the scripted page has a fixed cast and place)
   const CASTS = [['N', '信長', 'Nobunaga'], ['I', '家康', 'Ieyasu'], ['NI', '三人で', 'all three']];
   const LANGS = [['ja-JP', '日本語'], ['en-US', 'English'], ['zh-CN', '中文']];
-  const pick = { cast: store.get('talk.cast', 'N'), scene: store.get('talk.scene', 'gifu'), lang: store.get('talk.lang', 'ja-JP') };
+  const pick = B.fixed ? { ...B.fixed } : { cast: store.get('talk.cast', 'N'), scene: store.get('talk.scene', 'gifu'), lang: store.get('talk.lang', 'ja-JP') };
   if (!T.SCENES.find((s) => s.id === pick.scene)) pick.scene = 'gifu';
   function picker() {
-    const opt = (k, v, ja, en) => `<button type="button" class="opt${pick[k] === v ? ' on' : ''}" data-k="${k}" data-v="${v}">${ja}${en ? `<small>${en}</small>` : ''}</button>`;
-    $('pickCast').innerHTML = CASTS.map(([v, ja, en]) => opt('cast', v, ja, en)).join('');
-    $('pickScene').innerHTML = T.SCENES.map((s) => opt('scene', s.id, s.ja, '')).join('');
-    $('pickLang').innerHTML = LANGS.map(([v, ja]) => opt('lang', v, ja, '')).join('');
-    document.querySelectorAll('.opt').forEach((b) => b.addEventListener('click', () => { pick[b.dataset.k] = b.dataset.v; store.set(`talk.${b.dataset.k}`, b.dataset.v); picker(); coverChars(); }));
+    if ($('pickCast')) {
+      const opt = (k, v, ja, en) => `<button type="button" class="opt${pick[k] === v ? ' on' : ''}" data-k="${k}" data-v="${v}">${ja}${en ? `<small>${en}</small>` : ''}</button>`;
+      $('pickCast').innerHTML = CASTS.map(([v, ja, en]) => opt('cast', v, ja, en)).join('');
+      $('pickScene').innerHTML = T.SCENES.map((s) => opt('scene', s.id, s.ja, '')).join('');
+      $('pickLang').innerHTML = LANGS.map(([v, ja]) => opt('lang', v, ja, '')).join('');
+      document.querySelectorAll('.opt').forEach((b) => b.addEventListener('click', () => { pick[b.dataset.k] = b.dataset.v; store.set(`talk.${b.dataset.k}`, b.dataset.v); picker(); coverChars(); }));
+    }
     $('posInfo').textContent = scene().ja;
   }
   const scene = () => T.SCENES.find((s) => s.id === pick.scene);
+  // the language you speak: the live page's own picker, otherwise the display language (shared/subs.js: EN default / 日本語 / 中文)
+  const recLang = () => pick.lang || window.MoHeatSub?.speech?.() || 'en-US';
 
   // ---------------------------------------------------------------- art (Demo 9's, by path) + backgrounds (Demo 5 / 7 / 8 / 9)
   const IMG = {};
@@ -90,68 +99,35 @@
     $('phase').textContent = { connect: 'Connecting', think: 'Thinking', speak: 'Speaking', listen: 'Your turn', end: 'Ended' }[p] || 'Conversation';
   }
 
-  // ---------------------------------------------------------------- server (limits) + agent (WebSocket)
-  let LIMITS = { session_seconds: 120 };
-  async function status() {
-    try {
-      const r = await fetch('/api/talk/status', { cache: 'no-store' }); if (!r.ok) throw 0; const s = await r.json();
-      LIMITS = s.limits; const b = $('budget');
-      if (s.blocked) { b.textContent = `${s.blocked[0]} · ${s.blocked[1]}`; b.classList.add('warn'); $('startBtn').disabled = true; return; }
-      const left = s.month.limit - s.month.used;
-      b.textContent = `本日あと ${s.left_sessions} 回 · ${s.left_sessions} talks left today · 今月の残り ${left.toLocaleString()} 字（上限を超えると止まります · stops at the limit）`;
-      b.classList.remove('warn'); $('startBtn').disabled = false;
-    } catch {
-      const b = $('budget'); b.classList.add('warn'); $('startBtn').disabled = true;
-      b.textContent = 'ローカル専用：start_demo.command で起動してください · Local only — run start_demo.command (it starts the talk server)';
-    }
-  }
+  // ---------------------------------------------------------------- one turn of the characters (the brain fills the queue)
+  let turnDone = false;
+  const LIMITS = () => B.limits || { session_seconds: 120 };
+  function ask(kind, said) { turnDone = false; setPhase('think'); B.ask(kind, said); }
 
-  let ws = null, sid = null, buf = '', turnId = 0, turnParts = false, turnDone = false;
-  function wsSend(o) { if (ws && ws.readyState === 1) ws.send(JSON.stringify(o)); }
-  function ask(text) {   // one turn of the characters
-    turnId++; buf = ''; turnParts = false; turnDone = false; setPhase('think');
-    wsSend({ type: 'user_message', text });
-  }
-  function onWs(m) {
-    if (m.type === 'ping') return wsSend({ type: 'pong', event_id: m.ping_event.event_id });
-    if (m.type === 'conversation_initiation_metadata') { ask(T.OPEN(scene())); return; }
-    if (m.type === 'agent_chat_response_part') {
-      const p = m.text_response_part || {}; turnParts = true;
-      if (p.text) { buf += p.text; let n; while ((n = buf.indexOf('\n')) >= 0) { line(buf.slice(0, n)); buf = buf.slice(n + 1); } }
-      if (p.type === 'stop') { if (buf.trim()) line(buf); buf = ''; turnDone = true; kick(); }
-      return;
-    }
-    if (m.type === 'agent_response') {   // the full text of the turn (used only if no streamed parts came)
-      if (!turnParts) { for (const l of (m.agent_response_event?.agent_response || '').split('\n')) line(l); }
-      turnDone = true; kick();
-    }
-  }
-
-  // ---------------------------------------------------------------- lines → queue (TTS starts at once, plays in order)
+  // ---------------------------------------------------------------- lines → queue (voice starts loading at once, plays in order)
   const Q = [];
   const strip = (s) => s.replace(/\[[^\]]*\]/g, '').replace(/\s+/g, ' ').trim();
-  function line(raw) {
+  // the side-panel transcript in the display language (shared/subs.js): ja as written, en from the line, zh from l10n / MOHEAT_ZH
+  const shown = (ja, en) => { const l = window.MoHeatSub?.lang || 'en'; return l === 'ja' ? ja : l === 'zh' ? (window.MoHeatSub.tr(ja, 'zh', false) || en || ja) : (en || ja); };
+  function push(it) {   // { who, key?, ja (with [tag]), en, id? }
+    if (!S || !strip(it.ja || '')) return;
+    const who = S.cast.includes(it.who) ? it.who : S.cast[0], key = T.POS[it.key] ? it.key : S.ch[who].key;
+    const tag = ((it.ja.match(/^\s*\[([^\]]+)\]/) || [])[1] || '').toLowerCase();
+    const item = { ...it, who, key, tag };
+    item.audio = B.voice(item);
+    Q.push(item); log(who, T.CAST[who].name.slice(-2), shown(strip(it.ja), it.en)); kick();
+  }
+  function line(raw) {   // the live agent's text format: N|position|[tag] せりふ|English · @|gust · #END
     const l = raw.trim(); if (!l || !S) return;
     if (/#END/.test(l)) { S.endAfter = true; const rest = l.replace('#END', '').trim(); if (rest) line(rest); return; }
     const parts = l.split('|').map((x) => x.trim());
-    if (parts[0] === '@') { const ev = scene().events[parts[1]]; if (ev) Q.push({ ev: parts[1] }); kick(); return; }
+    if (parts[0] === '@') return pushEvent(parts[1]);
     let who = parts[0].replace(/[^NI]/g, '').slice(0, 1), k = 1;
     if (!S.cast.includes(who)) { who = S.cast[0]; k = /^\d+$/.test(parts[0]) || parts[0].length <= 2 ? 1 : 0; }
     let key = parts[k]; if (!T.POS[key]) { key = S.ch[who].key; } else k++;
-    const ja = parts[k] || '', en = parts[k + 1] || '';
-    if (!strip(ja)) return;
-    const tag = ((ja.match(/^\s*\[([^\]]+)\]/) || [])[1] || '').toLowerCase();
-    const item = { who, key, ja, en, tag, audio: tts(who, ja) };
-    Q.push(item); log(who, T.CAST[who].name.slice(-2), strip(ja)); kick();
+    push({ who, key, ja: parts[k] || '', en: parts[k + 1] || '' });
   }
-  async function tts(who, text) {
-    try {
-      const r = await fetch('/api/talk/tts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sid, who, text }) });
-      if (r.status === 429) { const j = await r.json(); limitHit(j.blocked); return null; }
-      if (!r.ok) return null;
-      return await SND.decode(await r.arrayBuffer());
-    } catch { return null; }
-  }
+  function pushEvent(k) { if (S && scene().events[k]) { Q.push({ ev: k }); log('sys', '', k === 'gust' ? shown('🌬 風', '🌬 A gust') : shown('🔥 火', '🔥 Warmth')); kick(); } }   // logged in script order
   function limitHit(why) { if (!S || S.limitMsg) return; S.limitMsg = why; S.endAfter = true; log('sys', '', `${why[0]} ${why[1]}`); }
 
   let playing = false;
@@ -175,7 +151,7 @@
     } finally { playing = false; }
     if (my !== run || !S) return;
     if (Q.length) return kick();
-    if (!turnDone) return;   // more text is coming
+    if (!turnDone) return;   // more lines are coming
     sub('', '', '');
     if (S.endAfter || S.closing) return finish(S.limitMsg ? 'limit' : 'bye');
     listen();
@@ -204,7 +180,6 @@
     const ev = scene().events[k]; if (!ev) return;
     S.events.push({ k, az: ev.az, s: ev.s, t0: S.t, dur: 5 });
     if (k === 'gust') SND.fx.gust(ev.az); else SND.fx.fire(ev.az);
-    log('sys', '', k === 'gust' ? '🌬 風 · a gust' : '🔥 火 · warmth');
   }
 
   // ---------------------------------------------------------------- your turn: speech recognition (or typing)
@@ -212,15 +187,15 @@
   let rec = null, recOn = false, heard = '', interim = '', quietT = null, silentT = null, micStream = null, micAn = null, micBuf = null;
   function listen() {
     if (!S) return;
-    const left = LIMITS.session_seconds - S.clock;
-    if (left <= 0 && !S.closing) { S.closing = true; return ask(T.CLOSE('')); }
+    const left = LIMITS().session_seconds - S.clock;
+    if (left <= 0 && !S.closing) { S.closing = true; return ask('close', ''); }
     setPhase('listen'); heard = ''; interim = '';
-    clearTimeout(silentT); silentT = setTimeout(() => { if (S && S.phase === 'listen' && !heard && !interim && !$('typeIn').value) { if (S.silent < 2) { S.silent++; log('sys', '', '…'); submit(null); } } }, 14000);
+    clearTimeout(silentT); silentT = setTimeout(() => { if (S && S.phase === 'listen' && !heard && !interim && !$('typeIn').value) { if (S.silent < (B.maxSilent ?? 2)) { S.silent++; log('sys', '', '…'); submit(null); } } }, (B.silenceSec || 14) * 1000);
     if (SR && !S.noMic) startRec();
   }
   function startRec() {
     if (recOn) return;
-    rec = new SR(); rec.lang = pick.lang; rec.continuous = true; rec.interimResults = true;
+    rec = new SR(); rec.lang = recLang(); rec.continuous = true; rec.interimResults = true;
     rec.onresult = (e) => {
       let fin = '', tmp = '';
       for (let i = e.resultIndex; i < e.results.length; i++) { const r = e.results[i]; if (r.isFinal) fin += r[0].transcript; else tmp += r[0].transcript; }
@@ -236,10 +211,10 @@
   function submit(text) {
     if (!S || S.phase !== 'listen') return;
     stopRec();
-    if (text) { S.silent = 0; log('you', 'あなた', text); sub('あなた', text, '', 'you'); }
-    const late = S.clock >= LIMITS.session_seconds - 25;
-    if (late) { S.closing = true; return ask(T.CLOSE(text || '')); }
-    ask(text ? T.USER(text) : T.SILENT);
+    if (text) { S.silent = 0; log('you', 'あなた', text); sub('あなた', text, text, 'you'); }
+    const late = S.clock >= LIMITS().session_seconds - 25;
+    if (late) { S.closing = true; return ask('close', text || ''); }
+    ask(text ? 'user' : 'silent', text || '');
   }
   $('typeIn').addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.isComposing && e.target.value.trim()) { submit(e.target.value.trim()); e.target.value = ''; } });
   async function mic() {   // only for the level bars (and the permission prompt); nothing is recorded
@@ -251,31 +226,26 @@
   function micLevel() { if (!micAn) return 0; micAn.getFloatTimeDomainData(micBuf); let s = 0; for (const v of micBuf) s += v * v; return Math.sqrt(s / micBuf.length); }
 
   // ---------------------------------------------------------------- start / end
+  const ui = { budget: $('budget'), startBtn: $('startBtn') };
+  const E = { line, push, event: pushEvent, done: () => { turnDone = true; kick(); }, endAfter: () => { if (S) S.endAfter = true; }, limitHit, log, scene, get S() { return S; } };
   async function start() {
     SND.init(); const my = ++run;
     const cast = pick.cast.split(''), sc = scene();
     $('startBtn').disabled = true; $('cleared').hidden = true;
-    let j;
-    try { const r = await fetch('/api/talk/session', { method: 'POST' }); j = await r.json(); if (!r.ok) throw j; }
-    catch (e) { $('budget').textContent = e?.blocked ? `${e.blocked[0]} · ${e.blocked[1]}` : `接続できません · cannot start (${e?.error || 'server'})`; $('budget').classList.add('warn'); $('startBtn').disabled = false; return; }
-    sid = j.signed_url ? j.sid : null; LIMITS = j.limits || LIMITS;
+    if (!(await B.begin(sc, cast, E, ui))) { $('startBtn').disabled = false; return; }
     await Promise.all([...cast.map(loadChar), loadBg(sc)]);
     if (my !== run) return;
-    S = fresh(cast); logEl.innerHTML = ''; viewBg = sc.bg;
+    S = fresh(cast); logEl.innerHTML = ''; viewBg = sc.bg; turnDone = false;
     for (const c of cast) { SND.char(c); const ch = S.ch[c]; SND.move(c, ch.az, ch.dist, .01); }
     SND.ambience(sc.sound);
-    $('intro').classList.add('hidden'); $('endBtn').hidden = false; setPhase('connect'); log('sys', '', `${sc.ja} · ${sc.en}`);
-    if (!micStream) mic();
-    ws = new WebSocket(j.signed_url);
-    ws.onopen = () => wsSend({ type: 'conversation_initiation_client_data', conversation_config_override: { agent: { prompt: { prompt: T.prompt(sc, cast) }, first_message: '', language: 'ja' }, conversation: { text_only: true } } });
-    ws.onmessage = (e) => { try { onWs(JSON.parse(e.data)); } catch (err) { console.error(err); } };
-    ws.onclose = (e) => { if (S && !S.done && my === run) { console.warn('ws closed', e.code, e.reason); if (!Q.length && !playing) finish('lost'); else S.endAfter = true; } };
+    $('intro').classList.add('hidden'); $('endBtn').hidden = false; setPhase('connect'); log('sys', '', shown(sc.ja, sc.en));
+    if (!micStream && !QS.has('nomic')) mic();
+    B.open();
   }
   function finish(why = 'bye') {
     if (!S || S.done) return;
     S.done = true; run++; stopRec(); SND.stopVoices(); SND.stopAmbience(); Q.length = 0; playing = false;
-    try { ws && ws.close(); } catch {} ws = null;
-    if (sid) fetch('/api/talk/end', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sid }) }).catch(() => {}); sid = null;
+    try { B.end(why); } catch {}
     S.phase = 'end'; $('phase').textContent = 'Ended'; $('turn').classList.remove('show'); sub('', '', ''); $('endBtn').hidden = true;
     const fadeFrom = S;
     setTimeout(() => {
@@ -283,12 +253,13 @@
       S.started = false; stopOutput();
       const c = $('cleared'); c.hidden = false;
       c.textContent = why === 'limit' ? `⏸ ${fadeFrom.limitMsg ? fadeFrom.limitMsg.join(' · ') : '上限に達しました · limit reached'}` : why === 'lost' ? '⚠ 接続が切れました · connection lost' : '🏯 またいずれ、語らおうぞ · Until we talk again';
-      $('startBtn').textContent = '↺ もう一度 · Talk again'; $('intro').classList.remove('hidden'); status(); coverChars();
+      $('startBtn').textContent = '↺ もう一度 · Talk again'; $('intro').classList.remove('hidden'); B.status(ui); coverChars();
     }, why === 'bye' ? 2500 : 600);
   }
+  E.finish = finish; E.playing = () => playing || Q.length > 0;
   $('endBtn').addEventListener('click', () => {   // you leave: they say goodbye if they can, otherwise stop at once
     if (!S || S.done) return;
-    if (S.phase === 'listen' && !S.closing) { stopRec(); S.closing = true; ask(T.CLOSE('（そろそろ失礼します）')); } else finish('bye');
+    if (S.phase === 'listen' && !S.closing) { stopRec(); S.closing = true; ask('close', '（そろそろ失礼します）'); } else finish('bye');
   });
 
   // ---------------------------------------------------------------- per frame
@@ -306,10 +277,10 @@
     }
     S.events = S.events.filter((e) => S.t - e.t0 < e.dur);
     if (S.phase === 'listen') {
-      if (S.clock >= LIMITS.session_seconds && !S.closing && !heard && !interim) { stopRec(); S.closing = true; ask(T.CLOSE('')); }
+      if (S.clock >= LIMITS().session_seconds && !S.closing && !heard && !interim) { stopRec(); S.closing = true; ask('close', ''); }
       const lv = micLevel(); document.querySelectorAll('#mic i').forEach((el, i) => { const v = clamp(lv * 14 - i * .12); el.style.height = `${15 + 85 * v}%`; el.style.opacity = .4 + .6 * v; });
     }
-    if (S.clock > LIMITS.session_seconds + 75) finish('bye');   // hard stop
+    if (S.clock > LIMITS().session_seconds + 75) finish('bye');   // hard stop
   }
 
   // ---------------------------------------------------------------- drawing
@@ -431,10 +402,11 @@
   $('intensity').value = Math.round(intensity * 100); $('intensityVal').textContent = `${Math.round(intensity * 100)}%`;
   $('intensity').addEventListener('input', (e) => { intensity = +e.target.value / 100; $('intensityVal').textContent = `${e.target.value}%`; store.set('asmr.intensity', +e.target.value); });
   const meterEls = Object.fromEntries(['Lc', 'Lh', 'Rc', 'Rh'].map((k) => [k, [$(`m${k}`), $(`v${k}`)]]));
+  let lastCmd = 'stop';
   function output(th, live) {
     const sc = Object.fromEntries(Object.entries(th).map(([k, v]) => [k, live && !tripped ? v * intensity : 0]));
     for (const [k, [bar, val]] of Object.entries(meterEls)) { bar.style.width = `${sc[k] * 100}%`; val.textContent = Math.round(sc[k] * 100); }
-    const cmd = command(sc); $('cmd').textContent = cmd;
+    const cmd = command(sc); $('cmd').textContent = cmd; lastCmd = cmd;
     for (const [e, el] of [['L', $('glowL')], ['R', $('glowR')]]) {
       const c = sc[e + 'c'], h = sc[e + 'h'], v = Math.max(c, h), dir = e === 'L' ? 'right' : 'left';
       el.style.opacity = v.toFixed(2); el.style.background = `linear-gradient(to ${dir}, rgba(255,122,69,${(.55 * h / (v || 1)).toFixed(2)}), rgba(255,122,69,0)), linear-gradient(to ${dir}, rgba(79,179,255,${(.55 * c / (v || 1)).toFixed(2)}), rgba(79,179,255,0))`;
@@ -452,7 +424,7 @@
       update(dt);
       if (S && S.started) draw(n / 1000);
       const { th, src } = thermal(dt); output(th, !!(S && S.started)); radar(S && S.started ? src : [], th);
-      $('clock').textContent = S && S.started ? `${fmt(S.clock)} / ${fmt(LIMITS.session_seconds)}` : '0:00';
+      $('clock').textContent = S && S.started ? (B.showLimit === false ? fmt(S.clock) : `${fmt(S.clock)} / ${fmt(LIMITS().session_seconds)}`) : '0:00';
     }
     requestAnimationFrame(loop);
   }
@@ -461,8 +433,9 @@
   $('startBtn').addEventListener('click', start);
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
-  window.TALKDEMO = { get S() { return S; }, line, thermal: () => thermal(.05) };
-  picker(); coverChars(); status();
+  // testing: TALKDEMO.say('…') answers as if typed; TALKDEMO.phase; TALKDEMO.cmd = the current DUAL command
+  window.TALKDEMO = { get S() { return S; }, get phase() { return S && S.phase; }, get cmd() { return lastCmd; }, line, say: (t) => submit(t), thermal: () => thermal(.05) };
+  picker(); coverChars(); B.status(ui);
   if (QS.has('cover')) { document.body.classList.add('cover-only'); return; }
   requestAnimationFrame(loop);
 })();

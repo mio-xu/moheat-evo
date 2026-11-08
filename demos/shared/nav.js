@@ -31,6 +31,7 @@
     { cat: 'nobunaga-suntory', dir: 'Demo07_KyotoIzakaya', ja: '信長と家康、京都の居酒屋へ', en: 'Two Warlords in a Kyoto Izakaya', zh: '信长与家康，京都居酒屋之夜', group: 4, ep: 3 },
     { cat: 'nobunaga-suntory', dir: 'Demo08_YamazakiDistillery', ja: '信長と家康、山崎蒸溜所へ', en: 'Two Warlords at the Yamazaki Distillery', zh: '信长与家康，探访山崎蒸馏所', group: 4, ep: 4 },
     { cat: 'nobunaga-suntory', dir: 'Demo09_SengokuBanquet', ja: '安土最後の酒宴', en: 'The Last Banquet at Azuchi', zh: '安土最后的酒宴', group: 4, ep: 5 },
+    { cat: 'nobunaga-suntory', dir: 'Demo23_NobunagaTalk', ja: '信長と、語らう', en: 'Talk with Nobunaga', zh: '与信长对谈', group: 4 },
   ];
   // rights notes shown under each demo's cover credits (full pages only); the full list is the site's credits.html
   const HIST = 'Oda Nobunaga and Tokugawa Ieyasu are portrayed as fictional characters', ADULT = 'お酒は20歳になってから · 20+ only';
@@ -41,6 +42,7 @@
     Demo07_KyotoIzakaya: `${HIST} · art: ChatGPT (OpenAI) · ${ADULT}`,
     Demo08_YamazakiDistillery: `${HIST} · Suntory and Yamazaki are trademarks of Suntory Holdings Limited · ${ADULT}`,
     Demo09_SengokuBanquet: `${HIST} · art: ChatGPT (OpenAI) · ${ADULT}`,
+    Demo23_NobunagaTalk: `${HIST} · art: ChatGPT (OpenAI)`,
   };
   const GROUPS = ['全年齢 · All ages', '癒し · Healing', '男性向け · For him', '女性向け · For her', '信長シリーズ · Nobunaga Series'];   // numbers are the list order
   const qs = new URLSearchParams(location.search);

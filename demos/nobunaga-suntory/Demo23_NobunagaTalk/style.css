@@ -62,3 +62,7 @@
 .log li.N b { color: var(--n); } .log li.I b { color: var(--i); } .log li.you b { color: #fff; } .log li.sys { color: var(--faint); font-style: italic; }
 .endbtn { margin-top: 8px; width: 100%; justify-content: center; }
 @container (max-width: 620px) { .turn { width: 60cqw; } .turn b { font-size: 2.6cqw; } }
+
+/* public scripted page: an honest "Preview · scripted" tag on the cover */
+.intro .preview-tag { margin: 0; align-self: center; padding: .2em .9em; border-radius: 999px; border: 1px dashed rgba(217, 168, 74, .6); background: rgba(14, 8, 3, .55);
+  font: 700 clamp(7px, .85cqw, 15px)/1.3 Inter, "Noto Sans JP", sans-serif; letter-spacing: .08em; color: #ffe9b8; }

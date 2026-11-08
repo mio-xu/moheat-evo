@@ -484,11 +484,12 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 画面按分层标准（Demo24 的做法）：Seedance 网页（背景、站立基准）+ OpenAI API（15 张姿势 / 差分）；`build_stage.py` 之后必须跑 `scripts/clean_cutout.py`（夜景抠图清理）。烟花 = 新共用模块 `demos/shared/fireworks.js`。没有视频。
 - 已上线菜单（nav.js、官网、credits、封面、缩略图），两条分支自动通关 0 报错。细节、命令、花费见该目录 README；当天的经过见 `WORKLOG.md`。
 
-### Demo23_NobunagaTalk ✅ 可玩（本机专用）—《信長と、語らう / Talk with Nobunaga》实时 AI 对话（2026-11-08）
-- 用户要求：不是固定台词，能对用户说的话做出反应；讲完等用户讲；本机版 + 限额不许超；可选 信長 / 家康 / 三人で、可选场所（5 个：岐阜城天守夕暮れ、茶室囲炉裏、京都居酒屋、山崎蒸溜所、安土月夜の宴）；角色先按场所开话题；约 2 分钟由角色收尾；角色要走动（不在一个位置讲话）让冷热变化。
-- 架构：`server.py`（端口 8771，持有 key，执行 `limits.json`）+ ElevenLabs **text-only agent**（`agent.json`，LLM claude-sonnet-5-5，prompt 每次在 `scenes.js` 生成后 override）+ 浏览器语音识别 + 每句 ElevenLabs v4 TTS → 每个角色独立 HRTF。细节见该目录 README。
-- 不在 nav.js / 网站里（GitHub Pages 没有服务器）。`start_demo.command` 双击启动。
-- 一次 2 分钟三人对话 ≈ 600–700 credits。
+### Demo23_NobunagaTalk ✅ 公开剧本版 + 私密实时版 —《信長と、語らう / Talk with Nobunaga》（2026-11-08）
+- **两版（用户 2026-11-08：花钱的实时功能先在网站上放假的占位，真实版只给本人用）**：
+  - **公开剧本版** = `demos/nobunaga-suntory/Demo23_NobunagaTalk/`（在 nav.js 和官网菜单里，信长系列最后一项）：茶室の囲炉裏、信長 + 家康、约 2 分钟、6 段（`lines.js`）。每段后轮到玩家：说话（按显示语言识别）、打字或沉默 9 秒都会继续；下一段先开口的人说一句过渡句（`lines.js` 的 `topics`：是/否、茶、酒、天下、冷暖、未来、夸奖、告辞，否则通用句），然后接回剧本。声音预先用 ElevenLabs 合成一次（`scripts/voice.py` → `media/voice/*.m4a`，52 句 1,495 字符），运行时零成本、无服务器、无密钥。封面写「台本プレビュー · Preview · scripted」。草稿：`project/script_scripted.md`。
+  - **私密实时版** = `live/index.html`（`<base href="../">`）+ `live/live.js`，只能通过 `server.py`（127.0.0.1:8771）打开：`http://localhost:8771/live` → 密码登录。密码在仓库外 `~/.moheat_live_pass`（第一次启动时随机生成并在终端打印一次）。所有页面和 `/api/*` 都要 cookie（否则跳登录页 / 401），不提供 dot 文件、`local/`、`*.py`。手机远程：`brew install cloudflared` 后双击 `start_remote.command`（Cloudflare quick tunnel，地址每次不同，仍需密码）。
+- 共用引擎：`main.js`（画面、走位、HRTF、DUAL 冷热、雷达、设备、语音识别 / 打字），"大脑"是可替换的 `window.TALK_BRAIN`（`scripted.js` / `live/live.js`）。
+- 实时版架构：`server.py`（持有 key，执行 `limits.json`）+ ElevenLabs **text-only agent**（`agent.json`，LLM claude-sonnet-5-5，prompt 每次在 `scenes.js` 生成后 override）+ 每句 ElevenLabs v4 TTS → 每个角色独立 HRTF。一次 2 分钟三人对话 ≈ 600–700 credits。细节见该目录 README。
 
 ### Demo switcher (`demos/shared/nav.js`)
 Every full demo page loads `../shared/nav.js`, which adds ‹ ☰ Demos N/9 › to the top bar and a thumbnail panel of all demos (thumbs = `assets/images/demos/demoN.jpg`). `#demos` in the URL opens the panel. Hidden with `?embed`, `?cover`, `?render`. **A new demo must be added to the `DEMOS` list in nav.js.**
