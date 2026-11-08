@@ -188,7 +188,12 @@
      90
     ]
    ],
-   "mouth": "lp"
+   "mouth": "lp",
+   "lp": {
+    "view": {
+     "rotate": "auto"
+    }
+   }
   },
   "pray": {
    "src": "tsubaki_pray",
@@ -288,7 +293,12 @@
      84
     ]
    ],
-   "mouth": "lp"
+   "mouth": "lp",
+   "lp": {
+    "view": {
+     "rotate": "auto"
+    }
+   }
   }
  },
  "views": {

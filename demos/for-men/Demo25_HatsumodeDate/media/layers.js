@@ -361,45 +361,45 @@ window.MOHEAT_LAYERS = {
      "kind": "eyes"
     },
     {
-     "src": "art/close_mouth0.webp?v=66e52379",
+     "src": "art/close_mouth0.webp?v=2a69956a",
      "rect": [
       1073,
       458,
-      185,
-      156
+      184,
+      155
      ],
      "kind": "mouth_lv",
      "level": 0
     },
     {
-     "src": "art/close_mouth1.webp?v=b0eaefef",
+     "src": "art/close_mouth1.webp?v=6e01fb89",
      "rect": [
       1073,
       458,
-      185,
-      156
+      184,
+      155
      ],
      "kind": "mouth_lv",
      "level": 1
     },
     {
-     "src": "art/close_mouth2.webp?v=05cdbf2c",
+     "src": "art/close_mouth2.webp?v=653bd25d",
      "rect": [
       1073,
       458,
-      185,
-      156
+      184,
+      155
      ],
      "kind": "mouth_lv",
      "level": 2
     },
     {
-     "src": "art/close_mouth3.webp?v=128671fa",
+     "src": "art/close_mouth3.webp?v=21468adb",
      "rect": [
       1073,
       458,
-      185,
-      156
+      184,
+      155
      ],
      "kind": "mouth_lv",
      "level": 3
@@ -594,45 +594,45 @@ window.MOHEAT_LAYERS = {
      "kind": "eyes"
     },
     {
-     "src": "art/stole_mouth0.webp?v=68ff01ce",
+     "src": "art/stole_mouth0.webp?v=b6d02d99",
      "rect": [
-      699,
+      693,
       420,
-      167,
-      141
+      175,
+      148
      ],
      "kind": "mouth_lv",
      "level": 0
     },
     {
-     "src": "art/stole_mouth1.webp?v=26790ae0",
+     "src": "art/stole_mouth1.webp?v=8b1b072a",
      "rect": [
-      699,
+      693,
       420,
-      167,
-      141
+      175,
+      148
      ],
      "kind": "mouth_lv",
      "level": 1
     },
     {
-     "src": "art/stole_mouth2.webp?v=af42457b",
+     "src": "art/stole_mouth2.webp?v=d4963031",
      "rect": [
-      699,
+      693,
       420,
-      167,
-      141
+      175,
+      148
      ],
      "kind": "mouth_lv",
      "level": 2
     },
     {
-     "src": "art/stole_mouth3.webp?v=b68946cc",
+     "src": "art/stole_mouth3.webp?v=4335b889",
      "rect": [
-      699,
+      693,
       420,
-      167,
-      141
+      175,
+      148
      ],
      "kind": "mouth_lv",
      "level": 3
