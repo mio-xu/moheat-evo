@@ -85,7 +85,22 @@
    "radius_mouth_quiet": [
     80,
     60
-   ]
+   ],
+   "lp": {
+    "warp": false,
+    "centre": [
+     1617,
+     610
+    ],
+    "radius": [
+     62,
+     48
+    ],
+    "lift": 0.1,
+    "drop": 0.42,
+    "dark": 12
+   },
+   "mouth": "lp"
   },
   "sparkler": {
    "src": "nagisa_sparkler_flat_ext",
