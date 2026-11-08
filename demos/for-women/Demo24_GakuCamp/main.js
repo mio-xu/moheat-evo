@@ -333,7 +333,7 @@
     // steam leaves the mug / potato in his hands: with layers its spot follows his hands (parallax, breathing) and the page zoom
     const sp = st && (LIVE() && window.MoHeatLayers.toFrame ? window.MoHeatLayers.toFrame('gaku_' + S.view, st[0] * W, st[1] * H) : [st[0] * W, st[1] * H]);
     const zc = /left|whisper|coffee|imo|blanket/.test(S.view) ? 1.025 : 1.012;
-    if (st && (S.mug || S.imo) && Math.random() < dt * 9) parts.push({ k: 's', x: W / 2 + (sp[0] - W / 2) * zc + rnd(-50, 50), y: H / 2 + (sp[1] - H / 2) * zc, vx: rnd(-10, 10), vy: rnd(-55, -30), r: rnd(18, 34), life: 0, max: rnd(2, 3) });
+    if (st && (S.mug || S.imo) && Math.random() < dt * 9) parts.push({ k: 's', view: S.view, x: W / 2 + (sp[0] - W / 2) * zc + rnd(-50, 50), y: H / 2 + (sp[1] - H / 2) * zc, vx: rnd(-10, 10), vy: rnd(-55, -30), r: rnd(18, 34), life: 0, max: rnd(2, 3) });
     if (S.snow && Math.random() < dt * 40) parts.push({ k: 'n', x: rnd(0, W), y: -10, vx: rnd(-20, 10), vy: rnd(50, 110), r: rnd(1.5, 4), life: 0, max: 14 });
     // physics: the lake wind blows from your LEFT (→ right in the picture). Embers: the fire's lift fades (drag), the wind takes them;
     // steam: rises slower as it cools and drifts; snow: falls at its terminal speed, eases into the wind, flutters.
@@ -345,10 +345,14 @@
       else p.vx += (windX * .8 - p.vx) * Math.min(1, dt * .7);
       p.x += p.vx * dt; p.y += p.vy * dt; if (p.k === 'n') p.x += Math.sin(p.life * 1.3 + p.r) * .4;
     }
-    parts = parts.filter((p) => p.life < p.max && p.y < H + 20);
+    for (const p of parts) if (p.k === 's' && (p.view !== S.view)) p.out = Math.max(0, (p.out ?? 1) - dt / .45);
+    parts = parts.filter((p) => p.life < p.max && p.y < H + 20 && p.out !== 0);
     for (const p of parts) {
       if (p.k === 'k') { const a = 1 - p.life / p.max; ctx.fillStyle = `rgba(255,${170 + 60 * a | 0},90,${a})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill(); }
-      else if (p.k === 's') { const a = Math.sin(Math.PI * p.life / p.max) * .16; ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * (1 + p.life * .6), 0, 7); ctx.fill(); }
+      else if (p.k === 's') {   // soft puff, gone with the view it belongs to (it used to float over his chin in the next view)
+        const a = Math.sin(Math.PI * p.life / p.max) * .16 * (p.out ?? 1), r = p.r * (1 + p.life * .6), g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r);
+        g.addColorStop(0, `rgba(255,255,255,${a})`); g.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 7); ctx.fill();
+      }
       else { ctx.fillStyle = 'rgba(240,246,255,.8)'; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill(); }
     }
     // a cool wash from the lake side while the wind blows unblocked
