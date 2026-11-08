@@ -6,7 +6,7 @@ Japanese, stability 0.4 / similarity 0.8, fixed seed; delivery comes from the au
 at the ear). Key = ELEVENLABS_API_KEY in the repo's .env.local. Staff = ElevenLabs staff_f (user's pick r1_a; earlier VOICEVOX:春日部つむぎ).
 The old VOICEVOX Hinata ("m1": 暁記ミタマ) settings are kept in MODES for reference.
 Only (re)synthesizes changed lines (cache: audio/voice_cache.json)."""
-import io, json, math, os, subprocess, tempfile, urllib.parse, urllib.request, wave
+import io, json, math, os, subprocess, tempfile, urllib.parse, urllib.request, wave, sys
 import numpy as np
 from scipy.signal import butter, sosfilt
 
@@ -101,6 +101,23 @@ def save(wav_bytes, dst, k, eq):
     if eq: af += ['equalizer=f=160:t=q:w=1:g=4', 'equalizer=f=3200:t=q:w=1.5:g=-2', 'highshelf=f=9000:g=3']
     af += ['loudnorm=I=-18:TP=-2']
     subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', p, '-ac', '1', '-af', ','.join(af), '-c:a', 'aac', '-b:a', '128k', dst], check=True); os.remove(p)
+import importlib.util
+REPO = os.path.abspath(os.path.join(ROOT, '..', '..', '..'))
+# Dubbed takes (user 2026-11-09: every demo voiced in ja / en / zh): python3 scripts/voice.py --lang en|zh [--count]
+#   → media/voice/<lang>/<id>.m4a + index.json (tools/eleven/dub.py: same voice / settings, the ja tags moved into the en / zh text).
+#   Text = the subtitles: en from lines.js, zh from l10n.js. Names stay Japanese-style (DUB_NAMES).
+DUB_NAMES = {}
+DUB_OVERRIDE = {}                                                   # (lang, id) → hand-tagged text when retag() is not good enough
+LANG = sys.argv[sys.argv.index('--lang') + 1] if '--lang' in sys.argv else 'ja'
+if LANG != 'ja':
+    sp = importlib.util.spec_from_file_location('dub', os.path.join(REPO, 'tools', 'eleven', 'dub.py')); D = importlib.util.module_from_spec(sp); sp.loader.exec_module(D)
+    l10 = open(os.path.join(ROOT, 'l10n.js'), encoding='utf-8').read(); L10N = json.loads(l10[l10.index('= {') + 2:l10.rindex('}') + 1])
+    lines = {}
+    for lid, v in LINES.items():
+        sub = v[1] if LANG == 'en' else L10N['text'][LANG][v[0]]
+        lines[lid] = (STAFF_VOICE if v[2] == 'staff' else HINATA_VOICE, DUB_OVERRIDE.get((LANG, lid)) or D.retag(STAFF[lid] if v[2] == 'staff' else ELEVEN[lid], D.names(sub, LANG, DUB_NAMES), LANG))
+    D.render(lines, LANG, os.path.join(out_dir, LANG), os.path.join(ROOT, 'audio', f'voice_cache.{LANG}.json'), count_only='--count' in sys.argv)
+    sys.exit()
 
 
 def dur(p):
