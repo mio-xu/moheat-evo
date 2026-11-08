@@ -59,7 +59,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/stand_mouth2.webp?v=546fc84e",
+     "src": "art/stand_mouth2.webp?v=ddfb858e",
      "rect": [
       597,
       423,
@@ -70,7 +70,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/stand_mouth3.webp?v=7aea6892",
+     "src": "art/stand_mouth3.webp?v=6b71a4a6",
      "rect": [
       597,
       423,
@@ -140,7 +140,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/fan_mouth2.webp?v=25a408d8",
+     "src": "art/fan_mouth2.webp?v=d8d7c4b7",
      "rect": [
       485,
       433,
@@ -151,7 +151,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/fan_mouth3.webp?v=8c3bcfb9",
+     "src": "art/fan_mouth3.webp?v=44d8d19e",
      "rect": [
       485,
       433,
@@ -221,7 +221,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/kakigori_mouth2.webp?v=135420f6",
+     "src": "art/kakigori_mouth2.webp?v=b7aeebb3",
      "rect": [
       546,
       433,
@@ -232,7 +232,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/kakigori_mouth3.webp?v=0c603256",
+     "src": "art/kakigori_mouth3.webp?v=3d6f60d0",
      "rect": [
       546,
       433,
@@ -270,16 +270,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/breath_mouth.webp?v=1fcdff38",
-     "rect": [
-      1233,
-      696,
-      138,
-      83
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/breath_eyes.webp?v=b3ef67a7",
      "rect": [
       988,
@@ -288,6 +278,50 @@ window.MOHEAT_LAYERS = {
       163
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/breath_mouth0.webp?v=66543e4f",
+     "rect": [
+      1262,
+      699,
+      111,
+      84
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/breath_mouth1.webp?v=9541949a",
+     "rect": [
+      1262,
+      699,
+      111,
+      84
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/breath_mouth2.webp?v=7b42261e",
+     "rect": [
+      1262,
+      699,
+      111,
+      84
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/breath_mouth3.webp?v=03089651",
+     "rect": [
+      1262,
+      699,
+      111,
+      84
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -339,7 +373,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/whisper_mouth2.webp?v=d21e272e",
+     "src": "art/whisper_mouth2.webp?v=7ae36339",
      "rect": [
       1213,
       462,
@@ -350,7 +384,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/whisper_mouth3.webp?v=616e5054",
+     "src": "art/whisper_mouth3.webp?v=ba86c42c",
      "rect": [
       1213,
       462,
@@ -430,7 +464,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/fan_mouth2.webp?v=25a408d8",
+     "src": "art/fan_mouth2.webp?v=d8d7c4b7",
      "rect": [
       485,
       433,
@@ -441,7 +475,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/fan_mouth3.webp?v=8c3bcfb9",
+     "src": "art/fan_mouth3.webp?v=44d8d19e",
      "rect": [
       485,
       433,

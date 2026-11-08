@@ -40,7 +40,12 @@
      0.18,
      0.26
     ],
-    "minh": 0.16
+    "minh": 0.16,
+    "teeth": {
+     "alpha": 0.75,
+     "band": 0.05,
+     "tongue_a": 0.5
+    }
    }
   },
   "fan": {
@@ -63,7 +68,12 @@
      0.18,
      0.26
     ],
-    "minh": 0.16
+    "minh": 0.16,
+    "teeth": {
+     "alpha": 0.75,
+     "band": 0.05,
+     "tongue_a": 0.5
+    }
    }
   },
   "kakigori": {
@@ -94,7 +104,12 @@
      0.18,
      0.26
     ],
-    "minh": 0.16
+    "minh": 0.16,
+    "teeth": {
+     "alpha": 0.75,
+     "band": 0.05,
+     "tongue_a": 0.5
+    }
    }
   },
   "breath": {
@@ -123,7 +138,26 @@
      48,
      36
     ]
-   ]
+   ],
+   "lp": {
+    "warp": false,
+    "centre": [
+     1394,
+     784
+    ],
+    "radius": [
+     42,
+     28
+    ],
+    "lift": 0.1,
+    "drop": 0.35,
+    "teeth": {
+     "alpha": 0.75,
+     "band": 0.05,
+     "tongue_a": 0.5
+    }
+   },
+   "mouth": "lp"
   },
   "whisper": {
    "src": "saku_whisper2",
@@ -144,7 +178,12 @@
      0.18,
      0.26
     ],
-    "minh": 0.16
+    "minh": 0.16,
+    "teeth": {
+     "alpha": 0.75,
+     "band": 0.05,
+     "tongue_a": 0.5
+    }
    },
    "blink": "saku_whisper2_blink",
    "regions_eyes": [
