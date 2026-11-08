@@ -13,6 +13,24 @@
 4. **屏幕上的文字只用日语 + 英语**（不出现中文）。日文标题必须带假名，全汉字会被看成中文。
 5. **Demo 之间零依赖**（用户 2026-11-08：「demo 都要起源一个规范模版类似引擎…demo 之间不应该存在依附性」「同一个类别可以共享一个依赖」）：页面、代码、美术、声音只能来自自己的文件夹、`demos/shared/` 和**本品类的** `demos/<品类>/_kit/`（§12.1）；不用 `<base href>` 指向别的文件夹，不用指向文件夹外的符号链接。为了解耦 / 迁移可以改旧 Demo，用 `tools/qa/trace_demo.js` 验证行为不变。每次改动都 commit 并 push 到 `origin main`，大文件不进 git。（例外，用户 2026-11-08：**重做版接管原版**——在临时文件夹里做好、测完后，用 `python3 tools/web/merge_remake.py <原文件夹> <临时文件夹>` 并回原文件夹，网址不变，旧版自动备份到仓库外 `~/Desktop/MoHeat Evo 备份/<品类>/<文件夹>_<时间>/`。）
 
+## 0.1 成品要求（所有 Demo 都一样，用户 2026-11-08；`USER_PREFERENCES.md`「成品要求」）
+
+新做、重做、全 Demo 扫描时都按这里验收：G1 写剧本时逐条对（`tools/qa/SCRIPT_TEMPLATE.md`），G6 测试时再对一遍（CHECKLIST「成品要求」）。
+
+- **有趣、有记忆点**：封面一定有故事里的角色或生物；每个场景有一个"哇"的看点（会变形的魔法、华丽的烟花）；特别版造型变化越大越好。
+- **突出 MoHeat Evo**：冷热快速切换、强度到顶、左右方向、同一只耳朵冷热同时（DUAL 四项）；**冷热来源在画面上看得见、一看就懂**（结霜 / 热浪、窗框随冷热发光）。
+- **放大 2 倍也挑不出毛病**：每个镜头同一张脸、头发、衣服；嘴（LivePortrait 嘴套）和眼（两眼都眨、闭眼不露瞳孔）完美；没有半截身体、毛边、接缝；远景也看得出在动（§6.5）。
+- **谁都好用**：默认纯享、可选互动，章节进度条、暂停、结束回本封面；一屏、手机好用；三语（英文默认）；语音回答判定内容。
+- **一切符合物理世界**：冷热（来源真实，随距离 / 时间变化，热慢慢散，冷风有方向，人声暖）、声音（方位远近和画面一致，远处先见光后闻声）、动作（重力、惯性、加减速，呼吸眨眼像真人）、光影（光源在哪受光就在哪，夜景冷色、灯下暖色）、空间（大小、遮挡、"你"的位置一致：贴耳在哪边冷热就在哪边）。
+- **特殊设定的例外**：雪女 / 雪精灵的气息是凉的、吸血鬼体温低……可以，但要在剧情里交代清楚，这个角色前后一致。
+- **魔法 / 异世界的 6 条规则**（每个这样的 Demo 都要）：
+  1. **规则卡**：每个世界写一张（`project/script.md` 的「世界规则卡」）：什么魔法 / 现象，产生冷还是热，强弱和距离、时间的关系，看得见的样子。
+  2. **魔法冷热也有物理感**：有来源、有方向、随距离衰减、慢慢散去，不凭空出现 / 消失。
+  3. **颜色统一**：冷 = 蓝白，热 = 橙红，所有 Demo、所有特效都一样。
+  4. **第一次出现慢慢示范**：一条魔法规则第一次出现时放慢、单独演示（看得见的来源 → 对应的耳朵变冷 / 热），之后才可以快。
+  5. **强度上限不放宽**：魔法也不超过现实来源用的上限。
+  6. **至少一半是现实来源**：一个 Demo 的冷热来源里至少一半是现实里存在的（火、风、雪、饮料、人声）。
+
 ---
 
 ## 1. 选题与角色
@@ -210,14 +228,14 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 | 步 | 做什么 | 门禁：查什么 · 用什么 · 通过标准 | 防住的 §11.1 |
 |---|---|---|---|
 | **G0 开工** | `git log --oneline -15` + 重读本节、§7、§11.1、`USER_PREFERENCES.md`；给 2–4 个方案；写 `project/layers.md`（画面 × 层 × L0–L4 × credits / 美元） | 用户（或统筹会话）选定方案和预算（Seedance ≤ 1500、OpenAI ≤ 10 美元 / Demo）；`check_demo.py <demo> --quick --checklist` 生成 `project/CHECKLIST.md` | 理解错、按旧标准开工、方案太重 |
-| **G1 剧本 + 冷热 + 语言** | `lines.js`（ja + en）、`l10n.js`（zh，韩语留位置：`subs.js` LANGS）；冷热表用 DUAL；每个回答二选一、能说出口 | 冷热表每行写出物理来源（人声暖、贴耳最强）；**DUAL 展示四项都安排到**：同一只耳冷热快速切换、强度到顶、左右方向、冷热同时输出（G6 用 `#cmd` 实测） | — |
+| **G1 剧本 + 冷热 + 语言** | 先按 `tools/qa/SCRIPT_TEMPLATE.md` 写 `project/script.md`：**世界规则卡**（§0.1）、**镜头表**（每个画面"你"在哪、谁在哪边、手里拿什么 / 不拿什么、远景还是近景、谁说话）、冷热表；**出图前**由用户 / 统筹审过剧本 + 镜头表 + 冷热表（提效标准 4）；然后 `lines.js`（ja + en）、`l10n.js`（zh，韩语留位置：`subs.js` LANGS）；冷热表用 DUAL；每个回答二选一、能说出口 | 冷热表每行写出物理来源（人声暖、贴耳最强）；**DUAL 展示四项都安排到**：同一只耳冷热快速切换、强度到顶、左右方向、冷热同时输出（G6 用 `#cmd` 实测）；§0.1 成品要求逐条对过（魔法世界有规则卡）；script.md 审过才出图 | 出图后才发现镜头 / 道具不对、魔法冷热说不通 |
 | **G2 声音** | ElevenLabs 试听 3 个 → 用户选 → 合成（交接文档 §4） | 选定的 voice id 记进交接文档 / README | — |
-| **G3 出图** | §5.3 工具顺序，先 `probe`（429 / Retry-After 长 → OpenAI）；提示词：新姿势「full figure inside the frame with margin」、按参考重画「同样取景不拉远」、手上拿什么不拿什么、只画人物；特写给远景 + 近景两张参考；差分一律遮罩编辑；同一底图的差分和同脸姿势当场一起提交 | **只看输出文件**：每个 job 都有新图（`exists` = 错误）、网页端历史多了一张卡片；`assets/poses_preview.jpg` 并排对比同一个人（CHECKLIST） | 没出图却"成功"、重名跳过、共用账号、加道具 / 全身像、近景远景不一致 |
-| **G4 合成** | `build_stage.py <demo> --preview` →（夜景）`clean_cutout.py` → `check_cut_body.py` →（有报告）`extend_pose.py … --auto` / `--place` → `check_patches.py` →（不准）写死 `regions_*` 重跑 | `check_demo.py <demo> --quick` 的 **G4 行全 PASS**：layers（和 stage.json 同步）、cut-body（0 截断）、patches（rim / outer / outside / border）、eyes（两只眼）；人工：`mouths.jpg` 2×、每张 `char_*.webp` 叠深色 2×（CHECKLIST） | 抠图边缘、嘴 / 眼差分、半截身体、写进原 Demo、特效遮罩 |
+| **G3 出图** | 按 §6.5 素材标准 S1–S7（角色卡 `docs/characters/<id>.md`、提示词 `python3 tools/art/prompts/fill.py <模板> <角色>`）；**先做 1 个完整画面打样**（底图 + 嘴套 + 眨眼 + 合成 + 在页面里播放）给用户 / 统筹审过再批量（提效标准 5）；§5.3 工具顺序，先 `probe`（429 / Retry-After 长 → OpenAI）；提示词：新姿势「full figure inside the frame with margin」、按参考重画「同样取景不拉远」、手上拿什么不拿什么、只画人物；特写给远景 + 近景两张参考；差分一律遮罩编辑；同一底图的差分和同脸姿势当场一起提交 | **只看输出文件**：每个 job 都有新图（`exists` = 错误）、网页端历史多了一张卡片；`assets/poses_preview.jpg` 并排对比同一个人（CHECKLIST） | 没出图却"成功"、重名跳过、共用账号、加道具 / 全身像、近景远景不一致 |
+| **G4 合成** | `build_stage.py <demo> --preview` →（夜景）`clean_cutout.py` → `check_cut_body.py` →（有报告）`extend_pose.py … --auto` / `--place` → `check_patches.py` →（不准）写死 `regions_*` 重跑 | `check_demo.py <demo> --quick` 的 **G4 行全 PASS**：layers（和 stage.json 同步）、cut-body（0 截断）、patches（rim / outer / outside / border）、eyes（两只眼）、edges / fringe / blink / far-motion（`tools/art/check_art.py`，§6.5 S8）；人工：`mouths.jpg` 2×、每张 `char_*.webp` 叠深色 2×（CHECKLIST） | 抠图边缘、嘴 / 眼差分、半截身体、写进原 Demo、特效遮罩 |
 | **G5 页面** | §7.3 骨架（复制同类最近的 Demo）、`media/layers.js` + `shared/layers.js`、`hooks`；改 shared 马上 `bump.py --stage`；文件只放自己的文件夹 / 本品类 `_kit/` | `check_demo.py <demo> --quick` 的 **G5 行全 PASS**：syntax、refs（无 `<base>`、无别的 Demo 路径）、links（无断链）、files（静态 404）、cache（shared 和 `media/layers.js` 的 `?v=` 最新）、l10n、voice（`shared/voice.js`）、end（回本 Demo 封面「↺ もう一度 · Play again」） | 嘴不动（缓存）、依赖别的 Demo、语法错误、写死路径 |
-| **G6 测试** | 自动通关（两条分支）、三语、手机 | `check_demo.py <demo>`（默认：自己的 headless Chrome，`?auto=1&nomic&sub=zh` 通关 + 7 种尺寸）：**runtime**（0 异常 / 0 失败请求）、**l10n-live**（无 `[MoHeatSub] no zh`）、**end-live**、**thermal**（`#cmd` 实测：同时冷热、≤ 3 s 冷热切换、左右差、峰值 ≥ 50 %、结束 stop）、**mobile** 全 PASS；上线前 `--full`（加 alt 分支 + `check_mouth.js` 口型）；自己看一段说话和眨眼（CHECKLIST） | 测试通过但嘴不动、手机不好用、测试被干扰 |
+| **G6 测试** | 自动通关（两条分支）、三语、手机 | `check_demo.py <demo>`（默认：自己的 headless Chrome，`?auto=1&nomic&sub=zh` 通关 + 7 种尺寸）：**runtime**（0 异常 / 0 失败请求）、**l10n-live**（无 `[MoHeatSub] no zh`）、**end-live**、**thermal**（`#cmd` 实测：同时冷热、≤ 3 s 冷热切换、左右差、峰值 ≥ 50 %、结束 stop）、**mobile** 全 PASS；上线前 `--full`（加 alt 分支 + `check_mouth.js` 口型）；自己看一段说话和眨眼、对照 §0.1 成品要求（CHECKLIST） | 测试通过但嘴不动、手机不好用、测试被干扰 |
 | **G7 上线** | 封面 `?cover=1` → `media/cover.jpg`、`thumbs.py`、`nav.js` DEMOS、官网菜单、`credits.html`；重做版 `merge_remake.py`（**先自动跑 check_demo，FAIL 就拒绝合并**，`--force` 要在提交说明里写理由），合并后对原文件夹再跑一次；**只提交自己的路径、自己提交**（硬规则，2026-11-08 一天出了 3 次事）：整份文件都是自己的用 `git commit -- <路径>`；共用文件里还有别人没提交的改动时，用临时索引（`GIT_INDEX_FILE` + `read-tree HEAD` + 只放自己基于 HEAD 的版本 + `commit-tree` / `update-ref HEAD <新> <旧>`）；**永远不用不带路径的 `git commit`**（会带走别人暂存的东西），**永远不让 HEAD 往回走**（共用的 main 上不 reset / rebase / amend / 强推，出错就再做一个往前的修正提交）；共用文档一律写临时文件再替换（不先清空再写），改之前马上重读；提交后 `git show --stat HEAD` | `check_demo.py` 0 FAIL（**release** 行：封面、三语缩略图不比封面 / `l10n.js` 旧、菜单、credits 写明 layered）；统筹会话 push 后 Pages `built` | 带上别人的改动、只提交版本号、`$F` 路径 |
-| **G8 收尾** | README / 交接文档 / `WORKLOG.md`、预算记账（`tools/report/balances.py`）、`tools/cleanup/audit.py`；新问题 → §11.1 **并变成一个检查** | **hygiene** 行 PASS（assets 不进 git、无大文件、有预算记录、有 CHECKLIST）；CHECKLIST 手动项都打勾 | — |
+| **G8 收尾** | README / 交接文档 / `WORKLOG.md`、预算记账（`python3 tools/report/balances.py --budget`：每个 Demo 的 OpenAI 估算，80 % 预警、超过 10 美元先停，check_demo 的 hygiene 也会报）、`tools/cleanup/audit.py`；新问题 → §11.1 **并变成一个检查** | **hygiene** 行 PASS（assets 不进 git、无大文件、有预算记录、有 CHECKLIST）；CHECKLIST 手动项都打勾 | — |
 
 **check_demo.py 用法**
 ```
@@ -448,6 +466,44 @@ python3 tools/qa/check_demo.py <demo> --checklist        # 同时写 / 刷新 pr
 - **光和声**：远处的烟花先亮后响（声音晚 ≈ 距离 / 340 m/s）；页面上火光的闪烁和背景火光同步（`MoHeatLayers.flicker()`）；暖光 / 冷光只在对应冷热事件开着的时候出现。
 - **道具动画**（夹娃娃机、罐子、杯子）：用缓入缓出，有加速度；不瞬移；该静止的东西不动。
 
+### 6.5 素材制作标准（14 条，用户 2026-11-08 认可）：每条都是一个门禁
+
+`USER_PREFERENCES.md`「素材制作标准」的落地版。S1–S7 在 G3 出图时做，S8 由 `check_demo.py` 的 G4 行自动查，S9 是固定审查图。
+
+| # | 标准 | 门禁（通过标准） |
+|---|---|---|
+| S1 | **锁脸参考图**：每个角色一张（`docs/characters/<id>.md` 的 `refs.lock_face`），每次出新姿势都一起发 | 提示词里有 lock_face；`poses_preview.jpg` 同一个人（CHECKLIST） |
+| S2 | **幕布按角色颜色选**：浅色 / 银发 / 白衣 → 绿幕 #00B140 + `"matte": "green"`；绿发 / 绿衣 → 品红 #FF00FF + `"matte": "magenta"`；深色角色 → 浅灰 #c8c8c8；**浅色头发永远不用灰幕**（灰边去不掉） | 角色卡 `backdrop`；check_demo **fringe**（抠图边缘有幕布色 > 6 % WARN、> 25 % FAIL） |
+| S3 | **全身留白**：人物完整在画里，头顶、两侧留幕布，除了故意在腰 / 胸切开的下边，什么都不碰边 | check_demo **cut-body** + **edges**（平头 / 直线切口、上 / 左右切口离画框不到 1.5 %） |
+| S4 | **人物层只画人**：没有火、架子、画框、桌子、路人、别人的手 | 提示词「ONLY the character」（`tools/art/prompts/base_pose.txt`）；CHECKLIST |
+| S5 | **出图前先读这一场的台词，写镜头**：「你」在哪、她 / 他在哪边、手里拿什么不拿什么、远景还是近景 | `project/script.md` 镜头表（G1）；提示词的 `{shot}` `{hold}` `{not_hold}` 不能空（fill.py 拒绝） |
+| S6 | **嘴 = LivePortrait 嘴套**（`tools/art/lp_mouths.py`，闭嘴 = 原图像素）；**眨眼 = 遮罩重画「no iris visible」**（`prompts/masked_blink.txt`，两只眼一起） | check_patches + check_mouth；check_demo **blink**（单眼眨 FAIL、闭眼下还透出瞳孔 FAIL） |
+| S7 | **眼 / 嘴区域手动量**进 `stage.json`（`near_mouth` / `near_eyes`，不准就写死 `regions_*`） | check_patches 0 报告 |
+| S8 | **自动检查**：切边、平头、抠图残色、贴片对位、单眼眨、透瞳、远景动作太小 | check_demo G4：cut-body / edges / fringe / patches / eyes / blink / far-motion（嘴开口 < 4 px、眨眼 < 3 px @1080p = WARN：远景把动作画大） |
+| S9 | **固定审查图**：`assets/poses_preview.jpg`；`assets/patch_check/mouths.jpg` 和眼睛对照（2 倍）；每张 `char_*.webp` 叠在**深色**和**场景颜色**上 2 倍看 | CHECKLIST（G3 / G4） |
+| S10 | **道具动画先算几何**（停放 / 抓取高度、行程 > 0、不穿模），整段按虚拟时钟逐帧渲染检查 | `check_motion.js`；CHECKLIST |
+| S11 | **远景加大动作**：远景的嘴 / 眨眼画得更明显 | check_demo **far-motion** |
+| S12 | **先审 1–2 张再批量**：1 个完整画面打样（底图 + 嘴套 + 眨眼 + 合成 + 页面播放）审过才铺开 | G3 门禁；CHECKLIST |
+| S13 | **每个 Demo 记账**：`project/openai_log.json`（images.py / extend_pose.py 自动写，重跑也记 `prior_usage`）、Seedance credits 写进 README | `balances.py --budget`；hygiene 行 |
+| S14 | **到上限先停**：OpenAI 80 % 预警，超过 10 美元 / Seedance 1500 credits 停下交给用户 | `balances.py --demo <demo>` 退出码 1 / 2 → hygiene WARN |
+
+### 6.6 效率工具与多会话协作（提效标准 13 条，用户 2026-11-08 认可）
+
+| 工具 | 做什么 |
+|---|---|
+| `python3 tools/git/commit_mine.py "<说明>" <路径…> [--hunks <文件> <正则>] [--patch x.diff] [--dry]` | 只提交自己的路径 / 自己的几块改动：私有临时索引（从 HEAD 建）、`update-ref` 带旧值（别人先提交就在新 HEAD 上重建）、同步共享索引、空提交拒绝、打印 `git show --stat`；路径可以有空格。`MOHEAT_AGENT=<id>` 时提醒别人认领的文件 |
+| `python3 tools/git/claim.py claim / release / list / check / scratch` | 任务认领表（`docs/CLAIMS.md`，实时表在 `.git/moheat-claims.json`）；`scratch <id> <scratchpad>` 建自己的临时文件夹 |
+| `.github/workflows/qa.yml` → `tools/qa/ci_report.py` | 每次 push：`check_deps.py --fail` + 改动 Demo 的 `check_demo --quick`，结果是注释 + 运行摘要；**只提示，不挡 GitHub Pages** |
+| `python3 tools/web/bump.py --auto [文件…]` / `--check` | `?v=` 改成内容哈希（8 位），文件没变就不变；`--check` 列出过期的版本号（check_demo 的 cache 行也认哈希） |
+| `python3 tools/report/balances.py [--budget] [--write docs/budget.md] [--demo <demo>]` | API 余额 + 每个 Demo 的 OpenAI 花费表，80 % 预警 |
+| `python3 tools/qa/changed.py <起点提交> [--worktree] [--json]` | 改了哪些 Demo、哪些 QA 方面（art / mouth / thermal / ui / mobile），该派哪个测试组、跑哪些检查 |
+| `python3 tools/art/prompts/fill.py <模板> <角色> 字段=值 … [--job <demo> <job>]` | 提示词模板库（底图、全身留白、锁脸编辑、遮罩眨眼、遮罩补全、空场景）+ 角色卡 → `web_prompts.json` |
+| `docs/characters/<id>.md` · `python3 tools/library/index.py` → `docs/library.md` | 角色资料卡（参考图、颜色、幕布、声音、口癖）；场景 / 道具 / 角色层 / 音效素材库 |
+
+**多会话规则**：
+- **开工先认领**（`claim.py claim <id> <路径>`），scratchpad 里的东西放 `<scratchpad>/<id>/`（同名 `commit.sh` 害过一次错误提交）；共用文件只改小块，提交用 `commit_mine.py --hunks`。
+- **用量上限前先存进度**（提效标准「agent 任务拆小 + 用量上限前先存进度」）：任务拆成 30–60 分钟能做完的小块；**每做完一块就提交一次**（不要攒到最后）；长任务每完成一步在 `WORKLOG.md` 写一行「做到哪、下一步」；接近用量上限时先提交、写交接，再继续。被打断的 agent 留下的东西必须能从 git log + WORKLOG 接上。
+
 ## 7. 页面与版式
 
 - **以最近一个同类 Demo 为模板**复制（女性向：Demo21 / 22 的 `index.html` + `style.css` + `main.js` + `audio.js` + `lines.js` + `l10n.js`），共用 `../../shared/game.css`、`../../shared/series.css`、`../../shared/nav.js`、`../../../device.js`；画面按 §6「标准制作流程」用 `media/layers.js` + `../../shared/layers.js`（范例 岳（Demo24））。
@@ -560,6 +616,7 @@ main.layout
 ### 7.2 共用文件的版本号
 
 - 改了 `demos/shared/` 里的文件（`series.css`、`nav.js` 等）或官网的 `styles.css`，要把**所有页面**引用它的 `?v=` 数字一起加 1，否则浏览器（包括 GitHub Pages 的访客）会继续用缓存里的旧文件。
+- **自动版本号**（2026-11-08）：`python3 tools/web/bump.py --auto <改过的文件…>` 把引用写成内容哈希 `?v=<8 位>`，文件没变就不变，不会忘也不会冲突；`--check` 列出过期的。页面改动用 `commit_mine.py --hunks <页面> '\?v='` 只提交版本号那几行。
 - 页面只请求真实存在的文件。素材还没做出来的时候，不要请求它（Demo10 原来每次打开都有 7 个 404；现在只有加 `?film` 参数才会请求这些视频）。
 
 ## 8. 制作流程（每一步做完再进下一步）
@@ -647,6 +704,7 @@ main.layout
 - **刘海横过眼睛的闭眼差分，补丁越收越糟**（Demo43 ひなた贴耳：遮罩编辑把遮罩椭圆里的发丝也重画了，`regions_eyes` 收小到 0.62 后 SEAM 8 → 19、OUTER 57 → 59）→ 发丝被重画时，补丁区域要**不小于出图时的遮罩椭圆**（`regions_eyes` 用遮罩原尺寸 × 1.05–1.1），补丁边缘就落在没改过的像素上；收小只适合模型只改了眼睛本身的情况。〔G4 · check_demo: patches〕
 - **几个人同框时嘴不动 / 画外的人说话时画面里的人在动嘴**（Demo43 黎明三人：拼成一张静态合成图，h09 / m11 / n17 三句没有口型；ひなた的火锅画面里渚在左边说话，ひなた的嘴却跟着动）→ 同框用多人视图：`stage.json` 视图写 `"who"` + `"more": [{pose, x, y, height, who}]`，`build_stage.py` 每人一层、各用自己姿势的 LivePortrait 嘴型组和闭眼差分（不出新图），`hooks.who` 指向页面记录的说话人，`shared/layers.js` 只让说话的那个人动嘴（单人视图同样生效）；检查 `node tools/art/check_mouth.js <demo> 240 [--query=talk=MHN&place=hall]` 的 WRONG-MOUTH / FIG-NO-MOVE。check_mouth 以前在页面已经自己开始（`?talk` / `?autoplay`）时又点了 Start，把要测的对话换成了故事 → 现在只在 Start 可见时点。〔G6 · check_demo --full: mouth〕
 **G5 页面与代码**
+- **check_demo 报 Demo23 / 41 / 42 的 `banquet_bg.webp` 404，页面其实正常**（2026-11-08：`_kit/talk/scenes.js` 写的是 `ART + 'banquet_bg.webp'`，静态扫描只看到文件名，按页面文件夹找不到；headless Chrome 实测 200）→ files 扫描现在会解析同一文件里 `const ART = '../_kit/art/'` 这类前缀常量。静态 404 报告先用浏览器核实再改代码。〔G5 · check_demo: files〕
 - **手机上抚摸 / 拖动做不了，网页跟着手指动**（用户 2026-11-08；Demo11 撸猫、Demo13 隔着镜头摸、Demo26 拖耳朵、Demo22 吹风机瞄准）→ 原因：`shared/game.css` 给 `.stage` 的是 `touch-action: manipulation`（允许平移），手指一拖浏览器就把它当成滚动 / 回弹接管，发出 `pointercancel`，Demo 只收到开头几个 pointermove（实测 Demo11 390×844：没有 gesture.js 时 3 次 pointercancel、4 个 move；有了之后 0 次 cancel、60 个 move）。以后：拖动类互动只靠 `shared/gesture.js`（§7.1「拖动手势」），Demo 不自己写 touch 处理；判定按距离 / 来回累加，并给按住不动的备用和 👆↔ 提示；固定按钮不要盖住拖动目标。〔check_demo: drag〕
 - **说话时嘴完全不动**（陽向分层版）：改了 `demos/shared/layers.js` 没升 `?v=`，浏览器用缓存的旧版；复用的 Demo20 `main.js` 状态在 `window.HINA` 不是 `window.STREAM` → 改完 shared 文件马上 `python3 tools/web/bump.py --stage <文件>`；重跑 `build_stage.py` 改了 `media/layers.js` 也给页面里的 `media/layers.js?v=` 加 1；复用旧 `main.js` 前列出它的全局状态对象，在 `stage.json` 写 `hooks`。`media/layers.js` 里的图片路径带内容指纹 `?v=`，换图不改名也不会读到旧图。〔G5 · check_demo: cache · G6 · check_demo --full: mouth〕
 - **页面依赖别的 Demo 的文件夹**（Demo24 读 Demo14 的 `style.css`，Demo14 被 Mint 新版接管时就会坏；Demo17–19 的 `<base href>` 指向 Demo14）→ 重做会接管原文件夹，所以页面、代码、样式、图、音频都要在自己的文件夹里（或者合并后变成本地路径），同品类共用的放 `demos/<品类>/_kit/`。没有例外（`allow_foreign` 已取消，只有 `--remake-of` 放行暂存文件夹）。〔G5 · check_demo: refs · tools/qa/check_deps.py〕
@@ -672,6 +730,7 @@ main.layout
 - **`tools/web/thumbs.py` 全部 FAILED**（脚本写死 `localhost:8765`，没有起服务器时只打印 FAILED）→ 先在仓库根目录 `python3 -m http.server 8765`，再跑 thumbs.py。〔G7〕
 - **`git` / `python3` 突然报「You have not agreed to the Xcode license agreements」（exit 69）**（2026-11-08 下午：`xcode-select -p` 被切到新装的 `/Applications/Xcode.app`，许可没接受，`/usr/bin/git`、`/usr/bin/python3` 这些转发器全部失效）→ 命令前加 `export DEVELOPER_DIR=/Library/Developer/CommandLineTools` 继续工作；请用户在终端执行 `sudo xcodebuild -license accept`（或 `sudo xcode-select -s /Library/Developer/CommandLineTools`）彻底解决。〔环境〕
 **G7 提交与上线**
+- **OpenAI 花费记录被覆盖，预算看起来比实际少**（2026-11-08：`images.py` 按 job 名覆盖 `openai_log.json`，重跑不留旧记录；`extend_pose.py` 用姿势原图的 job 名写，冲掉了出图那一条）→ 重跑把旧用量存进 `prior_usage`，extend_pose 用 `<src>:extend`；日志写临时文件再 `os.replace`。预算看 `balances.py --budget`。〔G8 · check_demo: hygiene〕
 - **我的提交带走了别人暂存的文件，撤回时又把别人刚做的提交退掉了**（2026-11-08 QA 会话：用 hash-object 只暂存了自己的指南版本，但最后用不带路径的 `git commit`，把别的会话已经 `git add` 的 main.js、shared/layers.js、WORKLOG 一起提交；想 `git reset --soft HEAD~1` 撤回时，HEAD 已经是别人刚提交的 8553937，退掉的是它；同一天还有一次 WORKLOG 被旧副本覆盖、一次指南被清空几分钟）→ 共用一个工作区和一个索引时：只用 `git commit -- <路径>` 或临时 `GIT_INDEX_FILE`；`update-ref HEAD <新> <旧>` 带旧值，别人先提交了就会失败而不是覆盖；**HEAD 只往前走**：不 reset / rebase / amend，出错用新的修正提交（统筹 2026-11-08）；共用文档写临时文件再 `os.replace`。〔G7 · CLAUDE.md 硬规则〕
 - **提交时带上别的会话没提交的改动**（共用文档被两个会话同时改；Demo37 `git add build_stage.py DEMO_DESIGN_GUIDE.md` 把别人的改动一起提交，推送前撤回）→ 共用文件一律「HEAD 版本 + 只改自己的几行 → `git hash-object -w` + `git update-index --cacheinfo`」暂存，提交后 `git show <hash> -- <文件>` 看一遍；脚本改文件失败时不要接着 `git add`。〔G7〕
 - **只提交了版本号，没提交共用文件本身**（`bump.py --stage` 只暂存页面里的 `?v=`，再用不带路径的 `git commit` → 线上"新版本号配旧代码"）→ `git commit -- <共用文件> <bump 改的页面…>` 一起提交，提交后 `git show --stat HEAD` 确认。〔G7 · check_demo: cache 会报"文件在版本号之后又改过"〕
@@ -778,6 +837,7 @@ assets/images/demos/  官网菜单缩略图（按文件夹名命名）
   - `python3 tools/qa/check_demo.py <demo> [--quick|--full] [--checklist]`：**一个入口跑完所有自动检查**（§6「制作流程 v2」），PASS / WARN / FAIL 表；`merge_remake.py` 合并前自动跑，FAIL 就拒绝。新检查加进它，不另开入口。
   - `python3 tools/qa/check_deps.py [--fail] [--scripts]`：全站依赖矩阵（§12.1 依赖规则），refs 检查用同一份扫描。
   - `node tools/qa/trace_demo.js <demo> --out a.json` + `--diff a.json b.json`：固定随机种子录字幕、`#cmd` 冷热流、答题按钮、加载的文件、截图，证明搬动 / 迁移没有改变行为（页面没有 `?auto` 时加 `--click`）。
+  - 提效工具（§6.6）：`tools/git/commit_mine.py`（只提交自己的路径 / 几块）、`tools/git/claim.py`（认领表）、`tools/qa/changed.py`（按改动派测试）、`tools/qa/ci_report.py` + `.github/workflows/qa.yml`（推送自动检查，只提示）、`bump.py --auto / --check`（内容哈希版本号）、`tools/report/balances.py --budget`（预算 80 % 预警）、`tools/art/check_art.py`（素材标准自动检查）、`tools/art/prompts/fill.py`（提示词模板）、`docs/characters/`（角色卡）、`tools/library/index.py`（素材库）。全部写在 `tools/README.md`。
 - **安全地改文件**：先读完再写（Python 里不要在同一行 `open(p, 'w').write(f(open(p).read()))`，打开写入时文件已被清空——2026-11-08 因此清空过一次 Demo24 的页面）；批量改动前先 `--dry` 看清单；改完 `node --check` 所有改过的 JS。
 - **多个会话同时工作**：只提交自己改的文件或改动（`git add <具体文件>`，或 `bump.py --stage`），**暂存后立刻 commit + push**（别的会话的 `git commit` 会把你暂存的改动一起提交）；改名、批量移动之前用 ListAgents 看看谁在工作，改完用 SendMessage 告诉它们新路径。
 - **写清楚**：规则写进本规范（是什么、为什么、怎么做）；用户交代的任务记进 `TASKS.md`；每个共用文件开头写用途和用法；文件名按 §12.1。
