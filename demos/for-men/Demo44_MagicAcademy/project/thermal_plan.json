@@ -275,12 +275,17 @@
    ]
   },
   "@lean_right": {
-   "why": "Luna leans to your RIGHT ear, beside the open window (warm voice + cool night air on the same ear)",
+   "why": "Luna leans to your RIGHT ear, beside the open window (warm voice + cool night air on the same ear); the iced tea glass in her hand at your right (cool)",
    "set": {
     "night": [
      "cool",
      80,
      0.3
+    ],
+    "glass": [
+     "cool",
+     80,
+     0.12
     ]
    }
   },
@@ -306,6 +311,11 @@
      "cool",
      0,
      0.12
+    ],
+    "glass": [
+     "cool",
+     80,
+     0
     ]
    }
   },
