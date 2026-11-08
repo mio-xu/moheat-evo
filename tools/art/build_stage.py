@@ -133,6 +133,12 @@ for name, p in cfg["poses"].items():
             if p.get(f"centre_{kind}"): e["centre"], e["radius"] = p[f"centre_{kind}"], p[f"radius_{kind}"]   # fixed ellipse, no search
             pcfg["patches"].append(e)
     print(f"pose {name}: cut {cut.size} from box {box}")
+# all poses side by side (user: close-ups and wide shots must match — face, art style, clothes): check this sheet every build
+_sheet = [Image.open(src(p["src"])).convert("RGB").resize((640, 360)) for p in cfg["poses"].values()]
+_cols = 4; _poses = Image.new("RGB", (_cols * 640, ((len(_sheet) + _cols - 1) // _cols) * 360), (30, 30, 30))
+for _i, _t in enumerate(_sheet): _poses.paste(_t, ((_i % _cols) * 640, (_i // _cols) * 360))
+os.makedirs(os.path.join(D, "assets"), exist_ok=True); _poses.save(os.path.join(D, "assets", "poses_preview.jpg"), quality=82)
+print("poses side by side: assets/poses_preview.jpg (check face / style / clothes / props match across close-ups and wide shots)")
 if pcfg["patches"]:
     tmp = os.path.join(D, "assets", "patches_cfg"); os.makedirs(os.path.join(tmp, "project"), exist_ok=True); os.makedirs(os.path.join(tmp, "assets"), exist_ok=True)
     json.dump(pcfg, open(os.path.join(tmp, "project", "patches.json"), "w"))
