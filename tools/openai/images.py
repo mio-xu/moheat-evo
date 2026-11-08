@@ -17,6 +17,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("demo"); ap.add_argument("jobs", nargs="+")
 ap.add_argument("--size", default="2560x1440"); ap.add_argument("--quality", default="high"); ap.add_argument("--model", default="gpt-image-2")
 ap.add_argument("--force", action="store_true")
+ap.add_argument("--composite", action="store_true", help="masked edits: paste the result back into the reference ONLY inside the (feathered) mask ellipses — gpt-image-2 redraws the whole picture and drifts outside the mask (Demo46: an earring changed, guide §11.1)")
 ap.add_argument("--mask", default="", help="cx,cy,rx,ry[;…] ellipses (reference-image px) the model may change; the rest stays pixel-identical")
 a = ap.parse_args()
 D = os.path.abspath(a.demo); ART = os.path.join(D, "assets", "art"); os.makedirs(os.path.join(ART, "web"), exist_ok=True)
@@ -74,6 +75,13 @@ for job in a.jobs:
     r = call("edits", {k: str(v) for k, v in fields.items()}, files) if rp \
         else call("generations", fields)
     im = Image.open(io.BytesIO(base64.b64decode(r["data"][0]["b64_json"]))).convert("RGB")
+    if mk and rp and (a.composite or j.get("composite")):   # keep every pixel outside the mask exactly as in the reference
+        from PIL import ImageDraw, ImageFilter
+        ref = Image.open(rp).convert("RGB"); im = im.resize(ref.size, Image.LANCZOS) if im.size != ref.size else im
+        km = Image.new("L", ref.size, 0); dk = ImageDraw.Draw(km)
+        for e in mk.split(";"):
+            cx, cy, rx, ry = [float(v) for v in e.split(",")]; dk.ellipse((cx - rx, cy - ry, cx + rx, cy + ry), fill=255)
+        im = Image.composite(im, ref, km.filter(ImageFilter.GaussianBlur(4)))
     im.save(dst); im.save(os.path.join(ART, "web", job + ".jpg"), quality=92)
     log = json.load(open(LOG)) if os.path.exists(LOG) else {}   # re-read: parallel runs on the same demo share this log
     prev = log.get(job) or {}   # a re-run keeps the earlier spend (tools/report/balances.py budget per demo)
