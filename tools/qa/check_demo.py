@@ -267,7 +267,7 @@ for p in site_pages:
         q = os.path.normpath(os.path.join(base, ref))
         site_max[q] = max(site_max.get(q, 0), int(v))
 dirty = set(git('status', '--porcelain', '--', REL, 'demos/shared', 'device.js').splitlines())
-dirty = {l[3:].strip('"') for l in dirty}
+dirty = {l.split(None, 1)[-1].strip('"') for l in dirty}   # (git() strips the output: the first line lost its leading space, so l[3:] cut a letter)
 cache_fail, cache_warn = [], []
 for ref, v in re.findall(r'(?:src|href)="([^"?#]+)\?v=([^"&]+)"', html):
     p = resolve(ref); rp = os.path.relpath(p, REPO)
