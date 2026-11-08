@@ -48,7 +48,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/wave_mouth1.webp?v=69897cb1",
+     "src": "art/wave_mouth1.webp?v=426cd1da",
      "rect": [
       615,
       360,
@@ -59,7 +59,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/wave_mouth2.webp?v=63c29dc6",
+     "src": "art/wave_mouth2.webp?v=f4d7c1fd",
      "rect": [
       615,
       360,
@@ -70,7 +70,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/wave_mouth3.webp?v=5db1970c",
+     "src": "art/wave_mouth3.webp?v=32a3c8b4",
      "rect": [
       615,
       360,
@@ -211,7 +211,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/race_mouth1.webp?v=3446ff68",
+     "src": "art/race_mouth1.webp?v=ae4d7ab3",
      "rect": [
       682,
       450,
@@ -222,7 +222,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/race_mouth2.webp?v=46076d7d",
+     "src": "art/race_mouth2.webp?v=231a0642",
      "rect": [
       682,
       450,
@@ -233,7 +233,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/race_mouth3.webp?v=aaee10cf",
+     "src": "art/race_mouth3.webp?v=11373c05",
      "rect": [
       682,
       450,
