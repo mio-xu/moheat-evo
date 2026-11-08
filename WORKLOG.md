@@ -7,6 +7,16 @@
 
 ---
 
+## 2026-11-09 · 新 Demo 前期制作 ②–⑧（agent `prepro`，统筹分派，用户「其他demo的部分可以先准备剧情设计，素材，配音等本身与引擎无关的准备」）
+- **新文件夹**（都不在菜单里、没有页面）：Demo44_MagicAcademy（for-men ② 魔法学院）· Demo45_CelestialPalace（for-women ③ 月宫天女）· Demo46_DragonContract（for-women ④ 龙与精灵）· Demo47_GhostLantern（all-ages ⑤ 鬼屋提灯）· Demo48_AnimalOnsen（all-ages ⑥ 动物温泉）· Demo49_NaomiSummer（healing ⑦）· Demo50_WatermelonSummer（healing ⑧）。每个都有 `project/PREPRO.md`（做了什么 / 剩什么 / UI v2 搭建说明 / 花费）和 `project/script.md`。
+- **造型全部由用户从方案图选定**（方案图 `project/designs_options.jpg`，索引 scratchpad `prepro/PICKS/PICKS.md`）：44 椿 A / ココア A / ルナ B；45 迅 A / 紫苑 A 去眼镜 / 朔 B；46 陽向 C / 岳 C / 蓮 A；47 ぼんちゃん C / 小鬼 C / ゆらり B；48 ゆずじい A / 企鹅 B / 猴子 C / 狐狸 B（加毛巾 + 蓝花发夹，和コハク区分）；49 道具 B；50 奶奶 C / 爷爷 A。新声音（日语）：ゆずじい / 企鹅 / 狐狸 b、ぼんちゃん c、ゆらり b（按音高、语速、亮度、Scribe 清晰度选）；猴子复用 staff_f（声音名额 30/30 满，API key 没有 voices_write，删不了旧试听）。
+- **完成度**：44 / 45 画面已合成（LivePortrait 嘴套 + 遮罩眨眼 + build_stage，check_cut_body / patches / art 全过，`project/stills_contact.jpg`）；45 的构图返修（紫苑 dawn 头顶、t_terrace_3 三人、迅的冠）在重建中；46 底图 / 特写 / 眨眼 / 背景都有，正在合成；47–50 剧本 + 台词三语 + 冷热计划 + 日语配音（49 没有人声），画面待做。44 / 45 配音 ja / en / zh 都有（en / zh 只在本地，.gitignore）；46–50 只有 ja（统筹：en / zh 等推出计划）。
+- **新工具**：`tools/thermal/plan_sim.py`（用剧本数据 + 真实配音响度模拟冷热，输出 CSV + DUAL 四项检查，`--alt` / `--lang` / `--plot`）；`tools/openai/images.py --composite`（遮罩编辑只贴回遮罩内）；风格卡登记 Demo44–50。
+- **花费**：OpenAI 44 ≈ $4.1、45 ≈ $6.5、46 ≈ $5、47 ≈ $2.2、48 ≈ $3.2、49 ≈ $0.7、50 ≈ $1.4（上限 $15）；Seedance 0（API 429）；ElevenLabs 约 44k 字符（44 / 45 三语 + 46–50 日语 + 6 个试听）。
+- **下一步**：45 重建结果确认 → 46 合成（LP → build → 检查）→ 47–50 背景 / 姿势 / 合成；然后进页面搭建阶段（UI v2，见各 PREPRO）。
+- **问题 → §11.1**：古代设定不戴眼镜、特写站错边、遮罩编辑改了遮罩外（已写）；lp_mouths 需要先有 media/layers.js（`NOLP=1` 先建一次）；zsh 里 `for p in "a b"` 把两个参数当一个（pick.py IndexError）。
+
+
 ## 2026-11-09 · 统一界面 UI v2：一个封面格式 + 一条常驻控制条 + ⚙，全站一致（ui3，统筹分派）
 - **做了什么**：`demos/shared/ui2.js` + `ui2.css`（组件只认 adapter）+ `shell.js` 里的 live adapter（开关 `MoHeatShell.UI_V2`）；封面 = 一张成品图：每个 Demo 只有 `cover.json` + `media/cover/art.webp`，`python3 tools/web/covers.py` 用唯一模板 `tools/web/cover_tpl.html` 烤出 `media/cover/<lang>.w1920 / w1280 / c1200.webp`（+ `--publish` 菜单缩略图 / `media/cover.jpg`，`--check` 过期检查，内容戳 `media/cover/stamp.json`）；控制条 ▶/⏸ · 章节 · 模式 · 🔊 · 🌡 · ⚙ · ⛶ 一直显示，**在画面正下方**（用户 2026-11-09：叠在画面上时盖住了 Demo10 / 13 自己的按钮）；页面版式保持原来的（播放器 + 右侧栏，≥ 1300 px 侧栏 380 px、雷达更大；播放器那一栏上下居中；手机竖排不变；用户否决了信息条 / 侧列新版式 → USER_PREFERENCES）；⚙ = 语言 / 字幕 / 大小 / 减少动态 / 隐藏控制条 / 设备 / 左右检查 / 温冷检查 / 头部追踪（Beta）/ 信息面板 / 制作名单；状态 loading → cover → playing ⇄ paused → ended。章节：所有 Demo ≥ 2（对谈 = 问候 / 对谈 / 告别；Demo28 4 段、Demo29 5 段；Demo03 / 04 用 segments，名字在 cover.json）。Demo05–09 各自的封面（现有图层按 2b 合成，`tools/art/cover_duo.py`，0 美元）；Demo22 前景发束切边（gpt-image-2 局部重画 ≈ $0.3）、Demo43 三人同框重排（cover_plate.py ≈ $0.3）、Demo24 眼线微调。
 - **删掉的旧封面**：`demos/shared/cover.js`、`tools/web/cover_shots.js`、`cover_extract.js`（一次性迁移，已完成）；33 个 index.html 的旧封面文字 / hero 图 / cover.js 标签（222 行）；20 个 main.js 的 `drawCover()` 绘制体（留空函数，调用处不变）；series.css 的旧封面版式和 `l10n-ready` 遮挡；`thumbs.py` 改为调用 `covers.py --publish`。#startBtn / #lrBtn / #cleared / #credits / 对谈选项等仍在 HTML 里（Demo 代码在用，看不见，由新界面驱动）。
