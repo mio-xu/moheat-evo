@@ -48,7 +48,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/greet_mouth1.webp?v=a709cebc",
+     "src": "art/greet_mouth1.webp?v=11322bc1",
      "rect": [
       725,
       489,
@@ -59,7 +59,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/greet_mouth2.webp?v=28687fc7",
+     "src": "art/greet_mouth2.webp?v=fa292b4e",
      "rect": [
       725,
       489,
@@ -70,7 +70,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/greet_mouth3.webp?v=082e3cec",
+     "src": "art/greet_mouth3.webp?v=bd857b30",
      "rect": [
       725,
       489,
@@ -129,7 +129,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/towel_mouth1.webp?v=5c792dbc",
+     "src": "art/towel_mouth1.webp?v=d47a2aba",
      "rect": [
       751,
       436,
@@ -140,7 +140,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/towel_mouth2.webp?v=8863d339",
+     "src": "art/towel_mouth2.webp?v=9d37b103",
      "rect": [
       751,
       436,
@@ -151,7 +151,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/towel_mouth3.webp?v=bf2cb67c",
+     "src": "art/towel_mouth3.webp?v=ba7d9d8a",
      "rect": [
       751,
       436,
@@ -210,7 +210,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/spoon_mouth1.webp?v=7bf25704",
+     "src": "art/spoon_mouth1.webp?v=2d5a9b8d",
      "rect": [
       733,
       488,
@@ -221,7 +221,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/spoon_mouth2.webp?v=bad215dc",
+     "src": "art/spoon_mouth2.webp?v=74d635dd",
      "rect": [
       733,
       488,
@@ -232,7 +232,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/spoon_mouth3.webp?v=4a7d8035",
+     "src": "art/spoon_mouth3.webp?v=aa20c0a3",
      "rect": [
       733,
       488,
@@ -291,7 +291,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/earL_mouth1.webp?v=18836e49",
+     "src": "art/earL_mouth1.webp?v=a9ea5bca",
      "rect": [
       636,
       523,
@@ -302,7 +302,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/earL_mouth2.webp?v=29fdbed0",
+     "src": "art/earL_mouth2.webp?v=98010404",
      "rect": [
       636,
       523,
@@ -313,7 +313,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/earL_mouth3.webp?v=0f111b7d",
+     "src": "art/earL_mouth3.webp?v=f641caf1",
      "rect": [
       636,
       523,
@@ -372,7 +372,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/earR_mouth1.webp?v=70127526",
+     "src": "art/earR_mouth1.webp?v=b634c9ba",
      "rect": [
       964,
       583,
@@ -383,7 +383,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/earR_mouth2.webp?v=97e71e6e",
+     "src": "art/earR_mouth2.webp?v=02269521",
      "rect": [
       964,
       583,
@@ -394,7 +394,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/earR_mouth3.webp?v=c403765d",
+     "src": "art/earR_mouth3.webp?v=5f9f2f19",
      "rect": [
       964,
       583,
@@ -453,7 +453,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/lullaby_mouth1.webp?v=4a77e252",
+     "src": "art/lullaby_mouth1.webp?v=25e140ad",
      "rect": [
       630,
       463,
@@ -464,7 +464,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/lullaby_mouth2.webp?v=c6f4b5cb",
+     "src": "art/lullaby_mouth2.webp?v=2a705e23",
      "rect": [
       630,
       463,
@@ -475,7 +475,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/lullaby_mouth3.webp?v=d9a40a6d",
+     "src": "art/lullaby_mouth3.webp?v=62f73552",
      "rect": [
       630,
       463,
@@ -534,7 +534,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/goodnight_mouth1.webp?v=07efbbb8",
+     "src": "art/goodnight_mouth1.webp?v=8f7e35d8",
      "rect": [
       768,
       398,
@@ -545,7 +545,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/goodnight_mouth2.webp?v=0eed2df6",
+     "src": "art/goodnight_mouth2.webp?v=3b03a8eb",
      "rect": [
       768,
       398,
@@ -556,7 +556,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/goodnight_mouth3.webp?v=f40cbaa4",
+     "src": "art/goodnight_mouth3.webp?v=c7f00daa",
      "rect": [
       768,
       398,
