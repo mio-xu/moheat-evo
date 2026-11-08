@@ -10,6 +10,8 @@ Reads <demo>/project/stage.json:
                         "centre_mouth": [x, y], "radius_mouth": [rx, ry] (skip the search when it is pulled away by a hand / prop), "regions_eyes": [[cx, cy, rx, ry], …] (fixed ellipses),
                         "erase": [[x0, y0, x1, y1]], "keep": [[x0, y0, x1, y1]] } },             "mouth": "lp" = the mouth is a LivePortrait set (tools/art/lp_mouths.py, run first; talk / quiet are then not used); erase = source boxes cleared (e.g. a fire drawn in the pose); keep = source boxes never keyed (grey steam, smoke); "matte": "ai" = outline from the isnet-anime model (~/ml/layers venv) for light / pastel figures ; "matte": "green" / "magenta" = chroma key for poses on #00B140 / #FF00FF (green-haired figures)
     "views": { "live": { "still": "gaku_live", "pose": "sit", "bg": "camp", "fire": [0.9, 0.74], "x": 0.42, "y": 1.06, "height": 1.1 } } }
+  several characters in one view: "who": "M" + "more": [{ "pose": "hinata_base", "x": 0.78, "y": 1, "height": 0.86, "who": "H" }, …]
+  (drawn back → front; hooks.who = where the page keeps the current speaker's key; "small": true = 960×540 flat still)
   view: still = the file the page draws (stem, or stem.ext; media/art/<still> is written as the flat fallback), alias = other view names
   that draw the same still (e.g. a mirrored side), fire = where the page expects the
   fire (or null), x / y = the character's bottom centre (frame fraction), height = the character's height as a fraction of the frame
@@ -179,7 +181,7 @@ def lp_set(name, p, cut, box, f):
 if a.mouths_only:
     lj = os.path.join(D, "media", "layers.js"); t = open(lj).read(); head = t[:t.index("{")]; data = json.loads(t[t.index("{"):t.rindex("}") + 1])
     sets = {}
-    for vw in data["views"].values():
+    for vw in [f for v_ in data["views"].values() for f in [v_] + v_.get("more", [])]:   # every figure of every view
         pn = vw["char"]["src"].split("char_")[1].split(".")[0]; p = cfg["poses"].get(pn)
         if not p or p.get("mouth") != "lp": continue
         if pn not in sets:
@@ -256,30 +258,41 @@ for name, p in cfg["poses"].items():   # "mouth": "lp" sets (lp_set above)
     if p.get("mouth") == "lp": pose = poses[name]; pose["patches"] += lp_set(name, p, pose["cut"], pose["box"], pose["f"])
 
 # views: data for shared/layers.js + the flat fallback still (same placement maths as the page)
+# Several characters in one view (Demo43 dawn trio, 2026-11-08): "more": [{ "pose", "x", "y", "height", "who" }, …] are drawn after the
+# main pose (back → front), each its own layer with its own face patches; "who" (main view key or per figure) = the speaker key the page
+# reports through hooks.who — that figure's mouth moves only while that one speaks. No "more" / "who" = one character, as before.
+# "small": true writes the flat fallback still at 960×540 (views that are only ever drawn live: keeps the repo light).
 FW, FH = 1920, 1080
-for vname, v in cfg["views"].items():
-    b, p = bgs[v["bg"]], poses[v["pose"]]
+def figure(p, v, flat):
     if "height" not in v:   # no placement given: where the figure is in its own source frame (poses drawn with a still's framing, Demo40)
         (x0, y0, x1, y1), (sw, sh) = p["box"], pcfg["size"]
         v = {**v, "x": round((x0 + x1) / 2 / sw, 4), "y": round(y1 / sh, 4), "height": round((y1 - y0) / sh, 4)}
+    ch = p["cut"].copy()
+    hpx = v["height"] * FH; wpx = hpx * p["w"] / p["h"]
+    ch = ch.resize((round(wpx), round(hpx)), Image.LANCZOS)
+    flat.alpha_composite(ch, (round(v["x"] * FW - wpx / 2), round(v["y"] * FH - hpx))) if v["x"] * FW - wpx / 2 >= 0 and v["y"] * FH - hpx >= 0 else \
+        flat.paste(ch, (round(v["x"] * FW - wpx / 2), round(v["y"] * FH - hpx)), ch)
+    return {"char": {"src": p["src"], "w": p["w"], "h": p["h"], "x": v["x"], "y": v["y"], "height": v["height"], "box": [int(b) for b in p["box"]],   # box = source px (tools/art/extend_pose.py)
+                     **({"who": v["who"]} if v.get("who") else {})},
+            "patches": [{k: pt[k] for k in ("src", "rect", "kind", "level") if k in pt} for pt in p["patches"]]}
+for vname, v in cfg["views"].items():
+    b, p = bgs[v["bg"]], poses[v["pose"]]
     f, bf = v.get("fire"), b["fire"]; z = v.get("zoom", 1)
     if f:
         for k in (0, 1): z = max(z, f[k] / bf[k], (1 - f[k]) / (1 - bf[k]))
         ox, oy = f[0] - bf[0] * z, f[1] - bf[1] * z
     else: ox = oy = (1 - z) / 2
     flat = b["im"].resize((round(FW * z), round(FH * z)), Image.LANCZOS).crop((round(-ox * FW), round(-oy * FH), round(-ox * FW) + FW, round(-oy * FH) + FH)).convert("RGBA")
-    ch = p["cut"].copy()
-    hpx = v["height"] * FH; wpx = hpx * p["w"] / p["h"]
-    ch = ch.resize((round(wpx), round(hpx)), Image.LANCZOS)
-    flat.alpha_composite(ch, (round(v["x"] * FW - wpx / 2), round(v["y"] * FH - hpx))) if v["x"] * FW - wpx / 2 >= 0 and v["y"] * FH - hpx >= 0 else \
-        flat.paste(ch, (round(v["x"] * FW - wpx / 2), round(v["y"] * FH - hpx)), ch)
+    main = figure(p, {k: v[k] for k in ("x", "y", "height", "who") if k in v}, flat)
+    more = [figure(poses[m["pose"]], m, flat) for m in v.get("more", [])]
     stem, ext = os.path.splitext(v["still"]); ext = ext or ".jpg"   # the page decides the still's file name (Demo20 loads .webp)
-    flat.convert("RGB").save(out(os.path.join(ART, stem + ext)), quality=88)
+    flat = flat.convert("RGB")
+    if v.get("small"): flat = flat.resize((FW // 2, FH // 2), Image.LANCZOS)
+    flat.save(out(os.path.join(ART, stem + ext)), quality=80 if v.get("small") else 88)
     data["views"][stem] = {"view": vname, **({"alias": v["alias"]} if v.get("alias") else {}), "fire": f,
-                                "bg": {"src": b["src"], "fire": bf, **({"zoom": v["zoom"]} if v.get("zoom") else {})},
-                                "char": {"src": p["src"], "w": p["w"], "h": p["h"], "x": v["x"], "y": v["y"], "height": v["height"], "box": [int(b) for b in p["box"]]},   # box = source px (tools/art/extend_pose.py)
-                                "patches": [{k: pt[k] for k in ("src", "rect", "kind", "level") if k in pt} for pt in p["patches"]]}
-    print(f"view {vname}: bg zoom {z:.2f}, still media/art/{stem}{ext}")
+                                "bg": {"src": b["src"], "fire": bf, **({"zoom": v["zoom"]} if v.get("zoom") else {})}, **main,
+                                **({"more": more} if more else {})}
+    print(f"view {vname}: bg zoom {z:.2f}, {1 + len(more)} figure(s), still media/art/{stem}{ext}")
 import hashlib
 def _v(rel):   # "art/x.webp" → "art/x.webp?v=<content hash>"
     f = os.path.join(D, "media", rel.split("?")[0])
@@ -288,6 +301,9 @@ for _vw in data["views"].values():
     _vw["bg"]["src"] = _v(_vw["bg"]["src"]); _vw["char"]["src"] = _v(_vw["char"]["src"])
     if _vw["bg"].get("depth"): _vw["bg"]["depth"] = _v(_vw["bg"]["depth"])
     for _pt in _vw["patches"]: _pt["src"] = _v(_pt["src"])
+    for _m in _vw.get("more", []):
+        _m["char"]["src"] = _v(_m["char"]["src"])
+        for _pt in _m["patches"]: _pt["src"] = _v(_pt["src"])
 open(out(os.path.join(D, "media", "layers.js")), "w").write(
     "// Layer data for ../../shared/layers.js — written by tools/art/build_stage.py from project/stage.json (do not edit by hand).\n"
     "window.MOHEAT_LAYERS = " + json.dumps(data, ensure_ascii=False, indent=1) + ";\n")

@@ -19,6 +19,9 @@
 //            char: { src, w, h, x, y, height } (anchored at its bottom centre: x, y = frame fraction, height = fraction of the frame),
 //            patches: [ { src, rect: [x, y, w, h] in char pixels, kind: "mouth" | "eyes" | "mouth_quiet" | "mouth_lv", level? } ] } }   (mouth_quiet: closed mouth over an open-mouth pose, shown in silence;
 //            mouth_lv: a LivePortrait mouth SET, tools/art/lp_mouths.py — level 0 = closed, 1..n wider; exactly one block of the set is drawn)
+// Several characters in one view (Demo43 dawn trio, 2026-11-08; tools/art/build_stage.py "more"): views.<stem>.more = [{ char, patches }, …]
+//   drawn after the main one (back → front), each with its own breathing phase, blinks and mouth set; char.who = its speaker key, and with
+//   hooks.who (where the page keeps the speaker, e.g. "INN.S.who") a figure's mouth moves only while that one speaks. No who = as before.
 // Data hooks (optional): hooks: { view: "HINA.S.view", mouth: "HINA.FW.mouth" (0..1) | lv: "JIN.S.lv" (+ lvGain, default 25), level / raw: paths } — where the base demo keeps its state.
 // Hooks (optional): MoHeatLayers.level() → 0..1 talking envelope (default window.STREAM.S.env), MoHeatLayers.raw() → raw voice level
 // (default window.STREAM.S.lv), MoHeatLayers.current() → the view on screen (default window.STREAM.S.view).
@@ -44,6 +47,7 @@
     : null);
   // the raw voice level (syllables): hooks.lv / hooks.raw, MoHeatLayers.raw(), or next to a mouth hook's state (HINA.FW.mouth → HINA.S.lv)
   const voiceRaw = H.lv ? () => get(H.lv) : H.raw ? () => get(H.raw) : H.mouth && H.view ? () => get(H.view.replace(/view$/, 'lv')) : () => API.raw();
+  API.speaker = API.speaker || (H.who ? () => get(H.who) : () => null);   // multi-character views: whose mouth may move
   API.current = API.current || (() => (H.view ? get(H.view) : window.STREAM?.S?.view) || Object.values(D.views)[0].view);
 
   if (D.skipVideo) {   // the base demo's own clips are not part of this page: no requests, an 'error' instead
@@ -59,7 +63,7 @@
   if (!gl) return;
   const VS = 'attribute vec2 p;varying vec2 uv;void main(){uv=p*.5+.5;uv.y=1.-uv.y;gl_Position=vec4(p,0,1);}';
   const FS = `precision highp float;varying vec2 uv;
-uniform sampler2D bg,dep,chr;uniform vec2 off,fire,bgO,bob;uniform vec4 crect;uniform float bgZ,t,flick,hasFire,hasDep,breath;uniform vec2 neck;uniform vec4 edge;
+uniform sampler2D bg,dep,chr;uniform vec2 off,fire,bgO,bob;uniform vec4 crect;uniform float bgZ,t,flick,hasFire,hasDep,breath,only;uniform vec2 neck;uniform vec4 edge;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}
 vec2 toBg(vec2 u){return (u-bgO)/bgZ;}
@@ -86,14 +90,14 @@ void main(){
   float rim=0.;
   if(hasFire>.5){vec2 dir=normalize((fire-cu)*vec2(1.7778,1.)+1e-5);rim=ch.a*(1.-charAt(cu+dir*vec2(.0035,.0062)).a);}
   vec3 cc=ch.rgb+rim*vec3(1.,.55,.22)*.8*flick+hasFire*ch.a*smoothstep(.25,.9,cu.x)*vec3(.06,.025,0.)*(flick-.6);
-  gl_FragColor=vec4(mix(col,cc,ch.a),1.);}`;
+  gl_FragColor=only>.5?vec4(cc,ch.a):vec4(mix(col,cc,ch.a),1.);}`;   // only: a further character over the frame drawn so far
   const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error('[layers]', gl.getShaderInfoLog(s)); return s; };
   const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(pr);
   if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return;
   gl.useProgram(pr);
   gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer()); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
   const ap = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(ap); gl.vertexAttribPointer(ap, 2, gl.FLOAT, false, 0, 0);
-  const U = {}; for (const n of ['bg', 'dep', 'chr', 'off', 'fire', 'bgO', 'bob', 'crect', 'bgZ', 't', 'flick', 'hasFire', 'hasDep', 'breath', 'neck', 'edge']) U[n] = gl.getUniformLocation(pr, n);
+  const U = {}; for (const n of ['bg', 'dep', 'chr', 'off', 'fire', 'bgO', 'bob', 'crect', 'bgZ', 't', 'flick', 'hasFire', 'hasDep', 'breath', 'neck', 'edge', 'only']) U[n] = gl.getUniformLocation(pr, n);
   ['bg', 'dep', 'chr'].forEach((n, i) => gl.uniform1i(U[n], i));
   const newTex = () => { const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
     for (const [k, v] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D, k, v);
@@ -106,17 +110,32 @@ void main(){
 
   // ---------------------------------------------------------------- layers per view (loaded on demand, all preloaded after the page load)
   const base = 'media/';
-  const L = {}, IMGS = {};
+  const L = {}, IMGS = {}, BGT = {};
   const img = (src) => IMGS[src] || (IMGS[src] = new Promise((res) => { const im = new Image(); im.decoding = 'async'; im.onload = () => res(im); im.onerror = () => res(null); im.src = base + src; }));
+  function fig(cd, pats, ch, ims) {   // one character layer: cut-out + face patches, placement, chin / shoulder lines
+    const g = { who: cd.who || null, ch, ps: (pats || []).map((p, i) => ({ ...p, im: ims[i] })).filter((p) => p.im), bu: 0, nb: -1, seen: -9 };
+    g.order = [...g.ps.filter((p) => p.kind === 'eyes'), ...g.ps.filter((p) => p.kind !== 'eyes')];
+    g.nLv = Math.max(0, ...g.ps.filter((p) => p.kind === 'mouth_lv').map((p) => p.level || 0));
+    const hf = cd.height, wf = hf * (cd.w / cd.h) * (9 / 16);
+    g.rect = [cd.x - wf / 2, cd.y - hf, wf, hf];
+    // chin + shoulder lines (fractions of the pose height) from the face patches: breathing lifts what is above the shoulders
+    const H0 = ch.height, cy_ = (p) => (p.rect[1] + p.rect[3] / 2) / H0, pm = g.ps.find((p) => /^mouth/.test(p.kind)), pe = g.ps.filter((p) => p.kind === 'eyes');
+    let cn = cd.chin, sn = cd.shoulder;
+    if (cn == null && pm) { const ym = cy_(pm), f = pe.length ? Math.max(.03, ym - pe.reduce((a, p) => a + cy_(p), 0) / pe.length) : 1.6 * pm.rect[3] / H0; cn = ym + .45 * f; sn = sn ?? ym + 1.4 * f; }
+    cn = Math.max(.05, Math.min(.8, cn ?? .25)); sn = Math.min(.92, Math.max(cn + .04, sn ?? cn + .13)); g.neck = [cn, sn];
+    g.edge = [g.rect[0] <= .01, g.rect[0] + g.rect[2] >= .99, g.rect[1] <= .01, g.rect[1] + g.rect[3] >= .99].map(Number);   // touches L / R / top / bottom
+    return g;
+  }
   function load(stem) {
     if (L[stem]) return L[stem];
     const c = D.views[stem], o = L[stem] = { c, ready: false };
-    Promise.all([img(c.bg.src), c.bg.depth ? img(c.bg.depth) : null, img(c.char.src), ...(c.patches || []).map((p) => img(p.src))]).then(([b, d, ch, ...ps]) => {
+    const more = c.more || [];
+    Promise.all([img(c.bg.src), c.bg.depth ? img(c.bg.depth) : null, img(c.char.src), ...(c.patches || []).map((p) => img(p.src)),
+      Promise.all(more.map((m) => Promise.all([img(m.char.src), ...(m.patches || []).map((p) => img(p.src))])))]).then(([b, d, ch, ...rest]) => {
+      const ms = rest.pop(), ps = rest;
       if (!b || !ch) { o.failed = true; return; }
-      o.bgT = newTex(); upload(o.bgT, b); if (d) { o.depT = newTex(); upload(o.depT, d); }
-      o.ch = ch; o.ps = (c.patches || []).map((p, i) => ({ ...p, im: ps[i] })).filter((p) => p.im);
-      o.order = [...o.ps.filter((p) => p.kind === 'eyes'), ...o.ps.filter((p) => p.kind !== 'eyes')];
-      o.nLv = Math.max(0, ...o.ps.filter((p) => p.kind === 'mouth_lv').map((p) => p.level || 0));
+      const tex = (src, im) => BGT[src] || (BGT[src] = (() => { const t_ = newTex(); upload(t_, im); return t_; })());   // one texture per plate, shared by its views
+      o.bgT = tex(c.bg.src, b); if (d) o.depT = tex(c.bg.depth, d);
       // the plate's zoom + offset: its fire lands on the view's fire, never showing an edge
       const f = c.fire, bf = c.bg.fire; let z = c.bg.zoom || 1, ox, oy;
       if (f && bf) {
@@ -124,14 +143,8 @@ void main(){
         ox = f[0] - bf[0] * z; oy = f[1] - bf[1] * z;
       } else { ox = (1 - z) / 2; oy = (1 - z) / 2; }
       o.z = z; o.o = [ox, oy];
-      const hf = c.char.height, wf = hf * (c.char.w / c.char.h) * (9 / 16);
-      o.rect = [c.char.x - wf / 2, c.char.y - hf, wf, hf];
-      // chin + shoulder lines (fractions of the pose height) from the face patches: breathing lifts what is above the shoulders
-      const H0 = ch.height, cy_ = (p) => (p.rect[1] + p.rect[3] / 2) / H0, pm = o.ps.find((p) => /^mouth/.test(p.kind)), pe = o.ps.filter((p) => p.kind === 'eyes');
-      let cn = c.char.chin, sn = c.char.shoulder;
-      if (cn == null && pm) { const ym = cy_(pm), f = pe.length ? Math.max(.03, ym - pe.reduce((a, p) => a + cy_(p), 0) / pe.length) : 1.6 * pm.rect[3] / H0; cn = ym + .45 * f; sn = sn ?? ym + 1.4 * f; }
-      cn = Math.max(.05, Math.min(.8, cn ?? .25)); sn = Math.min(.92, Math.max(cn + .04, sn ?? cn + .13)); o.neck = [cn, sn];
-      o.edge = [o.rect[0] <= .01, o.rect[0] + o.rect[2] >= .99, o.rect[1] <= .01, o.rect[1] + o.rect[3] >= .99].map(Number);   // touches L / R / top / bottom
+      o.figs = [fig(c.char, c.patches, ch, ps), ...more.map((m, i) => ms[i][0] && fig(m.char, m.patches, ms[i][0], ms[i].slice(1))).filter(Boolean)];
+      Object.assign(o, o.figs[0]);   // ch, ps, order, nLv, rect, neck, edge of the main character (toFrame, motion, tests)
       o.ready = true;
     });
     return o;
@@ -177,41 +190,64 @@ void main(){
     // breathing ≈ 15 / min with a slow drift of the rate; inhale 40 % of the cycle, exhale 60 % (eased, no pause-free sine)
     liveT += dt;   // time actually animated (a page that shows a non-layered view pauses all this)
     bph = (bph + dt * 1.57 * (1 + .08 * Math.sin(t * .21) + .05 * Math.sin(t * .53))) % (2 * Math.PI);
-    { const c = bph / (2 * Math.PI); breathY = c < .4 ? .5 - .5 * Math.cos(Math.PI * c / .4) : .5 + .5 * Math.cos(Math.PI * (c - .4) / .6); }
+    breathY = breathAt(bph);
   }
+  function breathAt(ph) { const c = ph / (2 * Math.PI); return c < .4 ? .5 - .5 * Math.cos(Math.PI * c / .4) : .5 + .5 * Math.cos(Math.PI * (c - .4) / .6); }
+  let lastFigs = null;
   function render(stem) {
     const o = load(stem); if (!o.ready) return null;
     const now = performance.now(); if (now !== frameT) { frameT = now; step(now); }
-    const c = o.c, active = byView[API.current()] === stem;
-    // compose the character with its face patches
-    if (cc.width !== o.ch.width || cc.height !== o.ch.height) { cc.width = o.ch.width; cc.height = o.ch.height; }
-    cx2.clearRect(0, 0, cc.width, cc.height); cx2.drawImage(o.ch, 0, 0);
-    // eyes first, then the mouth (an eye patch that reaches down to the lips must not cover the open mouth during a blink);
-    // 'source-atop' clips every patch to the character's own alpha (no patch pixels on the background / beyond the jaw or hair).
-    // kind 'mouth_quiet' = a closed-mouth patch for a pose drawn mid-laugh / mid-word: shown while she / he is NOT talking.
-    cx2.globalCompositeOperation = 'source-atop';
-    for (const p of o.order) {
-      const a = p.kind === 'mouth_lv' ? (p.level === (active && mouthOpen ? Math.min(lvl, o.nLv) : 0) ? 1 : 0)   // one block of the set, always
-        : p.kind === 'mouth' ? (active ? mouth : 0) : p.kind === 'mouth_quiet' ? 1 - (active ? mouth : 0) : (blinkOn() ? 1 : 0);
-      if (a > .01) { cx2.globalAlpha = a; cx2.drawImage(p.im, p.rect[0], p.rect[1], p.rect[2], p.rect[3]); cx2.globalAlpha = 1; }
-    }
-    cx2.globalCompositeOperation = 'source-over';
-    upload(chrTex, cc);
+    const c = o.c, active = byView[API.current()] === stem, spk = API.speaker(), many = o.figs.length > 1 || o.figs.some((g) => g.who);
     gl.viewport(0, 0, glc.width, glc.height);
-    [o.bgT, o.depT || o.bgT, chrTex].forEach((tx_, i) => { gl.activeTexture(gl.TEXTURE0 + i); gl.bindTexture(gl.TEXTURE_2D, tx_); });
-    const ix = Math.sin(t * .5) * .25, iy = Math.sin(t * .37) * .15;
-    gl.uniform2f(U.off, -(px + ix) * .010, -(py + iy) * .007);
-    gl.uniform2f(U.bob, 0, active ? -.004 * talk : 0);
-    const D_ = API.debug || {}, lift = D_.lift ?? .006 * o.rect[3] * (breathY - .5);   // head + shoulders rise ~6 px (1080p) per breath
-    gl.uniform1f(U.breath, lift); gl.uniform2f(U.neck, ...o.neck); gl.uniform4f(U.edge, ...o.edge);
-    if (D_.off) gl.uniform2f(U.off, ...D_.off);   // tests: forced parallax extremes (tools/art/check_motion.js)
-    if (D_.solid) { gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, solidTex()); gl.activeTexture(gl.TEXTURE2); }   // tests: a magenta plate shows every gap
-    o.live = { ox: D_.off ? D_.off[0] : -(px + ix) * .010, oy: D_.off ? D_.off[1] : -(py + iy) * .007, lift };
-    gl.uniform2f(U.fire, ...(c.fire || [0, 0])); gl.uniform1f(U.hasFire, c.fire ? 1 : 0); gl.uniform1f(U.hasDep, o.depT ? 1 : 0);
-    gl.uniform2f(U.bgO, ...o.o); gl.uniform1f(U.bgZ, o.z); gl.uniform4f(U.crect, ...o.rect);
-    gl.uniform1f(U.t, t); gl.uniform1f(U.flick, flick);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    const ix = Math.sin(t * .5) * .25, iy = Math.sin(t * .37) * .15, D_ = API.debug || {};
+    const off = D_.off || [-(px + ix) * .010, -(py + iy) * .007];   // tests: forced parallax extremes (tools/art/check_motion.js)
+    const shown = [];
+    o.figs.forEach((g, i) => {
+      // this figure talks: its view is on screen and (with a speaker hook + its own key) it is the one speaking
+      const me = active && (!g.who || spk == null || spk === g.who);
+      let blink = blinkOn();
+      if (i > 0 && !(API.debug && API.debug.blink != null)) {   // a further figure blinks on its own (never across a view cut)
+        if (t - g.seen > .3) { g.bu = 0; g.nb = Math.max(g.nb, t + .7 + Math.random() * 2.5); }
+        if (t > g.nb) { g.bu = t + .11 + Math.random() * .04; g.nb = t + 2 + Math.random() * 4; }
+        blink = t < g.bu;
+      }
+      g.seen = t;
+      // compose the character with its face patches
+      if (cc.width !== g.ch.width || cc.height !== g.ch.height) { cc.width = g.ch.width; cc.height = g.ch.height; }
+      cx2.clearRect(0, 0, cc.width, cc.height); cx2.drawImage(g.ch, 0, 0);
+      // eyes first, then the mouth (an eye patch that reaches down to the lips must not cover the open mouth during a blink);
+      // 'source-atop' clips every patch to the character's own alpha (no patch pixels on the background / beyond the jaw or hair).
+      // kind 'mouth_quiet' = a closed-mouth patch for a pose drawn mid-laugh / mid-word: shown while she / he is NOT talking.
+      cx2.globalCompositeOperation = 'source-atop';
+      for (const p of g.order) {
+        const a = p.kind === 'mouth_lv' ? (p.level === (me && mouthOpen ? Math.min(lvl, g.nLv) : 0) ? 1 : 0)   // one block of the set, always
+          : p.kind === 'mouth' ? (me ? mouth : 0) : p.kind === 'mouth_quiet' ? 1 - (me ? mouth : 0) : (blink ? 1 : 0);
+        if (a > .01) { cx2.globalAlpha = a; cx2.drawImage(p.im, p.rect[0], p.rect[1], p.rect[2], p.rect[3]); cx2.globalAlpha = 1; }
+      }
+      cx2.globalCompositeOperation = 'source-over';
+      shown.push([g.who, me && mouthOpen && g.ps.some((p) => /^mouth/.test(p.kind) && p.kind !== 'mouth_quiet') ? 1 : 0]);
+      upload(chrTex, cc);
+      [o.bgT, o.depT || o.bgT, chrTex].forEach((tx_, k) => { gl.activeTexture(gl.TEXTURE0 + k); gl.bindTexture(gl.TEXTURE_2D, tx_); });
+      gl.uniform2f(U.off, ...off);
+      gl.uniform2f(U.bob, 0, me ? -.004 * talk : 0);
+      // head + shoulders rise ~6 px (1080p) per breath; a further figure breathes in its own phase
+      const by = i ? breathAt((bph + 2.1 * i) % (2 * Math.PI)) : breathY, lift = D_.lift ?? .006 * g.rect[3] * (by - .5);
+      gl.uniform1f(U.breath, lift); gl.uniform2f(U.neck, ...g.neck); gl.uniform4f(U.edge, ...g.edge); gl.uniform4f(U.crect, ...g.rect);
+      if (D_.solid) { gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, solidTex()); gl.activeTexture(gl.TEXTURE2); }   // tests: a magenta plate shows every gap
+      if (i === 0) o.live = { ox: off[0], oy: off[1], lift };
+      gl.uniform1f(U.only, i ? 1 : 0);
+      if (i) { gl.enable(gl.BLEND); gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ZERO, gl.ONE); }
+      if (i < o.figs.length - 1) { setRest(c, o); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); }
+    });
+    if (active) lastFigs = { stem, many, figs: shown };
+    setRest(c, o); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    gl.disable(gl.BLEND); gl.uniform1f(U.only, 0);
     return glc;
+  }
+  function setRest(c, o) {   // the per-view uniforms (same for every figure of the view)
+    gl.uniform2f(U.fire, ...(c.fire || [0, 0])); gl.uniform1f(U.hasFire, c.fire ? 1 : 0); gl.uniform1f(U.hasDep, o.depT ? 1 : 0);
+    gl.uniform2f(U.bgO, ...o.o); gl.uniform1f(U.bgZ, o.z);
+    gl.uniform1f(U.t, t); gl.uniform1f(U.flick, flick);
   }
   API.render = render;
   API.live = true;   // the page must not add its own zoom / bob drift on top (the background would breathe with her)
@@ -231,8 +267,9 @@ void main(){
   };
   API.motion = () => { const o = L[byView[API.current()]]; return { t, liveT, blink: blinkOn(), blinks: blinkLog.slice(), breath: breathY, phase: bph, flick,
     view: API.current(), stem: byView[API.current()], rect: o?.rect, neck: o?.neck, edge: o?.edge, live: o?.live, draw: lastDraw }; };   // tests
-  API.state = () => ({ mouth, open: mouthOpen, level: mouthOpen ? lvl : 0, tgt: lastTgt, rel: lastV, env, blink: t < blinkUntil, view: API.current(), stem: byView[API.current()],
-    patches: (D.views[byView[API.current()]]?.patches || []).map((p) => p.kind) });   // tests (tools/art/check_mouth.js)
+  API.state = () => { const st = byView[API.current()], F = lastFigs && lastFigs.stem === st && lastFigs.many ? lastFigs : null; return {
+    mouth: F ? (F.figs.some((x) => x[1]) ? 1 : 0) : mouth, open: mouthOpen, speaker: API.speaker(), figs: F ? F.figs : null, level: mouthOpen ? lvl : 0, tgt: lastTgt, rel: lastV, env, blink: t < blinkUntil, view: API.current(), stem: byView[API.current()],
+    patches: (D.views[byView[API.current()]]?.patches || []).map((p) => p.kind) }; };   // tests (tools/art/check_mouth.js); figs = [[who, open], …] in multi-character views
 
   // ---------------------------------------------------------------- the hook: a known still → its live composite (same place / size)
   const drawImage = CanvasRenderingContext2D.prototype.drawImage;

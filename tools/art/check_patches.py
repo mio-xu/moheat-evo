@@ -25,7 +25,7 @@ t = open(os.path.join(D, "media", "layers.js")).read(); data = json.loads(t[t.in
 out = os.path.join(D, "assets", "patch_check"); os.makedirs(out, exist_ok=True)
 LIM = {"mouth": dict(seam=4.0, outer=6.0), "mouth_lv": dict(seam=4.0, outer=6.0), "mouth_quiet": dict(seam=4.0, outer=6.0), "eyes": dict(seam=8.0, outer=40.0)}
 flags, seen, mouths = [], set(), []
-for stem, v in data["views"].items():
+for stem, v in [(st, f) for st, v_ in data["views"].items() for f in [v_] + v_.get("more", [])]:   # every figure of every view (several in one: "more")
     pose = v["char"]["src"].split("char_")[1].split(".")[0]
     if only and pose not in only: continue
     kinds = [p["kind"] for p in v.get("patches", [])]
