@@ -14,9 +14,9 @@
    "matte": "ai"
   },
   "hands": {
-   "src": "hina_hands",
-   "talk": "hina_hands_talk",
-   "blink": "hina_hands_blink",
+   "src": "hina_hands_ext",
+   "talk": "hina_hands_ext_talk",
+   "blink": "hina_hands_ext_blink",
    "matte": "ai"
   },
   "lean": {
@@ -26,9 +26,9 @@
    "matte": "ai"
   },
   "wave": {
-   "src": "hina_wave",
-   "talk": "hina_ref_talk",
-   "blink": "hina_ref_blink",
+   "src": "hina_wave_ext",
+   "talk": "hina_wave_ext_talk",
+   "blink": "hina_wave_ext_blink",
    "matte": "ai",
    "near_mouth": [
     1790,
@@ -56,7 +56,7 @@
    "bg": "booth",
    "fire": null,
    "zoom": 1.15,
-   "x": 0.52,
+   "x": 0.4601,
    "y": 1.02,
    "height": 1.02
   },
@@ -78,7 +78,7 @@
    "pose": "wave",
    "bg": "booth",
    "fire": null,
-   "x": 0.5,
+   "x": 0.5667,
    "y": 1.02,
    "height": 0.95
   }

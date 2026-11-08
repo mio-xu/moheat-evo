@@ -44,5 +44,51 @@
    2560,
    1440
   ]
+ },
+ "hina_wave_ext": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "seconds": 48,
+  "usage": {
+   "input_tokens": 1663,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 155
+   },
+   "output_tokens": 1843,
+   "output_tokens_details": {
+    "image_tokens": 1843,
+    "text_tokens": 0
+   },
+   "total_tokens": 3506
+  },
+  "pad": {
+   "left": 0,
+   "right": 360,
+   "bottom": 0
+  }
+ },
+ "hina_hands_ext": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "seconds": 49,
+  "usage": {
+   "input_tokens": 1663,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 155
+   },
+   "output_tokens": 1843,
+   "output_tokens_details": {
+    "image_tokens": 1843,
+    "text_tokens": 0
+   },
+   "total_tokens": 3506
+  },
+  "pad": {
+   "left": 300,
+   "right": 0,
+   "bottom": 0
+  }
  }
 }

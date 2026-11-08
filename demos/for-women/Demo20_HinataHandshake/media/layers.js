@@ -17,7 +17,13 @@ window.MOHEAT_LAYERS = {
     "h": 988,
     "x": 0.56,
     "y": 1.02,
-    "height": 1.0
+    "height": 1.0,
+    "box": [
+     84,
+     0,
+     2560,
+     1440
+    ]
    },
    "patches": [
     {
@@ -54,31 +60,37 @@ window.MOHEAT_LAYERS = {
     "zoom": 1.15
    },
    "char": {
-    "src": "art/char_hands.webp?v=09e10556",
+    "src": "art/char_hands.webp?v=eb4f1db5",
     "w": 1700,
-    "h": 956,
-    "x": 0.52,
+    "h": 856,
+    "x": 0.4601,
     "y": 1.02,
-    "height": 1.02
+    "height": 1.02,
+    "box": [
+     0,
+     0,
+     2860,
+     1440
+    ]
    },
    "patches": [
     {
-     "src": "art/hands_mouth.webp?v=0d458d10",
+     "src": "art/hands_mouth.webp?v=134445f2",
      "rect": [
-      914,
-      406,
-      125,
-      102
+      996,
+      363,
+      112,
+      92
      ],
      "kind": "mouth"
     },
     {
-     "src": "art/hands_eyes.webp?v=354120d3",
+     "src": "art/hands_eyes.webp?v=94bf1ffb",
      "rect": [
-      726,
-      202,
-      331,
-      210
+      828,
+      181,
+      297,
+      188
      ],
      "kind": "eyes"
     }
@@ -104,7 +116,13 @@ window.MOHEAT_LAYERS = {
     "h": 980,
     "x": 0.45,
     "y": 1.02,
-    "height": 1.02
+    "height": 1.02,
+    "box": [
+     0,
+     0,
+     2499,
+     1440
+    ]
    },
    "patches": [
     {
@@ -140,31 +158,37 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_wave.webp?v=ab2efff0",
+    "src": "art/char_wave.webp?v=f7eb28f7",
     "w": 1700,
-    "h": 988,
-    "x": 0.5,
+    "h": 863,
+    "x": 0.5667,
     "y": 1.02,
-    "height": 0.95
+    "height": 0.95,
+    "box": [
+     83,
+     0,
+     2920,
+     1440
+    ]
    },
    "patches": [
     {
-     "src": "art/wave_mouth.webp?v=574d4213",
+     "src": "art/wave_mouth.webp?v=4f8e6d59",
      "rect": [
-      1099,
-      334,
-      145,
-      96
+      959,
+      291,
+      127,
+      84
      ],
      "kind": "mouth"
     },
     {
-     "src": "art/wave_eyes.webp?v=6545b411",
+     "src": "art/wave_eyes.webp?v=110124e3",
      "rect": [
-      1002,
-      193,
-      264,
-      150
+      875,
+      168,
+      231,
+      131
      ],
      "kind": "eyes"
     }
