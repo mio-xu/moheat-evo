@@ -1,0 +1,30 @@
+{
+ "src": "assets/art",
+ "bgs": {
+  "roof": {
+   "src": "bg_roof"
+  }
+ },
+ "poses": {
+  "stand": {
+   "src": "nagisa_ref",
+   "talk": "nagisa_ref_talk_clean",
+   "blink": "nagisa_ref_blink",
+   "near_mouth": [
+    1355,
+    632
+   ]
+  }
+ },
+ "views": {
+  "arrive": {
+   "still": "nagisa_arrive",
+   "pose": "stand",
+   "bg": "roof",
+   "fire": null,
+   "x": 0.56,
+   "y": 1.02,
+   "height": 0.98
+  }
+ }
+}
