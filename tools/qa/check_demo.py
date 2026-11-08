@@ -21,7 +21,7 @@ What is checked (id → lesson / rule):
   syntax     node --check of every JS the page loads (§11.1 script edits that broke syntax)
   layers     media/layers.js readable; rebuilt after the last stage.json edit (§11.1 stale build, foreign tool output)
   cut-body   tools/art/check_cut_body.py (half bodies floating in the frame)
-  patches    tools/art/check_patches.py (mouth drift / seams / outer ring / patch outside; NO-MOUTH = WARN)
+  patches    tools/art/check_patches.py (mouth drift / seams / outer ring / patch outside; OLD-MOUTH / NO-TEETH unless qa.json mouth_exceptions; NO-MOUTH = WARN)
   eyes       every eyes patch covers two eyes (one-eye blinks)
   refs       only own folder + demos/shared + own category _kit (tools/qa/check_deps.py): no <base href>, no other demo folder / other
              category's kit, no hard link to another demo, no symlink out (engine plan §3.1, guide §12.1)
@@ -160,7 +160,7 @@ if os.path.exists(LJ):
         if r.returncode and not fl: hard = [(r.stderr.strip().splitlines() or ['check_patches.py crashed'])[-1]]
         row('G4', 'patches', 'FAIL' if hard else 'WARN' if fl else 'PASS',
             (f'{len(hard)} patch problem(s) — look at assets/patch_check/ at 100 %, fix regions_mouth / regions_eyes' if hard else
-             f'{len(fl)} view(s) without a mouth patch (fine only if nobody talks there)' if fl else 'all patches aligned (still look at assets/patch_check/mouths.jpg 2×)'), fl)
+             f'{len(fl)} view(s) without a mouth patch (fine only if nobody talks there)' if fl else 'all patches aligned (still look at assets/patch_check/mouths.jpg + every assets/lp_mouths/<pose>_sheet.jpg 2×: teeth inside the lips, same place on lv2 / lv3)'), fl)
         # eyes: two eyes in every eyes patch
         one = []
         try:
