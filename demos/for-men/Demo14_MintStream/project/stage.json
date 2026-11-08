@@ -1,0 +1,258 @@
+{
+ "src": "assets/art",
+ "hooks": {
+  "view": "MINT.S.view",
+  "lv": "MINT.S.lv"
+ },
+ "bgs": {
+  "salon": {
+   "src": "bg_salon",
+   "fire": [
+    0.5,
+    0.5
+   ]
+  }
+ },
+ "poses": {
+  "greet": {
+   "src": "mint_greet",
+   "talk": "mint_greet_talk",
+   "blink": "mint_greet_blink",
+   "matte": "magenta",
+   "centre_mouth": [
+    1180,
+    570
+   ],
+   "radius_mouth": [
+    48,
+    32
+   ],
+   "regions_eyes": [
+    [
+     1050,
+     465,
+     56,
+     42
+    ],
+    [
+     1240,
+     400,
+     56,
+     42
+    ]
+   ]
+  },
+  "towel": {
+   "src": "mint_towel",
+   "talk": "mint_towel_talk",
+   "blink": "mint_towel_blink",
+   "matte": "magenta",
+   "centre_mouth": [
+    1270,
+    570
+   ],
+   "radius_mouth": [
+    48,
+    32
+   ],
+   "regions_eyes": [
+    [
+     1140,
+     460,
+     56,
+     42
+    ],
+    [
+     1315,
+     405,
+     56,
+     42
+    ]
+   ]
+  },
+  "spoon": {
+   "src": "mint_spoon",
+   "talk": "mint_spoon_talk",
+   "blink": "mint_spoon_blink",
+   "matte": "magenta",
+   "centre_mouth": [
+    1205,
+    565
+   ],
+   "radius_mouth": [
+    48,
+    32
+   ],
+   "regions_eyes": [
+    [
+     1050,
+     460,
+     56,
+     42
+    ],
+    [
+     1250,
+     390,
+     56,
+     42
+    ]
+   ]
+  },
+  "earL": {
+   "src": "mint_earL",
+   "talk": "mint_earL_talk",
+   "blink": "mint_earL_blink",
+   "matte": "magenta",
+   "centre_mouth": [
+    712,
+    603
+   ],
+   "radius_mouth": [
+    48,
+    32
+   ],
+   "regions_eyes": [
+    [
+     555,
+     485,
+     56,
+     42
+    ],
+    [
+     760,
+     410,
+     56,
+     42
+    ]
+   ]
+  },
+  "earR": {
+   "src": "mint_earR",
+   "talk": "mint_earR_talk",
+   "blink": "mint_earR_blink",
+   "matte": "magenta",
+   "centre_mouth": [
+    1805,
+    645
+   ],
+   "radius_mouth": [
+    48,
+    32
+   ],
+   "regions_eyes": [
+    [
+     1765,
+     465,
+     56,
+     42
+    ],
+    [
+     1985,
+     535,
+     56,
+     42
+    ]
+   ]
+  },
+  "lullaby": {
+   "src": "mint_lullaby",
+   "talk": "mint_lullaby_talk",
+   "blink": "mint_lullaby_blink",
+   "matte": "magenta",
+   "centre_mouth": [
+    1045,
+    555
+   ],
+   "radius_mouth": [
+    48,
+    32
+   ],
+   "regions_eyes": [
+    [
+     900,
+     460,
+     56,
+     42
+    ],
+    [
+     1090,
+     390,
+     56,
+     42
+    ]
+   ]
+  },
+  "goodnight": {
+   "src": "mint_goodnight",
+   "talk": "mint_goodnight_talk",
+   "blink": "mint_goodnight_blink",
+   "matte": "magenta",
+   "centre_mouth": [
+    1215,
+    600
+   ],
+   "radius_mouth": [
+    48,
+    32
+   ],
+   "regions_eyes": [
+    [
+     1065,
+     480,
+     56,
+     42
+    ],
+    [
+     1265,
+     395,
+     56,
+     42
+    ]
+   ]
+  }
+ },
+ "views": {
+  "greet": {
+   "still": "mint_greet",
+   "pose": "greet",
+   "bg": "salon",
+   "fire": null
+  },
+  "towel": {
+   "still": "mint_towel",
+   "pose": "towel",
+   "bg": "salon",
+   "fire": null
+  },
+  "spoon": {
+   "still": "mint_spoon",
+   "pose": "spoon",
+   "bg": "salon",
+   "fire": null
+  },
+  "earL": {
+   "still": "mint_earL",
+   "pose": "earL",
+   "bg": "salon",
+   "fire": null
+  },
+  "earR": {
+   "still": "mint_earR",
+   "pose": "earR",
+   "bg": "salon",
+   "fire": null
+  },
+  "lullaby": {
+   "still": "mint_lullaby",
+   "pose": "lullaby",
+   "bg": "salon",
+   "fire": null
+  },
+  "goodnight": {
+   "still": "mint_goodnight",
+   "pose": "goodnight",
+   "bg": "salon",
+   "fire": null
+  }
+ }
+}

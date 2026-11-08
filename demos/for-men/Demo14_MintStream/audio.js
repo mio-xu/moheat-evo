@@ -1,7 +1,8 @@
-// Live stream room — Web Audio. The streamer's binaural mic is YOUR head: her voice, breath and every ASMR trigger are placed
-// with HRTF around you (az: rad, 0 = front, − = left, + = right). Triggers are synthesized; voices are VOICEVOX clips.
-window.StreamAudio = (() => {
-  let ac = null, master = null, dry = null, verb = null, ui = null, noise = null, muted = false;
+// Mint's ear salon (a live stream) — Web Audio. Her whisper (beside the chair, at one ear of the dummy head = your ears) and the little
+// salon: a quiet room tone with a soft aquarium bubble, her warmed hands rubbing an ear, the ear pick scratching, a steamed towel, a
+// chilled spoon's tink, a warm stone set down, her mint breath, a cool mist spray, the blanket. Base copied from Demo17 Cocoa's audio.js.
+window.HTAudio = (() => {
+  let ac = null, master = null, dry = null, verb = null, noise = null, muted = false;
   const rnd = (a, b) => a + Math.random() * (b - a);
   const voices = {};
   let level = 0, an = null, abuf = null;
@@ -13,10 +14,9 @@ window.StreamAudio = (() => {
     const comp = ac.createDynamicsCompressor(); comp.threshold.value = -16; comp.ratio.value = 3;
     master.connect(comp).connect(ac.destination);
     dry = ac.createGain(); dry.connect(master);
-    ui = ac.createGain(); ui.gain.value = .5; ui.connect(master);
-    verb = ac.createConvolver(); const vg = ac.createGain(); vg.gain.value = .1; verb.connect(vg).connect(master);
-    const n = Math.round(ac.sampleRate * .4), b = ac.createBuffer(2, n, ac.sampleRate);
-    for (let c = 0; c < 2; c++) { const d = b.getChannelData(c); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 5); }
+    verb = ac.createConvolver(); const vg = ac.createGain(); vg.gain.value = .16; verb.connect(vg).connect(master);
+    const n = Math.round(ac.sampleRate * .9), b = ac.createBuffer(2, n, ac.sampleRate);   // a small soft room: a short, dry tail
+    for (let c = 0; c < 2; c++) { const d = b.getChannelData(c); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 4); }
     verb.buffer = b;
     noise = ac.createBuffer(1, ac.sampleRate * 3, ac.sampleRate);
     const d = noise.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
@@ -28,7 +28,7 @@ window.StreamAudio = (() => {
     const x = Math.sin(az) * dist, z = -Math.cos(az) * dist, t = ac.currentTime;
     if (p.positionX) { p.positionX.setTargetAtTime(x, t, tc || .001); p.positionY.setTargetAtTime(0, t, .001); p.positionZ.setTargetAtTime(z, t, tc || .001); } else p.setPosition(x, 0, z);
   }
-  function chain(az, dist, send = .2) { const g = ac.createGain(), p = panner(az, dist), s = ac.createGain(); s.gain.value = send; g.connect(p); p.connect(dry); p.connect(s); s.connect(verb); return { g, p }; }
+  function chain(az, dist, send = .3) { const g = ac.createGain(), p = panner(az, dist), s = ac.createGain(); s.gain.value = send; g.connect(p); p.connect(dry); p.connect(s); s.connect(verb); return { g, p }; }
   function noiseSrc() { const s = ac.createBufferSource(); s.buffer = noise; s.loop = true; s.start(0, rnd(0, 2.5)); return s; }
   function shot(az, dist, send, build, len) { if (!ac) return; const { g, p } = chain(az, dist, send); build(g, ac.currentTime); setTimeout(() => { g.disconnect(); p.disconnect(); }, (len + 1.5) * 1000); }
   function burst(out, dur, amp, f, type = 'bandpass', q = .8, at = 0) {
@@ -36,153 +36,76 @@ window.StreamAudio = (() => {
     g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(amp, t + Math.min(.008, dur / 3)); g.gain.exponentialRampToValueAtTime(.001, t + dur + .01);
     s.connect(fl).connect(g).connect(out); s.start(t, rnd(0, 2.5), dur + .03);
   }
-  function swell(out, dur, amp, f, q = .7, type = 'bandpass', at = 0, up = .3) {   // soft breath-like noise envelope
-    const s = ac.createBufferSource(); s.buffer = noise; const fl = new BiquadFilterNode(ac, { type, frequency: f, Q: q }), g = ac.createGain(), t = ac.currentTime + at;
-    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(amp, t + dur * up); g.gain.linearRampToValueAtTime(0, t + dur);
-    s.connect(fl).connect(g).connect(out); s.start(t, rnd(0, 2), dur + .05); return fl;
-  }
-  function tone(out, f, dur, amp, at = 0, type = 'sine', f1 = f) {
+  function tone(out, f, dur, amp, at = 0, type = 'sine', attack = .006) {
     const o = new OscillatorNode(ac, { frequency: f, type }), g = ac.createGain(), t = ac.currentTime + at;
-    o.frequency.setValueAtTime(f, t); if (f1 !== f) o.frequency.exponentialRampToValueAtTime(f1, t + dur);
-    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(amp, t + .004); g.gain.exponentialRampToValueAtTime(.001, t + dur);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(amp, t + attack); g.gain.exponentialRampToValueAtTime(.0005, t + dur);
     o.connect(g).connect(out); o.start(t); o.stop(t + dur + .02);
   }
 
   // ---------------------------------------------------------------- voices
   function loadVoices(ids) {
     if (!ac) return;
-    for (const id of ids) if (!voices[id]) voices[id] = fetch(`media/voice/${id}.m4a`).then((r) => r.arrayBuffer()).then((b) => ac.decodeAudioData(b)).then((buf) => (voices[id] = buf)).catch(() => (voices[id] = null));
+    for (const id of ids) if (!voices[id]) voices[id] = fetch(`media/voice/${id}.m4a`).then((r) => { if (!r.ok) throw 0; return r.arrayBuffer(); }).then((b) => ac.decodeAudioData(b)).then((buf) => (voices[id] = buf)).catch(() => (voices[id] = null));
   }
-  let cur = null;   // the line now playing (its panner follows her when she moves)
-  function say(id, at = { az: 0, dist: 1 }, gain = 1.4) {
+  function say(id, where = { az: 0, dist: .8 }, gain = 1.4) {   // → Promise, resolves when the line ends (no file yet: a pause)
     return new Promise(async (res) => {
       if (voices[id] instanceof Promise) await voices[id];
-      const buf = voices[id]; if (!ac || !buf) return res();
+      const buf = voices[id]; if (!ac || !buf) return setTimeout(res, 2200);
       const s = ac.createBufferSource(); s.buffer = buf; const g = ac.createGain(); g.gain.value = gain;
-      const c = chain(at.az, at.dist, at.dist < .3 ? .03 : .15);
-      s.connect(g); g.connect(an); g.connect(c.g); cur = c;
-      s.onended = () => { if (cur === c) cur = null; setTimeout(() => { c.g.disconnect(); c.p.disconnect(); }, 600); res(); };
-      s.start();
+      const c = chain(where.az, where.dist, where.dist < .3 ? .03 : .15);
+      s.connect(g); g.connect(c.g); g.connect(an);
+      setTimeout(() => { c.g.disconnect(); c.p.disconnect(); }, (buf.duration + 2) * 1000);
+      s.onended = () => res(); s.start();
     });
   }
-  function moveVoice(az, dist) { if (cur) place(cur.p, az, dist, .25); }
-  function stopVoices() { cur = null; }
   function voiceLevel() {
     if (!an) return 0;
     an.getFloatTimeDomainData(abuf); let s = 0; for (let i = 0; i < abuf.length; i++) s += abuf[i] * abuf[i];
     const v = Math.sqrt(s / abuf.length); level += (v - level) * .35; return level;
   }
 
-  // ---------------------------------------------------------------- loops (room tone, rain on the window, heater, brushing)
+
+  // ---------------------------------------------------------------- loops
   const loops = {};
-  function loop(kind, az = 0, dist = 2) {
-    if (!ac || loops[kind]) return loops[kind];
-    const { g, p } = chain(az, dist, .15); g.gain.value = 0; const nodes = [];
-    const add = (n) => { nodes.push(n); return n; };
-    if (kind === 'room') { const lp = new BiquadFilterNode(ac, { type: 'lowpass', frequency: 180 }); add(noiseSrc()).connect(lp).connect(g); }
-    if (kind === 'rain') {
-      const bp = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 3200, Q: .4 }), lp = new BiquadFilterNode(ac, { type: 'lowpass', frequency: 900 }), g2 = ac.createGain(); g2.gain.value = .6;
-      add(noiseSrc()).connect(bp).connect(g); add(noiseSrc()).connect(lp).connect(g2).connect(g);
-      const iv = setInterval(() => { if (ac && Math.random() < .7) burst(g, .02, rnd(.2, .6), rnd(2500, 6000), 'bandpass', 2); }, 70); nodes.push({ stop: () => clearInterval(iv), disconnect() {} });
-    }
-    if (kind === 'heater') {
-      const o = add(new OscillatorNode(ac, { frequency: 100, type: 'triangle' })), og = ac.createGain(); og.gain.value = .05; o.connect(og).connect(g); o.start();
-      const lp = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 500, Q: .4 }); add(noiseSrc()).connect(lp).connect(g);
-    }
-    if (kind === 'fan') {   // a small desk fan: motor hum + airy blade noise
-      const o = add(new OscillatorNode(ac, { frequency: 118, type: 'sawtooth' })), lp0 = new BiquadFilterNode(ac, { type: 'lowpass', frequency: 300 }), og = ac.createGain(); og.gain.value = .05; o.connect(lp0).connect(og).connect(g); o.start();
-      const bp = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 1100, Q: .5 }), am = ac.createGain(); add(noiseSrc()).connect(bp).connect(am).connect(g);
-      const lfo = add(new OscillatorNode(ac, { frequency: 22 })), lg = ac.createGain(); lg.gain.value = .25; am.gain.value = .75; lfo.connect(lg).connect(am.gain); lfo.start();
-    }
-    if (kind === 'wind') {  // night wind through the open window
-      const bp = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 500, Q: .7 }); add(noiseSrc()).connect(bp).connect(g);
-      const lfo = add(new OscillatorNode(ac, { frequency: .17 })), lg = ac.createGain(); lg.gain.value = 260; lfo.connect(lg).connect(bp.frequency); lfo.start();
-    }
-    if (kind === 'musicbox') {   // a small original lullaby on a music box (comb + tines), looping
-      const mel = [76, 79, 81, 79, 76, 74, 72, 74, 76, 79, 76, 72, 74, 72, 69, 72];
-      let i = 0; const iv = setInterval(() => { if (!ac) return; const f = 440 * Math.pow(2, (mel[i % mel.length] - 69) / 12); tone(g, f, 1.6, .12); tone(g, f * 3.01, .5, .02); if (i % 4 === 0) tone(g, f / 2, 1.8, .05); i++; }, 520);
+  function loop(kind) {
+    if (!ac) return null; if (loops[kind]) return loops[kind];
+    const nodes = []; let g, p, lp = null;
+    if (kind === 'room') {         // the salon at night: a very low room tone + the soft bubbling of a small tank on the right
+      ({ g, p } = chain(1.1, 2.2, .2)); g.gain.value = 0;
+      const s = noiseSrc(); lp = new BiquadFilterNode(ac, { type: 'lowpass', frequency: 220 }); const sg = ac.createGain(); sg.gain.value = .3; s.connect(lp).connect(sg).connect(g); nodes.push(s);
+      const iv = setInterval(() => { if (!ac || g.gain.value < .01) return; if (Math.random() < .6) tone(g, rnd(700, 1400), .06, rnd(.01, .03), 0, 'sine', .003); }, 260);
       nodes.push({ stop: () => clearInterval(iv), disconnect() {} });
     }
-    // round 4 (2026-11-08): each streamer's own place
-    if (kind === 'aquarium') {   // Mint: the big tank's pump hum + bubbles rising in the water
-      const o = add(new OscillatorNode(ac, { frequency: 58, type: 'sine' })), og = ac.createGain(); og.gain.value = .12; o.connect(og).connect(g); o.start();
-      const lp = new BiquadFilterNode(ac, { type: 'lowpass', frequency: 260 }); add(noiseSrc()).connect(lp).connect(g);
-      const iv = setInterval(() => { if (!ac) return; const n = Math.random() < .3 ? 3 : 1; for (let i = 0; i < n; i++) { const f = rnd(380, 900); tone(g, f, .07, rnd(.05, .11), i * .06, 'sine', f * 1.9); } }, 260);
+    if (kind === 'scratch') {      // the bamboo ear pick right inside the ear: tiny dry scratches (placed at the ear with .at())
+      ({ g, p } = chain(1.35, .08, 0)); g.gain.value = 0;
+      const iv = setInterval(() => { if (!ac || g.gain.value < .01) return; const n = 1 + (Math.random() * 3 | 0); for (let i = 0; i < n; i++) burst(g, rnd(.01, .04), rnd(.15, .45), rnd(2500, 6000), 'bandpass', 2.5, rnd(0, .12)); }, 140);
       nodes.push({ stop: () => clearInterval(iv), disconnect() {} });
     }
-    if (kind === 'clock') {   // Cocoa: the kissaten's wall clock
-      let k = 0; const iv = setInterval(() => { if (!ac) return; burst(g, .012, .5, k++ % 2 ? 2600 : 3100, 'bandpass', 6); }, 500);
-      nodes.push({ stop: () => clearInterval(iv), disconnect() {} });
-    }
-    if (kind === 'festival') {   // Hinata: festival crowd murmur, far taiko, suzumushi crickets, a wind chime now and then
-      const bp = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 700, Q: .6 }), am = ac.createGain(); am.gain.value = .7; add(noiseSrc()).connect(bp).connect(am).connect(g);
-      const lfo = add(new OscillatorNode(ac, { frequency: .3 })), lg = ac.createGain(); lg.gain.value = .25; lfo.connect(lg).connect(am.gain); lfo.start();
-      let b = 0; const iv = setInterval(() => { if (!ac) return;
-        if (b % 4 !== 3) tone(g, 70, .35, .35, 0, 'sine', 48);   // don, don, don, (rest)
-        for (let i = 0; i < 4; i++) tone(g, 4300, .05, .012, .12 + i * .07);   // crickets
-        if (Math.random() < .12) for (const f of [2637, 3520, 3951]) tone(g, f * rnd(.99, 1.01), 1.4, .02, rnd(0, .1));   // furin
-        b++; }, 520);
-      nodes.push({ stop: () => clearInterval(iv), disconnect() {} });
-    }
-    if (kind === 'vinyl') {   // Luna: the bar's record player left on the run-out groove — soft crackle
-      const hp = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 1200, Q: .3 }), ng = ac.createGain(); ng.gain.value = .15; add(noiseSrc()).connect(hp).connect(ng).connect(g);
-      const iv = setInterval(() => { if (ac && Math.random() < .6) burst(g, .006, rnd(.2, .7), rnd(1500, 5000), 'bandpass', 1.5); }, 90);
-      nodes.push({ stop: () => clearInterval(iv), disconnect() {} });
-    }
-    if (kind === 'piano') {   // Luna's one song on the bar piano: an original slow jazz-ballad progression (Dm9 G13 Cmaj9 A7b9), soft melody on top
-      const ch = [[50, 53, 57, 60, 64], [43, 53, 57, 59, 64], [48, 52, 55, 59, 62], [45, 49, 55, 58, 61]], mel = [[76, 74], [72, 71], [71, 67], [69, 70]];
-      const key = (m, d, a, at) => { const f = 440 * Math.pow(2, (m - 69) / 12); tone(g, f, d, a, at, 'triangle'); tone(g, f * 2, d * .5, a * .25, at); tone(g, f * 3, d * .25, a * .08, at); };
-      let i = 0; const bar = () => { if (!ac) return; const c = ch[i % 4]; c.forEach((m, k) => key(m, 3, k ? .045 : .07, k * .04)); mel[i % 4].forEach((m, k) => key(m, 1.6, .06, .9 + k * 1.1)); i++; };
-      bar(); const iv = setInterval(bar, 2600); nodes.push({ stop: () => clearInterval(iv), disconnect() {} });
-    }
-    if (kind === 'heart') { const iv = setInterval(() => { if (!ac) return; tone(g, 54, .14, .9); tone(g, 49, .16, .6, .26); }, 950); nodes.push({ stop: () => clearInterval(iv), disconnect() {} }); }
-    const L = { g, p, set: (v, a = az, d = dist) => { g.gain.setTargetAtTime(v, ac.currentTime, .3); place(p, a, d); }, stop: () => { g.gain.setTargetAtTime(0, ac.currentTime, .4); setTimeout(() => { for (const n of nodes) try { n.stop(); n.disconnect(); } catch {} g.disconnect(); }, 1800); delete loops[kind]; } };
+    const L = { g, p, lp,
+      set: (v, tc = .2) => g.gain.setTargetAtTime(v, ac.currentTime, tc),
+      at: (az, dist, tc) => place(p, az, dist, tc ?? .05),
+      tone: (f) => lp?.frequency.setTargetAtTime(f, ac.currentTime, .3),
+      stop: () => { g.gain.setTargetAtTime(0, ac.currentTime, .15); setTimeout(() => { for (const n of nodes) try { n.stop(); n.disconnect(); } catch {} g.disconnect(); }, 1200); delete loops[kind]; } };
     loops[kind] = L; return L;
   }
-  function stopLoops() { for (const k of Object.keys(loops)) loops[k].stop(); }
 
-  // ---------------------------------------------------------------- ASMR triggers + stream UI sounds
+  const ear = (side) => 1.35 * Math.sign(side || 1);
   const fx = {
-    // a long, close breath on one ear (Mint's "fuuu"): airy noise right at the ear, low rumble of air on the mic
-    blow: (az, dur = 1.8) => shot(az, .06, .01, (o) => { swell(o, dur, .5, 1400, .35, 'bandpass', 0, .25); swell(o, dur, .45, 260, .5, 'lowpass', 0, .2); }, dur),
-    puff: (az) => shot(az, .12, .02, (o) => { swell(o, .45, .45, 1100, .4, 'bandpass', 0, .2); swell(o, .45, .35, 220, .6, 'lowpass', 0, .15); }, .6),
-    // ice in a glass at the ear: clinks (inharmonic glass partials) and a little swirl
-    clink: (az, dist = .15) => shot(az, dist, .08, (o) => { const f = rnd(2300, 3400); for (const [k, a] of [[1, .14], [2.32, .07], [4.1, .04]]) tone(o, f * k, rnd(.25, .5), a); burst(o, .015, .3, 5000, 'highpass'); }, .7),
-    swirl: (az) => { for (let i = 0; i < 5; i++) setTimeout(() => fx.clink(az + rnd(-.1, .1), .14), i * rnd(140, 260)); shot(az, .15, .05, (o) => swell(o, 1.2, .08, 3000, 1.5), 1.3); },
-    // cloth: towel / blanket wrapping
-    cloth: (az, dist = .12, dur = 1) => shot(az, dist, .05, (o) => { const f = swell(o, dur, .35, 2600, .5, 'bandpass', 0, .4); const t = ac.currentTime; f.frequency.setValueAtTime(1800, t); f.frequency.linearRampToValueAtTime(3600, t + dur); }, dur),
-    steam: (az = 0) => shot(az, .4, .1, (o) => swell(o, 1.6, .05, 6000, .5, 'highpass'), 1.7),
-    // café: pouring, stirring, sipping, a marshmallow plop
-    pour: (az = .15) => shot(az, .5, .2, (o, t) => {
-      const s = noiseSrc(), f = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 900, Q: 2.5 }), g = ac.createGain();
-      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.45, t + .2); g.gain.setValueAtTime(.45, t + 2.2); g.gain.linearRampToValueAtTime(0, t + 2.6);
-      f.frequency.setValueAtTime(600, t); f.frequency.linearRampToValueAtTime(1500, t + 2.4);
-      const lfo = new OscillatorNode(ac, { frequency: 11 }), lg = ac.createGain(); lg.gain.value = 260; lfo.connect(lg).connect(f.frequency); lfo.start(t); lfo.stop(t + 2.7);
-      s.connect(f).connect(g).connect(o); s.stop(t + 2.7);
-    }, 2.8),
-    stir: (az = .1) => { for (let i = 0; i < 7; i++) setTimeout(() => shot(az + Math.sin(i) * .15, .4, .1, (o) => { tone(o, rnd(3900, 4300), .18, .07); tone(o, rnd(6100, 6600), .1, .025); }, .3), i * 230); },
-    sip: (az = 0) => shot(az, .3, .05, (o) => { swell(o, .5, .25, 1800, 2, 'bandpass', 0, .7); burst(o, .03, .25, 700, 'bandpass', 3, .55); }, .8),
-    plop: (az = 0) => shot(az, .35, .1, (o) => { tone(o, 520, .12, .3, 0, 'sine', 170); burst(o, .04, .2, 1200, 'bandpass', 2, .02); }, .3),
-    taps: (az, n = 3) => { for (let i = 0; i < n; i++) setTimeout(() => shot(az, .08, .02, (o) => burst(o, .03, .35, 600, 'lowpass', .7), .2), i * 180); },
-    // Hinata: noodle slurp, a gulp of milk, a paper fan
-    slurp: (az = 0) => shot(az, .3, .05, (o, t) => { const f = swell(o, 1.1, .35, 1500, 1.2, 'bandpass', 0, .5); f.frequency.setValueAtTime(900, t); f.frequency.linearRampToValueAtTime(2600, t + 1); for (let i = 0; i < 6; i++) burst(o, .03, .18, rnd(700, 1600), 'bandpass', 3, .1 + i * .14); }, 1.2),
-    gulp: (az = 0) => { for (let i = 0; i < 3; i++) setTimeout(() => shot(az, .3, .05, (o) => { tone(o, 210, .12, .25, 0, 'sine', 120); burst(o, .05, .12, 500, 'lowpass', .7); }, .3), i * 420); },
-    flap: (az) => shot(az, .25, .03, (o) => { swell(o, .35, .5, 700, .5, 'bandpass', 0, .35); burst(o, .02, .15, 2500, 'bandpass', 2, .1); }, .5),
-    // Luna: window sliding, a cup on a saucer
-    slide: (az = -1.3, open = true) => shot(az, 1.4, .3, (o, t) => { const f = swell(o, .8, .35, open ? 500 : 650, 3, 'bandpass', 0, .5); f.frequency.linearRampToValueAtTime(open ? 750 : 450, t + .8); burst(o, .04, .5, 900, 'bandpass', 2, .82); }, 1),
-    bell: (az = -.6) => shot(az, 2.2, .35, (o) => { for (const [f, a, at] of [[2350, .08, 0], [3130, .05, 0], [2350, .05, .18], [3130, .03, .18]]) tone(o, f, 1.2, a, at); }, 1.6),   // kissaten door bell
-    steamwand: (az = .3) => shot(az, .6, .15, (o, t) => { const f = swell(o, 3, .22, 5200, .7, 'bandpass', 0, .15); f.frequency.setValueAtTime(6200, t); f.frequency.linearRampToValueAtTime(3400, t + 2.8); swell(o, 2.6, .12, 300, .8, 'lowpass', .3, .4); }, 3.2),   // espresso machine frothing milk
-    marble: (az = 0) => shot(az, .2, .05, (o) => { burst(o, .05, .4, 2200, 'bandpass', 1.5); tone(o, 3800, .25, .08, .06); tone(o, 5200, .15, .04, .1); swell(o, .5, .15, 4000, .6, 'highpass', .05, .2); }, .8),   // ramune: the marble pushed in + fizz
-    firework: (az = .3) => shot(az, 6, .7, (o) => { tone(o, 900, .9, .025, 0, 'sine', 300); burst(o, .25, .9, 160, 'lowpass', .7, .95); swell(o, 1.6, .18, 3500, .5, 'bandpass', 1.05, .1); }, 3),   // whistle up, boom, crackle
-    saucer: (az = .1) => shot(az, .4, .1, (o) => { tone(o, 2900, .3, .08); tone(o, 4700, .2, .03); burst(o, .02, .25, 3000, 'bandpass', 2); }, .5),
-    // stream UI (not spatial)
-    pop: () => ac && tone(ui, 1320, .08, .06, 0, 'sine', 1760),
-    you: () => ac && (tone(ui, 990, .1, .09), tone(ui, 1480, .14, .08, .07)),
-    superchat: () => ac && [784, 988, 1175, 1568].forEach((f, i) => { tone(ui, f, .5, .07, i * .08, 'triangle'); tone(ui, f * 2, .3, .02, i * .08); }),
-    heart: () => ac && tone(ui, 1760, .07, .03, 0, 'sine', 2200),
-    end: () => ac && [880, 698, 523].forEach((f, i) => tone(ui, f, .6, .06, i * .18, 'triangle')),
+    // warm hands rubbing the outer ear (squish, squish) — a few soft strokes right at that ear
+    massage: (side = 1) => { if (!ac) return; for (let i = 0; i < 8; i++) setTimeout(() => shot(ear(side), .06, 0, (o, t) => { const s = noiseSrc(), f = new BiquadFilterNode(ac, { type: 'lowpass', frequency: 900 }), gg = ac.createGain(); gg.gain.setValueAtTime(0, t); gg.gain.linearRampToValueAtTime(.35, t + .18); gg.gain.linearRampToValueAtTime(0, t + .5); s.connect(f).connect(gg).connect(o); s.stop(t + .55); }, .7), i * 620); },
+    // the steamed towel laid over both ears: cloth + a soft hiss of steam, then muffled
+    towel: () => { if (!ac) return; for (const a of [-1.4, 1.4]) shot(a, .08, 0, (o, t) => { const s = noiseSrc(), f = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 1200, Q: .5 }), gg = ac.createGain(); gg.gain.setValueAtTime(0, t + 2.4); gg.gain.linearRampToValueAtTime(.4, t + 2.6); gg.gain.linearRampToValueAtTime(.05, t + 3.4); gg.gain.linearRampToValueAtTime(0, t + 5); s.connect(f).connect(gg).connect(o); s.stop(t + 5.1); }, 5.5); },
+    // the chilled spoon touching the ear: a tiny metallic tink
+    tink: (side = 1) => shot(ear(side), .06, 0, (o) => { tone(o, 3800, .25, .05, 0, 'sine', .001); tone(o, 6100, .15, .02, 0, 'sine', .001); burst(o, .01, .2, 4000, 'bandpass', 4); }, .5),
+    // a warm smooth stone set down on the cushion by the ear
+    stone: (side = 1) => shot(ear(side), .15, .02, (o) => { burst(o, .05, .5, 500, 'lowpass', 1); burst(o, .2, .1, 900, 'bandpass', .7, .05); }, .6),
+    // her mint breath on the ear: a long soft "fuuu" right at the ear
+    blow: (side = 1) => shot(ear(side), .05, 0, (o, t) => { const s = noiseSrc(), f = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 900, Q: .4 }), gg = ac.createGain(); gg.gain.setValueAtTime(0, t); gg.gain.linearRampToValueAtTime(.45, t + .2); gg.gain.linearRampToValueAtTime(.2, t + 1.2); gg.gain.linearRampToValueAtTime(0, t + 1.7); s.connect(f).connect(gg).connect(o); s.stop(t + 1.8); }, 2),
+    // a cool mist sprayed over both ears: psst
+    mist: () => { for (const a of [-1.2, 1.2]) shot(a, .25, 0, (o, t) => { const s = noiseSrc(), f = new BiquadFilterNode(ac, { type: 'highpass', frequency: 3500 }), gg = ac.createGain(); gg.gain.setValueAtTime(0, t); gg.gain.linearRampToValueAtTime(.35, t + .03); gg.gain.linearRampToValueAtTime(0, t + .45); s.connect(f).connect(gg).connect(o); s.stop(t + .5); }, .8); },
+    rustle: (az = 0, dist = .3) => shot(az, dist, .05, (o, t) => { const s = noiseSrc(), f = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 1800, Q: .6 }), gg = ac.createGain(); gg.gain.setValueAtTime(0, t); gg.gain.linearRampToValueAtTime(.4, t + .12); gg.gain.linearRampToValueAtTime(0, t + .7); s.connect(f).connect(gg).connect(o); s.stop(t + .8); }, .9),
   };
   function setMuted(v) { muted = v; if (master) master.gain.setTargetAtTime(v ? 0 : .95, ac.currentTime, .05); }
   function lrCheck() { init(); shot(-Math.PI / 2, 1, .1, (o) => tone(o, 880, .4, .2), .5); setTimeout(() => shot(Math.PI / 2, 1, .1, (o) => tone(o, 1175, .4, .2), .5), 900); }
-  return { init, loadVoices, say, moveVoice, stopVoices, voiceLevel, loop, stopLoops, fx, setMuted, isMuted: () => muted, lrCheck, ctx: () => ac };
+  return { init, loadVoices, say, voiceLevel, loop, fx, setMuted, isMuted: () => muted, lrCheck, ctx: () => ac };
 })();

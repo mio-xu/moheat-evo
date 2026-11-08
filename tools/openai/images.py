@@ -75,6 +75,7 @@ for job in a.jobs:
         else call("generations", fields)
     im = Image.open(io.BytesIO(base64.b64decode(r["data"][0]["b64_json"]))).convert("RGB")
     im.save(dst); im.save(os.path.join(ART, "web", job + ".jpg"), quality=92)
+    log = json.load(open(LOG)) if os.path.exists(LOG) else {}   # re-read: parallel runs on the same demo share this log
     log[job] = {"model": a.model, "size": a.size, "quality": a.quality, "seconds": round(time.time() - t0), "usage": r.get("usage"), "out": list(im.size)}
     json.dump(log, open(LOG, "w"), indent=1)
     print(f"  saved {job} {im.size} in {time.time() - t0:.0f}s usage {r.get('usage')}", flush=True)

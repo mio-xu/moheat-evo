@@ -1,59 +1,34 @@
-# Live-stream demos — Demo 14 / 17 / 18 / 19 (one streamer each)
+# ミントの、おみみ専門店 · Mint's Ear Salon (for-men, interactive stream)
 
-| Demo | Page | Title |
-|---|---|---|
-| 14 | `demos/for-men/Demo14_MintStream/` | ミントの、ささやき配信 · Mint's Whisper Stream |
-| 17 | `demos/for-men/Demo17_CocoaStream/` | ココアの、ほっこりカフェ配信 · Cocoa's Cozy Café Stream |
-| 18 | `demos/for-men/Demo18_HinataStream/` | ひなたの、激辛チャレンジ配信 · Hinata's Super-Spicy Challenge |
-| 19 | `demos/for-men/Demo19_LunaStream/` | ルナの、よふかし配信 · Luna's Late-Night Stream |
+Lives at `demos/for-men/Demo14_MintStream/` (same URL as the old whisper stream room, which it replaced on 2026-11-08 — user: the
+stream rooms become stories, Mint stays the one stream, in a new form: C — a role-play "ear salon" stream where the chat orders the
+treatments; old version backed up to `~/Desktop/MoHeat Evo 备份/for-men/Demo14_MintStream_20261108-1509/`). Built as staging folder Demo37.
 
-You are a viewer in the streamer's live room: chat comments and Super Chats, she answers you. Her binaural mic is your head,
-so her voice, whispers and triggers come from her side.
+**Mint (白深ミント), 20** — original character, unchanged look / personality / voice: long silky mint-green hair fading to white, thin low
+side braid, sleepy pale aqua eyes, small star hair clip, oversized white cable-knit cardigan; calm, sleepy, whispery; ElevenLabs `mint`
+r1_a. Outfit for the place: cardigan over a mint salon apron.
 
-**Thermal (firmware `DUAL`, cool and heat independent on each ear; user 2026-11-08: rich but plausible)** — two layers:
-- *voice* (a voice is always warm, user 2026-11-08): her loudness (0.1 + 0.8 × envelope) warms the ear she is at — full at the ear, ×0.6 within 30 cm, a mild ×0.28 from her desk;
-- *ambient*: only real warm / cold things next to the binaural mic (mug and steam, cold bottle, ice, towel, blanket, heater,
-  night wind gusting with the wind sound, desk fan, blown breath). Nothing for what only she feels (spicy food, a topping she tastes).
-Both layers can hit the same ear at once (Mint's menthol whisper, Cocoa's fu-fu next to the steaming mug). `STREAM.both()` counts those frames.
-This folder holds the shared code, art and voices; Demo 17/18/19 hold only `index.html` + `media/cover.jpg` and use
-`<base href="./">`; `<body data-ch="…">` picks the streamer. All four pages come from `scripts/make_pages.py`
-(edit there, not in the pages). The stream-end screen links to the next streamer (Mint → Cocoa → Hinata → Luna → Mint).
-Art style = Demo 12's soft-cel pick. Covers: `?cover=1` → `media/cover.jpg` (headless Chrome 1920×1080).
+## Story (5 steps, ~2:10) — her little salon set at night; you are the dummy head 「みみくん」
+1. **ご来店** — greeting, the chat says hi · chat vote 「みぎ」/「ひだり」 (= ear A for the rest).
+2. **ほぐす** — warmed hands on ear A · Super Chat menu 「蒸しタオル」 (both ears warm) / 「ひんやりスプーン」 (cool on ear A right after the warm hands).
+3. **おみみかき** — **hold** 「動かない」 (let go → she nudges you once) · menu 「温石」 / 「ミントの吐息」 (cool breath on the ear her whisper warms).
+4. **反対のおみみ** — action 「寝返り」 → ear B: hands, then a cool mist on both (warm → cool on ear B within a second, whisper still warm).
+5. **ねかしつけ** — chat choice secret / lullaby at ear A · blanket · say 「おやすみ」 (voice, judged) · 「また来るね」 / Super Chat 「延長」.
+Ends on its own cover (↺ Play again). All answers by tap or voice (`shared/voice.js`, `l10n.js` VOICE); EN / 日本語 / 中文 (chat
+messages stay in the viewers' own languages — ambience, `project/qa.json`).
 
-## Channels (final)
-
-| Channel | Feel | Voice (until 2026-11-08 VOICEVOX; now ElevenLabs, see below) | Story · thermal |
-|---|---|---|---|
-| 白深ミント Mint | calm, sleepy, ASMR whisper | 四国めたん ささやき / ヒソヒソ | dummy head "みみくん": ear blowing with mint lip balm on the ear you pick (cool), ice Super Chat (cool, moves L→R), warm towel on both ears, a secret in each ear |
-| 甘音ココア Cocoa | sweet café chat | ユーレイちゃん 甘々 / ささやき | hot cocoa (warm), fu-fu blowing (cool right), "aah" (warm), topping Super Chat (marshmallow warm / ice cream cool), rain → shared blanket, her hands on your right ear (warm) |
-| 火野ひなた Hinata | genki gamer | 春日部つむぎ | spicy ramen challenge (warm, both ears), rescue Super Chat (milk = cool front / desk fan = cool left), paper-fan flaps L/R (cool), a secret at the right ear |
-| 宵月ルナ Luna | cool, mature, late night | 九州そら あまあま / ささやき (round 3 "n5": pitch −0.07, intonation 1.20, formant ×0.96) | night wind from the open window (cool left), music box or hot tea request (warm), she sits on your left (warm), a confession before dawn |
-
-Voices now (2026-11-08, user picks): ElevenLabs mint r1_a / cocoa r1_a / hinata_s r1_b / luna r1_b (`tools/eleven/cast.json`), audio tags per line in `scripts/voice.py`. No voice is shared. Lines: `lines.js` (ja + en); voices: `scripts/voice.py` → `media/voice/` (only changed lines are re-synthesized).
-
-## Round 4 — each streamer in her own place (user 2026-11-08: "all four stream from home, a bit boring")
-
-User picks: Mint → **night aquarium after closing** (teal, jellyfish tank, bubbles + pump hum, ice "from the penguins' room", towel warmed in the staff room) ·
-Cocoa → **retro kissaten after closing** (caramel + amber, door bell, espresso steam wand, wall clock, rain on the shop window, stove + blanket) ·
-Hinata → **her ramen yatai at a summer-night festival** (lantern red on night navy, crowd / taiko / crickets / furin, milk → ice-cold ramune, the stall fan,
-a festival uchiwa, fireworks at the end — ambient: a mild warm summer night on both ears) ·
-Luna → **jazz bar after closing** (navy + wine red, record crackle, the bar window's night wind, music box → one song on the bar piano, tea at the counter, the stool next to you).
-Faces and hair stay; outfits follow the place. Story structure, steps and thermal layers stay; 18 lines rewritten / added (`lines.js`, re-voiced with the same ElevenLabs voices).
-
-Art: `scripts/seedance_v2.py` (prompts; `project/web_jobs_v2.json` for the website) → `assets/art/v2/`. The four new `*_live` bases use the old `*_live`
-as the style + character reference; every other round-4 frame refers to its new base by the generation's output URL (no upload). Then the v2 PNGs replace
-`assets/art/*.png` and `prepare_art.py` (face boxes) makes `media/art/*.webp` (`?v=2`). `luna_musicbox*` → `luna_piano*`.
+## Thermal (firmware DUAL)
+- Voice: warm at the ear she leans to, `(0.1 + 0.8 × level)` × distance (ear 1 / ≤ 50 cm 0.6 / further 0.28), × 0.5 in front.
+- Ambient: warmed hands (0.35, one ear) · steamed towel (both 0.6 → 0.3 over ~20 s) · chilled spoon (cool 0.6, short) · warm stone (0.4) ·
+  mint-balm breath (cool 0.45, with the whisper warming the same ear) · cool mist (both 0.55) · blanket (both 0.2).
+- Not heated: sleepiness, the chat.
 
 ## Files
-
-- `index.html`, `style.css` (+ Demo 10's `demo.css` by path), `main.js` (stories, chat, Super Chats, thermal, face animation), `audio.js` (HRTF + synthesized triggers), `lines.js`.
-- `?embed=1` site menu · `?cover=1` poster (`media/cover.jpg`) · `?auto=1` auto-picks every choice (testing). Without `data-ch` the page would show the 4-channel lobby (not used any more). `window.STREAM.conflicts()` = same-ear conflict frames (0 in every channel).
-- Face animation: `scripts/prepare_art.py` blends only the eyes (blink / half) or only the mouth (talk / talk_s) of each extra frame into its base, using the eye and mouth boxes in `FACES`, so colour and hair never jump. Blush is a soft overlay drawn in `main.js` (`CHEEKS`).
-
-## Art (Seedance, gpt-image-2, 16:9 2K)
-
-Prompts: `scripts/seedance.py` (`SCENES`). Raw PNGs in `assets/art/` stay out of git; `media/art/*.webp` are the game frames.
-- API: `python3 scripts/seedance.py scenes <names>`. The upload endpoint has a request-count limit (≈10 h reset) and accepts ≤5 files per request; external image URLs are refused.
-- Website (used on 2026-11-08 when the API upload was limited): prompts in `project/web_jobs.json`; on seedance2-5.com Image-to-Image upload the refs from `assets/art/web/`, paste the prompt, 16:9 + 2K, generate, Download; `scripts/web_take.py <name>` / `web_take_many.py <names…>` move the downloads into `assets/art/`. Then `python3 scripts/prepare_art.py`.
-
-Large media (`assets/art/`, `audio/`) stay out of git.
+- `index.html`, `style.css` (stream overlay: LIVE, viewers, chat, Super Chat cards; the chat moves left in the right-ear view),
+  `main.js`, `audio.js`, `lines.js`, `l10n.js` (`scripts/make_l10n.py`), `media/voice` (`scripts/voice.py`, 22 lines), `project/script.md`.
+- Art = the layered standard (DEMO_DESIGN_GUIDE §6): `scripts/prompts.py` → `project/web_prompts.json` → `python3 tools/openai/images.py
+  <this folder> <jobs>` (OpenAI gpt-image-2: 1 plate, 7 poses on chroma MAGENTA — green hair, 14 masked mouth / blink variants from
+  `project/face_points.json`) → `python3 tools/art/build_stage.py <this folder>` (`project/stage.json`, `"matte": "magenta"`) →
+  `media/art/` + `media/layers.js`. Raw PNGs in `assets/` (not in git).
+- Budget: OpenAI gpt-image-2 22 images (2560×1440 high, ≈ $0.2 each ≈ $4.4; `project/openai_log.json`), Seedance 0.
+- `?auto=1` / `?auto=1&alt=1` test both branches, `?flat` flat stills, `?cover=1` poster (`scripts/make_cover.py`).

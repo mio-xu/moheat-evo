@@ -13,7 +13,7 @@
     { sel: null, en: 'Welcome! Put on headphones: you will hear the story in 3D and, with MoHeat Evo, feel warmth and coolness on each ear. Choose your language, then a 30-second tour.',
       ja: 'ようこそ！ヘッドホンをつけてください。立体音響で物語を聴き、MoHeat Evo をつなぐと左右の耳で温かさ・冷たさを感じられます。言語を選んだら、30 秒で画面の使い方をご紹介します。',
       zh: '欢迎！请戴上耳机：你会听到立体声的故事，连接 MoHeat Evo 后还能在左右耳感受到冷和热。先选择语言，再用 30 秒介绍一下界面。' },
-    { sel: 'header .device, #connectBtn, .mdev-btn', en: 'Connect MoHeat Evo here (desktop Chrome / Edge, USB or Bluetooth). Without it you can still watch and listen.',
+    { sel: 'header .device, #connectBtn', en: 'Connect MoHeat Evo here (desktop Chrome / Edge, USB or Bluetooth). Without it you can still watch and listen.',
       ja: 'ここで MoHeat Evo をつなぎます（パソコンの Chrome / Edge、USB または Bluetooth）。つながなくても、見る・聴くことはできます。',
       zh: '在这里连接 MoHeat Evo（电脑上的 Chrome / Edge，USB 或蓝牙）。不连接也可以观看和收听。' },
     { sel: '.mtc-btn', en: 'Thermal check: left warm → right warm → left cool → right cool, a few seconds each, to make sure every channel works.',
@@ -28,8 +28,6 @@
     { sel: '#startBtn', en: 'Start here. When it is your turn, tap an answer — or simply say it out loud (microphone).',
       ja: 'ここからスタート。あなたの番では、ボタンをタップするか、声に出して答えてもOK（マイク）。',
       zh: '从这里开始。轮到你时，点选答案，或者直接说出来也可以（麦克风）。' },
-    { sel: '.mside-btn', en: '🎛 opens the panel with the sound map, the thermal output and the settings (on small screens).',
-      ja: '🎛 で、音の位置・温冷の出力・設定のパネルを開きます（小さい画面のとき）。', zh: '点 🎛 打开声音位置、冷热输出和设置面板（小屏幕时）。' },
     { sel: 'aside .card:has(#radar)', en: 'Where the voices and sounds are around your head.', ja: '声や音が、頭のまわりのどこにあるかを表示します。', zh: '显示声音在你头部周围的位置。' },
     { sel: 'aside .card:has(.meters), aside .card:has(#cmd)', en: 'What the headphones do on each ear right now: blue = cool, orange = warm.',
       ja: 'いま左右の耳で何が起きているか：青＝冷たい、オレンジ＝温かい。', zh: '耳机此刻在左右耳的输出：蓝色 = 凉，橙色 = 暖。' },
@@ -50,22 +48,13 @@
   .mg-tip button.mg-go { background: linear-gradient(135deg, #ffd58a, #ff9f6e); color: #2a1606; border: 0; margin-left: auto; }
   .mg-tip button.mg-skip { border: 0; color: #b8a9c9; padding-left: 0; }
   .mg-help { min-width: 30px; }
-  .mg-langs { display: flex; gap: 6px; margin: -4px 0 12px; } .mg-langs button.on { background: #f5eefb; color: #17121f; border-color: transparent; }
-  .mg-tip { max-height: calc(100dvh - 16px); overflow-y: auto; box-sizing: border-box; }
-  @media (max-width: 1100px), (pointer: coarse) {   /* touch: every button 44 px tall (user: the guide must be tappable on phones) */
-    .mg-tip button { min-height: 44px; padding: 0 16px; font-size: 14px; } .mg-tip button.mg-skip { padding: 0 12px 0 4px; }
-    .mg-langs button { flex: 1 1 0; padding: 0 6px; } }
-  @media (max-height: 500px) { .mg-tip { padding: 10px 14px 8px; } .mg-tip p { margin-bottom: 8px; } .mg-tip .mg-n { margin-bottom: 2px; } }`;
+  .mg-langs { display: flex; gap: 6px; margin: -4px 0 12px; } .mg-langs button.on { background: #f5eefb; color: #17121f; border-color: transparent; }`;
   document.head.appendChild(css);
 
   let i = 0, list = [], veil, hole, tip;
   const visible = (el) => { if (!el) return false; const r = el.getBoundingClientRect(); return r.width > 4 && r.height > 4 && getComputedStyle(el).visibility !== 'hidden'; };
   const target = (s) => (s.sel ? s.sel.split(', ').map((q) => document.querySelector(q)).find(visible) : null);
-  const root = document.documentElement, inDrawer = (el) => !!el && root.classList.contains('lay-drawer') && !!el.closest('aside.side');
-  let opened = false;   // the side panel is a drawer on small screens (nav.js): the tour opens it for its steps and closes it again
-  const drawer = (v) => { if (v === root.classList.contains('side-open')) return; if (v) opened = true; root.classList.toggle('side-open', v); };
   function close(done = true) {
-    if (opened) { drawer(false); opened = false; }
     veil?.remove(); hole?.remove(); tip?.remove(); veil = hole = tip = null;
     removeEventListener('resize', place); removeEventListener('keydown', key, true);
     if (done) try { localStorage.setItem(KEY, 'done'); } catch {}
@@ -93,31 +82,22 @@
     tip.querySelector('.mg-skip')?.addEventListener('click', () => close());
     place();
     tip.querySelector('.mg-go').focus({ preventScroll: true });
-    const el = s.sel && target(s); if (opened || inDrawer(el)) { drawer(inDrawer(el)); setTimeout(place, 300); }   // after the slide-in
   }
-  function place() {   // the tooltip goes where it is fully on screen and covers the highlighted element least (phones too)
+  function place() {
     if (!tip) return;
-    const el = target(list[i]), W = innerWidth, H = innerHeight, tw = tip.offsetWidth, th = tip.offsetHeight, m = 8, gap = 12;
-    if (!el) { Object.assign(hole.style, { left: `${W / 2}px`, top: `${H / 2}px`, width: '0px', height: '0px' }); Object.assign(tip.style, { left: `${(W - tw) / 2}px`, top: `${Math.max(m, (H - th) / 2)}px` }); return; }
-    el.scrollIntoView({ block: 'nearest', inline: 'nearest' });   // e.g. a card further down the side panel that scrolls inside itself (portrait / tablet)
-    const b = el.getBoundingClientRect(), pad = 6;
-    const r = { left: Math.max(0, b.left), top: Math.max(0, b.top), right: Math.min(W, b.right), bottom: Math.min(H, b.bottom) };   // the part on screen
-    Object.assign(hole.style, { left: `${r.left - pad}px`, top: `${r.top - pad}px`, width: `${r.right - r.left + pad * 2}px`, height: `${r.bottom - r.top + pad * 2}px` });
-    const cx = (r.left + r.right) / 2, cy = (r.top + r.bottom) / 2, clampX = (x) => Math.max(m, Math.min(W - tw - m, x)), clampY = (y) => Math.max(m, Math.min(H - th - m, y));
-    const spots = [[clampX(cx - tw / 2), r.bottom + gap], [clampX(cx - tw / 2), r.top - th - gap], [r.right + gap, clampY(cy - th / 2)], [r.left - tw - gap, clampY(cy - th / 2)],
-      [clampX((W - tw) / 2), H - th - m], [clampX((W - tw) / 2), m]];   // below, above, right, left, bottom of the screen, top of the screen
-    const cost = ([x, y]) => (x < m - .5 || y < m - .5 || x + tw > W - m + .5 || y + th > H - m + .5) ? Infinity
-      : Math.max(0, Math.min(x + tw, r.right + pad) - Math.max(x, r.left - pad)) * Math.max(0, Math.min(y + th, r.bottom + pad) - Math.max(y, r.top - pad));
-    let best = spots[4], bc = Infinity; for (const p of spots) { const c = cost(p); if (c < bc) { bc = c; best = p; } if (c === 0) break; }
-    Object.assign(tip.style, { left: `${best[0]}px`, top: `${Math.max(m, best[1])}px` });
+    const el = target(list[i]), W = innerWidth, H = innerHeight, tw = tip.offsetWidth, th = tip.offsetHeight;
+    if (!el) { Object.assign(hole.style, { left: `${W / 2}px`, top: `${H / 2}px`, width: '0px', height: '0px' }); Object.assign(tip.style, { left: `${(W - tw) / 2}px`, top: `${(H - th) / 2}px` }); return; }
+    const r = el.getBoundingClientRect(), pad = 6;
+    Object.assign(hole.style, { left: `${r.left - pad}px`, top: `${r.top - pad}px`, width: `${r.width + pad * 2}px`, height: `${r.height + pad * 2}px` });
+    let top = r.bottom + 14; if (top + th > H - 12) top = r.top - th - 14; if (top < 12) top = Math.min(H - th - 12, Math.max(12, r.top + r.height / 2 - th / 2));
+    let left = r.left + r.width / 2 - tw / 2; left = Math.max(12, Math.min(W - tw - 12, left));
+    if (r.width > W * .5 && r.height > H * .5) { top = H - th - 24; }   // a big target (the stage): bubble at the bottom
+    Object.assign(tip.style, { left: `${left}px`, top: `${top}px` });
   }
   function start() {
     close(false);
     if (window.MoHeatFullscreen?.on) window.MoHeatFullscreen.set(false);
-    const peek = root.classList.contains('lay-drawer') && !root.classList.contains('side-open');
-    if (peek) root.classList.add('side-open');   // so the cards inside the closed drawer count as visible
     list = STEPS.filter((s) => !s.sel || target(s)); i = 0;
-    if (peek) root.classList.remove('side-open');
     veil = document.createElement('div'); veil.className = 'mg-veil'; veil.addEventListener('click', (e) => e.stopPropagation());
     hole = document.createElement('div'); hole.className = 'mg-hole';
     tip = document.createElement('div'); tip.className = 'mg-tip'; tip.setAttribute('role', 'dialog');

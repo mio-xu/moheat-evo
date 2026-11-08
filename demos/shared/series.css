@@ -29,7 +29,8 @@
   .intro:has(.hero.a) .cover-copy { margin: 0 30cqw 0 2cqw !important; max-width: 68cqw !important; }
   .intro h1 { font-size: 6.2cqw !important; }
   .intro .series { font-size: 2cqw; padding: .4cqw 1.6cqw; }
-  .intro .cast { display: none !important; }   /* phones (user: no scrolling, 44 px buttons): the chips make room for the buttons */
+  .intro .cast { flex-wrap: nowrap; }
+  .intro:has(.hero.a) .cast { flex-wrap: wrap; }
   .intro .chip { font-size: 1.9cqw !important; }
   .intro .intro-actions .btn { font-size: 2.6cqw !important; }
   .intro .intro-actions .btn.big { font-size: 3cqw !important; }
@@ -71,132 +72,29 @@
 }
 
 /* ---------- phones and tablets (user, 2026-11-08): the page fits the screen exactly and the player is as large as possible ----------
-   Responsive (user 2026-11-08: "UI 能不能做成屏幕自适应"): the player always takes the largest 16:9 that fits; nav.js picks where
-   the side panel goes from the space that is left —
-     html.lay-below  (≥ 220 px left under the full-width player: portrait phones / tablets): side panel under the player, scrolls inside itself;
-     html.lay-drawer (less: landscape phones / tablets): the side panel is a drawer from the right, opened by 🎛 in the top bar (html.side-open).
-   Landscape phones (height ≤ 600): the top bar is a 56 px column on the left so the player gets the full height.
-   Narrow windows WITH Web Serial: the device controls collapse behind 🔌 (html.dev-open shows them as a small menu).
-   html.no-serial (set by nav.js when the browser has no Web Serial, i.e. every phone / iPad) hides the device controls and 🔌. */
+   Portrait: the player (+ its transport) sits at the top at full width, the side panel fills the rest of the screen and scrolls
+   inside itself. Landscape phone: only the player — as big as the height allows — with a slim top bar; the side panel is hidden.
+   html.no-serial (set by nav.js when the browser has no Web Serial, i.e. every phone) hides the device-connection controls. */
 @media (max-width: 1100px) {
   html.fit:not(.embed) body:not(.cover-only) { overflow: hidden; }
   html.fit:not(.embed) body:not(.cover-only) .layout { display: flex; flex-direction: column; gap: 8px; height: calc(100dvh - var(--fit-bar, 0px)); padding: 8px; box-sizing: border-box; max-width: none; }
   html.fit:not(.embed) body:not(.cover-only) .stage-col { flex: none; width: 100%; min-width: 0; }
   html.fit:not(.embed) body:not(.cover-only) .stage { width: min(100%, calc((100dvh - var(--fit-bar, 0px) - 16px - var(--fit-below, 0px) - 120px) * 16 / 9)); margin-inline: auto; }
   html.fit:not(.embed) body:not(.cover-only) .side { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-  /* drawer: the player does not reserve room for the panel; the panel slides in over the page */
-  html.fit.lay-drawer:not(.embed) body:not(.cover-only) .stage { width: min(100%, calc((100dvh - var(--fit-bar, 0px) - 16px - var(--fit-below, 0px)) * 16 / 9)); }
-  html.fit.lay-drawer:not(.embed) body:not(.cover-only) .side { display: flex !important; flex-direction: column; position: fixed; z-index: 45; top: 0; right: 0; bottom: 0;
-    width: min(340px, 86vw); max-height: none; height: auto; margin: 0; padding: 10px; gap: 10px; box-sizing: border-box; overflow-y: auto; overscroll-behavior: contain;
-    background: var(--bg, #120d14); border-left: 1px solid rgba(255, 255, 255, .14); box-shadow: -18px 0 50px rgba(0, 0, 0, .55);
-    transform: translateX(105%); visibility: hidden; transition: transform .25s ease, visibility 0s .25s; }
-  html.fit.lay-drawer.side-open:not(.embed) body:not(.cover-only) .side { transform: none; visibility: visible; transition: transform .25s ease; }
-  html.fit.lay-drawer:not(.embed) body:not(.cover-only) .side > .card { flex: none; }
-  .mside-btn, .mdev-btn { display: none !important; }
-  html.fit.lay-drawer:not(.embed) body:not(.cover-only) .bar .mside-btn { display: inline-flex !important; }
-  html.side-open .bar .mside-btn, html.dev-open .bar .mdev-btn { background: rgba(255, 255, 255, .22) !important; }
-  /* device controls behind 🔌 (browsers with Web Serial only) */
-  html.fit:not(.embed):not(.no-serial) .bar .mdev-btn { display: inline-flex !important; }
-  html.fit:not(.embed) .bar .device { display: none !important; }
-  html.fit.dev-open:not(.embed):not(.no-serial) .bar .device { display: flex !important; position: fixed; z-index: 46; top: calc(var(--fit-bar, 48px) + 4px); right: 8px; left: auto;
-    width: min(360px, calc(100vw - 16px)); flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px; box-sizing: border-box; border-radius: 14px;
-    background: #17121f; color: #f5eefb; border: 1px solid rgba(255, 255, 255, .16); box-shadow: 0 18px 50px rgba(0, 0, 0, .55); }
-  html.fit.dev-open:not(.embed) .bar { position: relative; z-index: 60 !important; }   /* the menu above the picture */
-  html.fit.dev-open:not(.embed) body:not(.cover-only) .bar { z-index: 60 !important; }
-  html.fit.dev-open:not(.embed) .bar .device select { flex: 1 1 100%; min-width: 0; }
-  html.fit.dev-open:not(.embed) .bar .device .status { flex: 1 1 100%; margin: 0; }
+  html.no-serial .bar .device { display: none !important; }
   html.fit:not(.embed) body:not(.cover-only) .side #radar { display: block; width: auto !important; max-width: 100%; height: 150px !important; margin: 0 auto; }
   .bar { gap: 8px !important; padding: 6px 10px !important; flex-wrap: nowrap; }
   .bar .brand em { display: none; }
 }
 @media (max-width: 1100px) and (orientation: landscape) and (max-height: 600px) {
+  html.fit:not(.embed) body:not(.cover-only) .side { display: none; }
   html.fit:not(.embed) body:not(.cover-only) .layout { padding: 4px 8px; }
-  html.fit.dev-open:not(.embed) body:not(.cover-only) .bar .device { top: 8px; left: 64px; right: auto; }
   html.fit:not(.embed) body:not(.cover-only) .stage { width: min(100%, calc((100dvh - var(--fit-bar, 0px) - 8px - var(--fit-below, 0px)) * 16 / 9)); }
-  /* the top bar becomes a slim column on the left (nav.js then measures --fit-bar = 0): the picture gets the full height */
-  html.fit:not(.embed) body:not(.cover-only) .bar { position: fixed; left: 0; top: 0; bottom: 0; z-index: 20; width: 56px; min-height: 0; flex-direction: column;
-    justify-content: flex-start; align-items: center; padding: 6px 4px !important; gap: 6px !important; overflow-y: auto; scrollbar-width: none; border-bottom: 0; }
-  html.fit:not(.embed) body:not(.cover-only) .layout { margin-left: 56px; }
-  html.fit:not(.embed) body:not(.cover-only) .bar .brand { display: none !important; }
-  html.fit:not(.embed) body:not(.cover-only) .dnav { flex-direction: column; margin: 0; gap: 6px; }
-  html.fit:not(.embed) body:not(.cover-only) :is(.dnav button, .bar .estop) { width: 48px; height: auto !important; min-height: 44px !important; padding: 4px 0 !important;
-    flex-direction: column; gap: 1px; font-size: 11px !important; line-height: 1.15; white-space: normal; text-align: center; margin: 0; }
-  html.fit:not(.embed) body:not(.cover-only) .bar .estop { margin-top: auto; }
-  html.fit:not(.embed) body:not(.cover-only) .bar :is(.btn, .mg-help) { width: 44px; padding-inline: 0 !important; }
-  html.fit:not(.embed) body:not(.cover-only) .dn-panel { left: calc(50% + 28px); width: calc(100vw - 72px); }   /* the demo list leaves the bar column free */
+  .bar { padding: 3px 10px !important; }
+  .bar .btn, .bar .estop, .dnav button, .dnav a.dn-step { height: 28px !important; min-height: 0 !important; padding-block: 0 !important; font-size: 12px !important; }
   html.fit:not(.embed) body:not(.cover-only) .stage-col .legend { display: none; }   /* timeline demos: more height for the player */
   html.fit:not(.embed) body:not(.cover-only) .stage-col .transport { margin-top: 4px !important; }
 }
-/* ---------- touch (user, 2026-11-08: "手机上每个 Demo 都不能滚动", comfortable to use) ----------
-   Phones / tablets (≤ 1100 px wide or a touch screen): every control is at least 44 × 44 px to tap. Bar controls are really
-   44 px tall; small buttons ON the picture keep their look and get an invisible 44 × 44 px hit area (::before), so the picture
-   is not covered. Check: tools/web/check_mobile.html (DEMO_DESIGN_GUIDE §7.1). */
-@media (max-width: 1100px) {
-  html.fit:not(.embed) .bar { min-height: 48px; padding: 2px 8px !important; gap: 6px !important; box-sizing: border-box; }
-  html.fit:not(.embed) .bar .brand { display: inline-block; line-height: 44px; white-space: nowrap; flex: none; }
-  html.fit:not(.embed) .bar :is(.btn, .mg-help) { display: inline-flex; align-items: center; justify-content: center; }
-  html.fit:not(.embed) :is(.bar .btn, .bar .estop, .bar select, .dnav button, .dnav a.dn-step) { height: 44px !important; min-height: 44px !important; min-width: 44px; padding-block: 0 !important; box-sizing: border-box; white-space: nowrap; flex: none; }
-  html.fit:not(.embed) .dnav { gap: 4px; margin-left: 0; }
-  html.fit:not(.embed) .dnav a.dn-step { width: 44px; }
-  html.fit:not(.embed) .bar { flex-wrap: wrap !important; row-gap: 4px !important; }   /* last resort on very narrow phones (< 375 px): ■ STOP on a second row, never a wider page */
-  html.fit:not(.embed) .bar .estop { display: inline-flex; align-items: center; justify-content: center; margin-left: auto; padding-inline: 12px !important; }
-  /* side panel (portrait / tablets): sliders and the check box get a 44 px row */
-  html.fit:not(.embed) .side :is(label.row, label:has(input[type=checkbox])) { min-height: 44px; box-sizing: border-box; display: flex; align-items: center; }
-  html.fit:not(.embed) .side input[type=range] { height: 44px; margin-block: 0; }
-  html.fit:not(.embed) .side input[type=checkbox] { width: 22px; height: 22px; }
-  html.fit:not(.embed) .side select { min-height: 44px; }
-  /* film demos: the play button under the picture */
-  html.fit:not(.embed) .transport .btn { min-width: 44px; min-height: 44px; }
-  /* no Web Serial (phones, iPad) = no device: the cover's 🌡 thermal check has nothing to drive */
-  html.no-serial .mtc-btn { display: none !important; }
-}
-@media (max-width: 480px) {   /* narrow phones: the top bar stays one row (≥ 375 px; narrower phones wrap ■ STOP onto a second row) */
-  html.fit:not(.embed) .bar { gap: 4px !important; padding-inline: 6px !important; }
-  html.fit:not(.embed) .bar .brand { font-size: 14px !important; }
-  html.fit:not(.embed):not(.no-serial) .bar .brand, html.fit.lay-drawer:not(.embed) .bar .brand { display: none !important; }   /* room for 🔌 / 🎛 */
-  html.fit:not(.embed) .dnav button { padding-inline: 6px !important; font-size: 12px !important; }
-  html.fit:not(.embed) .bar .estop { padding-inline: 7px !important; font-size: 13px !important; }
-}
-@media (max-width: 1100px), (pointer: coarse) {
-  :where(.stage) :where(button, [role=button]) { position: relative; }   /* zero specificity: a demo's own position wins */
-  .stage :is(button, [role=button])::before { content: ""; position: absolute;
-    top: min(0px, calc(50% - 22px)); bottom: min(0px, calc(50% - 22px)); left: min(0px, calc(50% - 22px)); right: min(0px, calc(50% - 22px)); }
-  /* hold buttons: no scrolling / text selection / callout menu while a finger is down (pointercancel would end the hold) */
-  .stage :is(.ch, .act-btn, .chip-c, #micGate button, .mic-gate button, .ix-btn, button) { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; touch-action: manipulation; }
-  .stage :is(.hold, .act-btn.hold) { touch-action: none; }
-  :where(.stage) :where(label.ix-toggle) { position: relative; }
-  .stage label.ix-toggle::before { content: ""; position: absolute; inset: min(0px, calc(50% - 22px)) 0; }
-  /* cover buttons are really 44 px tall (their hit areas must not overlap the language row under them) */
-  .intro :is(.intro-actions .btn, .msub-lang, .ix-toggle) { min-height: 44px !important; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; }
-  .intro .msub-row { margin-top: 6px !important; gap: 6px !important; }
-  /* answer buttons, chat chips, the live-chat 💝 button */
-  .stage :is(.ch, .act-btn, .chip-c, #micGate button, .mic-gate button, .ix-btn) { min-height: 44px; min-width: 44px; box-sizing: border-box; }
-  .stage .gift-btn { width: 40px !important; height: 40px !important; }
-  .stage .msub-hud .ix-chip { position: relative !important; inset: auto !important; }   /* subs.js makes it static: its hit area would then cover the whole 🌐 ⛶ row */
-  .stage .ix-cheer { z-index: 7; } .stage .ix-cheer button { min-height: 36px; }   /* Demo 1–9 "cheer" button: above the demo's own pills */
-  .intro .intro-actions { gap: 6px !important; row-gap: 6px !important; }
-  /* the 🌐 / ⛶ / 🔊 buttons in the picture's corner: 32 px, apart and away from the edge so the 44 px hit areas stay inside the picture */
-  .stage :is(.hud-top, .msub-hud) { transform: translate(-4px, 4px); gap: 12px !important; }
-  .stage .hud-top { z-index: 6 !important; }   /* above a demo's own tap areas (Demo26 cat ears, Demo12 incoming call) so 🔊 / ⛶ stay tappable */   /* moved, not re-placed: some demos put it elsewhere (Demo14: left of the chat) */
-  .stage :is(.hud-btn, .msub-btn) { min-height: 32px; min-width: 32px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; }
-}
-@container (max-width: 620px) {             /* small player (phones): bigger answer buttons, readable text */
-  .stage .choices:has(> .ch) { flex-direction: row !important; flex-wrap: wrap; justify-content: center; width: 94cqw; gap: 1.6cqw !important; }
-  .stage .choices > .ch { flex: 1 1 0; min-width: 26cqw; max-width: 46cqw; }
-  .stage :is(.ch, .act-btn) b { font-size: max(13px, 3.4cqw) !important; }
-  .stage :is(.ch, .act-btn) span { font-size: max(11px, 2.6cqw) !important; }
-  .subs .ja { font-size: max(13px, 3.4cqw) !important; } .subs .en { font-size: max(11px, 2.6cqw) !important; }
-  .intro .intro-actions { flex-wrap: wrap; }
-  .intro .intro-actions .btn { font-size: max(12px, 3cqw) !important; }
-  .intro .intro-actions .btn.big { font-size: max(13px, 3.4cqw) !important; }
-  .intro .msub-lang { font-size: max(11px, 2.6cqw) !important; padding-inline: 2.4cqw !important; }
-}
-@container (max-width: 420px) {             /* phone portrait (≈ 374 × 210 player): title, buttons and languages only */
-  .intro .series, .intro .bottles { display: none !important; }
-  .intro .cover-copy, .intro:has(.hero.a) .cover-copy { margin: 0 auto !important; max-width: 96cqw !important; gap: 2cqw !important; }
-  .intro .msub-row { margin-top: 0 !important; }
-}
-
 /* small players (phones): the cover's "join in" toggle stays inside the picture */
 @container (max-width: 620px) { .intro .ix-toggle { font-size: 2.4cqw !important; margin-top: .4cqw !important; padding: .3em .8em !important; } }
 /* no progress card in the UI (user 2026-11-08): the game demos still write #steps, the card is just not shown */

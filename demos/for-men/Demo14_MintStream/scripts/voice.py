@@ -1,39 +1,42 @@
 #!/usr/bin/env python3
-"""Streamer voices: ElevenLabs, the user's picks (2026-11-08, tools/eleven/cast.json; earlier VOICEVOX):
-Mint m.. = mint r1_a · Cocoa c.. = cocoa r1_a · Hinata h.. = hinata_s r1_b · Luna l.. = luna r1_b.
-Standard settings from tools/eleven/tts.py. Delivery = audio tags: TALK[prefix] for 'n' lines, [whispers] for 'w' lines, OVERRIDE for
-special lines (blowing, spicy shouts, laughs). Reads ../lines.js → media/voice/<id>.m4a + media/voice.js. Only changed lines are re-voiced."""
+"""Mint's voice: ElevenLabs (tools/eleven/cast.json "mint", r1_a, the user's pick from the audition).
+Standard settings from tools/eleven/tts.py (eleven_v4, ja, stability 0.4, similarity 0.8, seed 7); delivery from the audio tags in
+TAGGED below ([whispers] at your ear). Reads ../lines.js → media/voice/<id>.m4a (mono AAC) + media/voice.js. Only (re)synthesizes lines whose text or voice changed (cache: audio/voice_cache.json)."""
 import importlib.util, json, os, subprocess, tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REPO = os.path.abspath(os.path.join(ROOT, '..', '..', '..'))
 sp = importlib.util.spec_from_file_location('eleven', os.path.join(REPO, 'tools', 'eleven', 'tts.py')); E = importlib.util.module_from_spec(sp); sp.loader.exec_module(E)
-CAST = {'m': 'mint', 'c': 'cocoa', 'h': 'hinata_s', 'l': 'luna'}
-NAME = {'m': 'ミント', 'c': 'ココア', 'h': 'ひなた', 'l': 'ルナ'}
-TALK = {'m': '[softly]', 'c': '[cheerful]', 'h': '[excited]', 'l': '[softly]'}
-OVERRIDE = {
-    'm07': '[whispers] …いきますよ。[blows softly] …ふぅー',
-    'm10': '[blows softly] …ふぅー。…ふぅー',
-    'm18': '[chuckles softly] …ふふ。[whispers] じゃあ、さいごに、ないしょばなし',
-    'c05': '[giggles] …あ、コメント。「ふーふーして」？ もう、あまえんぼさんだなあ',
-    'c06': '[blows] …ふーっ、ふーっ',
-    'c08': '[softly] …おいしい？ [giggles] えへへ。いっしょにのむと、もっとおいしいね',
-    'c10': '[curious] …あれ？ おそと、あめ、ふってきたみたい',
-    'c11': '[softly] ちょっと、さむくなってきたね。…ストーブつけて、ブランケット、いっしょに、はいろ？',
-    'h03b': '[giggles] えへへ、やさしい〜。[determined] でも、やるって決めたからっ！',
-    'h05': '[shouting] …からっ！ からいからい！ 口から火が出そうっ！',
-    'h06m': '[relieved] ラムネ！ たすかる〜！ [sighs happily] …ぷはーっ、ひんやり〜',
-    'h06f': '[relieved] 扇風機！ ありがと〜！ [excited] 屋台の扇風機、全開にしちゃお！ [sighs happily] …あ〜、風きもちいい〜',
-    'h11b': '[gasps] …あっ、花火！ [softly] …きれい。いっしょに見られて、よかった',
-    'h10': '[shy] [whispers] …えへへ、ここだけのはなしね。ほんとは、ちょっとだけ緊張してたんだ',
-    'l03': '[chuckles softly] …ふふ。[softly] 夜の風って、すき。…でも、冷えすぎないでね',
+VOICE = E.voice('mint')
+TAGGED = {
+    'm01': '[softly] …いらっしゃいませ。 [whispers] おみみ専門店、ミントへ、ようこそ。',
+    'm02': '[softly] 今夜のお客さまは…みみくん。 [whispers] …つまり、画面のまえの、あなたです。',
+    'm03': '[whispers] …まずは、どっちのおみみから、ほぐしましょうか。 コメントで、おしえてね。',
+    'm04': '[whispers] …はーい。 こっちのおみみ、さわりますね。 手、あっためておいたから。',
+    'm05': '[whispers] …むに、むに。 [giggles softly] …ふふ、やわらかい。 [whispers] …ちから、ぬいてね。',
+    'm06t': '[softly] …ご注文ありがとう。 蒸しタオル、ふたつのおみみに。 [sighs contentedly] …ふわぁ、あったかい、ね。',
+    'm06s': '[softly] …ご注文ありがとう。 冷やしておいた、スプーン。 [whispers] …ぴと。 [giggles softly] …ひゃっ、てなった？',
+    'm07': '[whispers] …つぎは、おみみかき。 …ちょっとだけ、動かないでね。',
+    'm08': '[whispers] …かり、かり。 …すー。 …はい、きれいになりました。 いいこ、いいこ。',
+    'm08x': '[whispers] …あ、うごいた。 …あぶないから、もうすこし、じっとしてて？',
+    'm09w': '[whispers] …あったかい石、おみみのそばに、おいておくね。 …じんわり。',
+    'm09m': '[whispers] …ミントのリップ、ぬったの。 …いくよ。 [blows softly] …ふぅー。 [whispers] …すーすー、するでしょ。',
+    'm10': '[whispers] …はんたいがわも、しないとね。 …ごろん、ってしてくれる？',
+    'm11': '[whispers] …こっちのおみみも、さっきと、おなじに。 …むに、むに。 かり、かり。',
+    'm12': '[whispers] …しゅっ。 ひんやりミスト、さいごに。 [softly] …おつかれさま、でした。',
+    'm13': '[softly] …コメント、いっぱい。 「ねむくなってきた」… [giggles softly] ふふ、よかった。',
+    'm14a': '[whispers] …ひみつ。 …このお店、ほんとは、あなたのために、ひらいたの。',
+    'm14b': '[hums softly] …ん、ん〜…。 [whispers] …こもりうた、ミントの、オリジナル。',
+    'm15': '[whispers] …ブランケット、かけるね。 …さいごに、おやすみって、いって？',
+    'm16': '[whispers] …おやすみなさい。 …またのご来店、まってます。',
+    'm17a': '[whispers] …うん。 …やくそく、ね。',
+    'm17b': '[surprised, softly] …えっ、延長…？ [giggles softly] …ふふ、しかたないなあ。 [whispers] …じゃあ、あなたが眠るまで、ここにいるね。',
 }
 src = open(os.path.join(ROOT, 'lines.js'), encoding='utf-8').read()
 LINES = json.loads(src[src.index('= {') + 2:src.rindex('}') + 1])
 out_dir = os.path.join(ROOT, 'media', 'voice'); os.makedirs(out_dir, exist_ok=True)
 cache_p = os.path.join(ROOT, 'audio', 'voice_cache.json'); os.makedirs(os.path.dirname(cache_p), exist_ok=True)
 cache = json.load(open(cache_p)) if os.path.exists(cache_p) else {}
-VOICES = {p: E.voice(c) for p, c in CAST.items()}
 
 
 def dur(p):
@@ -42,17 +45,17 @@ def dur(p):
 
 
 durs = {}
-for lid, v in LINES.items():
-    p = lid[0]; text = OVERRIDE.get(lid) or ('[whispers] ' if v[2] == 'w' else TALK[p] + ' ') + v[0]
-    key = f'eleven|{VOICES[p]}|{E.MODEL}|{E.SEED}|{text}'
+for lid in LINES:
+    if lid not in TAGGED: raise SystemExit(f'{lid}: add its tagged text to TAGGED')
+    key = f'eleven|{VOICE}|{E.MODEL}|{E.SEED}|{TAGGED[lid]}'
     m4a = os.path.join(out_dir, f'{lid}.m4a')
     if cache.get(lid) != key or not os.path.exists(m4a):
-        with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as f: f.write(E.speak(text, VOICES[p])); wav = f.name
+        with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as f: f.write(E.speak(TAGGED[lid], VOICE)); wav = f.name
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', wav, '-ac', '1', '-af', 'loudnorm=I=-18:TP=-2', '-ar', '48000', '-c:a', 'aac', '-b:a', '112k', m4a], check=True)
-        os.remove(wav); cache[lid] = key; print('voiced', lid, text)
+        os.remove(wav); cache[lid] = key; print('voiced', lid, TAGGED[lid])
     durs[lid] = dur(m4a)
 for f in os.listdir(out_dir):
     if f.endswith('.m4a') and f[:-4] not in LINES: os.remove(os.path.join(out_dir, f))
 json.dump(cache, open(cache_p, 'w'), ensure_ascii=False, indent=1)
-open(os.path.join(ROOT, 'media', 'voice.js'), 'w').write('window.STREAM_VOICE = ' + json.dumps({'credit': {p: 'ElevenLabs' for p in CAST}, 'dur': durs}) + ';\n')
+open(os.path.join(ROOT, 'media', 'voice.js'), 'w').write('window.MINT_VOICE = ' + json.dumps({'credit': 'ElevenLabs', 'dur': durs}) + ';\n')
 print(len(durs), 'lines,', round(sum(durs.values()), 1), 's')

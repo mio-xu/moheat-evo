@@ -70,11 +70,6 @@ body.cover-only .cover-copy { margin-top: 0 !important; }
 #heatBtn.on { background: #ff8a5c; color: #3a0f00; }
 .dk[hidden] { display: none !important; }
 .dk { white-space: nowrap; }
-/* touch (DEMO_DESIGN_GUIDE §7.1): 44 px camera buttons; on a phone-size player the dock wraps onto two rows instead of shrinking */
-@media (max-width: 1100px), (pointer: coarse) {
-  .dk { height: 44px; min-width: 44px; }
-  .dock { gap: 4px; bottom: 4px; flex-wrap: wrap; justify-content: center; max-width: calc(100% - 8px); }
-}
 
 /* coach bubble: points at what to press / tap next */
 .coach { position: absolute; z-index: 5; left: 0; top: 0; transform: translate(-50%, calc(-100% - 1cqw)); pointer-events: none; opacity: 0; transition: opacity .3s;
