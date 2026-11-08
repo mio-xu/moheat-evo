@@ -346,11 +346,10 @@
   $('startBtn').addEventListener('click', start);
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
-  function drawCover() {   // the door still pushed to the right third, so the title sits on the dark rain on the left
-    ctx.fillStyle = '#100c18'; ctx.fillRect(0, 0, W, H);
-    const im = IMG.door || IMG.window; if (!im) return;
-    ctx.drawImage(im, 460, 0, W, H);
-    const g = ctx.createLinearGradient(380, 0, 1000, 0); g.addColorStop(0, 'rgba(16,12,24,1)'); g.addColorStop(1, 'rgba(16,12,24,0)'); ctx.fillStyle = g; ctx.fillRect(380, 0, 620, H);
+  function drawCover() {   // cover standard (shared/cover.js): the still with the face on the standard spot, the title in the shaded left column
+    const im = IMG.door || IMG.window, C = window.MoHeatCover; if (!im) { ctx.fillStyle = '#100c18'; ctx.fillRect(0, 0, W, H); return; }
+    const pic = () => ctx.drawImage(im, 460, 0, W, H);
+    if (C) C.fit(ctx, { eye: [.681, .163], face: .416 }, pic, { tone: '#100c18', covers: [.24, 0, 1.24, 1] }); else pic();   // eye / face: where the face is in this drawing (tools/web/check_cover.py)
   }
   window.SHION = { get S() { return S; }, thermal: () => thermal(.05), both: () => both };
   setStep(0);

@@ -32,6 +32,7 @@ What is checked (id → lesson / rule):
   mobile     tools/web/check_mobile.html at 7 sizes (one screen, no overflow, ≥ 44 px, guide on screen, drawer)
   drag       CDP touch strokes on the picture at 390×844 / 844×390: no page scroll / zoom / pointercancel (§7.1 拖动手势, shared/gesture.js)
   mouth      (--full) tools/art/check_mouth.js: opens only while talking, no stuck / half / flicker
+  shell      (browser) tools/web/check_shell.js: pure mode ends with zero input, no mic, ← / → only on the cover, Space pauses, seek
   cover      (browser) tools/web/check_cover.py: the cover standard (§7.3 封面构图标准) — shared/cover.js, face size / eye line / side,
              copy column, dark under the copy, phone title / Start / languages (per-demo exception: qa.json skip.cover)
   release    cover.jpg, menu thumbnail + en / ja / zh thumbs (not older than cover / l10n.js), nav.js DEMOS, site menu, credits.html
@@ -394,6 +395,22 @@ if mouth:
     except subprocess.TimeoutExpired: mouth.kill(); out = 'timeout'
     fl = [l.strip()[2:] for l in out.splitlines() if l.strip().startswith('✗')]
     row('G6', 'mouth', 'FAIL' if mouth.returncode else 'PASS', f'{len(fl)} lip-sync problem(s)' if mouth.returncode else 'mouth opens only while talking', fl or ([out.strip().splitlines()[-1]] if mouth.returncode and out.strip() else []))
+
+# ---------------------------------------------------------------- G6 unified shell (tools/web/check_shell.js, guide §2 / §7.3 统一外壳)
+if not A.quick and 'shared/shell.js' in read(os.path.join(D, 'index.html')):
+    sh = subprocess.run(['node', os.path.join(REPO, 'tools', 'web', 'check_shell.js'), D, '--secs', str(A.secs)], capture_output=True, text=True)
+    try:
+        r = json.loads(sh.stdout.strip().splitlines()[-1]); bad = []
+        if not r.get('pureEnded'): bad.append(f'pure mode did not reach its own cover in {r.get("secs")} s with zero input')
+        if r.get('mic'): bad.append('pure mode asked for the microphone: ' + ', '.join(r['mic']))
+        if r.get('navDuringPlay'): bad.append('← / → left the page during playback')
+        if not r.get('navOnCover'): bad.append('→ on the cover did not switch demos')
+        if not (r.get('pause') or {}).get('frozen'): bad.append('Space did not freeze the clock')
+        sk = r.get('seek')
+        if sk and not (sk.get('forward') and sk.get('back')): bad.append(f'seek failed: {sk}')
+        row('G6', 'shell', 'FAIL' if bad else 'PASS', f'{len(bad)} shell problem(s)' if bad else f'pure run ends in {r.get("secs")} s, no mic, ←/→ gated, pause, seek {"ok" if sk else "n/a (no chapters)"}', bad + r.get('errors', []))
+    except Exception: row('G6', 'shell', 'WARN', 'check_shell.js gave no result', [sh.stderr.strip()[-300:]])
+elif not A.quick: row('G6', 'shell', 'WARN', 'page does not load demos/shared/shell.js yet (pure / interactive mode, pause, seek, ← / →)')
 
 # ---------------------------------------------------------------- G7 cover composition (tools/web/check_cover.py, guide §7.3 封面构图标准)
 if not A.quick:

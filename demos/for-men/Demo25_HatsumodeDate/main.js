@@ -400,11 +400,10 @@
   $('startBtn').addEventListener('click', start);
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
-  function drawCover() {   // the torii still pushed to the right third, so the title sits on the dark night on the left
-    ctx.fillStyle = '#140d14'; ctx.fillRect(0, 0, W, H);
-    const im = IMG.torii || IMG.stole; if (!im) return;
-    ctx.drawImage(im, 460, 0, W, H);
-    const g = ctx.createLinearGradient(380, 0, 1000, 0); g.addColorStop(0, 'rgba(20,13,20,1)'); g.addColorStop(1, 'rgba(20,13,20,0)'); ctx.fillStyle = g; ctx.fillRect(380, 0, 620, H);
+  function drawCover() {   // cover standard (shared/cover.js): the still with the face on the standard spot, the title in the shaded left column
+    const im = IMG.torii || IMG.stole, C = window.MoHeatCover; if (!im) { ctx.fillStyle = '#140d14'; ctx.fillRect(0, 0, W, H); return; }
+    const pic = () => ctx.drawImage(im, 460, 0, W, H);
+    if (C) C.fit(ctx, { eye: [.819, .256], face: .27 }, pic, { tone: '#140d14', covers: [.24, 0, 1.24, 1] }); else pic();   // eye / face: where the face is in this drawing (tools/web/check_cover.py)
   }
   window.TSUBAKI = { get S() { return S; }, thermal: () => thermal(.05), both: () => both, log: cmdLog, done: false };
   setStep(0);

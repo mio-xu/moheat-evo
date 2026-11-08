@@ -11,7 +11,8 @@
 // matched but came close (recognition of short lines is not perfect, the demo must never get stuck; unrelated talk in the room
 // does not count); a choice needs a clear winner.
 // Keys too: 1 / 2 / 3 / 4 pick an answer, Enter a single action. No recognition (Firefox, mic denied, ?embed without the
-// microphone permission): everything stays a tap, nothing changes. Off in ?cover / ?render / ?auto. Toggle: the 🎙 pill (saved).
+// microphone permission): everything stays a tap, nothing changes. Off in ?cover / ?render / ?auto and in pure listening mode
+// (shared/playmode.js: no microphone at all). Toggle: the 🎙 pill (saved).
 // The audio is processed by the browser's speech service (Chrome / Edge: Google / Microsoft; Safari: Apple); nothing is stored here.
 (() => {
   if (window.MoHeatVoice) return;
@@ -106,7 +107,7 @@
     place(anchorEls);
   }
   function place(anchorEls) {
-    if (!pill || !anchorEls?.length) return;
+    if (!pill?.isConnected || !anchorEls?.length) return;   // a hidden (removed) pill: nothing to place (getComputedStyle(null) threw 4× a second)
     let l = 1e9, t = 1e9, r = -1e9, b = -1e9;
     for (const el of anchorEls) { const q = el.getBoundingClientRect(); if (!q.width) continue; l = Math.min(l, q.left); t = Math.min(t, q.top); r = Math.max(r, q.right); b = Math.max(b, q.bottom); }
     if (l > r) return;
@@ -122,7 +123,8 @@
   // ---------------------------------------------------------------- recognition
   let rec = null, recOn = false, denied = !SR, netFails = 0, sess = null;
   const micAllowed = () => { const m = document.getElementById('micOn'); return !m || m.checked; };
-  const active = () => !OFF && enabled && !denied && micAllowed();
+  const pure = () => window.MoHeatPlay?.pure === true;   // pure listening mode (shared/playmode.js): no microphone, no recognition
+  const active = () => !OFF && !pure() && enabled && !denied && micAllowed();
   function make() {
     const r = new SR(); r.continuous = true; r.interimResults = true; r.maxAlternatives = 4; r.lang = LANG();
     r.onstart = () => { netFails = 0; };
@@ -155,7 +157,7 @@
   function begin(o) {
     end();
     sess = { ...o, preps: o.phrases.map((ph) => expand(ph).flatMap(prep)), fails: 0, done: false, anchor: o.anchor || (() => []) };
-    if (OFF) { sess = null; return null; }
+    if (OFF || pure()) { sess = null; return null; }
     if (!SR) { notice(o); return sess; }
     idle(); startRec();
     return sess;
@@ -213,16 +215,17 @@
   let autoSig = '', autoEls = [], manual = false;
   function scan() {
     if (manual) return;
-    const els = OFF ? [] : [...document.querySelectorAll(SEL)].filter(visible);
+    const els = OFF || pure() ? [] : [...document.querySelectorAll(SEL)].filter(visible);
     if (!els.length) { if (autoSig) { autoSig = ''; autoEls = []; end(); } return; }
     const sig = els.map((e) => e.dataset.voice || [...e.querySelectorAll(':scope > b:not(.one), :scope > span:not(.one)')].map((x) => x.textContent).join('/') || e.textContent).join('|');
     if (sig !== autoSig) {
       autoSig = sig; autoEls = els;
       begin({ phrases: els.map(phrasesOf), single: els.length === 1, lenient: true, anchor: () => autoEls.filter((e) => e.isConnected), onHit: (i) => els[i]?.click() });
       if (sess) sess.els = els;
-    } else if (pill) place(autoEls);
+    } else if (pill?.isConnected) place(autoEls);
   }
   setInterval(scan, 250);
+  addEventListener('moheat:playmode', () => { if (pure()) { autoSig = ''; autoEls = []; end(); } });   // switched to pure listening: stop listening at once
   addEventListener('moheat:sublang', () => { if (rec && recOn && rec.lang !== LANG()) stopRec(); /* onend restarts in the new language */ if (sess) idle(); });
   addEventListener('keydown', (e) => {   // 1–4 pick an answer, Enter a single action (not while typing)
     if (e.repeat || e.metaKey || e.ctrlKey || e.altKey || /input|textarea|select/i.test(e.target.tagName) || e.target.isContentEditable) return;

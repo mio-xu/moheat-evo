@@ -275,7 +275,11 @@
   $('startBtn').addEventListener('click', start);
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
-  function drawCover() { if (IMG.lounge) ctx.drawImage(IMG.lounge, 0, 0, W, H); else { ctx.fillStyle = '#1a0f14'; ctx.fillRect(0, 0, W, H); } }
+  function drawCover() {   // cover standard (shared/cover.js): the still with the face on the standard spot, the title in the shaded left column
+    const im = IMG.lounge, C = window.MoHeatCover; if (!im) { ctx.fillStyle = '#1a0f14'; ctx.fillRect(0, 0, W, H); return; }
+    const pic = () => ctx.drawImage(im, 0, 0, W, H);
+    if (C) C.fit(ctx, { eye: [.484, .27], face: .273 }, pic, { tone: '#1a0f14', covers: [0, 0, 1, 1] }); else pic();   // eye / face: where the face is in this drawing (tools/web/check_cover.py)
+  }
   window.JIN = { get S() { return S; }, thermal: () => thermal(.05), both: () => both };
   setStep(0);
   if (QS.has('cover')) { document.body.classList.add('cover-only'); artReady.then(drawCover); return; }
