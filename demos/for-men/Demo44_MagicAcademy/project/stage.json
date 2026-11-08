@@ -276,6 +276,9 @@
    "pose": "tsubaki_broom",
    "bg": "sky",
    "fire": null,
+   "x": 0.5482,
+   "y": 1.025,
+   "height": 0.9965,
    "who": "T"
   },
   "lab_C": {
@@ -296,7 +299,7 @@
     0.78,
     0.86
    ],
-   "x": 0.72,
+   "x": 0.7,
    "y": 1.0,
    "height": 1.0,
    "who": "C"
@@ -309,7 +312,7 @@
     0.78,
     0.86
    ],
-   "x": 0.72,
+   "x": 0.7,
    "y": 1.0,
    "height": 1.0,
    "who": "C"
@@ -322,6 +325,9 @@
     0.07,
     0.84
    ],
+   "x": 0.4691,
+   "y": 1.025,
+   "height": 0.9972,
    "who": "L"
   },
   "tower_L_ear": {
@@ -349,7 +355,7 @@
    "pose": "cocoa_ear",
    "bg": "dawn",
    "fire": null,
-   "x": 0.72,
+   "x": 0.7,
    "y": 1.0,
    "height": 1.0,
    "who": "C"
@@ -383,6 +389,9 @@
     0.5,
     0.5
    ],
+   "x": 0.4691,
+   "y": 1.025,
+   "height": 0.9972,
    "who": "L",
    "small": true
   },
@@ -394,10 +403,10 @@
     0.5,
     0.5
    ],
-   "who": "L",
    "x": 0.5,
    "y": 1.0,
    "height": 0.92,
+   "who": "L",
    "more": [
     {
      "pose": "tsubaki_base",
@@ -408,7 +417,7 @@
     },
     {
      "pose": "cocoa_base",
-     "x": 0.8,
+     "x": 0.78,
      "y": 1.0,
      "height": 0.9,
      "who": "C"
@@ -435,6 +444,9 @@
     0.78,
     0.86
    ],
+   "x": 0.4691,
+   "y": 1.025,
+   "height": 0.9972,
    "who": "L",
    "small": true
   },
@@ -446,10 +458,10 @@
     0.78,
     0.86
    ],
-   "who": "L",
    "x": 0.5,
    "y": 1.0,
    "height": 0.92,
+   "who": "L",
    "more": [
     {
      "pose": "tsubaki_base",
@@ -460,7 +472,7 @@
     },
     {
      "pose": "cocoa_base",
-     "x": 0.8,
+     "x": 0.78,
      "y": 1.0,
      "height": 0.9,
      "who": "C"
@@ -498,10 +510,10 @@
     0.07,
     0.84
    ],
-   "who": "L",
    "x": 0.5,
    "y": 1.0,
    "height": 0.92,
+   "who": "L",
    "more": [
     {
      "pose": "tsubaki_base",
@@ -512,7 +524,7 @@
     },
     {
      "pose": "cocoa_base",
-     "x": 0.8,
+     "x": 0.78,
      "y": 1.0,
      "height": 0.9,
      "who": "C"
@@ -541,6 +553,9 @@
    "pose": "luna_base",
    "bg": "dawn",
    "fire": null,
+   "x": 0.4691,
+   "y": 1.025,
+   "height": 0.9972,
    "who": "L",
    "small": true
   },
@@ -549,10 +564,10 @@
    "pose": "luna_base",
    "bg": "dawn",
    "fire": null,
-   "who": "L",
    "x": 0.5,
    "y": 1.0,
    "height": 0.92,
+   "who": "L",
    "more": [
     {
      "pose": "tsubaki_base",
@@ -563,7 +578,7 @@
     },
     {
      "pose": "cocoa_base",
-     "x": 0.8,
+     "x": 0.78,
      "y": 1.0,
      "height": 0.9,
      "who": "C"

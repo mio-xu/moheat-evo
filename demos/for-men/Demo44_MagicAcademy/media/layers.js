@@ -101,7 +101,7 @@ window.MOHEAT_LAYERS = {
     "w": 1700,
     "h": 1055,
     "x": 0.5482,
-    "y": 1.0,
+    "y": 1.025,
     "height": 0.9965,
     "box": [
      247,
@@ -270,7 +270,7 @@ window.MOHEAT_LAYERS = {
     "src": "art/char_cocoa_ear.webp?v=82ed0d07",
     "w": 1466,
     "h": 1440,
-    "x": 0.72,
+    "x": 0.7,
     "y": 1.0,
     "height": 1.0,
     "box": [
@@ -355,7 +355,7 @@ window.MOHEAT_LAYERS = {
     "src": "art/char_cocoa_blow.webp?v=680884f1",
     "w": 1464,
     "h": 1440,
-    "x": 0.72,
+    "x": 0.7,
     "y": 1.0,
     "height": 1.0,
     "box": [
@@ -397,7 +397,7 @@ window.MOHEAT_LAYERS = {
     "w": 1094,
     "h": 1436,
     "x": 0.4691,
-    "y": 1.0,
+    "y": 1.025,
     "height": 0.9972,
     "box": [
      654,
@@ -645,7 +645,7 @@ window.MOHEAT_LAYERS = {
     "src": "art/char_cocoa_ear.webp?v=82ed0d07",
     "w": 1466,
     "h": 1440,
-    "x": 0.72,
+    "x": 0.7,
     "y": 1.0,
     "height": 1.0,
     "box": [
@@ -898,7 +898,7 @@ window.MOHEAT_LAYERS = {
     "w": 1094,
     "h": 1436,
     "x": 0.4691,
-    "y": 1.0,
+    "y": 1.025,
     "height": 0.9972,
     "box": [
      654,
@@ -1128,7 +1128,7 @@ window.MOHEAT_LAYERS = {
       "src": "art/char_cocoa_base.webp?v=a5c1a171",
       "w": 1097,
       "h": 1412,
-      "x": 0.8,
+      "x": 0.78,
       "y": 1.0,
       "height": 0.9,
       "box": [
@@ -1301,7 +1301,7 @@ window.MOHEAT_LAYERS = {
     "w": 1094,
     "h": 1436,
     "x": 0.4691,
-    "y": 1.0,
+    "y": 1.025,
     "height": 0.9972,
     "box": [
      654,
@@ -1531,7 +1531,7 @@ window.MOHEAT_LAYERS = {
       "src": "art/char_cocoa_base.webp?v=a5c1a171",
       "w": 1097,
       "h": 1412,
-      "x": 0.8,
+      "x": 0.78,
       "y": 1.0,
       "height": 0.9,
       "box": [
@@ -1934,7 +1934,7 @@ window.MOHEAT_LAYERS = {
       "src": "art/char_cocoa_base.webp?v=a5c1a171",
       "w": 1097,
       "h": 1412,
-      "x": 0.8,
+      "x": 0.78,
       "y": 1.0,
       "height": 0.9,
       "box": [
@@ -2183,7 +2183,7 @@ window.MOHEAT_LAYERS = {
     "w": 1094,
     "h": 1436,
     "x": 0.4691,
-    "y": 1.0,
+    "y": 1.025,
     "height": 0.9972,
     "box": [
      654,
@@ -2410,7 +2410,7 @@ window.MOHEAT_LAYERS = {
       "src": "art/char_cocoa_base.webp?v=a5c1a171",
       "w": 1097,
       "h": 1412,
-      "x": 0.8,
+      "x": 0.78,
       "y": 1.0,
       "height": 0.9,
       "box": [

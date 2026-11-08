@@ -24,7 +24,7 @@ REUSE = {('hall', 'T'): 'hall_T', ('sky', 'T'): 'sky_T', ('lab', 'C'): 'lab_C', 
          ('hall', 'Te'): 'hall_T', ('sky', 'Te'): 'sky_T'}
 EAR_AT = {'C': ('lab', 'dawn'), 'L': ('tower', 'dawn')}   # the close poses hold the mug / the iced tea: only where that exists
 ONLY = {'sky': 'T'}
-TRIO = [('tsubaki_base', .2, .9, 'T'), ('cocoa_base', .8, .9, 'C')]   # main figure = luna_base x .5, height .92
+TRIO = [('tsubaki_base', .2, .9, 'T'), ('cocoa_base', .78, .9, 'C')]   # (cocoa .8 → .78: her side 2 % inside the frame, check_art full-edge) main figure = luna_base x .5, height .92
 for pl in ('hall', 'sky', 'lab', 'tower', 'dawn'):
     for c in ONLY.get(pl, 'TCL'):
         if (pl, c) not in REUSE: VIEWS[f't_{pl}_{c}'] = (f't_{pl}_{c}', BASE[c], pl)
