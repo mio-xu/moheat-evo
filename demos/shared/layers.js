@@ -13,7 +13,7 @@
 // Use, before the demo's main.js:  <script src="media/layers.js"></script> (data)  <script src="../../shared/layers.js"></script>
 // Data (window.MOHEAT_LAYERS):
 //   skipVideo: "regex"                      <video> sources of the base demo this page does not use (answered with 'error', no request)
-//   views: { <still file stem>: { view, fire: [x, y] (where the fire must appear, frame fraction) or null,
+//   views: { <still file stem>: { view, alias?: [other view names drawing the same still], fire: [x, y] (where the fire must appear, frame fraction) or null,
 //            bg: { src, depth?, fire: [x, y] (fire in the plate, fraction), zoom? },
 //            char: { src, w, h, x, y, height } (anchored at its bottom centre: x, y = frame fraction, height = fraction of the frame),
 //            patches: [ { src, rect: [x, y, w, h] in char pixels, kind: "mouth" | "eyes" } ] } }
@@ -104,7 +104,7 @@ void main(){
     });
     return o;
   }
-  const byView = {}; for (const [stem, c] of Object.entries(D.views)) byView[c.view] = stem;
+  const byView = {}; for (const [stem, c] of Object.entries(D.views)) for (const v of [c.view, ...(c.alias || [])]) byView[v] = stem;
   addEventListener('load', () => { for (const s of Object.keys(D.views)) load(s); });
 
   // ---------------------------------------------------------------- input, breathing, voice, blinks

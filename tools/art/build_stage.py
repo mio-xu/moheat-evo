@@ -6,9 +6,10 @@ Reads <demo>/project/stage.json:
   { "src": "assets/art", "skipVideo": "media/video/[vt]_",
     "bgs":   { "camp": { "src": "bg_camp", "fire": [0.75, 0.72] } },               fire in the plate (fraction); omit → found automatically
     "poses": { "sit": { "src": "gaku_ref", "talk": "gaku_ref_talk", "blink": "gaku_ref_blink", "near_mouth": [x, y], "near_eyes": [x, y],
-                        "erase": [[x0, y0, x1, y1]], "keep": [[x0, y0, x1, y1]] } },             erase = source boxes cleared (e.g. a fire drawn in the pose); keep = source boxes never keyed (grey steam, smoke)
+                        "erase": [[x0, y0, x1, y1]], "keep": [[x0, y0, x1, y1]] } },             erase = source boxes cleared (e.g. a fire drawn in the pose); keep = source boxes never keyed (grey steam, smoke); "matte": "ai" = outline from the isnet-anime model (~/ml/layers venv) for light / pastel figures
     "views": { "live": { "still": "gaku_live", "pose": "sit", "bg": "camp", "fire": [0.9, 0.74], "x": 0.42, "y": 1.06, "height": 1.1 } } }
-  view: still = the file stem the page draws (media/art/<still>.jpg is written as the flat fallback), fire = where the page expects the
+  view: still = the file the page draws (stem, or stem.ext; media/art/<still> is written as the flat fallback), alias = other view names
+  that draw the same still (e.g. a mirrored side), fire = where the page expects the
   fire (or null), x / y = the character's bottom centre (frame fraction), height = the character's height as a fraction of the frame.
 Does:
   1. cuts every pose out of its plain background (flood from the border on the background colour, soft edge, grey fringe unmixed)
@@ -29,34 +30,60 @@ src = lambda n: os.path.join(SRC, n + ".png")
 MAXDIM = 1700   # character textures are uploaded every frame: keep them modest
 
 
-def cutout(path, erase=(), keep=()):
+def cutout(path, erase=(), keep=(), ai=False):
     """plain-background pose → RGBA, cropped. Background colour = median of the border; background = connected to the border."""
     im = np.asarray(Image.open(path).convert("RGB"), np.float32); H, W, _ = im.shape
     border = np.concatenate([im[0], im[-1], im[:, 0], im[:, -1]])
     light = border[(border.max(1) - border.min(1) < 18) & (border.mean(1) > 120)]   # the plain background on the border, not the figure
     bgc = np.median(light if len(light) > 50 else border, 0)
     diff = np.abs(im - bgc).max(2)
-    # background = connected to the border, or a large enclosed patch of it (between chair legs, under an arm) — on a small grid
-    k = 4; small = (diff[::k, ::k] < 30)
-    seen = np.zeros_like(small); lab = np.zeros(small.shape, np.int32); n = 0
-    for y0, x0 in zip(*np.where(small)):
+    # background = grown from the border over smooth, background-like pixels; the lineart (a sharp edge) stops it, so light clothes
+    # close to the background colour stay solid (Demo32's cream cardigan). Plus large enclosed patches of the plain colour (chair gaps).
+    g = np.asarray(Image.fromarray(im.astype(np.uint8)).convert("L"), np.float32)
+    grad = np.maximum(np.abs(np.diff(g, axis=0, append=g[-1:])), np.abs(np.diff(g, axis=1, append=g[:, -1:])))
+    k = 2; Hs, Ws = H // k, W // k
+    gk = grad[:Hs * k, :Ws * k].reshape(Hs, k, Ws, k).max((1, 3))           # max-pool: a thin line still blocks
+    dk = diff[:Hs * k, :Ws * k].reshape(Hs, k, Ws, k).max((1, 3))
+    cand = (dk < 40) & (gk < 9)
+    seen = np.zeros_like(cand); lab = np.zeros(cand.shape, np.int32); n = 0
+    for y0, x0 in zip(*np.where(cand)):
         if lab[y0, x0]: continue
         n += 1; stack = [(y0, x0)]; lab[y0, x0] = n; pts = []; edge = False
         while stack:
             y, x = stack.pop(); pts.append((y, x))
-            if y in (0, small.shape[0] - 1) or x in (0, small.shape[1] - 1): edge = True
+            if y in (0, Hs - 1) or x in (0, Ws - 1): edge = True
             for yy, xx in ((y + 1, x), (y - 1, x), (y, x + 1), (y, x - 1)):
-                if 0 <= yy < small.shape[0] and 0 <= xx < small.shape[1] and small[yy, xx] and not lab[yy, xx]:
+                if 0 <= yy < Hs and 0 <= xx < Ws and cand[yy, xx] and not lab[yy, xx]:
                     lab[yy, xx] = n; stack.append((yy, xx))
-        ys_, xs_ = zip(*pts); dd = diff[::k, ::k][list(ys_), list(xs_)]
-        if edge or len(pts) > small.size * .0015 or (len(pts) > 30 and dd.mean() < 14):   # small enclosed gaps only if really the bg colour
-            ys, xs = zip(*pts); seen[list(ys), list(xs)] = True
+        ys_, xs_ = zip(*pts)
+        if edge or (len(pts) > 120 and dk[list(ys_), list(xs_)].mean() < 10):   # enclosed gaps only if really the plain bg colour
+            seen[list(ys_), list(xs_)] = True
     for x0, y0, x1, y1 in keep: seen[y0 // k:y1 // k + 1, x0 // k:x1 // k + 1] = False   # grey things that belong to the figure (steam)
-    bgm = np.asarray(Image.fromarray(seen.astype(np.uint8) * 255).resize((W, H), Image.NEAREST), np.float32) / 255
-    bgm = np.asarray(Image.fromarray((bgm * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(9)), np.float32) / 255   # reach the edge
-    soft = np.clip((diff - 8) / 34, 0, 1)                         # how unlike the background each pixel is
-    alpha = np.where(bgm > .5, soft, 1.0)
+    bgm = np.zeros((H, W), np.float32)
+    bgm[:Hs * k, :Ws * k] = np.repeat(np.repeat(seen, k, 0), k, 1)
+    # anti-aliased edge: only a thin band on the background side takes its alpha from how unlike the background it is
+    big = lambda a, f: np.asarray(Image.fromarray((a * 255).astype(np.uint8)).filter(f), np.float32) / 255
+    band = (big(bgm, ImageFilter.MinFilter(5)) < .5) & (bgm > .5)
+    soft = np.clip((diff - 8) / 34, 0, 1)
+    alpha = np.where(bgm > .5, 0.0, 1.0); alpha[band] = soft[band]
     alpha = np.asarray(Image.fromarray((alpha * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(.7)), np.float32) / 255
+    if ai:   # light / pastel figures on a light background: the anime matting model draws the outline, holes inside are filled
+        import tempfile
+        tmp = tempfile.mktemp(suffix=".png")
+        subprocess.run([os.path.expanduser("~/ml/layers/bin/python"), "-c",
+                        "import sys; from rembg import remove, new_session; from PIL import Image; "
+                        "remove(Image.open(sys.argv[1]).convert('RGB'), session=new_session('isnet-anime'), only_mask=True).save(sys.argv[2])",
+                        path, tmp], check=True, capture_output=True)
+        m = np.asarray(Image.open(tmp).convert("L"), np.float32) / 255; os.remove(tmp)
+        out = np.zeros((Hs, Ws), bool); low = m[:Hs * k, :Ws * k].reshape(Hs, k, Ws, k).max((1, 3)) < .5
+        stack = [(y, x) for y in range(Hs) for x in (0, Ws - 1) if low[y, x]] + [(y, x) for x in range(Ws) for y in (0, Hs - 1) if low[y, x]]
+        for y, x in stack: out[y, x] = True
+        while stack:
+            y, x = stack.pop()
+            for yy, xx in ((y + 1, x), (y - 1, x), (y, x + 1), (y, x - 1)):
+                if 0 <= yy < Hs and 0 <= xx < Ws and low[yy, xx] and not out[yy, xx]: out[yy, xx] = True; stack.append((yy, xx))
+        outside = np.zeros((H, W), bool); outside[:Hs * k, :Ws * k] = np.repeat(np.repeat(out, k, 0), k, 1)
+        alpha = np.where(outside, np.minimum(m, alpha), 1.0)      # outside the outline: the model's soft edge; inside: solid
     for x0, y0, x1, y1 in erase: alpha[y0:y1, x0:x1] = 0   # things drawn that belong to another layer (a fire, a table)
     # unmix the grey fringe: C = a·F + (1−a)·BG  →  F = (C − (1−a)·BG) / a
     a3 = np.maximum(alpha, .05)[..., None]
@@ -87,7 +114,7 @@ for name, b in cfg["bgs"].items():
 # face patches: run face_patches.py on the full-size sources through a temporary config
 poses, pcfg = {}, {"src": SRC, "dst": os.path.join(D, "assets", "patches"), "size": None, "patches": []}
 for name, p in cfg["poses"].items():
-    cut, box, size = cutout(src(p["src"]), p.get("erase", ()), p.get("keep", ()))
+    cut, box, size = cutout(src(p["src"]), p.get("erase", ()), p.get("keep", ()), p.get("matte") == "ai")
     f = min(1, MAXDIM / max(cut.size)); cut = cut.resize((round(cut.width * f), round(cut.height * f)), Image.LANCZOS)
     cut.save(os.path.join(ART, f"char_{name}.webp"), quality=88, method=6)
     poses[name] = {"src": f"art/char_{name}.webp", "w": cut.width, "h": cut.height, "box": box, "f": f, "cut": cut, "patches": []}
@@ -125,12 +152,13 @@ for vname, v in cfg["views"].items():
     ch = ch.resize((round(wpx), round(hpx)), Image.LANCZOS)
     flat.alpha_composite(ch, (round(v["x"] * FW - wpx / 2), round(v["y"] * FH - hpx))) if v["x"] * FW - wpx / 2 >= 0 and v["y"] * FH - hpx >= 0 else \
         flat.paste(ch, (round(v["x"] * FW - wpx / 2), round(v["y"] * FH - hpx)), ch)
-    flat.convert("RGB").save(os.path.join(ART, v["still"] + ".jpg"), quality=88)
-    data["views"][v["still"]] = {"view": vname, "fire": f,
+    stem, ext = os.path.splitext(v["still"]); ext = ext or ".jpg"   # the page decides the still's file name (Demo20 loads .webp)
+    flat.convert("RGB").save(os.path.join(ART, stem + ext), quality=88)
+    data["views"][stem] = {"view": vname, **({"alias": v["alias"]} if v.get("alias") else {}), "fire": f,
                                 "bg": {"src": b["src"], "fire": bf, **({"zoom": v["zoom"]} if v.get("zoom") else {})},
                                 "char": {"src": p["src"], "w": p["w"], "h": p["h"], "x": v["x"], "y": v["y"], "height": v["height"]},
                                 "patches": [{k: pt[k] for k in ("src", "rect", "kind")} for pt in p["patches"]]}
-    print(f"view {vname}: bg zoom {z:.2f}, still media/art/{v['still']}.jpg")
+    print(f"view {vname}: bg zoom {z:.2f}, still media/art/{stem}{ext}")
 open(os.path.join(D, "media", "layers.js"), "w").write(
     "// Layer data for ../../shared/layers.js — written by tools/art/build_stage.py from project/stage.json (do not edit by hand).\n"
     "window.MOHEAT_LAYERS = " + json.dumps(data, ensure_ascii=False, indent=1) + ";\n")
