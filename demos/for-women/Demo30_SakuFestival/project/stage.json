@@ -72,7 +72,31 @@
   },
   "breath": {
    "src": "saku_breathL",
-   "matte": "ai"
+   "matte": "ai",
+   "talk": "saku_breathL_mtalk2",
+   "centre_mouth": [
+    1378,
+    781
+   ],
+   "radius_mouth": [
+    46,
+    22
+   ],
+   "blink": "saku_breathL_blink",
+   "regions_eyes": [
+    [
+     1205,
+     513,
+     105,
+     40
+    ],
+    [
+     1480,
+     487,
+     48,
+     36
+    ]
+   ]
   },
   "whisper": {
    "src": "saku_whisper2",

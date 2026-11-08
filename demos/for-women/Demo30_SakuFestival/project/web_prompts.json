@@ -1,0 +1,17 @@
+{
+ "saku_breathL_mtalk": {
+  "ref": "saku_breathL",
+  "mask": "1395,782,72,46",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, face, profile outline, hair, clothes, colours, lighting and background — and change ONLY his mouth: lips slightly parted as if speaking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture."
+ },
+ "saku_breathL_blink": {
+  "ref": "saku_breathL",
+  "mask": "1205,513,115,48;1480,487,55,42",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, face, hair strands, clothes, colours, lighting and background — and change ONLY his eyes: both eyes gently closed (a relaxed blink, eyelashes down), same eyelid shape and position. Do not move, zoom or crop the picture."
+ },
+ "saku_breathL_mtalk2": {
+  "ref": "saku_breathL",
+  "mask": "1388,785,52,36",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, face, hair, clothes, colours, lighting, background, and the exact same side-profile outline of the lips and chin. Change ONLY the gap between his lips: the lips part very slightly as if softly speaking — a thin dark opening between the upper and lower lip, no teeth. The front edge of the lips stays exactly where it is. Do not move, zoom or crop the picture."
+ }
+}

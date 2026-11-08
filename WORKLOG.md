@@ -52,6 +52,31 @@
 
 ---
 
+## 2026-11-08 · 嘴部专项 QA（上线中的分层 Demo：Demo17 / 18 / 20 / 24 / 25 / 30 / 31）
+
+**用户**：「嘴的部分都要重点检查，我看了还是有 bug」。
+
+**做了什么**
+- 新工具（每次合成后必跑，指南 §6 第 5 步「嘴部 QA」、§9 清单）：
+  - `python3 tools/art/check_patches.py <demo>`：每块差分 100 % 对照 + `assets/patch_check/mouths.jpg`（每张嘴 闭 | 张 2 倍）；退出码 1 = SEAM / OUTER（下巴线、脸颊、头发被重画）/ OUTSIDE / BORDER / BOUNDS；NO-MOUTH 列出没有嘴差分的画面。
+  - `node tools/art/check_mouth.js <demo> [秒] [--alt] [--shots] [--dump]`：自己的 headless Chrome + 端口，`?auto=1&nomic` 跑剧情，逐帧读 `MoHeatLayers.state()`：SILENT-OPEN / NO-MOVE / NO-PATCH / UNMAPPED / STUCK-OPEN / HALF / FLICKER；`--shots` 存每个画面张 / 闭的整帧到 `assets/mouth_check/`。
+- `demos/shared/layers.js`（现在 `?v=6`）：嘴按音节动（相对最近峰值，> 70 % 张、< 55 % 闭，最长张 0.45 s），张 / 闭硬切换并保持 ≥ 60 ms（不再半透明双唇）；差分 `source-atop` 裁到人物透明度；先画眼后画嘴；新的差分类型 `mouth_quiet`（张嘴底图的闭嘴差分，不说话时盖上）；`MoHeatLayers.state()` 给测试用。之前 Demo25 说话时间里嘴 95 % 张着（像定格）。
+- Demo18 大头贴 booth：补宽的姿势（2696×1499）差分按旧尺寸截取 → 张嘴偏到左上、脸颊多一条下巴线；用按尺寸分组的 `build_stage.py` 重建（`media/layers.js?v=3`）。
+- Demo30 朔 breath_L（侧脸贴左耳，他在说话却没有嘴 / 眼差分）：OpenAI 遮罩编辑 `saku_breathL_mtalk2`（嘴）+ `saku_breathL_blink`（眼），`project/web_prompts.json`；`stage.json` 加 talk / blink；重建（新的抠图规则顺带去掉了旧版头发的灰白边）；`media/layers.js?v=2`。OpenAI 3 张约 0.6 美元。
+- 提交：fc6ebd7、（?v=4 补交）、47cb7fd（f02fb0c 用旧的暂存副本把 layers.js 的嘴部修改覆盖了，重新落地 + ?v=6）、本条目所在的提交（Demo30 + 指南 + 日志）。
+
+**现在的状态**
+- `check_patches.py`：Demo17 / 18 / 20 / 24 / 25 / 30 全部 ✓；`check_mouth.js` 两条分支：Demo17 / 18 / 20 / 24 / 25 / 30 ✓（Demo20 的 queue 画面没有人物，不算）。
+- **Demo31 渚 没有改素材**（另一个会话在补身体、重建它的人物层）：剩下 ① 靠肩 shoulder 没有嘴 / 眼差分（她在那里说 n17a）；② 大笑 laugh、贴耳 whisper 的底图本身张着嘴，沉默时也张着 → 各出一张闭嘴差分，`stage.json` 里写 `mouth_quiet`（`layers.js` 已支持）；③ fan / sit 的嘴差分外圈带进了头发（check_patches 的 OUTER 待它重建后再看）。
+
+**下一步**
+- 等 Demo31 的补身体提交后：`images.py` 遮罩编辑 shoulder 张嘴 + 闭眼、laugh / whisper 闭嘴（约 0.8 美元）→ `build_stage.py` → `check_patches.py` + `check_mouth.js --alt`。
+- 新 Demo（Demo37 Mint、Demo39 Luna）上线前同样跑这两个检查（`tools/qa/check_demo.py --full` 已调用 check_mouth）。
+
+**问题**（教训在指南 §11.1）
+- 我的一行 Python `open(p,'w').write(f(open(p).read()))` 把 `DEMO_DESIGN_GUIDE.md` 清成 0 字节（连同 QA 会话未提交的整段改写）；已从会话记录里的命令 + scratchpad 文件（`guide_before.md`、`new_v2.md`、`new_111.md`）原样重建。
+- 并行提交互相覆盖：f02fb0c 把别的会话按旧 HEAD 暂存的 layers.js 一起提交，冲掉了 fc6ebd7 的嘴部修改；我的 `bump.py --stage` 暂存被别的提交带走一部分。以后：提交共用文件前后 `git show HEAD:<文件> | grep <自己的关键行>` 确认还在；用临时 index（`GIT_INDEX_FILE`）只提交自己的路径。
+
 ## 2026-11-08 · 人物细节 + 动画物理检查（眼睛 / 呼吸 / 视差 / 粒子），7 个分层 Demo
 
 **做了什么**

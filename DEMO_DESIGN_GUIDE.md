@@ -248,6 +248,7 @@ python3 tools/qa/check_demo.py <demo> --checklist        # 同时写 / 刷新 pr
    - 底图出来后，同一批差分和姿势**马上一起提交**：API 输出链接 30–60 分钟就失效（§11）。API 不能上传时改用网页端，提示词完全一样（`project/web_prompts.json`），下载后用 `python3 tools/seedance/web_take.py <demo> <name>` 改名；网页操作用 `tools/seedance/web_helpers.js`（填提示词、选 16:9 + 2K、只在显示 25 credits 时提交、按提示词找卡片下载）。
 4. **检查每张图，并把所有姿势并排对比**（`build_stage.py` 每次都会输出 `assets/poses_preview.jpg`）。用户 2026-11-08 要求：**近景和远景之间，人物的长相、画风、服装必须完全一致**。逐项对比：发型和发色、瞳色、脸型、配饰（眼镜、耳饰、项链、戒指）、衣服的颜色和细节、线条和上色的风格；还要按剧情顺序检查连续性（前一个画面摘了眼镜，后面就不该再戴）。有一项不一致就重出那一张。另外检查长相是否一致、有没有多出来的道具（岳（Demo24） "坐到左边" 被加了一个杯子，重出了）、画里有没有画进背景层的东西（火、桌子）。
 5. **合成**：写 `project/stage.json`（姿势、`near_mouth` / `near_eyes` 位置提示、`erase` / `keep` 区域、每个画面的摆位和火的位置），然后运行 `python3 tools/art/build_stage.py <demo> --preview`。这一步用 Pillow + numpy，约 1 分钟，不占 GPU。每次都要看截取预览和备用静帧拼图。 合成后再跑 `python3 tools/art/check_cut_body.py <demo>`（不带参数 = 所有 Demo）：列出身体被图片边缘截断、而截断处落在画面里面的人物层（用户 2026-11-08：「人物在画面中全出现，但是身体只有半截」）。有报告就补全：`python3 tools/art/extend_pose.py <demo> <pose> --auto [--right/--left/--bottom PX] --quality medium --hint "缺的是什么（他右肩和皮夹克的袖子）"` → `build_stage.py <demo>` → `extend_pose.py <demo> <pose> --place`（旧像素回到原来的屏幕位置）→ `build_stage.py <demo>` → 再跑 check_cut_body + check_patches，并在 2 倍放大、场景颜色上看新身体的边缘。extend_pose 用 gpt-image-2 画缺的身体（每个姿势一次，medium 约 0.07 美元），把回答自动对位回原图（模型会缩放 / 平移整张图），只在旧边缘附近沿差异最小的缝换成新画的部分，张嘴 / 闭眼差分同样补边；`--reraw` 用存下的回答重新对位，不再花钱。截断处至少要在画外 3 %。合并 / 上线前必须 0 报告。合成后再跑 `python3 tools/art/check_patches.py <demo>`：每块差分输出一张 100% 的「原图 | 叠上差分 | 差异 ×4」对照图（`assets/patch_check/`），逐张看嘴角、下巴、下唇阴影有没有双线或跳动，两只眼都要闭上。
+   **嘴部 QA（用户 2026-11-08「嘴的部分都要重点检查」，每次合成后必跑，0 报告才能上线）**：① `python3 tools/art/check_patches.py <demo>`——退出码 1 就有问题：SEAM（边缘对不上）、OUTER（贴片外圈的下巴线 / 脸颊 / 头发被重画 → 说话时多一条下巴线、头发跳）、OUTSIDE（贴片盖到人物外面）、BORDER（看得见贴片方框）、BOUNDS（重建 / 补边后的旧坐标）；NO-MOUTH 列出没有嘴差分的画面（人物在那里说话就必须补）；再打开 `assets/patch_check/mouths.jpg`（每张嘴 闭 | 张 2 倍）逐张看。② `node tools/art/check_mouth.js <demo> [秒] [--alt] [--shots]`：headless Chrome 自己开端口自动跑剧情，逐帧读 `MoHeatLayers.state()`：SILENT-OPEN（不说话时嘴张着）、NO-MOVE / NO-PATCH（说话的画面嘴不动）、UNMAPPED（画面没对上 `views` / `alias`）、STUCK-OPEN（整句张着不动，跟的是句子不是音节）、HALF（半透明双嘴）、FLICKER；两条分支都跑。`--shots` 把每个画面张嘴 / 闭嘴时的整帧存到 `assets/mouth_check/`，放大 2 倍看真实合成里的嘴。③ 张着嘴画的姿势（大笑、正在说话）要再出一张**闭嘴**差分，在 `stage.json` 里作 `mouth_quiet`（不说话时盖上），不能让她沉默时一直张着嘴。
 6. **页面**：剧情代码只需要画静帧 `media/art/<still>.jpg`（`build_stage.py` 生成的备用静帧）。页面在剧情代码之前加载 `media/layers.js` 和 `../../shared/layers.js`，它们会把每张静帧自动换成分层动画：背景视差、火光、呼吸、口型、眨眼、边缘光。重做旧 Demo 时，旧的 `main.js` 可以按路径原样复用（岳（Demo24） 复用了 Demo24 的）。火星、热气、雪这些特效继续用代码画，摆位时要让道具对齐代码里写死的位置。
 7. **测试**：两条分支都用 `?auto=1` / `?auto=1&alt=1` 自动跑完，0 报错、没有 404，三种语言，一屏。`?flat` 可以对照原始静帧。
 8. **封面和缩略图**：用 headless Chrome 截 `?cover=1` 存成 `media/cover.jpg`，再运行 `python3 tools/web/thumbs.py <文件夹>` 生成三种语言的缩略图，菜单用的缩略图存成 `assets/images/demos/<文件夹>.jpg`。
@@ -549,6 +550,7 @@ main.layout
 - [ ] 声音是用户选定的；署名正确：封面 `#credits` 写明声音、美术 / 视频工具、音乐；有商标、历史人物、饮酒内容的在 `nav.js` 的 `RIGHTS` 里加一行；`credits.html` 的表格里加上这个 Demo。
 - [ ] 语音输入判定（§2.1）：每个选项 / 台词 / 动作都能用说的完成（`MoHeatVoice._hear()` 走遍所有分支），无关的话不会误判；不支持识别时点按照常可用。
 - [ ] 分层画面：每个画面的截取预览都看过（嘴 / 眼只截到该截的地方），备用静帧拼图里没有残留的背景色或抠掉的洞；`?flat` 正常。有动态 CG 时，首尾帧与静帧完全一致。
+- [ ] 嘴部 QA（§6 第 5 步）：`check_patches.py` 退出码 0、`mouths.jpg` 逐张 2 倍看过；`check_mouth.js` 两条分支都 ✓（只在这个人说话时动、停顿闭上、每个说话的画面都有嘴差分）。
 - [ ] 大文件（原始 PNG、下载的视频、wav）都在 `.gitignore` 里；只提交压缩后的 `media/`。
 - [ ] README、交接文档已更新；已 push。
 
@@ -601,6 +603,8 @@ main.layout
 - **差点把重做版的图写进原 Demo**（占位 `hina_wave.webp` 是指向 Demo20 原图的链接，合成顺着链接写过去）→ `build_stage.py` 写文件前先断开链接；尽量不用指向原 Demo 的占位链接。〔G4 · check_demo: links 列出指向别的 Demo 的链接〕
 - **特效层的遮罩不对**（Demo31 烟花：遮罩存成灰度 PNG，`destination-in` 按透明度裁剪，烟花画到门和水塔上；遮罩下边是一条直线，烟花被"看不见的线"切掉；夜景按颜色找天空找不准）→ 遮罩一律 RGBA、形状放 alpha，存完打印 `mode` 和 alpha 范围；遮挡边界沿真实轮廓手描（`make_sky_mask.py`），羽化 6–10 px；黑底贴图类特效先把近黑噪点压成纯黑、边缘圆形渐隐。〔G4 · CHECKLIST：动画物理 / 层次〕
 - **道具和角色的前后关系画错**（Demo18 抓娃娃机：整张爪子画在玩偶脸上像铁丝，或整张在后面看不出抓住）→ 道具按前后关系拆层（中间爪在玩偶后，两边爪在前、只收拢到头宽，外壳停在头顶上方）；冻结动画（替换 `requestAnimationFrame`）在关键帧放大检查。重做版里旧 `main.js` 写死的火星、热气位置也要先查，让道具对齐。**又一次**（同一个抓娃娃机，只看了「刚抓住」一帧就判断动画没问题）：动作看着怪、猫一直没被提起来——道具太大、停靠位置已经低于抓取高度，「下降」和「提起」方向都反了 → 先算几何（停靠高度 / 抓取高度、行程 > 0、底部不被裁掉），再用虚拟时钟（替换 `performance.now` / `requestAnimationFrame`）逐帧渲染**整段**动作来看；摆锤从天花板上的支点吊下来，爪子绕铰链转，永远不要压扁变形。〔G4 / G6 · CHECKLIST：动画物理（整段逐帧）〕
+- **补宽的姿势，嘴和眼的差分整体错位**（Demo18 大头贴 booth：补边后 2696×1499，其他姿势 2560×1440；旧 `build_stage.py` 让 face_patches 只按一种尺寸运行 → 张开的嘴落在原来嘴的左上方，脸颊上多一条下巴线）→ `build_stage.py` 已按图片尺寸分组运行 face_patches；任何姿势被 `extend_pose` 补过边或换了尺寸，都重新 `build_stage.py` + `check_patches.py`（OUTER / SEAM 会报出来）。〔G4 · check_patches〕
+- **张着嘴画的姿势沉默时嘴也张着；说话的画面没有嘴差分**（Demo31 渚：大笑 laugh、贴耳 whisper 的底图本身张着嘴；靠肩 shoulder、Demo30 朔 breath_L 一张差分都没有，人物却在那里说话）→ 张嘴的底图再出一张闭嘴差分，`stage.json` 里作 `mouth_quiet`（`layers.js` 不说话时盖上）；侧脸也要出张嘴差分（遮罩只盖嘴唇之间，不盖侧脸轮廓——轮廓被重画会出现第二条轮廓线）；`check_patches.py` 的 NO-MOUTH、`check_mouth.js` 的 NO-PATCH 会列出来。〔G4 · check_patches / check_mouth〕
 
 **G5 页面与代码**
 - **说话时嘴完全不动**（陽向分层版）：改了 `demos/shared/layers.js` 没升 `?v=`，浏览器用缓存的旧版；复用的 Demo20 `main.js` 状态在 `window.HINA` 不是 `window.STREAM` → 改完 shared 文件马上 `python3 tools/web/bump.py --stage <文件>`；重跑 `build_stage.py` 改了 `media/layers.js` 也给页面里的 `media/layers.js?v=` 加 1；复用旧 `main.js` 前列出它的全局状态对象，在 `stage.json` 写 `hooks`。`media/layers.js` 里的图片路径带内容指纹 `?v=`，换图不改名也不会读到旧图。〔G5 · check_demo: cache · G6 · check_demo --full: mouth〕
@@ -609,6 +613,7 @@ main.layout
 - **数据文件头注释里的示例写法让解析失败**（`lines.js` 注释里有 `line = { … }`，`src.index('= {')` 找到注释；Demo23 又犯一次）→ 从 JS 数据文件取 JSON 时按完整赋值定位（`src.index('window.TALK_SCRIPT = ')`），注释里不写赋值的样子。〔G5〕
 - **共用工具出问题牵连别的 Demo**：`build_stage.py` 开始在路径后加 `?v=<hash>`，`clean_cutout.py` 打开文件失败、页面显示的是没清理的抠图；在 Demo18 运行了写死 Demo31 路径的脚本，把 Demo31 又清理了一遍 → 共用处理脚本放 `tools/`，Demo 文件夹是**必填参数**；读路径一律去掉 `?` 后面；流水线每一步用 `&&` 串起来，失败就停。〔G4 / G5〕
 - **路径被按空格拆碎**（"MoHeat Evo"）→ 脚本里一律按行分割文件列表，假设路径有空格（`merge_remake.py` 已改）。〔G5 / G7〕
+- **嘴在整句话里一直张着（像定格）、半透明双唇、差分盖到人物外面**（用户 2026-11-08「嘴的部分还有 bug」；`check_mouth.js` 量出 Demo25 说话时间里 95 % 张着）：`layers.js` 用"音量 > 固定阈值就张开"，ElevenLabs 的声音整句都高于阈值；淡入淡出时半透明的张嘴叠在闭嘴上是两条唇线；Demo30 whisper 的差分在下巴外面留一块灰白；眼睛差分的框延到嘴边时，后画的眨眼盖住张开的嘴 → `layers.js` 改为相对最近峰值跟音节（> 70 % 张、< 55 % 闭、最长张 0.45 s），张 / 闭硬切换并至少保持 60 ms；差分用 `source-atop` 裁到人物透明度里；先画眼后画嘴。共用代码一次修好所有 Demo。静态对位看 `check_patches.py`，播放逻辑看 `check_mouth.js`，两个都要跑（§6 第 5 步）。〔G5 · check_mouth〕
 
 **G6 测试**
 - **自动测试"通过"了，但嘴不动、只眨一只眼** → 测试不能只看画面顺序、报错和 404：`check_demo.py --full` 跑 `tools/art/check_mouth.js`（说话时口型值 > 0、停顿时闭上、没有半透明双唇）；交给用户前自己先看一段说话和眨眼。〔G6 · check_demo --full: mouth · CHECKLIST〕
@@ -632,6 +637,7 @@ main.layout
 - **剧情结束回到封面时画面全黑**（Demo19 测试发现；Demo17 / 18 / 25 / 31 的 `main.js` 同样有：`finish()` 没清 `S.fade`，循环继续画全黑的渐暗层而不是封面）→ `finish()` 里加 `S.fade = 0; S.fadeA = 0`。结束后截图看一眼封面，不只看按钮文字。
 - **长按按钮挡住了要看的东西**（Demo19：「見つめる」按钮正好盖在画面中央的蓝色火焰上）→ 要盯着画面某处的互动，按钮放到旁边（`.act.side`）；每个互动都截一张图看按钮挡没挡住主角 / 道具。
 - **`?auto=1` 测试卡在第一句**（自动开始时 AudioContext 还是 suspended，台词的 `onended` 永远不来）→ 测试标签页里先真实点击一次「Start」（computer 点击，不是 JS `click()`），之后同一个标签页里的 `?auto` 都能自动开始。
+- **共用文档被写成 0 字节**（2026-11-08 14:52，嘴部 QA 会话：`open(p,'w').write(f(open(p).read()))`——Python 先执行 `open(p,'w')` 把文件清空，再去读，读到空串；`f` 里的断言失败后文件就停在 0 字节，别的会话未提交的整段改写也一起没了，靠会话记录里的命令和 scratchpad 文件重建）→ 改文件一律**先读进变量、处理完、检查长度再写**：`s=open(p).read(); t=f(s); assert len(t)>len(s)*.9; open(p,'w').write(t)`；改共用文档前先 `cp` 一份到 scratchpad。〔G7〕
 
 ## 12. 资源清理与文件结构
 
