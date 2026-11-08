@@ -1,0 +1,17 @@
+{
+ "design_A": {
+  "generation": "api_8b83d556695ce8c12b2ad60fd8d62af58de9f89c1c83d6f6f80cac3890dad6c1",
+  "idempotency_key": "moheat-d30-design-A-v1",
+  "variant": 1
+ },
+ "design_B": {
+  "generation": "api_08a15298b227278051dc5bcb957fa8ebb11efdfa9cd7f129b7bff31447a45630",
+  "idempotency_key": "moheat-d30-design-B-v1",
+  "variant": 1
+ },
+ "design_C": {
+  "generation": "api_7420d12667babe2d5b44d7b6f779542e8a0f0bbc3dc92e1558cf6816600ed5ec",
+  "idempotency_key": "moheat-d30-design-C-v1",
+  "variant": 1
+ }
+}
