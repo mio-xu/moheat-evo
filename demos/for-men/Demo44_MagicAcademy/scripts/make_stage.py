@@ -9,6 +9,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FP = json.load(open(os.path.join(ROOT, 'project', 'face_points.json')))
 POSES = ['tsubaki_base', 'tsubaki_broom', 'cocoa_base', 'cocoa_ear', 'luna_base', 'luna_ear']
 BGS = {'hall': [.5, .5], 'sky': None, 'lab': [.78, .86], 'tower': [.07, .84], 'dawn': None}
+EYE = {'cocoa_ear': 1.2, 'cocoa_blow': 1.2}   # check_patches OUTER 40.5 at 1.05, 46.7 at .95: the blink redrew hair inside its mask → the patch must cover the whole mask (guide §11.1)
 LP = {'tsubaki_broom': {"view": {"rotate": "auto"}}, 'cocoa_ear': {"view": {"rotate": "auto"}}, 'luna_ear': {"view": {"rotate": "auto"}}}
 VIEWS = {   # view: (still, pose, bg)
     'hall_T': ('tsubaki_hall', 'tsubaki_base', 'hall'), 'sky_T': ('tsubaki_sky', 'tsubaki_broom', 'sky'),
@@ -37,13 +38,13 @@ for p in POSES:
     f = FP[p]; c = p.split('_')[0]
     cfg["poses"][p] = {"src": p, "blink": f"{p}_blink", "matte": "green", "character": c, "look": "crossover_academy",
                        "centre_mouth": f["mouth"][:2], "radius_mouth": [round(f["mouth"][2] * .8), round(f["mouth"][3] * .8)],
-                       "regions_eyes": [[e[0], e[1], round(e[2] * 1.05), round(e[3] * 1.05)] for e in f["eyes"]]}
+                       "regions_eyes": [[e[0], e[1], round(e[2] * EYE.get(p, 1.05)), round(e[3] * EYE.get(p, 1.05))] for e in f["eyes"]]}
     if p in LP: cfg["poses"][p]["lp"] = LP[p]
     if not os.environ.get('NOLP'): cfg["poses"][p]["mouth"] = "lp"   # NOLP=1: first build only (lp_mouths.py needs media/layers.js first)
 # her blow (pursed lips, a silent moment: no line plays) = the mug pose's own masked edit; shares its blink (same face, same pixels)
 fe = FP['cocoa_ear']
 cfg["poses"]["cocoa_blow"] = {"src": "cocoa_ear_blow", "blink": "cocoa_ear_blink", "matte": "green", "character": "cocoa", "look": "crossover_academy",
-                              "regions_eyes": [[e[0], e[1], round(e[2] * 1.05), round(e[3] * 1.05)] for e in fe["eyes"]]}
+                              "regions_eyes": [[e[0], e[1], round(e[2] * EYE["cocoa_blow"]), round(e[3] * EYE["cocoa_blow"])] for e in fe["eyes"]]}
 for v, (still, pose, bg) in VIEWS.items():
     d = {"still": still, "pose": pose, "bg": bg, "fire": BGS[bg]}
     d.update(PLACE.get(pose, {}))

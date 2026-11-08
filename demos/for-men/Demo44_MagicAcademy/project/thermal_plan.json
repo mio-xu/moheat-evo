@@ -18,7 +18,7 @@
    "front": 0,
    "left": -60,
    "right": 60,
-   "behind_front": -20
+   "behind_front": 15
   },
   "front_split": 0.5
  },
