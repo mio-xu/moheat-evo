@@ -74,5 +74,10 @@
  "shion_whisper_talk": {
   "ref": "shion_whisper",
   "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, glasses, clothes, colours, lighting and background — and change ONLY his mouth: slightly open as if speaking softly, a small natural opening, the same half-closed eyes. Do not move, zoom or crop the picture."
+ },
+ "shion_whisper_blink": {
+  "ref": "shion_whisper",
+  "prompt": "Edit image 1: only BOTH eyes change — they are fully, gently closed (a relaxed blink), no iris, no pupil, no white of the eye visible at all: the upper lid comes all the way down, the closed lid is a soft curved lash line with the same lash colour and thickness as the open eye.\nThe eyelid skin has exactly the same skin colour, light and shading as the face around it (no grey patch, no ghost of the iris). Eyebrows, hair over the eyes (the long silver bangs across the visible eye, the mole under the eye), glasses and everything else stay pixel-identical. Do not move, scale or redraw anything outside the eyes.",
+  "mask": "450,360,80,45"
  }
 }

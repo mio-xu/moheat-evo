@@ -251,5 +251,28 @@
    2560,
    1440
   ]
+ },
+ "shion_whisper_blink": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 125,
+  "usage": {
+   "input_tokens": 1655,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 147
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9025
+  },
+  "out": [
+   2560,
+   1440
+  ]
  }
 }

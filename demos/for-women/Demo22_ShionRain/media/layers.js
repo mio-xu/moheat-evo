@@ -347,7 +347,7 @@ window.MOHEAT_LAYERS = {
     "h": 961,
     "x": 0.5,
     "y": 1.02,
-    "height": 1.02,
+    "height": 1.06,
     "box": [
      0,
      0,
@@ -399,6 +399,16 @@ window.MOHEAT_LAYERS = {
      ],
      "kind": "mouth_lv",
      "level": 3
+    },
+    {
+     "src": "art/whisper_eyes.webp?v=de9709e1",
+     "rect": [
+      226,
+      196,
+      148,
+      88
+     ],
+     "kind": "eyes"
     }
    ]
   },

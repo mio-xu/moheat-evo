@@ -11,7 +11,7 @@
   const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
   const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000));
 
-  // ---------------------------------------------------------------- art: one still per view ('dryerR' = the dryer still mirrored)
+  // ---------------------------------------------------------------- art: one still per view ('dryerR' = the dryer still, never mirrored: his mole / ear cuff / ponytail side stay put)
   const VIEWS = ['door', 'towel', 'dryer', 'glasses', 'whisper', 'window'];
   const IMG = {};
   const artReady = Promise.all(VIEWS.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/shion_${n}.jpg?v=4`; })));
@@ -236,17 +236,16 @@
   }
   function drawClip(view, alpha) {
     if (!(cur && clipOK(cur) && (view === curView || (view === S.view && ONCE.has(cur))))) return false;
-    ctx.save(); if (curView === 'dryerR' && !ONCE.has(cur)) { ctx.translate(W, 0); ctx.scale(-1, 1); }
-    ctx.globalAlpha = alpha; ctx.drawImage(CLIP[cur], 0, 0, W, H); ctx.restore(); ctx.globalAlpha = 1; return true;
+    ctx.globalAlpha = alpha; ctx.drawImage(CLIP[cur], 0, 0, W, H); ctx.globalAlpha = 1; return true;
   }
   function drawView(view, alpha, t) {
     if (drawClip(view, alpha)) return;
     const exact = !QS.has('stills') && Object.keys(CLIP).length > 0;   // with video the still must match the clips' frames exactly (no drift)
-    const mirror = view === 'dryerR', im = IMG[mirror ? 'dryer' : view];
+    const im = IMG[view === 'dryerR' ? 'dryer' : view], live = !!(window.MoHeatLayers && window.MoHeatLayers.live);   // layered: no page drift (guide §6.4)
     ctx.globalAlpha = alpha;
     if (!im) { ctx.fillStyle = '#16121e'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
-    const z = exact ? 1 : 1.02 + .008 * Math.sin(t * 1.1) + (view === 'glasses' ? .03 * clamp(S.near - 1, 0, .4) / .4 : 0), dh = W * im.height / im.width;
-    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(mirror ? -z : z, z); ctx.drawImage(im, -W / 2, -dh / 2 + (exact ? 0 : 4 * Math.sin(t * .9)), W, dh); ctx.restore();
+    const z = exact ? 1 : 1.02 + (live ? 0 : .008 * Math.sin(t * 1.1)) + (view === 'glasses' ? .03 * clamp(S.near - 1, 0, .4) / .4 : 0), dh = W * im.height / im.width;
+    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + (exact || live ? 0 : 4 * Math.sin(t * .9)), W, dh); ctx.restore();
     ctx.globalAlpha = 1;
   }
   const drops = Array.from({ length: 70 }, () => ({ x: Math.random() * W, y: Math.random() * H, v: 900 + Math.random() * 700, l: 20 + Math.random() * 30 }));
