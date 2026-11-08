@@ -1,0 +1,25 @@
+// Mint's ear salon (a role-play stream): id → [ja, en]. Voice: ElevenLabs (tools/eleven/cast.json "mint", r1_a) — scripts/voice.py holds the tagged text.
+window.MINT_LINES = {
+  "m01": ["…いらっしゃいませ。おみみ専門店、ミントへ、ようこそ。", "…Welcome. Welcome to Mint, the ear salon."],
+  "m02": ["今夜のお客さまは…みみくん。…つまり、画面のまえの、あなたです。", "Tonight's guest is… Mimi-kun. …Which means, you, in front of the screen."],
+  "m03": ["…まずは、どっちのおみみから、ほぐしましょうか。コメントで、おしえてね。", "…Which ear shall I start on? Tell me in the chat."],
+  "m04": ["…はーい。こっちのおみみ、さわりますね。手、あっためておいたから。", "…Okay. I'll touch this ear. I warmed my hands first."],
+  "m05": ["…むに、むに。…ふふ、やわらかい。…ちから、ぬいてね。", "…Squish, squish. …Heh, so soft. …Let yourself relax."],
+  "m06t": ["…ご注文ありがとう。蒸しタオル、ふたつのおみみに。…ふわぁ、あったかい、ね。", "…Thank you for your order. Steamed towels, on both ears. …Mm, warm, isn't it."],
+  "m06s": ["…ご注文ありがとう。冷やしておいた、スプーン。…ぴと。…ひゃっ、てなった？", "…Thank you for your order. A spoon I chilled. …Tap. …Did you jump?"],
+  "m07": ["…つぎは、おみみかき。…ちょっとだけ、動かないでね。", "…Next, ear cleaning. …Stay still for just a bit."],
+  "m08": ["…かり、かり。…すー。…はい、きれいになりました。いいこ、いいこ。", "…Scritch, scritch. …Swish. …There, all clean. Good, good."],
+  "m08x": ["…あ、うごいた。…あぶないから、もうすこし、じっとしてて？", "…Ah, you moved. …It's not safe, so stay still a little longer?"],
+  "m09w": ["…あったかい石、おみみのそばに、おいておくね。…じんわり。", "…I'll leave a warm stone by your ear. …Slowly warming."],
+  "m09m": ["…ミントのリップ、ぬったの。…いくよ。…ふぅー。…すーすー、するでしょ。", "…I put on mint lip balm. …Here it comes. …Fuuu. …Tingly, right?"],
+  "m10": ["…はんたいがわも、しないとね。…ごろん、ってしてくれる？", "…I have to do the other side too. …Can you roll over?"],
+  "m11": ["…こっちのおみみも、さっきと、おなじに。…むに、むに。かり、かり。", "…This ear too, just like before. …Squish, squish. Scritch, scritch."],
+  "m12": ["…しゅっ。ひんやりミスト、さいごに。…おつかれさま、でした。", "…Psst. A cool mist, to finish. …All done."],
+  "m13": ["…コメント、いっぱい。「ねむくなってきた」…ふふ、よかった。", "…So many comments. \"I'm getting sleepy\"… heh, good."],
+  "m14a": ["…ひみつ。…このお店、ほんとは、あなたのために、ひらいたの。", "…A secret. …I actually opened this salon for you."],
+  "m14b": ["…ん、ん〜…。…こもりうた、ミントの、オリジナル。", "…Mm, mm… …A lullaby, Mint's own."],
+  "m15": ["…ブランケット、かけるね。…さいごに、おやすみって、いって？", "…I'll put a blanket on you. …Last of all, say goodnight?"],
+  "m16": ["…おやすみなさい。…またのご来店、まってます。", "…Goodnight. …I'll be waiting for your next visit."],
+  "m17a": ["…うん。…やくそく、ね。", "…Mm. …It's a promise."],
+  "m17b": ["…えっ、延長…？ …ふふ、しかたないなあ。…じゃあ、あなたが眠るまで、ここにいるね。", "…Huh, an extension…? …Heh, can't be helped. …Then I'll stay here until you fall asleep."]
+};
