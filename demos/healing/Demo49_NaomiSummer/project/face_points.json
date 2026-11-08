@@ -1,0 +1,8 @@
+{
+ "_doc": "Naomi (the user's real cat): blink-mask ellipses [cx, cy, rx, ry] per pose, measured on grids (source px of assets/art/<pose>.png). No mouth sets: Naomi has no human speech (her sounds are purrs / chirps), see project/qa.json.",
+ "naomi_pancake": {"eyes": [[1375, 812, 88, 68], [1683, 733, 80, 70]]},
+ "naomi_bat": {"eyes": [[1083, 407, 60, 50], [1277, 310, 60, 50]]},
+ "naomi_bottle": {"eyes": [[483, 707, 70, 45], [727, 600, 70, 45]]},
+ "naomi_startle": {"eyes": [[1607, 627, 60, 60], [1857, 673, 60, 60]]},
+ "naomi_shoulder": {"eyes": [[493, 720, 90, 50], [860, 560, 90, 50]]}
+}
