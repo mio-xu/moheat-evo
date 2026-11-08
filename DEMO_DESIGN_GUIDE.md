@@ -549,6 +549,33 @@ python3 tools/qa/check_demo.py <demo> --checklist        # 同时写 / 刷新 pr
   - **自动检查**：`python3 -m http.server 8765`（仓库根目录）→ 打开 `http://127.0.0.1:8765/tools/web/check_mobile.html`：每个 Demo 在 390×844、844×390、768×1024、1024×768、1280×720、1440×900、1920×1080 下（同源 iframe，≤ 1100 px 的尺寸模拟没有 Web Serial），测封面和按开始后的页面滚动 / 横向溢出、画面外的控件、点不到的按钮（真实点击测试：控件中心 ±21 px 都要点得到它）、样例回答按钮，抽屉打开后里面的控件，和引导每一步（提示框 + 按钮在屏幕内、44 px、不挡高亮元素）。表格每格开头写这个尺寸用的是哪种排版（beside / below / drawer）。`?only=Demo21,Demo05` 只测几个，`?serial=1` 保留设备控件，`?view=Demo21` 只显示不测。**新 Demo 上线前跑一次，全绿才算过。**
 
 ### 7.3 UI 规范（所有 Demo 统一，用户 2026-11-08：今后的新 Demo 都按同样的 UI）
+**UI v2 = 唯一的界面标准（用户 2026-11-08 决定 A–G；`MoHeatShell.UI_V2` 打开后，下面第 1–2c 点里和它冲突的旧做法全部作废）**：所有 Demo（包括 AI 对谈 23 / 41 / 42、Demo43 的自由对话）的界面**完全一样**——同一个元素的位置、大小、间距、字体、图标、文案、颜色有任何不同都算 bug。界面只由共用代码生成，**Demo 不写任何界面代码、不画封面**：
+
+```
+┌──────────────────────── .stage（16:9，播放器）────────────────────────┐
+│ [封面 = 一张做好的图 media/cover/<lang>.<size>.webp]                     │
+│   kicker / 系列                                    人物（2b 构图：眼 72 % / 30 %，脸 27 %）│
+│   标题（≤ 2–3 行，5.6cqw）                                               │
+│   副标题 · chips（温 = 橙框 / 凉 = 蓝框）     ← 以上都烤在图里（≤ 31cqw） │
+│                                                                          │
+│   [▶ Start] [✋ Interactive | 🎧 Just listen]      ← 真按钮，固定位置     │
+│   [Where  Tea ▾] [With  Mint ▾]                     ← cover.json options │
+│   🌐 [English] [日本語] [中文]                       (结束时右下：☆ Endings 1/2) │
+│ ──────────────────────────── 控制条（一直显示）─────────────────────────── │
+│ ▶/⏸ │ ③ 章节名 ▬▬▬▬▬▬░░░░ 章节进度（可点） │ ✋|🎧 │ 🔊 │ 🌡 │ ⚙ │ ⛶ │
+└──────────────────────────────────────────────────────────────────────────┘
+  字幕和回答按钮在控制条上方（ui2.css 统一 bottom）；播放器 < 760 px（手机）= 紧凑封面：
+  图里只有标题 + 副标题，一行 [▶ Start][✋|🎧][📍 选项]，语言在 ⚙；⚙ 变成底部弹出面板。
+```
+- **文件**：`demos/shared/ui2.js`（组件，只认 adapter，不认 Demo）+ `ui2.css`（全部尺寸，cqw + 触屏 44 px 下限）；`shared/shell.js` 里的 live adapter（时钟 / 暂停 / 模式 / 章节 / 音量 / 冷热 / 字幕 / 设备 / 全屏）；开关 `MoHeatShell.UI_V2`（发布前 `?ui=2` 本浏览器打开、`?ui=1` 关掉）。
+- **封面**：每个 Demo 只提供 `cover.json`（`title / tagline / chips[{kind: warm|cool|tag, text}] / series / tone / options[{key, label, items[{v, label}], when}] / chapters`，每项 en / ja / zh）+ `media/cover/art.webp`（背景 + 人物，按 2b 数值合成一次；姿势填不满就用 `tools/art/cover_plate.py` 出整张画）。`python3 tools/web/covers.py <Demo>` 用唯一模板 `tools/web/cover_tpl.html` 烤出 `media/cover/<lang>.w1920 / w1280 / c1200.webp`（`--publish` 同时出 `media/cover.jpg` 和菜单缩略图）；标题放不下或文件超预算 = FAIL。页面一打开就先显示这张图（shell.js 首先 preload 它），换语言换成预先缓存的另一张；选项按钮点的是 Demo 自己的隐藏按钮（`button[data-k][data-v]` 或 `[data-<key>="<v>"]`）。
+- **控制条**：▶/⏸ · 章节（`MoHeatShell.chapters / current / seek` 或 `#steps`；互动模式只能回到 / 跳到已到过的章节）· 模式（互动默认，播放中可切）· 🔊 音量 · 🌡 开关 + 强度 · ⚙ · ⛶。**一直显示**；只有 ⚙「隐藏控制条」打开时（默认关）才在播放中 3 秒无操作后淡出。每个 Demo 至少 2 个章节。
+- **⚙ 设置**：语言、字幕开关 + 大小、减少动态、隐藏控制条、设备连接、头部追踪（Beta，以后）。
+- **状态**：loading（封面已显示，Start 显示 % 等待）→ cover → playing ⇄ paused → ended（回本 Demo 封面：↺ Play again · 模式 · 结局图鉴 n / m）。
+- **类别主题**：只换 `--u2-accent` / `--u2-on-accent`（`ui2.css` 里按 `data-cat`）和烤图时的标题字体；布局一模一样。
+- **检查（FAIL 门禁）**：`node tools/web/check_ui.js [Demo…] --sheet x.jpg`：每个 Demo 在 1440×900 和 390×844（触屏）下的 封面 / 播放 / 暂停 / ⚙ / 结束 五个状态，量 `.u2` 里每个元素的位置、大小、字体、颜色、文字，和参照 Demo（岳 Demo24）逐项比较，只允许画面、章节数和名字、选项内容、类别主题色不同；旧界面（旧封面、🌐 ⛶ 角落、旧模式按钮、旧进度条、影片 transport）还看得见 = FAIL；少于 2 个章节 = FAIL。`check_demo.py` 的 G7 **ui** 行：`--quick`（CI 也跑）检查 cover.json / 三种语言的封面图齐全且不过期、页面加载 shell.js、Demo 自己的 css / js 里没有 `.u2` 规则；完整模式再跑 check_ui.js。
+- **新 Demo**：界面一行都不写——页面加载 `shell.js`；复制 `tools/web/cover_template.json` 为 `cover.json` 填三种语言，放 `media/cover/art.webp`，跑 `python3 tools/web/covers.py <Demo> --publish`；章节用 `#steps`（`setStep()`）或 `MoHeatShell.chapters / current`。样品页 `preview/ui2/specimen.html`、封面墙 `preview/ui2/covers.html`。
+
 - **结束 = 回到本 Demo 自己的封面**（用户 2026-11-08）：剧情播完后显示本 Demo 的封面，开始按钮改成「↺ もう一度 · Play again」（subs.js 按当前语言显示），不要「下一个 Demo」按钮、不要自动跳到别的 Demo。换 Demo 只用顶栏的 ‹ › 和作品列表。
 
 整套界面由共用文件负责：`shared/series.css`（尺寸、一屏、右侧栏、封面字号）、`shared/nav.js`（顶栏的 Demo 切换、一屏测量）、`shared/subs.js`（显示语言、🌐 语言按钮）、`shared/voice.js`（语音回答）、`shared/game.css`（游戏类的基础样式）、`shared/interact.js`（影片类的互动和进度卡片）。**新 Demo 只写自己的内容，不另做一套 UI。**
