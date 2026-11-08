@@ -228,5 +228,28 @@
    "right": 0,
    "bottom": 0
   }
+ },
+ "cover_plate": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 68,
+  "usage": {
+   "input_tokens": 1631,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 123
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9001
+  },
+  "out": [
+   2560,
+   1440
+  ]
  }
 }

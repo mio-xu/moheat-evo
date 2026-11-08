@@ -347,8 +347,10 @@
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
   function drawCover() {   // cover standard (shared/cover.js): the still with the face on the standard spot, the title in the shaded left column
-    const C0 = window.MoHeatCover;   // layered: the empty plate + the pose cut-out, the pose scaled to the cover standard (no new art)
-    if (C0?.layered && C0.layered(ctx, { bg: 'media/art/bg_door.webp', char: 'media/art/char_door.webp', x: .45, y: 1.02, height: 1.12 }, { eye: [.441, .163], face: .416 }, { at: { y: .35, face: .316 }, redraw: drawCover, tone: '#100c18' })) return;
+    // a whole painting, no cut-out (the door pose's cut top edge showed inside the frame): the window view widened by
+    // scripts/cover_plate.py (gpt-image-2 outpaint) so his face fits the standard; eye / face measured on the plate (SCRFD)
+    const C0 = window.MoHeatCover, plate = C0?.img?.('media/art/cover_plate.jpg?v=1', drawCover);
+    if (plate) { C0.fit(ctx, { eye: [.712, .426], face: .262 }, () => ctx.drawImage(plate, 0, 0, W, H), { at: { y: .33, face: .306 }, tone: '#100c18' }); return; }
     const im = IMG.door || IMG.window, C = window.MoHeatCover; if (!im) { ctx.fillStyle = '#100c18'; ctx.fillRect(0, 0, W, H); return; }
     const pic = () => ctx.drawImage(im, 460, 0, W, H);
     if (C) C.fit(ctx, { eye: [.681, .163], face: .416 }, pic, { tone: '#100c18', covers: [.24, 0, 1.24, 1] }); else pic();   // eye / face: where the face is in this drawing (tools/web/check_cover.py)
