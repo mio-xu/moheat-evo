@@ -6,7 +6,7 @@ Characters = special versions of three for-men heroines (face, hair colour, pers
 changed — docs/proposals/2026-11-08_crossover.md M1-West). References COPIED into assets/art/ (never linked, so nothing is written into
 the original demos): ref_tsubaki (Demo25 tsubaki_torii = card lock_face) / ref_cocoa (Demo17 cocoa_welcome) / ref_luna (Demo19
 luna_counter) + a closer face crop each (ref_<c>_close).
-Step 1: two design options per character (design_<c>_a / _b, project/designs_contact.jpg) → pick one each; the pick is copied to
+Step 1: two design options per character (design_<c>_a / _b, project/designs_contact.jpg) → picks 2026-11-09 (prepro, coordinator rule: pick yourself): Tsubaki A (academy uniform + crown braid), Cocoa A (leather apron, goggles on the beret, side braid), Luna B (witch's coat + hat: the biggest change, brim above the brows); the pick is copied to
 <c>_base.png (the base pose). Step 2: the other poses reference the pick; blink variants are masked edits (face_points.json);
 mouths = LivePortrait sets (free, tools/art/lp_mouths.py), so no talk variants are drawn.
 Screens (guide §6 / card backdrop): all three on chroma GREEN #00B140 ("matte": "green"): silver-white Tsubaki, pastel Cocoa, Luna in
@@ -122,7 +122,7 @@ POSES = {   # name: (character, pose, lighting or None)
                   "right cheek, face in three-quarter view, a sweet doting smile, eyes on the viewer; both hands low near the bottom edge "
                   "hold a round steaming mug of hot cocoa (a little steam), held below her chin. Nothing across her face. Mouth CLOSED.", None),
     'luna_ear': ('luna', "An intimate close-up: she sits very near the viewer at the RIGHT side of the picture, leaning toward the viewer's "
-                 "right ear, face in three-quarter view, half-lidded calm eyes looking sideways at the viewer, a faint teasing smile; one "
+                 "right ear, face in three-quarter view, wearing her pointed witch's hat tilted back so the brim stays above her eyebrows and clear of the viewer, half-lidded calm eyes looking sideways at the viewer, a faint teasing smile; one "
                  "hand low near the bottom edge holds a tall glass of iced tea. Nothing across her face. Mouth CLOSED.", None),
 }
 
@@ -144,6 +144,20 @@ for n, (c, pose, light) in POSES.items():
     out[n] = {"ref": [f"{c}_base", REFS[c][1]], "prompt": "\n\n".join([lead, STYLE, CHAR[c], pose, light or LIGHT[c], plain(), END])}
     out[f"{n}_blink"] = {"ref": n, "prompt": EDIT.format(what=BLINK)}
 out["cocoa_ear_blow"] = {"ref": "cocoa_ear", "prompt": EDIT.format(what=BLOW)}
+# cover art still (UI v2: media/cover/art.webp at the build stage, 1920×1080; title on the left → figures on the right two-thirds)
+out["cover_art"] = {"ref": ["luna_base", "tsubaki_base", "cocoa_base"], "prompt": "\n\n".join([
+    "Images 1, 2 and 3 are the CHARACTER and STYLE references: draw these exact three young women (Image 1 Luna, the witch with the hat; "
+    "Image 2 Tsubaki, silver-white hair; Image 3 Cocoa, chestnut braid and goggles) with the same faces, hair, hairstyles and outfits, the "
+    "same art style. " + STYLE,
+    "A striking cover illustration: the three stand close together on the open balcony at the top of a magic academy's astronomy tower at "
+    "night, a huge full moon and stars behind them, the academy's spires far below. They fill the RIGHT two-thirds of the picture, seen "
+    "from the waist up, all looking at the viewer: Luna in the middle, a little in front, one hand raised with a swirl of small glittering "
+    "BLUE-WHITE ice crystals and frost mist circling above her palm (cold); Tsubaki on the left of the group holding her slim white wand, a "
+    "faint pale circle of light at its tip; Cocoa on the right holding a steaming mug of hot cocoa, a tiny cute round fire salamander "
+    "(chibi-like, red-orange, friendly, glowing warm ORANGE, little flames on its tail) perched on her shoulder (warm). Cold blue light on "
+    "the left of the group, warm orange glow on the right. The LEFT third of the picture is calm dark night sky with a few stars (space for a "
+    "title), no figures there. Faces large and clear, nobody's face covered, full heads inside the frame.",
+    END])}
 FP = os.path.join(ROOT, "project/face_points.json")
 if os.path.exists(FP):
     for v, f in json.load(open(FP)).items():

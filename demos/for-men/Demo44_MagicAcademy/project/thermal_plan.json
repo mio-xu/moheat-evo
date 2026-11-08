@@ -1,33 +1,337 @@
 {
  "_doc": "Demo44 thermal plan (firmware DUAL: LC LH RC RH independent; DEMO_DESIGN_GUIDE §3). Data for the build stage (main.js EVENTS / PLACE_AMB) and for scripts/thermal_plan.py (simulates the default story path with the real voice loudness → project/thermal_preview.csv + checks). az in degrees: 0 = front, -90 = LEFT ear, +90 = RIGHT ear (ear weights wL = 1 - 1.2·max(0, sin az), wR = 1 - 1.2·max(0, -sin az)). kind warm / cool, level 0-1 (warm ≤ 0.9, cool ≤ 1). 'set' = ambient sources that stay until the next 'set' (by name; level 0 removes); 'pulse' = a source that rises, holds 'hold' s and fades with 'fade' s; 'sweep' = a moving source from az0 to az1 over 'secs'. Every source names its physical cause, visible on screen. Magic light (summoning circle, the return circle) has NO temperature (world rule card).",
- "voice": {"formula": "(0.1 + 0.8 × loudness) × distance", "distance": {"left_ear": 1.0, "right_ear": 1.0, "near": 0.6, "behind_front": 0.6, "left": 0.28, "right": 0.28, "front": 0.28}, "az": {"left_ear": -90, "right_ear": 90, "near": 0, "front": 0, "left": -60, "right": 60, "behind_front": -20}, "front_split": 0.5},
- "smoothing": {"warm_rise": 0.4, "warm_fall": 0.5, "cool_rise": 0.2, "cool_fall": 0.35},
- "events": {
-  "@circle":       {"why": "the summoning circle flashes: light only, no temperature (rule card)", "set": {}},
-  "@hall":         {"why": "stone hall: a cold draught along the floor + two iron braziers left and right", "set": {"draught": ["cool", 0, 0.12], "brazier_L": ["warm", -80, 0.15], "brazier_R": ["warm", 80, 0.15]}},
-  "@lean_left":    {"why": "Tsubaki leans to your left ear (her voice does the warming)", "set": {}},
-  "@takeoff":      {"why": "the broom lifts off: head wind grows with speed", "set": {"brazier_L": ["warm", -80, 0], "brazier_R": ["warm", 80, 0], "draught": ["cool", 0, 0], "wind": ["cool", 0, 0.3]}},
-  "@cruise":       {"why": "cruising speed: steady head wind", "set": {"wind": ["cool", 0, 0.35]}},
-  "@dive":         {"why": "the dive at full speed (hold on): the cold PEAK, both ears", "set": {"wind": ["cool", 0, 0.92]}, "during_hold": true},
-  "@turn_left":    {"why": "sharp left turn: the wind swings from your left ear across to your right", "sweep": ["cool", -90, 90, 1.6, 0.6]},
-  "@descend":      {"why": "slowing down to land: wind drops", "set": {"wind": ["cool", 0, 0.12]}},
-  "@lab":          {"why": "workshop: brick furnace + cauldron fire on the RIGHT, iron cold cabinet with frost on the LEFT (left cool / right warm)", "set": {"wind": ["cool", 0, 0], "furnace": ["warm", 60, 0.3], "cabinet": ["cool", -70, 0.25]}},
-  "@flare":        {"why": "a pinch of fire-salamander scale: the furnace flame flares up in front-right (the HEAT peak, real fire)", "pulse": ["warm", 30, 0.88, 0.25, 1.2, 1.6]},
-  "@mug_right":    {"why": "the hot cocoa mug pressed to your RIGHT cheek", "set": {"mug": ["warm", 90, 0.6]}},
-  "@blow_right":   {"why": "silent moment: she takes the mug away and blows on your right cheek — right ear warm → cool in < 1 s (fast switch)", "set": {"mug": ["warm", 90, 0]}, "pulse": ["cool", 90, 0.75, 0.15, 1.4, 0.8]},
-  "@sip":          {"why": "you drink: the mug in front of your face", "set": {"mug": ["warm", 0, 0.35]}, "then": {"after": 3, "set": {"mug": ["warm", 0, 0]}}},
-  "@tower":        {"why": "tower salon: fireplace on the LEFT, open window to the night on the RIGHT", "set": {"furnace": ["warm", 60, 0], "cabinet": ["cool", -70, 0], "fire": ["warm", -80, 0.35], "night": ["cool", 80, 0.2]}},
-  "@crystal_show": {"why": "FIRST appearance of ice magic, slowly: one real ice crystal forms in her palm in front of you", "pulse": ["cool", 0, 0.3, 3.0, 2.0, 1.5]},
-  "@orbit":        {"why": "ice crystals circle your head once (360°, real ice); passing the LEFT ear they meet the fireplace = cool + warm on the same ear", "sweep": ["cool", 0, 360, 6.0, 0.55], "during_hold": true},
-  "@into_glass":   {"why": "the crystals drop into your glass and melt away", "pulse": ["cool", 0, 0.2, 0.2, 0.5, 3.0]},
-  "@lean_right":   {"why": "Luna leans to your RIGHT ear, beside the open window (warm voice + cool night air on the same ear)", "set": {"night": ["cool", 80, 0.3]}},
-  "@sunrise":      {"why": "dawn on the tower: the sun rises in front, morning air, the fire burned down to embers", "set": {"fire": ["warm", -80, 0.08], "night": ["cool", 80, 0], "sun": ["warm", 0, 0.16], "morning": ["cool", 0, 0.12]}},
-  "@brazier":      {"why": "(keep talking) someone stokes the brazier", "pulse": ["warm", -60, 0.35, 0.6, 2.0, 2.0]},
-  "@cloak":        {"why": "(keep talking) Luna's cloak around you on the broom: wind cut, cloth warm on the left", "set": {"wind": ["cool", 0, 0.08]}, "pulse": ["warm", -70, 0.2, 0.6, 4.0, 2.0]}
+ "voice": {
+  "formula": "(0.1 + 0.8 × loudness) × distance",
+  "distance": {
+   "left_ear": 1.0,
+   "right_ear": 1.0,
+   "near": 0.6,
+   "behind_front": 0.6,
+   "left": 0.28,
+   "right": 0.28,
+   "front": 0.28
+  },
+  "az": {
+   "left_ear": -90,
+   "right_ear": 90,
+   "near": 0,
+   "front": 0,
+   "left": -60,
+   "right": 60,
+   "behind_front": -20
+  },
+  "front_split": 0.5
  },
- "step_start": {"hall": "@hall", "sky": null, "lab": null, "tower": null, "dawn": null},
+ "smoothing": {
+  "warm_rise": 0.4,
+  "warm_fall": 0.5,
+  "cool_rise": 0.2,
+  "cool_fall": 0.35
+ },
+ "events": {
+  "@circle": {
+   "why": "the summoning circle flashes: light only, no temperature (rule card)",
+   "set": {}
+  },
+  "@hall": {
+   "why": "stone hall: a cold draught along the floor + two iron braziers left and right",
+   "set": {
+    "draught": [
+     "cool",
+     0,
+     0.12
+    ],
+    "brazier_L": [
+     "warm",
+     -80,
+     0.15
+    ],
+    "brazier_R": [
+     "warm",
+     80,
+     0.15
+    ]
+   }
+  },
+  "@lean_left": {
+   "why": "Tsubaki leans to your left ear (her voice does the warming)",
+   "set": {}
+  },
+  "@takeoff": {
+   "why": "the broom lifts off: head wind grows with speed",
+   "set": {
+    "brazier_L": [
+     "warm",
+     -80,
+     0
+    ],
+    "brazier_R": [
+     "warm",
+     80,
+     0
+    ],
+    "draught": [
+     "cool",
+     0,
+     0
+    ],
+    "wind": [
+     "cool",
+     0,
+     0.3
+    ]
+   }
+  },
+  "@cruise": {
+   "why": "cruising speed: steady head wind",
+   "set": {
+    "wind": [
+     "cool",
+     0,
+     0.35
+    ]
+   }
+  },
+  "@dive": {
+   "why": "the dive at full speed (hold on): the cold PEAK, both ears",
+   "set": {
+    "wind": [
+     "cool",
+     0,
+     0.92
+    ]
+   },
+   "during_hold": true
+  },
+  "@turn_left": {
+   "why": "sharp left turn: the wind swings from your left ear across to your right",
+   "sweep": [
+    "cool",
+    -90,
+    90,
+    1.6,
+    0.6
+   ]
+  },
+  "@descend": {
+   "why": "slowing down to land: wind drops",
+   "set": {
+    "wind": [
+     "cool",
+     0,
+     0.12
+    ]
+   }
+  },
+  "@lab": {
+   "why": "workshop: brick furnace + cauldron fire on the RIGHT, iron cold cabinet with frost on the LEFT (left cool / right warm)",
+   "set": {
+    "wind": [
+     "cool",
+     0,
+     0
+    ],
+    "furnace": [
+     "warm",
+     60,
+     0.3
+    ],
+    "cabinet": [
+     "cool",
+     -70,
+     0.25
+    ]
+   }
+  },
+  "@flare": {
+   "why": "a pinch of fire-salamander scale: the furnace flame flares up in front-right (the HEAT peak, real fire)",
+   "pulse": [
+    "warm",
+    30,
+    0.88,
+    0.25,
+    1.2,
+    1.6
+   ]
+  },
+  "@mug_right": {
+   "why": "the hot cocoa mug pressed to your RIGHT cheek",
+   "set": {
+    "mug": [
+     "warm",
+     90,
+     0.6
+    ]
+   }
+  },
+  "@blow_right": {
+   "why": "silent moment: she takes the mug away and blows on your right cheek — right ear warm → cool in < 1 s (fast switch)",
+   "set": {
+    "mug": [
+     "warm",
+     90,
+     0
+    ]
+   },
+   "pulse": [
+    "cool",
+    90,
+    0.75,
+    0.15,
+    1.4,
+    0.8
+   ]
+  },
+  "@sip": {
+   "why": "you drink: the mug in front of your face",
+   "set": {
+    "mug": [
+     "warm",
+     0,
+     0.35
+    ]
+   },
+   "then": {
+    "after": 3,
+    "set": {
+     "mug": [
+      "warm",
+      0,
+      0
+     ]
+    }
+   }
+  },
+  "@tower": {
+   "why": "tower salon: fireplace on the LEFT, open window to the night on the RIGHT",
+   "set": {
+    "furnace": [
+     "warm",
+     60,
+     0
+    ],
+    "cabinet": [
+     "cool",
+     -70,
+     0
+    ],
+    "fire": [
+     "warm",
+     -80,
+     0.35
+    ],
+    "night": [
+     "cool",
+     80,
+     0.2
+    ]
+   }
+  },
+  "@crystal_show": {
+   "why": "FIRST appearance of ice magic, slowly: one real ice crystal forms in her palm in front of you",
+   "pulse": [
+    "cool",
+    0,
+    0.3,
+    3.0,
+    2.0,
+    1.5
+   ]
+  },
+  "@orbit": {
+   "why": "ice crystals circle your head once (360°, real ice); passing the LEFT ear they meet the fireplace = cool + warm on the same ear",
+   "sweep": [
+    "cool",
+    0,
+    360,
+    6.0,
+    0.55
+   ],
+   "during_hold": true
+  },
+  "@into_glass": {
+   "why": "the crystals drop into your glass and melt away",
+   "pulse": [
+    "cool",
+    0,
+    0.2,
+    0.2,
+    0.5,
+    3.0
+   ]
+  },
+  "@lean_right": {
+   "why": "Luna leans to your RIGHT ear, beside the open window (warm voice + cool night air on the same ear)",
+   "set": {
+    "night": [
+     "cool",
+     80,
+     0.3
+    ]
+   }
+  },
+  "@sunrise": {
+   "why": "dawn on the tower: the sun rises in front, morning air, the fire burned down to embers",
+   "set": {
+    "fire": [
+     "warm",
+     -80,
+     0.08
+    ],
+    "night": [
+     "cool",
+     80,
+     0
+    ],
+    "sun": [
+     "warm",
+     0,
+     0.16
+    ],
+    "morning": [
+     "cool",
+     0,
+     0.12
+    ]
+   }
+  },
+  "@brazier": {
+   "why": "(keep talking) someone stokes the brazier",
+   "pulse": [
+    "warm",
+    -60,
+    0.35,
+    0.6,
+    2.0,
+    2.0
+   ]
+  }
+ },
+ "step_start": {
+  "hall": "@hall",
+  "sky": null,
+  "lab": null,
+  "tower": null,
+  "dawn": null
+ },
  "places": {
-  "hall": ["@hall"], "sky": ["@takeoff", "@cruise"], "lab": ["@lab"], "tower": ["@tower"], "dawn": ["@tower", "@sunrise"]
+  "hall": [
+   "@hall"
+  ],
+  "sky": [
+   "@takeoff",
+   "@cruise"
+  ],
+  "lab": [
+   "@lab"
+  ],
+  "tower": [
+   "@tower"
+  ],
+  "dawn": [
+   "@tower",
+   "@sunrise"
+  ]
  },
  "showcase": {
   "fast_switch": "lab: @mug_right (right warm 0.6) → @blow_right (right cool 0.75, mug gone) in a silent moment (no line between c08 and c09)",

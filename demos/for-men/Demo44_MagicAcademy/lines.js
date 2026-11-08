@@ -538,26 +538,6 @@ window.ACAD_LINES = {
    "…Hold tight so you don't fall. …Yes, just like that.",
    "T"
   ],
-  "sc1": [
-   "ひゃっ…！ た、高い〜！ 椿ちゃん、もっとゆっくり〜！",
-   "Eek…! S-so high~! Tsubaki, slower~!",
-   "C"
-  ],
-  "sc2": [
-   "…怖いから、手、にぎってて。 …ほんとに怖いんだからね？",
-   "…I'm scared, so hold my hand. …I really am scared, okay?",
-   "C"
-  ],
-  "sl1": [
-   "…夜の空は、わたしの庭みたいなもの。 星の名前、ぜんぶ言えるわ。",
-   "…The night sky is like my garden. I can name every star.",
-   "L"
-  ],
-  "sl2": [
-   "…風、つめたいでしょう。 …わたしのマントに、入って。",
-   "…The wind is cold, isn't it. …Come under my cloak.",
-   "L"
-  ],
   "lc1": [
    "おかえり〜！ また来てくれたんだ。 今日は、なに作ろっか。",
    "Welcome back~! You came again. What shall we make today?",
@@ -712,16 +692,6 @@ window.ACAD_LINES = {
    "ふふ、風が強いほど、速く飛んでいる証拠ですわ！",
    "Hehe, the stronger the wind, the faster we are flying!",
    "T"
-  ],
-  "bc_p_wind": [
-   "風、つめたい〜！ 帰ったら、すぐココアだからね！",
-   "The wind's so cold~! When we're back, it's cocoa right away!",
-   "C"
-  ],
-  "bl_p_wind": [
-   "…高い空の風は、氷みたいにつめたいの。 …耳を、かくして。",
-   "…The wind up high is as cold as ice. …Cover your ears.",
-   "L"
   ],
   "bt_p_lab": [
    "あの大きなかまど、いつも火が入っていますのね。 あたたかい…。",
@@ -1483,107 +1453,12 @@ window.ACAD_LINES = {
        "behind_front"
       ]
      ]
-    ],
-    "C": [
-     [
-      [
-       "@cruise"
-      ],
-      [
-       "sc1",
-       "behind_front"
-      ]
-     ],
-     [
-      [
-       "bc_p_wind",
-       "behind_front"
-      ]
-     ],
-     [
-      [
-       "sc2",
-       "behind_front"
-      ]
-     ]
-    ],
-    "L": [
-     [
-      [
-       "@cruise"
-      ],
-      [
-       "sl1",
-       "behind_front"
-      ]
-     ],
-     [
-      [
-       "@cloak"
-      ],
-      [
-       "sl2",
-       "behind_front"
-      ]
-     ],
-     [
-      [
-       "l11",
-       "behind_front"
-      ]
-     ]
-    ],
-    "TCL": [
-     [
-      [
-       "st1",
-       "front"
-      ],
-      [
-       "sc1",
-       "right"
-      ]
-     ],
-     [
-      [
-       "@turn_left"
-      ],
-      [
-       "sl1",
-       "left"
-      ]
-     ],
-     [
-      [
-       "st2",
-       "front"
-      ]
-     ],
-     [
-      [
-       "@cloak"
-      ],
-      [
-       "sl2",
-       "left"
-      ]
-     ]
     ]
    },
    "bridges": {
     "T": {
      "wind": [
       "bt_p_wind"
-     ]
-    },
-    "C": {
-     "wind": [
-      "bc_p_wind"
-     ]
-    },
-    "L": {
-     "wind": [
-      "bl_p_wind"
      ]
     }
    }

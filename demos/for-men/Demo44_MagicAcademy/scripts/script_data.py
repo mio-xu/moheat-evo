@@ -126,15 +126,11 @@ L = {
     'hc2': ('C', '[whispers] …椿ちゃんの召喚、失敗しててよかった。 …じゃなきゃ、会えなかったもんね。', "…I'm glad Tsubaki's summoning went wrong. …Or we'd never have met.", '…还好椿的召唤失败了。…不然，就遇不到你了呢。'),
     'hl1': ('L', '[softly] …大広間は、天井が高すぎて、落ち着かないの。', "…The great hall's ceiling is too high. I can't settle here.", '…大厅的天花板太高了，让人静不下心。'),
     'hl2': ('L', '[whispers] …でも、あなたが現れた場所だから。 …少しだけ、好きになったわ。', "…But it's where you appeared. …So I've come to like it, a little.", '…不过，这是你出现的地方。…所以，稍微喜欢上了一点。'),
-    # 学院の上空 (wind by speed)
+    # 学院の上空 (wind by speed; only Tsubaki — her broom)
     'st1': ('T', '[excited] また空のお散歩ですのね！ 今度は、どちらへ参りましょう？', 'Another stroll in the sky! Where shall we go this time?', '又要去空中散步了呢！这次要去哪里？'),
     'st2': ('T', '[laughs] ふふ、ほうきの免許は、学年で一番でしたのよ。 …安全運転は、二番目でしたけれど。', 'Hehe, I had the best broom licence in my year. …Safe flying was second, though.', '呵呵，扫帚驾照我可是全年级第一哦。…安全驾驶是第二就是了。'),
     'st3': ('T', '[softly] 夕焼けが、右の空に残っていますわ。 …あちらが、西の国ですの。', 'The sunset still lingers in the sky on the right. …That way lies the western kingdom.', '晚霞还留在右边的天空。…那边是西方的国家。'),
     'st4': ('T', '[whispers] …落ちないように、ぎゅっと。 …はい、そのまま。', "…Hold tight so you don't fall. …Yes, just like that.", '…抓紧，别掉下去。…对，就这样。'),
-    'sc1': ('C', '[surprised] ひゃっ…！ た、高い〜！ 椿ちゃん、もっとゆっくり〜！', 'Eek…! S-so high~! Tsubaki, slower~!', '呀…！好、好高～！椿，再慢一点～！'),
-    'sc2': ('C', '[whispers] …怖いから、手、にぎってて。 …ほんとに怖いんだからね？', "…I'm scared, so hold my hand. …I really am scared, okay?", '…好可怕，握住我的手。…我是真的害怕哦？'),
-    'sl1': ('L', '[softly] …夜の空は、わたしの庭みたいなもの。 星の名前、ぜんぶ言えるわ。', '…The night sky is like my garden. I can name every star.', '…夜空就像是我的庭院。星星的名字，我全都叫得出来。'),
-    'sl2': ('L', '[whispers] …風、つめたいでしょう。 …わたしのマントに、入って。', "…The wind is cold, isn't it. …Come under my cloak.", '…风很冷吧。…进到我的斗篷里来。'),
     # 錬金工房 (furnace right, cold cabinet left)
     'lc1': ('C', '[cheerful] おかえり〜！ また来てくれたんだ。 今日は、なに作ろっか。', 'Welcome back~! You came again. What shall we make today?', '欢迎回来～！你又来啦。今天要做什么呢？'),
     'lc2': ('C', '[playful] このかまど、火トカゲの子が住んでるの。 名前はね、マシュマロ。', "A baby fire salamander lives in this furnace. Her name is Marshmallow.", '这个炉子里，住着一只小火蜥蜴哦。名字叫棉花糖。'),
@@ -170,8 +166,6 @@ L = {
     'bc_p_circle': ('C', '[curious] 魔法陣って、近くで見ると、こんなにきらきらしてるんだ…。', 'So up close, a magic circle sparkles this much…', '魔法阵近看，原来这么闪闪发亮啊…。'),
     'bl_p_circle': ('L', '[softly] …召喚の光は、ただの光。 …つめたいのは、石の床のほう。', '…Summoning light is only light. …What\'s cold is the stone floor.', '…召唤的光只是光。…冰的是石头地板。'),
     'bt_p_wind': ('T', '[laughs] ふふ、風が強いほど、速く飛んでいる証拠ですわ！', 'Hehe, the stronger the wind, the faster we are flying!', '呵呵，风越大，就说明我们飞得越快！'),
-    'bc_p_wind': ('C', '[pouting] 風、つめたい〜！ 帰ったら、すぐココアだからね！', "The wind's so cold~! When we're back, it's cocoa right away!", '风好冷～！回去之后，马上喝可可！'),
-    'bl_p_wind': ('L', '[softly] …高い空の風は、氷みたいにつめたいの。 …耳を、かくして。', '…The wind up high is as cold as ice. …Cover your ears.', '…高空的风，像冰一样冷。…把耳朵捂住。'),
     'bt_p_lab': ('T', '[curious] あの大きなかまど、いつも火が入っていますのね。 あたたかい…。', 'That big furnace always has a fire in it. So warm…', '那个大炉子，总是生着火呢。好暖和…。'),
     'bc_p_lab': ('C', '[cheerful] 右はかまどで、左は氷室。 だからここ、あったかいのとつめたいのが、半分こなの！', "The furnace on the right, the ice cabinet on the left. So here it's half warm, half cold!", '右边是炉子，左边是冰柜。所以这里呀，暖的冷的各一半！'),
     'bl_p_lab': ('L', '[softly] …かまどの火と、わたしの氷。 …この工房は、いつも喧嘩してるわね。', '…The furnace fire and my ice. …This workshop is always quarrelling.', '…炉火和我的冰。…这个工房总是在吵架呢。'),
@@ -255,10 +249,8 @@ PLACES = {
                       'TCL': [[['tt1', 'front'], ['hc1', 'right']], [['ht2', 'left']], [['@brazier'], ['hl1', 'front']], [['hc2', 'right_ear'], ['ht4', 'left_ear']]]}},
     'sky': {'ja': '学院の上空', 'en': 'Above the academy', 'zh': '学院上空', 'icon': '🧹',
             'topic': ['wind', r'風|かぜ|空|そら|高い|たかい|速|はや|ほうき|wind|sky|high|fast|speed|broom|风|天空|高|快|扫帚'],
-            'cast': {'T': [[['@cruise'], ['st1', 'behind_front']], [['st2', 'behind_front']], [['@turn_left'], ['st3', 'behind_front']], [['t16', 'behind_front']], [['st4', 'behind_front']]],
-                     'C': [[['@cruise'], ['sc1', 'behind_front']], [['bc_p_wind', 'behind_front']], [['sc2', 'behind_front']]],
-                     'L': [[['@cruise'], ['sl1', 'behind_front']], [['@cloak'], ['sl2', 'behind_front']], [['l11', 'behind_front']]],
-                     'TCL': [[['st1', 'front'], ['sc1', 'right']], [['@turn_left'], ['sl1', 'left']], [['st2', 'front']], [['@cloak'], ['sl2', 'left']]]}},
+            'cast': {'T': [[['@cruise'], ['st1', 'behind_front']], [['st2', 'behind_front']], [['@turn_left'], ['st3', 'behind_front']], [['t16', 'behind_front']], [['st4', 'behind_front']]]},
+            'only': 'T'},   # only Tsubaki flies you (her broom view); ココア / ルナ / 三人 are not offered here
     'lab': {'ja': '錬金工房', 'en': 'The alchemy workshop', 'zh': '炼金工房', 'icon': '⚗️',
             'topic': ['lab', r'かまど|釜|鍋|なべ|火|ひ|氷室|ひむろ|湯気|ゆげ|錬金|furnace|cauldron|pot|fire|steam|ice box|cabinet|alchemy|炉|锅|火|冰柜|蒸汽|炼金'],
             'cast': {'C': [[['lc1', 'front']], [['@flare'], ['lc2', 'front']], [['lc3', 'front']], [['@mug_right'], ['lc4', 'near']], [['lc5', 'right_ear']]],
