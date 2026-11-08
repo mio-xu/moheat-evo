@@ -137,7 +137,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/hinata_base_mouth1.webp?v=18449f02",
+     "src": "art/hinata_base_mouth1.webp?v=2c756f51",
      "rect": [
       510,
       343,
@@ -148,7 +148,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hinata_base_mouth2.webp?v=33154869",
+     "src": "art/hinata_base_mouth2.webp?v=d91e5a6b",
      "rect": [
       510,
       343,
@@ -159,7 +159,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hinata_base_mouth3.webp?v=bc248ded",
+     "src": "art/hinata_base_mouth3.webp?v=e451f63e",
      "rect": [
       510,
       343,
@@ -222,7 +222,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/hinata_dice_mouth1.webp?v=0ab52ee1",
+     "src": "art/hinata_dice_mouth1.webp?v=d30df2b0",
      "rect": [
       419,
       345,
@@ -233,7 +233,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hinata_dice_mouth2.webp?v=2387fead",
+     "src": "art/hinata_dice_mouth2.webp?v=09fc15cf",
      "rect": [
       419,
       345,
@@ -244,7 +244,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hinata_dice_mouth3.webp?v=8858c518",
+     "src": "art/hinata_dice_mouth3.webp?v=2c02fb41",
      "rect": [
       419,
       345,
@@ -307,7 +307,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/hinata_ear_mouth1.webp?v=f5b5670b",
+     "src": "art/hinata_ear_mouth1.webp?v=3995c8aa",
      "rect": [
       1276,
       549,
@@ -318,7 +318,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hinata_ear_mouth2.webp?v=bb4010e2",
+     "src": "art/hinata_ear_mouth2.webp?v=fcf830f2",
      "rect": [
       1276,
       549,
@@ -329,7 +329,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hinata_ear_mouth3.webp?v=017599d8",
+     "src": "art/hinata_ear_mouth3.webp?v=055a2467",
      "rect": [
       1276,
       549,
@@ -720,7 +720,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/hinata_ear_mouth1.webp?v=f5b5670b",
+     "src": "art/hinata_ear_mouth1.webp?v=3995c8aa",
      "rect": [
       1276,
       549,
@@ -731,7 +731,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hinata_ear_mouth2.webp?v=bb4010e2",
+     "src": "art/hinata_ear_mouth2.webp?v=fcf830f2",
      "rect": [
       1276,
       549,
@@ -742,7 +742,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hinata_ear_mouth3.webp?v=017599d8",
+     "src": "art/hinata_ear_mouth3.webp?v=055a2467",
      "rect": [
       1276,
       549,
@@ -966,7 +966,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/hinata_base_mouth1.webp?v=18449f02",
+     "src": "art/hinata_base_mouth1.webp?v=2c756f51",
      "rect": [
       510,
       343,
@@ -977,7 +977,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hinata_base_mouth2.webp?v=33154869",
+     "src": "art/hinata_base_mouth2.webp?v=d91e5a6b",
      "rect": [
       510,
       343,
@@ -988,7 +988,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hinata_base_mouth3.webp?v=bc248ded",
+     "src": "art/hinata_base_mouth3.webp?v=e451f63e",
      "rect": [
       510,
       343,
@@ -1048,7 +1048,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/hinata_ear_mouth1.webp?v=f5b5670b",
+     "src": "art/hinata_ear_mouth1.webp?v=3995c8aa",
      "rect": [
       1276,
       549,
@@ -1059,7 +1059,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hinata_ear_mouth2.webp?v=bb4010e2",
+     "src": "art/hinata_ear_mouth2.webp?v=fcf830f2",
      "rect": [
       1276,
       549,
@@ -1070,7 +1070,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hinata_ear_mouth3.webp?v=017599d8",
+     "src": "art/hinata_ear_mouth3.webp?v=055a2467",
      "rect": [
       1276,
       549,
@@ -1358,7 +1358,7 @@ window.MOHEAT_LAYERS = {
        "level": 0
       },
       {
-       "src": "art/hinata_base_mouth1.webp?v=18449f02",
+       "src": "art/hinata_base_mouth1.webp?v=2c756f51",
        "rect": [
         510,
         343,
@@ -1369,7 +1369,7 @@ window.MOHEAT_LAYERS = {
        "level": 1
       },
       {
-       "src": "art/hinata_base_mouth2.webp?v=33154869",
+       "src": "art/hinata_base_mouth2.webp?v=d91e5a6b",
        "rect": [
         510,
         343,
@@ -1380,7 +1380,7 @@ window.MOHEAT_LAYERS = {
        "level": 2
       },
       {
-       "src": "art/hinata_base_mouth3.webp?v=bc248ded",
+       "src": "art/hinata_base_mouth3.webp?v=e451f63e",
        "rect": [
         510,
         343,
@@ -1846,7 +1846,7 @@ window.MOHEAT_LAYERS = {
        "level": 0
       },
       {
-       "src": "art/hinata_base_mouth1.webp?v=18449f02",
+       "src": "art/hinata_base_mouth1.webp?v=2c756f51",
        "rect": [
         510,
         343,
@@ -1857,7 +1857,7 @@ window.MOHEAT_LAYERS = {
        "level": 1
       },
       {
-       "src": "art/hinata_base_mouth2.webp?v=33154869",
+       "src": "art/hinata_base_mouth2.webp?v=d91e5a6b",
        "rect": [
         510,
         343,
@@ -1868,7 +1868,7 @@ window.MOHEAT_LAYERS = {
        "level": 2
       },
       {
-       "src": "art/hinata_base_mouth3.webp?v=bc248ded",
+       "src": "art/hinata_base_mouth3.webp?v=e451f63e",
        "rect": [
         510,
         343,
@@ -1930,7 +1930,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/hinata_base_mouth1.webp?v=18449f02",
+     "src": "art/hinata_base_mouth1.webp?v=2c756f51",
      "rect": [
       510,
       343,
@@ -1941,7 +1941,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hinata_base_mouth2.webp?v=33154869",
+     "src": "art/hinata_base_mouth2.webp?v=d91e5a6b",
      "rect": [
       510,
       343,
@@ -1952,7 +1952,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hinata_base_mouth3.webp?v=bc248ded",
+     "src": "art/hinata_base_mouth3.webp?v=e451f63e",
      "rect": [
       510,
       343,
@@ -2012,7 +2012,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/hinata_ear_mouth1.webp?v=f5b5670b",
+     "src": "art/hinata_ear_mouth1.webp?v=3995c8aa",
      "rect": [
       1276,
       549,
@@ -2023,7 +2023,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hinata_ear_mouth2.webp?v=bb4010e2",
+     "src": "art/hinata_ear_mouth2.webp?v=fcf830f2",
      "rect": [
       1276,
       549,
@@ -2034,7 +2034,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hinata_ear_mouth3.webp?v=017599d8",
+     "src": "art/hinata_ear_mouth3.webp?v=055a2467",
      "rect": [
       1276,
       549,
@@ -2404,7 +2404,7 @@ window.MOHEAT_LAYERS = {
        "level": 0
       },
       {
-       "src": "art/hinata_base_mouth1.webp?v=18449f02",
+       "src": "art/hinata_base_mouth1.webp?v=2c756f51",
        "rect": [
         510,
         343,
@@ -2415,7 +2415,7 @@ window.MOHEAT_LAYERS = {
        "level": 1
       },
       {
-       "src": "art/hinata_base_mouth2.webp?v=33154869",
+       "src": "art/hinata_base_mouth2.webp?v=d91e5a6b",
        "rect": [
         510,
         343,
@@ -2426,7 +2426,7 @@ window.MOHEAT_LAYERS = {
        "level": 2
       },
       {
-       "src": "art/hinata_base_mouth3.webp?v=bc248ded",
+       "src": "art/hinata_base_mouth3.webp?v=e451f63e",
        "rect": [
         510,
         343,
@@ -2576,7 +2576,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/hinata_base_mouth1.webp?v=18449f02",
+     "src": "art/hinata_base_mouth1.webp?v=2c756f51",
      "rect": [
       510,
       343,
@@ -2587,7 +2587,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hinata_base_mouth2.webp?v=33154869",
+     "src": "art/hinata_base_mouth2.webp?v=d91e5a6b",
      "rect": [
       510,
       343,
@@ -2598,7 +2598,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hinata_base_mouth3.webp?v=bc248ded",
+     "src": "art/hinata_base_mouth3.webp?v=e451f63e",
      "rect": [
       510,
       343,
@@ -2661,7 +2661,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/hinata_ear_mouth1.webp?v=f5b5670b",
+     "src": "art/hinata_ear_mouth1.webp?v=3995c8aa",
      "rect": [
       1276,
       549,
@@ -2672,7 +2672,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hinata_ear_mouth2.webp?v=bb4010e2",
+     "src": "art/hinata_ear_mouth2.webp?v=fcf830f2",
      "rect": [
       1276,
       549,
@@ -2683,7 +2683,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hinata_ear_mouth3.webp?v=017599d8",
+     "src": "art/hinata_ear_mouth3.webp?v=055a2467",
      "rect": [
       1276,
       549,
@@ -2892,7 +2892,7 @@ window.MOHEAT_LAYERS = {
        "level": 0
       },
       {
-       "src": "art/hinata_base_mouth1.webp?v=18449f02",
+       "src": "art/hinata_base_mouth1.webp?v=2c756f51",
        "rect": [
         510,
         343,
@@ -2903,7 +2903,7 @@ window.MOHEAT_LAYERS = {
        "level": 1
       },
       {
-       "src": "art/hinata_base_mouth2.webp?v=33154869",
+       "src": "art/hinata_base_mouth2.webp?v=d91e5a6b",
        "rect": [
         510,
         343,
@@ -2914,7 +2914,7 @@ window.MOHEAT_LAYERS = {
        "level": 2
       },
       {
-       "src": "art/hinata_base_mouth3.webp?v=bc248ded",
+       "src": "art/hinata_base_mouth3.webp?v=e451f63e",
        "rect": [
         510,
         343,
@@ -3058,7 +3058,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/hinata_base_mouth1.webp?v=18449f02",
+     "src": "art/hinata_base_mouth1.webp?v=2c756f51",
      "rect": [
       510,
       343,
@@ -3069,7 +3069,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hinata_base_mouth2.webp?v=33154869",
+     "src": "art/hinata_base_mouth2.webp?v=d91e5a6b",
      "rect": [
       510,
       343,
@@ -3080,7 +3080,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hinata_base_mouth3.webp?v=bc248ded",
+     "src": "art/hinata_base_mouth3.webp?v=e451f63e",
      "rect": [
       510,
       343,
@@ -3368,7 +3368,7 @@ window.MOHEAT_LAYERS = {
        "level": 0
       },
       {
-       "src": "art/hinata_base_mouth1.webp?v=18449f02",
+       "src": "art/hinata_base_mouth1.webp?v=2c756f51",
        "rect": [
         510,
         343,
@@ -3379,7 +3379,7 @@ window.MOHEAT_LAYERS = {
        "level": 1
       },
       {
-       "src": "art/hinata_base_mouth2.webp?v=33154869",
+       "src": "art/hinata_base_mouth2.webp?v=d91e5a6b",
        "rect": [
         510,
         343,
@@ -3390,7 +3390,7 @@ window.MOHEAT_LAYERS = {
        "level": 2
       },
       {
-       "src": "art/hinata_base_mouth3.webp?v=bc248ded",
+       "src": "art/hinata_base_mouth3.webp?v=e451f63e",
        "rect": [
         510,
         343,
