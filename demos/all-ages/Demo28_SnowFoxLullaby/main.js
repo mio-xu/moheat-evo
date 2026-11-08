@@ -406,12 +406,16 @@
   $('startBtn').addEventListener('click', start);
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
-  function drawCover(t, dt) {   // the room pushed right; both girls on the right half, the title over the dark left
-    ctx.fillStyle = '#0b0f1e'; ctx.fillRect(0, 0, W, H);
-    ctx.save(); ctx.translate(380, 0); drawBg(t, dt, 1.05, 0, .1); ctx.restore();
-    const g = ctx.createLinearGradient(300, 0, 1150, 0); g.addColorStop(0, 'rgba(11,15,30,1)'); g.addColorStop(1, 'rgba(11,15,30,0)'); ctx.fillStyle = g; ctx.fillRect(300, 0, 850, H); ctx.fillStyle = '#0b0f1e'; ctx.fillRect(0, 0, 300, H);
-    spr('H_bust_happy', 1560, 1230, 980, { bob: Math.sin(t * 1.6) * 5 }); spr('K_bust_happy', 1820, 1220, 980, { bob: Math.sin(t * 1.6 + 1.7) * 5 });
-    wisps(1560, 470, 240, t, 5, true, .8); wisps(1820, 450, 220, t, 7, false, .8);
+  function drawCover(t, dt) {   // cover standard (shared/cover.js): the room, both girls on the right half, the title in the shaded left column
+    const C = window.MoHeatCover;
+    if (!C) { ctx.save(); ctx.translate(380, 0); drawBg(t, dt, 1.05, 0, .1); ctx.restore(); }
+    else drawBg(t, dt, 1.05, 0, .1);
+    const girls = () => {
+      spr('H_bust_happy', 1560, 1230, 980, { bob: Math.sin(t * 1.6) * 5 }); spr('K_bust_happy', 1820, 1220, 980, { bob: Math.sin(t * 1.6 + 1.7) * 5 });
+      wisps(1560, 470, 240, t, 5, true, .8); wisps(1820, 450, 220, t, 7, false, .8);
+    };
+    if (C) C.fit(ctx, { eye: [.86, .595], face: .22 }, girls, { duo: true, free: true, tone: '#0b0f1e', at: { y: .36, face: .26 }, fade: 1.03 });   // chibi busts: their cut-off bottoms fade into the room
+    else girls();
   }
   // testing: LULLABY.peek('share') shows one view without the story (screenshots / layout checks)
   const peek = (v) => { run++; S = fresh(); S.started = true; S.view = v; S.walk = 1; S.poof = -9; S.t = 9; viewA = viewB = v; mix = 1; $('intro').classList.add('hidden'); };

@@ -632,13 +632,13 @@
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
 
   // cover: the sunny room, Naomi sitting on the right (also behind the cover before Start)
-  function drawCover() {
+  function drawCover() {   // cover standard (shared/cover.js): the sunny room, Naomi's face on the standard spot, the title in the shaded left column
     drawBg(ctx, 'day');
     ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = 'rgba(255,220,150,.08)'; ctx.fillRect(0, 0, W, H); ctx.restore();
-    const im = IMG.naomi_sit; if (!im) return;
+    const im = IMG.naomi_sit, C = window.MoHeatCover; if (!im) return;
     const h = 900, w = h * im.width / im.height;
-    ctx.fillStyle = 'rgba(40,20,40,.16)'; ctx.beginPath(); ctx.ellipse(1450, 1035, w * .36, 22, 0, 0, 7); ctx.fill();
-    ctx.drawImage(im, 1450 - w / 2, 1040 - h, w, h);
+    const cat = () => { ctx.fillStyle = 'rgba(40,20,40,.16)'; ctx.beginPath(); ctx.ellipse(1450, 1035, w * .36, 22, 0, 0, 7); ctx.fill(); ctx.drawImage(im, 1450 - w / 2, 1040 - h, w, h); };
+    if (C) C.fit(ctx, { eye: [.78, .33], face: .18 }, cat, { free: true, tone: '#2a1c22', at: { face: .24 } }); else cat();   // a cat's face is smaller than a person's: 24 %, her body still reaches the bottom
   }
   window.NAOMI = { get S() { return S; }, N, thermal: () => thermal(.05), conflicts: () => conflicts, jumpTo, poke };
   renderGoal(); renderSteps(); renderHearts();

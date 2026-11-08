@@ -333,11 +333,10 @@
   $('startBtn').addEventListener('click', start);
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
-  function drawCover() {   // the counter still pushed right (she stands in the middle of it), the title on the dark bar on the left
-    ctx.fillStyle = '#0e1122'; ctx.fillRect(0, 0, W, H);
-    const im = IMG.counter; if (!im) return;
-    ctx.drawImage(im, 480, 0, W, H);
-    const g = ctx.createLinearGradient(400, 0, 1050, 0); g.addColorStop(0, 'rgba(14,17,34,1)'); g.addColorStop(1, 'rgba(14,17,34,0)'); ctx.fillStyle = g; ctx.fillRect(400, 0, 650, H);
+  function drawCover() {   // cover standard (shared/cover.js): the counter still, her face on the standard spot, the title in the shaded left column
+    const im = IMG.counter, C = window.MoHeatCover; if (!im) { ctx.fillStyle = '#0e1122'; ctx.fillRect(0, 0, W, H); return; }
+    const pic = () => ctx.drawImage(im, 480, 0, W, H);
+    if (C) C.fit(ctx, { eye: [.719, .256], face: .251 }, pic, { tone: '#0e1122', covers: [.25, 0, 1.25, 1] }); else pic();
   }
   window.LUNA = { get S() { return S; }, thermal: () => thermal(.05), both: () => both, log: cmdLog, done: false };
   setStep(0);

@@ -922,6 +922,8 @@
     const keepBg = S.bg; S.bg = 'day';
     drawScene(t); present(t); drawOSD(t);
     S.bg = keepBg; Object.assign(N, keep);
+    // cover standard (shared/cover.js): the camera picture is drawn by WebGL, so it is not refitted — where Naomi's face is (check_cover.py)
+    if (window.MoHeatCover) { MoHeatCover.setTone('#2a1c22'); MoHeatCover.placed = { eye: [81, 40], face: 18 }; }
   }
   window.NAOMICAM = { get S() { return S; }, N, cam, laser, thermal: () => thermal(.05), conflicts: () => conflicts, jumpTo, onTalk };
   renderGoal(); renderSteps(); renderHearts(); dockUI();

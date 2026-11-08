@@ -378,10 +378,10 @@
   $('meowBtn').addEventListener('click', () => { if (!S.started) return; const k = ['mew', 'tiny', 'ask', 'trill'][Math.floor(Math.random() * 4)]; NA.meow(k, 0, .3); });
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
-  function drawCover() {   // the windowsill mirrored: Naomi's reflection on the right, the warm room under the title on the left
-    ctx.fillStyle = '#1e1625'; ctx.fillRect(0, 0, W, H);
-    const im = IMG.sill; if (!im) return;
-    ctx.save(); ctx.translate(W, 0); ctx.scale(-1, 1); ctx.drawImage(im, -120, 0, W + 120, H); ctx.restore();
+  function drawCover() {   // the windowsill mirrored: Naomi's reflection on the right (you ARE Naomi: a POV scene, no character facing you — cover.js "scene")
+    const im = IMG.sill, C = window.MoHeatCover; if (!im) { ctx.fillStyle = '#1e1625'; ctx.fillRect(0, 0, W, H); return; }
+    const pic = () => { ctx.save(); ctx.translate(W, 0); ctx.scale(-1, 1); ctx.drawImage(im, -120, 0, W + 120, H); ctx.restore(); };
+    if (C) C.fit(ctx, null, pic, { scene: true, tone: '#1e1625' }); else pic();
   }
   window.NEKO = { get S() { return S; }, thermal: () => thermal(.05), both: () => both, focusOf, setEar };
   setStep(0); setEar('L', S.earL); setEar('R', S.earR);

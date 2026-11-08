@@ -321,11 +321,10 @@
   $('startBtn').addEventListener('click', start);
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
-  function drawCover() {   // the genkan still (grandma rushing to hug you) pushed right, the title over the dark left
-    ctx.fillStyle = '#20160f'; ctx.fillRect(0, 0, W, H);
-    const im = IMG.genkan || IMG.kotatsu; if (!im) return;
-    ctx.drawImage(im, 760, 0, W, H);
-    const g = ctx.createLinearGradient(700, 0, 1180, 0); g.addColorStop(0, 'rgba(32,22,15,1)'); g.addColorStop(1, 'rgba(32,22,15,0)'); ctx.fillStyle = g; ctx.fillRect(700, 0, 480, H);
+  function drawCover() {   // cover standard (shared/cover.js): the genkan still (grandma rushing to hug you), her face on the standard spot
+    const im = IMG.genkan || IMG.kotatsu, C = window.MoHeatCover; if (!im) { ctx.fillStyle = '#20160f'; ctx.fillRect(0, 0, W, H); return; }
+    const pic = () => ctx.drawImage(im, 760, 0, W, H);
+    if (C) C.fit(ctx, { eye: [.79, .31], face: .23 }, pic, { tone: '#20160f', covers: [.396, 0, 1.396, 1] }); else pic();
   }
   // testing: VISIT.peek('kotatsu') shows one scene without the story
   const peek = (v) => { run++; S = fresh(); S.started = true; S.view = v; viewA = viewB = v; mix = 1; $('intro').classList.add('hidden'); };

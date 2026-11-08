@@ -32,6 +32,8 @@ What is checked (id → lesson / rule):
   mobile     tools/web/check_mobile.html at 7 sizes (one screen, no overflow, ≥ 44 px, guide on screen, drawer)
   drag       CDP touch strokes on the picture at 390×844 / 844×390: no page scroll / zoom / pointercancel (§7.1 拖动手势, shared/gesture.js)
   mouth      (--full) tools/art/check_mouth.js: opens only while talking, no stuck / half / flicker
+  cover      (browser) tools/web/check_cover.py: the cover standard (§7.3 封面构图标准) — shared/cover.js, face size / eye line / side,
+             copy column, dark under the copy, phone title / Start / languages (per-demo exception: qa.json skip.cover)
   release    cover.jpg, menu thumbnail + en / ja / zh thumbs (not older than cover / l10n.js), nav.js DEMOS, site menu, credits.html
   hygiene    assets/ git-ignored, no big tracked files, budget logged, project/CHECKLIST.md present
 """
@@ -392,6 +394,17 @@ if mouth:
     except subprocess.TimeoutExpired: mouth.kill(); out = 'timeout'
     fl = [l.strip()[2:] for l in out.splitlines() if l.strip().startswith('✗')]
     row('G6', 'mouth', 'FAIL' if mouth.returncode else 'PASS', f'{len(fl)} lip-sync problem(s)' if mouth.returncode else 'mouth opens only while talking', fl or ([out.strip().splitlines()[-1]] if mouth.returncode and out.strip() else []))
+
+# ---------------------------------------------------------------- G7 cover composition (tools/web/check_cover.py, guide §7.3 封面构图标准)
+if not A.quick:
+    if 'cover' in QA.get('skip', {}): row('G7', 'cover', 'SKIP', QA['skip']['cover'])
+    else:
+        cv = subprocess.run([sys.executable, os.path.join(REPO, 'tools', 'web', 'check_cover.py'), D, '--json'], capture_output=True, text=True)
+        try:
+            cr = json.loads(cv.stdout.strip().splitlines()[-1])[NAME]['rows']
+            bad = [f'{c}: {v} (want {e})' for s_, c, v, e in cr if s_ == 'FAIL']; wn = [f'{c}: {v} (want {e})' for s_, c, v, e in cr if s_ == 'WARN']
+            row('G7', 'cover', 'FAIL' if bad else 'WARN' if wn else 'PASS', f'{len(bad)} off the cover standard' if bad else f'{len(wn)} note(s)' if wn else 'face size / eye line / side, copy column, shade, phone', bad + wn)
+        except Exception: row('G7', 'cover', 'WARN', 'check_cover.py gave no result', [cv.stderr.strip()[-300:]])
 
 # ---------------------------------------------------------------- output
 ORDER = {'G4': 0, 'G5': 1, 'G6': 2, 'G7': 3, 'G8': 4}
