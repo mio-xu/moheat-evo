@@ -22,7 +22,7 @@
   if (QS.get('kiosk') === '1') { try { localStorage.setItem('moheat.kiosk', '1'); } catch {} }
 
   // ---------------------------------------------------------------- staff settings
-  const DEF = { lang: 'en', cap: 80, start: 50, idle: 60, demos: null, pin: '0000', site: 'https://moheat-evo.github.io/', newsUrl: '', langs: ['en', 'ja', 'zh'], currency: 'auto', bands: {}, cut: 'show', hygiene: false, pickUrl: '',
+  const DEF = { lang: 'en', cap: 80, start: 50, idle: 60, demos: null, pin: '0000', site: 'https://moheat-evo.github.io/', newsUrl: '', langs: ['en', 'ja', 'zh'], currency: 'auto', bands: {}, cut: 'full', hygiene: false, pickUrl: '',
     // queue screen (window 2): 'live' (attract + thermal view) | 'promo' (looping video + QR badge) | 'alt' (switch every altMin minutes)
     queue: true, maxDemos: 0, maxMin: 0,   // queue on = the visit ends after one demo (staff: long-press the tiny dot bottom-left or key Q)
     queueMode: 'promo', altMin: 3, promoSrc: '', promoSound: false, promoNow: true, qrSize: 'l', qrCorner: 'br' };
@@ -312,12 +312,12 @@
   }
   K.leave = leave;
 
-  // ---------------------------------------------------------------- show cut (60–90 s of the demo's best thermal moments; kiosk default)
+  // ---------------------------------------------------------------- show cut (60–90 s of the demo's best thermal moments; a staff option, default OFF: full demo)
   // the start chapter = staff data (SHOWCUT) → else the chapter with the strongest thermal output learned from earlier plays on this
   // machine ('moheat.kiosk.heat.<dir>', every play teaches it) → else chapter 2 when there are ≥ 3 (skips the slow opening), else the start.
   // Then CUT_S seconds of real playback, a fade and the experience card (counted as finished).
   const SHOWCUT = {};   // { DemoNN_Name: { from: chapter index, secs: 80 } } — optional per-demo picks
-  const CUT = (() => { try { return (sessionStorage.getItem('moheat.kiosk.cut') || c.cut || 'show') === 'show'; } catch { return true; } })();
+  const CUT = (() => { try { return (sessionStorage.getItem('moheat.kiosk.cut') || c.cut || 'full') === 'show'; } catch { return false; } })();   // user 2026-11-08: one COMPLETE demo per visitor; the show cut is a staff option
   const CUT_S = (SHOWCUT[dir]?.secs) || 80;
   const HK = `moheat.kiosk.heat.${dir}`, heatMap = LSg(HK, {});
   let learnT = 0; function learn(k, v) { heatMap[k] = Math.max(heatMap[k] || 0, Math.round(v * 100) / 100); if (Date.now() - learnT > 4000) { learnT = Date.now(); LSs(HK, heatMap); } }

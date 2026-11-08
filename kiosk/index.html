@@ -100,7 +100,7 @@
           <label>Site link (QR) <input type="url" id="sSite" /></label>
           <label>Price currency <select id="sCur"><option value="auto">auto (from language)</option><option>JPY</option><option>USD</option><option>CNY</option><option>EUR</option><option>KRW</option></select></label>
           <label>Price bands (<span id="sCurNow"></span>) <input type="text" id="sBands" placeholder="comma-separated, 4–5 bands" style="flex:1" /></label>
-          <label>Experience <select id="sCut"><option value="show">Show cut (60–90 s, default)</option><option value="full">Full demo</option></select></label>
+          <label>Experience <select id="sCut"><option value="full">Full demo (default: one complete demo per visitor)</option><option value="show">Show cut (60–90 s highlights)</option></select></label>
           <label><input type="checkbox" id="sHyg" /> Hygiene badge on the welcome screen</label>
           <label>Queue pick page (QR) <input type="url" id="sPick" placeholder="default: site link + kiosk/pick.html" /></label>
           <h4>Queue screen (window 2)</h4>
@@ -133,10 +133,10 @@
   <script src="../device.js?v=2"></script>
   <script>window.MOHEAT_NAV_DATA_ONLY = true;</script>
   <script src="../demos/shared/nav.js?v=4d8359f2"></script>
-  <script src="../demos/shared/kiosk.js?v=1c75e586"></script>
+  <script src="../demos/shared/kiosk.js?v=f5d647ad"></script>
   <script src="../demos/shared/thermintro.js?v=3fe97d6a"></script>
   <script src="qrcode.min.js"></script>
   <script src="pitches.js?v=640c3555"></script>
-  <script src="app.js?v=1bcda0a4"></script>
+  <script src="app.js?v=a93e4415"></script>
 </body>
 </html>

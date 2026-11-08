@@ -54,6 +54,9 @@ const step = (k, v, detail) => { out.steps[k] = detail === undefined ? !!v : { o
   await ev(`(localStorage.setItem('moheat.kiosk.cfg', JSON.stringify({ idle: 45 })), localStorage.setItem('moheat.intensity', '95'), localStorage.setItem('moheat.mode', '"pure"'), 1)`);
   await nav('/kiosk/');
   step('welcome', await ev(`localStorage.getItem('moheat.kiosk') === '1' && MoHeatKioskApp.view === 'welcome' && document.querySelectorAll('.picto li').length === 3`));
+  step('fullByDefault', await ev(`MoHeatKiosk.DEF.cut === 'full' && MoHeatKiosk.cfg().cut === 'full'`));   // user: one complete demo per visitor
+  await ev(`(MoHeatKiosk.setCfg({ cut: 'show' }), 1)`);   // the test itself uses the staff's show-cut option to stay short
+  await nav('/kiosk/');   // the kiosk page reads its settings on load (as after a staff panel change)
   step('resetOnLoad', await ev(`localStorage.getItem('moheat.intensity') === '100' && localStorage.getItem('moheat.warmScale') === '0.5' && localStorage.getItem('moheat.coolScale') === '0.5' && localStorage.getItem('moheat.mode') === '"interactive"'`));
   const fits = () => ev(`document.documentElement.scrollHeight <= innerHeight + 1 && document.documentElement.scrollWidth <= innerWidth + 1 && [...document.querySelectorAll('.view:not([hidden]) button')].every((b) => { const r = b.getBoundingClientRect(); return r.width === 0 || (r.bottom <= innerHeight + 1 && r.right <= innerWidth + 1 && r.top >= -1); })`);
   step('welcomeFits', await fits());

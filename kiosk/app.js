@@ -127,7 +127,7 @@
   let pending = null;   // a demo picked on the welcome screen: intro first, then straight to it
   const openDemo = (dir) => { const d = D.DEMOS.find((x) => x.dir === dir); if (!d) return;
     K.visit.set({ dir: d.dir, t0: Date.now(), started: false, finished: false, mode: null, moments: [] }); send('stop');
-    try { sessionStorage.setItem('moheat.kiosk.cut', cfg.cut || 'show'); } catch {}
+    try { sessionStorage.setItem('moheat.kiosk.cut', cfg.cut || 'full'); } catch {}
     location.href = `../demos/${d.cat}/${d.dir}/`; };
   for (const sel of ['.menu-grid', '.menu-top']) $(sel).addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) openDemo(b.dataset.dir); });
   $('.rec-row').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { pending = b.dataset.dir; begin(true); } });
@@ -266,7 +266,7 @@
     send('stop'); cfg = K.cfg(); $('#staff').hidden = false;
     $('#sLang').innerHTML = (cfg.langs || ['en', 'ja', 'zh']).map((l) => `<option value="${l}"${l === cfg.lang ? ' selected' : ''}>${LANG_NAMES[l] || l}</option>`).join('');
     $('#sCapW').value = cfg.capWarm; $('#sStartW').value = cfg.startWarm; $('#sCapC').value = cfg.capCool; $('#sStartC').value = cfg.startCool; $('#sIdle').value = cfg.idle; $('#sSite').value = cfg.site; $('#sNews').value = cfg.newsUrl || '';
-    $('#sCur').value = cfg.currency || 'auto'; bandsField(); $('#sCut').value = cfg.cut || 'show'; $('#sHyg').checked = !!cfg.hygiene; $('#sPick').value = cfg.pickUrl || ''; $('#sQueue').checked = !!cfg.queue; $('#sMaxD').value = cfg.maxDemos || 0; $('#sMaxM').value = cfg.maxMin || 0;
+    $('#sCur').value = cfg.currency || 'auto'; bandsField(); $('#sCut').value = cfg.cut || 'full'; $('#sHyg').checked = !!cfg.hygiene; $('#sPick').value = cfg.pickUrl || ''; $('#sQueue').checked = !!cfg.queue; $('#sMaxD').value = cfg.maxDemos || 0; $('#sMaxM').value = cfg.maxMin || 0;
     $('#sQMode').value = cfg.queueMode; $('#sAlt').value = cfg.altMin; $('#sPromo').value = cfg.promoSrc === 'idb' ? '' : cfg.promoSrc || ''; $('#sPromo').placeholder = cfg.promoSrc === 'idb' ? 'local file in use (pick another or type a URL)' : 'empty = kiosk/media/promo.mp4 · or a URL';
     $('#sPromoSound').checked = !!cfg.promoSound; $('#sPromoNow').checked = !!cfg.promoNow; $('#sQrSize').value = cfg.qrSize; $('#sQrCorner').value = cfg.qrCorner;
     $('#sDemos').innerHTML = D.DEMOS.map((d, i) => `<label><input type="checkbox" value="${d.dir}"${!cfg.demos || cfg.demos.includes(d.dir) ? ' checked' : ''}> ${i + 1} · ${d.en}</label>`).join('');

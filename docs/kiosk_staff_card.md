@@ -21,7 +21,7 @@
 2. 屏幕出现「声音没问题？」→ 向访客确认 → 点 **继续（工作人员）**。
 3. **把大的 MoHeat Evo 头戴设备戴在入耳式耳机外面** → 点 **继续** → 左暖、右暖、左凉、右凉各 2 秒。
 4. 屏幕出现「两边都感觉到了？」→ 向访客确认 → 点 **继续**。
-5. 访客自己完成：暖、凉校准（快要不舒服时按 STOP）→ 焰、小雪试听（太弱 / 刚好 / 太强）→ Demo。
+5. 访客自己完成：暖、凉校准（快要不舒服时按 STOP）→ 焰、小雪试听（太弱 / 刚好 / 太强）→ **一个完整的 Demo**（从头到尾）。
 6. 结束：冷热自动停止 →「请先摘下 MoHeat Evo」→ **帮访客取下，点继续** → 访客取下入耳式耳机 → 体验卡 → 感谢 + 二维码 → 自动回到欢迎画面。
 
 ## 排队开关
@@ -64,7 +64,7 @@
 2. 「音は大丈夫ですか？」と表示されたら、お客様に確認して **続ける（スタッフ）** をタップ。
 3. **イヤホンの上から、大きな MoHeat Evo をお客様に装着** → **続ける** → 左温・右温・左冷・右冷を各 2 秒出力します。
 4. 「左右で温かさと冷たさを感じましたか？」と表示されたら、お客様に確認して **続ける** をタップ。
-5. ここからはお客様ご自身で：温・冷の強さ調整（少しつらいと感じたら STOP）→ 焰と小雪の試聴（弱すぎる／ちょうどいい／強すぎる）→ デモ。
+5. ここからはお客様ご自身で：温・冷の強さ調整（少しつらいと感じたら STOP）→ 焰と小雪の試聴（弱すぎる／ちょうどいい／強すぎる）→ **デモを 1 本、最後まで**。
 6. 終了時：温冷は自動で停止 →「まず MoHeat Evo を外してください」→ **外すのを手伝い、続けるをタップ** → お客様がイヤホンを外す → アンケート → お礼と QR コード → 自動で最初の画面に戻ります。
 
 ## 待機列スイッチ
@@ -107,7 +107,7 @@
 2. “Sound OK?” appears → check with the visitor → tap **Continue (staff)**.
 3. **Place the big MoHeat Evo headset over the earbuds** → **Continue** → left warm, right warm, left cool, right cool, 2 s each.
 4. “Felt warm and cool on both sides?” appears → check with the visitor → tap **Continue**.
-5. The visitor does the rest: warm and cool calibration (STOP when almost uncomfortable) → Homura and Koyuki samples (too weak / just right / too strong) → the demo.
+5. The visitor does the rest: warm and cool calibration (STOP when almost uncomfortable) → Homura and Koyuki samples (too weak / just right / too strong) → **one complete demo**, start to end.
 6. At the end: warm / cool stops by itself → “Please take off the MoHeat Evo headset first” → **help remove it, tap Continue** → the visitor removes the earbuds → experience card → thank-you + QR → back to the welcome screen by itself.
 
 ## Queue switch
