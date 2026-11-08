@@ -16,9 +16,9 @@
 
   // ---------------------------------------------------------------- art
   const IMG = {}, PATCH = window.HINA_PATCHES || {};
-  const NAMES = ['bg_queue', 'hina_booth', 'hina_hands', 'hina_lean', 'hina_wave', ...Object.keys(PATCH)];
+  const NAMES = ['bg_queue', 'hina_booth', 'hina_hands', 'hina_lean', 'hina_lean_r', 'hina_wave', ...Object.keys(PATCH)];
   const artReady = Promise.all(NAMES.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/${n}.webp?v=1`; })));
-  const BASE = { queue: 'bg_queue', booth: 'hina_booth', hands: 'hina_hands', leanL: 'hina_lean', leanR: 'hina_lean', wave: 'hina_wave' };
+  const BASE = { queue: 'bg_queue', booth: 'hina_booth', hands: 'hina_hands', leanL: 'hina_lean', leanR: 'hina_lean_r', wave: 'hina_wave' };
   // where his voice is for each view (az rad, + = right; dist m)
   const POS = { queue: { az: .15, dist: 6 }, booth: { az: .1, dist: .8 }, hands: { az: 0, dist: .45 }, leanL: { az: -1.35, dist: .12 }, leanR: { az: 1.35, dist: .12 }, wave: { az: 0, dist: 2.2 } };
   const STAFF = { az: .8, dist: 1.4 };
@@ -268,7 +268,8 @@
     const lv = LIVE() && name !== 'bg_queue', z = near ? 1.02 + (lv ? 0 : .008 * Math.sin(t * .6)) : view === 'queue' ? 1.0 + .004 * Math.sin(t * .3) : 1.0 + (lv ? 0 : .005 * Math.sin(t * .45));
     const ox = W / 2 - W * z / 2, oy = H / 2 - H * z / 2 + (near && !lv ? 2 * Math.sin(t * 1.1) : 0);
     ctx.save();
-    if (view === 'leanR') { ctx.translate(W, 0); ctx.scale(-1, 1); }      // the right-ear lean is the left one, mirrored
+    // the right-ear lean is its own still (hina_lean_r: the pose mirrored WITHOUT the star stud — he wears one, on his left ear — over
+    // the unmirrored booth plate); mirroring the whole canvas swapped the stud and the room (same-character rule, fix4 2026-11-09)
     ctx.drawImage(im, ox, oy, W * z, H * z);
     const patch = (pn, w) => { const p = IMG[pn], a = PATCH[pn]; if (!p || !a || w < .01) return; ctx.globalAlpha = alpha * Math.min(1, w); ctx.drawImage(p, ox + a[0] * z, oy + a[1] * z, p.width * z, p.height * z); };
     if (name !== 'bg_queue') {

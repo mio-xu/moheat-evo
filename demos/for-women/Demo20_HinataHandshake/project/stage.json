@@ -134,6 +134,49 @@
     "minh": 0.16,
     "light": 0.4
    }
+  },
+  "lean_r": {
+   "src": "hina_lean_r",
+   "talk": "hina_lean_r_talk",
+   "blink": "hina_lean_r_blink",
+   "matte": "ai",
+   "regions_eyes": [
+    [
+     1836,
+     488,
+     131,
+     91
+    ],
+    [
+     2183,
+     672,
+     89,
+     60
+    ]
+   ],
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.18,
+     0.26
+    ],
+    "minh": 0.16,
+    "light": 0.4,
+    "warp": false,
+    "centre": [
+     1827,
+     881
+    ],
+    "radius": [
+     130,
+     102
+    ],
+    "lift": 0.08,
+    "drop": 0.24,
+    "dark": 20
+   },
+   "note": "the right-ear lean: hina_lean mirrored (fix4 2026-11-09) with the star stud removed (he wears ONE, on his left ear); the plate is NOT mirrored (layered: only the character is)"
   }
  },
  "views": {
@@ -152,15 +195,12 @@
    "bg": "booth",
    "fire": null,
    "zoom": 1.15,
-   "x": 0.4601,
+   "x": 0.4901,
    "y": 1.02,
-   "height": 1.02
+   "height": 1.06
   },
   "leanL": {
    "still": "hina_lean.webp",
-   "alias": [
-    "leanR"
-   ],
    "pose": "lean",
    "bg": "booth",
    "fire": null,
@@ -177,6 +217,16 @@
    "x": 0.5667,
    "y": 1.02,
    "height": 1.05
+  },
+  "leanR": {
+   "still": "hina_lean_r.webp",
+   "pose": "lean_r",
+   "bg": "booth",
+   "fire": null,
+   "zoom": 1.3,
+   "x": 0.55,
+   "y": 1.02,
+   "height": 1.02
   }
  },
  "hooks": {
