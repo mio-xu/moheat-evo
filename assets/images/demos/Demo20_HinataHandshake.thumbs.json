@@ -1,0 +1,34 @@
+{
+ "base": {
+  "inputs": {
+   "demos/for-women/Demo20_HinataHandshake/l10n.js": "60a44e44bcc426e6fb068c636801d268cca60b84",
+   "demos/for-women/Demo20_HinataHandshake/media/cover.jpg": "c3a4c0df49bfa922c1cb25573127e5e5cdca558e",
+   "demos/shared/cover.js": "df1a4aeb324385f99220c2952a432617415e4b13"
+  },
+  "thumb": "414616d87040509842dd3d2ed582228982f4f1df"
+ },
+ "en": {
+  "inputs": {
+   "demos/for-women/Demo20_HinataHandshake/l10n.js": "60a44e44bcc426e6fb068c636801d268cca60b84",
+   "demos/for-women/Demo20_HinataHandshake/media/cover.jpg": "c3a4c0df49bfa922c1cb25573127e5e5cdca558e",
+   "demos/shared/cover.js": "df1a4aeb324385f99220c2952a432617415e4b13"
+  },
+  "thumb": "414616d87040509842dd3d2ed582228982f4f1df"
+ },
+ "ja": {
+  "inputs": {
+   "demos/for-women/Demo20_HinataHandshake/l10n.js": "60a44e44bcc426e6fb068c636801d268cca60b84",
+   "demos/for-women/Demo20_HinataHandshake/media/cover.jpg": "c3a4c0df49bfa922c1cb25573127e5e5cdca558e",
+   "demos/shared/cover.js": "df1a4aeb324385f99220c2952a432617415e4b13"
+  },
+  "thumb": "247c49fd387186484bb82e899eba1c6c300fdc66"
+ },
+ "zh": {
+  "inputs": {
+   "demos/for-women/Demo20_HinataHandshake/l10n.js": "60a44e44bcc426e6fb068c636801d268cca60b84",
+   "demos/for-women/Demo20_HinataHandshake/media/cover.jpg": "c3a4c0df49bfa922c1cb25573127e5e5cdca558e",
+   "demos/shared/cover.js": "df1a4aeb324385f99220c2952a432617415e4b13"
+  },
+  "thumb": "fa8d2366d571c1ea6a017aeb31f4f4c104050dc6"
+ }
+}
