@@ -318,7 +318,7 @@
    "bg": "valley",
    "fire": null,
    "x": 0.34,
-   "y": 1.0,
+   "y": 1.025,
    "height": 1.0,
    "who": "G"
   },
@@ -334,6 +334,9 @@
    "pose": "ren_base",
    "bg": "lake",
    "fire": null,
+   "x": 0.4775,
+   "y": 1.025,
+   "height": 0.9938,
    "who": "R"
   },
   "lake_R_ear": {
@@ -408,7 +411,7 @@
     0.7
    ],
    "x": 0.34,
-   "y": 1.0,
+   "y": 1.025,
    "height": 1.0,
    "who": "G",
    "small": true
@@ -421,6 +424,9 @@
     0.9,
     0.7
    ],
+   "x": 0.4775,
+   "y": 1.025,
+   "height": 0.9938,
    "who": "R",
    "small": true
   },
@@ -446,10 +452,10 @@
     0.9,
     0.7
    ],
-   "who": "R",
    "x": 0.5,
    "y": 1.0,
    "height": 0.92,
+   "who": "R",
    "more": [
     {
      "pose": "gaku_base",
@@ -489,6 +495,9 @@
    "pose": "ren_base",
    "bg": "valley",
    "fire": null,
+   "x": 0.4775,
+   "y": 1.025,
+   "height": 0.9938,
    "who": "R",
    "small": true
   },
@@ -508,10 +517,10 @@
    "pose": "ren_base",
    "bg": "valley",
    "fire": null,
-   "who": "R",
    "x": 0.5,
    "y": 1.0,
    "height": 0.92,
+   "who": "R",
    "more": [
     {
      "pose": "gaku_base",
@@ -552,7 +561,7 @@
    "bg": "lake",
    "fire": null,
    "x": 0.34,
-   "y": 1.0,
+   "y": 1.025,
    "height": 1.0,
    "who": "G",
    "small": true
@@ -562,10 +571,10 @@
    "pose": "ren_base",
    "bg": "lake",
    "fire": null,
-   "who": "R",
    "x": 0.5,
    "y": 1.0,
    "height": 0.92,
+   "who": "R",
    "more": [
     {
      "pose": "gaku_base",
@@ -604,7 +613,7 @@
     0.72
    ],
    "x": 0.34,
-   "y": 1.0,
+   "y": 1.025,
    "height": 1.0,
    "who": "G",
    "small": true
@@ -617,6 +626,9 @@
     0.9,
     0.72
    ],
+   "x": 0.4775,
+   "y": 1.025,
+   "height": 0.9938,
    "who": "R",
    "small": true
   },
@@ -628,10 +640,10 @@
     0.9,
     0.72
    ],
-   "who": "R",
    "x": 0.5,
    "y": 1.0,
    "height": 0.92,
+   "who": "R",
    "more": [
     {
      "pose": "gaku_base",
