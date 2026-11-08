@@ -7,7 +7,7 @@ Reads <demo>/project/stage.json:
     "bgs":   { "camp": { "src": "bg_camp", "fire": [0.75, 0.72] } },               fire in the plate (fraction); omit → found automatically
     "poses": { "sit": { "src": "gaku_ref", "talk": "gaku_ref_talk", "blink": "gaku_ref_blink", "near_mouth": [x, y], "near_eyes": [x, y],
                         "centre_mouth": [x, y], "radius_mouth": [rx, ry] (skip the search when it is pulled away by a hand / prop),
-                        "erase": [[x0, y0, x1, y1]], "keep": [[x0, y0, x1, y1]] } },             erase = source boxes cleared (e.g. a fire drawn in the pose); keep = source boxes never keyed (grey steam, smoke); "matte": "ai" = outline from the isnet-anime model (~/ml/layers venv) for light / pastel figures
+                        "erase": [[x0, y0, x1, y1]], "keep": [[x0, y0, x1, y1]] } },             erase = source boxes cleared (e.g. a fire drawn in the pose); keep = source boxes never keyed (grey steam, smoke); "matte": "ai" = outline from the isnet-anime model (~/ml/layers venv) for light / pastel figures; "matte": "green" = chroma key for poses on #00B140
     "views": { "live": { "still": "gaku_live", "pose": "sit", "bg": "camp", "fire": [0.9, 0.74], "x": 0.42, "y": 1.06, "height": 1.1 } } }
   view: still = the file the page draws (stem, or stem.ext; media/art/<still> is written as the flat fallback), alias = other view names
   that draw the same still (e.g. a mirrored side), fire = where the page expects the
@@ -34,6 +34,26 @@ def out(path):   # never write THROUGH a symlink (a placeholder link to the orig
     if os.path.islink(path): os.remove(path)
     return path
 MAXDIM = 1700   # character textures are uploaded every frame: keep them modest
+
+
+def chroma_green(path, erase=(), keep=()):
+    """"matte": "green" — a pose on chroma green (#00B140; guide §6: light figures with dark lineart, Demo40). Alpha from how much greener
+    than red / blue a pixel is (so the gaps between hair strands key out too), green spill removed, edges unmixed."""
+    im = np.asarray(Image.open(path).convert("RGB"), np.float32); H, W, _ = im.shape
+    r, g, b = im[..., 0], im[..., 1], im[..., 2]; key = g - np.maximum(r, b)
+    border = np.concatenate([key[0], key[-1], key[:, 0], key[:, -1]]); full = float(np.median(border))   # the screen's own "greenness"
+    alpha = np.clip(1 - (key - 12) / max(20.0, full * .75 - 12), 0, 1)
+    for x0, y0, x1, y1 in keep: alpha[y0:y1, x0:x1] = 1
+    for x0, y0, x1, y1 in erase: alpha[y0:y1, x0:x1] = 0
+    bgc = np.median(np.concatenate([im[0], im[-1], im[:, 0], im[:, -1]]), 0)
+    a3 = np.maximum(alpha, .05)[..., None]
+    fg = np.clip((im - (1 - a3) * bgc) / a3, 0, 255)
+    fg[..., 1] = np.minimum(fg[..., 1], np.maximum(fg[..., 0], fg[..., 2]) + 6)   # despill: no pixel greener than its red / blue
+    alpha = np.asarray(Image.fromarray((alpha * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(.5)), np.float32) / 255
+    rgba = np.dstack([fg, alpha * 255]).astype(np.uint8)
+    ys, xs = np.where(alpha > .02); pad = 6
+    box = (max(0, xs.min() - pad), max(0, ys.min() - pad), min(W, xs.max() + pad), min(H, ys.max() + pad))
+    return Image.fromarray(rgba).crop(box), box, (W, H)
 
 
 def cutout(path, erase=(), keep=(), ai=False):
@@ -131,7 +151,8 @@ for name, b in cfg["bgs"].items():
 # face patches: run face_patches.py on the full-size sources through a temporary config
 poses, pcfg = {}, {"src": SRC, "dst": os.path.join(D, "assets", "patches"), "size": None, "patches": []}
 for name, p in cfg["poses"].items():
-    cut, box, size = cutout(src(p["src"]), p.get("erase", ()), p.get("keep", ()), p.get("matte") == "ai")
+    cut, box, size = (chroma_green(src(p["src"]), p.get("erase", ()), p.get("keep", ())) if p.get("matte") == "green" else
+                      cutout(src(p["src"]), p.get("erase", ()), p.get("keep", ()), p.get("matte") == "ai"))
     f = min(1, MAXDIM / max(cut.size)); cut = cut.resize((round(cut.width * f), round(cut.height * f)), Image.LANCZOS)
     cut.save(out(os.path.join(ART, f"char_{name}.webp")), quality=88, method=6)
     poses[name] = {"src": f"art/char_{name}.webp", "w": cut.width, "h": cut.height, "box": box, "f": f, "cut": cut, "patches": []}
