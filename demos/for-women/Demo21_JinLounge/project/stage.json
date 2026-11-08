@@ -10,7 +10,22 @@
   "lounge": {
    "src": "jin_lounge_ext",
    "talk": "jin_lounge_ext_talk",
-   "matte": "ai"
+   "matte": "ai",
+   "blink": "jin_lounge_ext_blink",
+   "regions_eyes": [
+    [
+     1262,
+     322,
+     56,
+     32
+    ],
+    [
+     1098,
+     412,
+     56,
+     32
+    ]
+   ]
   },
   "gaze": {
    "src": "jin_gaze_ext",
@@ -62,7 +77,22 @@
   "whisper": {
    "src": "jin_whisper_ext",
    "talk": "jin_whisper_ext_talk",
-   "matte": "ai"
+   "matte": "ai",
+   "blink": "jin_whisper_ext_blink",
+   "regions_eyes": [
+    [
+     1540,
+     566,
+     100,
+     50
+    ],
+    [
+     1922,
+     382,
+     105,
+     50
+    ]
+   ]
   }
  },
  "views": {

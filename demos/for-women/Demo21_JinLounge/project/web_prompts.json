@@ -66,5 +66,15 @@
  "jin_whisper_talk": {
   "ref": "jin_whisper",
   "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY his lips: parted a little, saying something low at her ear, the same half-closed eyes. Do not move, zoom or crop the picture."
+ },
+ "jin_lounge_win_blink": {
+  "ref": "jin_lounge_win",
+  "mask": "1262,322,64,38;1098,412,64,38",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, sunglasses, clothes, colours, lighting and background — and change ONLY BOTH of his eyes: fully closed in a natural blink (upper eyelids all the way down, lashes visible, no iris visible, same skin tone and lighting); his sunglasses and hair stay exactly as they are. Do not move, zoom or crop the picture."
+ },
+ "jin_whisper_win_blink": {
+  "ref": "jin_whisper_win",
+  "mask": "1340,568,110,58;1722,380,115,58",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, sunglasses, clothes, colours, lighting and background — and change ONLY BOTH of his eyes: fully closed in a natural blink (upper eyelids all the way down, lashes visible, no iris visible, same skin tone and lighting); his hair strands stay exactly as they are. Do not move, zoom or crop the picture."
  }
 }

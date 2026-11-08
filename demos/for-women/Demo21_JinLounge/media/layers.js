@@ -35,6 +35,16 @@ window.MOHEAT_LAYERS = {
       86
      ],
      "kind": "mouth"
+    },
+    {
+     "src": "art/lounge_eyes.webp?v=9965da18",
+     "rect": [
+      676,
+      182,
+      212,
+      122
+     ],
+     "kind": "eyes"
     }
    ]
   },
@@ -255,6 +265,16 @@ window.MOHEAT_LAYERS = {
       203
      ],
      "kind": "mouth"
+    },
+    {
+     "src": "art/whisper_eyes.webp?v=8451a7c6",
+     "rect": [
+      526,
+      246,
+      530,
+      264
+     ],
+     "kind": "eyes"
     }
    ]
   },
