@@ -11,7 +11,7 @@ import importlib.util, json, os, subprocess, sys, tempfile
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REPO = os.path.abspath(os.path.join(ROOT, '..', '..', '..'))
 sp = importlib.util.spec_from_file_location('eleven', os.path.join(REPO, 'tools', 'eleven', 'tts.py')); E = importlib.util.module_from_spec(sp); sp.loader.exec_module(E)
-src = open(os.path.join(ROOT, 'lines.js'), encoding='utf-8').read()
+src = open(os.path.join(ROOT, '..', '_kit', 'talk', 'lines.js'), encoding='utf-8').read()
 S = json.loads(src[src.index('window.TALK_SCRIPT = ') + 21:src.rindex('}') + 1])
 
 items = {}   # id → (who, tagged text); every place's beats + the shared and per-place bridges
@@ -29,7 +29,7 @@ for place in S['scenes'].values():
             if 'id' in l: add(l['id'], l['who'], l['ja'])
     bridges(place.get('bridges'))
 
-out_dir = os.path.join(ROOT, 'media', 'voice'); os.makedirs(out_dir, exist_ok=True)
+out_dir = os.path.join(ROOT, '..', '_kit', 'talk', 'media', 'voice'); os.makedirs(out_dir, exist_ok=True)
 cache_p = os.path.join(ROOT, 'audio', 'voice_cache.json'); os.makedirs(os.path.dirname(cache_p), exist_ok=True)
 cache = json.load(open(cache_p)) if os.path.exists(cache_p) else {}
 VOICE = {'N': 'nobunaga', 'I': 'ieyasu'}

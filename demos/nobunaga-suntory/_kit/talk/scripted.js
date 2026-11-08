@@ -5,7 +5,7 @@
 // matched by a light keyword layer (yes / no, the place's own topics, tea, sake, the realm, warm / cold, the future, praise,
 // leaving), else a generic one — and the script goes on. No server, no keys, no cost.
 window.TALK_BRAIN = (() => {
-  const D = window.TALK_SCRIPT, VOICE = 'media/voice/';
+  const D = window.TALK_SCRIPT, VOICE = '../_kit/talk/media/voice/';
   const strip = (s) => s.replace(/\[[^\]]*\]/g, '').replace(/\s+/g, ' ').trim();
   const flat = (B) => Object.values(B || {}).flatMap((k) => Object.values(k).flat());
   // 中文 subtitles: ja (as shown, without the tag) → zh, read by shared/subs.js (MOHEAT_ZH)

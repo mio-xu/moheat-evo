@@ -3,7 +3,7 @@
 // separate demos"). The templates are this folder's index.html (public, scripted) and live/index.html (private, server.py); this script
 // writes every page from them with that page's cast (<body data-cast>, read by main.js) and its own titles:
 //   public  Demo23_NobunagaTalk/index.html          N   (template itself, rewritten in place)
-//           Demo41_IeyasuTalk/index.html            I   (<base href> → Demo23: engine, voices, l10n by path, nothing copied)
+//           Demo41_IeyasuTalk/index.html            I   (thin page: engine, voices, l10n from ../_kit/talk/, nothing copied)
 //           Demo42_SengokuRoundtable/index.html     NI
 //   live    live/index.html · live/ieyasu.html · live/roundtable.html   (server.py: /live, /live/ieyasu, /live/roundtable)
 // Change the layout in index.html / live/index.html, then:  node scripts/pages.js   (bump ?v= first with tools/web/bump.py).
@@ -38,7 +38,6 @@ function page(tpl, p, live) {
     h = sub(h, /(<p class="hint" id="budget">)[^<]*/, `$1${esc(p.hint)}`, '#budget');
     h = sub(h, /(<p class="draft" id="credits">)[^<]*/, `$1${esc(p.credits)}`, '#credits');
     h = h.replace(/\n\s*<base href="[^"]*" \/>/, '');
-    if (p.dir !== 'Demo23_NobunagaTalk') h = h.replace(/<head>\n/, `<head>\n  <base href="../Demo23_NobunagaTalk/" />\n`);
   } else {
     h = sub(h, /(<p class="draft">)(?:They speak first, then wait|He speaks first, then waits) for you/, `$1${p.cast.length > 1 ? 'They speak first, then wait' : 'He speaks first, then waits'} for you`, 'live .draft');
   }

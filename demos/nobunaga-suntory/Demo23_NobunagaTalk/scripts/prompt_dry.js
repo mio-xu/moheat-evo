@@ -6,7 +6,7 @@
 //                                          each live entry page: live/index.html = N, ieyasu.html = I, roundtable.html = NI)
 const path = require('path');
 global.window = {};
-require(path.join(__dirname, '..', 'scenes.js'));
+require(path.join(__dirname, '..', '..', '_kit', 'talk', 'scenes.js'));
 const T = window.TALK;
 const build = (id, cast) => { const sc = T.SCENES.find((s) => s.id === id); if (!sc) throw new Error(`no place ${id}`); return { sc, prompt: T.prompt(sc, cast.split('')), open: T.OPEN(sc) }; };
 const a = process.argv.slice(2);

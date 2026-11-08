@@ -4,9 +4,9 @@ positions and thermal notes, and which lines each solo plays (both = ◎, Nobuna
 Run after editing lines.js:  python3 scripts/script_md.py"""
 import json, os, re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-src = open(os.path.join(ROOT, 'lines.js'), encoding='utf-8').read()
+src = open(os.path.join(ROOT, '..', '_kit', 'talk', 'lines.js'), encoding='utf-8').read()
 S = json.loads(src[src.index('window.TALK_SCRIPT = ') + 21:src.rindex('}') + 1])
-sc = open(os.path.join(ROOT, 'scenes.js'), encoding='utf-8').read()
+sc = open(os.path.join(ROOT, '..', '_kit', 'talk', 'scenes.js'), encoding='utf-8').read()
 NAME = {'N': '信長', 'I': '家康'}
 POS = {'seat': 'seat · 座 1.3 m：声 ×0.3', 'near': 'near · 目の前 50 cm：声 ×0.6', 'left_ear': 'left_ear · 左耳 12 cm：声 ×1（左耳が温かい）',
        'right_ear': 'right_ear · 右耳 12 cm：声 ×1（右耳が温かい）', 'left': 'left · 左 1 m：声 ×0.3', 'right': 'right · 右 1 m：声 ×0.3',
