@@ -190,7 +190,7 @@
   const GZH = ['全年龄', '治愈', '男性向', '女性向', '信长系列'];
   const GT = (gi) => { const [ja, en] = GROUPS[gi].split(' · '); return pickT({ ja, en, zh: GZH[gi] }); };
   const W = { all: { ja: 'すべて', en: 'All', zh: '全部' }, now: { ja: '▶ 再生中', en: '▶ Now playing', zh: '▶ 正在播放' }, ep: { ja: '第', en: 'Ep ', zh: '第' },
-    demos: { ja: 'デモ', en: 'Demos', zh: '演示' }, top: { ja: 'まずはこれから · 温冷をいちばん感じられる3本', en: 'Try these first · the most thermal feedback', zh: '推荐先体验 · 冷热反馈最丰富的3个' }, credits: { ja: '権利表記', en: 'Credits', zh: '版权与署名' },
+    demos: { ja: 'デモ', en: 'Demos', zh: '演示' }, rec: { ja: '★ おすすめ', en: '★ Recommended', zh: '★ 推荐', ko: '★ 추천' }, top: { ja: 'まずはこれから · 温冷をいちばん感じられる3本', en: 'Try these first · the most thermal feedback', zh: '推荐先体验 · 冷热反馈最丰富的3个' }, credits: { ja: '権利表記', en: 'Credits', zh: '版权与署名' },
     rights: { ja: '声・イラスト・音楽・商標', en: 'voices, art, music, trademarks', zh: '配音、美术、音乐、商标' }, prev: { ja: '前へ', en: 'Previous', zh: '上一个' }, next: { ja: '次へ', en: 'Next', zh: '下一个' } };
   const nav = document.createElement('nav'); nav.className = 'dnav'; nav.setAttribute('aria-label', 'Choose another demo');
   const prev = DEMOS[cur - 1], next = DEMOS[cur + 1];
@@ -205,7 +205,8 @@
   const count = (gi) => DEMOS.filter((d) => d.group === gi).length;   // level 1: category tabs (+ "all"); level 2: that category's demos
   const card = (d, i, top) => { const of = d.part ? DEMOS.filter((x) => x.series === d.series && x.part).length : 0;   // one menu card
     return `<a class="dn-card${i === cur ? ' is-cur' : ''}" href="${href(d)}"><img src="${thumb(i)}" data-t="${i}" alt="" loading="lazy"><span><em>${top ? `<s>🌡 ${HEAT[d.dir] || '★'}</s> · ` : ''}Demo ${i + 1}${d.part && of > 1 ? ` · <span data-part="${d.part}/${of}"></span>` : ''}${d.new ? '<i>NEW</i>' : ''}</em><b data-d="${i}"></b>${i === cur ? '<small class="dn-now" data-w="now"></small>' : ''}</span></a>`; };
-  panel.innerHTML = `<div class="dn-tabs" role="tablist"><button type="button" role="tab" data-g="all"><span data-w="all"></span><i>${DEMOS.length}</i></button>`
+  // "Recommended" is its OWN top-level tab (user 2026-11-09: never mixed into the category lists); the categories show only their demos
+  panel.innerHTML = `<div class="dn-tabs" role="tablist">${TOP.length ? `<button type="button" role="tab" data-g="top"><span data-w="rec"></span><i>${TOP.length}</i></button>` : ''}<button type="button" role="tab" data-g="all"><span data-w="all"></span><i>${DEMOS.length}</i></button>`
     + GROUPS.map((g, gi) => `<button type="button" role="tab" data-g="${gi}"><span data-gt="${gi}"></span><i>${count(gi)}</i></button>`).join('') + '</div>'
     + (TOP.length ? `<section class="dn-top" data-g="top"><h4 data-w="top"></h4><div class="dn-grid">${TOP.map((d) => card(d, DEMOS.indexOf(d), true)).join('')}</div></section>` : '')
     + GROUPS.map((g, gi) => `<section data-g="${gi}"><h4><span data-gt="${gi}"></span>${span(gi)}</h4><div class="dn-grid">` + DEMOS.map((d, i) => d.group !== gi ? '' :
@@ -225,7 +226,7 @@
     if (prev) st[0].title = `${pickT(W.prev)}: ${TITLE(prev)}`; if (next) st[1].title = `${pickT(W.next)}: ${TITLE(next)}`;
   }
   paint(); addEventListener('moheat:sublang', paint);
-  const show = (g) => { panel.querySelectorAll('.dn-tabs button').forEach((b) => b.setAttribute('aria-selected', b.dataset.g === String(g))); panel.querySelectorAll('section').forEach((x) => { x.hidden = x.dataset.g !== 'top' && g !== 'all' && x.dataset.g !== String(g); }); };   // "Try these first" heads every view
+  const show = (g) => { panel.querySelectorAll('.dn-tabs button').forEach((b) => b.setAttribute('aria-selected', b.dataset.g === String(g))); panel.querySelectorAll('section').forEach((x) => { x.hidden = String(g) === 'top' ? x.dataset.g !== 'top' : x.dataset.g === 'top' || (g !== 'all' && x.dataset.g !== String(g)); }); };   // Recommended = its own tab only
   panel.querySelector('.dn-tabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { e.stopPropagation(); show(b.dataset.g); } });
   show(cur >= 0 ? DEMOS[cur].group : 'all');
   const brand = bar.querySelector('.brand');
