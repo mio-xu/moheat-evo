@@ -13,5 +13,125 @@
   "generation": "api_7420d12667babe2d5b44d7b6f779542e8a0f0bbc3dc92e1558cf6816600ed5ec",
   "idempotency_key": "moheat-d30-design-C-v1",
   "variant": 1
+ },
+ "saku_stalls": {
+  "generation": "api_ed5b61169c6091dd48b711c7aeaf276f3edf4ea5a258d0b32b245bc4064ca5e8",
+  "idempotency_key": "moheat-d30-saku-stalls-v1",
+  "variant": 1
+ },
+ "saku_fan": {
+  "generation": "api_2b99702fcbd2a57c31e4f6d1376b33ee22614873daa42275a86233b3528f1834",
+  "idempotency_key": "moheat-d30-saku-fan-v2",
+  "variant": 2
+ },
+ "saku_kakigori": {
+  "generation": "api_1cba0671a6a862537a68a5ae643122a3a7ca18d4421dfb56da2305d9a680ed1b",
+  "idempotency_key": "moheat-d30-saku-kakigori-v2",
+  "variant": 2
+ },
+ "saku_breath_R": {
+  "generation": "api_fc0d681c77e727dc4fb12ed25c888477c2c052ca9c6d784b0b0b66277d63e980",
+  "idempotency_key": "moheat-d30-saku-breath-R-v2",
+  "variant": 2
+ },
+ "saku_whisper_L": {
+  "generation": "api_33e019a3d8dbc3553f39949b7dfc0ec6945314403fd34e3ef755930b995365a7",
+  "idempotency_key": "moheat-d30-saku-whisper-L-v1",
+  "variant": 1
+ },
+ "saku_fireworks": {
+  "generation": "api_d44b0b4c20ca0fb77391a1e383b1b2e3779a398849a734621095e1e997c0f391",
+  "idempotency_key": "moheat-d30-saku-fireworks-v1",
+  "variant": 1
+ },
+ "saku_ref": {
+  "generation": "api_f2262175296d25929d3871adc27781c539469f6eadf02663244dcd0feb4cf6de",
+  "idempotency_key": "moheat-d30-saku-ref-v1",
+  "variant": 1
+ },
+ "saku_ref_talk": {
+  "generation": "api_a0b878d42168763766ae5c88cb92de5b54db07623233459a6846dfe7832ed54e",
+  "idempotency_key": "moheat-d30-saku-ref-talk-v1",
+  "variant": 1
+ },
+ "saku_ref_blink": {
+  "generation": "api_841d0ce802ba3c275d8ce0c16185cee1a410cab720a344e7fba2dcff4263b1f2",
+  "idempotency_key": "moheat-d30-saku-ref-blink-v1",
+  "variant": 1
+ },
+ "saku_reach": {
+  "generation": "api_77f792dd5ee171f75c405de003ab7bba2c7b45fca7833a5b8ea8ec21e643f84f",
+  "idempotency_key": "moheat-d30-saku-reach-v1",
+  "variant": 1
+ },
+ "saku_breath": {
+  "generation": "api_e2fe6f84affa7b1fae023531d86f5bfa1056c86f8d84dbf3dcd058156267a0a7",
+  "idempotency_key": "moheat-d30-saku-breath-v1",
+  "variant": 1
+ },
+ "saku_whisper": {
+  "generation": "api_ba2efc50a45eb559c651e9a86392ad9ce59bb000f1d5f0a434e0bf035d72a068",
+  "idempotency_key": "moheat-d30-saku-whisper-v1",
+  "variant": 1
+ },
+ "saku_fan_talk": {
+  "generation": "api_7a9dfc9212e56fdc74055168da46c3046826a7739a361d3d8251e1bc02d7f520",
+  "idempotency_key": "moheat-d30-saku-fan-talk-v1",
+  "variant": 1
+ },
+ "saku_fan_blink": {
+  "generation": "api_fbb36bc495eb08c4f4e74588c30a0215f3af8ed938fc9d250e9828f6ae1b80f1",
+  "idempotency_key": "moheat-d30-saku-fan-blink-v1",
+  "variant": 1
+ },
+ "saku_fw": {
+  "generation": "api_1adc5c390b27ab46ec5226e418eb8669520d00aa93a6be0307be8ed7e70a7486",
+  "idempotency_key": "moheat-d30-saku-fw-v1",
+  "variant": 1
+ },
+ "saku_breath_talk": {
+  "generation": "api_df51cadc79a3caf543bf94c3496fcb9d001529649bf28678851a44a1a1e9d798",
+  "idempotency_key": "moheat-d30-saku-breath-talk-v1",
+  "variant": 1
+ },
+ "saku_whisper_talk": {
+  "generation": "api_f55e9f60d3e24451e491a7036fa5f400f08e58123f95ec989c4608a5a3d7d743",
+  "idempotency_key": "moheat-d30-saku-whisper-talk-v1",
+  "variant": 1
+ },
+ "bg_steps": {
+  "generation": "api_e13d2995d5631bab251923fa3c38dd66064517eeef0680dcea926793bfc02563",
+  "idempotency_key": "moheat-d30-bg-steps-v1",
+  "variant": 1
+ },
+ "bg_steps_fw": {
+  "generation": "api_a260bcbd207b495b5c83c3cf200821157bebeab25309e0b6a78c2b3a80f0f9d8",
+  "idempotency_key": "moheat-d30-bg-steps-fw-v1",
+  "variant": 1
+ },
+ "bg_stalls": {
+  "generation": "api_8c27c2ff866b943e0c211f925a4a97ebdbab5a5193ce54e24127b0668e430b40",
+  "idempotency_key": "moheat-d30-bg-stalls-v1",
+  "variant": 1
+ },
+ "saku_whisper2": {
+  "generation": "api_28e0b1ad2f88e19a804e3d47e05d327bae00431cb429292840f4d8f9f1f2c123",
+  "idempotency_key": "moheat-d30-saku-whisper2-v2",
+  "variant": 2
+ },
+ "saku_breath2": {
+  "generation": "api_eac3b8e0bf56031652577fbf30aa075985268b2e4f91cb0dfd9aca165132746a",
+  "idempotency_key": "moheat-d30-saku-breath2-v1",
+  "variant": 1
+ },
+ "saku_whisper3": {
+  "generation": "api_fff31247fb9ab812f7ce369134f8d3dfc0dfa74d0f3251e575c0d30798eacc7d",
+  "idempotency_key": "moheat-d30-saku-whisper3-v1",
+  "variant": 1
+ },
+ "saku_whisper3_talk": {
+  "generation": "api_28af1a4fd1079c5d8ed810c16d11cc10aeaba0321d2aaec318a4978dbfeacd94",
+  "idempotency_key": "moheat-d30-saku-whisper3-talk-v1",
+  "variant": 1
  }
 }

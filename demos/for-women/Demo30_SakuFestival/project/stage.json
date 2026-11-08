@@ -1,0 +1,147 @@
+{
+ "src": "assets/art",
+ "bgs": {
+  "stalls": {
+   "src": "bg_stalls"
+  },
+  "steps": {
+   "src": "bg_steps"
+  },
+  "steps_fw": {
+   "src": "bg_steps_fw"
+  }
+ },
+ "poses": {
+  "stand": {
+   "src": "saku_reach",
+   "talk": "saku_ref_talk",
+   "blink": "saku_ref_blink",
+   "near_mouth": [
+    1285,
+    528
+   ],
+   "near_eyes": [
+    1278,
+    378
+   ],
+   "centre_mouth": [
+    1285,
+    528
+   ],
+   "radius_mouth": [
+    90,
+    42
+   ],
+   "matte": "ai"
+  },
+  "fan": {
+   "src": "saku_fan",
+   "talk": "saku_fan_talk",
+   "blink": "saku_fan_blink",
+   "near_mouth": [
+    1172,
+    528
+   ],
+   "near_eyes": [
+    1143,
+    378
+   ],
+   "matte": "ai"
+  },
+  "kakigori": {
+   "src": "saku_kakigori",
+   "talk": "saku_fan_talk",
+   "blink": "saku_fan_blink",
+   "near_mouth": [
+    1172,
+    528
+   ],
+   "near_eyes": [
+    1143,
+    378
+   ],
+   "centre_mouth": [
+    1172,
+    528
+   ],
+   "radius_mouth": [
+    90,
+    42
+   ],
+   "matte": "ai"
+  },
+  "breath": {
+   "src": "saku_breathL",
+   "matte": "ai"
+  },
+  "whisper": {
+   "src": "saku_whisper2",
+   "talk": "saku_whisper_talk",
+   "centre_mouth": [
+    1973,
+    840
+   ],
+   "radius_mouth": [
+    75,
+    40
+   ],
+   "matte": "ai"
+  }
+ },
+ "views": {
+  "stalls": {
+   "still": "saku_stalls",
+   "pose": "stand",
+   "bg": "stalls",
+   "fire": null,
+   "x": 0.5,
+   "y": 1.04,
+   "height": 1.0
+  },
+  "fan": {
+   "still": "saku_fan",
+   "pose": "fan",
+   "bg": "steps",
+   "fire": null,
+   "x": 0.36,
+   "y": 1.04,
+   "height": 1.0
+  },
+  "kakigori": {
+   "still": "saku_kakigori",
+   "pose": "kakigori",
+   "bg": "steps",
+   "fire": null,
+   "x": 0.45,
+   "y": 1.06,
+   "height": 1.08
+  },
+  "breath_L": {
+   "still": "saku_breath_L",
+   "pose": "breath",
+   "bg": "steps",
+   "fire": null,
+   "x": 0.35,
+   "y": 1.01,
+   "height": 1.02
+  },
+  "whisper_R": {
+   "still": "saku_whisper_R",
+   "pose": "whisper",
+   "bg": "steps_fw",
+   "fire": null,
+   "x": 0.5,
+   "y": 1.01,
+   "height": 1.02
+  },
+  "fireworks": {
+   "still": "saku_fireworks",
+   "pose": "fan",
+   "bg": "steps_fw",
+   "fire": null,
+   "x": 0.36,
+   "y": 1.04,
+   "height": 1.0
+  }
+ }
+}

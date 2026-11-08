@@ -6,6 +6,7 @@ Reads <demo>/project/stage.json:
   { "src": "assets/art", "skipVideo": "media/video/[vt]_",
     "bgs":   { "camp": { "src": "bg_camp", "fire": [0.75, 0.72] } },               fire in the plate (fraction); omit → found automatically
     "poses": { "sit": { "src": "gaku_ref", "talk": "gaku_ref_talk", "blink": "gaku_ref_blink", "near_mouth": [x, y], "near_eyes": [x, y],
+                        "centre_mouth": [x, y], "radius_mouth": [rx, ry] (skip the search when it is pulled away by a hand / prop),
                         "erase": [[x0, y0, x1, y1]], "keep": [[x0, y0, x1, y1]] } },             erase = source boxes cleared (e.g. a fire drawn in the pose); keep = source boxes never keyed (grey steam, smoke); "matte": "ai" = outline from the isnet-anime model (~/ml/layers venv) for light / pastel figures
     "views": { "live": { "still": "gaku_live", "pose": "sit", "bg": "camp", "fire": [0.9, 0.74], "x": 0.42, "y": 1.06, "height": 1.1 } } }
   view: still = the file the page draws (stem, or stem.ext; media/art/<still> is written as the flat fallback), alias = other view names
@@ -123,6 +124,7 @@ for name, p in cfg["poses"].items():
         if p.get(key) and os.path.exists(src(p[key])):
             e = {"name": f"{name}_{kind}", "base": p["src"], "frame": p[key], "kind": kind}
             if p.get(f"near_{kind}"): e["near"] = p[f"near_{kind}"]
+            if p.get(f"centre_{kind}"): e["centre"], e["radius"] = p[f"centre_{kind}"], p[f"radius_{kind}"]   # fixed ellipse, no search
             pcfg["patches"].append(e)
     print(f"pose {name}: cut {cut.size} from box {box}")
 if pcfg["patches"]:
