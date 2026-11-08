@@ -459,6 +459,12 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 动画（§4b）：15 段 Seedance 2.5 Lite 1080p 首尾帧（8 段说话循环 + 7 段过渡，960 credits，网页端）；prepare_video 全部 exact 0.0 / 0.0；带动画自动通关 3:13，0 报错（每次换场景要等循环结束 + 4 s 过渡，比静帧版长约 40 s）。
 - 坑：网页历史和 Downloads 是多个会话共用的，下载要按提示词认卡片、下载后马上核对画面（这次混进了别的会话的一张客厅图，已放回 Downloads）；cast.json 被别的会话同时写过，pick 之后要再确认 voice_id 还在。
 
+### Demo31_SummerRooftop 🚧 做到一半 —《なつの、おくじょうで / Up on the Summer Roof》（男性向，纯交互，2026-11-08）
+- 用户要求：再做一个男性向剧情；从 4 个方案里选了 **A 夏夜屋顶 · 青梅竹马**。女主 **早瀬渚**（20 岁，暑假回老家的青梅竹马，嘴硬型），造型 **A**（栗色高马尾、橙色发圈、藏青烟花纹浴衣、橙腰带；`project/designs_contact.jpg`），声音 ElevenLabs **nagisa r1_b**（`IRIujaFF31qohpDbrkrj`）。
+- 用户（2026-11-08）：最终效果和制作要求**和岳（Demo27 ガク）一致** → 指南 §6 标准制作流程（空场景 + 纯色底姿势 + 画出来的差分 + build_stage.py + layers.js）。分层计划 `project/layers.md`（1 背景 + 8 姿势 + 差分，约 425 credits，不做视频），用户同意先试 100。
+- 已完成：剧情 / 22 句配音 / 页面（Demo25 的框架）/ 声音 / DUAL 冷热 / 三语 / 语音回答；两条分支自动通关 0 报错；分层的「登场」画面（bg_roof + nagisa_ref + 嘴 / 眼差分，用户看过说可以）。
+- 卡住：Seedance **每日上传上限**（网页 + API 共用）2026-11-08 用完，剩下 13 张（325 credits，提示词在 `scripts/seedance.py` 的 `JOBS3` 和 `project/web_prompts.json` 的 `_layered`）等第二天。之后：stage.json 补全 7 个画面 → build_stage → 测试 → 封面 / 缩略图 / 菜单。另外 200 credits 的 8 张整图是标准定下之前出的，只作构图参考。细节见该目录 README。
+
 ### Demo23_NobunagaTalk ✅ 可玩（本机专用）—《信長と、語らう / Talk with Nobunaga》实时 AI 对话（2026-11-08）
 - 用户要求：不是固定台词，能对用户说的话做出反应；讲完等用户讲；本机版 + 限额不许超；可选 信長 / 家康 / 三人で、可选场所（5 个：岐阜城天守夕暮れ、茶室囲炉裏、京都居酒屋、山崎蒸溜所、安土月夜の宴）；角色先按场所开话题；约 2 分钟由角色收尾；角色要走动（不在一个位置讲话）让冷热变化。
 - 架构：`server.py`（端口 8771，持有 key，执行 `limits.json`）+ ElevenLabs **text-only agent**（`agent.json`，LLM claude-sonnet-5-5，prompt 每次在 `scenes.js` 生成后 override）+ 浏览器语音识别 + 每句 ElevenLabs v4 TTS → 每个角色独立 HRTF。细节见该目录 README。
