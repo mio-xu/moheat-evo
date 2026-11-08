@@ -215,12 +215,13 @@
   // ---------------------------------------------------------------- drawing: stills (layered), cross-fades, the flame, the dark
   let viewA = 'counter', viewB = 'counter', mix = 1;
   const go = (name, view, onStart) => { onStart?.(); S.view = view; return sleep(.6); };   // no video clips in this demo (§6.3): a cross-fade
+  const LIVE = () => !!(window.MoHeatLayers && window.MoHeatLayers.live);
   function drawView(view, alpha, t) {
     const im = IMG[view];
     ctx.globalAlpha = alpha;
     if (!im) { ctx.fillStyle = '#0e1122'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
-    const z = 1.02 + .008 * Math.sin(t * 1.1), dh = W * im.height / im.width;
-    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + 4 * Math.sin(t * .9), W, dh); ctx.restore();
+    const live = LIVE(), z = 1.02 + (live ? 0 : .008 * Math.sin(t * 1.1)), dh = W * im.height / im.width;   // layered: no page drift (guide §6.4)
+    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + (live ? 0 : 4 * Math.sin(t * .9)), W, dh); ctx.restore();
     ctx.globalAlpha = 1;
   }
   function drawFlame(t) {   // the blue flame on her drink: a flickering glow + a few tongues (code, over the still)
