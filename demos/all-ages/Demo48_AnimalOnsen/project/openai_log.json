@@ -435,5 +435,112 @@
    2560,
    1440
   ]
+ },
+ "yuzujii_base_blink": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 63,
+  "usage": {
+   "input_tokens": 1604,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 96
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8974
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "monkeys_base_blink": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 66,
+  "usage": {
+   "input_tokens": 1607,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 99
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8977
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "penguin_base_blink": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 73,
+  "usage": {
+   "input_tokens": 1639,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 131
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9009
+  },
+  "out": [
+   2560,
+   1440
+  ],
+  "prior_usage": [
+   {
+    "input_tokens": 1593,
+    "input_tokens_details": {
+     "image_tokens": 1508,
+     "text_tokens": 85
+    },
+    "output_tokens": 7370,
+    "output_tokens_details": {
+     "image_tokens": 7370,
+     "text_tokens": 0
+    },
+    "total_tokens": 8963
+   }
+  ]
+ },
+ "fox_base2_blink": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 70,
+  "usage": {
+   "input_tokens": 1593,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 85
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8963
+  },
+  "out": [
+   2560,
+   1440
+  ]
  }
 }

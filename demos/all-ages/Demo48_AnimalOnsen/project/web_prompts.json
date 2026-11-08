@@ -112,5 +112,29 @@
  "fox_base2": {
   "ref": "fox_base",
   "prompt": "Image 1 is the exact design to keep (same character, face, colours, outfit). Redraw it at full quality on a new plain background.\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi (2–3 heads), friendly and adorable, not scary, clear silhouettes.\n\nThe fox of image 1 (light-blue yukata, folded onsen towel on its head, light-blue flower clip, no red rope, no bell), same design, facing the viewer, mouth closed.\n\nPlain flat CHROMA-KEY GREEN background (#00B140), one even colour, no shadow, nothing green on the character. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "yuzujii_base_blink": {
+  "ref": "yuzujii_base",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, outline, colours, lighting and background — and change ONLY BOTH of the capybara's sleepy half-closed eyes: now FULLY closed — each becomes one thin, gently curved closed-lid line with a few lashes (no dark eye showing at all), same place and length, same fur around them. Do not move, zoom or crop the picture.",
+  "mask": "1062,520,70,34;1308,520,70,34",
+  "composite": true
+ },
+ "penguin_base_blink": {
+  "ref": "penguin_base",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, outline, colours, lighting and background — and change ONLY BOTH of the penguin chick's eyes: FULLY closed in a soft blink (a curved closed eyelid line with lashes on each eye, no iris, no white of the eye visible), same fur around them. Do not move, zoom or crop the picture. Nothing of the open eye remains: no eye outline, no arc, no grey shadow above or around the closed lid — just the plain white face feathers and one curved closed-lid line with lashes per eye.",
+  "mask": "1115,505,78,80;1422,505,78,80",
+  "composite": true
+ },
+ "monkeys_base_blink": {
+  "ref": "monkeys_base",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, outline, colours, lighting and background — and change ONLY ALL FOUR eyes (the mother monkey's two and the child monkey's two): FULLY closed in a soft blink (a curved closed eyelid line with lashes on each eye, no iris, no white of the eye visible), each in its own place and size. Do not move, zoom or crop the picture.",
+  "mask": "990,478,66,64;1210,450,62,62;1494,712,48,52;1623,752,62,54",
+  "composite": true
+ },
+ "fox_base2_blink": {
+  "ref": "fox_base2",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, outline, colours, lighting and background — and change ONLY BOTH of its eyes: FULLY closed in a soft blink (a curved closed eyelid line with lashes on each eye, no iris, no white of the eye visible), same fur around them. Do not move, zoom or crop the picture.",
+  "mask": "1053,550,66,64;1311,503,72,66",
+  "composite": true
  }
 }

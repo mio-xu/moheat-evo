@@ -16,6 +16,9 @@ def load(name, path):
 E = load('eleven', os.path.join(REPO, 'tools', 'eleven', 'tts.py')); SD = load('script_data', os.path.join(ROOT, 'scripts', 'script_data.py'))
 D = load('dub', os.path.join(REPO, 'tools', 'eleven', 'dub.py'))
 CAST = {'Y': 'yuzujii', 'P': 'penguin', 'M': 'monkey', 'F': 'fox'}
+STAB = {E.voice('monkey'): .3}   # cast.json monkey settings (staff_f reused with a livelier delivery, user 2026-11-09); dub.render's speak() defaults to 0.4
+_speak = D.E.speak
+D.E.speak = lambda text, vid, **kw: _speak(text, vid, stability=STAB.get(vid, .4), **kw)
 GLOBAL = 'ONSEN_VOICE'
 NAMES = {'zh': [('柚子爷爷', 'Yuzu-jii'), ('小笨', 'Pen'), ('小康', 'Kon')], 'en': []}
 OVERRIDE = {}                                                                       # (lang, id) → hand-tagged text

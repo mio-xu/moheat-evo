@@ -1,0 +1,10 @@
+{
+ "mouth_exceptions": {
+  "monkey_kid_pail": "the monkey child never speaks (only the mother M has lines, script_data.py) — eyes / blink only",
+  "penguin_bath": "a beak, not lips: the set opens the beak along the line between the upper and lower beak — no teeth by design"
+ },
+ "notes": {
+  "mouths": "animal / chibi faces → every mouth set is LivePortrait-free (\"warp\": false on the drawn line, guide §11.1 Q-version rule); the penguin's set opens its beak along the line between the upper and lower beak (no teeth, dark interior).",
+  "bath": "the guests sit IN the water: their layers are bath variants (scripts/bath_cut.py) — a soft wavy water line (open bath) or the pail's front-rim arc — not a cut body; their visible bottom sits on the plate's water / rim."
+ }
+}

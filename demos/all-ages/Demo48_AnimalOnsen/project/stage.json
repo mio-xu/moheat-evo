@@ -1,0 +1,380 @@
+{
+ "src": "assets/art",
+ "hooks": {
+  "view": "ONSEN.S.view",
+  "who": "ONSEN.S.who"
+ },
+ "bgs": {
+  "onsen": {
+   "src": "bg_onsen_g",
+   "fire": null
+  },
+  "onsen_rain": {
+   "src": "bg_onsen_rain_g",
+   "fire": null
+  }
+ },
+ "poses": {
+  "yuzujii_base": {
+   "src": "yuzujii_base",
+   "blink": "yuzujii_base_blink",
+   "matte": "green",
+   "character": "yuzujii",
+   "look": "yuzujii",
+   "regions_eyes": [
+    [
+     1062,
+     520,
+     80,
+     39
+    ],
+    [
+     1308,
+     520,
+     80,
+     39
+    ]
+   ],
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.2,
+     0.3
+    ],
+    "light": 0.3,
+    "warp": false,
+    "centre": [
+     1158,
+     676
+    ],
+    "radius": [
+     87,
+     41
+    ],
+    "lift": 0.12,
+    "drop": 0.3,
+    "dark": 12
+   }
+  },
+  "yuzujii_bath": {
+   "src": "yuzujii_bath",
+   "blink": "yuzujii_bath_blink",
+   "matte": "green",
+   "character": "yuzujii",
+   "look": "yuzujii",
+   "regions_eyes": [
+    [
+     1062,
+     520,
+     80,
+     39
+    ],
+    [
+     1308,
+     520,
+     80,
+     39
+    ]
+   ],
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.2,
+     0.3
+    ],
+    "light": 0.3,
+    "warp": false,
+    "centre": [
+     1158,
+     676
+    ],
+    "radius": [
+     87,
+     41
+    ],
+    "lift": 0.12,
+    "drop": 0.3,
+    "dark": 12
+   }
+  },
+  "penguin_bath": {
+   "src": "penguin_bath",
+   "blink": "penguin_bath_blink",
+   "matte": "green",
+   "character": "penguin",
+   "look": "penguin",
+   "regions_eyes": [
+    [
+     1115,
+     505,
+     90,
+     92
+    ],
+    [
+     1422,
+     505,
+     90,
+     92
+    ]
+   ],
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.2,
+     0.3
+    ],
+    "light": 0,
+    "warp": false,
+    "centre": [
+     1272,
+     566
+    ],
+    "radius": [
+     156,
+     48
+    ],
+    "lift": 0.05,
+    "drop": 0.18,
+    "dark": 12,
+    "teeth": false
+   }
+  },
+  "monkey_mum_pail": {
+   "src": "monkey_mum_pail",
+   "blink": "monkey_mum_pail_blink",
+   "matte": "green",
+   "character": "monkey_mum",
+   "look": "monkey_mum",
+   "regions_eyes": [
+    [
+     990,
+     478,
+     76,
+     74
+    ],
+    [
+     1210,
+     450,
+     71,
+     71
+    ]
+   ],
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.2,
+     0.3
+    ],
+    "light": 0.3,
+    "warp": false,
+    "centre": [
+     1135,
+     550
+    ],
+    "radius": [
+     57,
+     34
+    ],
+    "lift": 0.12,
+    "drop": 0.3,
+    "dark": 12
+   }
+  },
+  "monkey_kid_pail": {
+   "src": "monkey_kid_pail",
+   "blink": "monkey_kid_pail_blink",
+   "matte": "green",
+   "character": "monkey_kid",
+   "look": "monkey_kid",
+   "regions_eyes": [
+    [
+     1494,
+     712,
+     55,
+     60
+    ],
+    [
+     1623,
+     752,
+     71,
+     62
+    ]
+   ]
+  },
+  "fox_bath": {
+   "src": "fox_bath",
+   "blink": "fox_bath_blink",
+   "matte": "green",
+   "character": "fox",
+   "look": "fox",
+   "regions_eyes": [
+    [
+     1053,
+     550,
+     76,
+     74
+    ],
+    [
+     1311,
+     503,
+     83,
+     76
+    ]
+   ],
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.2,
+     0.3
+    ],
+    "light": 0.3,
+    "warp": false,
+    "centre": [
+     1170,
+     626
+    ],
+    "radius": [
+     80,
+     41
+    ],
+    "lift": 0.12,
+    "drop": 0.3,
+    "dark": 12
+   }
+  }
+ },
+ "views": {
+  "open_Y": {
+   "still": "onsen_open",
+   "bg": "onsen",
+   "fire": null,
+   "pose": "yuzujii_base",
+   "x": 0.5,
+   "y": 0.97,
+   "height": 0.7,
+   "who": "Y"
+  },
+  "pen_P": {
+   "still": "onsen_penguin",
+   "bg": "onsen",
+   "fire": null,
+   "pose": "penguin_bath",
+   "x": 0.52,
+   "y": 0.755,
+   "height": 0.27,
+   "who": "P",
+   "more": [
+    {
+     "pose": "yuzujii_base",
+     "x": 0.12,
+     "y": 0.97,
+     "height": 0.5,
+     "who": "Y"
+    }
+   ]
+  },
+  "mon_M": {
+   "still": "onsen_monkeys",
+   "bg": "onsen",
+   "fire": null,
+   "pose": "monkey_mum_pail",
+   "x": 0.3,
+   "y": 0.795,
+   "height": 0.23,
+   "who": "M",
+   "more": [
+    {
+     "pose": "monkey_kid_pail",
+     "x": 0.72,
+     "y": 0.795,
+     "height": 0.19,
+     "who": "K"
+    }
+   ]
+  },
+  "rain_Y": {
+   "still": "onsen_rain",
+   "bg": "onsen_rain",
+   "fire": null,
+   "pose": "yuzujii_base",
+   "x": 0.5,
+   "y": 0.97,
+   "height": 0.7,
+   "who": "Y"
+  },
+  "rain_F": {
+   "still": "onsen_fox",
+   "bg": "onsen_rain",
+   "fire": null,
+   "pose": "fox_bath",
+   "x": 0.55,
+   "y": 0.755,
+   "height": 0.3,
+   "who": "F",
+   "more": [
+    {
+     "pose": "yuzujii_base",
+     "x": 0.12,
+     "y": 0.97,
+     "height": 0.5,
+     "who": "Y"
+    }
+   ]
+  },
+  "end_Y": {
+   "still": "onsen_yuzujii",
+   "bg": "onsen",
+   "fire": null,
+   "pose": "yuzujii_bath",
+   "x": 0.5,
+   "y": 0.775,
+   "height": 0.33,
+   "who": "Y"
+  },
+  "end_all": {
+   "still": "onsen_all",
+   "bg": "onsen",
+   "fire": null,
+   "pose": "yuzujii_bath",
+   "x": 0.585,
+   "y": 0.755,
+   "height": 0.27,
+   "who": "Y",
+   "more": [
+    {
+     "pose": "fox_bath",
+     "x": 0.415,
+     "y": 0.728,
+     "height": 0.17,
+     "who": "F"
+    },
+    {
+     "pose": "penguin_bath",
+     "x": 0.865,
+     "y": 0.745,
+     "height": 0.18,
+     "who": "P"
+    },
+    {
+     "pose": "monkey_mum_pail",
+     "x": 0.3,
+     "y": 0.795,
+     "height": 0.23,
+     "who": "M"
+    },
+    {
+     "pose": "monkey_kid_pail",
+     "x": 0.72,
+     "y": 0.795,
+     "height": 0.19,
+     "who": "K"
+    }
+   ]
+  }
+ }
+}
