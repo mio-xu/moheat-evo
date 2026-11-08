@@ -457,11 +457,11 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 招牌：团扇凉风绕头转（移动冷源）+ 吃完刨冰往左耳吹凉气；烟花盖住的话在右耳重说。详见 Demo 的 README / `project/DESIGN.md`。
 - 坑：特写图会把"你"的手 / 头发画进来（POV 不该出现）→ 编辑去掉；编辑有时整张重画或改构图（左耳特写失败 2 次）→ 改用镜像；纯灰底在夜景上留浅色描边 → `matte: ai`；差分自动搜索会被手 / 道具带偏 → `build_stage.py` 新增 `centre_<kind>` + `radius_<kind>`（固定椭圆）。共用约 775 credits（含作废的整图 175 和失败编辑 75）。
 
-### 女性向重制 Demo32–35（进行中，2026-11-08 起）—— 用户要求：人物、声音、剧情不变，按标准流程（§6）重做画面，不要视频
+### 女性向重制（进行中，2026-11-08 起；完成后用 `tools/web/merge_remake.py` 并回原文件夹，原版备份到仓库外）—— 用户要求：人物、声音、剧情不变，按标准流程（§6）重做画面，不要视频
 
 | 新文件夹 | 原 Demo | 状态 |
 |---|---|---|
-| Demo32_HinataBooth | Demo20 陽向 | 背景 + 3 个姿势已出（100 credits），页面已搭；缺挥手 + 6 张差分（上传限流） |
+| （已并回 Demo20_HinataHandshake） | Demo20 陽向 | ✅ 完成：分层版接管 Demo20，旧版备份在 `~/Desktop/MoHeat Evo 备份/for-women/Demo20_HinataHandshake_20261108-1220/` |
 | Demo33_RenNightCall | Demo12 蓮 | 提示词 / 分层表 / 页面 / stage.json 已准备，未出图（约 350，8 次上传） |
 | Demo34_JinVipRoom | Demo21 迅 | 同上（约 325，8 次上传） |
 | Demo35_ShionRainyNight | Demo22 紫苑 | 同上（约 425，10 次上传） |

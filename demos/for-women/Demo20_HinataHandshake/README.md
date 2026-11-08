@@ -24,14 +24,22 @@ young male idol; earlier VOICEVOX:暁記ミタマ "m1"), `eleven_v4`, Japanese, 
 `[giggles]` …). Key = `ELEVENLABS_API_KEY` in the repo's `.env.local` (gitignored; set up with `npx -y @elevenlabs/cli@latest onboard init`).
 Staff = ElevenLabs `staff_f` (user pick r1_a; earlier VOICEVOX:春日部つむぎ).
 
-Art: `scripts/seedance.py` (Seedance GPT Image 2, 2K 16:9). The upload API was rate-limited, so `hina_booth` is text-to-image and every other picture
-uses its generation URL as the reference (outputs: the new picture is the last one). Raw PNGs in `assets/art/` (not in git) →
-`scripts/prepare_art.py` (patch positions in `project/patches.json`) → `media/art/*.webp`. The right-ear lean is the left one mirrored.
+## Picture: layers (2026-11-08, the standard way — DEMO_DESIGN_GUIDE §6 标准制作流程)
 
-Animation (v2, 2026-11-08, handoff §4b): 11 Seedance 2.5 Lite **1080p** clips, First & Last Frame = the stills (web page; prompts and frames in
-`project/web_video_prompts.json`). Loops: `v_booth_talk`, `v_hands_talk`, `v_hands_idle` (only while he waits for your answer), `v_lean_whisper`
-(mirrored for the right ear), `v_wave`. One-shots, each from one still to the next: `v_take_hand` (booth→hands), `v_hands_breath`, `v_lean_in`
-(→left ear), `v_lean_back` (→hands), `v_lean_in_r` (→right ear, last frame = the mirrored lean still), `v_leave` (→wave).
-`scripts/prepare_video.py`: per clip, position + colour drift corrected and the first / last frames blended onto the stills (exact), 1920×1080.
-`main.js` switches clips only at a clip's end (identical frames → hard cut); `go(clip, view)` queues a transition for the next end.
-Raw downloads in `assets/video/` (not in git). `?stills` = stills + mouth patches.
+Redone as layers instead of video (user: "重做版直接接管原版"; the first version — scene stills, mouth / blink patches, 11 Seedance clips — is
+backed up outside the repo: `~/Desktop/MoHeat Evo 备份/for-women/Demo20_HinataHandshake_20261108-1220/`). No video.
+
+| Layer | Art | Moves by |
+|---|---|---|
+| background | the queue picture (no Hinata, used as is) and an empty booth plate (`bg_booth`: balloons + fairy lights, Hinata removed from the first version's still) | parallax (mouse / tilt + slow sway); the booth plate is zoomed for the close views |
+| Hinata | 4 poses on a plain grey background (the first version's stills as pose references): `hina_ref` (booth, hand held out), `hina_hands`, `hina_lean` (mirrored by `main.js` for the right ear), `hina_wave` (a same-face edit of `hina_ref`); the table edge is part of the pose | breathing, a small bob while talking (code) |
+| face | edits of each pose: mouth slightly open (his fang shows), eyes closed → feathered patches (both eyes, also under the fringe / with the head tilted) | the mouth follows `HINA.FW.mouth` (the voice), ~0.13 s blinks |
+| effects | — | `main.js`'s canvas code: snow through the doors, the overtime heart glow, the timer |
+
+- Art: Seedance website (bg + 3 poses, 100 credits) — then the uploads were rate-limited, so the variants and the wave came from the OpenAI API
+  (`python3 tools/openai/images.py demos/for-women/Demo20_HinataHandshake <job>`, gpt-image-2, 2560×1440) and one from ChatGPT. Prompts:
+  `scripts/seedance_layers.py prompts` → `project/web_prompts.json` (references: `assets/art/web/d20_*.jpg` = the first version's stills).
+  Raw PNGs in `assets/art/` (not in git).
+- Build (Pillow + numpy + the isnet-anime matte for this pastel figure): `python3 tools/art/build_stage.py demos/for-women/Demo20_HinataHandshake --preview`
+  from `project/stage.json` (`matte: ai`, `hooks` → `HINA.S.view` / `HINA.FW.mouth`, the wave's near-hints, placements) → `media/art/` + `media/layers.js`.
+- `media/layers.js` + `../../shared/layers.js` (before `main.js`) draw the composite wherever `main.js` draws a still; `?flat` = the flat stills.

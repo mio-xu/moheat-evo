@@ -1,1 +1,0 @@
-window.HINA_PATCHES = {"hina_hands_talk_mouth": [988, 446], "hina_lean_quiet_mouth": [460, 571], "hina_wave_talk_mouth": [991, 348]};

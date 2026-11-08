@@ -44,7 +44,7 @@ def cutout(path, erase=(), keep=(), ai=False):
     bgc = np.median(light if len(light) > 50 else border, 0)
     diff = np.abs(im - bgc).max(2)
     # background = grown from the border over smooth, background-like pixels; the lineart (a sharp edge) stops it, so light clothes
-    # close to the background colour stay solid (Demo32's cream cardigan). Plus large enclosed patches of the plain colour (chair gaps).
+    # close to the background colour stay solid (Demo20 Hinata's cream cardigan). Plus large enclosed patches of the plain colour (chair gaps).
     g = np.asarray(Image.fromarray(im.astype(np.uint8)).convert("L"), np.float32)
     grad = np.maximum(np.abs(np.diff(g, axis=0, append=g[-1:])), np.abs(np.diff(g, axis=1, append=g[:, -1:])))
     k = 2; Hs, Ws = H // k, W // k

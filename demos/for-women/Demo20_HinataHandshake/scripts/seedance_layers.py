@@ -1,4 +1,4 @@
-"""Seedance art for Demo32 (Hinata, Demo20 redone the standard way — DEMO_DESIGN_GUIDE §6 "标准制作流程"): an empty booth backdrop,
+"""Seedance art for the layered Demo20 (Hinata, redone the standard way — DEMO_DESIGN_GUIDE §6 "标准制作流程"): an empty booth backdrop,
 Hinata on a plain background per pose (Demo20's stills as pose references), mouth-open / eyes-closed variants as edits.
 Demo20's look / character prompts are loaded by path. The API upload was rate-limited (2026-11-08), so the pictures are made on the
 website with exactly these prompts: `python3 scripts/seedance.py prompts` writes project/web_prompts.json (job → reference + prompt);
@@ -7,7 +7,7 @@ downloads → `python3 tools/seedance/web_take.py <demo> <name>`.
 import importlib.util, json, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-spec = importlib.util.spec_from_file_location('d20', os.path.join(ROOT, '..', 'Demo20_HinataHandshake', 'scripts', 'seedance.py'))
+spec = importlib.util.spec_from_file_location('d20', os.path.join(ROOT, 'scripts', 'seedance.py'))
 d20 = importlib.util.module_from_spec(spec); spec.loader.exec_module(d20)
 
 PLAIN = ("Plain flat light-grey studio background (#c8c8c8), completely empty: no balloons, no lights, no scenery, no floor line, no "
