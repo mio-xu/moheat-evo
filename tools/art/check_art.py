@@ -198,7 +198,9 @@ def check(D, verbose=False):
             gap = {'bottom': 1 - c['y'], 'top': c['y'] - hf, 'left': c['x'] - wf / 2, 'right': 1 - (c['x'] + wf / 2)}   # frame fraction inside
             clear = {'bottom': not al[-3:].any(), 'top': not al[:3].any(), 'left': not al[:, :3].any(), 'right': not al[:, -3:].any()}
             for side in gap:
-                if clear[side] and gap[side] < FULL_EDGE:
+                # top: any head / ear cut or flush = headroom problem; other sides only in the "almost" band (−3 % … +1 %): well past the
+                # edge is a deliberate crop (grandpa's feet below the frame at the melon close shot, Demo50)
+                if clear[side] and gap[side] < FULL_EDGE and (side == 'top' or gap[side] > -.03):
                     out.append(('WARN', 'full-edge', f'{stem}: {src} is complete at its {side} but touches the {side} frame edge ({gap[side]:.1%} inside) — add a margin (≥ {FULL_EDGE:.0%}) or crop it deliberately'))
     return out
 
