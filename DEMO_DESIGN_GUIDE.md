@@ -153,6 +153,8 @@
 
 ### 5.3 提示词模板（照这个顺序拼）
 
+**出图工具的顺序**（用户 2026-11-08）：① **OpenAI API** `gpt-image-2`（`~/.openai_key`；`/v1/images/edits` 直接带参考图文件，不占 Seedance 上传额度；模板 `demos/for-men/Demo31_SummerRooftop/scripts/gpt_image.py`，2560×1440、quality high，约 55 s / 张，可并行）→ 没余额 / 出错时 ② **Seedance API** → 上传被限流时 ③ **Seedance 网页**。三处提示词通用（"Image 1" = 参考图）。视频仍用 Seedance。ChatGPT 网页也能出同样的图，但 Chrome 会拦截连续的自动下载，不作为常规路线。
+
 ```
 Image 1 is the STYLE and CHARACTER reference.
 LOOK   ：画风锚（系列的 LOOK 原文，不改）
@@ -207,7 +209,7 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 
 1. **设定图**：用户选定造型（人物设计方案 → 设定图）。保留角色的辨识度（Demo27 保留了遮眼刘海）。
 2. **分层计划**：先写 `project/layers.md`，列出每个画面用哪个姿势、哪些姿势可以共用一张脸、哪些是事件 CG、一共多少 credits，发给用户确认。Demo27 一共 8 个画面，约 425 credits。
-3. **出图**（Seedance，每张 25 credits，16:9 2K）：
+3. **出图**（按 §5.3 的工具顺序：OpenAI API → Seedance API → Seedance 网页；16:9 2K）：
    - 每个场地出一张**空场景背景**（"empty scene, no people"），火、灯这类光源放在固定的位置。
    - **立绘基准**：纯色底，颜色按角色的主色选，要拉开反差：深色角色（黑发、黑衣）用浅灰 #c8c8c8，浅色角色（银发、白金发、白衣、粉彩）用深灰 #404040，深浅混合的用中灰 #707070。正面、眼睛高度的机位，光线方向和背景一致。浅色角色在 `stage.json` 里加 `"matte": "ai"` 作保险。
    - **重做旧 Demo 时**：以原 Demo 的静帧作为姿势参考，空场景背景用"把人物从原图里去掉"的编辑得到；新页面用 `python3 tools/web/remake_page.py <原文件夹> <新文件夹>` 生成（原 Demo 的文件按路径引用，旧的差分和视频都不加载）。
