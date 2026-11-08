@@ -270,6 +270,13 @@
     }, why === 'bye' ? 2500 : 600);
   }
   E.finish = finish; E.playing = () => playing || Q.length > 0;
+  // chapters for the shared control bar (shared/shell.js, DEMO_DESIGN_GUIDE §7.3): greeting → talk (your turns) → farewell.
+  // Seeking: the farewell chapter = "leave now" (they say goodbye); a free talk cannot jump forward to a turn that has not happened.
+  if (window.MoHeatShell) {
+    MoHeatShell.chapters = [{ label: 'Greeting', ja: 'ごあいさつ', en: 'Greeting', zh: '问候' }, { label: 'Talk', ja: '語らい', en: 'Talk', zh: '对谈' }, { label: 'Farewell', ja: 'おわかれ', en: 'Farewell', zh: '告别' }];
+    MoHeatShell.current = () => (!S ? 0 : S.closing || S.done || S.phase === 'end' ? 2 : S.talkStart || S.silent || logEl.querySelector('li.you') ? 1 : S.phase === 'listen' ? 1 : 0);
+    MoHeatShell.seek = (i) => { if (i === 2) $('endBtn').click(); };
+  }
   $('endBtn').addEventListener('click', () => {   // you leave: they say goodbye if they can, otherwise stop at once
     if (!S || S.done) return;
     if (S.phase === 'listen' && !S.closing) { stopRec(); S.closing = true; ask('close', '（そろそろ失礼します）'); } else finish('bye');

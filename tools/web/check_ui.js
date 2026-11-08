@@ -94,7 +94,9 @@ const res = { ref: REF, sizes: SIZES, demos: {}, fails: [], errors: [] };
     }
   }
   if (SHEET) {   // comparison sheet: per demo one row = the states at the first size, the playing state at the others
-    const rows = Object.entries(res.demos).map(([n, D]) => [n, ...SIZES.flatMap((sz, i) => (i ? ['playing', 'settings'] : ['cover', 'playing', 'settings', 'ended']).map((st) => D[sz]?.[st]?.shot || ''))]);
+    // each cell = the player only (+ the ⚙ sheet on phones, which covers the page): [file, crop box]
+    const cell = (D, sz, st) => { const m = D[sz]?.[st]; if (!m?.shot) return ['', null]; const g = m.stage; return [m.shot, st === 'settings' && sz.endsWith('t') ? null : [g[0], g[1], g[0] + g[2], g[1] + g[3]]]; };
+    const rows = Object.entries(res.demos).map(([n, D]) => [n, ...SIZES.flatMap((sz, i) => (i ? ['cover', 'playing', 'settings'] : ['cover', 'playing', 'paused', 'settings', 'ended']).map((st) => cell(D, sz, st)))]);
     const py = spawn('python3', ['-c', `
 import json, sys
 from PIL import Image, ImageDraw
@@ -102,12 +104,15 @@ rows = json.load(sys.stdin); W = 360
 sheet = None; y = 0; parts = []
 for r in rows:
     ims = []
-    for f in r[1:]:
+    for f, box in r[1:]:
         try: im = Image.open(f).convert('RGB')
         except Exception: im = Image.new('RGB', (W, 225), '#400')
-        ims.append(im.resize((W, round(W * im.height / im.width))))
-    h = max(i.height for i in ims) + 24; row = Image.new('RGB', (len(ims) * (W + 8) + 8, h), '#15131b'); d = ImageDraw.Draw(row); d.text((8, 4), r[0], fill='#ddd')
-    for k, im in enumerate(ims): row.paste(im, (8 + k * (W + 8), 22))
+        if box: im = im.crop(tuple(box))
+        w = W if im.width >= im.height else W // 2
+        ims.append(im.resize((w, round(w * im.height / im.width))))
+    h = max(i.height for i in ims) + 24; row = Image.new('RGB', (sum(i.width + 8 for i in ims) + 8, h), '#15131b'); d = ImageDraw.Draw(row); d.text((8, 4), r[0], fill='#ddd')
+    x = 8
+    for im in ims: row.paste(im, (x, 22)); x += im.width + 8
     parts.append(row)
 S = Image.new('RGB', (max(p.width for p in parts), sum(p.height for p in parts)), '#15131b'); y = 0
 for p in parts: S.paste(p, (0, y)); y += p.height

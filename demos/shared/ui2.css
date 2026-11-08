@@ -146,7 +146,7 @@
   .u2-row-start { bottom: calc(var(--u2-bar) + 8px); }
   .u2-row-opt, .u2-row-lang { display: none; }
   .u2-cover > .u2-gal { display: none; }
-  .u2-row-start .u2-gal-c { display: inline-flex; height: 44px; }
+  .u2-row-start .u2-gal-c { display: inline-flex; height: 44px; position: static; }
   .u2-gal-c span { display: none; }
   .u2 .u2-start { font-size: 15px; padding: 0 1em; }
   .u2-row-start .u2-picks { display: inline-flex; }
@@ -167,7 +167,7 @@
   .u2-pop { right: 4px; left: 4px; bottom: calc(var(--u2-bar) + 8px); min-width: 0; }
   .u2-set { width: auto; max-height: calc(100cqw * 9 / 16 - var(--u2-bar) - 12px); }
   .stage:has(> .u2) .subs { bottom: calc(44px + 6px) !important; }
-  .stage:has(> .u2) :is(.choices, .act) { bottom: calc(44px + 12px + 2.6 * 13px) !important; }
+  .stage:has(> .u2) :is(.choices, .act) { bottom: calc(44px + 16px + 3.2 * 13px) !important; }
 }
 @container (max-width: 420px) { .u2-bar .u2-ib.u2-opt-vol { display: none; } }   /* the tiniest players: volume lives in ⚙ (device volume buttons work too) */
 .u2-touch .u2-chipb::before, .u2-touch .u2-seg-c::before { content: ""; position: absolute; inset: -6px 0; }

@@ -23,7 +23,7 @@ const out = { demos: {}, errors: [] };
   const chrome = spawn(CHROME, ['--headless=new', `--remote-debugging-port=${dp}`, `--user-data-dir=${prof}`, '--hide-scrollbars', '--font-render-hinting=none', 'about:blank'], { stdio: 'ignore' });
   const done = (code = 0) => { try { chrome.kill(); } catch {} try { http.kill(); } catch {} try { fs.rmSync(prof, { recursive: true, force: true }); } catch {}
     process.stdout.write(JSON.stringify(out) + '\n'); process.exit(code); };
-  setTimeout(() => { out.errors.push('timeout'); done(1); }, (60 + DEMOS.length * LANGS.length * 20) * 1000);
+  setTimeout(() => { out.errors.push('timeout'); done(1); }, (120 + DEMOS.length * LANGS.length * 45) * 1000);
   let ws;
   for (let i = 0; i < 80 && !ws; i++) { await sleep(250); try { const l = await (await fetch(`http://127.0.0.1:${dp}/json/list`)).json(); const pg = l.find((x) => x.type === 'page'); if (pg) ws = pg.webSocketDebuggerUrl; } catch {} }
   if (!ws) { out.errors.push('Chrome did not start'); return done(1); }

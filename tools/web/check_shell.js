@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // The unified shell at runtime (DEMO_DESIGN_GUIDE §2 "纯聆听 / 互动" + §7.3 "统一外壳"; check_demo.py G6 `shell` row). Prints ONE JSON object.
-//   node tools/web/check_shell.js <demo folder> [--secs 420] [--shots DIR]
+//   node tools/web/check_shell.js <demo folder> [--secs 420] [--shots DIR] [--ui2]
 // Own http.server + own headless Chrome. Opens the page with NO ?auto, picks PURE mode on the cover, clicks Start and touches nothing:
 //   · the story must end on its own cover (intro back) with zero input, and never ask for the microphone (getUserMedia / SpeechRecognition);
 //   · ← / → during playback must not leave the page; on the cover → must (it is undone right away);
@@ -41,7 +41,7 @@ const out = { demo: REL, shell: false, pureEnded: false, secs: 0, mic: [], navDu
   const base = `http://127.0.0.1:${hp}`, url = `${base}/${REL}/?sub=en&bar=1`;   // bar=1: the chapter bar even while MoHeatShell.BAR_ENABLED is off
   await cdp('Page.enable'); await cdp('Runtime.enable');
   await cdp('Page.navigate', { url: `${base}/tools/web/check_shell.js` }); await sleep(300);
-  await ev(`(localStorage.setItem('moheat.guide', 'done'), localStorage.setItem('moheat.mode', '"pure"'), 1)`);
+  await ev(`(localStorage.setItem('moheat.guide', 'done'), localStorage.setItem('moheat.mode', '"pure"'), ${argv.includes('--ui2') ? "localStorage.setItem('moheat.ui', '2')" : "localStorage.removeItem('moheat.ui')"}, 1)`);   // --ui2: with UI v2 on (before the release flips MoHeatShell.UI_V2)
   // the microphone must never be asked for in pure mode
   await cdp('Page.addScriptToEvaluateOnNewDocument', { source: `window.__mic = []; const gum = navigator.mediaDevices?.getUserMedia?.bind(navigator.mediaDevices);
     if (navigator.mediaDevices) navigator.mediaDevices.getUserMedia = (c) => { window.__mic.push('getUserMedia'); return gum ? gum(c) : Promise.reject(); };
@@ -87,14 +87,25 @@ const out = { demo: REL, shell: false, pureEnded: false, secs: 0, mic: [], navDu
     const t1 = Date.now(); await ev(`(MoHeatShell.seekTo(${nch - 1}), 1)`);
     while (Date.now() - t1 < 90000 && (await ev('MoHeatShell.chapter()')) < nch - 1) await sleep(500);
     const fwd = await ev('MoHeatShell.chapter()'), fwdS = Math.round((Date.now() - t1) / 1000);
+    await sleep(3000);
+    if (await ev(`!document.getElementById('intro').classList.contains('hidden')`)) {   // the last chapter ends the experience (a free talk's farewell): no "back" to test
+      out.seek = { chapters: nch, forward: true, forwardSecs: fwdS, back: null, endedAtLast: true }; out.pureEnded = true; out.secs = Math.round((Date.now() - t0) / 1000) + 4;
+      out.mic = (await ev('window.__mic')) || []; await shot('end'); return done(); }
     await ev('(MoHeatShell.seekTo(1), 1)'); await sleep(2500);
     const t2 = Date.now(); while (Date.now() - t2 < 60000 && (await ev('MoHeatShell.chapter()')) < 1) await sleep(500);
     out.seek = { chapters: nch, forward: fwd === nch - 1, forwardSecs: fwdS, back: (await ev('MoHeatShell.chapter()')) === 1 };
     await shot('seek');
   }
+  // stall: pure mode must keep moving — nothing of subtitles / thermal text / chapter / visible buttons changing for STALL s = stuck
+  // (2026-11-08: Demo12's ringing phone waited forever for a button the shell did not press)
+  const STALL = 75, SIG = `[document.querySelector('#subs, .subs')?.textContent || '', document.getElementById('cmd')?.textContent || '', MoHeatShell.chapter(),
+    [...document.querySelectorAll('.stage button')].filter((e) => e.offsetParent).map((e) => e.textContent.trim().slice(0, 12)).join('|')].join('¦')`;
+  let lastSig = null, since = Date.now();
   while ((Date.now() - t0) / 1000 < SECS) {
     await sleep(1000);
     if (await ev(`!document.getElementById('intro').classList.contains('hidden')`)) { out.pureEnded = true; break; }
+    const sg = await ev(SIG); if (sg !== lastSig) { lastSig = sg; since = Date.now(); }
+    else if ((Date.now() - since) / 1000 > STALL) { out.stalled = { secs: Math.round((Date.now() - t0) / 1000), state: String(sg).slice(0, 300) }; await shot('stalled'); break; }
   }
   out.secs = Math.round((Date.now() - t0) / 1000) + 4;
   out.mic = (await ev('window.__mic')) || [];

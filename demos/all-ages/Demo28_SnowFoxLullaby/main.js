@@ -113,8 +113,12 @@
     await say('h06', R_EAR, 'blow');
     S.expr.H = 'happy';
   }
+  // chapters for the shared control bar (shared/shell.js, DEMO_DESIGN_GUIDE §7.3): the numbered sections of story() below
+  let chap = 0;
+  if (window.MoHeatShell) { MoHeatShell.chapters = [{ label: 'A sleepless night', ja: '眠れない夜', en: 'A sleepless night', zh: '睡不着的夜' }, { label: 'One ear, two foxes', ja: '片耳の取り合い', en: 'One ear, two foxes', zh: '抢同一只耳朵' }, { label: 'Getting sleepy', ja: 'ねむくなって', en: 'Getting sleepy', zh: '困了' }, { label: 'Good night', ja: 'おやすみ', en: 'Good night', zh: '晚安' }]; MoHeatShell.current = () => chap; }
   async function story() {
     const my = ++run;
+    chap = 0;
     try {
       // 1 · a snowy night, you can't sleep: the hearth crackles in front, the garden doors are open to the snow
       S.view = 'room';
@@ -133,6 +137,7 @@
       if (S.first === 0) { await say('k04', K_TALK, 'happy'); await koyukiTurn(my); await homuraTurn(my); }
       else { await say('h04', H_TALK, 'smug'); await homuraTurn(my); await koyukiTurn(my); }
 
+      chap = 1;
       // 2 · both want the same ear: Homura squeezes in next to Koyuki — cool and warm on your LEFT ear at once (DUAL)
       S.view = 'share'; SND.fx.bells(-1.2, .3); SND.fx.rustle(-1.3, .2); await sleep(.5); alive(my);
       S.hAt = L_EAR2;
@@ -142,6 +147,7 @@
       await say('h08', L_EAR2, 'whisper');
       await say('kh1', { K: L_EAR, H: L_EAR2 }, 'whisper');
 
+      chap = 2;
       // 3 · getting sleepy: the embers settle; who stays beside you?
       S.view = 'both'; SND.fx.rustle(1.3, .25); SND.fx.settle(); fire?.set(.3, 2); S.fire = .8; await sleep(.6); alive(my);
       S.hAt = R_EAR;
@@ -158,6 +164,7 @@
         await say('h11b', R_EAR, 'happy');
       }
 
+      chap = 3;
       // 4 · good night: you say it — and they both answer, one at each ear (left cool, right warm)
       await action('🌙', '「おやすみ」と言う', 'Say "Good night"', 'おやすみ|おやすみなさい|good night|night|晚安');
       S.view = 'both'; SND.fx.rustle(-1.3, .2); await sleep(.5); alive(my);

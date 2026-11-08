@@ -124,17 +124,22 @@
   const setMode = (m) => { mode = m; LS.set('mode', m); document.documentElement.dataset.playmode = m; paint(); dispatchEvent(new CustomEvent('moheat:playmode', { detail: m })); };
 
   // pure mode: answer for the listener after a natural pause (the default = first button; holds are held)
-  const SEL = '.stage .choices .ch, .stage .act .act-btn, .stage #micGate button, .stage .mic-gate button, .stage .chips .chip-c, .stage .ix-btn';
+  // what pure mode presses: the standard answer markup (§7.3 3) + any element marked data-auto (a demo's own gate, e.g. a ringing
+  // phone's answer button) + the known gates in SH.AUTO (add a selector there instead of a per-demo workaround)
+  SH.AUTO = ['#answerBtn'];
+  const SEL = () => ['.stage .choices .ch', '.stage .act .act-btn', '.stage #micGate button', '.stage .mic-gate button', '.stage .chips .chip-c', '.stage .ix-btn', '.stage [data-auto]', ...SH.AUTO].join(', ');
   const seen = new WeakMap();
   const vis = (e) => e.isConnected && e.offsetParent !== null && getComputedStyle(e).visibility !== 'hidden' && !e.disabled && e.getBoundingClientRect().width > 0;
   const playing = () => { const i = document.getElementById('intro'); return !!i && i.classList.contains('hidden'); };
   if (!EXPORT) setInterval(() => {
     if (!Play.pure || !playing()) return;
     if (SH.autoplay) { if (!G.busy) { let r; try { r = SH.autoplay(G); } catch (e) { real.st(() => { throw e; }); } if (r) return; } else return; }   // the game plays itself (below)
-    const els = [...document.querySelectorAll(SEL)].filter(vis); if (!els.length) return;
-    const e = els[0], n = vnow(); if (!seen.has(e)) { seen.set(e, n); return; }
-    if (seen.get(e) < 0 || n - seen.get(e) < 2200) return;
-    seen.set(e, -1);
+    // the first visible control that was not pressed in the last 5 s (a press that did nothing — e.g. the demo was not listening
+    // yet — is repeated instead of waiting forever); it is pressed after a natural 2.2 s pause
+    const n = vnow(), els = [...document.querySelectorAll(SEL())].filter(vis).filter((x) => !(seen.get(x) < 0 && n + seen.get(x) < 5000)); if (!els.length) return;
+    const e = els[0]; if (!seen.has(e) || seen.get(e) < 0) { seen.set(e, n); return; }
+    if (n - seen.get(e) < 2200) return;
+    seen.set(e, -n);
     if (SH.autoplay) { G.run(async () => { e.classList.contains('hold') ? await G.hold(e, .5, .5, 3.4) : await G.tap(e); }); return; }   // games: the same default answer, by the visible hand
     if (e.classList.contains('hold')) {
       const r = e.getBoundingClientRect(), o = { bubbles: true, pointerId: 7, pointerType: 'mouse', isPrimary: true, clientX: r.left + r.width / 2, clientY: r.top + r.height / 2, button: 0, buttons: 1 };

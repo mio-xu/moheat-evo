@@ -81,8 +81,12 @@
   }
 
   // ---------------------------------------------------------------- the story
+  // chapters for the shared control bar (shared/shell.js, DEMO_DESIGN_GUIDE §7.3): the numbered sections of story() below
+  let chap = 0;
+  if (window.MoHeatShell) { MoHeatShell.chapters = [{ label: 'The station', ja: '雪の駅', en: 'The station', zh: '雪中车站' }, { label: 'The genkan', ja: '玄関', en: 'The genkan', zh: '玄关' }, { label: 'The kotatsu', ja: 'こたつ', en: 'The kotatsu', zh: '被炉' }, { label: 'The snowy garden', ja: '雪の庭', en: 'The snowy garden', zh: '雪中庭院' }, { label: 'At the pillow', ja: 'おふとん', en: 'At the pillow', zh: '枕边' }]; MoHeatShell.current = () => chap; }
   async function story() {
     const my = ++run;
+    chap = 0;
     try {
       // 1 · the snowy little station at dusk: the train leaves behind you, the wind blows in from the open left side, grandpa waves
       S.view = 'station';
@@ -97,6 +101,7 @@
       await say(hi ? 'p03b' : 'p03a', { az: .22, dist: .9 });
       await say('p04', { az: .3, dist: 1 });
 
+      chap = 1;
       // 2 · the genkan: the door slides open, warm air from the house, grandma's hug at your left ear
       SND.fx.steps(.1, .1, 6, .4, 1, 1, true); S.outdoor = .6; wind?.set(.18, 1.5); await sleep(1.6); alive(my);
       S.view = 'genkan'; SND.fx.door(0, 1.4); S.door = 1; S.wind = .5; await sleep(.9); alive(my);
@@ -108,6 +113,7 @@
       S.hug = 0;
       await say('g03', { az: -.35, dist: .6 });
 
+      chap = 2;
       // 3 · the kotatsu: the kerosene stove on your right, a steaming bowl of oshiruko held out to you
       SND.fx.door(0, 2.5); S.door = 0; S.outdoor = 0; S.wind = 0; wind?.set(0, 1); snow?.set(0, 1); await sleep(.6); alive(my);
       S.view = 'kotatsu'; const stove = SND.loop('stove'); stove?.set(.3, 1.5); S.stove = 1; await sleep(.8); alive(my);
@@ -120,6 +126,7 @@
       if (S.treat === 0) await say('p06a', { az: .35, dist: .8 }); else await say('g05b', { az: -.35, dist: .9 });
       await say('g06', { az: -.35, dist: .9 });
 
+      chap = 3;
       // 4 · next morning in the snowy garden: grandpa's snowball whizzes past your right ear; you throw one back
       S.view = 'yard'; S.stove = 0; S.steam = 0; stove?.set(0, 1); S.outdoor = 1; S.wind = .5; wind?.at(-.8, 5); wind?.set(.15, 1.5); snow?.set(.2, 1.5);
       await sleep(1.2); alive(my);
@@ -132,6 +139,7 @@
       await say('p10', { az: .45, dist: 2 });
       await say('g07', { az: -.7, dist: 6 });
 
+      chap = 4;
       // 5 · night: grandma's story at your pillow (left), grandpa snoring next door (right); the quilt up to your ears
       S.view = 'futon'; S.outdoor = 0; S.wind = 0; wind?.set(0, 1.5); snow?.set(0, 1.5); const snore = SND.loop('snore'); snore?.set(.35, 2);
       await sleep(1.6); alive(my);

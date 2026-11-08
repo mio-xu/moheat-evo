@@ -35,7 +35,11 @@ def sha(p):
 def inputs(cat, d):
     """what a finished cover depends on: the data, the picture, the template (a template change = every cover is stale)"""
     dd = os.path.join(REPO, 'demos', cat, d)
-    return {'cover.json': sha(os.path.join(dd, 'cover.json')), 'art.webp': sha(os.path.join(dd, 'media', 'cover', 'art.webp')),
+    try: cj = json.load(open(os.path.join(dd, 'cover.json'), encoding='utf-8'))
+    except (OSError, ValueError): cj = None
+    import hashlib   # only what is baked into the picture (options / chapters are live, they never make a cover stale)
+    seen = None if cj is None else hashlib.sha1(json.dumps({k: cj.get(k) for k in ('title', 'tagline', 'chips', 'series', 'tone')}, sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:12]
+    return {'cover.json': seen, 'art.webp': sha(os.path.join(dd, 'media', 'cover', 'art.webp')),
             'cover_tpl.html': sha(os.path.join(REPO, 'tools', 'web', 'cover_tpl.html'))}
 
 
@@ -87,7 +91,7 @@ def main():
                     t = res['demos'].get(d, {}).get(f'{l}.{lay}', {})
                     if t.get('err') or not t.get('fit'): bad.append(f'{d} {l} {lay}: {t.get("err") or "copy ends at %scqw > %s" % (t.get("end"), t.get("endMax"))}')
                     png = os.path.join(tmp, f'{d}.{l}.{lay}.png')
-                    if not os.path.exists(png): continue
+                    if not os.path.exists(png): bad.append(f'{d} {l} {lay}: not rendered (browser timeout?) — run covers.py {d} again'); continue
                     im = Image.open(png).convert('RGB')
                     if lay == 'wide':
                         im = im.resize((1920, 1080), Image.LANCZOS)
