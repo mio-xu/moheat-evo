@@ -7,6 +7,13 @@
 
 ---
 
+## 2026-11-08（夜）· 展示模式 Kiosk（TASKS #54，agent `kiosk`，统筹分派）
+- **已提交（未推送，统筹推）**：8772c46 展示模式全部代码；下一个提交 = 37 个页面的 `nav.js?v=` 内容哈希 + qrcode 许可头；再下一个 = 文档（本条、`docs/kiosk.md`、`docs/kiosk_staff_card.md`、`docs/kiosk/REQUIREMENTS.md` §9、指南 §7.4 + §11.1 两条、TASKS #54、tools/README）。
+- **做了什么**：`kiosk/`（`?kiosk=1` 进入，对这台浏览器一直有效）= 欢迎（三语、三步图示、推荐 3 个 + 全部号码、角落二维码、卫生标识）→ 2 秒片头（冷→暖扫过两耳）→ 30 秒引导（`demos/shared/thermintro.js`：戴耳机 L/R、音量、左暖、右凉、冷热切换、同耳 DUAL、强度；不靠声音也能看懂；`kiosk/intro.html` 是非展示模式版）→ Demo（`demos/shared/kiosk.js`，只在展示模式由 `nav.js` 加载：默认互动、精华版 80 秒、✕ 结束、音量滑块、强度上限、自动连设备、连续 120 秒停 10 秒、断开大提示、空闲重置）→ 体验卡（一屏一题：星级 → 想买吗 → 价位 → 场景 ≤ 2 → 最喜欢的瞬间；15 秒自动关闭）→ 重置 → 空闲轮播。工作人员面板（左上角 5 下 + PIN `0000`）：设置、统计（今天 / 累计 最多的 Demo、购买意愿 / 价位 / 场景、留言）、导出 CSV / JSON、日报 `report.html`、排队屏 `queue.html`（屏幕 2，BroadcastChannel 同步：大二维码、画面镜像、两耳冷热大图、正在体验、推荐 3 个）、A4 海报 `poster.html`、离线缓存（根目录 `kiosk-sw.js` + `kiosk/precache.json`）、退出。手机选号 `pick.html?o=<Demo 编号>`（不用服务器，号码和展示机一致）、带走页 `summary.html`。
+- **测试**：`node tools/web/check_kiosk.js`（完整一轮：引导冷热指令、Demo28 精华版 76 s 后自动到体验卡、体验卡 3 s 答完、统计 / CSV、轮播、Demo 封面空闲回欢迎、PIN、面板、退出）1440×900 全过；`--quick` 在 1024×768（平板）全过。排队屏 1920×1080、手机选号 390×844 截图检查过。截图在 scratchpad `kiosk/shots/`。
+- **没做 / 下一步**：① 真机真设备走一遍（Web Serial 自动连接、断开提示、电量提示要固件回 `BAT nn` 才有）；② 精华版的起点现在是「本机学到的最强章节 → 第 2 章」，可以给重点 Demo 在 `kiosk.js` 的 `SHOWCUT` 里写死起点；③ 画面镜像只在舞台是 canvas / video 时有实时帧，DOM 分层的 Demo 显示封面；④ 统一外壳改成底部控制条后，`MoHeatShell.setVolume` 出来时展示模式自动改用它（已留钩子），届时复测；⑤ service worker 要和 UI 重做 agent 的「封面优先加载」协调（目前 `kiosk-sw.js` 只在面板点「离线保存」后注册）；⑥ 新 Demo 要在 `kiosk/pitches.js` 加一行并重跑 `python3 tools/web/kiosk_precache.py`。
+- **问题**：shell 暂停时冻结 `Date.now` / `setTimeout`，空闲重置跟着冻住 → 用真实时间（指南 §11.1）；CSS `font: … inherit` 整条无效 → `var(--ff)`；两次「行尾注释吞掉后面的代码」（python 拼接时把语句接在 `//` 注释后面）→ 改完跑一次完整测试才发现，以后用 `node --check` 之外再跑 `check_kiosk.js --quick`。
+
 ## 2026-11-08（夜）· 统一外壳第 2 段：游戏自动演示、进度条总开关、菜单排序、封面切边（ui-shell 2，统筹分派）
 - **已提交（未推送，统筹推）**：a8ecf26 进度条总开关 `MoHeatShell.BAR_ENABLED = false`（统一进度条 + 影片自带播放条全站隐藏，`?bar=1` 测试时显示；check_shell 用 `?bar=1`）+ 「手」（`MoHeatShell.hand`：游戏纯聆听时可见的手指，真实 pointer / mouse 事件，`G.tap / hold / drag / move / wait(secs, until)`）；ed830b7 + 0df3c67 六个游戏自动演示（Demo10 / 11 / 13 / 15 / 16 / 26 的 `MoHeatShell.autoplay` 钩子）+ **默认模式改为「互动」**（纯聆听为可选，记住的选择优先）；9562449 + a4c8aaa Demo22 封面（整张画 outpaint，无切边，统筹已认可）；7f4a9a7 菜单自动排序（nav.js `series / part / cast / featured / new` + `tools/qa/thermal_score.py` + `tools/web/check_nav.py`）；9b88584 对谈 kit 纯聆听自动回答（talk 页面还没加载 shell.js，暂不生效）。
 - **测试**：`node tools/web/check_shell.js <demo>`：Demo10 / 15 / 16 / 26 全过（纯聆听零输入走完 101–177 s、无麦克风、暂停、章节前后跳）；Demo11 / 13 走完、无麦克风、暂停 OK，各有一次 seek 腿不稳（Demo11 后退偶尔超过、Demo13 前进 ×16 时 🎤 长按已加 until，未复测）。盘点表 `scratchpad/ui-shell/shell2_invA/B.jsonl` + 截图 `shell2_inv/`（33 个 Demo，开关加入前）。

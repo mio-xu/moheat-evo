@@ -617,6 +617,17 @@ main.layout
 
 **6. 新 Demo 的起点**：游戏类复制 `for-women/Demo21_JinLounge`（或同类最近的 Demo）的 `index.html` 骨架，影片类复制 `nobunaga-suntory/Demo05_GifuCastle`；只改内容（标题、角色、卡片里的说明），不动结构和 class。
 
+### 7.4 展示模式（Kiosk，用户 2026-11-08，TASKS #54；要求全文 `docs/kiosk/REQUIREMENTS.md`，工作人员说明 `docs/kiosk.md` + A4 速查卡 `docs/kiosk_staff_card.md`）
+展会用**一台电脑、一副耳机**，一位接一位。全部是共用代码，Demo 不写任何代码：
+- **入口**：任意页面 `?kiosk=1`（对这台浏览器一直有效，存 localStorage `moheat.kiosk`）→ `kiosk/`；退出只在工作人员面板（左上角连点 5 次 + PIN，初始 `0000`）。
+- **文件**：`kiosk/index.html` + `app.js` + `kiosk.css`（欢迎 / 引导 / 菜单 / 体验卡 / 轮播 / 面板）、`demos/shared/kiosk.js`（存储、统计、每位访客的重置；在 Demo 页上：隐藏切换器和使用引导、✕ 结束、音量滑块、强度上限、自动连接设备、精华版、空闲重置、冷热间歇、断开大提示、向排队屏发状态）——只在展示模式下由 `nav.js` 加载；`demos/shared/thermintro.js`（30 秒冷热入门，展示模式和 `kiosk/intro.html` 共用）；`kiosk/queue.html`（屏幕 2：排队屏）、`pick.html`（排队时手机选号）、`poster.html`（A4 二维码海报）、`summary.html`（体验卡二维码的带走页）、`report.html`（每日报表）、`pitches.js`（每个 Demo 一句话 + 冷热看点，**新 Demo 加一行**）；根目录 `kiosk-sw.js`（离线缓存，只有面板「Save all demos for offline」会注册）+ `kiosk/precache.json`（`python3 tools/web/kiosk_precache.py`，加 / 改 Demo 后重跑）。
+- **访客流程**：欢迎（三语、三步图示、推荐 3 个 + 全部号码、角落二维码、可选卫生标识）→ 2 秒片头（标志 + 冷→暖扫过两耳）→ 引导（戴耳机 L/R → 音量 → 左暖 → 右凉 → 冷热快速切换 → 同耳 DUAL → 强度；**不靠声音也看得懂**：大图示 + 一行字 + 进度点，随时可跳过）→ Demo（**默认互动**，纯享可选；**默认精华版 80 秒**：从冷热最强的章节开始——`SHOWCUT` 数据 → 本机学到的每章冷热 → 第 2 章）→ 体验卡（一屏一题、点了就下一题：星级 → 想买吗 → 价位（只在 有 / 也许 后）→ 使用场景（最多 2 个）→ 最喜欢的瞬间；「写一句话」藏在小链接里；跳过 / 全部跳过；15 秒无操作自动关闭；感谢画面 1.6 秒）→ 重置。
+- **重置**（每位新访客）：设备 stop、语言回到面板默认、强度回到起始值（≤ 上限）、模式回到互动、音量 70、字幕 M。空闲：欢迎 / 菜单 / 封面 / 暂停 `idle` 秒（默认 60）；互动模式播放中 3 × idle 无输入；体验卡 15 秒；欢迎画面空闲 → 轮播（冷热关闭）。计时用真实时间（shell 暂停时冻结 `Date.now` / `setTimeout`，`kiosk.js` 用隐藏 iframe 的计时器）。
+- **统计**：只存本机 localStorage `moheat.kiosk.stats`，按天：访客、每个 Demo 开始 / 看完 / 纯享 / 互动、星级、最喜欢的瞬间、购买意愿、价位、场景、交叉表（意愿 × 价位、场景 × 意愿）、留言；面板显示「今天 / 累计 体验最多的 Demo」，导出 CSV / 留言 CSV / JSON / 每日报表。
+- **安全**：每位新访客从温和强度开始；强度上限（默认 80 %）；连续输出 120 秒自动停 10 秒；设备断开 / 电量低（固件回 `BAT nn` 时）屏幕大字提示；每次重置都发 stop。
+- **和统一外壳**：用 shell 的钩子（`MoHeatShell.pause / seekTo / chapter`、`MoHeatPlay.mode`）；shell 有 `setVolume` 时用它的音量控件，不再自己加。
+- **检查**：`node tools/web/check_kiosk.js [--quick] [--size 1024x768] [--shots DIR]`（自己的 http.server + 无头 Chrome：欢迎 → 引导（检查冷热指令）→ Demo → 精华版结束 → 体验卡（< 10 秒）→ 重置 → 统计 / CSV → 轮播 → Demo 封面空闲回到欢迎 → PIN → 面板 → 退出）。
+
 ### 7.2 共用文件的版本号
 
 - 改了 `demos/shared/` 里的文件（`series.css`、`nav.js` 等）或官网的 `styles.css`，要把**所有页面**引用它的 `?v=` 数字一起加 1，否则浏览器（包括 GitHub Pages 的访客）会继续用缓存里的旧文件。
@@ -783,6 +794,8 @@ main.layout
 - **共用临时目录文件重名**（两个 agent 的 `commit.sh` 互相覆盖，导致错提交）、**`--hunks` 带走别人相邻改动**：→ 临时文件一律加 agent 前缀；只提交自己的行用 `commit_mine.py --match / --lines` 精确选择，先 `--dry-run`。
 - **重做后"看起来不会动"**（迅：远景小脸只有很小的嘴和 6 px 呼吸）：→ 远景动作幅度检查（check_art far-motion）；视频换成静帧时，统筹要亲自看远景是否"活着"。
 - **只看报告就批准**：agent 的报告可能乐观。→ 关键交付（上线、合并、封面）统筹至少打开一张实图核对，再推送。
+- **展示模式的空闲重置在暂停时不触发**（kiosk，2026-11-08）：shell.js 暂停时冻结 `Date.now` / `setTimeout`（Demo 的时钟），共用代码里用它们计时的"真实时间"功能（空闲、冷热间歇）也一起冻住了。→ 需要真实时间的共用代码用 `+new Date()` 和隐藏 iframe 的 `setTimeout`（`kiosk.js` 的 `RN / RT`）；要跟着故事走的（精华版倒计时）才用页面的计时器。`check_kiosk.js` 测「封面空闲回到欢迎画面」。
+- **CSS `font: 700 20px/1 inherit` 整条无效**（kiosk 页面字体全部掉回默认小字）：`inherit` 不能当 font 简写里的字体名。→ 用 `var(--ff)` 字体变量；截图检查标题字号。另：滚动区域里的 grid（`flex: 1; min-height: 0; overflow: auto`）行会被压扁成几 px → `grid-auto-rows: max-content`。
 
 ## 12. 资源清理与文件结构
 
