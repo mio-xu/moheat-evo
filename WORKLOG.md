@@ -7,6 +7,30 @@
 
 ---
 
+## 2026-11-08 · 引擎 P0 + P1：Demo 之间零依赖（方案 B）· 后台 agent
+
+**做了什么**
+- P0 工具：`tools/qa/check_deps.py`（全站依赖矩阵，`--fail` 给 pre-commit 用）、`tools/qa/trace_demo.js`（固定种子录字幕 / `#cmd` / 按钮 / 文件 / 截图，`--diff` 对比，`--root` 对比镜像目录）；`check_demo.py` 的 refs 用同一份扫描，现在是 FAIL 级，`qa.json` 的 `allow_foreign` 已取消。
+- P1 搬动（新增 `demos/<品类>/_kit/`，各有 README）：`for-women/_kit/base.css`（Demo20）；`healing/_kit/phone.css`（Demo15 / 16）、`healing/_kit/familycall/`（Demo15 / 16 整套，去掉 `<base>`）、`healing/_kit/naomi/`（Demo11 / 13 / 26）；`all-ages/_kit/snowfox/art/`（Demo01 / 28）；`nobunaga-suntory/_kit/art/`（原 Demo09 的 art）、`_kit/places/`（4 张共用背景）、`_kit/talk/`（Demo23 / 41 / 42 的代码、文本、13 MB 配音，去掉 `<base>`）。
+- 删掉 Demo24 指向 Demo12 的 `#nextBtn`；Demo15「第 2 话」的地址改从 `nav.js` 的 › 按钮读取。
+- 规则改写：CLAUDE.md、AGENTS.md、指南第 5 条 / §10 / §12.1 / §14，§11.1 加两条教训。状态表和待办：`docs/engine/MIGRATION.md`。
+
+**现在的状态**
+- `python3 tools/qa/check_deps.py --fail`：0 违规，34 / 34 个 Demo 文件夹。构建脚本里还有 56 处 B 引用（P4）。
+- 17 个改过的页面 `check_mobile` 7 种尺寸全过；trace 前后一致，例外见下；`tools/talk/server.py` 的 3 条 live 路由和全部脚本 / 样式 200。
+
+**下一步**
+- 封面会话：`demos/healing/_kit/familycall/main.js`、`demos/nobunaga-suntory/_kit/talk/main.js` 上的 drawCover 改动还没提交，要在新路径提交。
+- `live/` 按 Demo 拆分：等对话服务器会话提交 `tools/talk/`（路由在它的 `demos.json`）。
+- P2：引擎核心 + 试点（Demo31 或 Demo25）；教 `tools/l10n/check_missing.js` 读 kit（薄页面现在扫不到内容）。
+- pre-commit 钩子只是提案，没有安装（文本在 MIGRATION.md）。
+
+**遇到的问题**
+- trace 没能完整覆盖的：Demo24 前后对比时机器负载 200–550，结果作废，只有改动后的一次运行（0 错误）加代码核对（`nextBtn` 已无引用）；Demo15 的 trace 停在「ヒーター」按钮，只覆盖到开场（同一份代码由 Demo16 的 trace 覆盖）；Demo28 和对话类的随机分支两次运行会不同。
+- Xcode 许可证未同意时 `/usr/bin/git`、`python3` 不能用，改用 `/Library/Developer/CommandLineTools/usr/bin/` 下的。
+
+---
+
 ## 2026-11-08 · 手机上的拖动 / 抚摸手势修复（shared/gesture.js）· 后台 agent
 
 **用户原话**：手机 / 触屏上很难做抚摸动作，网页会跟着手指移动。
