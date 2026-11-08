@@ -485,6 +485,7 @@ if probe:
         runs = [('', res)]
         if A.full:
             ra = take(probe_alt or start_probe(['--alt', '--no-mobile']), PROBE_WAIT)   # sequential unless --parallel started it already
+            if not ra: ra = take(start_probe(['--alt', '--no-mobile']), PROBE_WAIT)   # once more, alone (Demo43 2026-11-09: one timeout under machine load)
             if ra: runs.append(('alt ', ra))
             else: row('G6', 'alt runtime', 'FAIL', 'the alt-branch probe did not answer')
         for tag, r in runs:
