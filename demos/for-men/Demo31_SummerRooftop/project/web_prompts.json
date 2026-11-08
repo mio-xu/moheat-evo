@@ -150,5 +150,10 @@
   "ref": "nagisa_laugh",
   "mask": "1605,632,92,74",
   "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: CLOSED in a small embarrassed pout (lips pressed together, no teeth, no opening, the corners slightly down), same lip colour, skin tone, blush and lighting; jaw and chin line exactly as they are. Do not move, zoom or crop the picture."
+ },
+ "nagisa_laugh_blink": {
+  "ref": "nagisa_laugh",
+  "prompt": "Edit image 1: only BOTH eyes change — they are fully, gently closed (a relaxed blink), no iris, no pupil, no white of the eye visible at all: the upper lid comes all the way down, the closed lid is a soft curved lash line with the same lash colour and thickness as the open eye.\nThe eyelid skin has exactly the same skin colour, light and shading as the face around it (no grey patch, no ghost of the iris). Eyebrows, hair over the eyes (the red-brown bangs; she is laughing, so the closed eyes are happy curved lids), glasses and everything else stay pixel-identical. Do not move, scale or redraw anything outside the eyes.",
+  "mask": "1490,512,62,40;1690,452,62,40"
  }
 }

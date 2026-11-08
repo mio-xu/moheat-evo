@@ -93,7 +93,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_popsicle.webp?v=c9ed89a4",
+    "src": "art/char_popsicle.webp?v=f5ca3301",
     "w": 1335,
     "h": 1440,
     "x": 0.56,
@@ -629,6 +629,16 @@ window.MOHEAT_LAYERS = {
      ],
      "kind": "mouth_lv",
      "level": 3
+    },
+    {
+     "src": "art/laugh_eyes.webp?v=631b5d6f",
+     "rect": [
+      384,
+      385,
+      374,
+      176
+     ],
+     "kind": "eyes"
     }
    ]
   }

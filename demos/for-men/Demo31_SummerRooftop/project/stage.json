@@ -100,7 +100,22 @@
     "drop": 0.42,
     "dark": 12
    },
-   "mouth": "lp"
+   "mouth": "lp",
+   "blink": "nagisa_laugh_blink",
+   "regions_eyes": [
+    [
+     1490,
+     512,
+     62,
+     40
+    ],
+    [
+     1690,
+     452,
+     62,
+     40
+    ]
+   ]
   },
   "sparkler": {
    "src": "nagisa_sparkler_flat_ext",

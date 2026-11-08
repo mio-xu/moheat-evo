@@ -683,5 +683,28 @@
    2560,
    1440
   ]
+ },
+ "nagisa_laugh_blink": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 129,
+  "usage": {
+   "input_tokens": 1659,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 151
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9029
+  },
+  "out": [
+   2560,
+   1440
+  ]
  }
 }
