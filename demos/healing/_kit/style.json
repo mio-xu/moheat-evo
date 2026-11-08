@@ -20,7 +20,8 @@
    "demos": [
     "Demo11_Naomi",
     "Demo13_NaomiCam",
-    "Demo26_BecomeNaomi"
+    "Demo26_BecomeNaomi",
+    "Demo49_NaomiSummer"
    ],
    "anchor": [
     "Demo11_Naomi"
@@ -36,23 +37,23 @@
     "demos/healing/Demo11_Naomi/media/cover.jpg"
    ],
    "anchor_stats": {
-    "sat": 0.2628,
-    "light": 0.6129,
-    "contrast": 0.1429,
-    "lines": 0.0652,
+    "sat": 0.24,
+    "light": 0.4495,
+    "contrast": 0.2475,
+    "lines": 0.0655,
     "hue": [
-     0.7298,
-     0.1068,
+     0.5795,
+     0.0201,
      0.0,
      0.0,
      0.0,
      0.0,
      0.0,
-     0.0099,
+     0.0,
      0.0001,
-     0.0002,
-     0.0169,
-     0.1363
+     0.0006,
+     0.0354,
+     0.3643
     ]
    }
   },
@@ -61,7 +62,8 @@
    "demos": [
     "Demo15_FamilyCall",
     "Demo16_FamilyCall2",
-    "Demo29_FamilyVisit"
+    "Demo29_FamilyVisit",
+    "Demo50_WatermelonSummer"
    ],
    "anchor": [
     "Demo15_FamilyCall"
@@ -77,23 +79,23 @@
     "demos/healing/Demo15_FamilyCall/media/cover.jpg"
    ],
    "anchor_stats": {
-    "sat": 0.5489,
-    "light": 0.4132,
-    "contrast": 0.2038,
-    "lines": 0.0963,
+    "sat": 0.5155,
+    "light": 0.3348,
+    "contrast": 0.2244,
+    "lines": 0.0877,
     "hue": [
-     0.8968,
-     0.0577,
+     0.9094,
+     0.0404,
      0.0,
      0.0,
      0.0,
      0.0,
      0.0,
-     0.0357,
-     0.0001,
+     0.0353,
+     0.0008,
      0.0,
-     0.0,
-     0.0096
+     0.0002,
+     0.0138
     ]
    }
   }

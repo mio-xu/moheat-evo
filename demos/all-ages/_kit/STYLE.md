@@ -8,5 +8,5 @@ Fonts: Inter, Noto Sans JP, Zen Maru Gothic, JetBrains Mono, Shippori Mincho B Â
 - **Look (prompt anchor)**: cute Japanese 2D, pastel cel shading, chibi idols / fairies, 2â€“3 heads tall, big eyes; NOT ukiyo-e / gold leaf
 - **Colours**: bright saturated pink #ff7eb6, sky blue #6ec6ff, orange #ffa94d, dreamy night navy #1d2350
 - **Music / SFX**: music-box / bells, soft synth pads, playful foley
-- **Demos**: Demo01_SnowFoxfire, Demo02_FanMeeting, Demo03_ShiningSmileConcert, Demo04_SeasonsExpress, Demo10_CaveSpring, Demo28_SnowFoxLullaby
+- **Demos**: Demo01_SnowFoxfire, Demo02_FanMeeting, Demo03_ShiningSmileConcert, Demo04_SeasonsExpress, Demo10_CaveSpring, Demo28_SnowFoxLullaby, Demo47_GhostLantern, Demo48_AnimalOnsen
 - **Anchor images**: `demos/all-ages/Demo01_SnowFoxfire/media/cover.jpg`, `demos/all-ages/Demo03_ShiningSmileConcert/media/cover.jpg`, `demos/all-ages/Demo03_ShiningSmileConcert/media/art/concert_stage_split.webp`, `demos/all-ages/Demo10_CaveSpring/media/cover.jpg`, `demos/all-ages/Demo10_CaveSpring/media/art/bg_hut_fire.webp`

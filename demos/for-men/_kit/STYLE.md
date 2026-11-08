@@ -8,7 +8,7 @@ Fonts: Inter, Shippori Mincho B, Noto Sans JP, Zen Maru Gothic, JetBrains Mono Â
 - **Look (prompt anchor)**: soft cel, hand-drawn, flat colour + one soft-edged shadow, dark-lavender lines; NO gloss, NO bloom; 7-heads adult women
 - **Colours**: Mint mint-green #9fe3cf, Cocoa milk-tea pink #e8b4a8, Hinata warm orange #ffa24c, Luna deep blue-black #1b1f3b, night room #14162a
 - **Music / SFX**: lo-fi / city-pop beds, close ASMR foley, room tone
-- **Demos**: Demo14_MintStream, Demo17_CocoaStream, Demo18_HinataStream, Demo19_LunaStream, Demo43_BlizzardInn
+- **Demos**: Demo14_MintStream, Demo17_CocoaStream, Demo18_HinataStream, Demo19_LunaStream, Demo43_BlizzardInn, Demo44_MagicAcademy
 - **Anchor images**: `demos/for-men/Demo14_MintStream/media/cover.jpg`, `demos/for-men/Demo14_MintStream/media/art/mint_greet.jpg`, `demos/for-men/Demo17_CocoaStream/media/cover.jpg`, `demos/for-men/Demo17_CocoaStream/media/art/cocoa_welcome.jpg`, `demos/for-men/Demo19_LunaStream/media/cover.jpg`, `demos/for-men/Demo19_LunaStream/media/art/luna_counter.jpg`
 
 ## date

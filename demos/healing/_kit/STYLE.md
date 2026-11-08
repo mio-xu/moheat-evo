@@ -8,7 +8,7 @@ Fonts: Inter, Noto Sans JP, Zen Maru Gothic, JetBrains Mono, Shippori Mincho B Â
 - **Look (prompt anchor)**: high-finish mobile-game / visual-novel illustration, healing mood; a realistic cat (four legs, not anthropomorphic)
 - **Colours**: afternoon warm light #ffd9a0, glowing pastels #f7c6d9, soft cream #fff4e0
 - **Music / SFX**: purring, breathing, small movement foley (Naomi rarely meows), soft piano
-- **Demos**: Demo11_Naomi, Demo13_NaomiCam, Demo26_BecomeNaomi
+- **Demos**: Demo11_Naomi, Demo13_NaomiCam, Demo26_BecomeNaomi, Demo49_NaomiSummer
 - **Anchor images**: `demos/healing/Demo11_Naomi/media/cover.jpg`
 
 ## family
@@ -16,5 +16,5 @@ Fonts: Inter, Noto Sans JP, Zen Maru Gothic, JetBrains Mono, Shippori Mincho B Â
 - **Look (prompt anchor)**: soft cel, hand-drawn feel, flat colour + one soft-edged shadow, warm brown lines; 5 heads tall, round and cute (not chibi)
 - **Colours**: warm orange interior #f2a65a, snow-blue window #a9c8e8, wood brown #8a5a3c
 - **Music / SFX**: kettle, kotatsu, snow outside, gentle acoustic guitar
-- **Demos**: Demo15_FamilyCall, Demo16_FamilyCall2, Demo29_FamilyVisit
+- **Demos**: Demo15_FamilyCall, Demo16_FamilyCall2, Demo29_FamilyVisit, Demo50_WatermelonSummer
 - **Anchor images**: `demos/healing/Demo15_FamilyCall/media/cover.jpg`

@@ -23,7 +23,9 @@
     "Demo03_ShiningSmileConcert",
     "Demo04_SeasonsExpress",
     "Demo10_CaveSpring",
-    "Demo28_SnowFoxLullaby"
+    "Demo28_SnowFoxLullaby",
+    "Demo47_GhostLantern",
+    "Demo48_AnimalOnsen"
    ],
    "anchor": [
     "Demo01_SnowFoxfire",
@@ -46,23 +48,23 @@
     "demos/all-ages/Demo10_CaveSpring/media/art/bg_hut_fire.webp"
    ],
    "anchor_stats": {
-    "sat": 0.4942,
-    "light": 0.4064,
+    "sat": 0.5543,
+    "light": 0.3432,
     "contrast": 0.2113,
-    "lines": 0.1242,
+    "lines": 0.1646,
     "hue": [
-     0.2149,
-     0.0168,
+     0.2118,
+     0.0252,
      0.0,
      0.0,
      0.0,
      0.0,
-     0.0212,
-     0.2994,
-     0.2076,
-     0.0506,
-     0.0712,
-     0.1181
+     0.0484,
+     0.3284,
+     0.1684,
+     0.0362,
+     0.0782,
+     0.1034
     ]
    }
   }

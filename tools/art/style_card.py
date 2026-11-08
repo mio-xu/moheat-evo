@@ -25,22 +25,22 @@ TOL = {'sat': 0.2, 'contrast': 0.12, 'lines': 1.0}   # lines: |log2 ratio| (1.0 
 
 CARDS = {
  'all-ages': {'series': [
-   {'id': 'fairy', 'demos': ['Demo01_SnowFoxfire', 'Demo02_FanMeeting', 'Demo03_ShiningSmileConcert', 'Demo04_SeasonsExpress', 'Demo10_CaveSpring', 'Demo28_SnowFoxLullaby'],
+   {'id': 'fairy', 'demos': ['Demo01_SnowFoxfire', 'Demo02_FanMeeting', 'Demo03_ShiningSmileConcert', 'Demo04_SeasonsExpress', 'Demo10_CaveSpring', 'Demo28_SnowFoxLullaby', 'Demo47_GhostLantern', 'Demo48_AnimalOnsen'],
     'anchor': ['Demo01_SnowFoxfire', 'Demo03_ShiningSmileConcert', 'Demo10_CaveSpring'],
     'look': 'cute Japanese 2D, pastel cel shading, chibi idols / fairies, 2–3 heads tall, big eyes; NOT ukiyo-e / gold leaf',
     'colours': ['bright saturated pink #ff7eb6', 'sky blue #6ec6ff', 'orange #ffa94d', 'dreamy night navy #1d2350'],
     'sound': 'music-box / bells, soft synth pads, playful foley'}]},
  'healing': {'series': [
-   {'id': 'cat', 'demos': ['Demo11_Naomi', 'Demo13_NaomiCam', 'Demo26_BecomeNaomi'], 'anchor': ['Demo11_Naomi'],
+   {'id': 'cat', 'demos': ['Demo11_Naomi', 'Demo13_NaomiCam', 'Demo26_BecomeNaomi', 'Demo49_NaomiSummer'], 'anchor': ['Demo11_Naomi'],
     'look': 'high-finish mobile-game / visual-novel illustration, healing mood; a realistic cat (four legs, not anthropomorphic)',
     'colours': ['afternoon warm light #ffd9a0', 'glowing pastels #f7c6d9', 'soft cream #fff4e0'],
     'sound': 'purring, breathing, small movement foley (Naomi rarely meows), soft piano'},
-   {'id': 'family', 'demos': ['Demo15_FamilyCall', 'Demo16_FamilyCall2', 'Demo29_FamilyVisit'], 'anchor': ['Demo15_FamilyCall'],
+   {'id': 'family', 'demos': ['Demo15_FamilyCall', 'Demo16_FamilyCall2', 'Demo29_FamilyVisit', 'Demo50_WatermelonSummer'], 'anchor': ['Demo15_FamilyCall'],
     'look': 'soft cel, hand-drawn feel, flat colour + one soft-edged shadow, warm brown lines; 5 heads tall, round and cute (not chibi)',
     'colours': ['warm orange interior #f2a65a', 'snow-blue window #a9c8e8', 'wood brown #8a5a3c'],
     'sound': 'kettle, kotatsu, snow outside, gentle acoustic guitar'}]},
  'for-men': {'series': [
-   {'id': 'streamer', 'demos': ['Demo14_MintStream', 'Demo17_CocoaStream', 'Demo18_HinataStream', 'Demo19_LunaStream', 'Demo43_BlizzardInn'],
+   {'id': 'streamer', 'demos': ['Demo14_MintStream', 'Demo17_CocoaStream', 'Demo18_HinataStream', 'Demo19_LunaStream', 'Demo43_BlizzardInn', 'Demo44_MagicAcademy'],
     'anchor': ['Demo14_MintStream', 'Demo17_CocoaStream', 'Demo19_LunaStream'],
     'look': 'soft cel, hand-drawn, flat colour + one soft-edged shadow, dark-lavender lines; NO gloss, NO bloom; 7-heads adult women',
     'colours': ['Mint mint-green #9fe3cf', 'Cocoa milk-tea pink #e8b4a8', 'Hinata warm orange #ffa24c', 'Luna deep blue-black #1b1f3b', 'night room #14162a'],
@@ -50,7 +50,7 @@ CARDS = {
     'colours': ['soda blue #5ab4e6', 'sparkler orange #ff9a3c', 'winter shrine red #c8323c', 'night navy #18203a'],
     'sound': 'festival / seasonal ambience (geta, wind chime, fireworks with delay), light acoustic'}]},
  'for-women': {'series': [
-   {'id': 'idol', 'demos': ['Demo12_LateCall', 'Demo20_HinataHandshake', 'Demo21_JinLounge', 'Demo22_ShionRain', 'Demo24_GakuCamp', 'Demo30_SakuFestival'],
+   {'id': 'idol', 'demos': ['Demo12_LateCall', 'Demo20_HinataHandshake', 'Demo21_JinLounge', 'Demo22_ShionRain', 'Demo24_GakuCamp', 'Demo30_SakuFestival', 'Demo45_CelestialPalace', 'Demo46_DragonContract'],
     'anchor': ['Demo12_LateCall', 'Demo22_ShionRain', 'Demo24_GakuCamp'],
     'look': 'style_3 soft cel: thin coloured lines, soft cel shadows, otome-game card finish; 7–7.5-heads handsome men, clear jawline (idol faces, no stubble)',
     'colours': ['Ren snowy blue-violet #6f6fc8', 'Hinata pink / cream #ffc2d4', 'Jin wine red + black #7a1630', 'Shion lavender + amber #b49ad8', 'Gaku campfire amber + pine #e0902f', 'night bokeh #121426'],
