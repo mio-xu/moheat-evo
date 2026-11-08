@@ -462,9 +462,9 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 | 新文件夹 | 原 Demo | 状态 |
 |---|---|---|
 | （已并回 Demo20_HinataHandshake） | Demo20 陽向 | ✅ 完成：分层版接管 Demo20，旧版备份在 `~/Desktop/MoHeat Evo 备份/for-women/Demo20_HinataHandshake_20261108-1220/` |
-| Demo33_RenNightCall | Demo12 蓮 | 提示词 / 分层表 / 页面 / stage.json 已准备，未出图（约 350，8 次上传） |
-| Demo34_JinVipRoom | Demo21 迅 | 同上（约 325，8 次上传） |
-| Demo35_ShionRainyNight | Demo22 紫苑 | 同上（约 425，10 次上传） |
+| （已并回 Demo12_LateCall） | Demo12 蓮 | ✅ 完成（acaba89）：分层版接管 Demo12，旧版备份 `~/Desktop/MoHeat Evo 备份/for-women/Demo12_LateCall_20261108-1521/` |
+| （已并回 Demo21_JinLounge） | Demo21 迅 | ✅ 完成（ea7c82d）：旧版备份 `…/for-women/Demo21_JinLounge_20261108-1533/` |
+| （已并回 Demo22_ShionRain） | Demo22 紫苑 | ✅ 完成（598cc12）：旧版备份 `…/for-women/Demo22_ShionRain_20261108-1543/`；测试用 `tools/qa/drive_story.js`（旧 main.js 没有 ?auto） |
 
 - 出图：每个文件夹 `python3 scripts/seedance.py prompts` → `project/web_prompts.json`（每条写着参考图：`dXX:<原静帧>` = `assets/art/web/dXX_*.jpg`，否则 = 本 Demo 先出的底图）。网页端：`tools/seedance/web_helpers.js` + `tools/seedance/web_take.py`；本地 CORS 服务器（scratchpad 的 `cors_server.py`，端口 8794）让网页直接读提示词。
 - **2026-11-08 起改用 OpenAI API 出图**（用户配好了 `~/.openai_key`）：`python3 tools/openai/images.py <demo> <job…>`，参考图直接用本地文件，不受 Seedance 上传限流影响；底图出完再跑它的差分。

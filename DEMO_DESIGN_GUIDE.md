@@ -654,6 +654,14 @@ main.layout
 - **页面提交时缺了一个函数，打开后只停在第一帧**（Demo37 ミント：`main.js` 调用 `thermal()` 却没写这个函数，开始后每帧报错，画面停在封面构图、冷热表全 0；上一个会话提交前没开过页面）→ 页面代码提交前至少开一次、按开始、看控制台；`python3 tools/qa/check_demo.py <demo>` 的 G6 runtime 会报出来〔check_demo: runtime〕。
 - **两个 `tools/openai/images.py` 同时出同一个 Demo 的图，用量记录互相覆盖**（张嘴、闭眼两批并行，`project/openai_log.json` 丢了 7 条）→ 已修：每张图写记录前重新读一次文件。
 - **直播弹幕栏挡住特写的脸**（ミント「右耳」画面：她的脸在画面右边，右上角的弹幕盖住眼睛和梵天）→ 每个画面截一张图，看覆盖层（弹幕、礼物卡片、按钮）挡没挡住脸和道具；人物在右边的画面弹幕换到左边（`.chat.left`）〔CHECKLIST〕。
+- **眨眼时眼睛根本没闭上，但 check_patches 全绿**（莲 Demo12 door、紫苑 Demo22 dryer：写死的 `regions_eyes` 比眼睛高了约 100 px，贴片贴在刘海上；仁 Demo21 can：自动搜索把上面那只眼的椭圆放偏，只闭了半只）→ check_patches 只量接缝，不判断"闭上没有"。写死区域时在**带坐标网格的原图 | 闭眼图并排图**上量（椭圆要同时盖住睁眼和闭眼的线，闭眼的线通常比睁眼低），重建后看 `assets/patch_check/<pose>_eyes.png` 的中间那格**两只眼都闭上**，再用 `node tools/qa/drive_story.js <demo> --shots <dir>` 看真实画面里的 `<view>_blink.png`。〔G4 · CHECKLIST：每个画面的眨眼截图两眼都闭〕
+- **张嘴时原来闭嘴线的尾巴还淡淡留在嘴角上方**（莲 close：嘴差分的椭圆够大，但边缘羽化约 30 px，闭嘴线的末端正好在羽化带里，透明度只有 70–80 %）→ 区域要让闭嘴线的两端都在椭圆**内侧**（不只是在椭圆里），斜着的嘴把中心往线的方向挪；在 `char_<pose>.webp` 上把补丁按 rect 叠一次放大 3 倍看。〔G4〕
+- **头发被图片上边缘切成一条平线，挂在画面顶下 2 %**（莲 call / door、仁 lounge、紫苑 door / dryer / window：`"y": 1.02` + `"height": 1.0` 把截断的上边放进了画面；封面上最明显）→ `check_cut_body.py` 现在也查**上边**；修法：`height` 加 0.04（上边移出画面），封面看一遍标题有没有压到脸（莲 call 同时右移到 x 0.71）。另：本次检查顺带报出 Demo31 nagisa_arrive、Demo20 hina_booth / hina_wave 也有同样问题，交给各自的会话。〔G4 · check_demo: cut-body〕
+- **人物层里被包住的纯色底：手机和脖子之间的灰块、马尾后面一圈暗灰"光晕"、手指和墨镜之间的缝**（莲 call / close、仁 lounge / glasses / wrist、紫苑 dryer / window；AI 抠图把轮廓里面全填实，build_stage 的口袋清除只认很小的块）→ 新工具 `python3 tools/art/clear_pockets.py <demo> [pose…] [--tol 22]`（build_stage 之后跑）：按姿势原图边框取幕布颜色，只清**厚的**（7 px 开运算，线稿和发丝不算）、≥ 120 px 的同色块和它的抗锯齿边，软化 1–2 px 边缘，重算 layers.js 里的 `?v=` 和平面静帧；`assets/pockets/<pose>.jpg`（前 | 后）和 `<pose>_mask.jpg`（品红 = 清掉的地方）必须看。**只列需要的姿势**：幕布颜色和道具相近时会误伤（仁 can 的铝罐、紫苑 door 的眼角阴影、紫苑 towel 边框取色失败）。〔G4 · CHECKLIST：人物层叠在深色上整张看〕
+- **暂存文件夹里的 index.html 比原版旧，合并时把别人刚升的共用 ?v 改回去了**（Demo21 / 22：`series.css?v=9 → 8`，check_demo 的 cache 报 FAIL 才发现）→ `merge_remake.py` 之后先 `git diff <原文件夹>/index.html`，只留下自己的改动（layers.js 引用、credits、main.js?v），其余的 `?v=` 和结构以 HEAD 为准。〔G7 · check_demo: cache〕
+- **旧 Demo 的 main.js 没有 `?auto` 模式，check_demo 的自动通关停在第一个按钮**（Demo12 / 21 / 22：报 "no thermal output" / "did not reach the end"）→ 用 `node tools/qa/drive_story.js <demo> [--alt] [--lang zh] [--shots <dir>]`：像观众一样点来电、选项（--alt 选最后一个）、动作、长按、拖动、"说一句"，同时做 check_mouth 的嘴部检查、404 / 报错 / 漏翻、是否回到自己的封面；merge 时 `--force` 并在提交信息里写明。〔G6〕
+- **合并后旧静帧同名、浏览器继续用缓存的旧图**（三个 Demo 的 `main.js` 用固定的 `media/art/<name>.jpg?v=1` 读静帧，合并换了内容但没换名）→ 合并后把 main.js 里静帧的 `?v=` 加 1、页面里 `main.js?v=` 加 1（只改版本号，不动剧情代码）。〔G7 · check_demo: cache〕
+
 
 ## 12. 资源清理与文件结构
 

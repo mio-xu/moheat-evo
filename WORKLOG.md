@@ -7,6 +7,31 @@
 
 ---
 
+## 2026-11-08 · 女性向重制收尾：莲 / 仁 / 紫苑 合并上线（Demo33→12、Demo34→21、Demo35→22）· 后台 agent（接 moheat-evo-24 的交接）
+
+**做了什么**
+- 三个暂存文件夹按交接清单逐个验收后用 `tools/web/merge_remake.py … --force` 并回原文件夹（同一网址），原版备份：`~/Desktop/MoHeat Evo 备份/for-women/Demo12_LateCall_20261108-1521/`、`Demo21_JinLounge_20261108-1533/`、`Demo22_ShionRain_20261108-1543/`。剧本、配音、冷热代码不变（各 `main.js` 只把静帧的 `?v=` 加 1，页面 `main.js?v=` 加 1）。暂存文件夹已删除。
+- 验收中发现并修好的（交接时以为 OK 的）：
+  - **眨眼没闭上**：莲 door、紫苑 dryer 写死的 `regions_eyes` 比眼睛高约 100 px；仁 can 自动搜索只闭了半只眼 → 在坐标网格并排图上重新量，写死在 `project/stage.json`。
+  - **莲 close 张嘴时闭嘴线尾巴透出来**：`regions_mouth` 加大并往线的方向挪。
+  - **头发被图片上边切成平线、挂在画面顶下 2 %**（莲 call/door、仁 lounge、紫苑 door/dryer/window）→ `height` 加 0.04；莲 call 右移到 x 0.71、仁 lounge 右移到 x 0.51（封面标题不压脸）；紫苑 door 放大到 1.12（举起的手上边那段抠得很碎，移到画外）。
+  - **人物层里被包住的灰底 / 马尾后的暗灰光晕** → 新工具 `tools/art/clear_pockets.py`（莲 call/close、仁 lounge/glasses/wrist、紫苑 dryer/window --tol 30）。
+  - 合并后的 `index.html` 带回了旧的 `series.css?v=8` → 改回 HEAD 的 9（教训见下）。
+- 新 / 改的工具：`tools/qa/drive_story.js`（没有 `?auto` 的旧 Demo 按按钮自动通关 + 嘴部检查 + 404 / 报错 / 漏翻 / 回到自己封面 + 每个画面张嘴 / 闭嘴 / 眨眼截图）、`tools/art/clear_pockets.py`、`tools/art/check_cut_body.py` 增加**上边**检查。
+- 封面 `media/cover.jpg`（headless Chrome `?cover=1`）+ 菜单缩略图 + `tools/web/thumbs.py` 三语缩略图，三个都重做。nav.js / 官网菜单不用改（文件夹和标题不变）。
+
+**现在的状态**：三个都已本地提交（acaba89 莲、ea7c82d 仁、598cc12 紫苑；文档另一提交），**没有 push**（统筹推送）。测试：每个 Demo 两条分支 × 不同语言（莲 zh/ja/en、仁 zh/en/ja、紫苑 ja/zh/en）用 drive_story.js 跑完，嘴部 0 问题（只在说话时动、静音闭上、没有半透明双嘴 / 卡住 / 闪烁），每个有眼差分的画面两眼都闭，0 个 404 / 报错 / 漏翻，结束回到自己的封面（↺ Play again）；check_patches / check_cut_body 0 报告；手机 / 平板 7 种尺寸（page_probe --no-play）一屏、≥ 44 px、引导在屏内。
+
+**下一步 / 遗留**
+- `check_demo.py --full` 对这三个仍会报：自动通关停在第一个按钮（旧 main.js 没有 `?auto`）→ thermal "no output"；建议 check_demo 在页面不支持 `?auto` 时改用 `tools/qa/drive_story.js` 的点击逻辑（或给 main.js 加 `?auto`，属于改剧情代码，需统筹决定）。冷热仍是旧的"每耳一种模式"，不是 DUAL（用户要求剧情/冷热不变）。
+- check_cut_body 的上边检查顺带报出别的 Demo：Demo31 nagisa_arrive（顶部 4 %）、Demo20 hina_booth（2 %）、hina_wave（7 %）——交给各自的会话。
+- 紫苑 dryer/window 左下"你的头发"之间清掉灰底后透出深色地板，看起来像几块暗洞（之前是灰块）；仁 can 的铝罐和幕布同色，没清；紫苑 towel / door 的取色不可靠，没清。
+- 旧版视频（`media/video/*.mp4`）已随合并从仓库删除（备份里有）。
+
+**花费**：本轮 OpenAI 0 次（全部修复都是重新量区域 / 摆位 / 代码清理）；三个 Demo 累计仍按交接估计 $6–9。Seedance 0。
+
+**问题 / 教训**（写进 `DEMO_DESIGN_GUIDE.md` §11.1 末尾）：眨眼区域量错但 check_patches 全绿；羽化带里的闭嘴线；头发上边切平；包住的灰底；暂存 index.html 的旧 `?v=`；旧 Demo 没有 `?auto`；同名静帧缓存。另外：会话中途 `/usr/bin/python3`、`/usr/bin/git` 开始报 "You have not agreed to the Xcode license agreements"（有人装了 Xcode）→ 用 `/Library/Developer/CommandLineTools/usr/bin/python3` / `git` 直接调用；需要用户在终端运行 `sudo xcodebuild -license` 同意一次。
+
 ## 2026-11-08 · ミント「おみみ専門店」接管 Demo14_MintStream（原 Demo37）· 后台 agent（统筹会话审查）
 
 **做了什么**（接 moheat-evo-55 的交接）
