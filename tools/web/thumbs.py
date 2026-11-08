@@ -8,25 +8,63 @@ the current language and falls back to <dir>.jpg (the site menu's thumbnail, unt
   python3 tools/web/thumbs.py --langs en,zh
   python3 tools/web/thumbs.py --base …               # also <dir>.jpg (site menu) + demos/<cat>/<dir>/media/cover.jpg from the English cover
 
-Needs the repo-root server: python3 -m http.server 8765. Run it again after a demo's cover or l10n.js changes."""
-import os, re, subprocess, sys, tempfile
+Needs the repo-root server: python3 -m http.server 8765. Run it again after a demo's cover or l10n.js changes.
+
+Content stamp (2026-11-08: check_demo `release` compared COMMIT TIMES, so after a shared/cover.js edit every cover.js demo FAILed
+forever when the re-rendered thumbnails came out byte-identical — nothing new to commit): every render writes
+assets/images/demos/<dir>.thumbs.json = per thumbnail {inputs: sha1 of each cover input, thumb: sha1 of the jpg}. Inputs = INPUTS
+below (shared/cover.js, the demo's l10n.js, media/cover.jpg). check_demo.py release is fresh when the inputs and the jpgs on disk
+still hash the same as stamped. Commit the .thumbs.json with the thumbnails (it does not change when nothing changed)."""
+import hashlib, json, os, re, subprocess, sys, tempfile
 from concurrent.futures import ThreadPoolExecutor
-from PIL import Image
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 OUT = os.path.join(REPO, 'assets', 'images', 'demos')
-args = [a for a in sys.argv[1:] if not a.startswith('--')]
-skip = [a.split('=', 1)[1] for a in sys.argv[1:] if a.startswith('--skip=')]
-langs = next((a.split('=', 1)[1] for a in sys.argv[1:] if a.startswith('--langs=')), 'en,ja,zh').split(',')
-if '--langs' in sys.argv: langs = sys.argv[sys.argv.index('--langs') + 1].split(','); args = [a for a in args if a != ','.join(langs)]
-nav = open(os.path.join(REPO, 'demos', 'shared', 'nav.js'), encoding='utf-8').read()
-demos = re.findall(r"\{ cat: '([^']+)', dir: '([^']+)'", nav)
-if args: demos = [d for d in demos if d[1] in args]
-demos = [d for d in demos if d[1] not in skip]
+INPUTS = ('demos/shared/cover.js', '{demo}/l10n.js', '{demo}/media/cover.jpg')   # what a cover render depends on (repo-relative)
+
+
+def sha(p):
+    try: return hashlib.sha1(open(p, 'rb').read()).hexdigest()
+    except OSError: return None
+
+
+def inputs_of(demo_rel):
+    """{input path: sha1 or None} for the cover inputs of demos/<cat>/<dir>."""
+    return {q: sha(os.path.join(REPO, q)) for q in (i.format(demo=demo_rel) for i in INPUTS)}
+
+
+def stamp_path(d): return os.path.join(OUT, f'{d}.thumbs.json')
+
+
+def stale(cat, d, keys=('en', 'ja', 'zh', 'base')):
+    """None when there is no stamp, else [(thumb key, reason)] for every thumbnail whose inputs or jpg changed since it was rendered."""
+    try: st = json.load(open(stamp_path(d), encoding='utf-8'))
+    except (OSError, ValueError): return None
+    cur, out = inputs_of(f'demos/{cat}/{d}'), []
+    for k in keys:
+        f = os.path.join(OUT, f'{d}.jpg' if k == 'base' else f'{d}.{k}.jpg')
+        e = st.get(k)
+        if not e: out.append((k, 'not in the stamp (rendered before stamps, or not with --base)')); continue
+        ch = [q for q in cur if cur[q] != e['inputs'].get(q)]
+        if ch: out.append((k, 'changed since the render: ' + ', '.join(ch)))
+        elif sha(f) != e['thumb']: out.append((k, f'{os.path.basename(f)} differs from the stamped render (hand-edited / reverted?)'))
+    return out
+
+
+def write_stamp(cat, d, done):
+    """done = thumbnail keys rendered now; keeps other keys' entries. Written via temp file + os.replace (shared tree)."""
+    try: st = json.load(open(stamp_path(d), encoding='utf-8'))
+    except (OSError, ValueError): st = {}
+    cur = inputs_of(f'demos/{cat}/{d}')
+    for k in done:
+        st[k] = {'inputs': cur, 'thumb': sha(os.path.join(OUT, f'{d}.jpg' if k == 'base' else f'{d}.{k}.jpg'))}
+    tmp = stamp_path(d) + f'.{os.getpid()}.tmp'
+    json.dump(dict(sorted(st.items())), open(tmp, 'w', encoding='utf-8'), indent=1, sort_keys=True); os.replace(tmp, stamp_path(d))
 
 
 def shot(cat, d, lang):
+    from PIL import Image
     with tempfile.TemporaryDirectory() as tmp:
         png = os.path.join(tmp, 'c.png')
         subprocess.run([CHROME, '--headless=new', '--disable-gpu', '--hide-scrollbars', '--window-size=1920,1080', '--timeout=10000',
@@ -49,7 +87,24 @@ def safe(job):   # a page that hangs once (heavy film demos under load) gets one
     return f'FAILED {job[1]}.{job[2]}.jpg'
 
 
-with ThreadPoolExecutor(2) as ex:   # at most 2 headless Chromes (shared, limited computer)
-    res = list(ex.map(safe, [(c, d, l) for c, d in demos for l in langs]))
-print('\n'.join(res)); bad = [r for r in res if r.startswith('FAILED')]
-if bad: sys.exit(f'{len(bad)} failed — run again with those folders')
+def main():
+    args = [a for a in sys.argv[1:] if not a.startswith('--')]
+    skip = [a.split('=', 1)[1] for a in sys.argv[1:] if a.startswith('--skip=')]
+    langs = next((a.split('=', 1)[1] for a in sys.argv[1:] if a.startswith('--langs=')), 'en,ja,zh').split(',')
+    if '--langs' in sys.argv: langs = sys.argv[sys.argv.index('--langs') + 1].split(','); args = [a for a in args if a != ','.join(langs)]
+    nav = open(os.path.join(REPO, 'demos', 'shared', 'nav.js'), encoding='utf-8').read()
+    demos = re.findall(r"\{ cat: '([^']+)', dir: '([^']+)'", nav)
+    if args: demos = [d for d in demos if d[1] in args]
+    demos = [d for d in demos if d[1] not in skip]
+    jobs = [(c, d, l) for c, d in demos for l in langs]
+    with ThreadPoolExecutor(2) as ex:   # at most 2 headless Chromes (shared, limited computer)
+        res = list(ex.map(safe, jobs))
+    for c, d in demos:   # content stamp for the thumbnails rendered now
+        done = [l for (c2, d2, l), r in zip(jobs, res) if d2 == d and not r.startswith('FAILED')]
+        if done: write_stamp(c, d, done + (['base'] if 'en' in done and '--base' in sys.argv else []))
+    print('\n'.join(res)); bad = [r for r in res if r.startswith('FAILED')]
+    if bad: sys.exit(f'{len(bad)} failed — run again with those folders')
+
+
+if __name__ == '__main__':
+    main()

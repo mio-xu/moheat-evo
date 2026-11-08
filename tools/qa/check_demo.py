@@ -35,7 +35,8 @@ What is checked (id → lesson / rule):
   shell      (browser) tools/web/check_shell.js: pure mode ends with zero input, no mic, ← / → only on the cover, Space pauses, seek
   cover      (browser) tools/web/check_cover.py: the cover standard (§7.3 封面构图标准) — shared/cover.js, face size / eye line / side,
              copy column, dark under the copy, phone title / Start / languages (per-demo exception: qa.json skip.cover)
-  release    cover.jpg, menu thumbnail + en / ja / zh thumbs (not older than cover / l10n.js), nav.js DEMOS, site menu, credits.html
+  release    cover.jpg, menu thumbnail + en / ja / zh thumbs (rendered from the CURRENT cover.js / l10n.js / cover.jpg: content stamp
+             assets/images/demos/<dir>.thumbs.json from tools/web/thumbs.py), nav.js DEMOS, site menu, credits.html
   hygiene    assets/ git-ignored, no big tracked files, budget logged, project/CHECKLIST.md present
 """
 import argparse, datetime, glob, json, os, re, subprocess, sys
@@ -317,16 +318,25 @@ else:
     crow = next((l for l in read(os.path.join(REPO, 'credits.html')).splitlines() if '<tr>' in l and title.split('、')[0] in l), '')
     if not crow: warn.append(f'credits.html has no row for 「{title}」')
     elif os.path.exists(LJ) and 'layered' not in crow: warn.append(f'credits.html row for 「{title}」 does not say "layered" (art credit out of date?)')
-    ct = lambda p: int(git('log', '-1', '--format=%ct', '--', p) or 0)
-    th = min([ct(os.path.join('assets', 'images', 'demos', f'{NAME}.{l}.jpg')) for l in ('en', 'ja', 'zh')] or [0])
-    for src in ('media/cover.jpg', 'l10n.js'):
-        if th and ct(os.path.join(REL, src)) > th: warn.append(f'{src} committed after the en/ja/zh thumbnails — rerun tools/web/thumbs.py {NAME}')
-    # the menu thumbnails must show the CURRENT cover (user 2026-11-08: the menu still showed the old covers): the cover standard
-    # (shared/cover.js) or the cover art changed after the thumbnails → FAIL until tools/web/thumbs.py --base <demo> is rerun
-    cvt = max(ct(os.path.join('demos', 'shared', 'cover.js')), ct(os.path.join(REL, 'media', 'cover.jpg')))
-    base = ct(os.path.join('assets', 'images', 'demos', f'{NAME}.jpg'))
-    if th and 'shared/cover.js' in read(os.path.join(D, 'index.html')) and min(th, base or th) < cvt:
-        rel.append(f'menu thumbnails older than the cover (shared/cover.js / media/cover.jpg) — python3 tools/web/thumbs.py --base {NAME}')
+    # thumbnails vs cover CONTENT (2026-11-08: commit times made every shared/cover.js demo FAIL forever when the re-rendered thumbnails
+    # were byte-identical): tools/web/thumbs.py stamps assets/images/demos/<dir>.thumbs.json with the sha1 of each cover input + jpg
+    sys.path.insert(0, os.path.join(REPO, 'tools', 'web')); import thumbs as _thumbs
+    uses_cover = 'shared/cover.js' in read(os.path.join(D, 'index.html'))
+    stl = _thumbs.stale(CAT, NAME, ('en', 'ja', 'zh') + (('base',) if uses_cover else ()))
+    if stl is not None:
+        for k, why in stl:
+            msg = f'thumbnail {k}: {why} — python3 tools/web/thumbs.py{" --base" if uses_cover else ""} {NAME} (then commit the jpgs + {NAME}.thumbs.json)'
+            (warn if why.startswith('changed since the render: ') and all(q.endswith('/l10n.js') for q in why.split(': ', 1)[1].split(', ')) or not uses_cover else rel).append(msg)
+    else:   # no stamp yet: the old commit-time rule, with the way out
+        ct = lambda p: int(git('log', '-1', '--format=%ct', '--', p) or 0)
+        th = min([ct(os.path.join('assets', 'images', 'demos', f'{NAME}.{l}.jpg')) for l in ('en', 'ja', 'zh')] or [0])
+        for src in ('media/cover.jpg', 'l10n.js'):
+            if th and ct(os.path.join(REL, src)) > th: warn.append(f'{src} committed after the en/ja/zh thumbnails (no {NAME}.thumbs.json content stamp yet) — rerun tools/web/thumbs.py {NAME}')
+        cvt = max(ct(os.path.join('demos', 'shared', 'cover.js')), ct(os.path.join(REL, 'media', 'cover.jpg')))
+        base = ct(os.path.join('assets', 'images', 'demos', f'{NAME}.jpg'))
+        if th and uses_cover and min(th, base or th) < cvt:
+            rel.append(f'menu thumbnails committed before the last shared/cover.js / media/cover.jpg change and no content stamp — python3 tools/web/thumbs.py --base {NAME} '
+                       f'(writes assets/images/demos/{NAME}.thumbs.json; byte-identical thumbnails then pass)')
     row('G7', 'release', 'FAIL' if rel else 'WARN' if warn else 'PASS', f'{len(rel)} release item(s) missing' if rel else f'{len(warn)} note(s)' if warn else 'cover, thumbs, menu, credits', rel + warn)
 # ---------------------------------------------------------------- G7 category style (tools/art/style_card.py, demos/<cat>/_kit/style.json)
 try:
