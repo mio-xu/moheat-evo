@@ -213,7 +213,7 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
    - **只换动作和道具的姿势**（拿杯子、挥手、举毯子）：在立绘基准上编辑，提示词写"脸、头、头发、表情、位置保持不变，只改手和手上的东西"。这样可以直接共用基准的脸部差分，每个姿势只花 1 张。
    - **脸的位置会变的姿势**（身体侧倾、特写、事件 CG）：参考基准单独出图，再出它自己的差分。
    - **差分**：在每张底图上编辑出"嘴微张（不露牙）"和"闭眼（刘海保持不变）"，提示词写明"只改嘴 / 眼，不移动、不缩放"。
-   - 底图出来后，同一批差分和姿势**马上一起提交**：API 输出链接 30–60 分钟就失效（§11）。API 不能上传时改用网页端，提示词完全一样（`project/web_prompts.json`），下载后用 `scripts/web_take.py <name>` 改名。
+   - 底图出来后，同一批差分和姿势**马上一起提交**：API 输出链接 30–60 分钟就失效（§11）。API 不能上传时改用网页端，提示词完全一样（`project/web_prompts.json`），下载后用 `python3 tools/seedance/web_take.py <demo> <name>` 改名；网页操作用 `tools/seedance/web_helpers.js`（填提示词、选 16:9 + 2K、只在显示 25 credits 时提交、按提示词找卡片下载）。
 4. **检查每张图**：长相是否一致、有没有多出来的道具（Demo27 "坐到左边" 被加了一个杯子，重出了）、画里有没有画进背景层的东西（火、桌子）。
 5. **合成**：写 `project/stage.json`（姿势、`near_mouth` / `near_eyes` 位置提示、`erase` / `keep` 区域、每个画面的摆位和火的位置），然后运行 `python3 tools/art/build_stage.py <demo> --preview`。这一步用 Pillow + numpy，约 1 分钟，不占 GPU。每次都要看截取预览和备用静帧拼图。
 6. **页面**：剧情代码只需要画静帧 `media/art/<still>.jpg`（`build_stage.py` 生成的备用静帧）。页面在剧情代码之前加载 `media/layers.js` 和 `../../shared/layers.js`，它们会把每张静帧自动换成分层动画：背景视差、火光、呼吸、口型、眨眼、边缘光。重做旧 Demo 时，旧的 `main.js` 可以按路径原样复用（Demo27 复用了 Demo24 的）。火星、热气、雪这些特效继续用代码画，摆位时要让道具对齐代码里写死的位置。

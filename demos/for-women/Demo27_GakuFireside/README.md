@@ -19,7 +19,7 @@ layers instead of video: **≈ 425 Seedance credits, no video** (Demo24's plan w
   and `media/layers.js`. Check `assets/patches_cfg/assets/patches_preview.jpg` after a rebuild.
 - Art: `scripts/seedance.py` (API: `test`, `batch2`) — prompts also in `project/web_prompts.json`. 2026-11-08 the API output URL of
   `gaku_ref` expired before batch 2 (all 7 failed, not charged) and uploads were rate-limited, so batch 2 was made on the website
-  with the same prompts (`scripts/web_take.py <name>` files each download). Raw PNGs in `assets/art/` (not in git).
+  with the same prompts (`python3 tools/seedance/web_take.py <demo> <name>` files each download; page helpers `tools/seedance/web_helpers.js`). Raw PNGs in `assets/art/` (not in git).
 - Page: `index.html` = Demo24's skeleton (same UI, §7.3); story / sound / thermal / languages are Demo24's files **by path**
   (`main.js`, `lines.js`, `audio.js`, `style.css`, `l10n.js`), unchanged. `../../shared/layers.js` draws the live composite wherever
   Demo24's code draws a still; `MOHEAT_LAYERS.skipVideo` stops Demo24's clip requests. `?flat` = the flat stills, `?cover=1` = poster
