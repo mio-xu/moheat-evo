@@ -170,7 +170,8 @@ if os.path.exists(LJ):
             DESC = {'edges': ('no flat head / ruler cut, cut edges ≥ 1.5 % outside the frame', 'flat head / straight cut or a cut edge close to the frame'),
                     'fringe': ('no backdrop colour on the cut-out rim', 'backdrop colour on the cut-out rim (grey / green / magenta halo)'),
                     'blink': ('both eyes close, no iris through the lids', 'one-eye blink or iris through the closed lid'),
-                    'far-motion': ('mouth / blink readable at 1080p on every view', 'mouth / blink too small to read on a far shot')}
+                    'far-motion': ('mouth / blink readable at 1080p on every view', 'mouth / blink too small to read on a far shot'),
+                    'looks': ('same hair in every pose, same outfit within each look', 'hair / outfit colour differs (coarse; confirm on poses_preview.jpg)')}
             for k, (ok, bad) in DESC.items():
                 got = [m for lv, kk, m in res if kk == (k if k != 'edges' else 'edge-margin')]
                 lvl = 'FAIL' if any(lv == 'FAIL' and kk == (k if k != 'edges' else 'edge-margin') for lv, kk, _ in res) else 'WARN' if got else 'PASS'
@@ -321,6 +322,14 @@ else:
     for src in ('media/cover.jpg', 'l10n.js'):
         if th and ct(os.path.join(REL, src)) > th: warn.append(f'{src} committed after the en/ja/zh thumbnails — rerun tools/web/thumbs.py {NAME}')
     row('G7', 'release', 'FAIL' if rel else 'WARN' if warn else 'PASS', f'{len(rel)} release item(s) missing' if rel else f'{len(warn)} note(s)' if warn else 'cover, thumbs, menu, credits', rel + warn)
+# ---------------------------------------------------------------- G7 category style (tools/art/style_card.py, demos/<cat>/_kit/style.json)
+try:
+    import style_card
+    sser, sw = style_card.check(D)
+    row('G7', 'style', 'WARN' if sw else 'PASS', f'{len(sw)} view(s) drift from the category style anchor — compare in demos/{CAT}/_kit/style_family.jpg' if sw
+        else f'cover / main view match the {sser["id"]} style anchor (saturation, contrast, line density)', sw)
+except Exception as e:
+    row('G7', 'style', 'WARN', f'tools/art/style_card.py failed: {e}')
 hy = []
 if os.path.isdir(os.path.join(D, 'assets')) and subprocess.run(['git', '-C', REPO, 'check-ignore', '-q', os.path.join(REL, 'assets', 'x.png')]).returncode:
     hy.append('assets/ is not in .gitignore (raw art must stay out of git)')

@@ -11,6 +11,7 @@ did not cover. check_demo.py runs it (G4 rows edge-margin / fringe / blink / far
                assets/ when present, else stage.json "matte".
   blink        per eyes patch: both eyes change (one-eye blink = FAIL), and the iris is gone under the closed lid (the patch is opaque
                over the iris and the iris pixels really change — "闭眼不露瞳孔"; a feathered / ghosted patch shows the iris through).
+  looks        same hair colour in every pose of a character; same outfit colour only within one "look" (stage.json pose "look")
   far-motion   mouth opening / blink, measured as changed pixels on a 1920×1080 frame for each view: < 4 px tall = too small to read on a
                far shot → draw a bigger opening / lid for that pose (preference: 远景加大动作).
 """
@@ -90,7 +91,7 @@ def regions(diff, mask):
 
 
 def check(D, verbose=False):
-    L = load_layers(D); S = stage(D); out = []   # (level, check, message)
+    L = load_layers(D); S = stage(D); out = looks(D)   # (level, check, message)
     cache, done_fringe, done_patch = {}, set(), {}
     views = L.get('views', {})
     for stem, v in views.items():
@@ -163,6 +164,40 @@ def check(D, verbose=False):
             if ch is not None:
                 h_px = ch[0] * scale
                 if h_px < 3: out.append(('WARN', 'far-motion', f'{stem}: the blink changes {h_px:.1f} px on a 1080p frame — too small to read; bigger lids for this far shot'))
+    return out
+
+
+def looks(D):
+    """Same person across ALL poses (hair colour), same outfit only within one look (user 2026-11-08: 换装由剧情交代，每套造型登记为一个
+    look). stage.json poses may say "look": "<id>" (docs/characters/<id>.md looks[]) and "character": "<id>" (several people in a demo)."""
+    S = stage(D); out = []; groups = {}
+    for pose, P in (S.get('poses') or {}).items():
+        f = os.path.join(D, 'media', 'art', f'char_{pose}.webp')
+        if not os.path.exists(f): continue
+        a = np.asarray(Image.open(f).convert('RGBA')).astype(np.float32)
+        rows = np.where((a[..., 3] > 200).sum(1) > a.shape[1] * 0.02)[0]
+        if len(rows) < 20: continue
+        y0, y1 = rows[0], rows[-1]; hgt = y1 - y0
+        top = a[y0:y0 + max(4, int(hgt * 0.12))]; bot = a[y1 - max(4, int(hgt * 0.2)):y1]
+        med = lambda b: np.median(b[..., :3][b[..., 3] > 200], 0) if (b[..., 3] > 200).sum() > 50 else None
+        who = P.get('character') or str(P.get('src', pose)).split('_')[0]
+        groups.setdefault(who, []).append((pose, P.get('look', 'default'), med(top), med(bot)))
+    for who, g in groups.items():
+        hair = [x for x in g if x[2] is not None]
+        if len(hair) > 1:
+            ref = np.median([x[2] for x in hair], 0)
+            for pose, lk, h, _ in hair:
+                d = float(np.abs(h - ref).max())
+                if d > 80: out.append(('WARN', 'looks', f'{who}/{pose}: hair colour {tuple(int(v) for v in h)} differs from the other poses {tuple(int(v) for v in ref)} (Δ{d:.0f}) — same person in every pose (poses_preview.jpg)'))
+        by = {}
+        for pose, lk, _, o in g:
+            if o is not None: by.setdefault(lk, []).append((pose, o))
+        for lk, xs in by.items():
+            if len(xs) < 2: continue
+            ref = np.median([o for _, o in xs], 0)
+            for pose, o in xs:
+                d = float(np.abs(o - ref).max())
+                if d > 90: out.append(('WARN', 'looks', f'{who}/{pose}: outfit colour {tuple(int(v) for v in o)} differs inside look "{lk}" (Δ{d:.0f}) — a new outfit needs its own "look" in stage.json + the character card, motivated by the story'))
     return out
 
 

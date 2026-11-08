@@ -1,0 +1,101 @@
+{
+ "_doc": "Category style card (tools/art/style_card.py build; DEMO_DESIGN_GUIDE §5.1 / §6.5). Edit CARDS in the tool, then rebuild.",
+ "category": "healing",
+ "fonts": [
+  "Inter",
+  "Noto Sans JP",
+  "Zen Maru Gothic",
+  "JetBrains Mono",
+  "Shippori Mincho B"
+ ],
+ "thermal_colours": {
+  "cold": "blue-white #9fd8ff → #ffffff",
+  "hot": "orange-red #ff8a3d → #ff3b1f",
+  "rule": "same in every demo and effect (§0.1)"
+ },
+ "crossover": "a crossover keeps this category's art style; only outfit / world change",
+ "series": [
+  {
+   "id": "cat",
+   "demos": [
+    "Demo11_Naomi",
+    "Demo13_NaomiCam",
+    "Demo26_BecomeNaomi"
+   ],
+   "anchor": [
+    "Demo11_Naomi"
+   ],
+   "look": "high-finish mobile-game / visual-novel illustration, healing mood; a realistic cat (four legs, not anthropomorphic)",
+   "colours": [
+    "afternoon warm light #ffd9a0",
+    "glowing pastels #f7c6d9",
+    "soft cream #fff4e0"
+   ],
+   "sound": "purring, breathing, small movement foley (Naomi rarely meows), soft piano",
+   "anchor_images": [
+    "demos/healing/Demo11_Naomi/media/cover.jpg"
+   ],
+   "anchor_stats": {
+    "sat": 0.2628,
+    "light": 0.6129,
+    "contrast": 0.1429,
+    "lines": 0.0652,
+    "hue": [
+     0.7298,
+     0.1068,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0099,
+     0.0001,
+     0.0002,
+     0.0169,
+     0.1363
+    ]
+   }
+  },
+  {
+   "id": "family",
+   "demos": [
+    "Demo15_FamilyCall",
+    "Demo16_FamilyCall2",
+    "Demo29_FamilyVisit"
+   ],
+   "anchor": [
+    "Demo15_FamilyCall"
+   ],
+   "look": "soft cel, hand-drawn feel, flat colour + one soft-edged shadow, warm brown lines; 5 heads tall, round and cute (not chibi)",
+   "colours": [
+    "warm orange interior #f2a65a",
+    "snow-blue window #a9c8e8",
+    "wood brown #8a5a3c"
+   ],
+   "sound": "kettle, kotatsu, snow outside, gentle acoustic guitar",
+   "anchor_images": [
+    "demos/healing/Demo15_FamilyCall/media/cover.jpg"
+   ],
+   "anchor_stats": {
+    "sat": 0.5489,
+    "light": 0.4132,
+    "contrast": 0.2038,
+    "lines": 0.0963,
+    "hue": [
+     0.8968,
+     0.0577,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0357,
+     0.0001,
+     0.0,
+     0.0,
+     0.0096
+    ]
+   }
+  }
+ ]
+}

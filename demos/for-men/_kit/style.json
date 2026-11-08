@@ -1,0 +1,116 @@
+{
+ "_doc": "Category style card (tools/art/style_card.py build; DEMO_DESIGN_GUIDE §5.1 / §6.5). Edit CARDS in the tool, then rebuild.",
+ "category": "for-men",
+ "fonts": [
+  "Inter",
+  "Shippori Mincho B",
+  "Noto Sans JP",
+  "Zen Maru Gothic",
+  "JetBrains Mono"
+ ],
+ "thermal_colours": {
+  "cold": "blue-white #9fd8ff → #ffffff",
+  "hot": "orange-red #ff8a3d → #ff3b1f",
+  "rule": "same in every demo and effect (§0.1)"
+ },
+ "crossover": "a crossover keeps this category's art style; only outfit / world change",
+ "series": [
+  {
+   "id": "streamer",
+   "demos": [
+    "Demo14_MintStream",
+    "Demo17_CocoaStream",
+    "Demo18_HinataStream",
+    "Demo19_LunaStream",
+    "Demo43_BlizzardInn"
+   ],
+   "anchor": [
+    "Demo14_MintStream",
+    "Demo17_CocoaStream",
+    "Demo19_LunaStream"
+   ],
+   "look": "soft cel, hand-drawn, flat colour + one soft-edged shadow, dark-lavender lines; NO gloss, NO bloom; 7-heads adult women",
+   "colours": [
+    "Mint mint-green #9fe3cf",
+    "Cocoa milk-tea pink #e8b4a8",
+    "Hinata warm orange #ffa24c",
+    "Luna deep blue-black #1b1f3b",
+    "night room #14162a"
+   ],
+   "sound": "lo-fi / city-pop beds, close ASMR foley, room tone",
+   "anchor_images": [
+    "demos/for-men/Demo14_MintStream/media/cover.jpg",
+    "demos/for-men/Demo14_MintStream/media/art/mint_greet.jpg",
+    "demos/for-men/Demo17_CocoaStream/media/cover.jpg",
+    "demos/for-men/Demo17_CocoaStream/media/art/cocoa_welcome.jpg",
+    "demos/for-men/Demo19_LunaStream/media/cover.jpg",
+    "demos/for-men/Demo19_LunaStream/media/art/luna_counter.jpg"
+   ],
+   "anchor_stats": {
+    "sat": 0.361,
+    "light": 0.3997,
+    "contrast": 0.226,
+    "lines": 0.0827,
+    "hue": [
+     0.3183,
+     0.0009,
+     0.0,
+     0.0,
+     0.0,
+     0.0016,
+     0.1216,
+     0.1908,
+     0.2737,
+     0.0132,
+     0.0131,
+     0.0668
+    ]
+   }
+  },
+  {
+   "id": "date",
+   "demos": [
+    "Demo25_HatsumodeDate",
+    "Demo31_SummerRooftop"
+   ],
+   "anchor": [
+    "Demo25_HatsumodeDate",
+    "Demo31_SummerRooftop"
+   ],
+   "look": "Demo12 style_3 soft cel: thin dark-lavender lineart, flat pastel + one soft-edged shadow, not glossy, no bloom; ~7 heads adult",
+   "colours": [
+    "soda blue #5ab4e6",
+    "sparkler orange #ff9a3c",
+    "winter shrine red #c8323c",
+    "night navy #18203a"
+   ],
+   "sound": "festival / seasonal ambience (geta, wind chime, fireworks with delay), light acoustic",
+   "anchor_images": [
+    "demos/for-men/Demo25_HatsumodeDate/media/cover.jpg",
+    "demos/for-men/Demo25_HatsumodeDate/media/art/tsubaki_torii.jpg",
+    "demos/for-men/Demo31_SummerRooftop/media/cover.jpg",
+    "demos/for-men/Demo31_SummerRooftop/media/art/nagisa_arrive.jpg"
+   ],
+   "anchor_stats": {
+    "sat": 0.4806,
+    "light": 0.3378,
+    "contrast": 0.1917,
+    "lines": 0.0953,
+    "hue": [
+     0.0879,
+     0.011,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0034,
+     0.5995,
+     0.0973,
+     0.0255,
+     0.0874,
+     0.0881
+    ]
+   }
+  }
+ ]
+}
