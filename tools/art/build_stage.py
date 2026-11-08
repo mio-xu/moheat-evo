@@ -28,6 +28,11 @@ D = os.path.abspath(a.demo); HERE = os.path.dirname(os.path.abspath(__file__))
 cfg = json.load(open(os.path.join(D, "project", "stage.json")))
 SRC = os.path.join(D, cfg.get("src", "assets/art")); ART = os.path.join(D, "media", "art"); os.makedirs(ART, exist_ok=True)
 src = lambda n: os.path.join(SRC, n + ".png")
+
+
+def out(path):   # never write THROUGH a symlink (a placeholder link to the original demo would overwrite the original's file)
+    if os.path.islink(path): os.remove(path)
+    return path
 MAXDIM = 1700   # character textures are uploaded every frame: keep them modest
 
 
@@ -108,7 +113,7 @@ if cfg.get("hooks"): data["hooks"] = cfg["hooks"]   # where the base demo keeps 
 bgs = {}
 for name, b in cfg["bgs"].items():
     im = Image.open(src(b["src"])).convert("RGB")
-    im.save(os.path.join(ART, f"bg_{name}.webp"), quality=84, method=6)
+    im.save(out(os.path.join(ART, f"bg_{name}.webp")), quality=84, method=6)
     fire = b.get("fire") or find_fire(src(b["src"]))
     bgs[name] = {"src": f"art/bg_{name}.webp", "fire": fire, "im": im}
     print(f"bg {name}: fire at {fire}")
@@ -118,7 +123,7 @@ poses, pcfg = {}, {"src": SRC, "dst": os.path.join(D, "assets", "patches"), "siz
 for name, p in cfg["poses"].items():
     cut, box, size = cutout(src(p["src"]), p.get("erase", ()), p.get("keep", ()), p.get("matte") == "ai")
     f = min(1, MAXDIM / max(cut.size)); cut = cut.resize((round(cut.width * f), round(cut.height * f)), Image.LANCZOS)
-    cut.save(os.path.join(ART, f"char_{name}.webp"), quality=88, method=6)
+    cut.save(out(os.path.join(ART, f"char_{name}.webp")), quality=88, method=6)
     poses[name] = {"src": f"art/char_{name}.webp", "w": cut.width, "h": cut.height, "box": box, "f": f, "cut": cut, "patches": []}
     pcfg["size"] = list(size)
     for kind, key in (("mouth", "talk"), ("eyes", "blink")):
@@ -136,7 +141,7 @@ if pcfg["patches"]:
     for e in pcfg["patches"]:
         pn = e["name"]; pose = poses[pn.rsplit("_", 1)[0]]; x, y, w, h = meta[pn]; bx, by = pose["box"][:2]; f = pose["f"]
         im = Image.open(os.path.join(pcfg["dst"], pn + ".webp"))
-        im = im.resize((max(1, round(w * f)), max(1, round(h * f))), Image.LANCZOS); im.save(os.path.join(ART, pn + ".webp"), quality=90, method=6)
+        im = im.resize((max(1, round(w * f)), max(1, round(h * f))), Image.LANCZOS); im.save(out(os.path.join(ART, pn + ".webp")), quality=90, method=6)
         pose["patches"].append({"src": f"art/{pn}.webp", "rect": [round((x - bx) * f), round((y - by) * f), im.width, im.height], "kind": e["kind"],
                                 "im": im})
 
@@ -156,13 +161,13 @@ for vname, v in cfg["views"].items():
     flat.alpha_composite(ch, (round(v["x"] * FW - wpx / 2), round(v["y"] * FH - hpx))) if v["x"] * FW - wpx / 2 >= 0 and v["y"] * FH - hpx >= 0 else \
         flat.paste(ch, (round(v["x"] * FW - wpx / 2), round(v["y"] * FH - hpx)), ch)
     stem, ext = os.path.splitext(v["still"]); ext = ext or ".jpg"   # the page decides the still's file name (Demo20 loads .webp)
-    flat.convert("RGB").save(os.path.join(ART, stem + ext), quality=88)
+    flat.convert("RGB").save(out(os.path.join(ART, stem + ext)), quality=88)
     data["views"][stem] = {"view": vname, **({"alias": v["alias"]} if v.get("alias") else {}), "fire": f,
                                 "bg": {"src": b["src"], "fire": bf, **({"zoom": v["zoom"]} if v.get("zoom") else {})},
                                 "char": {"src": p["src"], "w": p["w"], "h": p["h"], "x": v["x"], "y": v["y"], "height": v["height"]},
                                 "patches": [{k: pt[k] for k in ("src", "rect", "kind")} for pt in p["patches"]]}
     print(f"view {vname}: bg zoom {z:.2f}, still media/art/{stem}{ext}")
-open(os.path.join(D, "media", "layers.js"), "w").write(
+open(out(os.path.join(D, "media", "layers.js")), "w").write(
     "// Layer data for ../../shared/layers.js — written by tools/art/build_stage.py from project/stage.json (do not edit by hand).\n"
     "window.MOHEAT_LAYERS = " + json.dumps(data, ensure_ascii=False, indent=1) + ";\n")
 print("wrote media/layers.js")
