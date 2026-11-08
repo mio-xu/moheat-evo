@@ -27,7 +27,59 @@
    "src": "hina_hands_ext",
    "talk": "hina_hands_ext_talk",
    "blink": "hina_hands_ext_blink",
-   "matte": "ai"
+   "matte": "ai",
+   "lp": {
+    "warp": false,
+    "centre": [
+     1772,
+     682
+    ],
+    "radius": [
+     70,
+     40
+    ],
+    "lift": 0.1,
+    "drop": 0.3,
+    "light": 0.4,
+    "dark": 18,
+    "hide": [
+     [
+      [
+       1600,
+       687
+      ],
+      [
+       1680,
+       677
+      ],
+      [
+       1700,
+       683
+      ],
+      [
+       1720,
+       700
+      ],
+      [
+       1740,
+       717
+      ],
+      [
+       1783,
+       747
+      ],
+      [
+       1790,
+       770
+      ],
+      [
+       1600,
+       770
+      ]
+     ]
+    ]
+   },
+   "mouth": "lp"
   },
   "lean": {
    "src": "hina_lean",

@@ -59,7 +59,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/booth_mouth2.webp?v=27f72f40",
+     "src": "art/booth_mouth2.webp?v=6cd3ad16",
      "rect": [
       1081,
       304,
@@ -70,7 +70,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/booth_mouth3.webp?v=e44ac55e",
+     "src": "art/booth_mouth3.webp?v=c7fb35f8",
      "rect": [
       1081,
       304,
@@ -109,16 +109,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/hands_mouth.webp?v=134445f2",
-     "rect": [
-      996,
-      363,
-      112,
-      92
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/hands_eyes.webp?v=3838ed08",
      "rect": [
       840,
@@ -127,6 +117,50 @@ window.MOHEAT_LAYERS = {
       162
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/hands_mouth0.webp?v=ad03ce93",
+     "rect": [
+      999,
+      369,
+      110,
+      74
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/hands_mouth1.webp?v=511e02a7",
+     "rect": [
+      999,
+      369,
+      110,
+      74
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/hands_mouth2.webp?v=ee78938f",
+     "rect": [
+      999,
+      369,
+      110,
+      74
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/hands_mouth3.webp?v=c3f49c07",
+     "rect": [
+      999,
+      369,
+      110,
+      74
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -192,7 +226,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/lean_mouth2.webp?v=2faea932",
+     "src": "art/lean_mouth2.webp?v=eef040cd",
      "rect": [
       359,
       480,
@@ -203,7 +237,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/lean_mouth3.webp?v=e0d153af",
+     "src": "art/lean_mouth3.webp?v=420c2ccb",
      "rect": [
       359,
       480,
@@ -273,7 +307,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/wave_mouth2.webp?v=c68f043b",
+     "src": "art/wave_mouth2.webp?v=a09265ed",
      "rect": [
       943,
       267,
@@ -284,7 +318,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/wave_mouth3.webp?v=1cfec190",
+     "src": "art/wave_mouth3.webp?v=4e4b8810",
      "rect": [
       943,
       267,
