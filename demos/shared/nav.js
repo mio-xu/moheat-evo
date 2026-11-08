@@ -19,6 +19,7 @@
     { cat: 'for-men', dir: 'Demo18_HinataStream', ja: 'ひなたの、激辛チャレンジ配信', en: "Hinata's Super-Spicy Challenge", zh: '日向的超辣挑战直播', group: 2 },
     { cat: 'for-men', dir: 'Demo19_LunaStream', ja: 'ルナの、よふかし配信', en: "Luna's Late-Night Stream", zh: '露娜的深夜直播', group: 2 },
     { cat: 'for-men', dir: 'Demo25_HatsumodeDate', ja: 'はじめての、初詣デート', en: 'My First Hatsumode', zh: '第一次的新年参拜约会', group: 2 },
+    { cat: 'for-men', dir: 'Demo31_SummerRooftop', ja: 'なつの、おくじょうで', en: 'Up on the Summer Roof', zh: '夏日，屋顶上', group: 2 },
     { cat: 'for-women', dir: 'Demo12_LateCall', ja: 'もしもし、きこえる？', en: 'Can You Hear Me?', zh: '喂，听得到吗？', group: 3 },
     { cat: 'for-women', dir: 'Demo20_HinataHandshake', ja: 'あと10秒だけ、ね？', en: 'Just Ten More Seconds?', zh: '再多10秒，好吗？', group: 3 },
     { cat: 'for-women', dir: 'Demo21_JinLounge', ja: '俺だけ見てろ', en: 'Look Only at Me', zh: '只准看着我', group: 3 },
