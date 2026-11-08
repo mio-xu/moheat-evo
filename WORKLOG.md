@@ -6,6 +6,22 @@
 > 用户偏好在 `USER_PREFERENCES.md`，整体状态在 `HANDOFF_ASMR_DEMOS.md`，用户任务清单在 `TASKS.md`。
 
 ---
+
+## 2026-11-08 · 制作流程 v2 + 一个 QA 入口 tools/qa/check_demo.py · 后台 agent（统筹会话安排）
+
+**做了什么**
+- `DEMO_DESIGN_GUIDE.md` §6 新增「制作流程 v2」：G0 开工 → G1 剧本 / 冷热 / 语言 → G2 声音 → G3 出图 → G4 合成 → G5 页面 → G6 测试 → G7 上线 → G8 收尾，每步写明门禁（查什么、用什么工具、怎样算过）和它防住的 §11.1 教训；§8 / §9 / §14 指向它。§11.1 按步骤合并重复（约 55 条 → 约 30 条），每条标出防住它的门禁〔check_demo: …〕/〔CHECKLIST〕。
+- 新工具 `tools/qa/check_demo.py <demo> [--quick|--full|--remake-of <原>|--checklist]`：layers / cut-body / patches / eyes / syntax / refs / links / files（静态 404）/ cache（?v=）/ l10n（静态 + 运行时 no zh）/ voice / end（回本 Demo 封面）/ runtime（异常、失败请求）/ thermal（读 `#cmd` 实测 DUAL 展示）/ mobile（check_mobile.html 7 种尺寸，失败自动再跑一次）/ mouth（--full）/ release / hygiene。浏览器部分 `tools/qa/page_probe.js`（自己的 http.server + headless Chrome）。例外写在 `project/qa.json`。
+- `tools/qa/CHECKLIST_TEMPLATE.md` → `project/CHECKLIST.md`（自动表 + 手动项：人物一致、嘴眼 2×、动画物理整段逐帧、DUAL 四项、语音判定、三语 + 韩语位置、手机、结束回封面、预算）。
+- `tools/web/merge_remake.py`：合并前自动跑 `check_demo.py <重做版> --remake-of <原> --full`，FAIL 就拒绝（`--force` 要写理由）。
+- CLAUDE.md / AGENTS.md：QA 门禁规则 + 提交硬规则（只提交自己的路径、临时索引、HEAD 只往前走、共用文档写临时文件再替换）；USER_PREFERENCES：每条教训都要变成检查。
+
+**现在的状态（check_demo 默认模式，15:00）**：Demo17 / 18 / 25 / 30 0 FAIL；Demo20 FAIL refs（加载 `../Demo12_LateCall/style.css`，Demo12 被重做就会坏）；Demo24 FAIL refs（封面 `#nextBtn` 链到 Demo12 = 违反"结束回本 Demo 封面"）；Demo31 FAIL patches（fan / sit 嘴补丁 OUTSIDE 1.3 %，别的会话正在改）。常见 WARN：credits.html 没写 layered（20/24/25/30）、静态漏翻（Demo24 弹幕 69 条、Demo20 17 条）、Demo17 冷峰值 49 %、Demo20 没有 3 s 内的冷热切换、Demo31 assets/ 没进 .gitignore、各 Demo 没有 CHECKLIST.md。没改任何 Demo 内容。
+
+**问题**：我的第一次提交 f02fb0c 用了不带路径的 `git commit`，带走了别的会话已暂存的文件（内容是对的、只是挂在我的提交下）；之后 `git reset --soft` 退掉了别人刚做的 8553937（内容已由其作者在 2570f61 补回，没有丢东西；d3a1079 的说明文字是复制来的、不准）。教训已写进 §11.1 和 CLAUDE.md 硬规则。
+
+**下一步**：各 Demo 负责的会话按上表修 FAIL；新 Demo / 重做版上线前跑 `--full`；修好 `shared/subs.js` 的启动竞争（第一句台词在 l10n.js 加载前显示）。
+
 ## 2026-11-08 · ルナ「秘密调酒师」做完并接管 Demo19_LunaStream（后台 agent，统筹会话 moheat-evo-c9 审查）
 
 **做了什么**
