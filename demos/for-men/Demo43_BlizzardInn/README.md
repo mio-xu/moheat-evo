@@ -53,3 +53,12 @@ same ear (right cool 0.45) + her breath on it (right cool 0.85) · paper lamp (l
 - OpenAI gpt-image-2: 30 calls (6 design options, 4 plates, 4 poses, 14 masked variants + 2 redos of one mouth; 20 high + 10 medium)
   ≈ **$7.3** at list price (`project/openai_log.json`). Seedance: **0** credits (no video: nothing passed §6.3). ElevenLabs: **3,814 characters** (script
   lines only). Live talk: only on the private server, ≈ 600–700 credits per conversation.
+
+## QA (2026-11-08, after the LivePortrait mouth switch)
+`python3 tools/qa/check_demo.py demos/for-men/Demo43_BlizzardInn --full`: every static / art / release row PASS (layers, cut-body, patches,
+eyes, syntax, refs, links, files, cache, l10n, voice, end, release, cover, hygiene) and mouth PASS; earlier full run: runtime, l10n-live,
+end-live, thermal (fast switch R ear hot→cold 0.7 s), mobile (7 sizes), drag PASS. Under heavy machine load the G6 `runtime` row
+sometimes reports "the browser probe did not answer" — the same probe run on its own: main branch (`?auto=1&sub=zh`) 0 errors / 0 failed
+requests / ends on its own cover, 7 phone–desktop sizes clean, drag clean; alt branch (`--alt`) the same; `check_mouth.js` both
+branches ✓ (LivePortrait sets lv1–lv3). Voice judging tested with `MoHeatVoice._hear()` in EN / 日本語 / 中文 for every answer.
+Known limit: the three short lines at dawn (h09 / m11 / n17) play over the static group still (no lip movement there).
