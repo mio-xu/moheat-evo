@@ -19,8 +19,11 @@ from PIL import Image, ImageFilter
 from scipy import ndimage
 
 import sys
-if len(sys.argv) < 2: raise SystemExit('usage: clean_cutout.py <demo folder>')
+if len(sys.argv) < 2: raise SystemExit('usage: clean_cutout.py <demo folder> [--bg R,G,B]')
 ROOT = os.path.abspath(sys.argv[1])
+# --bg: the studio colour the poses were drawn on (default the grey #c8c8c8; chroma green poses: --bg 8,158,65, Demo39 Luna — thin dark
+# hair strands keyed off green come out light / teal without this matting step)
+STUDIO = [float(v) for v in sys.argv[sys.argv.index('--bg') + 1].split(',')] if '--bg' in sys.argv else [200., 200., 200.]
 ART = os.path.join(ROOT, 'media', 'art')
 REACH = 41   # px (odd, MaxFilter size) around transparency where background grey is removed
 MIN_AREA = 60   # px: smaller grey blobs are left (highlights, tiny specks inside the drawing)
@@ -35,6 +38,7 @@ def clean(path):
     rgb, a = im[..., :3], im[..., 3] / 255
     sat = rgb.max(2) - rgb.min(2); lum = rgb.mean(2)
     grey = (sat < 24) & (lum > 150) & (lum < 222)
+    if max(STUDIO) - min(STUDIO) > 30: grey = np.zeros_like(grey)   # chroma-key studio (--bg): no studio grey to remove — light-grey shirt shadows must stay (Demo19 Luna)
     near = grow(a < .35, REACH)
     for _ in range(2):   # grey that touches what was just removed goes too (enclosed gaps reached through the fringe)
         kill = grey & near & (a > 0)
@@ -42,6 +46,7 @@ def clean(path):
     # enclosed background patches anywhere (between hair and shoulder, between fingers, collar gaps): every connected blob of the
     # studio grey that is big enough goes, wherever it is (v1 only looked within REACH of the edge — user: 还是有些地方抠图细节有问题)
     strict = (sat < 18) & (lum > 165) & (lum < 218) & (a > 0)
+    if max(STUDIO) - min(STUDIO) > 30: strict = np.zeros_like(strict)
     lab, n = ndimage.label(strict)
     if n:
         area = ndimage.sum(np.ones_like(lab), lab, range(1, n + 1)); mlum = ndimage.mean(lum, lab, range(1, n + 1))
@@ -61,7 +66,7 @@ def clean(path):
     # wedge inside a loop of hair): the picture was drawn on the known studio grey BG, so each edge pixel is C = α·F + (1−α)·BG with
     # F = the figure colour next to it. Rebuild C, project it onto the BG→F line → the true α; colour = F. A pixel that is really
     # background (≈ BG) gets α ≈ 0 by itself, wherever it is near the edge.
-    BG = np.array([200., 200., 200.])
+    BG = np.array(STUDIO)
     band = grow(a < .5, 25) & (a > 0) & (w > .08)
     C = a[..., None] * im[..., :3] + (1 - a[..., None]) * BG          # the original pixel over the studio grey
     v = fill - BG; d2 = (v * v).sum(2)

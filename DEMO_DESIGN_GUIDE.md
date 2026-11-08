@@ -627,6 +627,11 @@ main.layout
 - **整张画在“呼吸”、背景跟着人一起缩放**（2026-11-08，动画物理检查）：分层 Demo 的 main.js 还留着静帧时代的 `z = 1.02 + .008·sin(1.1t)`、`dy = 4·sin(.9t)`，layers.js 自己也有呼吸（1.55 rad/s），叠在一起是两种频率的呼吸、背景也在缩放，烟花球、热气这些按固定像素画的特效会和手分开。另外旧呼吸是从底边整体拉伸，头也被拉长。→ 分层后页面检查 `MoHeatLayers.live` 不加漂移；呼吸只抬肩以上、拉伸躯干；挂在人物上的特效用 `MoHeatLayers.toFrame()`。自动检查：`node tools/art/check_motion.js <demo>`（FRAME-DRIFT / BREATH / BLINK-* / EDGE-GAP）。
 - **闭眼差分发灰 / 透出瞳孔**（2026-11-08）：Demo17 可可几乎每个姿势闭眼处都有发灰的色块，Demo25 椿 stole / amazake、Demo18 ひなた booth、Demo20 陽向 lean 闭眼时还能看到原来的瞳孔。→ 做完差分必跑 `check_motion.js --shots`，放大看睁 | 闭 | 差三联图；有问题就用遮罩重画闭眼差分（`images.py --mask` 只开两只眼的椭圆），提示词写“eyelids fully closed, same skin tone and lighting, no iris visible”。
 - **抠图留下纯色底的方块 / 缺口**（2026-11-08）：Demo31 渚 popsicle 你的手后面留着一块灰色底板；Demo24 岳 log 右下角木头和手被切出一个矩形缺口。→ 每张人物层叠在深色上全图看一遍（`build_stage.py --preview`），不只看脸。
+- **合并时的"暂存删除"被别的会话的提交带走，线上页面 404**（Demo19 ルナ：先 `git rm` 了旧 Demo19 的两个文件，还没提交新页面，另一个会话的 `git commit` 把这次删除一起推上去了，统筹会话紧急恢复）→ 合并 / 替换线上 Demo 时**不要在共享暂存区里分步暂存**：用临时索引一次做完 `GIT_INDEX_FILE=<临时文件> git read-tree HEAD` → 新文件 `git add`、共用文件「HEAD + 自己的几行」`git hash-object -w` + `update-index --cacheinfo` → `bump.py --stage` → `git commit`，最后 `git reset -q HEAD -- <自己的路径>` 让共享暂存区和 HEAD 对齐。
+- **绿幕人物经 `clean_cutout.py` 后白衬衫边缘一圈黑点**（Demo19 ルナ：工具原来专为灰底 #c8c8c8 写，"接近灰底的像素就抠掉"把白衬衫的浅灰阴影当成底色）→ `clean_cutout.py <demo> --bg R,G,B` 传入实际的幕布颜色（绿幕约 `8,158,65`）：非灰色幕布时跳过灰底清除，只做边缘重新上色 + 按幕布颜色的抠图公式。清理后把每个人物层叠在深色上整张看一遍、衣服和头发边缘放大 2 倍看。
+- **剧情结束回到封面时画面全黑**（Demo19 测试发现；Demo17 / 18 / 25 / 31 的 `main.js` 同样有：`finish()` 没清 `S.fade`，循环继续画全黑的渐暗层而不是封面）→ `finish()` 里加 `S.fade = 0; S.fadeA = 0`。结束后截图看一眼封面，不只看按钮文字。
+- **长按按钮挡住了要看的东西**（Demo19：「見つめる」按钮正好盖在画面中央的蓝色火焰上）→ 要盯着画面某处的互动，按钮放到旁边（`.act.side`）；每个互动都截一张图看按钮挡没挡住主角 / 道具。
+- **`?auto=1` 测试卡在第一句**（自动开始时 AudioContext 还是 suspended，台词的 `onended` 永远不来）→ 测试标签页里先真实点击一次「Start」（computer 点击，不是 JS `click()`），之后同一个标签页里的 `?auto` 都能自动开始。
 
 ## 12. 资源清理与文件结构
 

@@ -1,0 +1,238 @@
+{
+ "src": "assets/art",
+ "hooks": {
+  "view": "LUNA.S.view",
+  "lv": "LUNA.S.lv"
+ },
+ "bgs": {
+  "bar": {
+   "src": "bg_bar",
+   "fire": [
+    0.5,
+    0.5
+   ]
+  },
+  "bar_dim": {
+   "src": "bg_bar_dim",
+   "fire": [
+    0.5,
+    0.5
+   ]
+  },
+  "seat": {
+   "src": "bg_seat",
+   "fire": [
+    0.5,
+    0.5
+   ]
+  }
+ },
+ "poses": {
+  "counter": {
+   "src": "luna_counter",
+   "talk": "luna_counter_talk",
+   "blink": "luna_counter_blink",
+   "matte": "green",
+   "centre_mouth": [
+    1235,
+    500
+   ],
+   "radius_mouth": [
+    50,
+    30
+   ],
+   "regions_eyes": [
+    [
+     1117,
+     410,
+     50,
+     35
+    ],
+    [
+     1260,
+     347,
+     50,
+     35
+    ]
+   ]
+  },
+  "shake": {
+   "src": "luna_shake",
+   "talk": "luna_shake_talk",
+   "blink": "luna_shake_blink",
+   "matte": "green",
+   "centre_mouth": [
+    1325,
+    492
+   ],
+   "radius_mouth": [
+    50,
+    30
+   ],
+   "regions_eyes": [
+    [
+     1205,
+     410,
+     50,
+     35
+    ],
+    [
+     1347,
+     345,
+     50,
+     35
+    ]
+   ]
+  },
+  "lean": {
+   "src": "luna_lean",
+   "talk": "luna_lean_talk",
+   "blink": "luna_lean_blink",
+   "matte": "green",
+   "centre_mouth": [
+    1216,
+    584
+   ],
+   "radius_mouth": [
+    53,
+    32
+   ],
+   "regions_eyes": [
+    [
+     1075,
+     481,
+     53,
+     37
+    ],
+    [
+     1244,
+     403,
+     53,
+     37
+    ]
+   ]
+  },
+  "flame": {
+   "src": "luna_flame",
+   "talk": "luna_flame_talk",
+   "blink": "luna_flame_blink",
+   "matte": "green",
+   "centre_mouth": [
+    1278,
+    487
+   ],
+   "radius_mouth": [
+    50,
+    30
+   ],
+   "regions_eyes": [
+    [
+     1159,
+     397,
+     50,
+     35
+    ],
+    [
+     1306,
+     334,
+     50,
+     35
+    ]
+   ]
+  },
+  "sit": {
+   "src": "luna_sit",
+   "talk": "luna_sit_talk",
+   "blink": "luna_sit_blink",
+   "matte": "green",
+   "centre_mouth": [
+    1244,
+    512
+   ],
+   "radius_mouth": [
+    51,
+    32
+   ],
+   "regions_eyes": [
+    [
+     1119,
+     434,
+     51,
+     37
+    ],
+    [
+     1266,
+     359,
+     51,
+     37
+    ]
+   ]
+  },
+  "whisper": {
+   "src": "luna_whisper",
+   "talk": "luna_whisper_talk",
+   "blink": "luna_whisper_blink",
+   "matte": "green",
+   "centre_mouth": [
+    954,
+    725
+   ],
+   "radius_mouth": [
+    68,
+    42
+   ],
+   "regions_eyes": [
+    [
+     721,
+     575,
+     72,
+     50
+    ],
+    [
+     983,
+     429,
+     72,
+     50
+    ]
+   ]
+  }
+ },
+ "views": {
+  "counter": {
+   "still": "luna_counter",
+   "pose": "counter",
+   "bg": "bar",
+   "fire": null
+  },
+  "shake": {
+   "still": "luna_shake",
+   "pose": "shake",
+   "bg": "bar",
+   "fire": null
+  },
+  "lean": {
+   "still": "luna_lean",
+   "pose": "lean",
+   "bg": "bar",
+   "fire": null
+  },
+  "flame": {
+   "still": "luna_flame",
+   "pose": "flame",
+   "bg": "bar_dim",
+   "fire": null
+  },
+  "sit": {
+   "still": "luna_sit",
+   "pose": "sit",
+   "bg": "seat",
+   "fire": null
+  },
+  "whisper": {
+   "still": "luna_whisper",
+   "pose": "whisper",
+   "bg": "seat",
+   "fire": null
+  }
+ }
+}

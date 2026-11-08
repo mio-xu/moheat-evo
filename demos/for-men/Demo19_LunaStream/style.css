@@ -1,0 +1,47 @@
+/* Luna, the secret bartender — Demo17's style.css with a night-bar palette (midnight navy + sapphire + amber). */
+:root { --bg: #0e1122; --panel: #161a30; --panel-2: #1e2440; --line: #3a4570; --gold: #9fc3ff; }
+.bar { background: #0a0c18; }
+.brand span { color: #8fb8ff; }
+.btn.primary { background: linear-gradient(135deg, #3d63d9, #e0a94a); }
+.vv { bottom: auto; top: .6cqw; }
+
+/* cover */
+.intro::before { background: linear-gradient(to right, rgba(14, 17, 34, .82), rgba(14, 17, 34, .5) 42%, rgba(14, 17, 34, 0) 62%); }
+body.cover-only .intro::before { background: linear-gradient(to right, rgba(14, 17, 34, .76), rgba(14, 17, 34, .38) 42%, rgba(14, 17, 34, 0) 60%); }
+body.cover-only .cover-copy { margin-top: 0 !important; }
+.intro .hero.a { position: absolute; width: 1px; height: 1px; }
+.intro h1 { background: linear-gradient(100deg, #eaf1ff 0%, #ffffff 40%, #9fc3ff 72%, #ffd28a 100%); -webkit-background-clip: text; background-clip: text; }
+.intro .chip.p { background: rgba(61, 99, 217, .2); color: #eef3ff; border-color: rgba(159, 195, 255, .55); }
+.intro .cleared { color: #f2f6ff; background: rgba(61, 99, 217, .3); border-color: rgba(159, 195, 255, .6); }
+
+/* subtitles (sizes from series.css) */
+.subs { position: absolute; z-index: 3; display: flex; justify-content: center; pointer-events: none; opacity: 0; transition: opacity .25s; }
+.subs.show { opacity: 1; }
+.subs .line { display: flex; flex-direction: column; align-items: center; background: rgba(14, 17, 34, .64); }
+.subs .ja { color: #fff; font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif; font-weight: 700; }
+.subs .en { color: #dfe6f6; font-family: Inter, sans-serif; }
+
+/* your turn: choices / action / hold */
+.choices, .act { position: absolute; left: 50%; bottom: 12cqw; transform: translate(-50%, .6cqw); z-index: 4; opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s; }
+.choices.show, .act.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.choices { display: flex; gap: 1.2cqw; }
+.ch, .act-btn { cursor: pointer; border-radius: 1.4cqw; border: 1px solid rgba(159, 195, 255, .55); background: rgba(20, 24, 46, .82); color: #fff; padding: 1cqw 2cqw;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background .15s, transform .15s; user-select: none; -webkit-user-select: none; touch-action: none; }
+.ch:hover, .act-btn:hover { background: rgba(61, 99, 217, .55); transform: translateY(-2px); }
+.ch b, .act-btn b { display: block; font: 700 clamp(11px, 1.6cqw, 26px)/1.3 "Zen Maru Gothic", "Noto Sans JP", sans-serif; }
+.ch span, .act-btn span { display: block; font: 500 clamp(9px, 1.05cqw, 16px)/1.3 Inter, sans-serif; color: #dfe6f6; }
+.act-btn { display: grid; grid-template-columns: auto auto; grid-template-rows: auto auto; column-gap: 1cqw; align-items: center; text-align: left; animation: nudge 1.6s ease-in-out infinite; }
+.act-btn i { grid-row: span 2; font-style: normal; font-size: clamp(18px, 2.6cqw, 40px); }
+.act-btn.hold { grid-template-rows: auto auto auto; }
+.act-btn.hold.down { background: rgba(61, 99, 217, .7); transform: scale(.97); }
+.act-btn .bar { grid-column: 2; display: block; height: .45cqw; min-height: 4px; margin-top: .5cqw; border-radius: 9px; background: rgba(255, 255, 255, .15); overflow: hidden; }
+.act-btn .bar u { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #8fb8ff, #ffd28a); }
+@keyframes nudge { 50% { box-shadow: 0 0 1.6cqw rgba(159, 195, 255, .6); } }
+.stage:has(.intro:not(.hidden)) :is(.choices, .act, .subs, .hud-top) { display: none !important; }
+@container (max-width: 620px) {
+  .choices { flex-direction: column; bottom: 14cqw; } .ch b, .act-btn b { font-size: 3.2cqw; } .ch span, .act-btn span { font-size: 2.3cqw; }
+}
+
+/* the flame hold sits to the right of her (the flame is in the middle of the picture) */
+.act.side { left: 79%; }
+@container (max-width: 620px) { .act.side { left: 76%; } }

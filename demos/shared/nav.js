@@ -17,7 +17,7 @@
     { cat: 'for-men', dir: 'Demo14_MintStream', ja: 'ミントの、ささやき配信', en: "Mint's Whisper Stream", zh: '薄荷的耳语直播', group: 2 },
     { cat: 'for-men', dir: 'Demo17_CocoaStream', ja: 'ココアの、バレンタイン前夜', en: "Valentine's Eve with Cocoa", zh: '可可的情人节前夜', group: 2 },
     { cat: 'for-men', dir: 'Demo18_HinataStream', ja: 'ひなたと、ゲーセンデート', en: 'Arcade Date with Hinata', zh: '和日向的游戏厅约会', group: 2 },
-    { cat: 'for-men', dir: 'Demo19_LunaStream', ja: 'ルナの、よふかし配信', en: "Luna's Late-Night Stream", zh: '露娜的深夜直播', group: 2 },
+    { cat: 'for-men', dir: 'Demo19_LunaStream', ja: 'ルナの、ひみつのカクテル', en: "Luna's Secret Cocktail", zh: '露娜的秘密鸡尾酒', group: 2 },
     { cat: 'for-men', dir: 'Demo25_HatsumodeDate', ja: 'はじめての、初詣デート', en: 'My First Hatsumode', zh: '第一次的新年参拜约会', group: 2 },
     { cat: 'for-men', dir: 'Demo31_SummerRooftop', ja: 'なつの、おくじょうで', en: 'Up on the Summer Roof', zh: '夏日，屋顶上', group: 2 },
     { cat: 'for-women', dir: 'Demo12_LateCall', ja: 'もしもし、きこえる？', en: 'Can You Hear Me?', zh: '喂，听得到吗？', group: 3 },

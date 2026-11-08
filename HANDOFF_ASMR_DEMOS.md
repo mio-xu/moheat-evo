@@ -52,7 +52,7 @@ demos/healing/Demo26_BecomeNaomi/                Naomi 第三作《ねこにな�
 demos/for-men/Demo14_MintStream/                 女主播直播间 ①《ミントの、ささやき配信》（共用代码、美术、配音都在这里；详见该目录 README）
 demos/for-men/Demo17_CocoaStream/                直播间 ②《ココアの、ほっこりカフェ配信》（只有页面+封面，<base href> 指向 Demo14）
 demos/for-men/Demo18_HinataStream/               直播间 ③《ひなたの、激辛チャレンジ配信》（同上）
-demos/for-men/Demo19_LunaStream/                 直播间 ④《ルナの、よふかし配信》（同上）
+demos/for-men/Demo19_LunaStream/                 纯交互《ルナの、ひみつのカクテル》（ルナ 秘密调酒师，2026-11-08 接管旧直播间；分层 OpenAI 美术，ElevenLabs luna，页面独立不再依赖 Demo14）
 HANDOFF_ASMR_DEMOS.md                    本文件
 AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件）
 ```

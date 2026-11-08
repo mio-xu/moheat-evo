@@ -6,6 +6,26 @@
 > 用户偏好在 `USER_PREFERENCES.md`，整体状态在 `HANDOFF_ASMR_DEMOS.md`，用户任务清单在 `TASKS.md`。
 
 ---
+## 2026-11-08 · ルナ「秘密调酒师」做完并接管 Demo19_LunaStream（后台 agent，统筹会话 moheat-evo-c9 审查）
+
+**做了什么**
+- 《ルナの、ひみつのカクテル · Luna's Secret Cocktail》在临时文件夹 Demo39_LunaBartender 做好，测试通过后接管 `demos/for-men/Demo19_LunaStream/`（同一网址）。旧直播页（只有 index.html + cover，代码 / 美术都在 Demo14）连同当时 Demo14 的代码（不含 assets）备份在 `~/Desktop/MoHeat Evo 备份/for-men/Demo19_LunaStream_20261108-1448/`。**新 Demo19 完全独立**：没有 `<base href>`，html / js / css / 图 / 音频都不从 Demo14 读（服务器日志 0 个 Demo14 请求）；ルナ 的参考图先从 Demo14 复制到 `Demo19_LunaStream/assets/ref/`（不进 git）。
+- 剧本 = `project/script.md`（已审），5 段、22 句（ElevenLabs `luna` r1_b，118 s，`scripts/voice.py`），约 2:15。互动 7 次：点单二选一、接酒杯、给一个词（月 / 夜明け）、长按看火焰（松手 = 眨眼，她再点一次）、干杯说出来（ふたりの夜に / ルナに）、结局（「つき」と呼ぶ / また来てもいい？）；全部可用语音回答（l10n.js VOICE + `data-voice`）。三语。结束回本 Demo 封面。
+- DUAL：右脸冰摇壶（右冷 0.65）+ 她在右边的耳语（右暖）同时；蓝色火焰（两耳暖、闪烁）→ 火一灭门被风吹开（左冷）= 一秒内热→冷；门口雨夜风（左冷）；爱尔兰咖啡（前方暖）；她坐在左边（左暖）+ 左耳耳语。
+- 画面（标准分层，OpenAI gpt-image-2）：`bg_bar`、`bg_seat` 两张空背景（`bg_bar_dim` 用 Pillow 压暗，免费）、6 个绿幕姿势（counter / shake / lean / flame / sit / whisper）、12 张遮罩差分（`project/face_points.json`）→ `build_stage.py` → `tools/art/clean_cutout.py <demo> --bg 8,158,65`（本次给它加了 `--bg`：绿幕时不做灰底清除，见 §11.1）。check_cut_body 0、check_patches OK，嘴 2 倍看过（张嘴只在说话时出现、停顿闭上、无双嘴 / 方框）。
+- 共用：nav.js 标题（ja ルナの、ひみつのカクテル / en Luna's Secret Cocktail / zh 露娜的秘密鸡尾酒）+ `bump.py --stage`、官网菜单文字、credits（拆成「ミントの配信」和本作一行）、封面 `media/cover.jpg` + `assets/images/demos/Demo19_LunaStream.jpg` + 三语缩略图（`tools/web/thumbs.py`）、TASKS #35/#37、HANDOFF 目录行、`.gitignore`。
+
+**测试**（自己的标签页，端口 8797）：`?auto=1`（EN，真声音）2:13 通关、6 个画面都出现、说话时嘴开 96 %、沉默时 0；`?auto=1&alt=1&sub=zh` 通关，画面上 0 假名；`?alt` 快速版确认 l10x（眨眼重来）分支；同耳冷热同时出现（lean：RC64 + RH35）；结束回封面（修了黑屏）；0 报错，只有 favicon 404。
+
+**手机**：`tools/web/check_mobile.html?only=Demo19` 7 种尺寸 0 问题。
+
+**下一步**：Demo17 / 18 / 25 / 31 结束黑屏的同一个 bug 交给统筹分派（各自 `finish()` 加 `S.fade = 0`）。
+
+**花费**：OpenAI 20 张 2560×1440 high（约 $4，`project/openai_log.json`）；ElevenLabs 22 句（约 900 字）；Seedance 0。
+
+**问题**（教训已写进 §11.1）：分步暂存的删除被别的会话的提交带上线（Demo19 404，统筹恢复）；clean_cutout 在绿幕上把白衬衫边缘抠出黑点；结束后封面全黑；长按按钮挡住火焰；`?auto` 在 AudioContext 挂起时卡住。
+
+---
 ## 2026-11-08 · Demo18 ひなた 抓娃娃机检查 + 修正（moheat-evo-60 交接的验收子任务）
 
 - **问题（v8 实际画面）**：爪子 518 px 高、关在 635 px 的玻璃箱里，停车位置就已经插进玩偶堆里；`grabY()` 比停车位置还高 17 px → 「下降」其实往上走、「提起」往下走，猫根本没被提起；猫底部被玻璃下沿直线切掉；代码画的 3 px 细线接在图里 9 px 粗的吊绳上；两边的爪是横向挤压（铰链离开外壳）。
