@@ -49,3 +49,4 @@
 | 43 | 信长对话的假版本也要支持更多场景：选地点、只跟信长 / 只跟家康 / 两人一起；假版本和真版本都要有；话题跟地点相关 | Demo23 两版都加地点 + 对象选择，5 个地点的剧本 | 🔄 后台 agent |
 | 44 | 游戏机爪子的动画好奇怪，还是高质量生成素材来做 | Demo38 抓娃娃机：生成的机台 / 爪子 / 玩偶素材分层做动画（或 §6.3 动态 CG） | 🔄 会话 60 |
 | 45 | 手机版本都要改成不需要下滑的，一开始的指南不要跑到手机按不到的地方 | 全部 Demo 手机竖 / 横屏一屏无滚动；guide.js 提示框始终在屏幕内可点 | 🔄 后台 agent |
+| 46 | Keep the Nobunaga AI demo as THREE separate demos: one where you only talk with Nobunaga, one only with Ieyasu, and one multi-person round-table (座談会) | 三个独立 Demo、共用 Demo23 的引擎 / 剧本 / 声音：Demo23「信長と、語らう」（信长，原网址）、Demo41_IeyasuTalk「家康と、語らう」、Demo42_SengokuRoundtable「信長と家康の、座談会」；封面只选地点；nav.js / 官网菜单 / credits / 三语缩略图；私密实时版 /live · /live/ieyasu · /live/roundtable（同一密码和上限）；页面由 `scripts/pages.js` 生成 | ✅ |

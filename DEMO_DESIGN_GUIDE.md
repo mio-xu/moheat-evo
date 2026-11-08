@@ -606,6 +606,8 @@ main.layout
 - **提交时带上别的会话没提交的改动**（共用文档被两个会话同时改；Demo37 `git add build_stage.py DEMO_DESIGN_GUIDE.md` 把别人的改动一起提交，推送前撤回）→ 共用文件一律「HEAD 版本 + 只改自己的几行 → `git hash-object -w` + `git update-index --cacheinfo`」暂存，提交后 `git show <hash> -- <文件>` 看一遍；脚本改文件失败时不要接着 `git add`。〔G7〕
 - **只提交了版本号，没提交共用文件本身**（`bump.py --stage` 只暂存页面里的 `?v=`，再用不带路径的 `git commit` → 线上"新版本号配旧代码"）→ `git commit -- <共用文件> <bump 改的页面…>` 一起提交，提交后 `git show --stat HEAD` 确认。〔G7 · check_demo: cache 会报"文件在版本号之后又改过"〕
 - **提交命令没生效**（`$F` 里写了多个路径，zsh 不按空格拆开）→ 路径直接写在命令里或用数组；提交后 `git show --stat HEAD` 核对。〔G7〕
+- **缩略图截到还没画好的封面**（Demo42 英文缩略图只有 13 KB、一片暗色：别的会话同时在跑 headless Chrome，机器忙，`--timeout` 到了封面图还没加载）→ `tools/web/thumbs.py` 已改：截图颜色太少（96×54 下 < 1500 种，正常封面 ≥ 2,800）就算失败并重截；生成后照样把几张拼起来看一眼。
+- **一个 Demo 拆成几个时复制页面会越改越不一样**（Demo23 → 23 / 41 / 42）→ 代码和数据只留一份，其他文件夹只放 `<base href>` 的薄页面；薄页面由脚本从模板生成（`Demo23_NobunagaTalk/scripts/pages.js`），差别只写在脚本的表里，不手改生成的页面。
 
 ## 12. 资源清理与文件结构
 

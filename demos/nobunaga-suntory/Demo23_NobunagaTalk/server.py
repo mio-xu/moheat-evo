@@ -10,7 +10,8 @@ Override the file with MOHEAT_LIVE_PASS_FILE=… (tests). Bound to 127.0.0.1 onl
 
 Everything this server serves needs the session cookie (14 days, HttpOnly, SameSite=Strict, HMAC of the password): pages → the
 login form, /api/* → 401. Never served, even after login: dot files (.env.local, .git), local/, *.py, *.command, *.log.
-  GET  /live                → the live page (demos/nobunaga-suntory/Demo23_NobunagaTalk/live/)
+  GET  /live                → the live page with Nobunaga (demos/nobunaga-suntory/Demo23_NobunagaTalk/live/)
+  GET  /live/ieyasu · /live/roundtable → with Ieyasu · the round-table with both (live/ieyasu.html · live/roundtable.html)
   GET  /login · POST /login · GET /logout
   GET  /api/talk/status     usage today / this month and the limits
   POST /api/talk/session    → {sid, signed_url} for the text-only ElevenLabs agent (the conversation's brain), if the limits allow
@@ -28,6 +29,7 @@ sp = importlib.util.spec_from_file_location('eleven', os.path.join(REPO, 'tools'
 PORT = int(os.environ.get('PORT', 8771))
 HOST = os.environ.get('HOST', '127.0.0.1')
 LIVE = '/demos/nobunaga-suntory/Demo23_NobunagaTalk/live/'
+LIVE_PAGES = {'/live/nobunaga': '', '/live/ieyasu': 'ieyasu.html', '/live/roundtable': 'roundtable.html'}   # pages made by scripts/pages.js
 AGENT = json.load(open(os.path.join(HERE, 'agent.json')))['agent_id']
 USAGE_P = os.path.join(HERE, 'local', 'usage.json')
 PASS_P = os.path.expanduser(os.environ.get('MOHEAT_LIVE_PASS_FILE', '~/.moheat_live_pass'))
@@ -188,6 +190,7 @@ class H(http.server.SimpleHTTPRequestHandler):
             if path.startswith('/api/'): return self._json({'error': 'login required'}, 401)
             return self._redirect('/login?next=' + urllib.parse.quote(self.path))
         if path in ('/', '/live', '/live/'): return self._redirect(LIVE)
+        if path in LIVE_PAGES: return self._redirect(LIVE + LIVE_PAGES[path])   # the three talk demos (user 2026-11-08), same password + limits
         if self._denied(path): self.send_error(404); return
         if path.startswith('/api/talk/status'): return self._json(status())
         return super().do_GET()
@@ -255,5 +258,5 @@ if __name__ == '__main__':
     fresh = not os.path.exists(PASS_P); password()
     if not fresh: print(f'Password: in {PASS_P}  (cat {PASS_P})')
     srv = http.server.ThreadingHTTPServer((HOST, PORT), H)
-    print(f'Private live talk: http://localhost:{PORT}/live   (Ctrl+C to stop)', flush=True)
+    print(f'Private live talk: http://localhost:{PORT}/live (Nobunaga) · /live/ieyasu · /live/roundtable   (Ctrl+C to stop)', flush=True)
     srv.serve_forever()

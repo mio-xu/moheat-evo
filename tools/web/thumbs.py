@@ -29,7 +29,10 @@ def shot(cat, d, lang):
         subprocess.run([CHROME, '--headless=new', '--disable-gpu', '--hide-scrollbars', '--window-size=1920,1080', '--timeout=6000',
                         f'--user-data-dir={tmp}', f'--screenshot={png}', f'http://localhost:8765/demos/{cat}/{d}/?cover=1&sub={lang}'],
                        check=True, capture_output=True, timeout=90)
-        Image.open(png).convert('RGB').resize((480, 270), Image.LANCZOS).save(os.path.join(OUT, f'{d}.{lang}.jpg'), quality=84)
+        im = Image.open(png).convert('RGB')
+        if len(im.resize((96, 54)).getcolors(96 * 54) or range(9999)) < 1500:   # cover still loading under load (Demo42: dark, 13 KB); real covers ≥ 2,800
+            raise OSError('cover not drawn yet')
+        im.resize((480, 270), Image.LANCZOS).save(os.path.join(OUT, f'{d}.{lang}.jpg'), quality=84)
     return f'{d}.{lang}.jpg'
 
 

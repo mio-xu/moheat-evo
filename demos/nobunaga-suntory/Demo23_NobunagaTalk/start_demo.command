@@ -20,7 +20,7 @@ if [ "$1" = "--remote" ]; then
   TUNNEL=$!
   for i in $(seq 1 40); do URL=$(grep -oE 'https://[a-z0-9-]+\.trycloudflare\.com' "$LOG" | head -1); [ -n "$URL" ] && break; sleep 0.5; done
   if [ -n "$URL" ]; then
-    echo ""; echo "  Remote (phone):  $URL/live"; echo "  Password:        cat ~/.moheat_live_pass"
+    echo ""; echo "  Remote (phone):  $URL/live   (Nobunaga) · $URL/live/ieyasu · $URL/live/roundtable"; echo "  Password:        cat ~/.moheat_live_pass"
     echo "  The address changes every time; anyone with it still needs the password. Close this window to stop the tunnel."; echo ""
   else
     echo "Tunnel did not start — see $LOG"
@@ -28,5 +28,6 @@ if [ "$1" = "--remote" ]; then
 else
   open -a "Google Chrome" "http://localhost:$PORT/live" 2>/dev/null || open "http://localhost:$PORT/live"
 fi
+echo "Live talk: http://localhost:$PORT/live (Nobunaga) · /live/ieyasu (Ieyasu) · /live/roundtable (both)"
 echo "Live talk server running — close this window to stop."
 wait $SERVER

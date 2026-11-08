@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="style.css?v=3" />
   <link rel="stylesheet" href="../../shared/series.css?v=8" />
 </head>
-<body>
+<body data-cast="N">
   <!-- PUBLIC scripted preview of the live talk (lines.js + pre-rendered voices, no server, no keys). The live AI version is private: live/ via server.py. -->
   <header class="bar">
     <a class="brand" href="../../../">MoHeat <span>Evo</span> <em>ASMR · Nobunaga Series</em></a>
@@ -39,17 +39,16 @@
         </div>
         <p class="behind" id="behind"></p>
         <div class="subs" id="subs"><p class="line"><span class="ja"><em class="who" id="subWho"></em><span id="subJa"></span></span><span class="en" id="subEn"></span></p></div>
-        <p class="vv" id="vv">信長・家康 ElevenLabs</p>
+        <p class="vv" id="vv">信長 ElevenLabs</p>
 
         <div class="intro" id="intro">
           <div class="hero a" aria-hidden="true"></div>
           <div class="cover-copy">
             <p class="series">信長シリーズ 特別編 · Nobunaga Series</p>
             <h1><span>信長と、</span><span>語らう</span></h1>
-            <p class="en">Talk with Nobunaga — pick a place, and who you talk with</p>
+            <p class="en">Talk with Nobunaga — pick a place, just the two of you</p>
             <div class="pick">
               <p><small>場所 · Where</small><span id="pickScene"></span></p>
-              <p><small>相手 · With</small><span id="pickCast"></span></p>
             </div>
             <p class="cast" id="coverChips"></p>
             <p class="preview-tag">台本プレビュー · Preview · scripted</p>
@@ -58,8 +57,8 @@
               <button class="btn primary big" id="startBtn" type="button">▶ 語らう · Start</button>
               <button class="btn" id="lrBtn" type="button">🎧 Left / Right check</button>
             </div>
-            <p class="hint" id="budget">They speak first, then wait for you · answer with your voice or type · headphones + microphone</p>
-            <p class="draft" id="credits">A scripted preview of the live AI talk: five places, they answer anything you say and steer back to the script · voices ElevenLabs · art ChatGPT (OpenAI)</p>
+            <p class="hint" id="budget">He speaks first, then waits for you · answer with your voice or type · headphones + microphone</p>
+            <p class="draft" id="credits">A scripted preview of the live AI talk: five places, he answers anything you say and steers back to the script · voice ElevenLabs · art ChatGPT (OpenAI)</p>
           </div>
         </div>
       </div>
@@ -94,7 +93,7 @@
   <script src="audio.js?v=3"></script>
   <script src="lines.js?v=2"></script>
   <script src="scripted.js?v=2"></script>
-  <script src="main.js?v=4"></script>
+  <script src="main.js?v=5"></script>
   <script src="../../shared/nav.js?v=37"></script>
 </body>
 </html>
