@@ -23,7 +23,21 @@
    "src": "hina_lean",
    "talk": "hina_lean_talk",
    "blink": "hina_lean_blink",
-   "matte": "ai"
+   "matte": "ai",
+   "regions_eyes": [
+    [
+     724,
+     488,
+     131,
+     91
+    ],
+    [
+     377,
+     672,
+     89,
+     60
+    ]
+   ]
   },
   "wave": {
    "src": "hina_wave_ext",

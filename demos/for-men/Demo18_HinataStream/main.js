@@ -280,15 +280,27 @@
     if (!(cur && clipOK(cur) && (view === curView || (view === S.view && ONCE.has(cur))))) return false;
     ctx.globalAlpha = alpha; ctx.drawImage(CLIP[cur], 0, 0, W, H); ctx.globalAlpha = 1; return true;
   }
+  // the page's own zoom of the still: none on video, a constant 1.02 over the layered stills (shared/layers.js breathes / parallaxes —
+  // a page drift on top made the background breathe too, guide §6.4), the old slow drift only on the flat ?flat / ?stills fallback
+  const LIVE = () => !!(window.MoHeatLayers && window.MoHeatLayers.live);
+  function pageXf(t) {
+    const exact = !QS.has('stills') && Object.keys(CLIP).length > 0, live = LIVE();   // with video the still must match the clips' frames exactly
+    return { z: exact ? 1 : 1.02 + (live ? 0 : .008 * Math.sin(t * 1.1)), dy: exact || live ? 0 : 4 * Math.sin(t * .9) };
+  }
   function drawView(view, alpha, t) {
     if (drawClip(view, alpha)) return;
-    const exact = !QS.has('stills') && Object.keys(CLIP).length > 0;   // with video the still must match the clips' frames exactly (no drift)
     const im = IMG[view];
     ctx.globalAlpha = alpha;
     if (!im) { ctx.fillStyle = '#0d1630'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
-    const z = exact ? 1 : 1.02 + .008 * Math.sin(t * 1.1), dh = W * im.height / im.width;
-    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + (exact ? 0 : 4 * Math.sin(t * .9)), W, dh); ctx.restore();
+    const { z, dy } = pageXf(t), dh = W * im.height / im.width;
+    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + dy, W, dh); ctx.restore();
     ctx.globalAlpha = 1;
+  }
+  // a point of the crane plate (bg px) → canvas px right now: the background layer's parallax (MoHeatLayers.toFrame, incl. its 1.02)
+  // × the page's zoom — the claw / plushie are drawn through this so they stay locked to the machine
+  function bgToCanvas(x, y, t) {
+    const [fx, fy] = LIVE() && window.MoHeatLayers.toFrame ? window.MoHeatLayers.toFrame('hinata_crane', x, y, 'bg') : [x, y], { z, dy } = pageXf(t);
+    return [W / 2 + (fx - W / 2) * z, H / 2 + (fy - H / 2 + dy) * z];
   }
   // ---------------------------------------------------------------- the crane game as layers (user: "the claw animation looks weird,
   // make it with high-quality generated assets"): a generated claw + cat plushie (scripts/props.py) over the plate without its painted
@@ -386,13 +398,20 @@
       ctx.stroke(); ctx.restore();
     }
     if (viewB === 'crane' || (viewA === 'crane' && mix < 1)) {   // fades in / out with the machine plate (v8 popped off while the plate cross-faded)
-      ctx.save(); ctx.globalAlpha = viewB === 'crane' ? mix : 1 - mix; drawCrane(t, dt); ctx.restore(); }
+      const [ax, ay] = bgToCanvas(0, 0, t), [bx, by] = bgToCanvas(W, H, t);   // affine: parallax = shift, zoom = scale
+      ctx.save(); ctx.globalAlpha = viewB === 'crane' ? mix : 1 - mix; ctx.translate(ax, ay); ctx.scale((bx - ax) / W, (by - ay) / H); drawCrane(t, dt); ctx.restore(); }
     if (S.shots && S.shots.n) label(String(S.shots.n), W * .5, H * .3, 220, '#ffffff');
     if (S.flash > 0) { ctx.fillStyle = `rgba(255,255,255,${S.flash * .85})`; ctx.fillRect(0, 0, W, H); }
     if (canK > .05) {   // steam from the hot can at the left edge
       ctx.save(); ctx.fillStyle = 'rgba(255,255,255,.18)';
-      for (const p of steam) { if (p.life <= 0) { p.x = W * (.1 + Math.random() * .08); p.y = H * .55; p.v = 40 + Math.random() * 50; p.life = 1 + Math.random(); } p.life -= dt; p.y -= p.v * dt; p.x += 12 * Math.sin(t * 2 + p.v) * dt;
-        ctx.globalAlpha = canK * Math.max(0, p.life) * .7; ctx.beginPath(); ctx.arc(p.x, p.y, 14 + 18 * clamp(1 - p.life / 2), 0, 7)   /* life is 1–2 s: v1 gave a negative radius */; ctx.fill(); }
+      // physics (guide §6.4): born fast at the can, slows as it leaves the hot air (v·e^-1.1t), spreads (radius grows with age), drifts
+      // with the cold street air to the right, fades — never pops in / out mid-air
+      for (const p of steam) {
+        if (p.life <= 0) { p.x = W * (.1 + Math.random() * .08); p.y = H * .55; p.v = 70 + Math.random() * 50; p.vx = (Math.random() - .5) * 14; p.age = 0; p.life = p.max = 1.6 + Math.random() * .8; }
+        p.life -= dt; p.age += dt; p.v *= Math.exp(-1.1 * dt); p.vx += (10 - p.vx) * .6 * dt;
+        p.y -= p.v * dt; p.x += (p.vx + 6 * Math.sin(t * 1.7 + p.max * 5)) * dt;
+        const k = p.age / p.max, a = Math.min(1, p.age / .25) * Math.max(0, 1 - k);   // fade in over .25 s, out with age
+        ctx.globalAlpha = canK * a * .55; ctx.beginPath(); ctx.arc(p.x, p.y, 12 + 46 * k, 0, 7); ctx.fill(); }
       ctx.restore();
     }
     if (S.fade) { S.fadeA = Math.min(1, (S.fadeA || 0) + dt / 3); ctx.fillStyle = `rgba(10,6,24,${S.fadeA})`; ctx.fillRect(0, 0, W, H); }
@@ -463,6 +482,7 @@
   document.addEventListener('keydown', (e) => { if (e.code === 'Escape') emergencyStop(); });
   function finish() {   // back to this demo's own cover (user rule: never an "ended" card / next-demo button)
     S.started = false; run++; stopOutput();
+    S.fade = 0; S.fadeA = 0;   // the end fade must not stay over the cover (the loop draws the story while S.fade is set → black cover)
     for (const k of ['arcade', 'street', 'engine']) SND.loop(k)?.stop();
     sub('', ''); actEl.classList.remove('show'); choiceEl.classList.remove('show');
     const c = $('cleared'); c.hidden = false;

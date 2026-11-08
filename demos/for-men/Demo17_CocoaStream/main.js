@@ -347,7 +347,7 @@
   document.addEventListener('visibilitychange', () => { hidden = document.hidden; if (hidden) { stopOutput(); SND.ctx()?.suspend(); } else { last = performance.now(); SND.ctx()?.resume(); } });
   document.addEventListener('keydown', (e) => { if (e.code === 'Escape') emergencyStop(); });
   function finish() {   // back to this demo's own cover (user: never an "ended / next demo" card)
-    S.started = false; run++; stopOutput();
+    S.started = false; run++; stopOutput(); S.fade = 0; S.fadeA = 0;   // the end fade must not stay over the cover (the loop draws the story while S.fade is set → black cover)
     for (const k of ['wind', 'shop', 'oven', 'bain', 'whisk']) SND.loop(k)?.stop();
     sub('', ''); actEl.classList.remove('show'); choiceEl.classList.remove('show');
     const c = $('cleared'); c.hidden = false;

@@ -37,12 +37,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/welcome_eyes.webp?v=a5f5bc03",
+     "src": "art/welcome_eyes.webp?v=edb1922c",
      "rect": [
-      500,
-      345,
-      376,
-      189
+      509,
+      322,
+      361,
+      210
      ],
      "kind": "eyes"
     }
@@ -84,12 +84,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/melt_eyes.webp?v=54f3178a",
+     "src": "art/melt_eyes.webp?v=54e3ced2",
      "rect": [
-      571,
-      298,
-      388,
-      241
+      584,
+      295,
+      389,
+      239
      ],
      "kind": "eyes"
     }
@@ -131,12 +131,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/whisk_eyes.webp?v=ac4cc0d6",
+     "src": "art/whisk_eyes.webp?v=de39302b",
      "rect": [
-      668,
-      307,
-      346,
-      181
+      651,
+      271,
+      379,
+      216
      ],
      "kind": "eyes"
     }
@@ -178,12 +178,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/cookie_eyes.webp?v=fdfc38fa",
+     "src": "art/cookie_eyes.webp?v=cf0f721f",
      "rect": [
-      363,
-      361,
-      362,
-      168
+      377,
+      329,
+      370,
+      200
      ],
      "kind": "eyes"
     }
@@ -225,12 +225,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/piping_eyes.webp?v=ee32cc89",
+     "src": "art/piping_eyes.webp?v=d9d1c550",
      "rect": [
       489,
-      297,
-      355,
-      210
+      286,
+      347,
+      200
      ],
      "kind": "eyes"
     }
@@ -272,12 +272,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/whisper_eyes.webp?v=286c20bf",
+     "src": "art/whisper_eyes.webp?v=a044c0d7",
      "rect": [
-      344,
-      360,
-      589,
-      340
+      355,
+      359,
+      603,
+      320
      ],
      "kind": "eyes"
     }
@@ -319,12 +319,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/ending_eyes.webp?v=244bcd93",
+     "src": "art/ending_eyes.webp?v=c8d2f94e",
      "rect": [
-      399,
-      315,
-      362,
-      210
+      413,
+      313,
+      358,
+      211
      ],
      "kind": "eyes"
     }

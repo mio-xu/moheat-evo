@@ -37,12 +37,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/torii_eyes.webp?v=95276be0",
+     "src": "art/torii_eyes.webp?v=ab60a892",
      "rect": [
-      390,
-      261,
-      324,
-      208
+      381,
+      262,
+      354,
+      207
      ],
      "kind": "eyes"
     }
@@ -84,12 +84,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/stall_eyes.webp?v=d6dd47de",
+     "src": "art/stall_eyes.webp?v=982c7cc7",
      "rect": [
-      412,
-      204,
-      372,
-      258
+      419,
+      211,
+      382,
+      243
      ],
      "kind": "eyes"
     }
@@ -131,12 +131,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/amazake_eyes.webp?v=1a61106b",
+     "src": "art/amazake_eyes.webp?v=665dc3e4",
      "rect": [
-      227,
-      187,
-      435,
-      299
+      236,
+      161,
+      449,
+      324
      ],
      "kind": "eyes"
     }
@@ -178,12 +178,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/fire_eyes.webp?v=5b37929c",
+     "src": "art/fire_eyes.webp?v=b5c065b9",
      "rect": [
       736,
-      232,
-      369,
-      249
+      240,
+      381,
+      238
      ],
      "kind": "eyes"
     }
@@ -225,12 +225,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/close_eyes.webp?v=08c5b368",
+     "src": "art/close_eyes.webp?v=c463b1a2",
      "rect": [
-      973,
-      185,
-      470,
-      298
+      976,
+      193,
+      506,
+      293
      ],
      "kind": "eyes"
     }
@@ -309,12 +309,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/omikuji_eyes.webp?v=c8b19a47",
+     "src": "art/omikuji_eyes.webp?v=c84b6bdd",
      "rect": [
-      314,
-      303,
-      386,
-      213
+      285,
+      305,
+      456,
+      209
      ],
      "kind": "eyes"
     }
@@ -356,12 +356,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/stole_eyes.webp?v=478eece2",
+     "src": "art/stole_eyes.webp?v=e58d2ed8",
      "rect": [
-      525,
-      202,
-      327,
-      278
+      507,
+      201,
+      379,
+      298
      ],
      "kind": "eyes"
     }

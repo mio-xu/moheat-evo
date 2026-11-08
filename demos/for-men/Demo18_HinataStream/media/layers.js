@@ -37,12 +37,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/wave_eyes.webp?v=80f78694",
+     "src": "art/wave_eyes.webp?v=2be537fa",
      "rect": [
-      500,
-      224,
-      362,
-      216
+      516,
+      241,
+      329,
+      182
      ],
      "kind": "eyes"
     }
@@ -84,12 +84,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/taiko_eyes.webp?v=6c10b4dc",
+     "src": "art/taiko_eyes.webp?v=6abb022a",
      "rect": [
-      481,
-      235,
-      345,
-      188
+      498,
+      250,
+      313,
+      154
      ],
      "kind": "eyes"
     }
@@ -132,12 +132,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/race_eyes.webp?v=a3efb6e3",
+     "src": "art/race_eyes.webp?v=b5c24b91",
      "rect": [
-      554,
-      301,
-      397,
-      217
+      572,
+      319,
+      363,
+      180
      ],
      "kind": "eyes"
     }
@@ -179,12 +179,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/crane_eyes.webp?v=3b78faaf",
+     "src": "art/crane_eyes.webp?v=0b70f4ef",
      "rect": [
-      669,
-      225,
-      363,
-      226
+      685,
+      244,
+      329,
+      190
      ],
      "kind": "eyes"
     }
@@ -226,12 +226,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/booth_eyes.webp?v=285e779b",
+     "src": "art/booth_eyes.webp?v=a27a2cad",
      "rect": [
-      493,
-      242,
-      381,
-      242
+      452,
+      240,
+      459,
+      271
      ],
      "kind": "eyes"
     }
@@ -273,12 +273,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/can_eyes.webp?v=eccaf470",
+     "src": "art/can_eyes.webp?v=07619321",
      "rect": [
-      636,
-      272,
-      413,
-      226
+      654,
+      292,
+      378,
+      186
      ],
      "kind": "eyes"
     }
