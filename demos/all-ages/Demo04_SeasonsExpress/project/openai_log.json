@@ -1,0 +1,255 @@
+{
+ "car_closed": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 68,
+  "usage": {
+   "input_tokens": 316,
+   "input_tokens_details": {
+    "image_tokens": 0,
+    "text_tokens": 316
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 7686
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "cond_opt_a": {
+  "model": "gpt-image-2",
+  "size": "1440x1440",
+  "quality": "high",
+  "seconds": 89,
+  "usage": {
+   "input_tokens": 257,
+   "input_tokens_details": {
+    "image_tokens": 0,
+    "text_tokens": 257
+   },
+   "output_tokens": 9386,
+   "output_tokens_details": {
+    "image_tokens": 9386,
+    "text_tokens": 0
+   },
+   "total_tokens": 9643
+  },
+  "out": [
+   1440,
+   1440
+  ]
+ },
+ "cond_opt_b": {
+  "model": "gpt-image-2",
+  "size": "1440x1440",
+  "quality": "high",
+  "seconds": 91,
+  "usage": {
+   "input_tokens": 237,
+   "input_tokens_details": {
+    "image_tokens": 0,
+    "text_tokens": 237
+   },
+   "output_tokens": 9386,
+   "output_tokens_details": {
+    "image_tokens": 9386,
+    "text_tokens": 0
+   },
+   "total_tokens": 9623
+  },
+  "out": [
+   1440,
+   1440
+  ]
+ },
+ "toys": {
+  "model": "gpt-image-2",
+  "size": "1440x1440",
+  "quality": "medium",
+  "seconds": 31,
+  "usage": {
+   "input_tokens": 154,
+   "input_tokens_details": {
+    "image_tokens": 0,
+    "text_tokens": 154
+   },
+   "output_tokens": 2347,
+   "output_tokens_details": {
+    "image_tokens": 2347,
+    "text_tokens": 0
+   },
+   "total_tokens": 2501
+  },
+  "out": [
+   1440,
+   1440
+  ]
+ },
+ "car_open": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 68,
+  "usage": {
+   "input_tokens": 1693,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 185
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9063
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "cond_holo": {
+  "model": "gpt-image-2",
+  "size": "1440x1440",
+  "quality": "high",
+  "seconds": 84,
+  "usage": {
+   "input_tokens": 1754,
+   "input_tokens_details": {
+    "image_tokens": 1521,
+    "text_tokens": 233
+   },
+   "output_tokens": 9386,
+   "output_tokens_details": {
+    "image_tokens": 9386,
+    "text_tokens": 0
+   },
+   "total_tokens": 11140
+  },
+  "out": [
+   1440,
+   1440
+  ]
+ },
+ "cond_wave": {
+  "model": "gpt-image-2",
+  "size": "1440x1440",
+  "quality": "high",
+  "seconds": 86,
+  "usage": {
+   "input_tokens": 1717,
+   "input_tokens_details": {
+    "image_tokens": 1521,
+    "text_tokens": 196
+   },
+   "output_tokens": 9386,
+   "output_tokens_details": {
+    "image_tokens": 9386,
+    "text_tokens": 0
+   },
+   "total_tokens": 11103
+  },
+  "out": [
+   1440,
+   1440
+  ]
+ },
+ "cond_ear": {
+  "model": "gpt-image-2",
+  "size": "1440x1440",
+  "quality": "high",
+  "seconds": 92,
+  "usage": {
+   "input_tokens": 1768,
+   "input_tokens_details": {
+    "image_tokens": 1521,
+    "text_tokens": 247
+   },
+   "output_tokens": 9386,
+   "output_tokens_details": {
+    "image_tokens": 9386,
+    "text_tokens": 0
+   },
+   "total_tokens": 11154
+  },
+  "out": [
+   1440,
+   1440
+  ]
+ },
+ "cond_wave_blink": {
+  "model": "gpt-image-2",
+  "size": "1440x1440",
+  "quality": "high",
+  "seconds": 93,
+  "usage": {
+   "input_tokens": 1675,
+   "input_tokens_details": {
+    "image_tokens": 1521,
+    "text_tokens": 154
+   },
+   "output_tokens": 9386,
+   "output_tokens_details": {
+    "image_tokens": 9386,
+    "text_tokens": 0
+   },
+   "total_tokens": 11061
+  },
+  "out": [
+   1440,
+   1440
+  ]
+ },
+ "cond_holo_blink": {
+  "model": "gpt-image-2",
+  "size": "1440x1440",
+  "quality": "high",
+  "seconds": 96,
+  "usage": {
+   "input_tokens": 1675,
+   "input_tokens_details": {
+    "image_tokens": 1521,
+    "text_tokens": 154
+   },
+   "output_tokens": 9386,
+   "output_tokens_details": {
+    "image_tokens": 9386,
+    "text_tokens": 0
+   },
+   "total_tokens": 11061
+  },
+  "out": [
+   1440,
+   1440
+  ]
+ },
+ "cond_ear_blink": {
+  "model": "gpt-image-2",
+  "size": "1440x1440",
+  "quality": "high",
+  "seconds": 97,
+  "usage": {
+   "input_tokens": 1675,
+   "input_tokens_details": {
+    "image_tokens": 1521,
+    "text_tokens": 154
+   },
+   "output_tokens": 9386,
+   "output_tokens_details": {
+    "image_tokens": 9386,
+    "text_tokens": 0
+   },
+   "total_tokens": 11061
+  },
+  "out": [
+   1440,
+   1440
+  ]
+ }
+}

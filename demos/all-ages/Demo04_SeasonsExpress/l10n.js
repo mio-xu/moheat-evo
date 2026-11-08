@@ -1,6 +1,6 @@
 // Languages of this demo for ../../shared/subs.js (subtitles, answers, cover) and ../../shared/voice.js (voice answers).
-// text.<lang>: "text exactly as the page shows it" → that language · names: speaker labels · voice.<lang|all>: same-meaning phrasings per answer.
-// Generated from the translation tables (DEMO_DESIGN_GUIDE §2.2); edit here, keys must stay byte-identical to the page text.
+// text.<lang>: "text exactly as the page shows it" → that language · voice.<lang|all>: same-meaning phrasings per answer.
+// v2 (2026-11-09): the conductor's lines (media/voice.js), the gates, the season names.
 window.MOHEAT_L10N = {
  "langs": [
   "en",
@@ -9,133 +9,81 @@ window.MOHEAT_L10N = {
  ],
  "text": {
   "zh": {
-   "暑い…！ ふーっと涼しい風を送ろう": "好热…！呼——吹一阵凉风吧",
-   "冷たいのは、どっちの耳？": "哪只耳朵是凉的？",
-   "今度は？ 冷たいのは、どっち？": "这次呢？哪边是凉的？",
-   "⬅ ひだり": "⬅ 左边",
-   "みぎ ➡": "右边 ➡",
-   "ライト、ついて！": "灯，亮起来！",
-   "ありがとう、魔法の列車！": "谢谢你，魔法列车！",
-   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · 双耳ASMR × 冷热触感",
-   "季節が暴走する 魔法の列車": "四季失控的魔法列车",
-   "The Runaway Seasons Express": "",
-   "❄ 風・雪・氷・雨 · cool": "❄ 风・雪・冰・雨 · 清凉",
-   "🔥 夏風・炎・溶岩・蒸気 · warm": "🔥 夏风・火焰・熔岩・蒸汽 · 温暖",
-   "▶ Start · 2:30": "▶ 开始 · 2:30",
-   "🎧 Left / Right check": "🎧 左右声道检查",
-   "Headphones on · connect MoHeat Evo (top right): each window brings its own season — you feel it on that side": "请戴上耳机 · 连接 MoHeat Evo（右上角）：每扇车窗带来不同的季节，你会在那一侧感受到它",
-   "ASMR Demo · Seasons Express": "ASMR 演示 · 四季魔法列车",
-   "Winter Forest · 🌬 ❄": "冬日雪林 · 🌬 ❄",
-   "Strength from each ambience track (wind, snow, ice, rain → cool; breeze, fire, lava, steam → warm), left / right from where that sound is. Sunlight is a designed curve. Music and the train never drive it. One mode per ear.": "强度来自每条环境音轨（风、雪、冰、雨 → 凉；微风、火焰、熔岩、蒸汽 → 暖），左右取决于声音所在的位置。阳光是设计好的曲线。音乐和列车声从不驱动冷热。每只耳朵一次只能冷或热其一。",
+   "つぎは〜、ふゆ！ マフラー、しっかり巻いてね！": "下一站，冬天！围巾要围好哦！",
+   "手がつめたい？ あったかい紅茶をどうぞ！": "手冷吗？捧着热茶吧！",
+   "つぎは〜、なつ！ 通気口オープン、あつくなるよ〜！": "下一站，夏天！通风口打开——要变热啦！",
+   "スコールだ！ あったかいランプ、つけておくね。": "前方暴雨！我把暖暖的灯打开。",
+   "氷と炎のトンネル！ 車両がふたつに分かれるよ。窓をえらんで！": "冰火隧道！车厢要一分为二啦——选一扇窗吧！",
+   "わわっ！ 季節が暴走してる〜！": "糟糕！四季失控啦！",
+   "ねえ…ほんものの、ぼくだよ。いっしょに「春！」ってさけんで。列車がもどるから。": "嘘……是真的我哦。和我一起喊「春天！」，列车就会回来。",
+   "つぎは〜、はる！ さくら駅〜！": "下一站，春天！樱花站！",
+   "とうちゃく〜！ 季節急行に乗ってくれて、ありがとう！": "到站啦！谢谢你乘坐四季特快！",
+   "あったかい紅茶で、手をあたためよう": "用热茶暖暖手",
+   "ながおしで、カップを持つ": "长按，捧起茶杯",
+   "どっちの窓を開ける？": "要打开哪一边的窗？",
+   "❄ ひだりの窓（氷）": "❄ 左边的窗（冰）",
+   "🔥 みぎの窓（炎）": "🔥 右边的窗（火）",
+   "いっしょに「春！」ってさけんで": "和列车长一起喊「春天！」",
+   "🌸「春！」": "🌸「春天！」",
+   "ひだりの窓が開いた！": "左边的窗打开了！",
+   "みぎの窓が開いた！": "右边的窗打开了！",
+   "「春！」": "「春天！」",
+   "あったか〜い": "好暖和～",
+   "終点・さくら駅": "终点・樱花站",
    "冬の雪林": "冬日雪林",
    "真夏の海岸": "盛夏海岸",
    "熱帯のスコール": "热带暴雨",
-   "氷と炎のトンネル": "冰与火的隧道",
-   "季節の暴走": "失控的四季",
+   "氷と炎のトンネル": "冰火隧道",
+   "季節の暴走": "四季失控",
    "春のさくら駅": "春日樱花站",
-   "Winter Forest": "冬日雪林",
-   "Summer Coast": "盛夏海岸",
-   "Tropical Downpour": "热带暴雨",
-   "Tunnel of Ice & Fire": "冰与火的隧道",
-   "Seasons Out of Control": "失控的四季",
-   "Cherry Blossom Station": "春日樱花站",
-   "終点・さくら駅": "终点・樱花站"
+   "🎧 Left / Right check": "🎧 左右声道检查",
+   "DUAL: cool and warm independent on each ear. The open rune panels bring each window's season in (wind, snow, ice, rain → cool; sun, fire, lava, steam → warm); the tea, the wall lamp and the conductor's whisper are real warm sources.": "DUAL：每只耳朵的冷和热各自独立。打开的符文面板把每扇窗外的季节带进车厢（风、雪、冰、雨 → 凉；阳光、火、熔岩、蒸汽 → 暖）；热茶、壁灯和列车长的耳语是真实的暖源。",
+   "ASMR · Seasons Express": "ASMR · 四季魔法列车"
   },
   "ja": {
-   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
-   "季節が暴走する 魔法の列車": "季節が暴走する 魔法の列車",
-   "The Runaway Seasons Express": "",
-   "❄ 風・雪・氷・雨 · cool": "❄ 風・雪・氷・雨 · ひんやり",
-   "🔥 夏風・炎・溶岩・蒸気 · warm": "🔥 夏風・炎・溶岩・蒸気 · あたたか",
-   "▶ Start · 2:30": "▶ スタート · 2:30",
    "🎧 Left / Right check": "🎧 左右チェック",
-   "Headphones on · connect MoHeat Evo (top right): each window brings its own season — you feel it on that side": "ヘッドホンを装着 · 右上から MoHeat Evo をつなぐと、窓ごとにちがう季節がやってきて、その側で感じられます",
-   "ASMR Demo · Seasons Express": "ASMRデモ · 季節の魔法列車",
-   "Winter Forest · 🌬 ❄": "冬の雪林 · 🌬 ❄",
-   "Strength from each ambience track (wind, snow, ice, rain → cool; breeze, fire, lava, steam → warm), left / right from where that sound is. Sunlight is a designed curve. Music and the train never drive it. One mode per ear.": "強さはそれぞれの環境音から（風・雪・氷・雨 → 冷、そよ風・炎・溶岩・蒸気 → 温）。左右はその音のある位置から。日差しは設計したカーブ。音楽と列車の音は温冷に使いません。冷・温は片耳ごとにどちらか一方。",
-   "冬の雪林": "冬の雪林",
-   "真夏の海岸": "真夏の海岸",
-   "熱帯のスコール": "熱帯のスコール",
-   "氷と炎のトンネル": "氷と炎のトンネル",
-   "季節の暴走": "季節の暴走",
-   "春のさくら駅": "春のさくら駅",
-   "Winter Forest": "冬の雪林",
-   "Summer Coast": "真夏の海岸",
-   "Tropical Downpour": "熱帯のスコール",
-   "Tunnel of Ice & Fire": "氷と炎のトンネル",
-   "Seasons Out of Control": "季節の暴走",
-   "Cherry Blossom Station": "春のさくら駅",
-   "終点・さくら駅": "終点・さくら駅"
+   "ASMR · Seasons Express": "ASMR · 季節の魔法列車",
+   "DUAL: cool and warm independent on each ear. The open rune panels bring each window's season in (wind, snow, ice, rain → cool; sun, fire, lava, steam → warm); the tea, the wall lamp and the conductor's whisper are real warm sources.": "DUAL：左右の耳それぞれで冷・温が独立。開いたルーンパネルが窓の外の季節を運びこみます（風・雪・氷・雨 → 冷、日差し・炎・溶岩・蒸気 → 温）。紅茶・壁のランプ・車掌のささやきは本物の温かさ。"
   },
-  "en": {
-   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
-   "季節が暴走する 魔法の列車": "The Runaway Seasons Express",
-   "The Runaway Seasons Express": "",
-   "❄ 風・雪・氷・雨 · cool": "❄ wind · snow · ice · rain · cool",
-   "🔥 夏風・炎・溶岩・蒸気 · warm": "🔥 summer breeze · fire · lava · steam · warm",
-   "▶ Start · 2:30": "▶ Start · 2:30",
-   "🎧 Left / Right check": "🎧 Left / Right check",
-   "Headphones on · connect MoHeat Evo (top right): each window brings its own season — you feel it on that side": "Headphones on · connect MoHeat Evo (top right): each window brings its own season — you feel it on that side",
-   "ASMR Demo · Seasons Express": "ASMR Demo · Seasons Express",
-   "Winter Forest · 🌬 ❄": "Winter Forest · 🌬 ❄",
-   "Strength from each ambience track (wind, snow, ice, rain → cool; breeze, fire, lava, steam → warm), left / right from where that sound is. Sunlight is a designed curve. Music and the train never drive it. One mode per ear.": "Strength from each ambience track (wind, snow, ice, rain → cool; breeze, fire, lava, steam → warm), left / right from where that sound is. Sunlight is a designed curve. Music and the train never drive it. One mode per ear.",
-   "冬の雪林": "Winter Forest",
-   "真夏の海岸": "Summer Coast",
-   "熱帯のスコール": "Tropical Downpour",
-   "氷と炎のトンネル": "Tunnel of Ice & Fire",
-   "季節の暴走": "Seasons Out of Control",
-   "春のさくら駅": "Cherry Blossom Station",
-   "Winter Forest": "Winter Forest",
-   "Summer Coast": "Summer Coast",
-   "Tropical Downpour": "Tropical Downpour",
-   "Tunnel of Ice & Fire": "Tunnel of Ice & Fire",
-   "Seasons Out of Control": "Seasons Out of Control",
-   "Cherry Blossom Station": "Cherry Blossom Station",
-   "終点・さくら駅": "Last stop: Sakura Station"
-  }
+  "en": {}
  },
  "names": {},
  "voice": {
   "all": {
-   "⬅ ひだり": [
+   "❄ ひだりの窓（氷）": [
     "左边",
+    "左边的窗",
+    "冰",
     "左",
-    "往左",
-    "左侧",
     "left",
-    "the left",
+    "left window",
+    "ice",
     "ひだり",
-    "左側"
+    "左",
+    "氷",
+    "こおり"
    ],
-   "みぎ ➡": [
+   "🔥 みぎの窓（炎）": [
     "右边",
+    "右边的窗",
+    "火",
     "右",
-    "往右",
-    "右侧",
     "right",
-    "the right",
+    "right window",
+    "fire",
     "みぎ",
-    "右側"
+    "右",
+    "炎",
+    "ほのお"
    ],
-   "ライト、ついて！": [
-    "灯，亮起来",
-    "开灯",
-    "灯亮",
-    "亮起来",
-    "lights on",
-    "light on",
-    "ライトついて",
-    "ついて"
-   ],
-   "ありがとう、魔法の列車！": [
-    "谢谢你，魔法列车",
-    "谢谢魔法列车",
-    "谢谢列车",
-    "谢谢",
-    "thank you magic train",
-    "thanks train",
-    "ありがとう",
-    "ありがとう列車"
+   "🌸「春！」": [
+    "春天",
+    "春",
+    "spring",
+    "spring!",
+    "はる",
+    "春だ",
+    "haru"
    ]
   }
  }

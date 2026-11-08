@@ -1,4 +1,36 @@
-# Demo 4 · The Runaway Seasons Express（季節が、暴走する。）
+# Demo 4 · 季節が、暴走する。 The Runaway Seasons Express (v2, 2026-11-09)
+
+**v2 = the upgrade the user approved (TASKS #49, "都做"):** a retro wooden **magic × cyber carriage** that transforms with every season,
+the **Season Spirit Conductor「ハルフユ車掌 / Conductor Halfy」** (chibi, half snow / half sun; card `docs/characters/halfy.md`) as the
+announcer, **DUAL thermal** (cool + warm independent on each ear), three light interactions and the unified UI v2 cover. Script, world
+rule card, shot list and thermal table: `project/script.md`; layer plan and costs: `project/layers.md`.
+
+- **The carriage** (`scripts/prepare_art.py`): wooden panels flip open on their hinges to glowing rune circuits — ice-blue runes and an
+  ice-crystal shield rising over the windows in winter, orange runes and opening ceiling vents blowing hot air in summer; in the tunnel the
+  car **splits in two** (ice cabin LEFT / fire cabin RIGHT, a glowing seam between); the seasons' chaos glitches the runes neon; the panels
+  close again at the cherry-blossom station. Window frames glow blue / orange with what each ear feels right now. Roof-hatch toys (a
+  snowman in winter, a sun pinwheel spinning with the summer breeze), a brass wall lamp, the tea cup, icicles, your breath cloud.
+- **The conductor**: announces every stop from the **hologram screen** above the door (light only — no warmth); in the power cut it
+  hops out of the dead screen and **whispers at your RIGHT ear** (warm voice), and at the station it waves goodbye from your table.
+  Voice: ElevenLabs `halfy` r1_a (three auditions + the pick: `project/voice_audition/`), **always Japanese** (user 2026-11-09; en / zh
+  are subtitles; the en / zh takes stay in `media/voice/`, unused). Lip-sync: mouth sets from `tools/art/lp_mouths.py`, blinks, breathing.
+- **World rule** (magic, §0.1): a window's season reaches the car only through that side's **open** rune panels (first shown slowly:
+  left panels 2–4.5 s → left ear cools, right panels 5–7 s → right ear). Real warm sources: sunlight, the tea, the wall lamp, the
+  conductor's voice in person.
+- **Thermal (DUAL `DUAL LC.. LH.. RC.. RH..`)**: winter sweeps L↔R; tea held in winter = cool + warm on both ears; storm = rain spray cool
+  + lamp warm on the LEFT ear; tunnel = ice cabin cool + tea steam warm on the LEFT ear, fire cabin warm on the right; chaos = 2-s
+  swaps then a **1-s hot↔cold block** (100–108 s, both ears in opposite phase); power cut = 0 except the whisper's warmth on the right ear.
+- **Interactions** (interactive = default, pure mode answers itself): hold ☕ the tea (winter) · open the ❄ LEFT / 🔥 RIGHT window
+  (tunnel; that side ×1.3) · shout 「春！」 "Spring!" (voice-judged, tap fallback) to bring the train back.
+
+Rebuild (v2): `python3 scripts/prepare_art.py && python3 tools/art/build_stage.py . && python3 scripts/voice.py && python3 scripts/build_audio.py &&
+python3 scripts/thermal.py && python3 scripts/check_sync.py && python3 scripts/export.py`; cover art `python3 scripts/render_mp4.py --cover`
+→ `python3 tools/web/covers.py Demo04_SeasonsExpress --publish`; film `python3 scripts/render_mp4.py` (soundtrack = mix + Japanese voice).
+
+---
+
+## v1 notes (scenery, sound and thermal pipeline — still valid unless v2 above says otherwise)
+
 
 You sit in a magic train car and face forward for 150 s. Outside the left and right windows the seasons run wild:
 - winter;

@@ -1,25 +1,30 @@
 {
- "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo04_SeasonsExpress",
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo04_SeasonsExpress --publish (art: python3 scripts/render_mp4.py --cover)",
  "title": {
-  "en": "The Runaway Seasons Express",
-  "ja": "季節が暴走する魔法の列車",
-  "zh": "四季失控的魔法列车"
+  "en": "The Runaway\nSeasons Express",
+  "ja": "季節が、\n暴走する。",
+  "zh": "四季失控的\n魔法列车"
+ },
+ "tagline": {
+  "en": "A transforming magic train · the conductor calls every season",
+  "ja": "変身する魔法の列車 · 車掌が季節をアナウンス",
+  "zh": "会变形的魔法列车 · 列车长为你播报每个季节"
  },
  "chips": [
   {
    "kind": "cool",
    "text": {
-    "en": "❄ wind · snow · ice · rain",
-    "ja": "❄ 風・雪・氷・雨",
-    "zh": "❄ 风・雪・冰・雨"
+    "en": "❄ ice runes · snow · rain",
+    "ja": "❄ 氷のルーン・雪・雨",
+    "zh": "❄ 冰符文・雪・雨"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "🔥 summer breeze · fire · lava · steam",
-    "ja": "🔥 夏風・炎・溶岩・蒸気",
-    "zh": "🔥 夏风・火焰・熔岩・蒸汽"
+    "en": "🔥 fire runes · sun · tea · whisper",
+    "ja": "🔥 炎のルーン・日差し・紅茶・ささやき",
+    "zh": "🔥 火符文・阳光・热茶・耳语"
    }
   }
  ],
@@ -56,5 +61,12 @@
    "zh": "春日樱花站"
   }
  ],
- "scene": true
+ "faces": {
+  "eye": [
+   72,
+   35
+  ],
+  "face": 22,
+  "_why": "chibi face: SCRFD does not see it; placed by scripts/render_mp4.py --cover (ex .72, ey .35, face .22 of H)"
+ }
 }

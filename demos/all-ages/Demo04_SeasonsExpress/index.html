@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1" />
+  <link rel="stylesheet" href="style.css?v=263d494d" />
   <link rel="stylesheet" href="../../shared/series.css?v=07348bf3" />
   <script>if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add('embed');</script>
   <style>/* ?embed=1 — used by the site's demo menu: stage + transport only */
@@ -41,9 +41,10 @@
         <canvas id="scene" width="1920" height="1080"></canvas>
         <div class="scene-title" id="sceneTitle"></div>
 
-        <div class="intro" id="intro" data-cover="scene" data-cover-tone="#0c1020">
-          <div class="cover-bg" aria-hidden="true"></div>
-          <div class="cover-snow" aria-hidden="true"></div>
+        <div class="subs" id="subs" aria-live="polite"></div>
+        <div class="gate" id="gate" hidden></div>
+
+        <div class="intro" id="intro">
           <div class="cover-copy">
             <div class="intro-actions">
               <button class="btn primary big" id="startBtn" type="button">▶ はじめる · Start</button>
@@ -79,7 +80,7 @@
           <div class="meter-row"><span>R cool</span><div class="m cool"><i id="mRc"></i></div><b id="vRc">0</b></div>
           <div class="meter-row"><span>R warm</span><div class="m heat"><i id="mRh"></i></div><b id="vRh">0</b></div>
         </div>
-        <p class="note">Strength from each ambience track (wind, snow, ice, rain → cool; breeze, fire, lava, steam → warm), left / right from where that sound is. Sunlight is a designed curve. Music and the train never drive it. One mode per ear.</p>
+        <p class="note">DUAL: cool and warm independent on each ear. The open rune panels bring each window's season in (wind, snow, ice, rain → cool; sun, fire, lava, steam → warm); the tea, the wall lamp and the conductor's whisper are real warm sources.</p>
       </div>
 
       <div class="card">
@@ -91,12 +92,14 @@
   </main>
 
   <audio id="mix" src="media/mix.m4a" preload="auto"></audio>
-  <script src="media/data.js?v=1"></script>
+  <script src="media/data.js?v=9a30b1aa"></script>
+  <script src="media/car_geo.js?v=40cd0747"></script>
+  <script src="media/voice.js?v=ffc0d7b7"></script>
+  <script src="media/layers.js?v=6ad7575d"></script>
   <script src="../../../device.js?v=c3d93e5c"></script>
   <script src="../../shared/shell.js?v=fe954fd6"></script>
-  <script src="main.js?v=2"></script>
-  <script src="../../shared/voice.js?v=6"></script>
-  <script src="../../shared/interact.js?v=9"></script>
+  <script src="main.js?v=2eea6275"></script>
+  <script src="../../shared/voice.js?v=f739b0a5"></script>
   <script>/* ?autoplay=1 (site demo menu): start right away when the browser allows it, else the cover's Start button stays */
     if (/[?&]autoplay\b/.test(location.search)) {
       const m = document.getElementById('mix');
@@ -104,6 +107,6 @@
     }
   </script>
   <script src="../../shared/nav.js?v=b06a4ab3"></script>
-  <script src="../../shared/scrub.js?v=1"></script>
+  <script src="../../shared/scrub.js?v=bbf21a99"></script>
 </body>
 </html>

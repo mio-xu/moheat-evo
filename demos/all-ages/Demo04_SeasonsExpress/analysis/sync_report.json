@@ -6,54 +6,59 @@
    "detail": "3000 rows, 0.00–149.95 s"
   },
   {
-   "check": "Same-ear cool+heat conflicts = 0 (firmware: one mode per ear)",
+   "check": "DUAL: cool + warm together on one ear (tea / lamp / chaos showcase, firmware DUAL)",
    "ok": true,
-   "detail": "0 frames"
+   "detail": "113.8 s"
   },
   {
    "check": "≥ 4 clear left/right environment moves",
    "ok": true,
-   "detail": "30 moves: cool L→R @ 2.9→4.0 s, cool R→L @ 5.5→6.5 s, cool L→R @ 50.4→55.1 s, cool R→L @ 62.1→63.5 s, cool L→R @ 72.9→77.2 s, heat R→L @ 73.3→76.5 s, cool R→L @ 88.5→89.7 s, heat L→R @ 88.8→89.5 s, heat R→L @ 91.4→91.8 s, cool L→R @ 91.5→92.2 s, cool R→L @ 93.5→93.8 s, heat L→R @ 93.5→93.8 s, heat R→L @ 95.2→96.2 s, cool L→R @ 95.7→96.0 s, heat L→R @ 97.7→97.8 s, cool R→L @ 97.7→97.9 s, cool L→R @ 99.5→99.8 s, heat R→L @ 99.5→99.8 s, heat L→R @ 101.2→102.0 s, cool R→L @ 101.5→101.8 s, heat R→L @ 103.5→103.8 s, cool L→R @ 103.5→104.0 s, cool R→L @ 105.3→105.8 s, heat L→R @ 105.5→105.9 s, heat R→L @ 108.3→112.0 s, cool L→R @ 108.5→112.2 s, cool R→L @ 114.2→114.6 s, heat L→R @ 114.2→114.6 s, cool L→R @ 118.1→118.3 s, heat R→L @ 118.2→118.4 s"
+   "detail": "16 moves: heat R→L @ 38.8→50.8 s, cool L→R @ 49.6→55.1 s, heat L→R @ 57.2→63.0 s, cool R→L @ 62.1→63.5 s, heat R→L @ 91.2→92.0 s, cool L→R @ 91.8→92.3 s, cool R→L @ 93.5→94.0 s, cool L→R @ 95.6→96.5 s, heat L→R @ 100.3→107.2 s, cool R→L @ 100.6→107.7 s, heat R→L @ 109.3→110.2 s, heat L→R @ 111.4→112.0 s, heat R→L @ 113.2→113.5 s, cool L→R @ 113.5→114.5 s, heat L→R @ 115.2→116.0 s, cool R→L @ 115.8→116.5 s"
   },
   {
    "check": "Rain cooling travels left → right (storm)",
    "ok": true,
-   "detail": "R−L cooling 38–46 s -0.69, 56–61 s +0.68"
+   "detail": "R−L cooling 38–46 s -0.68, 56–61 s +0.67"
   },
   {
    "check": "≥ 2 moments of opposite temperatures left vs right",
    "ok": true,
-   "detail": "17 segments ≥ 1 s: 11.1–19.8, 35.8–44.8, 45.4–47.6, 63.6–72.7, 77.2–84.4, 84.5–88.3, 89.8–91.4, 92.2–93.5, 93.9–95.0, 96.1–97.6, 97.9–99.5, 99.9–101.0, 102.0–103.5, 104.2–105.3, 105.9–108.3, 112.2–114.2, 115.5–118.1"
+   "detail": "17 segments ≥ 1 s: 11.2–19.8, 35.8–44.8, 45.4–47.6, 50.6–56.8, 63.6–65.2, 65.5–88.3, 89.7–91.8, 92.0–93.5, 93.7–95.0, 95.7–99.0, 99.3–103.5, 103.7–104.9, 105.0–106.9, 107.5–110.8, 111.0–113.0, 113.7–115.9, 117.1–118.2"
   },
   {
-   "check": "Clear ice/fire reversal in the tunnel",
+   "check": "Tunnel: ice cabin L cool + tea steam L warm (same ear), fire cabin R warm",
    "ok": true,
-   "detail": "64.8–72.6 s: L cool 0.64 / R heat 0.85; neutral 74.5–75.9 s total 0.00; 77.7–87.2 s: L heat 0.84 / R cool 0.57"
+   "detail": "65–88 s: L cool 0.60 + L warm 0.38 / R warm 0.85"
+  },
+  {
+   "check": "Chaos 100–108 s: hot <-> cold on the same ear every ~1 s (both ears)",
+   "ok": true,
+   "detail": "14 switches (L + R)"
   },
   {
    "check": "Silent segment: audio silent and all four channels exactly 0",
    "ok": true,
-   "detail": "108–110 s: max output 0.0, commands ['stop'], audio -240 dBFS"
+   "detail": "118–126 s: max output 0.0, commands ['stop'], audio -240 dBFS"
   },
   {
    "check": "Calm spring ending, everything 0 at 150 s",
    "ok": true,
-   "detail": "126–150 s: no cooling, max heat 0.32, max step 0.032/frame; audio -27.6 dBFS vs chaos -21.2 dBFS; last command 'stop'"
+   "detail": "126–150 s: no cooling, max heat 0.26, max step 0.019/frame; audio -28.4 dBFS vs chaos -22.0 dBFS; last command 'stop'"
   },
   {
    "check": "Each driving sound is heard on the side it heats/cools (binaural ILD > 3 dB)",
    "ok": true,
-   "detail": "winter_wind 0.6–2.8 s L (+8.9 dB), winter_wind 4.0–5.4 s R (-9.0 dB), tropical_rain 39–46 s L (+13.4 dB), tropical_rain 58.5–60.5 s R (-13.2 dB), summer_breeze 15–23 s R (-16.3 dB), summer_breeze 24.5–25.8 s L (+16.1 dB), fire_crackling 65.4–72.1 s R (-13.5 dB), fire_crackling 78.8–86.6 s L (+13.5 dB), ice_cracking 65.4–72.1 s L (+15.8 dB), ice_cracking 78.8–86.6 s R (-16.1 dB), lava 65.4–72.1 s R (-13.8 dB), lava 78.8–86.6 s L (+13.3 dB), fire_crackling 98.3–99.6 s R (-13.1 dB), steam 100.2–101.3 s L (+16.8 dB), winter_wind 112.8–114.1 s R (-9.1 dB), lava 104.3–105.6 s L (+13.5 dB), summer_breeze 114.8–116.1 s R (-15.6 dB)"
+   "detail": "winter_wind 0.6–2.8 s L (+8.9 dB), winter_wind 4.0–5.4 s R (-9.0 dB), tropical_rain 39–46 s L (+13.4 dB), tropical_rain 58.5–60.5 s R (-13.3 dB), summer_breeze 15–23 s R (-16.2 dB), summer_breeze 24.5–25.8 s L (+15.0 dB), fire_crackling 65.4–88 s R (-13.4 dB), ice_cracking 65.4–88 s L (+16.1 dB), lava 65.4–88 s R (-13.7 dB), lava 100.2–100.7 s L (+6.4 dB), winter_wind 100.2–100.7 s R (-9.2 dB), ice_cracking 101.2–101.7 s L (+16.2 dB), summer_breeze 101.2–101.7 s R (-15.4 dB), tropical_rain 108.3–109.6 s L (+13.3 dB), lava 108.3–109.6 s R (-13.1 dB), winter_wind 112.3–113.6 s L (+8.9 dB)"
   },
   {
    "check": "Thermal leads the sound by the device latency (cool 0.35 s, heat 0.60 s; measured on 0–88 s)",
    "ok": true,
-   "detail": "L cool: lead 0.35 s (r = 1.0); R heat: lead 0.55 s (r = 0.994)"
+   "detail": "L cool: lead 0.35 s (r = 1.0); R heat: lead 0.60 s (r = 0.996)"
   },
   {
    "check": "Seasons out of control switch about every 2 s (sound, picture and thermal together)",
    "ok": true,
-   "detail": "15 rows, 2.0–2.5 s each; left/right flips of cooling or warming in 90–125 s: 22"
+   "detail": "19 rows, 1.0–2.5 s each; left/right flips of cooling or warming in 90–125 s: 28"
   },
   {
    "check": "Music / train / waves / thunder / birds never drive thermal",
@@ -63,19 +68,19 @@
  ],
  "moves": [
   [
-   2.85,
-   4.0,
-   "cool L→R"
+   38.8,
+   50.8,
+   "heat R→L"
   ],
   [
-   5.5,
-   6.55,
-   "cool R→L"
-  ],
-  [
-   50.4,
+   49.65,
    55.15,
    "cool L→R"
+  ],
+  [
+   57.25,
+   63.05,
+   "heat L→R"
   ],
   [
    62.15,
@@ -83,139 +88,69 @@
    "cool R→L"
   ],
   [
-   72.9,
-   77.2,
-   "cool L→R"
-  ],
-  [
-   73.3,
-   76.5,
+   91.25,
+   92.0,
    "heat R→L"
   ],
   [
-   88.55,
-   89.65,
-   "cool R→L"
-  ],
-  [
-   88.85,
-   89.45,
-   "heat L→R"
-  ],
-  [
-   91.4,
    91.85,
-   "heat R→L"
-  ],
-  [
-   91.45,
-   92.15,
+   92.3,
    "cool L→R"
   ],
   [
    93.45,
-   93.85,
+   93.95,
    "cool R→L"
   ],
   [
-   93.55,
-   93.85,
-   "heat L→R"
-  ],
-  [
-   95.15,
-   96.15,
-   "heat R→L"
-  ],
-  [
-   95.65,
-   96.05,
+   95.6,
+   96.55,
    "cool L→R"
   ],
   [
-   97.65,
-   97.85,
+   100.3,
+   107.15,
    "heat L→R"
   ],
   [
-   97.7,
-   97.9,
+   100.6,
+   107.7,
    "cool R→L"
   ],
   [
-   99.55,
-   99.85,
-   "cool L→R"
-  ],
-  [
-   99.55,
-   99.85,
+   109.35,
+   110.15,
    "heat R→L"
   ],
   [
-   101.15,
-   101.95,
-   "heat L→R"
-  ],
-  [
-   101.55,
-   101.85,
-   "cool R→L"
-  ],
-  [
-   103.5,
-   103.85,
-   "heat R→L"
-  ],
-  [
-   103.55,
-   104.05,
-   "cool L→R"
-  ],
-  [
-   105.35,
-   105.85,
-   "cool R→L"
-  ],
-  [
-   105.5,
-   105.9,
-   "heat L→R"
-  ],
-  [
-   108.35,
+   111.4,
    112.0,
-   "heat R→L"
-  ],
-  [
-   108.45,
-   112.2,
-   "cool L→R"
-  ],
-  [
-   114.25,
-   114.6,
-   "cool R→L"
-  ],
-  [
-   114.25,
-   114.6,
    "heat L→R"
   ],
   [
-   118.1,
-   118.35,
+   113.15,
+   113.5,
+   "heat R→L"
+  ],
+  [
+   113.55,
+   114.5,
    "cool L→R"
   ],
   [
-   118.15,
-   118.4,
-   "heat R→L"
+   115.25,
+   116.05,
+   "heat L→R"
+  ],
+  [
+   115.75,
+   116.55,
+   "cool R→L"
   ]
  ],
  "opposite_segments": [
   [
-   11.1,
+   11.2,
    19.8
   ],
   [
@@ -227,60 +162,60 @@
    47.6
   ],
   [
+   50.6,
+   56.75
+  ],
+  [
    63.6,
-   72.7
+   65.25
   ],
   [
-   77.25,
-   84.4
-  ],
-  [
-   84.5,
+   65.55,
    88.35
   ],
   [
-   89.75,
-   91.4
+   89.65,
+   91.8
   ],
   [
-   92.15,
-   93.45
+   92.05,
+   93.55
   ],
   [
-   93.9,
+   93.65,
    95.0
   ],
   [
-   96.1,
-   97.6
+   95.65,
+   99.0
   ],
   [
-   97.9,
-   99.5
+   99.35,
+   103.55
   ],
   [
-   99.9,
-   101.0
+   103.65,
+   104.9
   ],
   [
-   101.95,
-   103.5
+   105.05,
+   106.9
   ],
   [
-   104.2,
-   105.3
+   107.45,
+   110.8
   ],
   [
-   105.9,
-   108.3
+   110.95,
+   113.0
   ],
   [
-   112.25,
-   114.2
+   113.65,
+   115.9
   ],
   [
-   115.45,
-   118.1
+   117.1,
+   118.15
   ]
  ],
  "positions": [
@@ -321,7 +256,7 @@
     60.5
    ],
    "expected": "R",
-   "ild_db": -13.2,
+   "ild_db": -13.3,
    "ok": true
   },
   {
@@ -331,7 +266,7 @@
     23
    ],
    "expected": "R",
-   "ild_db": -16.3,
+   "ild_db": -16.2,
    "ok": true
   },
   {
@@ -341,117 +276,107 @@
     25.8
    ],
    "expected": "L",
+   "ild_db": 15.0,
+   "ok": true
+  },
+  {
+   "source": "fire_crackling",
+   "window": [
+    65.4,
+    88
+   ],
+   "expected": "R",
+   "ild_db": -13.4,
+   "ok": true
+  },
+  {
+   "source": "ice_cracking",
+   "window": [
+    65.4,
+    88
+   ],
+   "expected": "L",
    "ild_db": 16.1,
    "ok": true
   },
   {
-   "source": "fire_crackling",
+   "source": "lava",
    "window": [
     65.4,
-    72.1
+    88
    ],
    "expected": "R",
-   "ild_db": -13.5,
-   "ok": true
-  },
-  {
-   "source": "fire_crackling",
-   "window": [
-    78.8,
-    86.6
-   ],
-   "expected": "L",
-   "ild_db": 13.5,
-   "ok": true
-  },
-  {
-   "source": "ice_cracking",
-   "window": [
-    65.4,
-    72.1
-   ],
-   "expected": "L",
-   "ild_db": 15.8,
-   "ok": true
-  },
-  {
-   "source": "ice_cracking",
-   "window": [
-    78.8,
-    86.6
-   ],
-   "expected": "R",
-   "ild_db": -16.1,
+   "ild_db": -13.7,
    "ok": true
   },
   {
    "source": "lava",
    "window": [
-    65.4,
-    72.1
+    100.2,
+    100.7
    ],
-   "expected": "R",
-   "ild_db": -13.8,
+   "expected": "L",
+   "ild_db": 6.4,
    "ok": true
   },
   {
-   "source": "lava",
+   "source": "winter_wind",
    "window": [
-    78.8,
-    86.6
+    100.2,
+    100.7
+   ],
+   "expected": "R",
+   "ild_db": -9.2,
+   "ok": true
+  },
+  {
+   "source": "ice_cracking",
+   "window": [
+    101.2,
+    101.7
+   ],
+   "expected": "L",
+   "ild_db": 16.2,
+   "ok": true
+  },
+  {
+   "source": "summer_breeze",
+   "window": [
+    101.2,
+    101.7
+   ],
+   "expected": "R",
+   "ild_db": -15.4,
+   "ok": true
+  },
+  {
+   "source": "tropical_rain",
+   "window": [
+    108.3,
+    109.6
    ],
    "expected": "L",
    "ild_db": 13.3,
    "ok": true
   },
   {
-   "source": "fire_crackling",
+   "source": "lava",
    "window": [
-    98.3,
-    99.6
+    108.3,
+    109.6
    ],
    "expected": "R",
    "ild_db": -13.1,
    "ok": true
   },
   {
-   "source": "steam",
-   "window": [
-    100.2,
-    101.3
-   ],
-   "expected": "L",
-   "ild_db": 16.8,
-   "ok": true
-  },
-  {
    "source": "winter_wind",
    "window": [
-    112.8,
-    114.1
-   ],
-   "expected": "R",
-   "ild_db": -9.1,
-   "ok": true
-  },
-  {
-   "source": "lava",
-   "window": [
-    104.3,
-    105.6
+    112.3,
+    113.6
    ],
    "expected": "L",
-   "ild_db": 13.5,
-   "ok": true
-  },
-  {
-   "source": "summer_breeze",
-   "window": [
-    114.8,
-    116.1
-   ],
-   "expected": "R",
-   "ild_db": -15.6,
+   "ild_db": 8.9,
    "ok": true
   }
  ],
@@ -461,8 +386,8 @@
    "corr": 1.0
   },
   "R_heat": {
-   "lag_s": 0.55,
-   "corr": 0.994
+   "lag_s": 0.6,
+   "corr": 0.996
   }
  },
  "all_pass": true

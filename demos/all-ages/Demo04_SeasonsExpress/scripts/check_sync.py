@@ -62,7 +62,7 @@ def main():
     check("CSV 3000 rows, 0.00–149.95 s, 20 Hz", len(t) == 3000 and t[0] == 0 and abs(t[-1] - 149.95) < 1e-6 and np.allclose(np.diff(t), .05),
           f"{len(t)} rows, {t[0]:.2f}–{t[-1]:.2f} s")
     same = int(np.sum((Lc > 0) & (Lh > 0)) + np.sum((Rc > 0) & (Rh > 0)))
-    check("Same-ear cool+heat conflicts = 0 (firmware: one mode per ear)", same == 0, f"{same} frames")
+    check("DUAL: cool + warm together on one ear (tea / lamp / chaos showcase, firmware DUAL)", same > 0, f"{same / 20:.1f} s")
 
     # 1 left/right environment moves
     L, R = Lc + Lh, Rc + Rh
@@ -83,14 +83,15 @@ def main():
     opp = segments(((Lc > .25) & (Rh > .25)) | ((Lh > .25) & (Rc > .25)), t, 1.0)
     check("≥ 2 moments of opposite temperatures left vs right", len(opp) >= 2, f"{len(opp)} segments ≥ 1 s: " + ", ".join(f"{a:.1f}–{b:.1f}" for a, b in opp))
 
-    # 3 ice / fire reversal
+    # 3 tunnel (v2, no swap): the ice cabin cools the LEFT ear while the tea on the left warms it (DUAL); the fire cabin warms the right
     m = lambda v, a, b: float(np.mean(v[win(t, a, b)]))
-    pre = m(Lc, 64.8, 72.6) > .3 and m(Rh, 64.8, 72.6) > .3
-    neu = m(L + R, 74.5, 75.9) < .2
-    post = m(Lh, 77.7, 87.2) > .3 and m(Rc, 77.7, 87.2) > .3
-    check("Clear ice/fire reversal in the tunnel", pre and neu and post,
-          f"64.8–72.6 s: L cool {m(Lc, 64.8, 72.6):.2f} / R heat {m(Rh, 64.8, 72.6):.2f}; neutral 74.5–75.9 s total {m(L + R, 74.5, 75.9):.2f}; "
-          f"77.7–87.2 s: L heat {m(Lh, 77.7, 87.2):.2f} / R cool {m(Rc, 77.7, 87.2):.2f}")
+    check("Tunnel: ice cabin L cool + tea steam L warm (same ear), fire cabin R warm", m(Lc, 65, 88) > .3 and m(Lh, 67, 88) > .2 and m(Rh, 65, 88) > .3,
+          f"65–88 s: L cool {m(Lc, 65, 88):.2f} + L warm {m(Lh, 67, 88):.2f} / R warm {m(Rh, 65, 88):.2f}")
+    # 3b chaos 1-s block: each ear switches hot <-> cold about every second
+    blk = win(t, 100.0, 108.2); sw = 0
+    for c_, h_ in ((Lc, Lh), (Rc, Rh)):
+        d = np.sign(np.convolve(h_ - c_, np.ones(4) / 4, "same"))[blk]; d = d[d != 0]; sw += int(np.sum(d[1:] != d[:-1]))
+    check("Chaos 100–108 s: hot <-> cold on the same ear every ~1 s (both ears)", sw >= 12, f"{sw} switches (L + R)")
 
     # 4 silence = zero
     a, b = S.SILENCE
@@ -114,9 +115,10 @@ def main():
     # 6 sound position == thermal side (binaural ILD of the driving stems)
     pos = []
     for name, a_, b_, want in (("winter_wind", .6, 2.8, "L"), ("winter_wind", 4.0, 5.4, "R"), ("tropical_rain", 39, 46, "L"), ("tropical_rain", 58.5, 60.5, "R"),
-                               ("summer_breeze", 15, 23, "R"), ("summer_breeze", 24.5, 25.8, "L"), ("fire_crackling", 65.4, 72.1, "R"), ("fire_crackling", 78.8, 86.6, "L"),
-                               ("ice_cracking", 65.4, 72.1, "L"), ("ice_cracking", 78.8, 86.6, "R"), ("lava", 65.4, 72.1, "R"), ("lava", 78.8, 86.6, "L"),
-                               ("fire_crackling", 98.3, 99.6, "R"), ("steam", 100.2, 101.3, "L"), ("winter_wind", 112.8, 114.1, "R"), ("lava", 104.3, 105.6, "L"), ("summer_breeze", 114.8, 116.1, "R")):
+                               ("summer_breeze", 15, 23, "R"), ("summer_breeze", 24.5, 25.8, "L"), ("fire_crackling", 65.4, 88, "R"),
+                               ("ice_cracking", 65.4, 88, "L"), ("lava", 65.4, 88, "R"),
+                               ("lava", 100.2, 100.7, "L"), ("winter_wind", 100.2, 100.7, "R"), ("ice_cracking", 101.2, 101.7, "L"), ("summer_breeze", 101.2, 101.7, "R"),
+                               ("tropical_rain", 108.3, 109.6, "L"), ("lava", 108.3, 109.6, "R"), ("winter_wind", 112.3, 113.6, "L")):
         d = ild(name, a_, b_); ok = (d > 3) if want == "L" else (d < -3)
         pos.append(dict(source=name, window=[a_, b_], expected=want, ild_db=round(d, 1), ok=ok))
     check("Each driving sound is heard on the side it heats/cools (binaural ILD > 3 dB)", all(p["ok"] for p in pos),

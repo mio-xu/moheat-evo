@@ -74,6 +74,8 @@ def run():
             held = np.array([u[max(0, i - hold): i + 1].max() for i in range(len(u))])
             drive[role + sd] = T1.one_pole(held, rate, CFG["ATTACK"], CFG["RELEASE"]) * CFG["PEAK"]
         print(f"{role}: reference {ref:.1f} dB, gate {gate:.1f} dB")
+    for k_ in drive:                                                     # v2 world rule: the season comes in only through OPEN rune panels
+        drive[k_] = drive[k_] * S.rune_open(k_[-1], times)
     for name, dsg in S.DESIGNED.items():
         v = T1.one_pole(S.designed(name, times), rate, .3, .6)
         contrib[name] = (v, np.zeros_like(v)) if dsg["side"] == "L" else (np.zeros_like(v), v)
@@ -83,7 +85,7 @@ def run():
     cap = lambda v: np.minimum(v, 1.0) * CFG["CAP"]
     cL, cR = (cap(T1.lead(intent[k], CFG["COOL_LEAD"], rate)) for k in ("coolL", "coolR"))
     hL, hR = (cap(T1.lead(intent[k], CFG["HEAT_LEAD"], rate)) for k in ("heatL", "heatR"))
-    Lc, Lh = T1.resolve_ear(cL, hL, CFG); Rc, Rh = T1.resolve_ear(cR, hR, CFG)
+    Lc, Lh, Rc, Rh = cL, hL, cR, hR                                      # v2: DUAL firmware — cool and warm independent on one ear, no arbitration
     Lc, Lh, Rc, Rh = (T1.dose_limit(v, CFG) for v in (Lc, Lh, Rc, Rh))
     gate = ~((times >= S.SILENCE[0]) & (times < S.SILENCE[1]))
     for v in (Lc, Lh, Rc, Rh):
@@ -116,7 +118,7 @@ def run():
         json.dump(config, open(p, "w"), indent=1, ensure_ascii=False)
     plot(times, Lc, Rc, Lh, Rh, contrib)
     same = int(np.sum((Lc > 0) & (Lh > 0)) + np.sum((Rc > 0) & (Rh > 0)))
-    print(f"rows {len(times)} ({times[0]:.2f}–{times[-1]:.2f} s) | same-ear conflicts {same}")
+    print(f"rows {len(times)} ({times[0]:.2f}–{times[-1]:.2f} s) | same-ear cool + warm together (DUAL) {same / rate:.1f} s")
     for n, v in (("L_cool", Lc), ("R_cool", Rc), ("L_heat", Lh), ("R_heat", Rh)):
         print(f"  {n}: max {v.max():.2f}  active {np.sum(v > 0) / rate:5.1f} s")
     return times, (Lc, Rc, Lh, Rh), intent, F
@@ -130,8 +132,7 @@ def write_csv(path, times, Lc, Rc, Lh, Rh):
         w = csv.writer(f)
         w.writerow(["time_s", "L_cool", "R_cool", "L_heat", "R_heat", "L_cool_pwm", "R_cool_pwm", "L_heat_pwm", "R_heat_pwm", "command"])
         for i, t in enumerate(times):
-            cmd = "stop" if not (pLc[i] or pLh[i] or pRc[i] or pRh[i]) else " ".join(
-                f"{s}C{c}" if c else f"{s}H{h}" for s, c, h in (("L", pLc[i], pLh[i]), ("R", pRc[i], pRh[i])))
+            cmd = "stop" if not (pLc[i] or pLh[i] or pRc[i] or pRh[i]) else f"DUAL LC{pLc[i]} LH{pLh[i]} RC{pRc[i]} RH{pRh[i]}"
             w.writerow([f"{t:.2f}", f"{Lc[i]:.3f}", f"{Rc[i]:.3f}", f"{Lh[i]:.3f}", f"{Rh[i]:.3f}", pLc[i], pRc[i], pLh[i], pRh[i], cmd])
 
 
@@ -154,8 +155,8 @@ def plot(times, Lc, Rc, Lh, Rh, contrib):
     ax[2].fill_between(times, Rc, color="#3b82f6", alpha=.8, label="R cool"); ax[2].fill_between(times, -Rh, color="#ef4444", alpha=.8, label="R heat")
     for a, s in ((ax[1], "LEFT ear"), (ax[2], "RIGHT ear")):
         a.set_ylim(-1.05, 1.05); a.axhline(0, color="k", lw=.5); a.set_ylabel(f"{s}\ncool ↑  heat ↓"); a.legend(fontsize=8, loc="upper right")
-    ax[2].set_xlabel("time (s)"); ax[2].set_xlim(0, 150)
-    fig.suptitle("The Runaway Seasons Express — thermal energy curves (after device lead, arbitration, dose limit)")
+    ax[2].set_xlabel("time (s)"); ax[2].set_xlim(0, S.DURATION)
+    fig.suptitle("The Runaway Seasons Express — thermal energy curves (DUAL: after device lead and dose limit, no arbitration)")
     fig.tight_layout(); fig.savefig(os.path.join(ROOT, "analysis", "thermal_energy_curves.png"), dpi=110)
     fig.savefig(os.path.join(ROOT, "thermal", "thermal_energy_curves.png"), dpi=110)
 
