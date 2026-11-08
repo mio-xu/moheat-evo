@@ -67,7 +67,7 @@ def main():
                            az=c.get("az"), az1=c.get("az1"), d=c.get("d"), name=c.get("name"),
                            **{k: c[k] for k in ("y", "h", "bgY", "bgH", "fireX", "fireY") if k in c}) for c, tm in zip(WK.CUES, timing)],
                 voice=json.load(open(os.path.join(MEDIA, "voice.json"))), **getattr(WK, "VIS", {}))
-    s_art = os.path.join(SENGOKU, "media", "art")
+    s_art = os.path.join(ROOT, "..", "_kit", "art")   # nobunaga-suntory category kit (cast + banquet room)
     base = os.path.relpath(s_art, ROOT) + "/"
     shared = sorted(x[:-5] for x in os.listdir(s_art) if x.endswith(".webp"))
     faces = json.load(open(os.path.join(s_art, "faces.json")))

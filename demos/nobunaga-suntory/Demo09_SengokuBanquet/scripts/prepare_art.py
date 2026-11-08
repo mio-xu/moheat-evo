@@ -16,7 +16,7 @@ from demo1 import load
 P = load("prepare_art")
 
 ART_SRC = os.path.join(ROOT, "project", "art_src")
-OUT = os.path.join(ROOT, "media", "art")
+OUT = os.path.join(ROOT, "..", "_kit", "art")   # nobunaga-suntory category kit: cast + banquet room, used by Demo05–09 / 23 / 41 / 42
 
 GROUPS = {
     "N_bust": dict(base="N_bust_base", probe=["N_bust_blink", "N_bust_mouth_open", "N_bust_mouth_half", "N_bust_laugh"],

@@ -43,7 +43,7 @@ const ambOf = (t, kinds, tail = .3) => cueOf(t, (c) => kinds.includes(c.kind), t
 const ART = new Set(D.art || []);
 const FACES = D.artFaces || {};
 const IMG = {};
-for (const f of ART) { const im = new Image(); im.src = `media/art/${f}.webp`; IMG[f] = im; }
+for (const f of ART) { const im = new Image(); im.src = `../_kit/art/${f}.webp`; IMG[f] = im; }
 const ok = (k) => IMG[k] && IMG[k].complete && IMG[k].naturalWidth > 0;
 const xOf = (az) => W / 2 + Math.sin(rad(clamp(az, -100, 100))) * W * .43;
 const PAL = { N: '255,96,60', I: '120,225,170' };

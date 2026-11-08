@@ -44,7 +44,8 @@ const ART = new Set(D.art || []);
 const FACES = D.artFaces || {};
 const IMG = {};
 for (const f of ART) { const im = new Image(); im.src = `${D.artBase || 'media/art/'}${f}.webp`; IMG[f] = im; }   // shared cast & room
-for (const f of D.ownArt || []) { const im = new Image(); im.src = `media/art/${f}.webp`; IMG[f] = im; ART.add(f); }   // whisky bottles
+const PLACES = new Set(['d7_bg_izakaya']);   // plates shared with the talk demos: demos/nobunaga-suntory/_kit/places/
+for (const f of D.ownArt || []) { const im = new Image(); im.src = `${PLACES.has(f) ? '../_kit/places/' : 'media/art/'}${f}.webp`; IMG[f] = im; ART.add(f); }   // whisky bottles
 const ok = (k) => IMG[k] && IMG[k].complete && IMG[k].naturalWidth > 0;
 const xOf = (az) => W / 2 + Math.sin(rad(clamp(az, -100, 100))) * W * .43;
 const PAL = { N: '255,96,60', I: '120,225,170' };

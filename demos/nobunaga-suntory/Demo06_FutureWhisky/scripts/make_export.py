@@ -63,7 +63,7 @@ def main():
                 cues=[dict(t=c["t"], who=c["who"], kind=c["kind"], emo=c.get("emo"), pose=c.get("pose"), dur=round(tm["dur"], 2),
                            az=c.get("az"), az1=c.get("az1"), d=c.get("d"), name=c.get("name")) for c, tm in zip(WK.CUES, timing)],
                 voice=json.load(open(os.path.join(MEDIA, "voice.json"))))
-    s_art = os.path.join(SENGOKU, "media", "art")
+    s_art = os.path.join(ROOT, "..", "_kit", "art")   # nobunaga-suntory category kit (cast + banquet room)
     base = os.path.relpath(s_art, ROOT) + "/"
     shared = sorted(x[:-5] for x in os.listdir(s_art) if x.endswith(".webp"))
     faces = json.load(open(os.path.join(s_art, "faces.json")))

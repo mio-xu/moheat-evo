@@ -64,7 +64,7 @@ button, select, input { font: inherit; color: inherit; }
 /* ---------- cover ---------- */
 .intro { position: absolute; inset: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; text-align: center; background: #0c0703; }
 .intro.hidden { display: none; }
-.cover-bg { position: absolute; inset: -3%; background: url(media/art/banquet_bg.webp) center / cover; filter: blur(2px) brightness(.45) saturate(1.1); }
+.cover-bg { position: absolute; inset: -3%; background: url(../_kit/art/banquet_bg.webp) center / cover; filter: blur(2px) brightness(.45) saturate(1.1); }
 .intro::before { content: ""; position: absolute; inset: 0; z-index: 1;
   background: radial-gradient(ellipse 40% 70% at 14% 70%, rgba(255,90,50,.32), transparent 70%),
               radial-gradient(ellipse 40% 70% at 86% 70%, rgba(110,220,170,.22), transparent 70%),
