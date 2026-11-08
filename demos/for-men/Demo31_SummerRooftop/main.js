@@ -333,14 +333,16 @@
     if (!(cur && clipOK(cur) && (view === curView || (view === S.view && ONCE.has(cur))))) return false;
     ctx.globalAlpha = alpha; ctx.drawImage(CLIP[cur], 0, 0, W, H); ctx.globalAlpha = 1; return true;
   }
+  // layered stills (demos/shared/layers.js) breathe / sway on their own: no page zoom / bob on top (the background would breathe with her)
+  const LIVE = () => !!(window.MoHeatLayers && window.MoHeatLayers.live);
   function drawView(view, alpha, t) {
     if (drawClip(view, alpha)) return;
     const exact = !QS.has('stills') && Object.keys(CLIP).length > 0;   // with video the still must match the clips' frames exactly (no drift)
     const im = IMG[view];
     ctx.globalAlpha = alpha;
     if (!im) { ctx.fillStyle = '#0d1630'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
-    const z = exact ? 1 : 1.02 + .008 * Math.sin(t * 1.1), dh = W * im.height / im.width;
-    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + (exact ? 0 : 4 * Math.sin(t * .9)), W, dh); ctx.restore();
+    const z = exact ? 1 : 1.02 + (LIVE() ? 0 : .008 * Math.sin(t * 1.1)), dh = W * im.height / im.width;
+    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + (exact || LIVE() ? 0 : 4 * Math.sin(t * .9)), W, dh); ctx.restore();
     ctx.globalAlpha = 1;
   }
   // sparkler balls in the still (1920×1080): ball 0 = hers, ball 1 = yours
@@ -352,8 +354,9 @@
     mix = Math.min(1, mix + dt / .6);
     if (mix < 1) drawView(viewA, 1, t);
     drawView(viewB, mix < 1 ? mix : 1, t);
-    const exact = Object.keys(CLIP).length > 0, z = exact ? 1 : 1.02 + .008 * Math.sin(t * 1.1), dy = exact ? 0 : 4 * Math.sin(t * .9);
-    const at = ([x, y]) => [W / 2 + (x - W / 2) * z, H / 2 + (y - H / 2) * z + dy];
+    const exact = Object.keys(CLIP).length > 0, z = exact ? 1 : 1.02 + (LIVE() ? 0 : .008 * Math.sin(t * 1.1)), dy = exact || LIVE() ? 0 : 4 * Math.sin(t * .9);   // same as drawView
+    // a point of the sparkler still: with layers it follows her hand (parallax, breathing, the 1.02 over-scan) — the fireball stays on the string tip
+    const at = (p) => { const [x, y] = LIVE() && window.MoHeatLayers.toFrame ? window.MoHeatLayers.toFrame('nagisa_sparkler', p[0], p[1]) : p; return [W / 2 + (x - W / 2) * z, H / 2 + (y - H / 2) * z + dy]; };
     if (S.view === 'sparkler' && mix >= 1) {
       // the fireballs are code only (the art has just the strings): a glow + sparks while lit; a dropped one falls as a bead
       for (let i = 0; i < 2; i++) {

@@ -203,6 +203,34 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 
 > **先看 §6.3**：Seedance 只给通过准入的素材；下面的循环 / 过渡片段规则只适用于已经决定要做的视频片段，不再是每个画面的默认做法（用户 2026-11-08）。
 
+### 制作流程 v2：每一步都有门禁（2026-11-08，优先于下面的「标准制作流程」顺序和 §8 / §9）
+
+用户 2026-11-08：「用这些经验不断迭代优化 demo 制作的流程和标准」。今天 §11.1 的教训都落到了下面某一步的**门禁**上：能用脚本查的都进了**一个入口** `python3 tools/qa/check_demo.py <demo>`（PASS / WARN / FAIL 表，有 FAIL 时退出码 1），查不了的进每个 Demo 的 `project/CHECKLIST.md`（`--checklist` 生成，模板 `tools/qa/CHECKLIST_TEMPLATE.md`）。**门禁没过不进下一步**；下面「标准制作流程」1–9 是出图、合成的具体做法。
+
+| 步 | 做什么 | 门禁：查什么 · 用什么 · 通过标准 | 防住的 §11.1 |
+|---|---|---|---|
+| **G0 开工** | `git log --oneline -15` + 重读本节、§7、§11.1、`USER_PREFERENCES.md`；给 2–4 个方案；写 `project/layers.md`（画面 × 层 × L0–L4 × credits / 美元） | 用户（或统筹会话）选定方案和预算（Seedance ≤ 1500、OpenAI ≤ 10 美元 / Demo）；`check_demo.py <demo> --quick --checklist` 生成 `project/CHECKLIST.md` | 理解错、按旧标准开工、方案太重 |
+| **G1 剧本 + 冷热 + 语言** | `lines.js`（ja + en）、`l10n.js`（zh，韩语留位置：`subs.js` LANGS）；冷热表用 DUAL；每个回答二选一、能说出口 | 冷热表每行写出物理来源（人声暖、贴耳最强）；**DUAL 展示四项都安排到**：同一只耳冷热快速切换、强度到顶、左右方向、冷热同时输出（G6 用 `#cmd` 实测） | — |
+| **G2 声音** | ElevenLabs 试听 3 个 → 用户选 → 合成（交接文档 §4） | 选定的 voice id 记进交接文档 / README | — |
+| **G3 出图** | §5.3 工具顺序，先 `probe`（429 / Retry-After 长 → OpenAI）；提示词：新姿势「full figure inside the frame with margin」、按参考重画「同样取景不拉远」、手上拿什么不拿什么、只画人物；特写给远景 + 近景两张参考；差分一律遮罩编辑；同一底图的差分和同脸姿势当场一起提交 | **只看输出文件**：每个 job 都有新图（`exists` = 错误）、网页端历史多了一张卡片；`assets/poses_preview.jpg` 并排对比同一个人（CHECKLIST） | 没出图却"成功"、重名跳过、共用账号、加道具 / 全身像、近景远景不一致 |
+| **G4 合成** | `build_stage.py <demo> --preview` →（夜景）`clean_cutout.py` → `check_cut_body.py` →（有报告）`extend_pose.py … --auto` / `--place` → `check_patches.py` →（不准）写死 `regions_*` 重跑 | `check_demo.py <demo> --quick` 的 **G4 行全 PASS**：layers（和 stage.json 同步）、cut-body（0 截断）、patches（rim / outer / outside / border）、eyes（两只眼）；人工：`mouths.jpg` 2×、每张 `char_*.webp` 叠深色 2×（CHECKLIST） | 抠图边缘、嘴 / 眼差分、半截身体、写进原 Demo、特效遮罩 |
+| **G5 页面** | §7.3 骨架（复制同类最近的 Demo）、`media/layers.js` + `shared/layers.js`、`hooks`；改 shared 马上 `bump.py --stage`；所有文件放在自己的文件夹 | `check_demo.py <demo> --quick` 的 **G5 行全 PASS**：syntax、refs（无 `<base>`、无别的 Demo 路径）、links（无断链）、files（静态 404）、cache（shared 和 `media/layers.js` 的 `?v=` 最新）、l10n、voice（`shared/voice.js`）、end（回本 Demo 封面「↺ もう一度 · Play again」） | 嘴不动（缓存）、依赖别的 Demo、语法错误、写死路径 |
+| **G6 测试** | 自动通关（两条分支）、三语、手机 | `check_demo.py <demo>`（默认：自己的 headless Chrome，`?auto=1&nomic&sub=zh` 通关 + 7 种尺寸）：**runtime**（0 异常 / 0 失败请求）、**l10n-live**（无 `[MoHeatSub] no zh`）、**end-live**、**thermal**（`#cmd` 实测：同时冷热、≤ 3 s 冷热切换、左右差、峰值 ≥ 50 %、结束 stop）、**mobile** 全 PASS；上线前 `--full`（加 alt 分支 + `check_mouth.js` 口型）；自己看一段说话和眨眼（CHECKLIST） | 测试通过但嘴不动、手机不好用、测试被干扰 |
+| **G7 上线** | 封面 `?cover=1` → `media/cover.jpg`、`thumbs.py`、`nav.js` DEMOS、官网菜单、`credits.html`；重做版 `merge_remake.py`（**先自动跑 check_demo，FAIL 就拒绝合并**，`--force` 要在提交说明里写理由），合并后对原文件夹再跑一次；只提交自己的文件（hash-object 方法），`git show --stat HEAD` | `check_demo.py` 0 FAIL（**release** 行：封面、三语缩略图不比封面 / `l10n.js` 旧、菜单、credits 写明 layered）；统筹会话 push 后 Pages `built` | 带上别人的改动、只提交版本号、`$F` 路径 |
+| **G8 收尾** | README / 交接文档 / `WORKLOG.md`、预算记账（`tools/report/balances.py`）、`tools/cleanup/audit.py`；新问题 → §11.1 **并变成一个检查** | **hygiene** 行 PASS（assets 不进 git、无大文件、有预算记录、有 CHECKLIST）；CHECKLIST 手动项都打勾 | — |
+
+**check_demo.py 用法**
+```
+python3 tools/qa/check_demo.py <demo>                    # 静态 + 合成 + 浏览器（zh 自动通关 + 7 种尺寸），一个 Demo 约 3–5 分钟
+python3 tools/qa/check_demo.py <demo> --quick            # 不开浏览器，约 30 秒：G4 / G5 / G7 / G8
+python3 tools/qa/check_demo.py <demo> --full             # 再加 alt 分支和口型检查（上线 / 合并前）
+python3 tools/qa/check_demo.py <临时文件夹> --remake-of <原文件夹>   # 重做版：允许引用原文件夹，跳过菜单 / 缩略图（merge_remake.py 自动这样跑）
+python3 tools/qa/check_demo.py <demo> --checklist        # 同时写 / 刷新 project/CHECKLIST.md 的自动部分（手动打的勾保留）
+```
+个别 Demo 的例外写在 `project/qa.json`（`allow_foreign`、`l10n_ignore`、`skip: {检查名: 理由}`），表里显示 SKIP + 理由。WARN 不挡上线，但要看一眼；FAIL 必须修好（或写明理由的 skip）。
+
+**怎么让流程继续变好**（用户 2026-11-08：每条教训都要变成检查）：出了问题 → ① 能用脚本发现的，加进 `check_demo.py`（或它调用的 `tools/art/*`、`tools/web/*`），在 §11.1 写〔check_demo: <检查名>〕；② 查不了的，加进 `tools/qa/CHECKLIST_TEMPLATE.md` 的手动项，写〔CHECKLIST〕；③ 改本表的「防住的 §11.1」一列。新工具也要接进 `check_demo.py`，不要再多一个要记住的入口。
+
 ### 标准制作流程：岳（Demo24_GakuCamp (layered, ex-岳（Demo24）)）的做法（用户 2026-11-08 定为所有新 Demo 的标准）
 
 画面一律这样做；Seedance 视频只给通过 §6.3 三条准入的动态 CG。范例：`demos/for-women/Demo24_GakuCamp/`（`project/stage.json`、`scripts/seedance.py`、`project/layers.md`）。
@@ -483,6 +511,8 @@ main.layout
 
 ## 8. 制作流程（每一步做完再进下一步）
 
+> 每一步的门禁（查什么、用什么工具、怎样算过）见 §6「制作流程 v2」；上线 / 合并前 `python3 tools/qa/check_demo.py <demo> --full` 必须 0 FAIL。
+
 1. 读交接文档 → **先给用户 2–4 个设计方案（梗概、阶段、招牌冷热动作、画面、成本）一起讨论，用户同意后才开始制作**（用户 2026-11-08：每次让我设计都这样，即使要求"高效"也一样；有新角色时，分别给**人物设计方案**（外表、声音、性格）和**剧情设计方案**）→ 定品类、角色一句话人设、招牌冷热动作、5 个阶段。
 2. 写台词（ja + en）和冷热表（每个时刻：什么东西、在哪只耳朵、冷还是热、为什么成立）。
 3. **用户确认**：造型（设定图）。
@@ -495,6 +525,8 @@ main.layout
 9. 更新交接文档（Demo 状态、声音 id、credits、坑）和该 Demo 的 README。
 
 ## 9. 验收清单
+
+> 能用脚本查的项都在 `python3 tools/qa/check_demo.py <demo>` 里（§6「制作流程 v2」）；每个 Demo 自己的打勾清单是 `project/CHECKLIST.md`（`--checklist` 生成，自动结果 + 手动项）。下面是总表。
 
 - [ ] 从头到尾自动通关，0 报错，所有分支都走过。
 - [ ] 每个冷热源都能说出物理理由；人声是暖的，跟响度变化；开头和结尾都回到 `stop`。
@@ -531,59 +563,49 @@ main.layout
 
 ### 11.1 出错记录（用户 2026-11-08：遇到问题当场总结，写在这里，保证不再犯）
 
-格式：**现象** → 原因 → 以后怎么做。新问题追加在最后。
+格式：**现象**（哪个 Demo）→ 原因 → 以后怎么做 **〔防住它的门禁〕**。同类问题合并成一条，按 §6「制作流程 v2」的步骤分组；新问题先找同类条目，合并进去再补一句。**每条都要写出防住它的门禁**：能用脚本查的加进 `tools/qa/check_demo.py`（写成〔check_demo: <检查名>〕），查不了的加进 `tools/qa/CHECKLIST_TEMPLATE.md` 的手动项（写成〔CHECKLIST〕）。用户 2026-11-08：「用这些经验不断迭代优化 demo 制作的流程和标准」。
 
-- **把用户的话理解错了**（Demo31：「和岳保持一致」被当成"和约会那一集一致"，其实是 岳（Demo24）（岳）的分层做法）→ 用户提到的名字没有在对话里出现过，就去 `git log`、交接文档、指南里查；还对不上就先问，不要猜。
-- **按旧标准开工**（Demo31 先做了 8 张整图，200 credits 浪费）→ 标准一天会改好几次。每次开始出图、写页面之前，先 `git log --oneline -15` 看最近的规则提交，再重读指南 §6 / §7。
-- **脚本"成功"了但其实没提交**（Seedance 网页：上传额度用完时生成按钮变灰，脚本照样点击）→ 每次提交后确认历史里多了一张卡片；不要只看脚本的返回值。
-- **新图和旧图重名，脚本跳过了**（Demo31：`gpt_image.py` 见到同名的旧整图就输出 exists，后面的差分全都做在旧图上）→ 新一轮出图前先把旧图改名（`flat_*`），并把脚本输出里的 `exists` 当成错误处理。
-- **从剪贴板读东西，泄露了用户的 API key** → 永远不读剪贴板；密钥只从约定的文件读（`~/.seedance_key`、`~/.openai_key`），输出里不打印任何可能含密钥的字符串。
-- **提交时带上了别的会话没提交的改动**（共用文档：CLAUDE.md / AGENTS.md / 指南被两个会话同时改）→ 改共用文档前后都要 `git diff <文件>`，只提交自己的那几行（必要时用 `git update-index --cacheinfo` 只暂存自己的版本）；脚本改文件失败时不要接着 `git add`。 又犯一次（Demo37：`git add tools/art/build_stage.py DEMO_DESIGN_GUIDE.md` 把另一个会话的「按尺寸分组」和第 5 步一起提交了，推送前发现、撤回）→ 共用文件**一律**用「HEAD 版本 + 只改自己的几行 → `git hash-object -w` + `git update-index --cacheinfo`」暂存，提交后 `git show <hash> -- <文件>` 看一遍。
-- **用脚本改代码，改出了语法错误**（把注释插进表达式中间）→ 自动替换后马上 `python3 -m py_compile <文件>` / `node --check <文件>`；注释单独写一行。
-- **"纯色底"其实带渐变**（GPT 在纯灰底的一侧加了暖光）→ 颜色抠图失败、AI 抠图又会填满头发缝；用 `demos/for-men/Demo31_SummerRooftop/scripts/flatten_bg.py`：只保留模型确定是人物的像素（阈值 200、不外扩），其余刷成 #c8c8c8，差分图也同样处理，再交给 `build_stage.py`。
-- **"同脸编辑"其实动了脸**（OpenAI 重画时脸会移动几个像素）→ 共用差分之前先比对两张图的眼睛位置（`build_stage --preview` 的 eyes 坐标一致才算同脸）；不一致就给这个姿势单独出张嘴 / 闭眼两张。
-- **差分的自动搜索被头发 / 手带偏**（截到整个头或别的部位）→ 先看 `--preview`；嘴的位置用 `centre_mouth` + `radius_mouth` 固定（坐标从原图裁一块看着量），眼睛用 `near_eyes`。
+**G0 开工与沟通**
+- **把用户的话理解错了**（Demo31：「和岳保持一致」被当成"和约会那一集一致"，其实是岳（Demo24）的分层做法）→ 用户提到的名字没在对话里出现过，就去 `git log`、交接文档、指南里查；还对不上就先问，不要猜。〔G0 · CHECKLIST：方案已选定〕
+- **按旧标准开工**（Demo31 先做了 8 张整图，200 credits 浪费）→ 标准一天会改好几次：每次开始出图、写页面之前先 `git log --oneline -15` 看最近的规则提交，再重读 §6 / §7 / 本节。〔G0〕
+- **推荐了很重的方案**（LivePortrait 视频、JoyVASA，实测才发现太慢、画质低）→ 推荐前先小规模实测速度、画质和费用，按投入产出排序，诚实说明哪些不是最优。〔G0〕
+- **从剪贴板读东西，泄露了用户的 API key** → 永远不读剪贴板；密钥只从约定的文件读（`~/.seedance_key`、`~/.openai_key`），输出里不打印任何可能含密钥的字符串。〔永久规则〕
+- **本地服务器把整个仓库（含 `.env.local` 的 API key）当静态文件提供**（Demo23 `server.py`；开隧道给手机用就等于公开 key）→ 任何持有 key 的服务器：所有路径都要登录 cookie，dot 文件、`local/`、`*.py`、`*.command`、`*.log` 一律 404，关目录列表；上线前用 curl 逐个试 `/.env.local`、`/.git/config`、`/api/*`（无 cookie 应 401）。〔G7 · 带服务器的 Demo〕
+
+**G3 出图（Seedance / OpenAI / 网页端）**
+- **生成"成功"了但其实没出图**（合并 5 条）：① Seedance 网页上传额度用完时生成按钮变灰，脚本照样"点击成功"；② API 输出链接 30–60 分钟失效，引用它的 7 张差分全失败（岳）；③ 上传被限流后，网页端上传和 "Edit" 也一样失败（额度共用）；④ API 被整体限流时 `call()` 按 Retry-After 等了约 20 小时、没有输出（Demo31 烟花）；⑤ 后台命令里又套了一层 `( … ) &`，外层 shell 退出时子进程被一起结束，日志只有第一行（Demo40）→ 先 `probe` / 只发一次上传探测，429 或 Retry-After 很长就立刻按顺序换 OpenAI API（`tools/openai/images.py`）；底图一出来，同一批差分和同脸姿势当场一起提交；网页端每次提交后确认历史里真的多了一张卡片；长任务整条命令放后台（工具的后台模式 / `nohup`），不再在里面加 `&`；**判断成败只看输出文件**（有没有新图、尺寸对不对），不看脚本返回值。〔G3〕
+- **新图和旧图重名，脚本跳过了**（Demo31：`gpt_image.py` 见到同名旧整图输出 exists，后面的差分全做在旧图上）→ 新一轮出图前先把旧图改名（`flat_*`），脚本输出里的 `exists` 当成错误处理。〔G3〕
+- **多个会话共用账号、网页和 ~/Downloads**（Demo26 / Demo25 互相拿错下载；ChatGPT 输入框残留别人的草稿；Seedance 历史里有相似提示词；Chrome 拦截同一网站的连续自动下载）→ 提交前清空输入框；`web_helpers.js` 按本 Demo 提示词里独有的句子找卡片；下载后先看一眼缩略图再改名移走，拿错的按原名放回；ChatGPT 网页不作为常规出图路线。〔G3〕
+- **OpenAI 安全审核拒绝了贴耳私语的差分**（"whispering into her ear" + 敞开的衬衫）→ 差分提示词只写嘴和眼的变化（"嘴微张，轻声说话"），不写亲密动作；被拒时换中性说法再试。〔G3〕
+- **模型擅自改了构图或加了东西**：坐到左边多出一个杯子（岳）；门口那张把门框和"你"的手画进人物层（紫苑）；按旧静帧重画时写了 "full figure"，人物缩成小小的全身像（Demo40 椿）→ 提示词写明手上拿什么、不拿什么，"只画人物，不画门框、墙、别人的手"；按参考图重画写「同样的取景和大小，不要拉远」，不写 full figure；但新姿势要写「full figure inside the frame with margin」防截断（见 G4 半截身体）。每张图出来先和参考图并排看一眼再出差分。〔G3 · CHECKLIST：没有多余道具 / 背景〕
+- **近景 / 特写和远景不像同一个人**（Demo31 贴耳、靠肩：画风更柔更写实、发色变浅、脸变成熟；紫苑：前一个画面已摘的眼镜又戴上了）→ 特写 / 事件 CG 同时给**远景 + 近景两张参考**（`images.py` 的 `ref` 可写成列表），提示词开头写"同一个人、同一画风，不要更写实、不要变浅色头发"；"只改动作"的编辑牵涉脸上的东西（眼镜）就当新姿势，单独出张嘴 / 闭眼；每次合成看 `assets/poses_preview.jpg` 逐项对比（发型发色、瞳色、配饰、服装、画风）并按剧情顺序查连续性。〔G4 · CHECKLIST：poses_preview〕
+
+**G4 合成（抠图、差分、身体、特效层）**
+- **抠图边缘：灰边 / 亮边 / 暗边 / 抠穿 / 洞**（合并 8 条，用户连续三次指出）：纯色底其实带渐变（GPT 在一侧加暖光）；夜景上发丝抗锯齿和被线条围住的发缝残留 #c8c8c8；碰到原图边缘的浅色手指和灰底差不到 40 被抠掉；AI 抠图把发丝间、头发和肩膀之间的底色填实；浅色衣服配浅灰底被抠穿（陽向）；深灰底把银发里的深色线稿抠掉（椿）；深灰底估错底色把边缘紫发当底色（紫苑、蓮）→ 底色按角色选（深色角色浅灰 #c8c8c8，浅色角色绿幕 #00B140 + `"matte": "green"`，有绿色的角色品红幕 #FF00FF + `"matte": "magenta"`，混合中灰；§6）；`build_stage.py` 已改：底色取边缘最多的纯灰、轮廓内被包围的底色小块抠掉、外侧和底色差 18 以内当背景、碰边的手加 `keep`；渐变底先 `demos/for-men/Demo31_SummerRooftop/scripts/flatten_bg.py`；夜景跑 `tools/art/clean_cutout.py <demo>`（抠图公式 C = α·F + (1−α)·BG 求真 α，v3）。改阈值后用浅、中、深三种底色的角色各查一张。**检查**：每张 `media/art/char_*.webp` 叠在深色上，头发、手、衣领放大 2 倍看，不只看缩小的拼图。〔G4 · CHECKLIST：char 叠深色 2×〕
+- **嘴 / 眼差分对不上**（合并 6 条）：特写的嘴被模型整体挪动、转角度，说话时嘴会"跳"（蓮特写、紫苑门口）；自动搜索被头发 / 手带偏，补丁贴到头发上或闭着的嘴旁边出现第二张嘴（Demo35 紫苑、Demo33 莲）；"同脸编辑"其实把脸移了几个像素；只眨一只眼（陽向：第二只眼被刘海挡住或头歪）→ 差分一律遮罩编辑（`images.py --mask`，只让嘴 / 眼周围的椭圆变化）；重新取景的差分先 `tools/art/align_variant.py`；共用差分前比对两张图的眼睛坐标；搜索不准就在 stage.json 写死 `centre_mouth` + `radius_mouth` / `regions_mouth` / `regions_eyes`（在带坐标网格的放大图上量，椭圆同时盖住闭嘴和张嘴、两只眼），重跑直到 rim diff 嘴 ≤ 1.5、眼 ≤ 4；Seedance 差分顺带改了别处时先 `clean_variant.py`（§11）。**检查**：`check_patches.py` 的 100 % 对照图 + `mouths.jpg` 2×，每个姿势的预览都要看到两只眼。〔G4 · check_demo: patches / eyes · CHECKLIST：mouths.jpg 2×〕
 - **人物身体只有半截，悬在画面中间**（岳 left / blanket、陽向 wave / hands、渚 sparkler / whisper / shoulder、Demo18 booth）→ 姿势提示词写「full figure inside the frame with margin, shoulders and arms not cut by the picture edge」；有报告就 `tools/art/extend_pose.py <demo> <pose> --auto`（gpt-image-2 只补边、NCC 对位回原图、差分同样补边，`--place` 恢复屏幕位置），截断处至少在画外 3 %。踩过的坑：遮罩编辑会整体缩放 / 平移 → 留白必须透明、窗口正好画布比例；`build_stage.py` 以前用最后一个姿势的尺寸算所有差分 → 现按尺寸分组；暖灰底（Demo20 #cec7c4）要和底色本身的彩度比。〔G4 · check_demo: cut-body〕
-- **Chrome 拦截同一网站的连续自动下载**（ChatGPT 网页：第二张起静默失败）→ ChatGPT 网页不作为常规出图路线；必须用时请用户在网站设置里允许"自动下载"。
-- **夜景上看得出抠图的灰边**（Demo31，用户指出）：纯灰底 #c8c8c8 在发丝的抗锯齿边缘和被线条围住的头发缝里残留，白天 / 浅色背景看不出，深蓝夜景上一圈灰点 → 合成后一定要把**每个画面的头发边缘放大到 100% 看一遍**（不是只看缩略图）；夜景 Demo 在 `build_stage.py` 之后跑 `demos/for-men/Demo31_SummerRooftop/scripts/clean_cutout.py`（去掉边缘附近接近底色的像素、边缘重新上色、重新合成平面静帧）。
-- **在别的 Demo 里运行了写死路径的脚本**（Demo18 时运行了 Demo31 的 `clean_cutout.py`，它把 Demo31 的人物层又清理了一遍）→ 共用的处理脚本放 `tools/`，Demo 文件夹作为**必填参数**；Demo 自己的 `scripts/` 只放这个 Demo 专用的东西。清理脚本已移到 `tools/art/clean_cutout.py <demo>`。
-- **抓娃娃机的爪子画在玩偶脸上**（Demo18，用户说「抓娃娃机动画很奇怪」）：一张爪子图整体画在玩偶上面、合拢时把三根爪往中间挤 → 爪子像铁丝贴在脸上；整张爪子画在玩偶后面 → 看不出抓住了 → 道具层按**前后关系拆开画**：中间那根爪在玩偶后面，两边的爪在前面、只收拢到头部宽度（卡住头的两侧），外壳停在头顶上方；画完冻结动画（替换 `requestAnimationFrame`）在「刚抓住」「提起来」两帧放大检查，不靠截图碰运气。
-- **抠图第二轮还有问题**（Demo31，用户：「还是有些地方抠图细节有问题」）：① 人物碰到原图边缘时，`build_stage.py` 从边缘往里长背景，**浅色皮肤（手指、前臂）和灰底差不到 40 被一起抠掉** → 碰边的手 / 手臂加 `keep` 框；② 被线条围住、离边缘远的灰底块（头发和肩膀之间、衣领缝）第一版清理没覆盖 → `clean_cutout.py` 现在去掉任何足够大（≥ 60 px）的灰底连通块；③ 细发丝边上一串亮点（抗锯齿混了灰底）→ 边缘比周围人物明显亮的像素改色并调低透明度。**检查方法**：把每张 `media/art/char_*.webp` 叠在深色（夜景色）上，整张看一遍，再把头发、手、衣领放大 2 倍看；不要只看缩小的拼图。
-- **近景 / 特写和远景不像同一个人**（Demo31 贴耳、靠肩：画风更柔更写实、发色变浅、脸变成熟；用户：「保证近景和远景，人物的外表，画风，穿着全部都是一致的」）→ 只拿一张远景当参考时特写容易跑偏。**合成前把所有姿势排成一排对比**（脸、发色、眼型、衣服花纹、线条和阴影的画法）；特写 / 事件 CG 同时给**远景 + 近景两张参考**（`tools/openai/images.py` 的 `ref` 可以写成列表），提示词开头写明"同一个人、同一画风，不要画得更写实、不要变浅色头发"。
-- **Seedance 整个 API 被限流时脚本会一直等**（Demo31 烟花：`call()` 按 Retry-After 等了约 20 小时，没有任何输出）→ 每次先 `probe`；看到 429 且 Retry-After 很长，立刻按顺序换 OpenAI API，不要提交到 Seedance。
-- **夜景按颜色找天空找不准**（整张图都偏蓝，墙、水塔和天空一样平滑）→ 固定的背景直接手描遮挡物多边形（`demos/for-men/Demo31_SummerRooftop/scripts/make_sky_mask.py`）。
-- **遮罩图存成灰度 PNG，裁剪不起作用**（Demo31 烟花中间层：烟花画到了门、水塔和地面上）→ canvas 的 `destination-in` 用的是**透明度**，灰度图到处都是不透明的；遮罩一律存成 RGBA，形状放在 alpha 里，存完打印 `mode` 和 alpha 范围确认。
-- **遮罩的下边是一条直线，烟花在空中被"看不见的线"切掉**（Demo31，协调者验收指出：地平线定在 y 342，比真实山脊高约 40 px）→ 遮挡边界一律沿真实轮廓描（山脊、海平线、建筑剪影），羽化 6–10 px；自动找边会被更强的栏杆边缘带偏，固定背景就手描折线。贴图类特效（黑底烟花）先把接近黑的噪点压成纯黑、边缘做圆形渐隐，叠加时才不会露出方框。
-- **共用工具的输出格式被别的会话改了，我的脚本出错后画面没清理**（`build_stage.py` 开始在路径后面加 `?v=<hash>`，`clean_cutout.py` 打开文件失败，页面上显示的是没清理的抠图）→ 读路径时一律去掉 `?` 后面的部分；流水线里每一步失败都要让整条命令停下（`&&`），看到报错先修，不要直接看结果图。
-- **头发边缘按阈值清理总会留一圈亮边**（用户连续三次指出头发抠图）→ 用抠图公式算：已知灰底颜色和旁边的头发颜色，每个边缘像素 C = α·F + (1−α)·BG，投影求出真正的 α，颜色改成 F（`clean_cutout.py` v3）。验收：每张人物层叠在夜景色上、头发放大 2 倍看，没有亮边、没有灰块。
-- **说话时嘴完全不动**（Demo20 陽向的分层版，用户指出）：改了 `demos/shared/layers.js` 没升 `?v=`，浏览器用的是缓存里的旧版；而且复用的 Demo20 `main.js` 把状态放在 `window.HINA`（口型 `HINA.FW.mouth`），不是 Demo24 那样的 `window.STREAM` → 改完任何 `demos/shared/` 文件**马上** `python3 tools/web/bump.py --stage <文件>`，再确认浏览器加载的是新版本号；重新跑 `build_stage.py` 改了某个 Demo 的 `media/layers.js` 时，也要把那个页面里 `media/layers.js?v=` 加 1（页面已经上线时）；复用旧 `main.js` 前先在控制台列出它的全局状态对象，在 `stage.json` 里写明 `hooks`（`layers.js` 已支持 `hooks.view / mouth / level`）。
-- **自动测试"通过"了，但嘴不动、只眨一只眼** → 测试不能只看画面顺序、报错和 404：说话期间要读出口型值确认大于 0、确认当前画面判断正确；交给用户前自己先看一段说话和眨眼。
-- **只眨一只眼**（Demo20 陽向，用户指出）：第二只眼被刘海挡住、变化小，或者头歪着、两眼高度差大，自动截取没认出来 → `face_patches.py` 已放宽（第二只眼变化只要有第一只的 10%，高度差按两眼距离放宽）；每个姿势的截取预览都要看到**两只眼**。
-- **浅色角色的衣服被抠穿**（陽向：米色开衫、白 T 恤配浅灰底）→ 纯色底按角色主色选（§6：深色角色浅灰、浅色角色深灰、混合中灰）；`build_stage.py` 的背景扩展碰到线稿就停；浅色角色加 `"matte": "ai"`。
-- **差点把重做版的图写进原 Demo**：占位用的 `hina_wave.webp` 是指向 Demo20 原图的链接，合成会顺着链接写过去 → `build_stage.py` 已改成写文件前先断开链接；尽量不用指向原 Demo 的占位链接。
-- **7 张图生成失败**（Seedance API：引用的输出链接 30–60 分钟后失效）→ 底图出来后同一批差分、姿势立刻全部提交（§11）。
-- **上传被限流后，网页端上传和 "Edit" 按钮也一样失败**（额度是网页端和 API 共用的）→ 先只发一次上传请求探测；被限流就按顺序换 OpenAI API（`tools/openai/images.py`），不要干等。
-- **模型擅自加了道具**（"坐到左边"出现一个杯子）→ 提示词写明手上拿什么、不拿什么；每张图出来先看一遍再用。
-- **提交命令没生效**（`$F` 里写了多个路径，zsh 不按空格拆开）→ 路径直接写在命令里或用数组；提交后 `git show --stat HEAD` 核对。
-- **在用户正在看的标签页里跑测试，打断了用户** → 测试一律新开自己的标签页，用户在看的页面不碰。
-- **后台出图只跑了第一行就没了**（Demo40：在后台命令里又用 `( … ) &` 套了一层，外层 shell 退出时把子进程一起结束了，日志只剩第一行、没有图）→ 长任务直接整条命令放后台（工具的后台模式 / `nohup`），不要再在里面加 `&`；结束后先看输出文件里有没有图再往下做。
-- **按旧静帧重画姿势时人物缩成了小小的全身像**（Demo40 椿：提示词里写了 "full figure"，模型把镜头拉远画了全身）→ 按参考图重画姿势时写明「同样的取景和大小，不要拉远，不要比参考图多画身体」，不写 full figure；出图后先和参考图并排看一眼再出差分（`scripts/prompts.py` 已改）。
-- **深灰底把银发里的线稿抠掉了**（Demo40 椿：银发 + 白振袖 + 深薰衣草线稿放在 #404040 上，发丝之间的线条和底色差不到 14，被当成背景，合成后银发里一道道夜空的蓝缝）→ 浅色角色、线稿又深的，灰底深浅都不行，改用绿幕 #00B140（§6 已改），`stage.json` 里写 `"matte": "green"`（`build_stage.py` 的色键：按绿色比红 / 蓝多多少算透明度、去溢色；原来按灰底调的抠图在绿幕上会留绿边）；合成后放大看头发。
-- **共用账户的网页上混进别的会话的东西**（ChatGPT 输入框残留草稿；Seedance 历史里有相似的提示词）→ 提交前先清空输入框；`web_helpers.js` 按本 Demo 提示词里独有的句子找卡片；下载后立刻看一眼。
-- **重做版里道具和特效对不上**（旧 `main.js` 写死了火星、热气的位置）→ 摆位前先查旧代码里写死的坐标，让道具对齐（§6 第 6 步）。
-- **推荐了很重的方案**（LivePortrait 视频、JoyVASA），实测才发现太慢、画质低 → 推荐前先小规模实测速度、画质和费用，按投入产出排序，诚实说明哪些不是最优。
-- **路径被按空格拆碎**（"MoHeat Evo"）→ 脚本里一律按行分割文件列表，假设路径可能有空格（`merge_remake.py` 已改）。
-- **只提交了版本号，没提交共用文件本身**（`bump.py --stage` 只暂存各页面里改的 `?v=`，不暂存被改的共用文件；再用不带路径的 `git commit` 就只提交了版本号——线上变成"新版本号配旧代码"，访客缓存后再也拿不到新代码）→ 改共用文件后用 `git commit -- <共用文件> <bump 改的页面…>` 一起提交；提交后 `git show --stat HEAD` 确认共用文件在里面。
-- **同一个角色前后画面不一致**（紫苑：窗边那张脸上戴着眼镜、手里又拿着一副——他在前一个画面已经摘了；门口那张把门框和"你"的手画进了人物层）→ 用户要求近景远景的长相、画风、服装完全一致：每次合成看 `assets/poses_preview.jpg` 逐项对比（发型发色、瞳色、配饰、服装、画风），并按剧情顺序检查连续性；"只改动作"的编辑如果牵涉到脸上的东西（眼镜），就当作新姿势，单独出张嘴 / 闭眼；提示词写明"只画人物，不画门框、墙、别人的手"。
-- **OpenAI 安全审核拒绝了贴耳私语的差分**（"whispering into her ear" + 敞开的衬衫）→ 差分提示词只写嘴和眼的变化（"嘴微张，轻声说话"），不写亲密动作；被拒时换成中性的说法再试，不花额外费用。
-- **头发和身体交界的地方残留灰色底**（用户指出）：AI 抠图模式把轮廓里面全部填实，夹在发丝之间、头发和肩膀之间的小块底色也被留下了 → `build_stage.py` 已改：轮廓里被包围的底色小块抠掉；靠近外轮廓（±60px）或模型自己不确定的地方，颜色几乎等于底色的像素也抠掉（衣服内部的灰色阴影不受影响）。合成后把**每个姿势的头发边缘放大到 100% 看**。另外图片换了内容但文件名不变时浏览器会用旧图 → `media/layers.js` 里的图片路径现在带内容指纹 `?v=`。
-- **特写的嘴没对上**（用户指出，蓮特写、紫苑门口等）：模型重画张嘴图时会把嘴整体挪动、转角度（截取位置是对的，但张开的嘴不在原来的位置），说话时嘴会"跳"；紫苑门口那张的截取位置甚至完全错了 → 张嘴 / 闭眼差分一律用遮罩编辑（`images.py --mask`，只让嘴或眼周围的椭圆变化）；每次合成都跑 `tools/art/check_patches.py` 按 100% 逐张看。只看缩小的预览图是不够的。
-- **本地服务器把整个仓库（含 `.env.local` 里的 API key）都当静态文件提供**（Demo23 的 `server.py`：`SimpleHTTPRequestHandler(directory=REPO)`；只绑 127.0.0.1 时没事，一旦开隧道给手机用就等于公开 key）→ 任何持有 key 的服务器：所有路径都要登录 cookie，dot 文件、`local/`、`*.py`、`*.command`、`*.log` 一律 404，关目录列表；上线前用 curl 逐个试 `/.env.local`、`/.git/config`、`/api/*`（无 cookie 应 401）。
-- **数据文件头注释里的示例写法让 Python 解析失败**（`lines.js` 注释里有 `line = { … }`，`src.index('= {')` 找到的是注释）→ 从 JS 数据文件里取 JSON 时按**完整的**赋值定位（`src.index('window.TALK_SCRIPT = ')`），注释里不写赋值的样子（Demo23 多场景版又犯了一次：头注释写了 `JSON after "TALK_SCRIPT = "`）。
-- **Chrome 测试时改窗口大小不生效**（窗口已最大化，`resize_window` 返回成功但 `innerWidth` 不变）→ 一屏检查改用同源 iframe（390×844 等尺寸）测量 `scrollHeight / scrollWidth`；桌面 Chrome 的 iframe 里设备连接栏会横向溢出（真机没有 Web Serial、`no-serial` 会隐藏它），不算页面问题。
-- **封面的选择按钮在手机横屏溢出**（Demo23 地点选择：英文标签「Castle keep」「Distillery」比日文长一倍，一行 5 个放不下，第一个被切掉）→ 按钮标签按**最长的语言**量；一行放不下就改成图标 + 一个词；用 `tools/web/check_mobile.html?only=<Demo>` 查 7 种尺寸的溢出和 < 44 px 的按钮（它在桌面 Chrome 的 iframe 里跑，`pointer: coarse` 不成立，所以 44 px 规则要同时写 `(max-width: 1100px)`）。
-- **长时间的自动通关在 javascript 工具里超时**（45 s 上限）→ 测试循环写成不 await 的 async 函数，结果存到 `window.__res`，之后再读；快速通关可把 `TKAudio.play` 换成 150 ms 的假播放。标签页不在前台时计时器会被节流，一轮会慢好几倍。
-- **深灰底的人物抠完带一圈暗边、银发里出现小洞**（紫苑、蓮）：①底色是从画面边缘里"偏亮的灰"估算的，深灰底 #404040 不够亮，被排除，结果把边缘的紫色头发当成底色；②"颜色接近底色就抠掉"的规则没限制色彩，蓮偏紫的银发阴影被当成底色 → 底色改为取边缘纯灰像素里最多的那种颜色（任何亮度）；空隙 / 轮廓附近的抠除只针对纯灰像素；轮廓外侧和底色差 18 以内的当作背景（模型会在底色上画淡淡的阴影）。改阈值后必须用浅、中、深三种底色的角色各检查一张（陽向、蓮、紫苑），只修一个角色容易把另一个改坏。
+- **差点把重做版的图写进原 Demo**（占位 `hina_wave.webp` 是指向 Demo20 原图的链接，合成顺着链接写过去）→ `build_stage.py` 写文件前先断开链接；尽量不用指向原 Demo 的占位链接。〔G4 · check_demo: links 列出指向别的 Demo 的链接〕
+- **特效层的遮罩不对**（Demo31 烟花：遮罩存成灰度 PNG，`destination-in` 按透明度裁剪，烟花画到门和水塔上；遮罩下边是一条直线，烟花被"看不见的线"切掉；夜景按颜色找天空找不准）→ 遮罩一律 RGBA、形状放 alpha，存完打印 `mode` 和 alpha 范围；遮挡边界沿真实轮廓手描（`make_sky_mask.py`），羽化 6–10 px；黑底贴图类特效先把近黑噪点压成纯黑、边缘圆形渐隐。〔G4 · CHECKLIST：动画物理 / 层次〕
+- **道具和角色的前后关系画错**（Demo18 抓娃娃机：整张爪子画在玩偶脸上像铁丝，或整张在后面看不出抓住）→ 道具按前后关系拆层（中间爪在玩偶后，两边爪在前、只收拢到头宽，外壳停在头顶上方）；冻结动画（替换 `requestAnimationFrame`）在关键帧放大检查。重做版里旧 `main.js` 写死的火星、热气位置也要先查，让道具对齐。**又一次**（同一个抓娃娃机，只看了「刚抓住」一帧就判断动画没问题）：动作看着怪、猫一直没被提起来——道具太大、停靠位置已经低于抓取高度，「下降」和「提起」方向都反了 → 先算几何（停靠高度 / 抓取高度、行程 > 0、底部不被裁掉），再用虚拟时钟（替换 `performance.now` / `requestAnimationFrame`）逐帧渲染**整段**动作来看；摆锤从天花板上的支点吊下来，爪子绕铰链转，永远不要压扁变形。〔G4 / G6 · CHECKLIST：动画物理（整段逐帧）〕
+
+**G5 页面与代码**
+- **说话时嘴完全不动**（陽向分层版）：改了 `demos/shared/layers.js` 没升 `?v=`，浏览器用缓存的旧版；复用的 Demo20 `main.js` 状态在 `window.HINA` 不是 `window.STREAM` → 改完 shared 文件马上 `python3 tools/web/bump.py --stage <文件>`；重跑 `build_stage.py` 改了 `media/layers.js` 也给页面里的 `media/layers.js?v=` 加 1；复用旧 `main.js` 前列出它的全局状态对象，在 `stage.json` 写 `hooks`。`media/layers.js` 里的图片路径带内容指纹 `?v=`，换图不改名也不会读到旧图。〔G5 · check_demo: cache · G6 · check_demo --full: mouth〕
+- **页面依赖别的 Demo 的文件夹**（Demo24 读 Demo14 的 `style.css`，Demo14 被 Mint 新版接管时就会坏；Demo17–19 的 `<base href>` 指向 Demo14）→ 重做会接管原文件夹，所以页面、代码、样式、图、音频都要在自己的文件夹里（复制过来，或合并后变成本地路径）；只有 `project/qa.json` 的 `allow_foreign` 写明理由的才例外。〔G5 · check_demo: refs / links〕
+- **用脚本改代码改出语法错误**（注释插进表达式中间）→ 自动替换后马上 `python3 -m py_compile` / `node --check`；注释单独写一行。〔G5 · check_demo: syntax〕
+- **数据文件头注释里的示例写法让解析失败**（`lines.js` 注释里有 `line = { … }`，`src.index('= {')` 找到注释；Demo23 又犯一次）→ 从 JS 数据文件取 JSON 时按完整赋值定位（`src.index('window.TALK_SCRIPT = ')`），注释里不写赋值的样子。〔G5〕
+- **共用工具出问题牵连别的 Demo**：`build_stage.py` 开始在路径后加 `?v=<hash>`，`clean_cutout.py` 打开文件失败、页面显示的是没清理的抠图；在 Demo18 运行了写死 Demo31 路径的脚本，把 Demo31 又清理了一遍 → 共用处理脚本放 `tools/`，Demo 文件夹是**必填参数**；读路径一律去掉 `?` 后面；流水线每一步用 `&&` 串起来，失败就停。〔G4 / G5〕
+- **路径被按空格拆碎**（"MoHeat Evo"）→ 脚本里一律按行分割文件列表，假设路径有空格（`merge_remake.py` 已改）。〔G5 / G7〕
+
+**G6 测试**
+- **自动测试"通过"了，但嘴不动、只眨一只眼** → 测试不能只看画面顺序、报错和 404：`check_demo.py --full` 跑 `tools/art/check_mouth.js`（说话时口型值 > 0、停顿时闭上、没有半透明双唇）；交给用户前自己先看一段说话和眨眼。〔G6 · check_demo --full: mouth · CHECKLIST〕
+- **手机上"能显示"不等于"能用"**（竖屏 ■ STOP 被挤出 3–6 px、窄窗口设备控件把 390 px 页面撑到 637 px、封面按钮 30 px、🌐 / ⛶ 20–26 px、平板横屏侧栏只剩 130 px、引导第 8、9 步在屏幕外；Demo23 地点按钮英文标签比日文长一倍、手机横屏溢出）→ 规则写在共用的 `series.css` / `guide.js`；按钮标签按最长的语言量；`tools/web/check_mobile.html` 做真实点击测试（控件中心 ±21 px）并逐步走一遍引导，44 px 规则同时写 `(max-width: 1100px)`。〔G6 · check_demo: mobile〕
+- **浏览器测试被干扰或测不准**：在用户正在看的标签页里跑测试；共用 Chrome 标签组里自己的标签被别的会话导航走；窗口最大化时 `resize_window` 不生效；javascript 工具 45 s 超时；后台标签计时器被节流 → `check_demo.py` 自己起 http.server + headless Chrome（`tools/qa/page_probe.js`），尺寸用同源 iframe，长循环不 await、结果存 `window.__res`。〔G6 · check_demo〕
+- **浏览器检查并行时结果不稳**（2026-11-08 建 check_demo 时：4 个 Demo 同时跑，1280×720 全部报 Y+21 滚动，单独跑是 0；zh 通关时第一句台词报「no zh」，其实 `l10n.js` 里有，只是它还没加载完台词就显示了）→ check_demo 的 mobile 有失败时自动单独再跑一次，两次都失败才算 FAIL；l10n-live 分开"真的没翻译"（FAIL）和"`l10n.js` 加载前就显示"（WARN，`shared/subs.js` 的启动竞争，待修）。〔G6 · check_demo: mobile / l10n-live〕
+
+**G7 提交与上线**
+- **提交时带上别的会话没提交的改动**（共用文档被两个会话同时改；Demo37 `git add build_stage.py DEMO_DESIGN_GUIDE.md` 把别人的改动一起提交，推送前撤回）→ 共用文件一律「HEAD 版本 + 只改自己的几行 → `git hash-object -w` + `git update-index --cacheinfo`」暂存，提交后 `git show <hash> -- <文件>` 看一遍；脚本改文件失败时不要接着 `git add`。〔G7〕
+- **只提交了版本号，没提交共用文件本身**（`bump.py --stage` 只暂存页面里的 `?v=`，再用不带路径的 `git commit` → 线上"新版本号配旧代码"）→ `git commit -- <共用文件> <bump 改的页面…>` 一起提交，提交后 `git show --stat HEAD` 确认。〔G7 · check_demo: cache 会报"文件在版本号之后又改过"〕
+- **提交命令没生效**（`$F` 里写了多个路径，zsh 不按空格拆开）→ 路径直接写在命令里或用数组；提交后 `git show --stat HEAD` 核对。〔G7〕
 
 ## 12. 资源清理与文件结构
 
@@ -655,6 +677,7 @@ assets/images/demos/  官网菜单缩略图（按文件夹名命名）
   - `python3 tools/web/bump.py <改过的共用文件…>`：改 `?v=` 版本号（`--stage` 只暂存这次的改动，`--name l10n.js` 按文件名）。
   - `node tools/l10n/check_missing.js <lang> [文件夹]`：列出没有翻译的字符串。
   - `python3 tools/cleanup/audit.py`：清理报告。
+  - `python3 tools/qa/check_demo.py <demo> [--quick|--full] [--checklist]`：**一个入口跑完所有自动检查**（§6「制作流程 v2」），PASS / WARN / FAIL 表；`merge_remake.py` 合并前自动跑，FAIL 就拒绝。新检查加进它，不另开入口。
 - **安全地改文件**：先读完再写（Python 里不要在同一行 `open(p, 'w').write(f(open(p).read()))`，打开写入时文件已被清空——2026-11-08 因此清空过一次 Demo24 的页面）；批量改动前先 `--dry` 看清单；改完 `node --check` 所有改过的 JS。
 - **多个会话同时工作**：只提交自己改的文件或改动（`git add <具体文件>`，或 `bump.py --stage`），**暂存后立刻 commit + push**（别的会话的 `git commit` 会把你暂存的改动一起提交）；改名、批量移动之前用 ListAgents 看看谁在工作，改完用 SendMessage 告诉它们新路径。
 - **写清楚**：规则写进本规范（是什么、为什么、怎么做）；用户交代的任务记进 `TASKS.md`；每个共用文件开头写用途和用法；文件名按 §12.1。

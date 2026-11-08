@@ -2,7 +2,10 @@
 """Merge a finished layered remake back into its original demo folder (user, 2026-11-08: a remake REPLACES the original — same folder,
 same URL — and the original is backed up outside the repo).
 
-  python3 tools/web/merge_remake.py <original folder> <remake folder> [--dry] [--backup "~/Desktop/MoHeat Evo 备份"]
+  python3 tools/web/merge_remake.py <original folder> <remake folder> [--dry] [--force] [--backup "~/Desktop/MoHeat Evo 备份"]
+
+0. Gate (制作流程 v2, DEMO_DESIGN_GUIDE §6): runs `python3 tools/qa/check_demo.py <remake> --remake-of <original> --full` first and refuses
+   to merge when it FAILs. --force merges anyway (say why in the commit message). After the merge, run check_demo.py on the original.
 
 1. Backs up the whole original (symlinks resolved, assets included) to <backup>/<category>/<original>_<YYYYMMDD-HHMM>/.
 2. In the original: the old pictures, face patches and animation go (media/art, media/video, patches.js, prepare_video.py,
@@ -17,8 +20,14 @@ import argparse, datetime, os, re, shutil, subprocess, sys
 
 ap = argparse.ArgumentParser(); ap.add_argument("orig"); ap.add_argument("remake"); ap.add_argument("--dry", action="store_true")
 ap.add_argument("--backup", default="~/Desktop/MoHeat Evo 备份")
+ap.add_argument("--force", action="store_true", help="merge even when tools/qa/check_demo.py FAILs")
 a = ap.parse_args()
 O, R = os.path.abspath(a.orig), os.path.abspath(a.remake)
+# 0. QA gate: the remake must pass check_demo.py before it may replace the original
+_qa = subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "qa", "check_demo.py"), R, "--remake-of", O, "--full"])
+if _qa.returncode and a.dry: print("[dry] check_demo.py FAILED — a real merge would stop here (unless --force)")
+elif _qa.returncode and not a.force:
+    sys.exit("merge_remake: tools/qa/check_demo.py FAILED for the remake — fix it first (or --force with a reason).")
 on, rn, cat = os.path.basename(O), os.path.basename(R), os.path.basename(os.path.dirname(O))
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(O)))
 acts = []

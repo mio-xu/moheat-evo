@@ -261,14 +261,16 @@
     if (!(cur && clipOK(cur) && (view === curView || (view === S.view && ONCE.has(cur))))) return false;
     ctx.globalAlpha = alpha; ctx.drawImage(CLIP[cur], 0, 0, W, H); ctx.globalAlpha = 1; return true;
   }
+  // layered stills (demos/shared/layers.js) breathe / sway on their own: no page zoom / bob on top (the background would breathe with her)
+  const LIVE = () => !!(window.MoHeatLayers && window.MoHeatLayers.live);
   function drawView(view, alpha, t) {
     if (drawClip(view, alpha)) return;
     const exact = !QS.has('stills') && Object.keys(CLIP).length > 0;   // with video the still must match the clips' frames exactly (no drift)
     const im = IMG[view];
     ctx.globalAlpha = alpha;
     if (!im) { ctx.fillStyle = '#2a1a16'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
-    const z = exact ? 1 : 1.02 + .008 * Math.sin(t * 1.1), dh = W * im.height / im.width;
-    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + (exact ? 0 : 4 * Math.sin(t * .9)), W, dh); ctx.restore();
+    const z = exact ? 1 : 1.02 + (LIVE() ? 0 : .008 * Math.sin(t * 1.1)), dh = W * im.height / im.width;
+    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + (exact || LIVE() ? 0 : 4 * Math.sin(t * .9)), W, dh); ctx.restore();
     ctx.globalAlpha = 1;
   }
   function draw(t, dt) {

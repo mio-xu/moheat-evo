@@ -13,3 +13,4 @@
 - `check_mouth.js <demo> [seconds] [--alt] [--shots]` — the lip-sync at runtime: headless Chrome on its own port runs the story
   (`?auto=1&nomic`), samples `MoHeatLayers.state()` every frame and flags SILENT-OPEN / NO-MOVE / NO-PATCH / UNMAPPED / STUCK-OPEN /
   HALF / FLICKER; `--shots` saves each view's open / closed frame to `assets/mouth_check/`. Both branches (`--alt`).
+- `check_motion.js <demo> [seconds] [--shots]` — eyes + animation physics (DEMO_DESIGN_GUIDE §6.4): blink timing / rate / blinks at a view cut, breathing rate, the page zooming the layered still (FRAME-DRIFT), the plate showing at the frame edge when the pose moves (EDGE-GAP, magenta plate + extreme parallax); `--shots` writes `<demo>/assets/motion_check/<stem>_eyes.png` (open | closed | difference ×4) for the 2× eye check.

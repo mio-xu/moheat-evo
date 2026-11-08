@@ -260,14 +260,16 @@
     if (!(cur && clipOK(cur) && (view === curView || (view === S.view && ONCE.has(cur))))) return false;
     ctx.globalAlpha = alpha; ctx.drawImage(CLIP[cur], 0, 0, W, H); ctx.globalAlpha = 1; return true;
   }
+  // layered stills (demos/shared/layers.js) breathe / sway on their own: no page zoom / bob on top (the background would breathe with her)
+  const LIVE = () => !!(window.MoHeatLayers && window.MoHeatLayers.live);
   function drawView(view, alpha, t) {
     if (drawClip(view, alpha)) return;
     const exact = !QS.has('stills') && Object.keys(CLIP).length > 0;   // with video the still must match the clips' frames exactly (no drift)
     const im = IMG[view];
     ctx.globalAlpha = alpha;
     if (!im) { ctx.fillStyle = '#140d14'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
-    const z = exact ? 1 : 1.02 + .008 * Math.sin(t * 1.1) + (view === 'close' ? .03 * clamp(nearK - 1, 0, .4) / .4 : 0), dh = W * im.height / im.width;
-    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + (exact ? 0 : 4 * Math.sin(t * .9)), W, dh); ctx.restore();
+    const z = exact ? 1 : 1.02 + (LIVE() ? 0 : .008 * Math.sin(t * 1.1)) + (view === 'close' ? .03 * clamp(nearK - 1, 0, .4) / .4 : 0), dh = W * im.height / im.width;
+    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + (exact || LIVE() ? 0 : 4 * Math.sin(t * .9)), W, dh); ctx.restore();
     ctx.globalAlpha = 1;
   }
   const flakes = Array.from({ length: 90 }, () => ({ x: Math.random() * W, y: Math.random() * H, v: 40 + Math.random() * 70, r: 1.5 + Math.random() * 3.5, p: Math.random() * 6 }));
@@ -286,7 +288,15 @@
     if (fireK > .05) {   // sparks rising from the bonfire on the left + a warm glow
       const g = ctx.createRadialGradient(0, H * .75, 50, 0, H * .75, 900); g.addColorStop(0, `rgba(255,150,70,${.22 * fireK})`); g.addColorStop(1, 'rgba(255,150,70,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
       ctx.fillStyle = `rgba(255,190,110,${.85 * fireK})`;
-      for (const s of sparks) { if (s.life <= 0) { s.x = 80 + Math.random() * 380; s.y = H * (.7 + Math.random() * .3); s.v = 90 + Math.random() * 160; s.life = 1 + Math.random() * 1.6; } s.life -= dt; s.y -= s.v * dt; s.x += 25 * Math.sin(t * 3 + s.v) * dt; ctx.fillRect(s.x, s.y, 3, 3); }
+      // embers: born in the fire, lifted by the hot air (the lift fades as they leave the plume), carried by the same wind as the
+      // snow, flutter, cool and fade out (no popping in mid-air)
+      for (const s of sparks) {
+        if (s.life <= 0) { s.x = 80 + Math.random() * 380; s.y = H * (.9 + Math.random() * .08); s.v = 150 + Math.random() * 170; s.vx = 0; s.max = s.life = 1.2 + Math.random() * 1.6; }
+        s.life -= dt; s.v *= Math.exp(-dt * .8); s.vx += (push * .6 - s.vx) * Math.min(1, dt * 1.5);
+        s.y -= s.v * dt; s.x += (s.vx + 30 * Math.sin(t * 3 + s.max * 9)) * dt;
+        ctx.globalAlpha = Math.max(0, Math.min(1, 1.6 * s.life / s.max, 8 * (s.max - s.life))); ctx.fillRect(s.x, s.y, 3, 3);
+      }
+      ctx.globalAlpha = 1;
     }
     if (S.count != null) {   // the countdown
       ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';

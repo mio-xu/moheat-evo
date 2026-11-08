@@ -302,12 +302,14 @@
     startLoop();
   }
   function stopClips() { for (const v of Object.values(CLIP)) v.pause(); cur = null; curView = null; pending = null; }
+  // layered stills (demos/shared/layers.js) breathe / sway on their own: no page zoom / bob on top (the background would breathe with her)
+  const LIVE = () => !!(window.MoHeatLayers && window.MoHeatLayers.live);
   function drawView(view, t, alpha) {
     if (cur && clipOK(cur) && (view === curView || (view === S.view && ONCE.has(cur)))) { ctx.globalAlpha = alpha; ctx.drawImage(CLIP[cur], 0, 0, W, H); ctx.globalAlpha = 1; return; }
     const exact = !QS.has('stills') && Object.keys(CLIP).length > 0;   // with video the still must match the clips' frames exactly (no drift)
     const im = IMG[view] || IMG.live; ctx.globalAlpha = alpha;
-    const close = /left|whisper|coffee|imo|blanket/.test(view), z = exact ? 1 : (close ? 1.025 : 1.012) + .006 * Math.sin(t * .5);
-    const dx = W / 2 - W * z / 2, dy = H / 2 - H * z / 2 + (exact ? 0 : 3 * Math.sin(t * .9));
+    const close = /left|whisper|coffee|imo|blanket/.test(view), z = exact ? 1 : (close ? 1.025 : 1.012) + (LIVE() ? 0 : .006 * Math.sin(t * .5));
+    const dx = W / 2 - W * z / 2, dy = H / 2 - H * z / 2 + (exact || LIVE() ? 0 : 3 * Math.sin(t * .9));
     if (im) ctx.drawImage(im, dx, dy, W * z, H * z); else { ctx.fillStyle = '#16242a'; ctx.fillRect(0, 0, W, H); }
     ctx.globalAlpha = 1;
   }
@@ -320,15 +322,29 @@
     // fire glow flicker + sparks, steam from the treat, snow
     const f = FIRE[S.view];
     if (f) {
-      const [fx, fy] = [f[0] * W, f[1] * H], a = .1 + .25 * S.fire + .04 * Math.sin(t * 13) * Math.sin(t * 7.3);
+      // the glow flickers in step with the fire in the plate (MoHeatLayers.flicker) — two independent flickers looked like two fires
+      const fl = LIVE() && window.MoHeatLayers.flicker ? .25 * (window.MoHeatLayers.flicker() - 1) * (.4 + S.fire) : .04 * Math.sin(t * 13) * Math.sin(t * 7.3);
+      const [fx, fy] = [f[0] * W, f[1] * H], a = .1 + .25 * S.fire + fl;
       const g = ctx.createRadialGradient(fx, fy, 10, fx, fy, 520); g.addColorStop(0, `rgba(255,150,60,${a})`); g.addColorStop(1, 'rgba(255,150,60,0)');
       ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'source-over';
       if (Math.random() < dt * 22 * S.fire) parts.push({ k: 'k', x: fx + rnd(-60, 60), y: fy - rnd(0, 40), vx: rnd(-25, 25), vy: rnd(-180, -90), r: rnd(1.5, 3.5), life: 0, max: rnd(1.2, 2.4) });
     }
     const st = STEAM[S.view];
-    if (st && (S.mug || S.imo) && Math.random() < dt * 9) parts.push({ k: 's', x: st[0] * W + rnd(-50, 50), y: st[1] * H, vx: rnd(-10, 10), vy: rnd(-55, -30), r: rnd(18, 34), life: 0, max: rnd(2, 3) });
+    // steam leaves the mug / potato in his hands: with layers its spot follows his hands (parallax, breathing) and the page zoom
+    const sp = st && (LIVE() && window.MoHeatLayers.toFrame ? window.MoHeatLayers.toFrame('gaku_' + S.view, st[0] * W, st[1] * H) : [st[0] * W, st[1] * H]);
+    const zc = /left|whisper|coffee|imo|blanket/.test(S.view) ? 1.025 : 1.012;
+    if (st && (S.mug || S.imo) && Math.random() < dt * 9) parts.push({ k: 's', x: W / 2 + (sp[0] - W / 2) * zc + rnd(-50, 50), y: H / 2 + (sp[1] - H / 2) * zc, vx: rnd(-10, 10), vy: rnd(-55, -30), r: rnd(18, 34), life: 0, max: rnd(2, 3) });
     if (S.snow && Math.random() < dt * 40) parts.push({ k: 'n', x: rnd(0, W), y: -10, vx: rnd(-20, 10), vy: rnd(50, 110), r: rnd(1.5, 4), life: 0, max: 14 });
-    for (const p of parts) { p.life += dt; p.x += p.vx * dt; p.y += p.vy * dt; if (p.k === 'n') p.x += Math.sin(p.life * 1.3 + p.r) * .4; }
+    // physics: the lake wind blows from your LEFT (→ right in the picture). Embers: the fire's lift fades (drag), the wind takes them;
+    // steam: rises slower as it cools and drifts; snow: falls at its terminal speed, eases into the wind, flutters.
+    const windX = 70 * S.wind * gust(t);
+    for (const p of parts) {
+      p.life += dt;
+      if (p.k === 'k') { p.vy *= Math.exp(-dt * .9); p.vx += (windX - p.vx) * Math.min(1, dt * 1.2); }
+      else if (p.k === 's') { p.vy *= Math.exp(-dt * .5); p.vx += (windX * .8 - p.vx) * Math.min(1, dt * .8); }
+      else p.vx += (windX * .8 - p.vx) * Math.min(1, dt * .7);
+      p.x += p.vx * dt; p.y += p.vy * dt; if (p.k === 'n') p.x += Math.sin(p.life * 1.3 + p.r) * .4;
+    }
     parts = parts.filter((p) => p.life < p.max && p.y < H + 20);
     for (const p of parts) {
       if (p.k === 'k') { const a = 1 - p.life / p.max; ctx.fillStyle = `rgba(255,${170 + 60 * a | 0},90,${a})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill(); }

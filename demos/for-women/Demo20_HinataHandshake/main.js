@@ -250,6 +250,8 @@
     startLoop();
   }
   const ONCE = new Set(['v_take_hand', 'v_lean_in', 'v_lean_back', 'v_lean_in_r', 'v_leave', 'v_hands_breath']);
+  // layered stills (demos/shared/layers.js) breathe / sway on their own: no page zoom / bob on top (the background would breathe with her)
+  const LIVE = () => !!(window.MoHeatLayers && window.MoHeatLayers.live);
   function drawView(view, t, alpha) {
     if (cur && clipOK(cur) && (view === curView || view === S.view && ONCE.has(cur))) {
       ctx.save(); if ((MIRROR[curView] || []).includes(cur)) { ctx.translate(W, 0); ctx.scale(-1, 1); }
@@ -263,8 +265,8 @@
     ctx.globalAlpha = alpha;
     if (!im) { ctx.fillStyle = '#2a2140'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
     const near = view === 'leanL' || view === 'leanR';
-    const z = near ? 1.02 + .008 * Math.sin(t * .6) : view === 'queue' ? 1.0 + .004 * Math.sin(t * .3) : 1.0 + .005 * Math.sin(t * .45);
-    const ox = W / 2 - W * z / 2, oy = H / 2 - H * z / 2 + (near ? 2 * Math.sin(t * 1.1) : 0);
+    const lv = LIVE() && name !== 'bg_queue', z = near ? 1.02 + (lv ? 0 : .008 * Math.sin(t * .6)) : view === 'queue' ? 1.0 + .004 * Math.sin(t * .3) : 1.0 + (lv ? 0 : .005 * Math.sin(t * .45));
+    const ox = W / 2 - W * z / 2, oy = H / 2 - H * z / 2 + (near && !lv ? 2 * Math.sin(t * 1.1) : 0);
     ctx.save();
     if (view === 'leanR') { ctx.translate(W, 0); ctx.scale(-1, 1); }      // the right-ear lean is the left one, mirrored
     ctx.drawImage(im, ox, oy, W * z, H * z);

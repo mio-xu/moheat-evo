@@ -81,7 +81,8 @@
   let fwTimer = 0;
   function firework(az = rnd(-.5, .6), big = 1) {
     SND.fx.firework(az, big);
-    setTimeout(() => { if (!S.started) return; S.flash = big; S.flashC = ['255,190,120', '255,120,90', '180,200,255', '255,230,150', '200,150,255'][Math.floor(Math.random() * 5)]; }, 1050);
+    // light first, sound later: the burst lights the sky 0.4 s in, its boom (audio.js, 1.05 s) arrives 0.65 s after (≈ 220 m away)
+    setTimeout(() => { if (!S.started) return; S.flash = big; S.flashC = ['255,190,120', '255,120,90', '180,200,255', '255,230,150', '200,150,255'][Math.floor(Math.random() * 5)]; }, 400);
   }
   const rnd = (a, b) => a + Math.random() * (b - a);
   function fireworksOn() { S.fw = true; clearInterval(fwTimer); fwTimer = setInterval(() => { if (S.fw && S.started && !talking) firework(rnd(-.5, .6), rnd(.5, .9)); }, 3400); }
@@ -207,12 +208,14 @@
   }
 
   // ---------------------------------------------------------------- drawing: stills with a slow breathing drift, cross-fades, light
+  // layered stills (demos/shared/layers.js) breathe / sway on their own: no page zoom / bob on top (the background would breathe with her)
+  const LIVE = () => !!(window.MoHeatLayers && window.MoHeatLayers.live);
   let viewA = 'stalls', viewB = 'stalls', mix = 1;
   function drawView(view, alpha, t) {
     const im = IMG[view]; ctx.globalAlpha = alpha;
     if (!im) { ctx.fillStyle = '#120f1f'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
-    const z = 1.02 + .008 * Math.sin(t * 1.1), dh = W * im.height / im.width;
-    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + 4 * Math.sin(t * .9), W, dh); ctx.restore();
+    const z = 1.02 + (LIVE() ? 0 : .008 * Math.sin(t * 1.1)), dh = W * im.height / im.width;
+    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + (LIVE() ? 0 : 4 * Math.sin(t * .9)), W, dh); ctx.restore();
     ctx.globalAlpha = 1;
   }
   function draw(t, dt) {
