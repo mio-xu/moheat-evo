@@ -221,7 +221,9 @@
     guard(my);
     S.fade = 1; SND.fx.end(); await sleep(2.6); guard(my);
     mode = 'ended'; SND.stopLoops(); stopClips(); S.started = false; stopOutput(); sub('', '');
-    $('endedSub').textContent = msg; $('ended').classList.add('show');
+    $('endedSub').textContent = msg;
+    // user 2026-11-08: every demo ends back on its OWN cover (no hop to the next demo); the button text follows the language (subs.js)
+    $('startBtn').textContent = '↺ もう一度 · Play again'; show('title');
   }
 
   // ---------------------------------------------------------------- per-frame state + thermal

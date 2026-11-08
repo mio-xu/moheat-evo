@@ -333,8 +333,8 @@
     S.fade = 1; SND.fx.end(); await sleep(2.6); guard(my);
     mode = 'ended'; SND.stopLoops(); S.started = false; stopOutput(); sub('', '');
     $('endedSub').textContent = msg;
-    if (!ONE) { const order = Object.keys(CH), other = order[(order.indexOf(S.ch) + 1) % order.length]; $('nextBtn').textContent = `▶ ${CH[other].name}の配信へ · ${CH[other].en}`; $('nextBtn').onclick = () => goLive(other); }
-    $('ended').classList.add('show');
+    // user 2026-11-08: every demo ends back on its OWN cover (no hop to the next demo); the button text follows the language (subs.js)
+    $('startBtn').textContent = '↺ もう一度 · Play again'; show('title');
   }
 
   // ---------------------------------------------------------------- per-frame state + thermal
