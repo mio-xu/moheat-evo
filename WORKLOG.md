@@ -7,6 +7,14 @@
 
 ---
 
+## 2026-11-08（晚）· 素材检查结果修复（fix2，统筹分派）
+- **Demo24 岳（标杆，FAIL → 0 FAIL）**：char_sit / log / coffee / imo / bye 的浅灰幕布毛边（边缘 40–57 %）→ 0 %，用新的 `python3 tools/art/clean_cutout.py <demo> --unmix --only …`（af36a9d）。
+- **Demo12 蓮 / 21 仁 / 22 紫苑**：灰底残边 / 发缝灰块同法清掉（Demo22 毛巾不动：幕布和毛巾阴影同色）；Demo12 call / hug、Demo22 dryer 的直线切口通过移动人物移出画面；Demo25 椿 omikuji 的毛领切口是 stage.json `"erase"` 框太宽 → 只框签架，在临时副本里重建、只取 omikuji 的层（其他视图逐字节相同）。全部 0 美元。
+- **Demo17 可可**：LivePortrait 嘴套按现在的默认参数重做（最小开口、口腔平涂）+ `build_stage --mouths-only`；check_patches OK，check_mouth OK。
+- **Demo18**：断链 `assets/art/ref_hinata.png` 换成备份里的真文件；Demo18 / 25 / 30 的 `?v=` 过期（cache FAIL）一并修好。
+- **工具**：clean_cutout（`--unmix`、`--only`，平面图按 fire 缩放 + stage.json 文件名）；check_art（直线切口：二值化 alpha、只跳过 2 px、按视图位置判断是否在画面内）。教训：指南 §11.1「抠图检查修好了一处、又藏住了另一处」。
+- **剩下**：jin_jacket（Demo21）/ saku_breath_L（Demo30）的 blink WARN：放大 3–4 倍看过，闭眼下没有瞳孔（羽化 / 发丝半透明造成），没改；Demo22 毛巾的 fringe WARN；几处 edge-margin WARN（离画框 < 1.5 %）没在这次范围内。证据图：scratchpad `fix2/evidence/`。
+
 ## 2026-11-08（晚）· 统一外壳 + 封面标准：第 2–4 批 + 菜单缩略图（ui-shell）
 - **完成**：直播间 14 / 17 / 18 / 24（2d40842）、影片 01–09（119a6c0：章节标记合进时间轴、影片结束回封面、纯聆听不开麦）、故事封面 Demo10 狐狸 / Demo26 直美（164860f，现有抠图合成，OpenAI 0 美元）、Demo28 / 29 接入外壳；Ren / Hinata / Shion / Gaku 的封面用 `MoHeatCover.layered()`（空场景 + 姿势抠图）达标；全站菜单缩略图 + media/cover.jpg 重新生成（`tools/web/thumbs.py --base`，Demo04 除外）；check_cover：没有角色 / 生物脸的封面 = FAIL；check_demo release：缩略图比封面旧 = FAIL。
 - **没做 / 下一步**：① 游戏 Demo10 / 11 / 13 / 15 / 16 / 26 的纯聆听会卡住（抚摸、吹气、找东西这类玩法要每个游戏写一个 `MoHeatShell.autoplay` 钩子），所以这几个暂时**没有**加载 shell.js（仍是旧封面按钮）；② 对谈 23 / 41 / 42（听众回合自动跳过）和 Demo43；③ 菜单顺序（nav.js 加 series / cast / part + 自动排序，"推荐先体验"用 check_demo --full 写的 tools/qa/thermal_scores.json）；④ 结局图鉴、音量记忆、`_kit/style.js` 接进外壳和封面配色；⑤ Demo13 封面（WebGL 摄像头画面：要在摄像头启动前画一张直美贴近镜头的合成封面）；⑥ check_mobile.html 测新按钮。
