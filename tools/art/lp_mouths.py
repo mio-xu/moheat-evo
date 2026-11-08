@@ -25,7 +25,8 @@ import cv2, numpy as np
 from PIL import Image, ImageDraw
 import lp_pose                # chdir → ~/ml/LivePortrait (paths above are absolute)
 
-LIPS = [.1, .2, .34]; PAD = 1.5; MINH = .26   # lips capped: at .42 the widest level went soft / jagged; normal speech sits on lv1–lv2
+LIPS = [.1, .2, .34]; PAD = 1.5; MINH = .26
+LP_DEEP, LP_TONGUE = [82, 38, 46], [168, 92, 98]   # mouth interior, muted (a saturated red read as lipstick on male faces, Demo12 Ren)
 cfg = json.load(open(os.path.join(D, "project", "stage.json")))
 SRC = os.path.join(D, cfg.get("src", "assets/art")); OUT = os.path.join(D, "assets", "lp_mouths"); os.makedirs(OUT, exist_ok=True)
 poses = {k: v for k, v in cfg["poses"].items() if (k in ONLY if ONLY else v.get("mouth") == "lp")}
@@ -78,7 +79,7 @@ def opening(Sn, S0, B, a):
         m = np.abs(du - (u0 + i)) < 1.5
         if m.any(): top[i], bot[i] = np.percentile(dv[m], 6), np.percentile(dv[m], 94)
     ok = ~np.isnan(top); top = np.interp(bins, bins[ok], top[ok]); bot = np.interp(bins, bins[ok], bot[ok])
-    sig = max(2, len(bins) * .1); top, bot = smooth1(top, sig), smooth1(bot, sig)
+    sig = max(2, len(bins) * .16); top, bot = smooth1(top, sig), smooth1(bot, sig)
     # the closed line, along the same axis: the darkest row of the drawing in each position
     gb = cv2.GaussianBlur(B.mean(2), (0, 0), 1); line = []
     for i in bins:
@@ -137,7 +138,7 @@ def refine(B, S0, Sk, a, L, f):
     ys = np.where(m.max(1) > .5)[0]
     if not len(ys): return out
     t = np.clip((np.arange(m.shape[0]) - ys[0]) / max(1, ys[-1] - ys[0]), 0, 1)[:, None, None]
-    deep, tongue = np.array([104, 34, 48], np.float32), np.array([196, 96, 104], np.float32)
+    deep, tongue = np.array(LP_DEEP, np.float32), np.array(LP_TONGUE, np.float32)
     ring = (a > 20) & (a < 120); skin = np.median(B[ring] if ring.sum() > 30 else B.reshape(-1, 3), 0)
     tint = np.clip(skin / np.array([244, 206, 190], np.float32), .45, 1.15)   # the scene's light on the skin (blue bar light, Demo19 flame; night)
     fill = (deep + (tongue - deep) * np.clip((t - .5) / .5, 0, 1)) * tint

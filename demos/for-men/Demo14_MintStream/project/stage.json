@@ -40,7 +40,8 @@
      56,
      42
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "towel": {
    "src": "mint_towel",
@@ -68,7 +69,8 @@
      56,
      42
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "spoon": {
    "src": "mint_spoon",
@@ -96,7 +98,8 @@
      56,
      42
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "earL": {
    "src": "mint_earL",
@@ -124,7 +127,8 @@
      56,
      42
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "earR": {
    "src": "mint_earR",
@@ -152,7 +156,8 @@
      56,
      42
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "lullaby": {
    "src": "mint_lullaby",
@@ -180,7 +185,8 @@
      56,
      42
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "goodnight": {
    "src": "mint_goodnight",
@@ -208,7 +214,8 @@
      56,
      42
     ]
-   ]
+   ],
+   "mouth": "lp"
   }
  },
  "views": {
