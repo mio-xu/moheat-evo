@@ -359,6 +359,16 @@ window.MOHEAT_LAYERS = {
      ],
      "kind": "mouth_lv",
      "level": 3
+    },
+    {
+     "src": "art/whisper_eyes.webp?v=2f5774db",
+     "rect": [
+      1093,
+      243,
+      333,
+      163
+     ],
+     "kind": "eyes"
     }
    ]
   },

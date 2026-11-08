@@ -13,5 +13,10 @@
   "ref": "saku_breathL",
   "mask": "1388,785,52,36",
   "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, face, hair, clothes, colours, lighting, background, and the exact same side-profile outline of the lips and chin. Change ONLY the gap between his lips: the lips part very slightly as if softly speaking — a thin dark opening between the upper and lower lip, no teeth. The front edge of the lips stays exactly where it is. Do not move, zoom or crop the picture."
+ },
+ "saku_whisper2_blink": {
+  "ref": "saku_whisper2",
+  "prompt": "Edit image 1: only BOTH eyes change — they are fully, gently closed (a relaxed blink), no iris, no pupil, no white of the eye visible at all: the upper lid comes all the way down, the closed lid is a soft curved lash line with the same lash colour and thickness as the open eye.\nThe eyelid skin has exactly the same skin colour, light and shading as the face around it (no grey patch, no ghost of the iris). Eyebrows, hair over the eyes (the brown bangs over both eyes, the fox mask, the mole under the eye), glasses and everything else stay pixel-identical. Do not move, scale or redraw anything outside the eyes.",
+  "mask": "1770,542,90,48;2078,428,48,42"
  }
 }
