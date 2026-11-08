@@ -6,6 +6,40 @@
 > 用户偏好在 `USER_PREFERENCES.md`，整体状态在 `HANDOFF_ASMR_DEMOS.md`，用户任务清单在 `TASKS.md`。
 
 ---
+## 2026-11-08 · 男性向 4 位女主播改剧情 + 椿分层重做（本会话：Demo25 / Demo17 / Demo37，Demo18 / 19 交给 moheat-evo-60）· 交接
+
+**用户的指令**（TASKS #33–37）：男性向直播间的女主角（ミント / ココア / ひなた / ルナ）只留一个直播间，其余改成像渚（Demo31）、椿（Demo25）那样丰富的剧情；人设（外表、性格、声音）不变，剧本重写；大小姐（椿 Demo25）剧本不改、画面改成新的分层做法；做好后**直接替换旧版上线**（同一网址，旧版备份到仓库外）。用户选定：ココア A 情人节前夜做巧克力 · ひなた B 游戏厅约会 · ルナ B 秘密调酒师 · ミント 仍是直播，形式换成 C「耳朵专门店」角色扮演直播。剧本初稿由统筹会话 moheat-evo-c9 代用户审过（用户醒来后可以再改）。
+
+**做完并上线（本地提交，统筹会话推送）**
+- **椿 Demo25_HatsumodeDate**（e64411c）：剧本、配音、冷热不变；8 张空背景（从旧静帧去掉人物）+ 8 个姿势（绿幕，以新画的 torii 姿势为人物参考、旧静帧只参考构图）+ 遮罩差分 → `build_stage.py`；15 段 Seedance 视频去掉。旧版备份 `~/Desktop/MoHeat Evo 备份/for-men/Demo25_HatsumodeDate_20261108-1356/`。两条分支自动通关 0 报错。
+- **ココア Demo17_CocoaStream**（1f3d699，在临时文件夹 Demo36 做好后 `git mv` 接管）：《ココアの、バレンタイン前夜》5 段、24 句（ElevenLabs cocoa r1_a）、6 次互动、DUAL（烤箱右 / 冰箱左 / 蒸汽 / ふーふー / 声音）；2 张背景 + 7 个绿幕姿势 + 14 张遮罩差分。旧直播页备份 `…/Demo17_CocoaStream_20261108-1410/`。两条分支通关（2:40 / 2:44），嘴 2 倍检查过。
+- **Demo24 岳**（324f579）：不再引用 Demo14 的 style.css（复制为 `Demo24_GakuCamp/stream.css`）。
+- 工具：`build_stage.py`（`"matte": "green"` / `"magenta"` 色键 + 去溢色；贴片按人物透明度裁、去溢色；`regions_eyes` 固定眼睛椭圆；视图不写 x/y/height 时保持原图取景）、`face_patches.py`（`regions`）、`merge_remake.py`（带上重做版的其他脚本；原版同名 project JSON 留作 `*_v1.json`）、`remake_page.py`（共用 layers.js 用当前版本号）、新 `tools/art/align_variant.py`（大范围对齐重新取景的差分）。
+
+**进行中：ミント Demo37_MintEarSalon（之后接管 Demo14_MintStream）**
+- 已有（afea14a / 380696f）：`project/script.md`（剧本）、`lines.js` + `media/voice/`（22 句，ElevenLabs mint r1_a）、`index.html` / `style.css`（直播覆盖层：LIVE、观看数、多语弹幕、Super Chat 卡片）、`main.js`（Demo17 ココア的框架；投票 / 点单选项、掏耳朵长按（松手会提醒一次 m08x）、翻身、说「おやすみ」、两种结局；DUAL：手 / 热毛巾 / 冰勺子 / 温石 / 薄荷气息 / 喷雾 / 毯子）、`audio.js`、`l10n.js`（`scripts/make_l10n.py`，三语 + 语音答案）、`scripts/prompts.py` → `project/web_prompts.json`。
+- 画面：她是薄荷绿头发，姿势用**品红幕 #FF00FF**（`"matte": "magenta"`）。已出 `assets/art/mint_greet.png`（人物参考）、`bg_salon.png`、姿势 `mint_towel` `mint_spoon` 等（统筹已审 key 图）。交接时后台任务还在出剩下的姿势（`python3 tools/openai/images.py demos/for-men/Demo37_MintEarSalon mint_towel mint_spoon mint_earL mint_earR mint_lullaby mint_goodnight`，已存在的会跳过；中断了就重跑这条）。
+- **还要做**：
+  1. 看 6 个姿势和 greet 是否同一个人、earL / earR 是否真在左 / 右耳边、没有多余道具（拼图对照，不对的 `--force` 重出）。
+  2. 量脸：给 7 个姿势写 `project/face_points.json`（格式同 `demos/for-men/Demo17_CocoaStream/project/face_points.json`：`eyes` 两个椭圆 + `mouth` 一个，单位是 2560×1440 原图像素），画椭圆核对后 `python3 scripts/prompts.py`（自动给差分加 mask），再出 14 张差分：`for v in greet towel spoon earL earR lullaby goodnight; do python3 tools/openai/images.py demos/for-men/Demo37_MintEarSalon mint_${v}_talk mint_${v}_blink; done`。
+  3. 写 `project/stage.json`（照 Demo17 的：`hooks` 用 `MINT.S.view` / `MINT.S.lv`；1 个背景 `salon`（`"fire": [0.5, 0.5]`，视图 `fire: null`）；姿势 `"matte": "magenta"`、`centre_mouth` / `radius_mouth` / `regions_eyes` 从 face_points 来，半径 ×0.8），`python3 tools/art/build_stage.py demos/for-men/Demo37_MintEarSalon`，再跑 `tools/art/check_patches.py` 和 `tools/art/check_cut_body.py`；夜景要放大看发丝边缘有没有品红残留。
+  4. 测试（自己的新标签页）：`?auto=1`、`?auto=1&alt=1` 都要回到封面；7 个画面都出现；嘴 2 倍检查（只在说话时动、停顿闭上、没有方框 / 接缝）；两只眼都眨；弹幕 / Super Chat 卡片不挡字幕；`?sub=zh` / `ja`；手机竖屏 / 横屏。
+  5. **合并进 Demo14**（只在统筹会话确认 moheat-evo-60 已把 ルナ 并入 Demo19、Demo19 不再 `<base href>` 到 Demo14 之后）：备份 Demo14 到 `~/Desktop/MoHeat Evo 备份/for-men/Demo14_MintStream_<时间>/`（`cp -RL`）→ `git rm -r` Demo14 → `git mv demos/for-men/Demo37_MintEarSalon demos/for-men/Demo14_MintStream` → 写 `scripts/make_cover.py`（复制 Demo17 的，它按文件夹名取网址）并运行 → `python3 tools/web/thumbs.py Demo14_MintStream` → `demos/shared/nav.js` 改 Demo14 的标题（ja ミントの、おみみ専門店 / en Mint's Ear Salon / zh 薄荷的耳朵专门店；**只暂存这一行**：HEAD 版本 + 改动 → `git hash-object -w` + `git update-index --cacheinfo`）→ `python3 tools/web/bump.py --stage demos/shared/nav.js` → 根目录 `index.html` 菜单文字、`credits.html`（「ミント / ルナ の配信」行）→ `.gitignore` 里 Demo37 路径改成 Demo14 → README（照 `demos/for-men/Demo17_CocoaStream/README.md`）→ 本地提交，哈希发给统筹会话。`tools/cleanup/audit.py` 里还有 `Demo14_MintStream/project/box_*.jpg` 的条目，合并后检查是否还需要。
+
+**花费**：OpenAI gpt-image-2 约 71 张（椿约 39、ココア 24、ミント 8，2560×1440 high，约 $0.2/张，合计约 $14；账单以 OpenAI 为准）；ElevenLabs ココア 24 句 + ミント 22 句；Seedance 0（上传仍限流）。
+
+**遇到的问题**（都已写进 `DEMO_DESIGN_GUIDE.md` §11.1 / §6）
+- 后台命令里又套 `( … ) &`，任务被一起结束。
+- 按旧静帧重画姿势写了 "full figure"，人物缩成小全身像。
+- 深灰底把银发之间的深色线稿抠掉 → 浅色角色用绿幕 + 色键；绿头发用品红幕。
+- 差分贴片在侧脸轮廓处带进绿幕底色 → 贴片按人物透明度裁、去溢色。
+- 特写的第二只眼自动截取太小、模型只闭一半 → `regions_eyes` + 只对那只眼再做一次遮罩编辑。
+- 共用文件提交时带上了别的会话的改动（Demo37，推送前撤回）→ 共用文件一律「HEAD + 自己的几行」暂存。
+- 本地 8765 服务器中途停了 → 在仓库根目录重新 `python3 -m http.server 8765`。
+- 手机竖屏：顶栏设备控件把页面撑到 637 px 宽、开始按钮 30 px 高 —— 共用 CSS 的问题，统筹会话说另有 agent 在修。
+
+---
+
 ## 2026-11-08（晚）· Demo23 信長と、語らう：剧本版和实时版都能选地点 × 对象 · 后台 agent（统筹会话审查）
 
 **做了什么**（用户：假的也要支持更多场景，可以选地点、只和信长 / 只和家康 / 两人，真假两版都要，话题要和地点相关）
