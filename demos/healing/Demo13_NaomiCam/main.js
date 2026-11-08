@@ -16,7 +16,7 @@
   const ease = (k) => k < .5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
 
   // ---------------------------------------------------------------- art: Demo 11's Seedance art, read by path (never modified)
-  const ART = '../Demo11_Naomi/media/art/', IMG = {};
+  const ART = '../_kit/naomi/art/', IMG = {};
   const ART_NAMES = ['bg_room_day', 'bg_room_night', 'prop_bowl', 'naomi_sit', 'naomi_sit_blink', 'naomi_sit_meow', 'naomi_sit_happy',
     'naomi_close', 'naomi_close_blink', 'naomi_close_happy', 'naomi_walk', 'naomi_pounce', 'naomi_eat', 'naomi_loaf', 'naomi_sleep', 'naomi_belly'];
   const artReady = Promise.all(ART_NAMES.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `${ART}${n}.webp?v=1`; })));

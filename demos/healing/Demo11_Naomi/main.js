@@ -14,11 +14,11 @@
   const rnd = (a, b) => a + Math.random() * (b - a);
   const ease = (k) => k < .5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
 
-  // ---------------------------------------------------------------- art (Seedance → scripts/prepare_art.py → media/art/*.webp)
+  // ---------------------------------------------------------------- art (Seedance → scripts/prepare_art.py → demos/healing/_kit/naomi/art/*.webp, shared with Demo13)
   const IMG = {};
   const ART_NAMES = ['bg_room_morning', 'bg_room_day', 'bg_room_night', 'prop_bowl', 'naomi_sit', 'naomi_sit_blink', 'naomi_sit_meow', 'naomi_sit_happy',
     'naomi_close', 'naomi_close_blink', 'naomi_close_happy', 'naomi_walk', 'naomi_pounce', 'naomi_eat', 'naomi_loaf', 'naomi_belly', 'naomi_sleep'];
-  const artReady = Promise.all(ART_NAMES.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/${n}.webp?v=1`; })));
+  const artReady = Promise.all(ART_NAMES.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `../_kit/naomi/art/${n}.webp?v=1`; })));
   // pose → drawn height in canvas px (anchor = bottom centre of the sprite)
   const POSE_H = { sit: 560, close: 1060, walk: 400, pounce: 600, eat: 380, loaf: 330, belly: 360, sleep: 560 };
   const FACES = { sit: ['blink', 'meow', 'happy'], close: ['blink', 'happy'] };
