@@ -32,13 +32,6 @@
       { t: 143.9, kind: 'read', what: ['うん、やくそく！', 'Yes — I promise!'] },
     ],
     Demo03_ShiningSmileConcert: 'cheer',
-    Demo04_SeasonsExpress: [
-      { t: 24.0, kind: 'blow', what: ['暑い…！ ふーっと涼しい風を送ろう', 'So hot! Blow a cool breeze'] },
-      { t: 66.0, kind: 'choice', hold: true, what: ['冷たいのは、どっちの耳？', 'Which ear feels cold?'], options: LR, answer: 0 },
-      { t: 82.0, kind: 'choice', hold: true, what: ['今度は？ 冷たいのは、どっち？', 'And now — which ear is cold?'], options: LR, answer: 1 },
-      { t: 109.3, kind: 'read', tag: '💡 まっくら！ · Power cut!', what: ['ライト、ついて！', 'Lights on!'], resume: 110.3 },
-      { t: 146.4, kind: 'read', what: ['ありがとう、魔法の列車！', 'Thank you, magic train!'] },
-    ],
     Demo05_GifuCastle: [
       { t: 23.0, kind: 'read' },
       { t: 74.35, kind: 'blow', what: ['お茶をふーふーして、冷ましましょう', 'Blow on the tea to cool it'] },

@@ -11,7 +11,7 @@
     { cat: 'all-ages', dir: 'Demo28_SnowFoxLullaby', ja: 'ふたりの、こもりうた', en: 'A Lullaby for Two', zh: '两个人的摇篮曲', series: 'snowfox', part: 2, cast: 'koyuki+homura', group: 0 },
     { cat: 'all-ages', dir: 'Demo02_FanMeeting', ja: 'キミだけのスペシャルファンミーティング', en: 'Your Special Fan Meeting', zh: '只属于你的特别见面会', series: 'ayane', part: 1, cast: 'ayane', group: 0 },
     { cat: 'all-ages', dir: 'Demo03_ShiningSmileConcert', ja: '氷と炎の星光コンサート', en: 'Ice & Fire Concert', zh: '冰与火的星光演唱会', series: 'ayane', part: 2, cast: 'ayane', group: 0 },
-    { cat: 'all-ages', dir: 'Demo04_SeasonsExpress', ja: '季節が暴走する魔法の列車', en: 'The Runaway Seasons Express', zh: '四季失控的魔法列车', cast: 'train', group: 0 },
+    { cat: 'all-ages', dir: 'Demo04_SeasonsExpress', ja: '季節が、暴走する。', en: 'The Runaway Seasons Express', zh: '四季失控的魔法列车', cast: 'train', group: 0 },
     { cat: 'all-ages', dir: 'Demo10_CaveSpring', ja: '火をともして、ひみつの泉へ', en: 'Kindle the Fire, Find the Hidden Spring', zh: '点燃火光，寻找秘密之泉', cast: 'kohaku', group: 0 },
     { cat: 'healing', dir: 'Demo11_Naomi', ja: 'ナオミと、ふわふわの一日', en: 'A Fluffy Day with Naomi', zh: '和直美的毛茸茸一天', series: 'naomi', part: 1, cast: 'naomi', group: 1 },
     { cat: 'healing', dir: 'Demo13_NaomiCam', ja: 'ナオミ、いまなにしてる？', en: "What's Naomi Up To? · Pet Cam", zh: '直美，你在干嘛呀？', series: 'naomi', part: 2, cast: 'naomi', group: 1 },
