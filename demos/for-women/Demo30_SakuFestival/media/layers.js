@@ -27,16 +27,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/stand_mouth.webp?v=4f6bbd2f",
-     "rect": [
-      551,
-      448,
-      280,
-      160
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/stand_eyes.webp?v=e2366dbc",
      "rect": [
       515,
@@ -45,6 +35,50 @@ window.MOHEAT_LAYERS = {
       144
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/stand_mouth0.webp?v=4ba949d0",
+     "rect": [
+      597,
+      423,
+      199,
+      169
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/stand_mouth1.webp?v=41fcbe01",
+     "rect": [
+      597,
+      423,
+      199,
+      169
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/stand_mouth2.webp?v=546fc84e",
+     "rect": [
+      597,
+      423,
+      199,
+      169
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/stand_mouth3.webp?v=7aea6892",
+     "rect": [
+      597,
+      423,
+      199,
+      169
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -74,16 +108,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/fan_mouth.webp?v=f0bbb6ee",
-     "rect": [
-      509,
-      463,
-      162,
-      116
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/fan_eyes.webp?v=3036607c",
      "rect": [
       392,
@@ -92,6 +116,50 @@ window.MOHEAT_LAYERS = {
       168
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/fan_mouth0.webp?v=3b4880ed",
+     "rect": [
+      485,
+      433,
+      208,
+      177
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/fan_mouth1.webp?v=25947e28",
+     "rect": [
+      485,
+      433,
+      208,
+      177
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/fan_mouth2.webp?v=25a408d8",
+     "rect": [
+      485,
+      433,
+      208,
+      177
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/fan_mouth3.webp?v=8c3bcfb9",
+     "rect": [
+      485,
+      433,
+      208,
+      177
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -121,16 +189,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/kakigori_mouth.webp?v=a26d920e",
-     "rect": [
-      496,
-      443,
-      280,
-      160
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/kakigori_eyes.webp?v=d0a7c4b3",
      "rect": [
       452,
@@ -139,6 +197,50 @@ window.MOHEAT_LAYERS = {
       180
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/kakigori_mouth0.webp?v=eedb4af6",
+     "rect": [
+      546,
+      433,
+      209,
+      177
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/kakigori_mouth1.webp?v=7c76959e",
+     "rect": [
+      546,
+      433,
+      209,
+      177
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/kakigori_mouth2.webp?v=135420f6",
+     "rect": [
+      546,
+      433,
+      209,
+      177
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/kakigori_mouth3.webp?v=0c603256",
+     "rect": [
+      546,
+      433,
+      209,
+      177
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -215,14 +317,48 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/whisper_mouth.webp?v=27db5d6a",
+     "src": "art/whisper_mouth0.webp?v=93b3e856",
      "rect": [
-      1230,
-      506,
-      161,
-      104
+      1213,
+      462,
+      212,
+      179
      ],
-     "kind": "mouth"
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/whisper_mouth1.webp?v=c0dab100",
+     "rect": [
+      1213,
+      462,
+      212,
+      179
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/whisper_mouth2.webp?v=d21e272e",
+     "rect": [
+      1213,
+      462,
+      212,
+      179
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/whisper_mouth3.webp?v=616e5054",
+     "rect": [
+      1213,
+      462,
+      212,
+      179
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -252,16 +388,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/fan_mouth.webp?v=f0bbb6ee",
-     "rect": [
-      509,
-      463,
-      162,
-      116
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/fan_eyes.webp?v=3036607c",
      "rect": [
       392,
@@ -270,6 +396,50 @@ window.MOHEAT_LAYERS = {
       168
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/fan_mouth0.webp?v=3b4880ed",
+     "rect": [
+      485,
+      433,
+      208,
+      177
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/fan_mouth1.webp?v=25947e28",
+     "rect": [
+      485,
+      433,
+      208,
+      177
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/fan_mouth2.webp?v=25a408d8",
+     "rect": [
+      485,
+      433,
+      208,
+      177
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/fan_mouth3.webp?v=8c3bcfb9",
+     "rect": [
+      485,
+      433,
+      208,
+      177
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   }

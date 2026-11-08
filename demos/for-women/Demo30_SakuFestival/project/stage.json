@@ -32,7 +32,16 @@
     90,
     42
    ],
-   "matte": "ai"
+   "matte": "ai",
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.18,
+     0.26
+    ],
+    "minh": 0.16
+   }
   },
   "fan": {
    "src": "saku_fan",
@@ -46,7 +55,16 @@
     1143,
     378
    ],
-   "matte": "ai"
+   "matte": "ai",
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.18,
+     0.26
+    ],
+    "minh": 0.16
+   }
   },
   "kakigori": {
    "src": "saku_kakigori",
@@ -68,7 +86,16 @@
     90,
     42
    ],
-   "matte": "ai"
+   "matte": "ai",
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.18,
+     0.26
+    ],
+    "minh": 0.16
+   }
   },
   "breath": {
    "src": "saku_breathL",
@@ -109,7 +136,16 @@
     75,
     40
    ],
-   "matte": "ai"
+   "matte": "ai",
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.18,
+     0.26
+    ],
+    "minh": 0.16
+   }
   }
  },
  "views": {
