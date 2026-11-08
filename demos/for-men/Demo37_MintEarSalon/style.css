@@ -1,0 +1,59 @@
+/* Mint's ear salon — Demo17 / Demo31 style.css with a night-teal palette (deep teal + mint + soft lamp gold) + the stream overlay. */
+:root { --bg: #0f2226; --panel: #14302f; --panel-2: #1b3d3b; --line: #2c5a56; --gold: #9be8d2; }
+.bar { background: #0b1b1d; }
+.brand span { color: #8fe3cc; }
+.btn.primary { background: linear-gradient(135deg, #2fb59a, #9be8d2); }
+.vv { bottom: auto; top: .6cqw; }
+
+/* cover */
+.intro::before { background: linear-gradient(to right, rgba(15, 34, 38, .82), rgba(15, 34, 38, .5) 42%, rgba(15, 34, 38, 0) 62%); }
+body.cover-only .intro::before { background: linear-gradient(to right, rgba(15, 34, 38, .76), rgba(15, 34, 38, .38) 42%, rgba(15, 34, 38, 0) 60%); }
+body.cover-only .cover-copy { margin-top: 0 !important; }
+.intro .hero.a { position: absolute; width: 1px; height: 1px; }
+.intro h1 { background: linear-gradient(100deg, #fff3e0 0%, #ffffff 40%, #9be8d2 72%, #ffd9a8 100%); -webkit-background-clip: text; background-clip: text; }
+.intro .chip.p { background: rgba(47, 181, 154, .2); color: #fff3e8; border-color: rgba(155, 232, 210, .55); }
+.intro .cleared { color: #fff6ea; background: rgba(47, 181, 154, .3); border-color: rgba(155, 232, 210, .6); }
+
+/* subtitles (sizes from series.css) */
+.subs { position: absolute; z-index: 3; display: flex; justify-content: center; pointer-events: none; opacity: 0; transition: opacity .25s; }
+.subs.show { opacity: 1; }
+.subs .line { display: flex; flex-direction: column; align-items: center; background: rgba(15, 34, 38, .64); }
+.subs .ja { color: #fff; font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif; font-weight: 700; }
+.subs .en { color: #dff3ee; font-family: Inter, sans-serif; }
+
+/* your turn: choices / action / hold */
+.choices, .act { position: absolute; left: 50%; bottom: 12cqw; transform: translate(-50%, .6cqw); z-index: 4; opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s; }
+.choices.show, .act.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.choices { display: flex; gap: 1.2cqw; }
+.ch, .act-btn { cursor: pointer; border-radius: 1.4cqw; border: 1px solid rgba(155, 232, 210, .55); background: rgba(14, 40, 42, .82); color: #fff; padding: 1cqw 2cqw;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background .15s, transform .15s; user-select: none; -webkit-user-select: none; touch-action: none; }
+.ch:hover, .act-btn:hover { background: rgba(47, 181, 154, .55); transform: translateY(-2px); }
+.ch b, .act-btn b { display: block; font: 700 clamp(11px, 1.6cqw, 26px)/1.3 "Zen Maru Gothic", "Noto Sans JP", sans-serif; }
+.ch span, .act-btn span { display: block; font: 500 clamp(9px, 1.05cqw, 16px)/1.3 Inter, sans-serif; color: #dff3ee; }
+.act-btn { display: grid; grid-template-columns: auto auto; grid-template-rows: auto auto; column-gap: 1cqw; align-items: center; text-align: left; animation: nudge 1.6s ease-in-out infinite; }
+.act-btn i { grid-row: span 2; font-style: normal; font-size: clamp(18px, 2.6cqw, 40px); }
+.act-btn.hold { grid-template-rows: auto auto auto; }
+.act-btn.hold.down { background: rgba(47, 181, 154, .7); transform: scale(.97); }
+.act-btn .bar { grid-column: 2; display: block; height: .45cqw; min-height: 4px; margin-top: .5cqw; border-radius: 9px; background: rgba(255, 255, 255, .15); overflow: hidden; }
+.act-btn .bar u { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #8fe3cc, #ffd9a8); }
+@keyframes nudge { 50% { box-shadow: 0 0 1.6cqw rgba(155, 232, 210, .6); } }
+.stage:has(.intro:not(.hidden)) :is(.choices, .act, .subs, .hud-top) { display: none !important; }
+@container (max-width: 620px) {
+  .choices { flex-direction: column; bottom: 14cqw; } .ch b, .act-btn b { font-size: 3.2cqw; } .ch span, .act-btn span { font-size: 2.3cqw; }
+}
+
+
+/* stream overlay (main.js): LIVE badge + viewers top-left, chat column on the right */
+.stage .live { position: absolute; top: .9cqw; left: 1cqw; display: flex; gap: .6cqw; align-items: center; z-index: 4; pointer-events: none;
+  font: 700 clamp(9px, 1cqw, 14px)/1 Inter, sans-serif; color: #fff; }
+.stage .live b { background: #e33b4f; padding: .35cqw .7cqw; border-radius: .4cqw; letter-spacing: .06em; }
+.stage .live span { background: rgba(0, 0, 0, .45); padding: .35cqw .7cqw; border-radius: .4cqw; font-weight: 600; }
+.stage .chat { position: absolute; right: 1cqw; top: 5cqw; width: 22cqw; display: flex; flex-direction: column; gap: .35cqw; z-index: 3;
+  pointer-events: none; mask-image: linear-gradient(to bottom, transparent, #000 25%); -webkit-mask-image: linear-gradient(to bottom, transparent, #000 25%); }
+.stage .chat p { margin: 0; padding: .3cqw .6cqw; border-radius: .5cqw; background: rgba(6, 20, 22, .55); color: #e9fff8;
+  font: 500 clamp(8px, .9cqw, 13px)/1.35 "Noto Sans JP", Inter, sans-serif; animation: chatIn .35s ease-out; }
+.stage .chat p b { color: #9be8d2; font-weight: 700; margin-right: .3em; }
+.stage .chat p.sc { background: linear-gradient(135deg, rgba(47, 181, 154, .92), rgba(31, 120, 160, .92)); }
+.stage .chat p.sc b { display: block; color: #fff; }
+@keyframes chatIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (max-width: 700px) { .stage .chat { width: 30cqw; } .stage .chat p:nth-last-child(n+5) { display: none; } }
