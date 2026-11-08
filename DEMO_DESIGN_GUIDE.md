@@ -538,7 +538,7 @@ main.layout
 - **脚本"成功"了但其实没提交**（Seedance 网页：上传额度用完时生成按钮变灰，脚本照样点击）→ 每次提交后确认历史里多了一张卡片；不要只看脚本的返回值。
 - **新图和旧图重名，脚本跳过了**（Demo31：`gpt_image.py` 见到同名的旧整图就输出 exists，后面的差分全都做在旧图上）→ 新一轮出图前先把旧图改名（`flat_*`），并把脚本输出里的 `exists` 当成错误处理。
 - **从剪贴板读东西，泄露了用户的 API key** → 永远不读剪贴板；密钥只从约定的文件读（`~/.seedance_key`、`~/.openai_key`），输出里不打印任何可能含密钥的字符串。
-- **提交时带上了别的会话没提交的改动**（共用文档：CLAUDE.md / AGENTS.md / 指南被两个会话同时改）→ 改共用文档前后都要 `git diff <文件>`，只提交自己的那几行（必要时用 `git update-index --cacheinfo` 只暂存自己的版本）；脚本改文件失败时不要接着 `git add`。
+- **提交时带上了别的会话没提交的改动**（共用文档：CLAUDE.md / AGENTS.md / 指南被两个会话同时改）→ 改共用文档前后都要 `git diff <文件>`，只提交自己的那几行（必要时用 `git update-index --cacheinfo` 只暂存自己的版本）；脚本改文件失败时不要接着 `git add`。 又犯一次（Demo37：`git add tools/art/build_stage.py DEMO_DESIGN_GUIDE.md` 把另一个会话的「按尺寸分组」和第 5 步一起提交了，推送前发现、撤回）→ 共用文件**一律**用「HEAD 版本 + 只改自己的几行 → `git hash-object -w` + `git update-index --cacheinfo`」暂存，提交后 `git show <hash> -- <文件>` 看一遍。
 - **用脚本改代码，改出了语法错误**（把注释插进表达式中间）→ 自动替换后马上 `python3 -m py_compile <文件>` / `node --check <文件>`；注释单独写一行。
 - **"纯色底"其实带渐变**（GPT 在纯灰底的一侧加了暖光）→ 颜色抠图失败、AI 抠图又会填满头发缝；用 `demos/for-men/Demo31_SummerRooftop/scripts/flatten_bg.py`：只保留模型确定是人物的像素（阈值 200、不外扩），其余刷成 #c8c8c8，差分图也同样处理，再交给 `build_stage.py`。
 - **"同脸编辑"其实动了脸**（OpenAI 重画时脸会移动几个像素）→ 共用差分之前先比对两张图的眼睛位置（`build_stage --preview` 的 eyes 坐标一致才算同脸）；不一致就给这个姿势单独出张嘴 / 闭眼两张。
