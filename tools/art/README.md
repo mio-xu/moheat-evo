@@ -14,3 +14,11 @@
   (`?auto=1&nomic`), samples `MoHeatLayers.state()` every frame and flags SILENT-OPEN / NO-MOVE / NO-PATCH / UNMAPPED / STUCK-OPEN /
   HALF / FLICKER; `--shots` saves each view's open / closed frame to `assets/mouth_check/`. Both branches (`--alt`).
 - `check_motion.js <demo> [seconds] [--shots]` — eyes + animation physics (DEMO_DESIGN_GUIDE §6.4): blink timing / rate / blinks at a view cut, breathing rate, the page zooming the layered still (FRAME-DRIFT), the plate showing at the frame edge when the pose moves (EDGE-GAP, magenta plate + extreme parallax); `--shots` writes `<demo>/assets/motion_check/<stem>_eyes.png` (open | closed | difference ×4) for the 2× eye check.
+- `complete_cutout.py <base> --variants … --pad L,T,R,B --zone … --redo … [--window …] [--trim …] --work <dir>` — completes an
+  already cut-out sprite set (RGBA, no stage.json) whose body ends in a hard straight cut: masked gpt-image-2 outpaint of only the
+  transparent pixels in `--zone` (+ the `--redo` strip at the cut), sent on a flat magenta matte, registered back, keyed; every
+  other pixel stays bit-identical and every variant gets the very same new pixels. A thin band at the bottom of a full figure makes
+  the model redraw the whole figure smaller → give room (`--pad 0,0,0,448 --trim 0,0,0,448`) and send only `--window`; the script
+  refuses to write when the answer does not line up (`--max-err`). Used for the Nobunaga `_kit/art` busts / ears (2026-11-08).
+- `check_cut_body.py` — also checks the bust / ear sprites of a category `_kit/art` for demos without `layers.js` (body must reach
+  the picture bottom; no long straight cut inside the picture).

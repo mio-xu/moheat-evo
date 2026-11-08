@@ -7,6 +7,32 @@
 
 ---
 
+## 2026-11-08 · 信长系列共用素材补全：I_ear / I_bust / N_bust / N_ear 的直线切口 · 后台 agent（本地提交未推送）
+
+**发现的瑕疵**（无头 Chrome 渲染真实画面：对话 Demo 按 `_kit/talk/main.js` 的 frame() / drawChar() / drawCover() 几何在 4 个地点底图上逐位置渲染，电影 Demo05–09 用 `?t=` 静帧）
+- **家康贴耳特写 I_ear / I_ear_smile**：右边（肩膀）和下边是直线切口。Demo23 / 41 / 42 的 left_ear / right_ear 把切口放在画面 40–60 % 处——身体在半空被一条竖线切断（最明显）。电影里 I_ear 的切口在画外。
+- **I_bust_\***：下摆停在图片底边上方 76 px，对话封面 / seat 位置膝下露出 1–2 % 的地板，电影的胸像露出最多约 50 px（坐着的人悬空）。N_bust 少（20 px），电影里笑的时候会露。
+- **N_ear**：下边直线切口，只差 0.4 % 就进画面（贴耳 + 大声说话的上下晃动）。
+- 全身姿势（pose_*）、道具没有问题；嘴 / 眨眼 / 表情差分和底图对齐（只脸部不同）。
+
+**做了什么**
+- 新工具 `tools/art/complete_cutout.py`：已抠好的 RGBA 素材组补全——只让 `--zone` 里的透明像素 + `--redo` 切口带被 gpt-image-2 遮罩编辑重画，品红幕布、对位（窗口内缩放 + 平移，误差 > 10 拒绝写入）、抠色；其他像素一个不变，所有差分得到完全相同的新像素；原图备份在 `~/Desktop/MoHeat Evo 备份/complete_cutout/<时间>/`。
+- I_ear×2：画布 1024→1536 宽（两边各加 256 px，居中绘制的对话页面位置不变），补出远侧肩膀和袖子、闭合轮廓，补到底边；`_kit/art/faces.json` 和 Demo05–09 `media/data.js` 的 I_ear.cx 462→718（电影按 cx 定位，画面位置不变）。
+- I_bust×10、N_bust×10、N_ear×2：裤裙 / 袍子一直画到图片底边（尺寸不变）。
+- `tools/art/check_cut_body.py`：没有 layers.js 的 Demo 也检查类别 `_kit/art` 的胸像 / 贴耳图（身体到达底边、没有长直线切口）→ check_demo 的 cut-body 现在会抓到这类问题。`tools/art/README.md`、`_kit/README.md`、指南 §11.1（合并进「人物身体只有半截」条）、USER_PREFERENCES。
+- 命令（重跑 `Demo09/scripts/prepare_art.py` 后需要再补一次，`--reraw` 用保存的答案不花钱，答案在会话草稿目录，丢了就重新调用）：
+  `complete_cutout.py I_ear.webp --variants I_ear_smile.webp --pad 256,0,256,0 --zone=900,600,1280,1536 --zone=-256,1360,1280,1536 --zone=-256,960,60,1536 --redo=975,700,1024,1536 --redo=0,1375,1024,1536 --redo=0,980,45,1536`；
+  胸像：`--pad 0,0,0,448 --trim 0,0,0,448 --zone=0,1380,1024,1984 --redo=0,1420,1024,1536 --window=0,1000,1024,1984 --scale 1.5`（N_bust zone 从 1440、redo 从 1490）；N_ear：`--zone=0,1380,1024,1984 --redo=0,1470,1024,1536 --redo=880,1380,1024,1536 --window=0,1150,1024,1984 --quality medium --max-err 12`。
+
+**检查**：渲染后 2 倍看：贴耳左右、两人同框、封面、seat / near / left / right / window、电影 5 部的胸像 / 贴耳 / 笑——没有切口、接缝、光晕、底边空隙；差分和底图只在脸部不同；check_cut_body 0；`check_deps.py` PASS；`check_demo.py --quick` 8 个 Demo 的 cut-body 都 PASS（其余 FAIL 是原来就有的：nav.js ?v、结束画面、talk 的 voice.js / 静态扫描 banquet_bg，与本次无关）。
+
+**花费**：OpenAI gpt-image-2 7 次（2 次胸像被模型整个重画小、1 次 N_ear 同样，均被拒绝没写入），输出约 5.8 万 image tokens ≈ $2.4。
+
+**没做 / 下一步**
+- 页面里素材 URL 没有 `?v=`，GitHub Pages 缓存最多约 10 分钟内可能新旧混用（I_ear 新宽度 + 旧 cx）；`data.js?v=1` 没有加号（各 index.html 有别的会话未提交的改动）。需要的话由统筹用 `tools/web/bump.py` 统一加。
+- 电影的 MP4（若有导出）是旧素材渲染的，页面是实时 canvas 不受影响；要更新 MP4 需重跑各 Demo 的 render_mp4。
+- N_ear 右下角（y > 1380，画面外）有一个袍角折点，可接受。
+
 ## 2026-11-08 · 细节修正：闭眼重影 / 抠图缺口 / 嘴 / Demo18 页面动画 / 仁"不动" / 椿 close + stole · 后台 agent（统筹会话审查，本地提交未推送）
 
 **做了什么（提交 40faf50、805bb72、c4c6002、af73c6e、f051f4c）**

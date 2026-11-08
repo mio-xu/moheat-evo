@@ -28,10 +28,49 @@ def edge_fill(a, side):
     return float((band > 128).any(axis=0).mean())
 
 
+def straight_cuts(a, min_h=0.25, min_v=0.2):
+    """Cut-out sprite (alpha): long straight horizontal / vertical edges INSIDE the picture where the body stops along a ruler
+    line (Nobunaga _kit/art I_ear 2026-11-08: right side and bottom cut straight, shown mid-screen in the talk demos)."""
+    H, W = a.shape; o, t = a > 200, a < 30; out = []
+    def runs(edge, n):
+        best = 0
+        for line in edge:
+            if not line.any(): continue
+            d = np.diff(np.concatenate([[0], line.astype(np.int8), [0]])); st, en = np.where(d == 1)[0], np.where(d == -1)[0]
+            best = max(best, int((en - st).max()))
+        return best / n
+    for name, e, n, lim in (('bottom', o[:-3] & t[3:], W, min_h), ('top', t[:-3] & o[3:], W, min_h),
+                             ('right', (o[:, :-3] & t[:, 3:]).T, H, min_v), ('left', (t[:, :-3] & o[:, 3:]).T, H, min_v)):
+        f = runs(e, n)
+        if f >= lim: out.append((name, f))
+    return out
+
+
+def check_kit_sprites(demo):
+    """Demos without layers.js that draw cut-out sprites from their category kit (demos/<cat>/_kit/art: Nobunaga films + talk)."""
+    idx = os.path.join(demo, 'index.html')
+    kit = os.path.join(os.path.dirname(demo), '_kit', 'art')
+    if not (os.path.exists(idx) and os.path.isdir(kit) and '_kit' in open(idx, encoding='utf-8', errors='ignore').read()):
+        return []
+    out = []
+    # only the sprites meant to be cropped by the frame bottom (busts, ear close-ups); full-figure poses and props end on purpose
+    for f in sorted(glob.glob(os.path.join(kit, '*.webp')) + glob.glob(os.path.join(kit, '*.png'))):
+        if not re.search(r'_bust|_ear|_close', os.path.basename(f)): continue
+        im = Image.open(f)
+        if im.mode not in ('RGBA', 'LA', 'PA') and 'transparency' not in im.info: continue
+        a = np.array(im.convert('RGBA'))[:, :, 3]
+        if (a < 30).mean() < 0.05: continue          # full-frame plate, not a cut-out
+        if edge_fill(a, 'bottom') < 0.3:
+            out.append((os.path.basename(f), 'bottom', f'_kit/art/{os.path.basename(f)}: the body ends above the picture bottom ({edge_fill(a, "bottom"):.0%} of the bottom edge) — floats when anchored at the frame bottom → tools/art/complete_cutout.py'))
+        for side, frac in straight_cuts(a):
+            out.append((os.path.basename(f), side, f'_kit/art/{os.path.basename(f)}: straight {side} cut {frac:.0%} long inside the picture → tools/art/complete_cutout.py'))
+    return out
+
+
 def check(demo):
     lj = os.path.join(demo, 'media', 'layers.js')
     if not os.path.exists(lj):
-        return []
+        return check_kit_sprites(demo)
     try:
         data, out, seen = load_layers(lj), [], {}
     except ValueError:      # empty / half-written layers.js (another session is building it)
