@@ -104,6 +104,10 @@ def number_older(page_rel, ref, v, q):
     return changed > set_at or (_dirty(qrel) and not _dirty(page_rel))
 
 
+def isnum(v):   # a version NUMBER (1, 2, 14…) — an 8-character content hash can be all digits (53962729) and is not one
+    return v.isdigit() and len(v) < 6
+
+
 def check(shared_only=False):
     """Stale ?v=: a hash that is not the file's content hash, a number lower than another reference's number to the same file, or a
     number set before the file's last change (number_older)."""
@@ -115,15 +119,15 @@ def check(shared_only=False):
             if os.path.isfile(q): refs.append((os.path.relpath(path, ROOT), m.group(1), m.group(3), q))
     top = {}
     for _, _, v, q in refs:
-        if v.isdigit(): top[q] = max(top.get(q, 0), int(v))
+        if isnum(v): top[q] = max(top.get(q, 0), int(v))
     bad = []
     for page, ref, v, q in refs:
-        if not v.isdigit() and v != chash(q): bad.append(f'{page}: {ref}?v={v} — content is now {chash(q)}')
-        elif v.isdigit() and int(v) < top[q]: bad.append(f'{page}: {ref}?v={v} — another page uses ?v={top[q]}')
-        elif v.isdigit() and (not shared_only or os.path.relpath(q, ROOT).startswith('demos/shared/')) and number_older(page, ref, v, q):
+        if not isnum(v) and v != chash(q): bad.append(f'{page}: {ref}?v={v} — content is now {chash(q)}')
+        elif isnum(v) and int(v) < top[q]: bad.append(f'{page}: {ref}?v={v} — another page uses ?v={top[q]}')
+        elif isnum(v) and (not shared_only or os.path.relpath(q, ROOT).startswith('demos/shared/')) and number_older(page, ref, v, q):
             bad.append(f'{page}: {ref}?v={v} — {os.path.relpath(q, ROOT)} changed after this number was set (fix: --auto <file>)')
     for b in bad: print(b)
-    n_hash = sum(1 for r in refs if not r[2].isdigit())
+    n_hash = sum(1 for r in refs if not isnum(r[2]))
     print(f'{len(bad)} stale of {len(refs)} reference(s) ({n_hash} content-hash, {len(refs) - n_hash} numbered)')
     return 1 if bad else 0
 

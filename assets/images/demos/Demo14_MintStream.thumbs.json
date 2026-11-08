@@ -1,34 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/for-men/Demo14_MintStream/l10n.js": "4e9e3706d56dfd4d48be367846161461f6acce0d",
-   "demos/for-men/Demo14_MintStream/media/cover.jpg": "45e247d407f8d993747181713d5dfe9bf80e4bb2",
-   "demos/shared/cover.js": "4f3bb841dc60ac2c0196b4939c6ae64ee2354dfb"
+   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "b28367cb01fd2da99770c9428303c1c7688a2106"
   },
-  "thumb": "31be7ea8f69091abf66f8df899dcd6aadfd26071"
+  "thumb": "bdeb501fc6e6c73ec245762e8a3297bbe14193f5"
  },
  "en": {
   "inputs": {
-   "demos/for-men/Demo14_MintStream/l10n.js": "4e9e3706d56dfd4d48be367846161461f6acce0d",
-   "demos/for-men/Demo14_MintStream/media/cover.jpg": "45e247d407f8d993747181713d5dfe9bf80e4bb2",
-   "demos/shared/cover.js": "4f3bb841dc60ac2c0196b4939c6ae64ee2354dfb"
+   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "b28367cb01fd2da99770c9428303c1c7688a2106"
   },
-  "thumb": "31be7ea8f69091abf66f8df899dcd6aadfd26071"
+  "thumb": "bdeb501fc6e6c73ec245762e8a3297bbe14193f5"
  },
  "ja": {
   "inputs": {
-   "demos/for-men/Demo14_MintStream/l10n.js": "4e9e3706d56dfd4d48be367846161461f6acce0d",
-   "demos/for-men/Demo14_MintStream/media/cover.jpg": "45e247d407f8d993747181713d5dfe9bf80e4bb2",
-   "demos/shared/cover.js": "4f3bb841dc60ac2c0196b4939c6ae64ee2354dfb"
+   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "b28367cb01fd2da99770c9428303c1c7688a2106"
   },
-  "thumb": "783e84a869cce4bca1ba927db78201f59708927e"
+  "thumb": "e973f62f3c888dfb0ffa4d72638e8f3cdb42b373"
  },
  "zh": {
   "inputs": {
-   "demos/for-men/Demo14_MintStream/l10n.js": "4e9e3706d56dfd4d48be367846161461f6acce0d",
-   "demos/for-men/Demo14_MintStream/media/cover.jpg": "45e247d407f8d993747181713d5dfe9bf80e4bb2",
-   "demos/shared/cover.js": "4f3bb841dc60ac2c0196b4939c6ae64ee2354dfb"
+   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "b28367cb01fd2da99770c9428303c1c7688a2106"
   },
-  "thumb": "c298b247cafd69ded0f2d86d070a8d691e88317b"
+  "thumb": "bcc2cddde93a0bd0040a7b2160d6c7fb70ffde77"
  }
 }

@@ -142,7 +142,7 @@ const out = { demo: REL, play: null, mobile: null, errors: [] };
         for (const [k, n] of [['down', 'pointerdown'], ['move', 'pointermove'], ['up', 'pointerup'], ['cancel', 'pointercancel']]) addEventListener(n, (e) => { if (e.pointerType === 'touch') g[k]++; }, true);
         addEventListener('contextmenu', (e) => { if (!e.defaultPrevented) g.ctx++; });
         const b = document.getElementById('startBtn'); g.tap = 0; b?.addEventListener('click', () => g.tap++); return 1; })()`);
-      const sb = await ev(`(() => { const b = document.getElementById('startBtn'); if (!b) return null; const r = b.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; })()`);
+      const sb = await ev(`(() => { const b = document.querySelector('.u2-start') || document.getElementById('startBtn'); if (!b) return null; const r = b.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; })()`);
       if (sb) { await touch('touchStart', [sb]); await sleep(40); await touch('touchEnd', []); await sleep(400); }   // a REAL tap: buttons on the guarded stage must still click
       await ev(`(() => { if (!window.__dg.tap) { document.getElementById('startBtn')?.click(); } return 1; })()`);
       await sleep(2500);

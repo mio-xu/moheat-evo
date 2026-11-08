@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo42_SengokuRoundtable/media/cover/stamp.json": "64a7b160aa1ae64b88e290acddccceb6238b0bda"
+  },
+  "thumb": "40be0ab76598ed67753c9ebb5500f8e8463412bc"
+ },
+ "en": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo42_SengokuRoundtable/media/cover/stamp.json": "64a7b160aa1ae64b88e290acddccceb6238b0bda"
+  },
+  "thumb": "40be0ab76598ed67753c9ebb5500f8e8463412bc"
+ },
+ "ja": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo42_SengokuRoundtable/media/cover/stamp.json": "64a7b160aa1ae64b88e290acddccceb6238b0bda"
+  },
+  "thumb": "b05a81d62930c2d0765b50e2c490e617055aec9f"
+ },
+ "zh": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo42_SengokuRoundtable/media/cover/stamp.json": "64a7b160aa1ae64b88e290acddccceb6238b0bda"
+  },
+  "thumb": "480fa3246ef012eaaba092ccb2dd3bcb18790fcf"
+ }
+}

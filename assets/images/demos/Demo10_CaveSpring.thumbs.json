@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/all-ages/Demo10_CaveSpring/media/cover/stamp.json": "95f5ff5742c0be80cb2a4de376854dc5286c1224"
+  },
+  "thumb": "f8652ed3a4b84415969838ea1b38cc6ea754b881"
+ },
+ "en": {
+  "inputs": {
+   "demos/all-ages/Demo10_CaveSpring/media/cover/stamp.json": "95f5ff5742c0be80cb2a4de376854dc5286c1224"
+  },
+  "thumb": "f8652ed3a4b84415969838ea1b38cc6ea754b881"
+ },
+ "ja": {
+  "inputs": {
+   "demos/all-ages/Demo10_CaveSpring/media/cover/stamp.json": "95f5ff5742c0be80cb2a4de376854dc5286c1224"
+  },
+  "thumb": "1faeaa2f056ad1fac95163c12a74a50de3fc9ebe"
+ },
+ "zh": {
+  "inputs": {
+   "demos/all-ages/Demo10_CaveSpring/media/cover/stamp.json": "95f5ff5742c0be80cb2a4de376854dc5286c1224"
+  },
+  "thumb": "80e22c8034a8defd9d08e774fdf9fc52214e6ee5"
+ }
+}

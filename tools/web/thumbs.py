@@ -21,7 +21,7 @@ from concurrent.futures import ThreadPoolExecutor
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 OUT = os.path.join(REPO, 'assets', 'images', 'demos')
-INPUTS = ('demos/shared/cover.js', '{demo}/l10n.js', '{demo}/media/cover.jpg')   # what a cover render depends on (repo-relative)
+INPUTS = ('{demo}/media/cover/stamp.json',)   # UI v2: thumbnails come from the finished cover (tools/web/covers.py --publish), which is stamped with its own inputs
 
 
 def sha(p):
@@ -88,6 +88,11 @@ def safe(job):   # a page that hangs once (heavy film demos under load) gets one
 
 
 def main():
+    # UI v2: the menu thumbnails + media/cover.jpg are made by the one renderer
+    sys.exit(subprocess.call([sys.executable, os.path.join(REPO, 'tools', 'web', 'covers.py'), '--publish', *[a for a in sys.argv[1:] if a != '--base']]))
+
+
+def main_old():   # before UI v2 (screenshots of ?cover=1); unused
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
     skip = [a.split('=', 1)[1] for a in sys.argv[1:] if a.startswith('--skip=')]
     langs = next((a.split('=', 1)[1] for a in sys.argv[1:] if a.startswith('--langs=')), 'en,ja,zh').split(',')

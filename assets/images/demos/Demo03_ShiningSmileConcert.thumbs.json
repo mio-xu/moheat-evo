@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/all-ages/Demo03_ShiningSmileConcert/media/cover/stamp.json": "321bc72b4454ab8f94d053b4e12e722634f89841"
+  },
+  "thumb": "8015d2e178084b7f472e46e5b7117b36f7858c20"
+ },
+ "en": {
+  "inputs": {
+   "demos/all-ages/Demo03_ShiningSmileConcert/media/cover/stamp.json": "321bc72b4454ab8f94d053b4e12e722634f89841"
+  },
+  "thumb": "8015d2e178084b7f472e46e5b7117b36f7858c20"
+ },
+ "ja": {
+  "inputs": {
+   "demos/all-ages/Demo03_ShiningSmileConcert/media/cover/stamp.json": "321bc72b4454ab8f94d053b4e12e722634f89841"
+  },
+  "thumb": "db691d286cc1d040fb60e732f99c0cc323481670"
+ },
+ "zh": {
+  "inputs": {
+   "demos/all-ages/Demo03_ShiningSmileConcert/media/cover/stamp.json": "321bc72b4454ab8f94d053b4e12e722634f89841"
+  },
+  "thumb": "81ebb4eb8195055822e70fb22f0f0c54a7bd5dd2"
+ }
+}

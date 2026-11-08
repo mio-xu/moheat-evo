@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "427439baa688834fbfc74a9f7cc8edde11076245"
+  },
+  "thumb": "bc7fa9b9e30b27482e81948f3ec3455fb30c7634"
+ },
+ "en": {
+  "inputs": {
+   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "427439baa688834fbfc74a9f7cc8edde11076245"
+  },
+  "thumb": "bc7fa9b9e30b27482e81948f3ec3455fb30c7634"
+ },
+ "ja": {
+  "inputs": {
+   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "427439baa688834fbfc74a9f7cc8edde11076245"
+  },
+  "thumb": "f987f7cb5519cf21a388595d9d39f2e6f8ded92b"
+ },
+ "zh": {
+  "inputs": {
+   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "427439baa688834fbfc74a9f7cc8edde11076245"
+  },
+  "thumb": "25033e17623ff2934bd23d493cee037bea48a7db"
+ }
+}

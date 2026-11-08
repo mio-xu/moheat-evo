@@ -316,11 +316,7 @@
   $('startBtn').addEventListener('click', start);
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
-  function drawCover() {   // cover standard (shared/cover.js): the stalls still, his face on the standard spot, the title in the shaded left column
-    const im = IMG.stalls || IMG.fireworks, C = window.MoHeatCover; if (!im) { ctx.fillStyle = '#100d1c'; ctx.fillRect(0, 0, W, H); return; }
-    const pic = () => ctx.drawImage(im, 420, 0, W, H);
-    if (C) C.fit(ctx, { eye: [.719, .295], face: .274 }, pic, { tone: '#100d1c', covers: [.219, 0, 1.219, 1] }); else pic();
-  }
+  function drawCover() {}   // UI v2: the cover is the finished image (media/cover/, tools/web/covers.py)
   // layered picture (../../shared/layers.js, as Demo27): the mouth follows his voice, blinks, breathing, parallax
   if (window.MoHeatLayers) Object.assign(window.MoHeatLayers, { level: () => S.env, raw: () => S.lv, current: () => S.view });
   window.SAKU = { get S() { return S; }, thermal: () => thermal(.05), cmdLog, get ended() { return ended; } };

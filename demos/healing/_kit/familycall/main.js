@@ -426,19 +426,7 @@
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
   let coverCv = null;
-  function drawCover() {   // the couple moved to the right half (title on the left): blurred copy behind, sharp copy with a feathered left edge
-    const im = PART === 2 ? IMG.duo_bye : IMG.duo_call; if (!im) { drawFallback('duo', S.t); return; }
-    if (!coverCv) {
-      coverCv = document.createElement('canvas'); coverCv.width = W; coverCv.height = H; const c = coverCv.getContext('2d');
-      c.filter = 'blur(18px) brightness(.8)'; c.drawImage(im, -60, -60, W + 120, H + 120); c.filter = 'none';
-      const off = document.createElement('canvas'); off.width = W; off.height = H; const o = off.getContext('2d');
-      const dx = 520; o.drawImage(im, dx, 0, W, H);
-      o.globalCompositeOperation = 'destination-in'; const g = o.createLinearGradient(dx, 0, dx + 380, 0); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, '#000'); o.fillStyle = g; o.fillRect(0, 0, W, H);
-      c.drawImage(off, 0, 0);
-    }
-    const C = window.MoHeatCover, pic = () => ctx.drawImage(coverCv, 0, 0);   // cover standard (shared/cover.js): the couple is already on the standard spot
-    if (C) C.fit(ctx, PART === 2 ? { eye: [.77, .325], face: .25 } : { eye: [.765, .275], face: .24 }, pic, { duo: true, tone: '#2a1a12' }); else pic();
-  }
+  function drawCover() {}   // UI v2: the cover is the finished image (media/cover/, tools/web/covers.py)
   // pure listening (shared/shell.js hand): your part of the call happens by itself — the hand taps the heater, the 📞 Call button,
   // the front door, your right / left cheek (the spot on the picture each action names, as a finger would), the other actions'
   // buttons; answers and "say it" prompts take the default after a natural pause (the shell's own default, by the same hand).

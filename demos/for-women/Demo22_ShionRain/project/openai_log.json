@@ -252,6 +252,25 @@
    1440
   ]
  },
+ "cover_fix_ui3": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 80,
+  "usage": {
+   "input_tokens": 1601,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 93
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8971
+  }
+ },
  "shion_whisper_blink": {
   "model": "gpt-image-2",
   "size": "2560x1440",

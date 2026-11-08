@@ -199,7 +199,7 @@
     + `<a class="dn-step" href="${next ? href(next) : '#'}" title="${next ? 'Next: ' + next.en : ''}" aria-label="Next demo" ${next ? '' : 'aria-disabled="true"'}>›</a>`;
   // ‹ › / swipe feel instant (user 2026-11-08: switching demos is slow): when the page is idle, prefetch the neighbours' page + cover image
   addEventListener('load', () => (window.requestIdleCallback || ((f) => setTimeout(f, 1500)))(() => { if (navigator.connection?.saveData) return;
-    for (const d of [next, prev]) if (d) for (const u of [href(d), `${href(d)}media/cover.jpg`]) { const l = document.createElement('link'); l.rel = 'prefetch'; l.href = u; document.head.appendChild(l); } }), { once: true });
+    for (const d of [next, prev]) if (d) for (const u of [href(d), `${href(d)}media/cover/${window.MoHeatSub?.lang || 'en'}.${innerWidth < 820 ? 'c1200' : 'w1280'}.webp`]) { const l = document.createElement('link'); l.rel = 'prefetch'; l.href = u; document.head.appendChild(l); } }), { once: true });
   const panel = document.createElement('div'); panel.className = 'dn-panel'; panel.hidden = true;
   const span = (gi) => { const n = DEMOS.map((d, i) => (d.group === gi ? i + 1 : 0)).filter(Boolean); return gi < 4 ? (n.length > 1 ? ` · ${n[0]}–${n[n.length - 1]}` : ` · ${n[0]}`) : ''; };
   const count = (gi) => DEMOS.filter((d) => d.group === gi).length;   // level 1: category tabs (+ "all"); level 2: that category's demos

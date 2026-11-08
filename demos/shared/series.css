@@ -3,39 +3,6 @@
    phone embed, in the site menu, in a full page and in the 1920×1080 cover export. Each demo keeps its own fonts / colours. */
 .stage { container-type: inline-size; }
 
-/* ---------- cover: one layout for all demos ---------- */
-.intro { justify-content: center; align-items: center; text-align: center; }
-.intro .cover-copy { max-width: 58cqw !important; margin: 0 auto !important; align-items: center !important; text-align: center !important; gap: .85cqw !important; }
-.intro:has(.hero.a) .cover-copy { margin: 0 33cqw 0 4cqw !important; max-width: 60cqw !important; }   /* one character on the right: centre the copy in the free space */
-.intro .series { margin: 0; padding: .32cqw 1.1cqw; border-radius: 999px; font: 700 clamp(7px, 1cqw, 19px)/1.3 "Shippori Mincho B1", "Noto Sans JP", serif;
-  letter-spacing: .08em; color: #f6d27a; background: rgba(40, 20, 8, .45); border: 1px solid rgba(246, 210, 122, .55); }
-.intro .kicker { margin: 0; font-size: clamp(6px, .82cqw, 17px) !important; letter-spacing: .16em; }
-.intro h1 { font-size: clamp(18px, 5.6cqw, 110px) !important; line-height: 1.12 !important; margin: 0 !important; white-space: nowrap; }
-.intro h1 span { display: block; }
-.intro .en { font-size: clamp(9px, 1.5cqw, 30px) !important; margin: 0 !important; }
-.intro .bottles { display: flex; align-items: flex-end; justify-content: center; gap: 1.2cqw; margin: .4cqw 0 0 !important; height: auto !important; }
-.intro .bottles img { height: clamp(26px, 8cqw, 160px) !important; width: auto !important; filter: drop-shadow(0 .6cqw 1.2cqw rgba(0, 0, 0, .6)); }
-.intro .bottles img.mid { height: clamp(30px, 9cqw, 180px) !important; }
-.intro .cast { gap: .6cqw !important; margin: .3cqw 0 .2cqw !important; flex-wrap: wrap; justify-content: center !important; }
-.intro .chip { font-size: clamp(7.5px, .92cqw, 18px) !important; padding: .3em .95em !important; white-space: nowrap; }
-.intro .intro-actions { gap: .8cqw !important; margin-top: .4cqw !important; justify-content: center !important; }
-.intro .intro-actions .btn { font-size: clamp(10px, 1.1cqw, 21px) !important; padding: .55em 1.15em !important; border-radius: .7em !important; }
-.intro .intro-actions .btn.big { font-size: clamp(11px, 1.35cqw, 26px) !important; padding: .6em 1.5em !important; }
-.intro .hint { font-size: clamp(8px, .85cqw, 16px) !important; margin: 0 !important; }
-.intro .draft { font-size: clamp(7px, .7cqw, 13px) !important; margin: 0 !important; }
-@container (max-width: 620px) {            /* phone / small embed: keep only what fits */
-  .intro .hint, .intro .draft, .intro .kicker { display: none !important; }
-  .intro .cover-copy { gap: 1.4cqw !important; max-width: 94cqw !important; }
-  .intro:has(.hero.a) .cover-copy { margin: 0 30cqw 0 2cqw !important; max-width: 68cqw !important; }
-  .intro h1 { font-size: 6.2cqw !important; }
-  .intro .series { font-size: 2cqw; padding: .4cqw 1.6cqw; }
-  .intro .cast { display: none !important; }   /* phones (user: no scrolling, 44 px buttons): the chips make room for the buttons */
-  .intro .chip { font-size: 1.9cqw !important; }
-  .intro .intro-actions .btn { font-size: 2.6cqw !important; }
-  .intro .intro-actions .btn.big { font-size: 3cqw !important; }
-  .intro .bottles img { height: 7.5cqw !important; } .intro .bottles img.mid { height: 8.5cqw !important; }
-}
-
 /* ---------- subtitles and scene titles: the same size in every demo ---------- */
 .subs { left: 5% !important; right: 5% !important; bottom: 4.5cqw !important; gap: .35cqw !important; }
 .subs .line { padding: .22em .75em !important; border-radius: .5em !important; }
@@ -205,6 +172,5 @@
    hidden (visibility, so nothing moves) until shared/subs.js has applied the language and sets html.l10n-ready, then fades in;
    fail-safe: shown after 2.5 s whatever happens. Pages without subs.js (?cover / ?render exports) get l10n-ready from nav.js.
    Check: python3 tools/qa/check_demo.py <demo> (G6 l10n-flash, node tools/qa/l10n_flash.js). */
-html:not(.l10n-ready) .intro :is(h1, h2, h3, p, li, .chip, button, .opt, label, .series, .kicker, .hint, .en) { visibility: hidden; opacity: 0; animation: moheat-l10n-failsafe 0s 2.5s forwards; }
 html.l10n-fade .intro :is(h1, h2, h3, p, li, .chip, button, .opt, label, .series, .kicker, .hint, .en) { transition: opacity .15s ease-out; }
 @keyframes moheat-l10n-failsafe { to { visibility: visible; opacity: 1; } }

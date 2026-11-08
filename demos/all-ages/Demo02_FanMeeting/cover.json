@@ -23,5 +23,14 @@
    }
   }
  ],
- "tone": "8 10 20"
+ "tone": "8 10 20",
+ "faces": {
+  "eye": [
+   72,
+   30
+  ],
+  "face": 27,
+  "duo": false,
+  "_why": "the face detector misses this face (chibi / animal / profile): where the composition put it (2b numbers, %)"
+ }
 }

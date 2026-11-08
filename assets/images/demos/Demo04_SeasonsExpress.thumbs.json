@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "66ae6ad71f3d848db893c04823da433791f1d1b1"
+  },
+  "thumb": "36be37fcc22950cfc3d71fc62bb325a21fcb30da"
+ },
+ "en": {
+  "inputs": {
+   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "66ae6ad71f3d848db893c04823da433791f1d1b1"
+  },
+  "thumb": "36be37fcc22950cfc3d71fc62bb325a21fcb30da"
+ },
+ "ja": {
+  "inputs": {
+   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "66ae6ad71f3d848db893c04823da433791f1d1b1"
+  },
+  "thumb": "d0cec2377fd4462e1fc4681c5e889193ccdf576e"
+ },
+ "zh": {
+  "inputs": {
+   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "66ae6ad71f3d848db893c04823da433791f1d1b1"
+  },
+  "thumb": "cc047c3606b1fd31af022319afd4ef3977182585"
+ }
+}

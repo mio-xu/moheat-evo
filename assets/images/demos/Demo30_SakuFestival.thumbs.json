@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/for-women/Demo30_SakuFestival/media/cover/stamp.json": "14e1b375a46a9ffa067d2df5494b4662d39d6e06"
+  },
+  "thumb": "f3f1d764d90c9595b057b017b55d3507f8fe8dc9"
+ },
+ "en": {
+  "inputs": {
+   "demos/for-women/Demo30_SakuFestival/media/cover/stamp.json": "14e1b375a46a9ffa067d2df5494b4662d39d6e06"
+  },
+  "thumb": "f3f1d764d90c9595b057b017b55d3507f8fe8dc9"
+ },
+ "ja": {
+  "inputs": {
+   "demos/for-women/Demo30_SakuFestival/media/cover/stamp.json": "14e1b375a46a9ffa067d2df5494b4662d39d6e06"
+  },
+  "thumb": "eb975ce31358ffccfbf78fe85ad04b99e508c877"
+ },
+ "zh": {
+  "inputs": {
+   "demos/for-women/Demo30_SakuFestival/media/cover/stamp.json": "14e1b375a46a9ffa067d2df5494b4662d39d6e06"
+  },
+  "thumb": "17fd8e97d17859baad33ea6f607d05040e5a6539"
+ }
+}

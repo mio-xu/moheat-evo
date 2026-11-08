@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/for-men/Demo18_HinataStream/media/cover/stamp.json": "0b23b6e700a56028dc5b234b8ed8833a65876bed"
+  },
+  "thumb": "863cfaec770d491c6fe1f39276ccc036b5f26ac6"
+ },
+ "en": {
+  "inputs": {
+   "demos/for-men/Demo18_HinataStream/media/cover/stamp.json": "0b23b6e700a56028dc5b234b8ed8833a65876bed"
+  },
+  "thumb": "863cfaec770d491c6fe1f39276ccc036b5f26ac6"
+ },
+ "ja": {
+  "inputs": {
+   "demos/for-men/Demo18_HinataStream/media/cover/stamp.json": "0b23b6e700a56028dc5b234b8ed8833a65876bed"
+  },
+  "thumb": "6788772da22afe265595014ef6287d54a7539765"
+ },
+ "zh": {
+  "inputs": {
+   "demos/for-men/Demo18_HinataStream/media/cover/stamp.json": "0b23b6e700a56028dc5b234b8ed8833a65876bed"
+  },
+  "thumb": "80511624f8556ba10db83c6bf4f36f74c5eaec53"
+ }
+}

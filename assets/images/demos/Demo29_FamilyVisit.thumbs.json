@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/healing/Demo29_FamilyVisit/media/cover/stamp.json": "1b7c41f1bd1e8334f3bcb8573d38fbe8f2eb7d55"
+  },
+  "thumb": "fb5aeb861d468441da0ea5528649b29ef972c715"
+ },
+ "en": {
+  "inputs": {
+   "demos/healing/Demo29_FamilyVisit/media/cover/stamp.json": "1b7c41f1bd1e8334f3bcb8573d38fbe8f2eb7d55"
+  },
+  "thumb": "fb5aeb861d468441da0ea5528649b29ef972c715"
+ },
+ "ja": {
+  "inputs": {
+   "demos/healing/Demo29_FamilyVisit/media/cover/stamp.json": "1b7c41f1bd1e8334f3bcb8573d38fbe8f2eb7d55"
+  },
+  "thumb": "bcfe52cc2aaa88430a55f3c31ff34ab332571eb8"
+ },
+ "zh": {
+  "inputs": {
+   "demos/healing/Demo29_FamilyVisit/media/cover/stamp.json": "1b7c41f1bd1e8334f3bcb8573d38fbe8f2eb7d55"
+  },
+  "thumb": "1199b89b88ac30a4e82d3b1265662b029c58a1cc"
+ }
+}

@@ -1,34 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/for-women/Demo22_ShionRain/l10n.js": "1a41c7d5a6e22abd01ec8ae9bb0940c0f8e5d565",
-   "demos/for-women/Demo22_ShionRain/media/cover.jpg": "e902a6b15af894cb277cf8c3332072b3ed4630e2",
-   "demos/shared/cover.js": "4f3bb841dc60ac2c0196b4939c6ae64ee2354dfb"
+   "demos/for-women/Demo22_ShionRain/media/cover/stamp.json": "493c402201b032ac4d6f95026fa5a204d93f4dd9"
   },
-  "thumb": "7e3783cd11d5ea2035bb8a7f866af51f5859f6b4"
+  "thumb": "89b4133aad7878fa2d281dab8da2a5aa10405df7"
  },
  "en": {
   "inputs": {
-   "demos/for-women/Demo22_ShionRain/l10n.js": "1a41c7d5a6e22abd01ec8ae9bb0940c0f8e5d565",
-   "demos/for-women/Demo22_ShionRain/media/cover.jpg": "e902a6b15af894cb277cf8c3332072b3ed4630e2",
-   "demos/shared/cover.js": "4f3bb841dc60ac2c0196b4939c6ae64ee2354dfb"
+   "demos/for-women/Demo22_ShionRain/media/cover/stamp.json": "493c402201b032ac4d6f95026fa5a204d93f4dd9"
   },
-  "thumb": "7e3783cd11d5ea2035bb8a7f866af51f5859f6b4"
+  "thumb": "89b4133aad7878fa2d281dab8da2a5aa10405df7"
  },
  "ja": {
   "inputs": {
-   "demos/for-women/Demo22_ShionRain/l10n.js": "1a41c7d5a6e22abd01ec8ae9bb0940c0f8e5d565",
-   "demos/for-women/Demo22_ShionRain/media/cover.jpg": "e902a6b15af894cb277cf8c3332072b3ed4630e2",
-   "demos/shared/cover.js": "4f3bb841dc60ac2c0196b4939c6ae64ee2354dfb"
+   "demos/for-women/Demo22_ShionRain/media/cover/stamp.json": "493c402201b032ac4d6f95026fa5a204d93f4dd9"
   },
-  "thumb": "354e7592e71e0e7424c447778394a3851efe89fb"
+  "thumb": "dfd36c40d9e7d6c90c057bf52ec91e9f3f9f1cfb"
  },
  "zh": {
   "inputs": {
-   "demos/for-women/Demo22_ShionRain/l10n.js": "1a41c7d5a6e22abd01ec8ae9bb0940c0f8e5d565",
-   "demos/for-women/Demo22_ShionRain/media/cover.jpg": "e902a6b15af894cb277cf8c3332072b3ed4630e2",
-   "demos/shared/cover.js": "4f3bb841dc60ac2c0196b4939c6ae64ee2354dfb"
+   "demos/for-women/Demo22_ShionRain/media/cover/stamp.json": "493c402201b032ac4d6f95026fa5a204d93f4dd9"
   },
-  "thumb": "4eb42abb0d612a86b5bf4bb03faaef2287e485b5"
+  "thumb": "20ae371a41146cceea1da1c04bf6c9f692a58948"
  }
 }

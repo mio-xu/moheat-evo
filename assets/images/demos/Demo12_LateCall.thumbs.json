@@ -1,34 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/for-women/Demo12_LateCall/l10n.js": "fcb607ad963efd0aec409522c7bbb68f180fba71",
-   "demos/for-women/Demo12_LateCall/media/cover.jpg": "629643a65be3616bab78f9b986b42cc3ae6db3bd",
-   "demos/shared/cover.js": "df1a4aeb324385f99220c2952a432617415e4b13"
+   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "c82dbef7da9f328a9e071df696470766b44eb9c3"
   },
-  "thumb": "42a8e0b2733b6c81020ca0745b381921f0bfceb4"
+  "thumb": "75e702b575c328ee4f093250862014f25e6e494d"
  },
  "en": {
   "inputs": {
-   "demos/for-women/Demo12_LateCall/l10n.js": "fcb607ad963efd0aec409522c7bbb68f180fba71",
-   "demos/for-women/Demo12_LateCall/media/cover.jpg": "629643a65be3616bab78f9b986b42cc3ae6db3bd",
-   "demos/shared/cover.js": "df1a4aeb324385f99220c2952a432617415e4b13"
+   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "c82dbef7da9f328a9e071df696470766b44eb9c3"
   },
-  "thumb": "42a8e0b2733b6c81020ca0745b381921f0bfceb4"
+  "thumb": "75e702b575c328ee4f093250862014f25e6e494d"
  },
  "ja": {
   "inputs": {
-   "demos/for-women/Demo12_LateCall/l10n.js": "fcb607ad963efd0aec409522c7bbb68f180fba71",
-   "demos/for-women/Demo12_LateCall/media/cover.jpg": "629643a65be3616bab78f9b986b42cc3ae6db3bd",
-   "demos/shared/cover.js": "df1a4aeb324385f99220c2952a432617415e4b13"
+   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "c82dbef7da9f328a9e071df696470766b44eb9c3"
   },
-  "thumb": "7d0d7db2494fdd3c309300a85209452a89d90536"
+  "thumb": "85da7c957458d5bfab863388320d54f4e000b479"
  },
  "zh": {
   "inputs": {
-   "demos/for-women/Demo12_LateCall/l10n.js": "fcb607ad963efd0aec409522c7bbb68f180fba71",
-   "demos/for-women/Demo12_LateCall/media/cover.jpg": "629643a65be3616bab78f9b986b42cc3ae6db3bd",
-   "demos/shared/cover.js": "df1a4aeb324385f99220c2952a432617415e4b13"
+   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "c82dbef7da9f328a9e071df696470766b44eb9c3"
   },
-  "thumb": "a8cf028eff0658f96c8eb90920f5784c85dd189b"
+  "thumb": "ea6ceec2e90259d4c579f5948c4865aa27a13cd4"
  }
 }

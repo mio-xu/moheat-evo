@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo05_GifuCastle/media/cover/stamp.json": "d4b458cc887a6dd4d783ca08fcb178f89b3decc5"
+  },
+  "thumb": "9d2386adfce3d7c250fb88d8fd966ba3883c44bb"
+ },
+ "en": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo05_GifuCastle/media/cover/stamp.json": "d4b458cc887a6dd4d783ca08fcb178f89b3decc5"
+  },
+  "thumb": "9d2386adfce3d7c250fb88d8fd966ba3883c44bb"
+ },
+ "ja": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo05_GifuCastle/media/cover/stamp.json": "d4b458cc887a6dd4d783ca08fcb178f89b3decc5"
+  },
+  "thumb": "95c5b6d0839b71997b0a36e4754fb622e2a832e0"
+ },
+ "zh": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo05_GifuCastle/media/cover/stamp.json": "d4b458cc887a6dd4d783ca08fcb178f89b3decc5"
+  },
+  "thumb": "4acd11fce146e5020240d8c69ce3c42e073bfc4e"
+ }
+}

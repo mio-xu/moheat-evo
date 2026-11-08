@@ -263,6 +263,7 @@ site_max = {}
 for p in site_pages:
     t = read(p); b = re.search(r'<base\s+href="([^"]+)"', t); base = resolve(b.group(1), os.path.dirname(p)) if b else os.path.dirname(p)
     for ref, v in re.findall(r'(?:src|href)="([^"?#]+)\?v=(\d+)"', t):
+        if len(v) >= 6: continue   # a content hash made only of digits (e.g. 53962729), not a version number
         q = os.path.normpath(os.path.join(base, ref))
         site_max[q] = max(site_max.get(q, 0), int(v))
 dirty = set(git('status', '--porcelain', '--', REL, 'demos/shared', 'device.js').splitlines())
@@ -271,16 +272,19 @@ cache_fail, cache_warn = [], []
 for ref, v in re.findall(r'(?:src|href)="([^"?#]+)\?v=([^"&]+)"', html):
     p = resolve(ref); rp = os.path.relpath(p, REPO)
     if not os.path.exists(p): continue
-    if not v.isdigit():   # content-hash version (tools/web/bump.py --auto): stale when it is not the file's current hash
+    if not v.isdigit() or len(v) >= 6:   # content-hash version (tools/web/bump.py --auto; may be all digits): stale when it is not the file's current hash
         import hashlib
         h = hashlib.sha1(open(p, 'rb').read()).hexdigest()[:8]
+        if v != h and rp in dirty:   # someone else's uncommitted edit in a shared file (e.g. nav.js HEAT, 2026-11-09): the released = committed content counts
+            hb = subprocess.run(['git', '-C', REPO, 'show', f'HEAD:{rp}'], capture_output=True).stdout
+            if hb and hashlib.sha1(hb).hexdigest()[:8] == v: cache_warn.append(f'{ref}?v={v} = the committed {rp}; the working copy has uncommitted edits (bump when they are committed)'); continue
         if re.fullmatch(r'[0-9a-f]{6,12}', v) and v != h: cache_fail.append(f'{ref}?v={v}: content is now {h} — python3 tools/web/bump.py --auto {rp}')
         continue
     shared = rp.startswith('demos/shared/') or os.path.dirname(p) == REPO
     if shared and int(v) < site_max.get(p, 0):
         cache_fail.append(f'{ref}?v={v}: other pages use ?v={site_max[p]} — bump (python3 tools/web/bump.py {rp})'); continue
     pat = f'{os.path.basename(p)}?v={v}' if shared else f'"{ref}?v={v}"'
-    where = [] if shared else ['--', os.path.relpath(INDEX, REPO)]
+    where = ['--', os.path.relpath(INDEX, REPO)]   # this page's history only (2026-11-09: a whole-history -S search took 5+ min per reference)
     c = git('log', '-1', '--format=%H', '-S', pat, *where)
     if c:
         later = git('log', '--diff-filter=M', '--format=%h %s', f'{c}..HEAD', '--', rp)   # M only: a move / first add is not a change
@@ -311,7 +315,7 @@ talks = os.path.exists(os.path.join(D, 'lines.js')) or 'lines.js' in html
 has_voice = 'shared/voice.js' in html
 row('G5', 'voice', 'PASS' if has_voice else 'FAIL' if talks else 'SKIP',
     'shared/voice.js loaded (answers by voice, judged)' if has_voice else 'dialogue demo without shared/voice.js' if talks else 'no dialogue')
-end_static = re.search(r'もう一度 · Play again', alljs) is not None
+end_static = re.search(r'もう一度 · Play again', alljs) is not None or 'shared/shell.js' in html   # UI v2: the shared interface shows ↺ Play again on the own cover
 navaway = re.findall(r'location(?:\.href)?\s*=\s*[^;\n]*Demo\d{2}|location\.(?:assign|replace)\([^)]*Demo\d{2}', alljs)
 row('G5', 'end', 'FAIL' if (not end_static or navaway) else 'PASS',
     'navigates to another demo at the end' if navaway else 'no "↺ もう一度 · Play again" on its own cover at the end' if not end_static else 'ends on its own cover (static)', navaway)
@@ -385,6 +389,10 @@ if not A.quick and not ub:
     try:
         r = json.loads(cu.stdout.strip().splitlines()[-1]); ub += [f for f in r.get('fails', []) if f.startswith(NAME + ' ')] + r.get('errors', [])
     except Exception: ub.append('check_ui.js gave no result: ' + cu.stderr.strip()[-200:])
+if not A.quick and not ub and 'device.js' in read(os.path.join(D, 'index.html')):   # the device state: one source, silent reconnect across demos (tools/web/check_device.js, mock serial)
+    cdv = subprocess.run(['node', os.path.join(REPO, 'tools', 'web', 'check_device.js'), REL], capture_output=True, text=True, cwd=REPO)
+    try: ub += [f'device: {f}' for f in json.loads(cdv.stdout.strip().splitlines()[-1]).get('fails', [])]
+    except Exception: ub.append('check_device.js gave no result: ' + cdv.stderr.strip()[-200:])
 row('G7', 'ui', 'FAIL' if ub else 'PASS', f'{len(ub)} difference(s) from the one interface' if ub else
     ('finished covers current, shell.js, no own UI rules' + ('' if A.quick else '; identical to the reference in 5 states × 2 sizes')), ub)
 # ---------------------------------------------------------------- G7 category style (tools/art/style_card.py, demos/<cat>/_kit/style.json)

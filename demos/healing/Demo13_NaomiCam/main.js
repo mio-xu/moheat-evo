@@ -923,7 +923,7 @@
     drawScene(t); present(t); drawOSD(t);
     S.bg = keepBg; Object.assign(N, keep);
     // cover standard (shared/cover.js): the camera picture is drawn by WebGL, so it is not refitted — where Naomi's face is (check_cover.py)
-    if (window.MoHeatCover) { MoHeatCover.setTone('#2a1c22'); MoHeatCover.placed = { eye: [81, 40], face: 18 }; }
+    
   }
   // pure listening (shared/shell.js hand): the camera app is used for you — 🌡 thermal, pan right, tap the warm cat house, hold 🎤
   // twice, slow strokes over her face at the lens, the laser dot parked a little away from her (she stalks it, pounces), the fan's

@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/healing/Demo26_BecomeNaomi/media/cover/stamp.json": "23713a7915eaffebfce0e4dfc4a4264d65b0530b"
+  },
+  "thumb": "da936a4c20d307dc4cccc01f24f86ae7dc66edb5"
+ },
+ "en": {
+  "inputs": {
+   "demos/healing/Demo26_BecomeNaomi/media/cover/stamp.json": "23713a7915eaffebfce0e4dfc4a4264d65b0530b"
+  },
+  "thumb": "da936a4c20d307dc4cccc01f24f86ae7dc66edb5"
+ },
+ "ja": {
+  "inputs": {
+   "demos/healing/Demo26_BecomeNaomi/media/cover/stamp.json": "23713a7915eaffebfce0e4dfc4a4264d65b0530b"
+  },
+  "thumb": "80e08394d577cb0b6388651719225e02c26fa16b"
+ },
+ "zh": {
+  "inputs": {
+   "demos/healing/Demo26_BecomeNaomi/media/cover/stamp.json": "23713a7915eaffebfce0e4dfc4a4264d65b0530b"
+  },
+  "thumb": "0e0cc2eb940f30dd1c8975ab38fd3433ba31fb18"
+ }
+}

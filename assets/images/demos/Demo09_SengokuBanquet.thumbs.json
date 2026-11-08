@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo09_SengokuBanquet/media/cover/stamp.json": "56c369c7d0244a88b0f884e61c892c28d276cd76"
+  },
+  "thumb": "a3ea8db12743c6cc5bca2e84c577a9a215905b20"
+ },
+ "en": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo09_SengokuBanquet/media/cover/stamp.json": "56c369c7d0244a88b0f884e61c892c28d276cd76"
+  },
+  "thumb": "a3ea8db12743c6cc5bca2e84c577a9a215905b20"
+ },
+ "ja": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo09_SengokuBanquet/media/cover/stamp.json": "56c369c7d0244a88b0f884e61c892c28d276cd76"
+  },
+  "thumb": "4bb2cbaef1c05b23820d7c6dbee7a2d1af57c76e"
+ },
+ "zh": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo09_SengokuBanquet/media/cover/stamp.json": "56c369c7d0244a88b0f884e61c892c28d276cd76"
+  },
+  "thumb": "8cab0d15e5b76df6cba84dae217930d0e3fce70b"
+ }
+}

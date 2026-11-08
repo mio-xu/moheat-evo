@@ -345,15 +345,7 @@
     const s = scene(), cast = pick.cast.split('');
     Promise.all([loadBg(s), ...cast.map((c) => load(`${c}_bust_base`, `${T.ART}${c}_bust_base.webp`))]).then(() => { if (!S || !S.started) drawCover(); });
   }
-  function drawCover() {   // cover standard (shared/cover.js): the place, the bust(s) on the standard spot, the title in the shaded left column
-    const s = scene(), cast = pick.cast.split(''), a = img(s.bg), C = window.MoHeatCover;
-    if (a) ctx.drawImage(a, 0, 0, W, H); else { ctx.fillStyle = '#1a1008'; ctx.fillRect(0, 0, W, H); }
-    const xs = cast.length > 1 ? { N: W * .66, I: W * .86 } : { [cast[0]]: W * .78 };
-    const busts = () => { for (const c of cast.slice().reverse()) { const im = img(`${c}_bust_base`); if (!im) continue; const h = H * .96, w = h * im.width / im.height; ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 50; ctx.drawImage(im, xs[c] - w / 2, H * 1.03 - h, w, h); ctx.restore(); } };
-    // where the faces are in the drawing above (measured by tools/web/check_cover.py): one warlord, or both (the middle between them)
-    const FACE = { N: { eye: [.768, .27], face: .166 }, I: { eye: [.774, .333], face: .174 }, NI: { eye: [.751, .303], face: .177 } }[cast.join('')];
-    if (C && FACE) C.fit(ctx, FACE, busts, { free: true, duo: cast.length > 1, tone: '#1a1008' }); else busts();
-  }
+  function drawCover() {}   // UI v2: the cover is the finished image (media/cover/, tools/web/covers.py)
 
   // ---------------------------------------------------------------- thermal (DUAL, two layers)
   //  · VOICE: a voice is warm. Loudness (0.1 + 0.8 × level) at the speaker's direction, × 1 at your ear (≤ 15 cm), × 0.6 within

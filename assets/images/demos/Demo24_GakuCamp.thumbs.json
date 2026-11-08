@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/for-women/Demo24_GakuCamp/media/cover/stamp.json": "325772df7e584e34392d415bb5de2d61179726a1"
+  },
+  "thumb": "79eb27e8c70a1359a68528534952ffdfd5425eae"
+ },
+ "en": {
+  "inputs": {
+   "demos/for-women/Demo24_GakuCamp/media/cover/stamp.json": "325772df7e584e34392d415bb5de2d61179726a1"
+  },
+  "thumb": "79eb27e8c70a1359a68528534952ffdfd5425eae"
+ },
+ "ja": {
+  "inputs": {
+   "demos/for-women/Demo24_GakuCamp/media/cover/stamp.json": "325772df7e584e34392d415bb5de2d61179726a1"
+  },
+  "thumb": "0868c78a761526f46bb3da1dd813bb4c73e62ab4"
+ },
+ "zh": {
+  "inputs": {
+   "demos/for-women/Demo24_GakuCamp/media/cover/stamp.json": "325772df7e584e34392d415bb5de2d61179726a1"
+  },
+  "thumb": "82f9c9a0d0973182ef897b5b0d5914aa429ecb64"
+ }
+}

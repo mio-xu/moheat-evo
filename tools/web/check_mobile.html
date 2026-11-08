@@ -66,7 +66,7 @@ function measure(f, touch, scope) {
     if (!shown(win, el) || el.closest('.mg-tip, .dn-panel, [hidden]')) return;
     const R = doc.documentElement; if (el.closest('aside.side') && R.classList.contains('lay-drawer') && !R.classList.contains('side-open')) return;   // inside the closed drawer
     const r = el.getBoundingClientRect();
-    if (el.closest('.intro.hidden')) return;
+    if (el.closest('.intro.hidden') || (R.classList.contains('ui2') && el.closest('.intro, .transport'))) return;   // UI v2: the old cover is invisible, its buttons are driven by the shared interface
     // clipped by a scrolling / overflow-hidden ancestor (side panel scrolls inside itself) → not "off-screen"
     let clip = null; for (let e = el.parentElement; e && e !== doc.body; e = e.parentElement) { const cs = win.getComputedStyle(e); if (cs.overflowY !== 'visible' || cs.overflowX !== 'visible') { clip = e; break; } }
     const cr = clip ? clip.getBoundingClientRect() : { top: 0, left: 0, right: W, bottom: H };
@@ -128,7 +128,7 @@ async function fullscreen(f) {
   return { issues };
 }
 async function play(f) {
-  const doc = f.contentDocument, b = doc.getElementById('startBtn');
+  const doc = f.contentDocument, b = doc.querySelector('.u2-start') || doc.getElementById('startBtn');
   if (!b || !shown(f.contentWindow, b)) return false;
   b.click(); await wait(2200); return true;
 }

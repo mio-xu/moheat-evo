@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/for-men/Demo31_SummerRooftop/media/cover/stamp.json": "6037c97afee481a32482cef848e1d50b07176ef0"
+  },
+  "thumb": "7bf8da029d56b5a07f10d1675b7d745113ae1055"
+ },
+ "en": {
+  "inputs": {
+   "demos/for-men/Demo31_SummerRooftop/media/cover/stamp.json": "6037c97afee481a32482cef848e1d50b07176ef0"
+  },
+  "thumb": "7bf8da029d56b5a07f10d1675b7d745113ae1055"
+ },
+ "ja": {
+  "inputs": {
+   "demos/for-men/Demo31_SummerRooftop/media/cover/stamp.json": "6037c97afee481a32482cef848e1d50b07176ef0"
+  },
+  "thumb": "bff9e2cfffaeb80afece228bd1651408e1703dfc"
+ },
+ "zh": {
+  "inputs": {
+   "demos/for-men/Demo31_SummerRooftop/media/cover/stamp.json": "6037c97afee481a32482cef848e1d50b07176ef0"
+  },
+  "thumb": "39be507feafc48c3610505a3398d251a5cb34955"
+ }
+}

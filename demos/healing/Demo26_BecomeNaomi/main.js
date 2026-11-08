@@ -378,13 +378,7 @@
   $('meowBtn').addEventListener('click', () => { if (!S.started) return; const k = ['mew', 'tiny', 'ask', 'trill'][Math.floor(Math.random() * 4)]; NA.meow(k, 0, .3); });
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
-  function drawCover() {   // the story cover (§7.3 2b): Naomi herself, happy, on the sunny windowsill in front of the frosted window
-    const im = IMG.sill, C = window.MoHeatCover; if (!im) { ctx.fillStyle = '#1e1625'; ctx.fillRect(0, 0, W, H); return; }
-    ctx.save(); ctx.translate(W, 0); ctx.scale(-1, 1); ctx.drawImage(im, -120, 0, W + 120, H); ctx.restore();
-    if (C?.img) {   // the sill is already drawn: only the cut-out goes on top
-      C.fit(ctx, { eye: [.5, .43], face: .28 }, () => { const n = C.img('../_kit/naomi/art/naomi_close_happy.webp', drawCover); if (n) { const h = H, w = h * n.width / n.height; ctx.drawImage(n, W * .5 - w / 2, 0, w, h); } },
-        { free: true, tone: '#1e1625', at: { y: .35, face: .32 } }); }
-  }
+  function drawCover() {}   // UI v2: the cover is the finished image (media/cover/, tools/web/covers.py)
   // pure listening (shared/shell.js hand): being Naomi happens by itself — the hand turns the right ear dial round to the kitchen,
   // hops into each patch of sunlight, presses and holds to burrow into the laundry; the other buttons / answers take the default
   // after a natural pause (the shell's own default, by the same hand).

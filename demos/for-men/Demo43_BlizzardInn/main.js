@@ -540,13 +540,7 @@
   document.querySelectorAll('#talkPick .tp').forEach((b) => b.addEventListener('click', () => startTalk(b.dataset.who)));
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
-  function drawCover() {   // the cover standard (guide §7.3, shared/cover.js): media/art/cover_trio.jpg is composed by scripts/make_trio.py with the
-    // middle of the three eye-lines at (72 %, 30 %) and each face ≈ 19 % of the height; cover.js adds the shade + the copy column on the left
-    const im = IMG.cover, C = window.MoHeatCover;
-    if (!im) { ctx.fillStyle = '#0d1018'; ctx.fillRect(0, 0, W, H); return; }
-    if (C) C.fit(ctx, { eye: [.72, .30], face: .19 }, () => ctx.drawImage(im, 0, 0, W, H), { duo: true, tone: '#0d1018' });
-    else ctx.drawImage(im, 0, 0, W, H);
-  }
+  function drawCover() {}   // UI v2: the cover is the finished image (media/cover/, tools/web/covers.py)
   window.INN = { get S() { return S; }, thermal: () => thermal(.05), both: () => both, log: cmdLog, done: false, startTalk, event };
   setStep(0); talkUI();
   if (QS.has('cover')) { document.body.classList.add('cover-only'); artReady.then(drawCover); return; }

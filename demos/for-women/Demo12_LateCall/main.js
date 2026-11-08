@@ -363,15 +363,7 @@
   $('startBtn').addEventListener('click', start);
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
-  function drawCover() {   // cover standard (shared/cover.js): the still with the face on the standard spot, the title in the shaded left column
-    // a whole painting, no cut-out (the pose's cut top / bottom edge showed inside the frame): the booth / street view widened by
-    // tools/art/cover_plate.py (gpt-image-2 outpaint) so the face fits the standard; eye / face measured on the plate (SCRFD)
-    const C0 = window.MoHeatCover, plate = C0?.img?.('media/art/cover_plate.jpg?v=1', drawCover);
-    if (plate) { C0.fit(ctx, { eye: [.709, .329], face: .227 }, () => ctx.drawImage(plate, 0, 0, W, H), { at: { y: .31, face: .28 }, tone: '#1b1d36' }); return; }
-    const im = IMG.ren_call, C = window.MoHeatCover; if (!im) { ctx.fillStyle = '#1b1d36'; ctx.fillRect(0, 0, W, H); return; }
-    const pic = () => ctx.drawImage(im, 0, 0, W, H);
-    if (C) C.fit(ctx, { eye: [.648, .256], face: .339 }, pic, { tone: '#1b1d36', covers: [0, 0, 1, 1] }); else pic();   // eye / face: where the face is in this drawing (tools/web/check_cover.py)
-  }
+  function drawCover() {}   // UI v2: the cover is the finished image (media/cover/, tools/web/covers.py)
   window.CALL = { get S() { return S; }, FW, thermal: () => thermal(.05), conflicts: () => conflicts };
   setStep(0);
   if (QS.has('cover')) { document.body.classList.add('cover-only'); artReady.then(drawCover); return; }

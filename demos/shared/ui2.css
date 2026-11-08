@@ -15,6 +15,7 @@
   --u2-x: 4cqw;                                 /* cover: left edge of the copy column (DEMO_DESIGN_GUIDE §7.3 2b) */
   --u2-btn: clamp(44px, 4.4cqw, 76px);          /* cover: Start / mode height */
   --u2-chip: clamp(32px, 3.2cqw, 54px);         /* cover: option / language chip height (44 px hit area on touch) */
+  --u2-barov: 2.6cqw;                           /* cover rows start this far above the picture's bottom edge (the bar is under the picture) */
   position: absolute; inset: 0; z-index: 50; pointer-events: none; font-family: var(--u2-ui); color: var(--u2-ink);
   -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
 .u2[data-cat="healing"] { --u2-accent: #a8e6c1; --u2-on-accent: #0d2116; }
@@ -35,9 +36,9 @@
 .u2-ctl { position: absolute; left: var(--u2-x); width: 50cqw; display: flex; align-items: center; gap: var(--u2-gap); }
 /* rows are stacked from the bar up (their sizes have touch minimums); the baked copy is anchored at the top and ends by 31cqw, so the
    two never meet down to the 760 px player (below that: the compact layout) — tools/web/cover_tpl.html holds the matching numbers */
-.u2-row-lang { bottom: calc(var(--u2-bar) + 1.6cqw); height: var(--u2-chip); }
-.u2-row-opt { bottom: calc(var(--u2-bar) + 3cqw + var(--u2-chip)); height: var(--u2-chip); }
-.u2-row-start { bottom: calc(var(--u2-bar) + 4.4cqw + 2 * var(--u2-chip)); height: var(--u2-btn); }
+.u2-row-lang { bottom: calc(var(--u2-barov) + 1.6cqw); height: var(--u2-chip); }
+.u2-row-opt { bottom: calc(var(--u2-barov) + 3cqw + var(--u2-chip)); height: var(--u2-chip); }
+.u2-row-start { bottom: calc(var(--u2-barov) + 4.4cqw + 2 * var(--u2-chip)); height: var(--u2-btn); }
 .u2 .u2-start { height: var(--u2-btn); padding: 0 1.25em; border: 0; border-radius: var(--u2-r); background: var(--u2-accent); color: var(--u2-on-accent);
   font-size: clamp(14px, 1.45cqw, 26px); font-weight: 700; display: inline-flex; align-items: center; gap: .5em; white-space: nowrap;
   box-shadow: 0 .4cqw 1.6cqw rgba(0, 0, 0, .45); }
@@ -60,11 +61,17 @@
 .u2-chips.u2-wrap { flex-wrap: wrap; max-width: min(46cqw, 520px); }
 .u2-pop-opt { right: auto; min-width: 0; }
 .u2-gal-c { display: none; }
-.u2-gal { position: absolute; right: 2cqw; bottom: calc(var(--u2-bar) + 1.6cqw); height: var(--u2-chip); }
+.u2-gal { position: absolute; right: 2cqw; bottom: calc(var(--u2-barov) + 1.6cqw); height: var(--u2-chip); }
 
 /* ---------------------------------------------------------------- the control bar (always visible) */
-.u2-bar { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--u2-bar) + 1.2cqw); padding: 1.2cqw 1cqw 0; display: flex; align-items: center; gap: .3cqw;
-  pointer-events: auto; background: linear-gradient(rgba(6, 5, 10, 0), rgba(6, 5, 10, .55) 40%, rgba(6, 5, 10, .82)); transition: opacity .3s, transform .3s; }
+/* the bar lives in .u2-under, a strip right under the picture (never over the demo's own buttons) */
+.u2.u2-under { position: relative; inset: auto; z-index: 5; width: 100%; container-type: inline-size; pointer-events: auto; margin-top: -1px; }
+.u2-bar { position: relative; height: calc(var(--u2-bar) + .6cqw); padding: .3cqw 1cqw; display: flex; align-items: center; gap: .3cqw; box-sizing: border-box;
+  pointer-events: auto; background: #100d16; border-radius: 0 0 10px 10px; border: 1px solid rgba(255, 255, 255, .07); border-top: 0; transition: opacity .3s, transform .3s; }
+html.ui2 .stage { border-radius: 10px 10px 0 0 !important; }
+html.ui2.mfs { --fs-below: calc(clamp(44px, 4.2cqw, 64px) + 8px) !important; }
+html.ui2.mfs .u2.u2-under { position: fixed; left: 0; right: 0; bottom: env(safe-area-inset-bottom, 0px); z-index: 1000; }
+html.ui2.mfs .u2-bar { border-radius: 0; height: calc(clamp(44px, 4.2vw, 64px) + 8px); }
 .u2-bar > * { flex: none; }
 .u2-ib { width: var(--u2-bar); height: var(--u2-bar); border: 0; border-radius: var(--u2-r); background: transparent; display: inline-flex; align-items: center; justify-content: center;
   font-size: clamp(18px, 1.55cqw, 26px); position: relative; }
@@ -76,20 +83,24 @@
 .u2-now { flex: none !important; width: 15cqw; font-size: var(--u2-fs); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }   /* fixed width: the track never moves with the chapter title */
 .u2-now b { color: var(--u2-accent); margin-right: .4em; font-variant-numeric: tabular-nums; }
 .u2-track { flex: 1 1 auto; min-width: 40px; display: flex; gap: 3px; height: 100%; align-items: center; }
-.u2-seg-c { flex: 1 1 0; min-width: 6px; height: 100%; border: 0; padding: 0; background: transparent; display: flex; align-items: center; position: relative; }
+.u2-track { cursor: pointer; border-radius: 6px; }
+.u2-track.lock { cursor: default; }
+.u2-seg-c { flex: 1 1 0; min-width: 4px; height: 100%; display: flex; align-items: center; position: relative; }
+.u2-seg-c.lock { cursor: not-allowed; }
 .u2-seg-c i { display: block; width: 100%; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, .24); overflow: hidden; position: relative; transition: height .15s; }
 .u2-seg-c i::before { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--p, 0%); background: var(--u2-ink); border-radius: inherit; }
 .u2-seg-c.done i::before { width: 100%; }
 .u2-seg-c.now i::before { background: var(--u2-accent); }
-.u2-seg-c:not(:disabled):hover i { height: 10px; }
-.u2-seg-c:disabled i { background: repeating-linear-gradient(-45deg, rgba(255, 255, 255, .1) 0 3px, rgba(255, 255, 255, .04) 3px 6px); }
+.u2-seg-c:not(.lock):hover i { height: 10px; }
+.u2-seg-c.lock i { background: repeating-linear-gradient(-45deg, rgba(255, 255, 255, .1) 0 3px, rgba(255, 255, 255, .04) 3px 6px); }
 .u2-tip { position: absolute; bottom: calc(100% + 2px); left: 50%; transform: translateX(-50%); padding: .35em .7em; border-radius: 6px; background: var(--u2-glass);
   font-size: var(--u2-fs-s); font-weight: 600; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .12s; border: 1px solid var(--u2-line); }
-.u2-seg-c:hover .u2-tip, .u2-seg-c:focus-visible .u2-tip { opacity: 1; }
+.u2-seg-c:hover .u2-tip { opacity: 1; }
+.u2-mode-t { display: none !important; }
 .u2-bar .u2-seg { height: calc(var(--u2-bar) - 8px); margin: 0 .3cqw; }
 .u2-bar .u2-seg button { padding: 0 .75em; }
 /* popovers (volume, thermal) and the ⚙ panel: above the bar, right-aligned to their button */
-.u2-pop { position: absolute; bottom: calc(var(--u2-bar) + 1.6cqw); right: 1cqw; min-width: clamp(220px, 20cqw, 320px); padding: clamp(10px, 1cqw, 16px);
+.u2-pop { position: absolute; bottom: 1cqw; right: 1cqw; min-width: clamp(220px, 20cqw, 320px); padding: clamp(10px, 1cqw, 16px);
   border-radius: calc(var(--u2-r) + 4px); background: var(--u2-glass); border: 1px solid var(--u2-line); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
   box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, .5); pointer-events: auto; font-size: var(--u2-fs); }
 .u2-pop h3 { margin: 0 0 .6em; font-size: var(--u2-fs-s); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--u2-dim); }
@@ -116,7 +127,7 @@
 .u2-btn2 { height: 36px; padding: 0 .9em; border-radius: 8px; border: 1px solid var(--u2-line); background: rgba(255, 255, 255, .1); font-weight: 600; font-size: var(--u2-fs-s); white-space: nowrap; }
 .u2-dot { width: 9px; height: 9px; border-radius: 50%; background: #8a8496; display: inline-block; margin-right: .45em; }
 .u2-dot.ok { background: #6fe39a; }
-.u2-set { width: clamp(280px, 28cqw, 400px); max-height: calc(100cqw * 9 / 16 - var(--u2-bar) - 4cqw); overflow-y: auto; scrollbar-width: thin; }
+.u2-set { width: clamp(280px, 28cqw, 400px); max-height: calc(100cqw * 9 / 16 - 2cqw); overflow-y: auto; scrollbar-width: thin; }
 
 /* ⚙ on small players: a bottom sheet over the whole page */
 .u2.u2-sheet { position: fixed; inset: 0; z-index: 1000; pointer-events: auto; background: rgba(4, 3, 8, .5); --u2-fs: 14px; --u2-fs-s: 12.5px; }
@@ -124,26 +135,26 @@
   padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); }
 
 /* ---------------------------------------------------------------- states */
-.u2-paused { position: absolute; inset: 0 0 calc(var(--u2-bar) + 1.2cqw); display: none; align-items: center; justify-content: center; pointer-events: auto; background: rgba(6, 5, 10, .38); border: 0; padding: 0; }
+.u2-paused { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; pointer-events: auto; background: rgba(6, 5, 10, .38); border: 0; padding: 0; }
 .u2[data-state="paused"] .u2-paused { display: flex; }
 .u2-paused span { width: clamp(64px, 8cqw, 128px); height: clamp(64px, 8cqw, 128px); border-radius: 50%; background: rgba(255, 255, 255, .92); color: #15121c;
   display: flex; align-items: center; justify-content: center; font-size: clamp(28px, 3.4cqw, 56px); box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, .45); }
 .u2-paused span svg { fill: currentColor; stroke: none; margin-left: 8%; }
-.u2-load { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255, 255, 255, .12); overflow: hidden; }
+.u2-load { position: absolute; left: 0; right: 0; top: 0; height: 3px; background: rgba(255, 255, 255, .12); overflow: hidden; }
 .u2-load i { display: block; height: 100%; width: var(--p, 0%); background: var(--u2-accent); transition: width .3s; }
 .u2[data-state]:not([data-state="loading"]) .u2-load { display: none; }
-/* answers and subtitles sit above the bar (the demo's own elements; the bar never covers them) */
-.stage:has(> .u2) .subs { bottom: calc(clamp(44px, 4.2cqw, 64px) + 2.2cqw) !important; }
-.stage:has(> .u2) :is(.choices, .act) { bottom: calc(clamp(44px, 4.2cqw, 64px) + 3.2cqw + 2.6 * clamp(10.5px, 2cqw, 30px)) !important; }   /* above two subtitle lines */
+/* the bar is under the picture: the demos' own subtitles, answers, docks and HUD keep their places; only the old credit line goes (⚙ → Credits) */
+.stage:has(> .u2) .vv { display: none !important; }
+html.ui2.mfs .stage:has(> .u2) .subs { bottom: 4.5cqw !important; }
 /* ⚙ "hide controls" (off by default): the bar fades after 3 s without input while playing; any move / tap brings it back */
-.u2.u2-autohide[data-state="playing"].u2-idle .u2-bar { opacity: 0; transform: translateY(30%); pointer-events: none; }
+.u2.u2-under.u2-autohide[data-state="playing"].u2-idle .u2-bar { opacity: 0; pointer-events: none; }   /* (fullscreen use) */
 
 /* ---------------------------------------------------------------- small players (phone portrait, small embeds): same parts, tighter */
 @container (max-width: 759.9px) {   /* COMPACT cover (phones, small embeds): the c1200 image (title + tagline at the top), one row of controls above the bar;
                                     the option row becomes one 📍 button, the language row lives in ⚙ */
   .u2 { --u2-btn: 44px; --u2-chip: 44px; --u2-x: 3cqw; }
   .u2-ctl { width: 94cqw; }
-  .u2-row-start { bottom: calc(var(--u2-bar) + 8px); }
+  .u2-row-start { bottom: 8px; }
   .u2-row-opt, .u2-row-lang { display: none; }
   .u2-cover > .u2-gal { display: none; }
   .u2-row-start .u2-gal-c { display: inline-flex; height: 44px; position: static; }
@@ -157,20 +168,27 @@
 @container (max-width: 620px) {
   .u2 { --u2-bar: 44px; --u2-fs: 13px; --u2-fs-s: 12px; }
   .u2-row-start .u2-seg button span, .u2-bar .u2-seg button span { display: none; }
-  .u2-row-start .u2-seg button, .u2-bar .u2-seg button { padding: 0 .8em; }
-  .u2-bar { padding: 0 2px; height: calc(var(--u2-bar) + 4px); gap: 0; }
-  .u2-ib { width: 40px; font-size: 19px; }
-  .u2-ib::before { content: ""; position: absolute; inset: 0 -2px; }
+  .u2-row-start .u2-seg button, .u2-bar .u2-seg button { padding: 0 .6em; }
+  .u2-bar { padding: 2px; height: calc(var(--u2-bar) + 4px); gap: 0; }
+  .u2-ib { width: 44px; font-size: 19px; }
+  .u2-bar .u2-mode-b { display: none !important; } .u2-bar .u2-mode-t { display: inline-flex !important; }   /* phones: the mode is one 44 px toggle (✋ ⇄ 🎧) */
+  .u2 .u2-row-start { height: 50px; } .u2 .u2-row-start .u2-seg { height: 50px; } .u2-row-start .u2-seg button { min-width: 44px; justify-content: center; }
   .u2-now { display: none; }
   .u2-prog { padding: 0 4px; }
   .u2-bar .u2-seg { margin: 0 2px; height: 36px; }
-  .u2-pop { right: 4px; left: 4px; bottom: calc(var(--u2-bar) + 8px); min-width: 0; }
-  .u2-set { width: auto; max-height: calc(100cqw * 9 / 16 - var(--u2-bar) - 12px); }
-  .stage:has(> .u2) .subs { bottom: calc(44px + 6px) !important; }
-  .stage:has(> .u2) :is(.choices, .act) { bottom: calc(44px + 16px + 3.2 * 13px) !important; }
+  .u2-pop { right: 4px; left: 4px; bottom: 6px; min-width: 0; }
+  .u2-set { width: auto; max-height: calc(100cqw * 9 / 16 - 12px); }
 }
 @container (max-width: 420px) { .u2-bar .u2-ib.u2-opt-vol { display: none; } }   /* the tiniest players: volume lives in ⚙ (device volume buttons work too) */
-.u2-touch .u2-chipb::before, .u2-touch .u2-seg-c::before { content: ""; position: absolute; inset: -6px 0; }
+/* touch screens and every window ≤ 1100 px (tablets, phone landscape — DEMO_DESIGN_GUIDE §7.1): every control ≥ 44 px — 44 px chips, a
+   50 px mode row on the cover, and in the bar the mode is the one 44 px toggle (as on phones) */
+@media (pointer: coarse), (max-width: 1100px) {
+  .u2 { --u2-chip: max(44px, 3.2cqw); --u2-btn: max(50px, 4.4cqw); }
+  .u2 .u2-row-start .u2-seg button { min-width: 44px; justify-content: center; }
+  .u2 .u2-bar .u2-mode-b { display: none !important; } .u2 .u2-bar .u2-mode-t { display: inline-flex !important; }
+  .u2 .u2-ib { min-width: 44px; min-height: 44px; } }
+/* nothing of the demo's own stage paints behind the cover image (no old stage image / scene title for a frame) */
+.stage:has(> .u2:is([data-state="loading"], [data-state="cover"], [data-state="ended"])) > :not(.u2) { visibility: hidden !important; }
 @media (prefers-reduced-motion: reduce) { .u2 *, .u2 { transition: none !important; } }
 html.reduce-motion .u2 * { transition: none !important; }
 .u2-set .u2-vol-line { display: none; }
@@ -178,11 +196,21 @@ html.reduce-motion .u2 * { transition: none !important; }
 
 /* ---------------------------------------------------------------- the old per-demo interface, replaced by UI v2 (html.ui2 = shell.js switch).
    Hidden here while both exist; the release deletes the old sources (cover HTML, drawCover, stage chips). */
-html.ui2 .stage .intro { opacity: 0 !important; pointer-events: none !important; }
-html.ui2 :is(.sh-mode, .sh-heat, .sh-bar, .sh-pause, .sh-veil, .sh-marks, .hud-top, .msub-hud, .ix-chip, .ix-hud, .mfs-exit, .stage .fs-btn, .stage .msub-btn) { display: none !important; }
+html.ui2 .stage .intro { visibility: hidden !important; pointer-events: none !important; }   /* visibility (inherited): nothing inside can paint */
+html.ui2 :is(.sh-mode, .sh-heat, .sh-bar, .sh-pause, .sh-veil, .sh-marks, .msub-hud, .ix-chip, .ix-hud, .mfs-exit, .stage .fs-btn, .stage .msub-btn, .stage .mfs-btn) { display: none !important; }
+html.ui2 .stage .hud-top #soundBtn { display: none !important; }   /* replaced by 🔊 in the bar; the demo's own HUD buttons (💡 Hint, 🐾 …) stay */
+.u2-clear { position: absolute; right: 2cqw; bottom: calc(var(--u2-barov) + 1.6cqw + var(--u2-chip) + .8cqw); height: var(--u2-chip); pointer-events: none; }
+@container (max-width: 759.9px) { .u2-clear { right: 3cqw; top: 3cqw; bottom: auto; height: 36px; } }
 html.ui2 .stage-col > .legend { display: none !important; }
 html.ui2 .stage-col > .transport { position: fixed !important; left: 0; top: 100vh; width: 1000px; height: 40px; margin: 0 !important; visibility: hidden !important; }   /* kept in layout, off screen: the film's seek handler reads its width */
 html.ui2 .sh-set { display: none !important; }
 html.ui2 .stage { background: #0b0a12; border: 0 !important; border-radius: 10px !important; box-shadow: 0 10px 40px rgba(0, 0, 0, .45) !important; outline: 0 !important; }   /* one frame for every player */
-html.ui2.u2-noside aside.side, html.ui2.u2-noside .mside-btn { display: none !important; }
-html.ui2.u2-noside .layout { grid-template-columns: minmax(0, 1fr) !important; }
+/* ---------------------------------------------------------------- the ORIGINAL page layout (user 2026-11-09), two small fixes inside it */
+@media (min-width: 1101px) {   /* desktop: the player column is centred vertically beside the side panel (no band under the player) */
+  html.ui2.fit:not(.embed) body:not(.cover-only) .stage-col { align-self: center; } }
+/* the sound-direction radar keeps the original rule (it takes the side panel's free height, as wide as the panel allows), never below 160 px */
+@media (min-width: 1300px) { html.ui2 body:not(.cover-only) .layout { grid-template-columns: minmax(0, 1fr) 380px !important; } }   /* a wider panel = a bigger radar (user: too small) */
+@media (min-width: 1101px) and (min-height: 820px) { html.ui2.fit:not(.embed) body:not(.cover-only) aside.side #radar { min-height: 160px !important; } }   /* lower windows: the original rule (no page / panel scroll comes first) */
+/* the header is ONE row in every demo (1280×720: a long brand subtitle wrapped some headers to two rows, so the player sat lower) */
+@media (min-width: 1101px) and (max-width: 1440px) { html.ui2 header.bar .brand em { display: none !important; } }
+html.ui2 header.bar { flex-wrap: nowrap !important; }

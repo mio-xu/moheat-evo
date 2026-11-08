@@ -75,6 +75,16 @@ def main():
     publish = '--publish' in a; args = [x for x in a if not x.startswith('--')]
     todo = [(c, d) for c, d in demos(args) if os.path.exists(os.path.join(REPO, 'demos', c, d, 'cover.json'))]
     if not todo: sys.exit('no demo with cover.json')
+    if '--publish-only' in a:   # no render: menu thumbnails + media/cover.jpg from the finished images already on disk
+        import thumbs
+        for c, d in todo:
+            dd = os.path.join(REPO, 'demos', c, d)
+            for l in LANGS:
+                im = Image.open(os.path.join(dd, 'media', 'cover', f'{l}.w1920.webp')).convert('RGB'); th = im.resize((480, 270), Image.LANCZOS)
+                th.save(os.path.join(REPO, 'assets', 'images', 'demos', f'{d}.{l}.jpg'), quality=84)
+                if l == 'en': th.save(os.path.join(REPO, 'assets', 'images', 'demos', f'{d}.jpg'), quality=84); im.save(os.path.join(dd, 'media', 'cover.jpg'), quality=84)
+            thumbs.write_stamp(c, d, list(LANGS) + ['base'])
+        print(f'{len(todo)} demos published'); return
     if '--check' in a:   # no render: list stale / missing finished covers (exit 1 if any)
         bad = [f'{d}: {"; ".join(r)}' for c, d in todo for r in [stale(c, d)] if r]
         print('\n'.join(bad) or 'all finished covers are current'); sys.exit(1 if bad else 0)
@@ -112,6 +122,8 @@ def main():
                 if k in BUDGET and os.path.getsize(os.path.join(od, f)) > BUDGET[k] * 1024: bad.append(f'{d}/{f} over {BUDGET[k]} KB')
             if langs.split(',') == list(LANGS) and not any(x.startswith(d + ' ') for x in bad):   # a full render: stamp it
                 tmp = os.path.join(od, f'stamp.json.{os.getpid()}'); json.dump(inputs(c, d), open(tmp, 'w'), indent=1); os.replace(tmp, os.path.join(od, 'stamp.json'))
+            if publish and not any(x.startswith(d + ' ') for x in bad):   # the content stamp check_demo's release row reads
+                import thumbs; thumbs.write_stamp(c, d, langs.split(',') + (['base'] if 'en' in langs.split(',') else []))
             print(d, ' · '.join(row))
     if bad: print('FAIL\n  ' + '\n  '.join(bad)); sys.exit(1)
     print('PASS')

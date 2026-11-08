@@ -19,7 +19,7 @@ DEMOS = DEMOS.map((d) => path.relative(ROOT, path.resolve(d)).split(path.sep).jo
 if (!DEMOS.some((d) => d.endsWith(REF))) DEMOS.unshift(`demos/for-women/${REF}`);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const freePort = () => new Promise((res) => { const s = net.createServer(); s.listen(0, '127.0.0.1', () => { const p = s.address().port; s.close(() => res(p)); }); });
-const OLD = '.stage .intro, .sh-mode, .sh-heat, .sh-bar, .sh-pause, .hud-top, .msub-hud, .ix-chip, .stage-col > .transport, .stage-col > .legend, .sh-marks, .msub-btn, #lrBtn';
+const OLD = '.stage .intro, .sh-mode, .sh-heat, .sh-bar, .sh-pause, .hud-top .msub-btn, .hud-top .mfs-btn, .hud-top #soundBtn, .msub-hud, .ix-chip, .stage-col > .transport, .stage-col > .legend, .sh-marks, .msub-btn, #lrBtn';
 const MEASURE = `((OLD) => {
   const st = document.querySelector('.stage-col .stage') || document.querySelector('.stage'), u = st && st.querySelector(':scope > .u2'); if (!u) return { err: 'no .u2 on the stage' };
   const S = st.getBoundingClientRect(), col = (v) => { const d = document.createElement('i'); d.style.color = getComputedStyle(u).getPropertyValue(v).trim(); u.appendChild(d); const c = getComputedStyle(d).color; d.remove(); return c; };
@@ -27,7 +27,9 @@ const MEASURE = `((OLD) => {
   const norm = (v) => (v || '').split(acc).join('ACCENT').split(on).join('ON-ACCENT').replace(/rgba?\\(([^)]+)\\)/g, (m) => m.replace(/\\s+/g, ''));
   const vis = (e) => { for (let p = e; p && p !== st; p = p.parentElement) { const c = getComputedStyle(p); if (c.display === 'none' || c.visibility === 'hidden' || +c.opacity === 0) return false; } const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
   const SKIP = '.u2-pic, .u2-track > *, .u2-now, .u2-row-opt, .u2-picks, .u2-pop-opt, .u2-tip, .u2-load i';
-  const out = {}, sh = document.querySelector('.u2-sheet:not([hidden])'), ALL = [...u.querySelectorAll('*'), ...(sh ? sh.querySelectorAll('*') : [])];
+  const out = {}, sh = document.querySelector('.u2-sheet:not([hidden])'), un = document.querySelector('.u2-under'), strip = document.querySelector('.u2-strip');
+  const ALL = [...u.querySelectorAll('*'), ...(un ? un.querySelectorAll('*') : []), ...(sh ? sh.querySelectorAll('*') : [])];
+  if (strip) out['u2-strip|box'] = (() => { const r = strip.getBoundingClientRect(); return [Math.round(r.left - S.left), Math.round(r.top - S.top), Math.round(r.width), Math.round(r.height)].join(' ¦ '); })();
   ALL.forEach((e, i) => {
     if (e.closest(SKIP) || !vis(e)) return; if (e.closest('svg') && e.tagName !== 'svg') return;
     const r = e.getBoundingClientRect(), c = getComputedStyle(e), key = (e.className?.baseVal ?? e.className) + '|' + (e.dataset.mode || e.dataset.lang || e.dataset.k || e.dataset.size || '') + '|' + i;
@@ -36,7 +38,26 @@ const MEASURE = `((OLD) => {
       e.tagName === 'svg' ? e.innerHTML.length : '', e.children.length ? '' : (e.textContent || '').trim()].join(' ¦ ');
   });
   const old = [...document.querySelectorAll(OLD)].filter(vis).map((e) => (e.id ? '#' + e.id : '.' + [...e.classList].join('.')) + ':' + (e.textContent || '').trim().slice(0, 20));
-  return { stage: [Math.round(S.left), Math.round(S.top), Math.round(S.width), Math.round(S.height)], state: u.dataset.state, els: out, old, chapters: u.querySelectorAll('.u2-track > *').length };
+  // the demo's own controls must never sit under the bar (they could not be pressed): any visible button / input on the stage whose
+  // centre is inside the bar's box = FAIL
+  // every interactive element of the demo must be reachable: elementFromPoint at its centre must hit it (not the shared interface on top)
+  const under = [];
+  for (const e of st.querySelectorAll('button, input, select, a[href], [role=button], .act-btn, .ch, .chip-c, .slot, [onclick]')) {
+    if (e.closest('.u2') || !vis(e) || e.closest('.intro')) continue; const r = e.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    if (cx < 0 || cy < 0 || cx > innerWidth || cy > innerHeight) continue;
+    const hit = document.elementFromPoint(cx, cy); if (hit && !e.contains(hit) && hit.closest('.u2, .u2-under, .sh-toast')) under.push((e.className || e.tagName) + ':' + (e.textContent || '').trim().slice(0, 16)); }
+  // nothing of the demo's own may disappear because of the shared interface: every demo button that shows with ui2.css switched off must
+  // show with it on (Demo10's 💡 Hint was hidden with the old corner buttons, 2026-11-09). Replaced on purpose: 🔊 #soundBtn (bar volume), #lrBtn / #playBtn (⚙ / bar)
+  const REPLACED = new Set(['soundBtn', 'lrBtn', 'playBtn', 'startBtn']), shown = (e) => !!(e.offsetParent || getComputedStyle(e).position === 'fixed') && getComputedStyle(e).visibility !== 'hidden';
+  const own = [...st.querySelectorAll('button[id], [role=button][id]')].filter((e) => !e.closest('.u2, .intro') && !REPLACED.has(e.id));
+  const before = own.map(shown), sheets = [...document.querySelectorAll('link[href*="ui2.css"], style#moheat-ui2-early')];
+  sheets.forEach((x) => { x.disabled = true; }); const without = own.map(shown); sheets.forEach((x) => { x.disabled = false; });
+  const lost = own.filter((e, i) => without[i] && !before[i]).map((e) => '#' + e.id);
+  // the ORIGINAL page layout (user 2026-11-09): side panel on the right (desktop), no page scroll, no empty band above / below the player column > 10 % of the window
+  const colR = document.querySelector('.stage-col')?.getBoundingClientRect(), side = document.querySelector('aside.side'), sr = side?.getBoundingClientRect(), hdr = document.querySelector('header.bar')?.getBoundingClientRect();
+  const lay = { scroll: document.documentElement.scrollHeight - innerHeight, side: side && getComputedStyle(side).display !== 'none' ? [Math.round(sr.left), Math.round(sr.top), Math.round(sr.width), Math.round(sr.height)] : null,
+    bandTop: colR && hdr ? Math.round(colR.top - hdr.bottom) : null, bandBottom: colR ? Math.round(innerHeight - colR.bottom) : null, vh: innerHeight, vw: innerWidth };
+  return { lay, lost, stage: [Math.round(S.left), Math.round(S.top), Math.round(S.width), Math.round(S.height)], state: u.dataset.state, els: out, old, under, chapters: document.querySelectorAll('.u2-track > *').length };
 })(${JSON.stringify(OLD)})`;
 const res = { ref: REF, sizes: SIZES, demos: {}, fails: [], errors: [] };
 (async () => {
@@ -74,25 +95,44 @@ const res = { ref: REF, sizes: SIZES, demos: {}, fails: [], errors: [] };
         for (const [st, act] of STATES) {
           if (act) { await ev(`(() => { try { ${act}; } catch (e) { return String(e); } return 1; })()`); await sleep(st === 'playing' ? 3500 : 700); }
           if (st === 'paused') await ev(`MoHeatShell.ui2view && MoHeatShell.ui2view.paint(), 1`);
-          R[st] = await ev(MEASURE); R[st].shot = await shot(`${n}.${sz}.${st}`);
+          R[st] = (await ev(MEASURE)) || { err: 'MEASURE threw (see the page console)' }; R[st].shot = await shot(`${n}.${sz}.${st}`);
+          if (st === 'playing') R.subsZoom = await ev(`(() => { const el = document.querySelector('.stage :is(.subs, .bubble, #bubble)'); if (!el) return null;
+            const z = ['s', 'm', 'l'].map((v) => { MoHeatShell.setSubs(v); const r = el.getBoundingClientRect(); return [+(getComputedStyle(el).zoom || 1), Math.round(r.width)]; }); MoHeatShell.setSubs('m'); return z; })()`);
         }
       } catch (e) { res.errors.push(`${n} ${sz}: ${e}`); }
     }
   }
+  // equal, allowing ±1 px on the box (sub-pixel rounding of the same layout; everything else must match exactly)
+  const same = (x, y) => { if (!x || !y) return false; const X = x.split(' ¦ '), Y = y.split(' ¦ '); return X.length === Y.length && X.every((v, i) => (i < 4 ? Math.abs(+v - +Y[i]) <= 1 : v === Y[i])); };
   // compare with the reference
   for (const sz of SIZES) for (const [n, D] of Object.entries(res.demos)) {
     if (n === REF) continue; const ref = res.demos[REF]?.[sz], cur = D[sz]; if (!ref || !cur) continue;
     for (const st of Object.keys(ref)) {
+      if (st === 'subsZoom') continue;
       const a = ref[st], b = cur[st]; if (!b || b.err) { res.fails.push(`${n} ${sz} ${st}: ${b?.err || 'not measured'}`); continue; }
       if (a.state !== b.state) res.fails.push(`${n} ${sz} ${st}: state ${b.state} ≠ ${a.state}`);
       if (b.old?.length) res.fails.push(`${n} ${sz} ${st}: old interface visible: ${b.old.join(', ')}`);
-      if (a.stage.join() !== b.stage.join()) res.fails.push(`${n} ${sz} ${st}: stage box ${b.stage.join(',')} ≠ ${a.stage.join(',')}`);
+      if (st === 'playing' && b.lost?.length) res.fails.push(`${n} ${sz} ${st}: hidden by the shared interface (must stay): ${b.lost.join(', ')}`);
+      if (st === 'playing' && b.under?.length) res.fails.push(`${n} ${sz} ${st}: the demo's own control(s) under the bar: ${b.under.join(', ')}`);
+      if (a.stage.some((v, i) => Math.abs(v - b.stage[i]) > 1)) res.fails.push(`${n} ${sz} ${st}: stage box ${b.stage.join(',')} ≠ ${a.stage.join(',')}`);
+      if (st === 'subsZoom') continue;
       for (const k of new Set([...Object.keys(a.els), ...Object.keys(b.els)])) {
-        if (a.els[k] !== b.els[k]) res.fails.push(`${n} ${sz} ${st}: ${k.split('|')[0] || '?'} ${b.els[k] ? '' : 'missing'}${a.els[k] ? '' : 'extra'}\n      ref ${a.els[k] || '—'}\n      got ${b.els[k] || '—'}`);
+        if (a.els[k] !== b.els[k] && !same(a.els[k], b.els[k])) res.fails.push(`${n} ${sz} ${st}: ${k.split('|')[0] || '?'} ${b.els[k] ? '' : 'missing'}${a.els[k] ? '' : 'extra'}\n      ref ${a.els[k] || '—'}\n      got ${b.els[k] || '—'}`);
       }
       if (st === 'playing' && b.chapters < 2) res.fails.push(`${n} ${sz}: ${b.chapters} chapters in the bar (every demo needs ≥ 2)`);
     }
   }
+  for (const sz of SIZES) for (const [n, D] of Object.entries(res.demos)) { const m = D[sz]?.playing?.lay; if (!m) continue;
+    if (m.scroll > 0) res.fails.push(`${n} ${sz}: the page scrolls by ${m.scroll} px`);
+    if (m.vw > 1100 && !m.side) res.fails.push(`${n} ${sz}: the side panel is gone (the original layout keeps it on the right)`);
+    if (m.vw > 1100 && Math.abs(m.bandTop - m.bandBottom) > 24) res.fails.push(`${n} ${sz}: one-sided empty band (${m.bandTop} px above, ${m.bandBottom} px below the player): the original layout centres the player column`); }
+  // subtitle size S / M / L must really change the subtitles (zoom .85 / 1 / 1.3, phones L 1.18), in every demo that has subtitles
+  for (const sz of SIZES) for (const [n, D] of Object.entries(res.demos)) { const z = D[sz]?.subsZoom; if (!z) continue;
+    const want = [.85, 1, (D[sz]?.playing?.stage?.[2] || 999) <= 620 ? 1.18 : 1.3]; /* the phone cap is for players ≤ 620 px */ if (z.some((v, i) => Math.abs(v[0] - want[i]) > .01)) res.fails.push(`${n} ${sz}: subtitle size S / M / L gives zoom ${z.map((v) => v[0]).join(' / ')} (want ${want.join(' / ')})`); }
+  for (const sz of SIZES) for (const [st, m] of Object.entries(res.demos[REF]?.[sz] || {})) {   // the reference demo itself: nothing covered, old UI gone
+    if (st === 'playing' && m?.under?.length) res.fails.push(`${REF} ${sz} ${st}: the demo's own control(s) under the shared interface: ${m.under.join(', ')}`);
+    if (m?.old?.length) res.fails.push(`${REF} ${sz} ${st}: old interface visible: ${m.old.join(', ')}`);
+    if (st === 'playing' && m?.lost?.length) res.fails.push(`${REF} ${sz} ${st}: hidden by the shared interface (must stay): ${m.lost.join(', ')}`); }
   if (SHEET) {   // comparison sheet: per demo one row = the states at the first size, the playing state at the others
     // each cell = the player only (+ the ⚙ sheet on phones, which covers the page): [file, crop box]
     const cell = (D, sz, st) => { const m = D[sz]?.[st]; if (!m?.shot) return ['', null]; const g = m.stage; return [m.shot, st === 'settings' && sz.endsWith('t') ? null : [g[0], g[1], g[0] + g[2], g[1] + g[3]]]; };
@@ -120,6 +160,6 @@ S.save(${JSON.stringify(SHEET)}, quality=78)
 `], { stdio: ['pipe', 'inherit', 'inherit'] });
     py.stdin.end(JSON.stringify(rows)); await new Promise((r) => py.on('close', r)); res.sheet = SHEET;
   }
-  for (const D of Object.values(res.demos)) for (const R of Object.values(D)) for (const s of Object.values(R)) if (s && s.els) s.els = Object.keys(s.els).length;
+  for (const D of Object.values(res.demos)) for (const R of Object.values(D)) for (const s of Object.values(R)) if (s && s.els && !Array.isArray(s)) s.els = Object.keys(s.els).length;
   done();
 })();

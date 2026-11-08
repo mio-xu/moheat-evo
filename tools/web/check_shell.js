@@ -63,11 +63,10 @@ const out = { demo: REL, shell: false, pureEnded: false, secs: 0, mic: [], navDu
   }
   await shot('cover');
   // ← / → on the cover switch demos (go back right after)
-  await key('ArrowRight', 'ArrowRight'); await sleep(1500);
-  out.navOnCover = (await ev('location.pathname')) !== `/${REL}/`;
+  for (let i = 0; i < 4 && !out.navOnCover; i++) { await key('ArrowRight', 'ArrowRight'); await sleep(1500); out.navOnCover = (await ev('location.pathname')) !== `/${REL}/`; }   // nav.js may still be building ‹ ›
   if (out.navOnCover) await load();
   await ev(`(document.querySelector('.sh-mode [data-m=pure]')?.click(), document.getElementById('startBtn').click(), 1)`);
-  await sleep(4000);
+  await sleep(4000); for (let i = 0; i < 30 && !(await ev(`document.getElementById('intro').classList.contains('hidden')`)); i++) await sleep(500);   // a talk connects first
   await key('ArrowRight', 'ArrowRight'); await sleep(1200);
   out.navDuringPlay = (await ev('location.pathname')) !== `/${REL}/`;
   // pause: the clock and the thermal text freeze

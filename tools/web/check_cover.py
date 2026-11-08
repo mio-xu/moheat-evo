@@ -67,6 +67,20 @@ def analyze(shots):   # runs under ~/ml/layers/bin/python (rembg + onnxruntime +
             r.update(char_top=round(ys.min() / H * 100, 1), char_bottom=round(ys.max() / H * 100, 1), char_left=round(xs.min() / W * 100, 1),
                      char_right=round(xs.max() / W * 100, 1), char_cx=round(xs.mean() / W * 100, 1), char_area=round(len(xs) / (W * H) * 100, 1),
                      char_h=round((ys.max() - ys.min()) / H * 100, 1))
+        # a straight cut in the character matte inside the frame (Demo22 2026-11-08: a foreground hair bundle ended on a vertical line): the longest
+        # run of rows whose left / right matte boundary stays within 8 px, away from the frame edges
+        best = (0, 0, 0, 0)
+        M = m > .5; T = np.zeros((H, W // 4 + 2), bool)   # every matte boundary (both directions), in 4 px columns
+        for y in range(H):
+            xs = np.flatnonzero(M[y, 1:] != M[y, :-1])
+            xs = xs[(xs > W * .02) & (xs < W * .98)]; T[y, xs // 4] = True
+        Tw = T | np.roll(T, 1, 1) | np.roll(T, -1, 1)   # ± 4 px
+        for c in range(1, T.shape[1] - 1):
+            col = Tw[:, c]; run = 0
+            for y in range(H):
+                run = run + 1 if col[y] else 0
+                if run > best[0]: best = (run, c * 4, y - run + 1, y)
+        r['straight'] = {'h': round(best[0] / H * 100, 1), 'x': round(float(best[1]) / W * 100, 1), 'y0': round(best[2] / H * 100, 1), 'y1': round(best[3] / H * 100, 1)}
         res[name] = r
         # luma of the art under the copy block (from the DOM of the export view, written next to the shots)
         res[name]['_luma'] = luma
@@ -172,8 +186,17 @@ def judge_v2(n_path, art):
     try: cj = json.load(open(os.path.join(n_path, 'cover.json'), encoding='utf-8'))
     except (OSError, ValueError) as e: return [('FAIL', 'cover.json', str(e), 'valid cover.json')]
     if cj.get('scene'): return [('PASS', 'character', 'scene cover (no lead)', 'cover.json "scene": true')]
+    st = art.get('straight') or {}
+    if st.get('h', 0) >= 22: rows.append(('WARN', 'straight edge', f"{st['h']} % of H at x {st['x']} % (y {st['y0']}–{st['y1']} %)", 'look at it: a straight edge of the figure that is a CUT (hair / body ending on a line) must leave the frame (cover_plate.py, or remove that element); a held pole is fine'))
     faces = [f for f in (art.get('faces') or []) if f['h'] > 8]
-    if not faces: return [('FAIL', 'character', 'no character / creature face found', 'a story cover with its character (§7.3 2b); a place-only cover needs the user\'s OK + cover.json "scene": true')]
+    dec = cj.get('faces')   # declared where the detector cannot see the face (chibi / animal / profile)
+    if dec and (not faces or (dec.get('duo') and len(faces) < 2)):
+        S = STANDARD['duo' if dec.get('duo') else 'solo']; ex, ey, fh = dec['eye'][0], dec['eye'][1], dec['face']
+        add(S['eye_x'][0] <= ex <= S['eye_x'][1], 'eye x (declared)', f'{ex:.0f} %', fmt(S['eye_x']) + ' %')
+        add(S['eye_y'][0] <= ey <= S['eye_y'][1], 'eye line (declared)', f'{ey:.0f} %', fmt(S['eye_y']) + ' %')
+        add(S['face_h'][0] <= fh <= S['face_h'][1], 'face size (declared)', f'{fh:.0f} % of H', fmt(S['face_h']) + ' %')
+        return rows
+    if not faces: return rows + [('FAIL', 'character', 'no character / creature face found', 'a story cover with its character (§7.3 2b); a place-only cover needs the user\'s OK + cover.json "scene": true')]
     duo = len(faces) >= 2 and abs(faces[0]['h'] - faces[1]['h']) < 12; S = STANDARD['duo' if duo else 'solo']; m = faces[:2] if duo else faces[:1]
     ex = sum(f['x'] for f in m) / len(m); ey = sum((f['eye_y'] or f['top'] + f['h'] * .5) for f in m) / len(m); fh = sum(f['h'] for f in m) / len(m)
     add(S['eye_x'][0] <= ex <= S['eye_x'][1], 'eye x' + (' (duo)' if duo else ''), f'{ex:.0f} %', fmt(S['eye_x']) + ' %')

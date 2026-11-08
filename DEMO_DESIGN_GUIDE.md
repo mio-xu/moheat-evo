@@ -561,19 +561,21 @@ python3 tools/qa/check_demo.py <demo> --checklist        # 同时写 / 刷新 pr
 │   [▶ Start] [✋ Interactive | 🎧 Just listen]      ← 真按钮，固定位置     │
 │   [Where  Tea ▾] [With  Mint ▾]                     ← cover.json options │
 │   🌐 [English] [日本語] [中文]                       (结束时右下：☆ Endings 1/2) │
-│ ──────────────────────────── 控制条（一直显示）─────────────────────────── │
-│ ▶/⏸ │ ③ 章节名 ▬▬▬▬▬▬░░░░ 章节进度（可点） │ ✋|🎧 │ 🔊 │ 🌡 │ ⚙ │ ⛶ │
 └──────────────────────────────────────────────────────────────────────────┘
-  字幕和回答按钮在控制条上方（ui2.css 统一 bottom）；播放器 < 760 px（手机）= 紧凑封面：
-  图里只有标题 + 副标题，一行 [▶ Start][✋|🎧][📍 选项]，语言在 ⚙；⚙ 变成底部弹出面板。
+┌──────────── 控制条 .u2-under（画面正下方，一直显示；全屏时贴屏幕底部）────────────┐
+│ ▶/⏸ │ ③ 章节名 ▬▬▬▬▬▬░░░░ 章节（一个滑块，可点） │ ✋|🎧 │ 🔊 │ 🌡 │ ⚙ │ ⛶ │
+└──────────────────────────────────────────────────────────────────────────┘
+  控制条不压在画面上（用户 2026-11-09：压住了 Demo10 / 13 自己的按钮）；页面版式 = 原来的（播放器 + 右侧栏，
+  手机竖排），侧栏 ≥ 1300 px 宽 380 px（雷达更大），播放器那一栏比侧栏矮时上下居中。播放器 < 760 px（手机）= 紧凑封面：
+  图里只有标题 + 副标题，一行 [▶ Start][✋|🎧][📍 选项]，语言在 ⚙；⚙ 变成底部弹出面板；控制条上的模式是一个 44 px 切换钮。
 ```
 - **文件**：`demos/shared/ui2.js`（组件，只认 adapter，不认 Demo）+ `ui2.css`（全部尺寸，cqw + 触屏 44 px 下限）；`shared/shell.js` 里的 live adapter（时钟 / 暂停 / 模式 / 章节 / 音量 / 冷热 / 字幕 / 设备 / 全屏）；开关 `MoHeatShell.UI_V2`（发布前 `?ui=2` 本浏览器打开、`?ui=1` 关掉）。
 - **封面**：每个 Demo 只提供 `cover.json`（`title / tagline / chips[{kind: warm|cool|tag, text}] / series / tone / options[{key, label, items[{v, label}], when}] / chapters`，每项 en / ja / zh）+ `media/cover/art.webp`（背景 + 人物，按 2b 数值合成一次；姿势填不满就用 `tools/art/cover_plate.py` 出整张画）。`python3 tools/web/covers.py <Demo>` 用唯一模板 `tools/web/cover_tpl.html` 烤出 `media/cover/<lang>.w1920 / w1280 / c1200.webp`（`--publish` 同时出 `media/cover.jpg` 和菜单缩略图）；标题放不下或文件超预算 = FAIL。页面一打开就先显示这张图（shell.js 首先 preload 它），换语言换成预先缓存的另一张；选项按钮点的是 Demo 自己的隐藏按钮（`button[data-k][data-v]` 或 `[data-<key>="<v>"]`）。
-- **控制条**：▶/⏸ · 章节（`MoHeatShell.chapters / current / seek` 或 `#steps`；互动模式只能回到 / 跳到已到过的章节）· 模式（互动默认，播放中可切）· 🔊 音量 · 🌡 开关 + 强度 · ⚙ · ⛶。**一直显示**；只有 ⚙「隐藏控制条」打开时（默认关）才在播放中 3 秒无操作后淡出。每个 Demo 至少 2 个章节。
+- **控制条**：▶/⏸ · 章节（`MoHeatShell.chapters / current / seek` 或 `#steps`；互动模式只能回到 / 跳到已到过的章节）· 模式（互动默认，播放中可切）· 🔊 音量 · 🌡 开关 + 强度 · ⚙ · ⛶。**一直显示**，在画面**下方**（不盖画面里任何东西）；只有 ⚙「隐藏控制条」打开时（默认关）才在全屏播放中 3 秒无操作后淡出。每个 Demo 至少 2 个章节。字幕大小 S / M / L = 字幕框 zoom .85 / 1 / 1.3（手机 L 1.18），所有家族（`.subs` / `.bubble`）。设备状态唯一来源 = `device.js`（`MoHeatDevice.state` + 事件 `moheat:device`；换 Demo 无提示重连上次的端口），顶栏 / ⚙ / 展示模式都只听它。提示条在页面顶部、4.5 秒消失、不挡任何控件。
 - **⚙ 设置**：语言、字幕开关 + 大小、减少动态、隐藏控制条、设备连接、头部追踪（Beta，以后）。
 - **状态**：loading（封面已显示，Start 显示 % 等待）→ cover → playing ⇄ paused → ended（回本 Demo 封面：↺ Play again · 模式 · 结局图鉴 n / m）。
 - **类别主题**：只换 `--u2-accent` / `--u2-on-accent`（`ui2.css` 里按 `data-cat`）和烤图时的标题字体；布局一模一样。
-- **检查（FAIL 门禁）**：`node tools/web/check_ui.js [Demo…] --sheet x.jpg`：每个 Demo 在 1440×900 和 390×844（触屏）下的 封面 / 播放 / 暂停 / ⚙ / 结束 五个状态，量 `.u2` 里每个元素的位置、大小、字体、颜色、文字，和参照 Demo（岳 Demo24）逐项比较，只允许画面、章节数和名字、选项内容、类别主题色不同；旧界面（旧封面、🌐 ⛶ 角落、旧模式按钮、旧进度条、影片 transport）还看得见 = FAIL；少于 2 个章节 = FAIL。`check_demo.py` 的 G7 **ui** 行：`--quick`（CI 也跑）检查 cover.json / 三种语言的封面图齐全且不过期、页面加载 shell.js、Demo 自己的 css / js 里没有 `.u2` 规则；完整模式再跑 check_ui.js。
+- **检查（FAIL 门禁）**：`node tools/web/check_ui.js [Demo…] --sheet x.jpg`：每个 Demo 在 1440×900 和 390×844（触屏）下的 封面 / 播放 / 暂停 / ⚙ / 结束 五个状态，量 `.u2` 里每个元素的位置、大小、字体、颜色、文字，和参照 Demo（岳 Demo24）逐项比较，只允许画面、章节数和名字、选项内容、类别主题色不同；旧界面（旧封面、🌐 ⛶ 角落、旧模式按钮、旧进度条、影片 transport）还看得见 = FAIL；少于 2 个章节 = FAIL；Demo 自己的任何可交互元素中心 `elementFromPoint` 点到共用界面 / 提示条 = FAIL；字幕 S / M / L 不变 = FAIL；页面滚动、桌面没有侧栏、播放器上下空带 > 10 % = FAIL。`node tools/web/check_device.js`（模拟串口：连接 → 换 Demo → 拔 → 插 → 断开，顶栏 / ⚙ / 提示一致）。`check_demo.py` 的 G7 **ui** 行：`--quick`（CI 也跑）检查 cover.json / 三种语言的封面图齐全且不过期、页面加载 shell.js、Demo 自己的 css / js 里没有 `.u2` 规则；完整模式再跑 check_ui.js。
 - **新 Demo**：界面一行都不写——页面加载 `shell.js`；复制 `tools/web/cover_template.json` 为 `cover.json` 填三种语言，放 `media/cover/art.webp`，跑 `python3 tools/web/covers.py <Demo> --publish`；章节用 `#steps`（`setStep()`）或 `MoHeatShell.chapters / current`。样品页 `preview/ui2/specimen.html`、封面墙 `preview/ui2/covers.html`。
 
 - **结束 = 回到本 Demo 自己的封面**（用户 2026-11-08）：剧情播完后显示本 Demo 的封面，开始按钮改成「↺ もう一度 · Play again」（subs.js 按当前语言显示），不要「下一个 Demo」按钮、不要自动跳到别的 Demo。换 Demo 只用顶栏的 ‹ › 和作品列表。

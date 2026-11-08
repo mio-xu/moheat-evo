@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/all-ages/Demo28_SnowFoxLullaby/media/cover/stamp.json": "dce08a2ef31a88bfc4cc1d5b0c0ca452eae11a74"
+  },
+  "thumb": "332839ad93469a3207b3b8899a0accd21e1abee6"
+ },
+ "en": {
+  "inputs": {
+   "demos/all-ages/Demo28_SnowFoxLullaby/media/cover/stamp.json": "dce08a2ef31a88bfc4cc1d5b0c0ca452eae11a74"
+  },
+  "thumb": "332839ad93469a3207b3b8899a0accd21e1abee6"
+ },
+ "ja": {
+  "inputs": {
+   "demos/all-ages/Demo28_SnowFoxLullaby/media/cover/stamp.json": "dce08a2ef31a88bfc4cc1d5b0c0ca452eae11a74"
+  },
+  "thumb": "11a60699c0beb3eaf37a91d021e9671e0c9b5544"
+ },
+ "zh": {
+  "inputs": {
+   "demos/all-ages/Demo28_SnowFoxLullaby/media/cover/stamp.json": "dce08a2ef31a88bfc4cc1d5b0c0ca452eae11a74"
+  },
+  "thumb": "8279bd55dd3f4b424a4aab485fb9214caf5937ce"
+ }
+}

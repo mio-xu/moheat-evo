@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/healing/Demo13_NaomiCam/media/cover/stamp.json": "9395663cac72cd8462282d0cc4077bbe95189667"
+  },
+  "thumb": "68999911821c80178fe1cdaf721722ec74094c32"
+ },
+ "en": {
+  "inputs": {
+   "demos/healing/Demo13_NaomiCam/media/cover/stamp.json": "9395663cac72cd8462282d0cc4077bbe95189667"
+  },
+  "thumb": "68999911821c80178fe1cdaf721722ec74094c32"
+ },
+ "ja": {
+  "inputs": {
+   "demos/healing/Demo13_NaomiCam/media/cover/stamp.json": "9395663cac72cd8462282d0cc4077bbe95189667"
+  },
+  "thumb": "9920ad260319f672e27d8b6aa90086fab545416b"
+ },
+ "zh": {
+  "inputs": {
+   "demos/healing/Demo13_NaomiCam/media/cover/stamp.json": "9395663cac72cd8462282d0cc4077bbe95189667"
+  },
+  "thumb": "b1d7039dba97632f0b712de451435ce72d030379"
+ }
+}

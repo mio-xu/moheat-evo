@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/healing/Demo15_FamilyCall/media/cover/stamp.json": "0cdee20e1b52b20fb28d61c974e6806fcd5b6e1c"
+  },
+  "thumb": "f59508348722043bcf40895c4de2b18e1fc4f9d5"
+ },
+ "en": {
+  "inputs": {
+   "demos/healing/Demo15_FamilyCall/media/cover/stamp.json": "0cdee20e1b52b20fb28d61c974e6806fcd5b6e1c"
+  },
+  "thumb": "f59508348722043bcf40895c4de2b18e1fc4f9d5"
+ },
+ "ja": {
+  "inputs": {
+   "demos/healing/Demo15_FamilyCall/media/cover/stamp.json": "0cdee20e1b52b20fb28d61c974e6806fcd5b6e1c"
+  },
+  "thumb": "e1d86f2db04a69f99fb81dd1c5c8adcfcf7cfdc3"
+ },
+ "zh": {
+  "inputs": {
+   "demos/healing/Demo15_FamilyCall/media/cover/stamp.json": "0cdee20e1b52b20fb28d61c974e6806fcd5b6e1c"
+  },
+  "thumb": "9425832fd54033af92a51606726ebb973916066a"
+ }
+}

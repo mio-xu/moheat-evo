@@ -1,34 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/for-men/Demo43_BlizzardInn/l10n.js": "169360d2afb8a3b6561904017da0d55098d45ca2",
-   "demos/for-men/Demo43_BlizzardInn/media/cover.jpg": "6df0db9f31b907855b3f826140ffb276434ae792",
-   "demos/shared/cover.js": "4f3bb841dc60ac2c0196b4939c6ae64ee2354dfb"
+   "demos/for-men/Demo43_BlizzardInn/media/cover/stamp.json": "9eda0c2ad5f887f7962eee7876bbf614e232f290"
   },
-  "thumb": "ec3646772e2417c1b44853bba3e86a70c69c3d7e"
+  "thumb": "78e4be28a973f176ee376252d9b70ca962c6536e"
  },
  "en": {
   "inputs": {
-   "demos/for-men/Demo43_BlizzardInn/l10n.js": "169360d2afb8a3b6561904017da0d55098d45ca2",
-   "demos/for-men/Demo43_BlizzardInn/media/cover.jpg": "6df0db9f31b907855b3f826140ffb276434ae792",
-   "demos/shared/cover.js": "4f3bb841dc60ac2c0196b4939c6ae64ee2354dfb"
+   "demos/for-men/Demo43_BlizzardInn/media/cover/stamp.json": "9eda0c2ad5f887f7962eee7876bbf614e232f290"
   },
-  "thumb": "ec3646772e2417c1b44853bba3e86a70c69c3d7e"
+  "thumb": "78e4be28a973f176ee376252d9b70ca962c6536e"
  },
  "ja": {
   "inputs": {
-   "demos/for-men/Demo43_BlizzardInn/l10n.js": "169360d2afb8a3b6561904017da0d55098d45ca2",
-   "demos/for-men/Demo43_BlizzardInn/media/cover.jpg": "6df0db9f31b907855b3f826140ffb276434ae792",
-   "demos/shared/cover.js": "4f3bb841dc60ac2c0196b4939c6ae64ee2354dfb"
+   "demos/for-men/Demo43_BlizzardInn/media/cover/stamp.json": "9eda0c2ad5f887f7962eee7876bbf614e232f290"
   },
-  "thumb": "aa8f56547e8f74ccb04dc4841509b557af14cc9d"
+  "thumb": "cd62b2ca8f1cd8cb265ccd1d7a9b1f06c5988fb2"
  },
  "zh": {
   "inputs": {
-   "demos/for-men/Demo43_BlizzardInn/l10n.js": "169360d2afb8a3b6561904017da0d55098d45ca2",
-   "demos/for-men/Demo43_BlizzardInn/media/cover.jpg": "6df0db9f31b907855b3f826140ffb276434ae792",
-   "demos/shared/cover.js": "4f3bb841dc60ac2c0196b4939c6ae64ee2354dfb"
+   "demos/for-men/Demo43_BlizzardInn/media/cover/stamp.json": "9eda0c2ad5f887f7962eee7876bbf614e232f290"
   },
-  "thumb": "98410d21bc14a085845cc12a45b0791e91e63edb"
+  "thumb": "9957764bc9cd603129ae3155e66f1675b3c9f310"
  }
 }

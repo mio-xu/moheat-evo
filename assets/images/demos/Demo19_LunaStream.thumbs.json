@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/for-men/Demo19_LunaStream/media/cover/stamp.json": "783737d5a8290d68a16fee92e75c9eb325277ee3"
+  },
+  "thumb": "8e66e8e96b3e85e69115db5bf1c98fc9e497dd72"
+ },
+ "en": {
+  "inputs": {
+   "demos/for-men/Demo19_LunaStream/media/cover/stamp.json": "783737d5a8290d68a16fee92e75c9eb325277ee3"
+  },
+  "thumb": "8e66e8e96b3e85e69115db5bf1c98fc9e497dd72"
+ },
+ "ja": {
+  "inputs": {
+   "demos/for-men/Demo19_LunaStream/media/cover/stamp.json": "783737d5a8290d68a16fee92e75c9eb325277ee3"
+  },
+  "thumb": "557f60c025fdb35a1e73179a7e863b44e74d8bc1"
+ },
+ "zh": {
+  "inputs": {
+   "demos/for-men/Demo19_LunaStream/media/cover/stamp.json": "783737d5a8290d68a16fee92e75c9eb325277ee3"
+  },
+  "thumb": "7322fb97447591a434d4befd0984fb2044ec771d"
+ }
+}

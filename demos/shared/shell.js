@@ -18,13 +18,14 @@
   // ONE switch for the progress / chapter bar on every demo (user 2026-11-08: all demos have it or none). false = the unified bar AND the
   // films' own play bar (.transport / .legend) are hidden everywhere; the chapter data, seek API, keys and pause keep working.
   // ?bar=1 shows it for testing. Flip to true in ONE release once every demo in nav.js DEMOS shows the same bar (tools/web/check_shell.js).
-  SH.BAR_ENABLED = false;
+  SH.BAR_ENABLED = true;
   // UI v2 (DEMO_DESIGN_GUIDE §7.3 "UI v2", user 2026-11-08): the finished-cover image + the one control bar + ⚙ (demos/shared/ui2.js).
   // ONE switch for every demo; until the release flips it, ?ui=2 turns it on for this browser (remembered, so ‹ › keeps it) and ?ui=1 off.
-  SH.UI_V2 = false;
+  SH.UI_V2 = true;
   const QS = new URLSearchParams(location.search), EXPORT = QS.has('cover') || QS.has('render') || QS.has('embed');
   try { if (QS.get('ui') === '2') localStorage.setItem('moheat.ui', '2'); else if (QS.get('ui') === '1') localStorage.removeItem('moheat.ui'); } catch {}
   const V2 = !EXPORT && (SH.UI_V2 || (() => { try { return localStorage.getItem('moheat.ui') === '2'; } catch { return false; } })());
+  if (SH.UI_V2) try { localStorage.removeItem('moheat.ui'); } catch {}   // released: the preview key is gone, nobody is left on an old mode
   SH.v2 = V2;
   // the finished cover is the first thing this page fetches (cover first, everything else after — fix2's speed plan)
   const PAGE = new URL('.', location.href).href, COVER_BASE = PAGE + 'media/cover/';
@@ -35,8 +36,9 @@
     const pl = document.createElement('link'); pl.rel = 'preload'; pl.as = 'image'; pl.href = `${COVER_BASE}${['en', 'ja', 'zh'].includes(lang0) ? lang0 : 'en'}.${sz}.webp`; pl.fetchPriority = 'high';
     document.head.appendChild(pl);
     const hide = document.createElement('style'); hide.id = 'moheat-ui2-early';   // nothing old shows, not even for one frame (the old cover HTML, the 🌐 ⛶ corner…)
-    hide.textContent = `html.ui2 .stage .intro { opacity: 0 !important; pointer-events: none !important; }
-      html.ui2 .stage { background: #0b0a12; }`;
+    hide.textContent = `html.ui2 .stage .intro { visibility: hidden !important; pointer-events: none !important; }
+      html.ui2 .stage { background: #0b0a12; }
+      html.ui2:not(.u2-on) .stage > *, html.ui2 .stage .vv { visibility: hidden !important; }`;   /* nothing of the old stage paints before the cover is on */   // no old stage image before the finished cover is on (Demo10 flashed one at 60 ms)
     document.head.appendChild(hide);
   }
   const LS = { get(k, d) { try { const v = localStorage.getItem('moheat.' + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
@@ -50,6 +52,7 @@
     subs: ['Subtitles', '字幕', '字幕'], off: ['off', 'オフ', '关'], motion: ['Reduce motion', '動きを減らす', '减少动态'],
     devLost: ['Device disconnected — plug it back in and press Connect.', 'デバイスが切断されました — つなぎ直して Connect を押してください。', '设备已断开 — 请重新连接后点 Connect。'],
     micDenied: ['Microphone blocked — answers work by tapping; allow the mic in the address bar to speak.', 'マイクが使えません — タップで答えられます。話すにはアドレスバーで許可してください。', '麦克风被拒绝 — 可以点按回答；要用声音请在地址栏允许麦克风。'],
+    devErr: ['Could not open MoHeat Evo — unplug it, plug it back in and press Connect.', 'MoHeat Evo を開けませんでした — 抜き差ししてから Connect を押してください。', '无法打开 MoHeat Evo — 请重新插拔后点 Connect。'],
     loadFail: ['Some files did not load — check the connection and reload the page.', '一部のファイルを読み込めませんでした — 接続を確かめて再読み込みしてください。', '部分文件加载失败 — 请检查网络后刷新页面。'],
   };
   const L = () => { const l = window.MoHeatSub?.lang || 'en'; return l === 'ja' ? 1 : l === 'zh' ? 2 : 0; };
@@ -289,7 +292,7 @@
   .sh-veil.gone { opacity: 0; pointer-events: none; }
   .sh-veil i { width: 1.1em; height: 1.1em; margin-right: .6em; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: shspin .8s linear infinite; }
   @keyframes shspin { to { transform: rotate(1turn); } }
-  .sh-toast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 99; max-width: min(92vw, 560px); padding: 12px 16px; border-radius: 12px;
+  .sh-toast { position: fixed; left: 50%; top: calc(var(--fit-bar, 54px) + 10px); transform: translateX(-50%); z-index: 99; pointer-events: none; max-width: min(92vw, 560px); padding: 12px 16px; border-radius: 12px;
     background: #2a1620; color: #ffe9ee; border: 1px solid #ff7a90; font: 500 14px/1.4 system-ui, sans-serif; box-shadow: 0 8px 30px rgba(0,0,0,.4); }
   .sh-set { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin-top: 8px; font-size: 12px; }
   .sh-set button { font: inherit; padding: 4px 9px; border-radius: 8px; border: 1px solid rgba(255,255,255,.25); background: transparent; color: inherit; cursor: pointer; min-height: 30px; }
@@ -302,9 +305,10 @@
   @keyframes shtap { to { transform: scale(7); opacity: 0; } }
   html.shell-paused .sh-hand { opacity: .5; }
   html.sh-nobar .sh-bar, html.sh-nobar .stage-col > .transport, html.sh-nobar .stage-col > .legend, html.sh-nobar .sh-marks { display: none !important; }
-  html[data-subs=off] .stage .subs { visibility: hidden !important; }
-  html[data-subs=s] .stage .subs { font-size: 82%; } html[data-subs=l] .stage .subs { font-size: 125%; }
-  html[data-subs=s] .stage .subs :is(.ja, .en) { transform-origin: bottom center; }
+  html[data-subs=off] .stage :is(.subs, .bubble, #bubble) { visibility: hidden !important; }
+  /* subtitle size S / M / L (⚙): zoom scales the whole subtitle box whatever sizes a demo family gives its lines (cqw, clamp, !important) */
+  html[data-subs=s] .stage :is(.subs, .bubble, #bubble) { zoom: .85; } html[data-subs=l] .stage :is(.subs, .bubble, #bubble) { zoom: 1.3; }
+  @container (max-width: 620px) { html[data-subs=l] .stage :is(.subs, .bubble, #bubble) { zoom: 1.18; } }   /* phones: L capped so two lines still fit */
   html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   :is(.stage, .side, .bar) :is(button, a, input, [tabindex]):focus-visible { outline: 3px solid #ffd479 !important; outline-offset: 2px; }`;
   let ui = {};
@@ -323,7 +327,7 @@
   };
   let toastT = 0;
   const toast = (k) => { let el = document.querySelector('.sh-toast'); if (!el) { el = document.createElement('div'); el.className = 'sh-toast'; el.setAttribute('role', 'alert'); document.body.appendChild(el); }
-    el.textContent = t(k); el.hidden = false; real.ct(toastT); toastT = real.st(() => { el.hidden = true; }, 7000); };
+    el.textContent = t(k); el.hidden = false; real.ct(toastT); toastT = real.st(() => { el.hidden = true; }, 4500); };   // top of the page, never over a control, gone after 4.5 s
   const setSubs = (v) => { LS.set('subs', v); document.documentElement.dataset.subs = v; paint(); };
   const setMotion = (v) => { Play.reduced = v; LS.set('reduce', v); document.documentElement.classList.toggle('reduce-motion', v); paint(); dispatchEvent(new CustomEvent('moheat:motion', { detail: v })); };
 
@@ -421,7 +425,8 @@
 
   // ---------------------------------------------------------------- error toasts
   addEventListener('error', (e) => { const el = e.target; if (el && el !== window && /^(IMG|AUDIO|VIDEO|SCRIPT|SOURCE)$/.test(el.tagName)) toast('loadFail'); }, true);
-  navigator.serial?.addEventListener('disconnect', () => toast('devLost'));
+  addEventListener('moheat:device', (e) => { const st = e.detail?.state; if (st === 'lost') toast('devLost'); if (st === 'error') toast('devErr');
+    if (st === 'connected') { const el = document.querySelector('.sh-toast'); if (el) el.hidden = true; } });   // device.js = the one source
   navigator.permissions?.query({ name: 'microphone' }).then((p) => { p.onchange = () => { if (p.state === 'denied' && !Play.pure) toast('micDenied'); }; }).catch(() => {});
   addEventListener('moheat:micdenied', () => toast('micDenied'));
 
@@ -443,9 +448,11 @@
 
   // ---------------------------------------------------------------- UI v2: the live adapter for demos/shared/ui2.js
   if (V2) {
-    const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = new URL('ui2.css', document.currentScript?.src || PAGE).href; document.head.appendChild(css);
-    const js = document.createElement('script'); js.src = new URL('ui2.js', document.currentScript?.src || PAGE).href; document.head.appendChild(js);
-    let started = false, cover = null, ui = null;
+    // UI2_V = content hash of ui2.js + ui2.css (python3 tools/web/bump.py --auto keeps it current: cat ui2.js ui2.css | shasum, 8 hex)
+    const UI2_V = '69418943';
+    const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = new URL(`ui2.css?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(css);
+    const js = document.createElement('script'); js.src = new URL(`ui2.js?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(js);
+    let started = false, cover = null, ui = null, relayout2 = () => {};
     document.addEventListener('click', (e) => { if (e.target.closest?.('#startBtn')) started = true; }, true);
     fetch(PAGE + 'cover.json').then((r) => (r.ok ? r.json() : null)).catch(() => null).then((c) => { cover = c || {}; mount(); });
     js.addEventListener('load', () => mount());
@@ -477,14 +484,14 @@
       reduced: () => Play.reduced, setReduced: (v) => setMotion(v),
       autohide: () => LS.get('autohide', false), setAutohide: (v) => LS.set('autohide', !!v),
       // the side panel (sound map, thermal meters) is secondary: ⚙ switch, default on for desktop, off for phone / tablet
-      side: () => !document.documentElement.classList.contains('u2-noside'),
-      setSide: (v) => { LS.set('side', !!v); document.documentElement.classList.toggle('u2-noside', !v); real.st(() => dispatchEvent(new Event('resize')), 30); },
+
       creditsUrl: new URL('../../../credits.html', PAGE).href,
-      device: () => { const d = window.MoHeatDevice?.current; return { serial: 'serial' in navigator, connected: !!(d && (d.connected || d.port)), name: d?.name || '' }; },
+      device: () => { const st = window.MoHeatDevice?.state || {}; return { serial: 'serial' in navigator, connected: !!st.connected, state: st.state || 'off', name: st.name || '' }; },
       connect: () => document.getElementById('connectBtn')?.click(),
       lrCheck: () => document.getElementById('lrBtn')?.click(), thermoCheck: () => window.MoHeatThermoCheck?.start?.(),
       fullscreen: () => !!window.MoHeatFullscreen?.on, toggleFullscreen: () => window.MoHeatFullscreen?.toggle?.(),
       endings: () => SH.endings?.() || null, openEndings: () => SH.openEndings?.(),
+      cleared: () => { const c = document.getElementById('cleared'); return c && !c.hidden && c.textContent.trim() ? c.textContent.trim() : ''; },
       options: () => (cover?.options || []).filter((o) => !o.when || o.when === A.state()).map((o) => ({ key: o.key, label: o.label,
         items: o.items.map((it) => { const el = optEl(o.key, it.v); return { v: it.v, label: it.label, on: !!el && (el.getAttribute('aria-pressed') === 'true' || el.classList.contains('on')) }; }) })),
       pick: (k, v) => optEl(k, v)?.click(),
@@ -495,12 +502,21 @@
     const filmTap = () => { const st = document.querySelector('.stage-col .stage') || document.querySelector('.stage'); if (!st || !FILM()) return;
       st.addEventListener('click', (e) => { if (e.target.closest('.u2, button, a, input') || !playing()) return; e.stopImmediatePropagation(); e.preventDefault(); pause(!paused); }, true); };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', filmTap); else filmTap();
-    document.documentElement.classList.toggle('u2-noside', !LS.get('side', innerWidth > 1100));
+    // the original page layout stays (user 2026-11-09): only the player column is centred vertically when it is shorter than the side panel
+    const relayout = () => dispatchEvent(new Event('resize'));
+    // the header can grow after nav.js measured it (fonts, the device menu, the demo switcher) → nav.js must measure again, or the page
+    // is taller than the window (1280×720: 21 px of scroll)
+    const watchBar = () => { if (!window.ResizeObserver) return;   // the header and the player column (the bar below the player arrives later)
+      for (const el of [document.querySelector('header.bar'), document.querySelector('.stage-col')]) { if (!el) continue; let h = el.offsetHeight;
+        new ResizeObserver(() => { if (Math.abs(el.offsetHeight - h) > 1) { h = el.offsetHeight; relayout(); } }).observe(el); } };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watchBar); else watchBar();
+    addEventListener('load', () => { relayout(); document.fonts?.ready.then(relayout); });
     function mount() {
       if (ui || !cover || !window.MoHeatUI2) return;
       const go = () => { const stage = document.querySelector('.stage-col .stage') || document.querySelector('.stage'); if (!stage) return;
-        ui = SH.ui2view = MoHeatUI2.mount(stage, A); real.st(function tick() { try { ui.paint(); } catch (e) { real.st(() => { throw e; }); } real.st(tick, 250); }, 250);
-        addEventListener('moheat:sublang', () => ui.paint()); addEventListener('moheat:playmode', () => ui.paint()); };
+        ui = SH.ui2view = MoHeatUI2.mount(stage, A); document.documentElement.classList.add('u2-on'); relayout2(); real.st(function tick() { try { ui.paint(); } catch (e) { real.st(() => { throw e; }); } real.st(tick, 250); }, 250);
+        addEventListener('moheat:sublang', () => ui.paint()); addEventListener('moheat:playmode', () => ui.paint());
+        addEventListener('moheat:device', () => ui.refresh?.()); };
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
     }
   }

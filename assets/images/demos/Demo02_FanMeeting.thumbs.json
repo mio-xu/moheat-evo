@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/all-ages/Demo02_FanMeeting/media/cover/stamp.json": "3decc7d86b4c9dec676f6a157e2954c46147aa6e"
+  },
+  "thumb": "0ed74cfeca1f0a315ac2a0bcbe4e8883dcbea068"
+ },
+ "en": {
+  "inputs": {
+   "demos/all-ages/Demo02_FanMeeting/media/cover/stamp.json": "3decc7d86b4c9dec676f6a157e2954c46147aa6e"
+  },
+  "thumb": "0ed74cfeca1f0a315ac2a0bcbe4e8883dcbea068"
+ },
+ "ja": {
+  "inputs": {
+   "demos/all-ages/Demo02_FanMeeting/media/cover/stamp.json": "3decc7d86b4c9dec676f6a157e2954c46147aa6e"
+  },
+  "thumb": "827d87d1347f736d9d0407b74dfe0489fb9ce199"
+ },
+ "zh": {
+  "inputs": {
+   "demos/all-ages/Demo02_FanMeeting/media/cover/stamp.json": "3decc7d86b4c9dec676f6a157e2954c46147aa6e"
+  },
+  "thumb": "c23a55cc2501e5f2db2f7f131ebf0b681a914553"
+ }
+}

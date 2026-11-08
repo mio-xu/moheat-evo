@@ -31,7 +31,9 @@
     hide: { en: 'Hide controls', ja: '操作バーを隠す', zh: '隐藏控制条' }, hideHint: { en: 'While playing, after 3 s without input', ja: '再生中、3 秒操作がないとき', zh: '播放中 3 秒无操作时' },
     device: { en: 'MoHeat Evo', ja: 'MoHeat Evo', zh: 'MoHeat Evo' }, connect: { en: 'Connect', ja: '接続', zh: '连接' }, connected: { en: 'Connected', ja: '接続中', zh: '已连接' },
     noSerial: { en: 'Connect from Chrome or Edge on a computer', ja: 'パソコンの Chrome / Edge から接続できます', zh: '请在电脑的 Chrome / Edge 中连接' },
-    notConn: { en: 'Not connected', ja: '未接続', zh: '未连接' },
+    notConn: { en: 'Not connected', ja: '未接続', zh: '未连接' }, reconnecting: { en: 'Reconnecting…', ja: '再接続中…', zh: '正在重新连接…' },
+    lost: { en: 'Disconnected — plug it back in', ja: '切断されました — 挿し直してください', zh: '已断开 — 请重新插上' }, devError: { en: 'Could not open', ja: '開けませんでした', zh: '无法打开' },
+    disconnect: { en: 'Disconnect', ja: '切断', zh: '断开' },
     head: { en: 'Head tracking', ja: 'ヘッドトラッキング', zh: '头部追踪' }, beta: { en: 'Beta', ja: 'ベータ', zh: '测试' }, soon: { en: 'Coming soon', ja: '近日公開', zh: '即将推出' },
     side: { en: 'Info panel', ja: '情報パネル', zh: '信息面板' }, sideHint: { en: 'Sound map and thermal meters', ja: '音の位置と温冷メーター', zh: '声音方位与温冷表' },
     lr: { en: 'Left / right check', ja: '左右チェック', zh: '左右声道检查' }, thermo: { en: 'Thermal check', ja: '温冷チェック', zh: '温冷检查' }, run: { en: 'Test', ja: 'テスト', zh: '测试' },
@@ -75,12 +77,13 @@
         <div class="u2-ctl u2-row-opt"></div>
         <div class="u2-ctl u2-row-lang"><span class="u2-label u2-lang-l"></span><span class="u2-chips u2-langs"></span></div>
         <button type="button" class="u2-chipb u2-gal" hidden></button>
+        <span class="u2-chipb u2-clear" hidden></span>
       </div>
       <button type="button" class="u2-paused" tabindex="-1"><span>${I.play}</span></button>
       <div class="u2-bar" role="toolbar">
         <button type="button" class="u2-ib u2-pp"></button>
-        <div class="u2-prog"><span class="u2-now"></span><div class="u2-track" role="group"></div></div>
-        <span class="u2-seg u2-mode-b" role="group"></span>
+        <div class="u2-prog"><span class="u2-now"></span><div class="u2-track" role="slider" tabindex="0" aria-valuemin="1"></div></div>
+        <span class="u2-seg u2-mode-b" role="group"></span><button type="button" class="u2-ib u2-mode-t"></button>
         <button type="button" class="u2-ib u2-opt-vol" aria-haspopup="true" aria-expanded="false"></button>
         <button type="button" class="u2-ib u2-heat" aria-haspopup="true" aria-expanded="false">${I.heat}</button>
         <button type="button" class="u2-ib u2-gear" aria-haspopup="true" aria-expanded="false">${I.gear}</button>
@@ -89,7 +92,11 @@
       </div>
       <div class="u2-pop u2-pop-vol" hidden></div><div class="u2-pop u2-pop-heat" hidden></div><div class="u2-pop u2-set" hidden></div><div class="u2-pop u2-pop-opt" hidden></div>`;
     stage.appendChild(root);
-    const $ = (s) => root.querySelector(s);
+    // the control bar sits UNDER the picture (user 2026-11-09: a bar over the picture covered the demos' own buttons — Demo10 / 13):
+    // its own strip right below the stage, same width; in fullscreen it is fixed to the bottom of the screen
+    const under = document.createElement('div'); under.className = 'u2 u2-under' + (root.classList.contains('u2-touch') ? ' u2-touch' : ''); if (A.cat) under.dataset.cat = A.cat;
+    under.appendChild(root.querySelector('.u2-bar')); stage.after(under);
+    const $ = (s) => root.querySelector(s) || under.querySelector(s);
     const pic = $('.u2-pic'), big = () => stage.getBoundingClientRect().width;
 
     // ------------------------------------------------ the finished cover image: the size that fits this player, every language pre-cached
@@ -113,9 +120,9 @@
       renderPop(k); pops[k].hidden = false; owners[k]?.setAttribute('aria-expanded', 'true');
       if (k === 'set' && big() <= 620) { sheet.lang = root.lang; sheet.appendChild(pops.set); sheet.hidden = false; return; }
       const b = owners[k].getBoundingClientRect(), r = root.getBoundingClientRect(), wide = big() > 620;
-      if (k === 'opt') { pops.opt.style.left = wide ? `${b.left - r.left}px` : ''; pops.opt.style.right = wide ? 'auto' : ''; pops.opt.style.bottom = `${r.bottom - b.top + 6}px`; }
+      if (k === 'opt') { pops.opt.style.left = wide ? `${b.left - r.left}px` : ''; pops.opt.style.right = wide ? 'auto' : ''; pops.opt.style.bottom = `${Math.max(6, r.bottom - b.top + 6)}px`; }
       else if (k !== 'set') pops[k].style.right = wide ? `${Math.max(4, r.right - b.right)}px` : ''; };
-    document.addEventListener('pointerdown', (e) => { if (sheet.contains(e.target)) return; if (!root.contains(e.target) || (!e.target.closest('.u2-pop') && !e.target.closest('[aria-haspopup]'))) close(); });
+    document.addEventListener('pointerdown', (e) => { if (sheet.contains(e.target)) return; if (!(root.contains(e.target) || under.contains(e.target)) || (!e.target.closest('.u2-pop') && !e.target.closest('[aria-haspopup]'))) close(); });
     addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
     const sw = (on, k, dis) => `<button type="button" class="u2-sw" role="switch" aria-checked="${!!on}" data-k="${k}" ${dis ? 'disabled' : ''}></button>`;
     const range = (k, v, cls = '') => `<input class="u2-range ${cls}" type="range" min="0" max="100" step="1" value="${Math.round(v * 100)}" data-k="${k}" style="--v:${Math.round(v * 100)}%">`;
@@ -132,12 +139,11 @@
           <div class="u2-line u2-vol-line"><span>${t('volume')}</span>${range('vol', A.volume?.() ?? 1)}</div>
           <div class="u2-line"><span>${t('motion')}<small>${t('motionHint')}</small></span>${sw(A.reduced?.(), 'motion')}</div>
           <div class="u2-line"><span>${t('hide')}<small>${t('hideHint')}</small></span>${sw(A.autohide?.(), 'hide')}</div>
-          <div class="u2-line"><span>${t('device')}<small>${d.serial === false ? t('noSerial') : `<i class="u2-dot ${d.connected ? 'ok' : ''}"></i>${d.connected ? `${t('connected')}${d.name ? ' · ' + esc(d.name) : ''}` : t('notConn')}`}</small></span>
-            ${d.serial === false ? '' : `<button type="button" class="u2-btn2" data-k="connect">${t('connect')}</button>`}</div>
+          <div class="u2-line"><span>${t('device')}<small class="u2-devst">${d.serial === false ? t('noSerial') : `<i class="u2-dot ${d.connected ? 'ok' : ''}"></i>${t({ connected: 'connected', reconnecting: 'reconnecting', connecting: 'reconnecting', lost: 'lost', error: 'devError' }[d.state] || 'notConn')}${d.connected && d.name ? ' · ' + esc(d.name) : ''}`}</small></span>
+            ${d.serial === false ? '' : `<button type="button" class="u2-btn2" data-k="connect">${t(d.connected ? 'disconnect' : 'connect')}</button>`}</div>
           <div class="u2-line"><span>${t('lr')}</span><button type="button" class="u2-btn2" data-k="lr">${t('run')}</button></div>
           <div class="u2-line"><span>${t('thermo')}</span><button type="button" class="u2-btn2" data-k="thermo" ${d.connected ? '' : 'disabled'}>${t('run')}</button></div>
           <div class="u2-line"><span>${t('head')}<span class="u2-beta">${t('beta')}</span><small>${t('soon')}</small></span>${sw(false, 'head', true)}</div>
-          <div class="u2-line"><span>${t('side')}<small>${t('sideHint')}</small></span>${sw(A.side?.(), 'side')}</div>
           ${A.creditsUrl ? `<div class="u2-line"><span>${t('credits')}</span><a class="u2-btn2" href="${esc(A.creditsUrl)}" target="_blank" rel="noopener">↗</a></div>` : ''}`;
       }
       if (k === 'opt') { const o = (A.options?.() || []).find((x) => x.key === optKey); if (!o) return;
@@ -150,7 +156,7 @@
       if (r.dataset.k === 'int') { A.setIntensity?.(v); if (val) val.textContent = `${r.value}%`; }
       paint(); };
     const onClick = (e) => {
-      const b = e.target.closest('button'); if (!b || b.disabled) return;
+      const b = e.target.closest('button'); if (!b || b.disabled || b.closest('.u2-track')) return;
       const k = b.dataset.k;
       if (b.classList.contains('u2-sw')) { const on = b.getAttribute('aria-checked') !== 'true';
         if (k === 'heat') A.setHeat?.(on); if (k === 'subs') A.setSubs?.(on ? 'm' : 'off'); if (k === 'motion') A.setReduced?.(on); if (k === 'hide') A.setAutohide?.(on); if (k === 'side') A.setSide?.(on);
@@ -163,7 +169,6 @@
       if (b.dataset.mode) { A.setMode?.(b.dataset.mode); paint(); return; }
       if (b.dataset.opt) { A.pick?.(b.dataset.opt, b.dataset.v); close(); paint(); return; }
       if (b.dataset.pick) return open('opt', b);
-      if (b.dataset.i != null) { A.seek?.(+b.dataset.i); paint(); return; }
       if (b.classList.contains('u2-start')) { A.start?.(); paint(); return; }
       if (b.classList.contains('u2-pp')) { if (['cover', 'ended', 'loading'].includes(A.state?.())) A.start?.(); else A.togglePause?.(); paint(); return; }
       if (b.classList.contains('u2-paused')) { A.togglePause?.(); paint(); return; }
@@ -171,19 +176,28 @@
       if (b.classList.contains('u2-heat')) return open('heat');
       if (b.classList.contains('u2-gear')) return open('set');
       if (b.classList.contains('u2-fs')) { A.toggleFullscreen?.(); paint(); return; }
+      if (b.classList.contains('u2-mode-t')) { A.setMode?.((A.mode?.() || 'interactive') === 'interactive' ? 'pure' : 'interactive'); paint(); return; }
       if (b.classList.contains('u2-gal')) { A.openEndings?.(); return; }
     };
-    for (const el of [root, sheet]) { el.addEventListener('input', onInput); el.addEventListener('click', onClick); }
+    for (const el of [root, sheet, under]) { el.addEventListener('input', onInput); el.addEventListener('click', onClick); }
+
+    // ------------------------------------------------ the chapter track: ONE control (a slider of chapters; 44 px tall, whole width), so even
+    // tiny segments on a phone are reachable — a tap goes to the chapter under the finger, ← / → step when it has focus
+    const track = $('.u2-track');
+    const segAt = (x) => { const kids = [...track.children]; let best = -1, d = Infinity; kids.forEach((k, i) => { const r = k.getBoundingClientRect(), c = (r.left + r.right) / 2; if (Math.abs(x - c) < d) { d = Math.abs(x - c); best = i; } }); return best; };
+    const go = (i) => { const k = track.children[i]; if (k && !k.classList.contains('lock')) { A.seek?.(i); paint(); } };
+    track.addEventListener('click', (e) => go(segAt(e.clientX)));
+    track.addEventListener('keydown', (e) => { if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return; e.preventDefault(); e.stopPropagation(); go((A.chapter?.() ?? 0) + (e.key === 'ArrowRight' ? 1 : -1)); });
 
     // ------------------------------------------------ auto-hide (opt-in)
     let idleT = 0; const wake = () => { root.classList.remove('u2-idle'); clearTimeout(idleT); idleT = setTimeout(() => root.classList.add('u2-idle'), 3000); };
-    ['pointermove', 'pointerdown', 'keydown'].forEach((ev) => stage.addEventListener(ev, wake, { passive: true }));
+    ['pointermove', 'pointerdown', 'keydown'].forEach((ev) => { stage.addEventListener(ev, wake, { passive: true }); under.addEventListener(ev, wake, { passive: true }); });
 
     // ------------------------------------------------ paint: everything from the adapter's state
     let sig = '';
     const paint = () => {
       const st = A.state?.() || 'cover', L = lang(); root.dataset.state = st; root.lang = L;
-      root.classList.toggle('u2-autohide', !!A.autohide?.());
+      root.classList.toggle('u2-autohide', !!A.autohide?.()); under.classList.toggle('u2-autohide', !!A.autohide?.()); under.dataset.state = st;
       showPic();
       // cover controls
       const ld = A.loaded?.() ?? 1, ready = A.ready?.() ?? ld >= 1, s = $('.u2-start');
@@ -194,6 +208,7 @@
       const modeHtml = `<button type="button" data-mode="interactive" aria-pressed="${m === 'interactive'}" title="${esc(t('interHint'))}">${I.hand}<span>${t('inter')}</span></button>`
         + `<button type="button" data-mode="pure" aria-pressed="${m === 'pure'}" title="${esc(t('pureHint'))}">${I.ear}<span>${t('pure')}</span></button>`;
       $('.u2-mode-c').innerHTML = modeHtml; $('.u2-mode-b').innerHTML = modeHtml;
+      const mt = $('.u2-mode-t'); mt.innerHTML = m === 'interactive' ? I.hand : I.ear; mt.title = mt.ariaLabel = `${t(m === 'interactive' ? 'inter' : 'pure')} — ${t(m === 'interactive' ? 'interHint' : 'pureHint')}`;
       // option groups (cover.json "options"): one picker chip each — "label  current ▾" — that opens the list above it
       const opts = A.options?.() || [];
       const picks = opts.map((o) => { const cur = o.items.find((it) => it.on) || o.items[0];
@@ -201,6 +216,7 @@
       $('.u2-row-opt').innerHTML = picks; $('.u2-picks-c').innerHTML = picks;
       $('.u2-lang-l').innerHTML = I.globe;
       $('.u2-langs').innerHTML = langs.map((l) => `<button type="button" class="u2-chipb" data-lang="${l}" aria-pressed="${l === L}" lang="${l}">${NAMES[l] || l}</button>`).join('');
+      const clr = $('.u2-clear'), ct = st === 'ended' ? A.cleared?.() : ''; clr.hidden = !ct; if (ct) clr.textContent = ct;   // e.g. "🎉 Cleared in 1:40" (the demo's own #cleared)
       const en = A.endings?.();
       root.querySelectorAll('.u2-gal').forEach((gal) => { gal.hidden = !(en && en.total > 1 && st === 'ended');
         if (!gal.hidden) { gal.innerHTML = `${I.star}<span>${t('endings')}</span> ${en.got} / ${en.total}`; gal.title = t('endings'); } });
@@ -210,10 +226,11 @@
       $('.u2-paused').title = t('resume');
       const cs = A.chapters?.() || [], c = A.chapter?.() ?? -1, reached = A.reached?.() ?? c, inter = m === 'interactive', live = st === 'playing' || st === 'paused';
       const key = `${cs.length}|${L}`;
-      if (key !== sig) { sig = key; $('.u2-track').innerHTML = cs.map((ch, i) => `<button type="button" class="u2-seg-c" data-i="${i}"><i></i><span class="u2-tip"></span></button>`).join(''); }
-      [...$('.u2-track').children].forEach((b, i) => {
+      if (key !== sig) { sig = key; track.innerHTML = cs.map((ch, i) => `<span class="u2-seg-c" data-i="${i}"><i></i><span class="u2-tip"></span></span>`).join(''); track.setAttribute('aria-valuemax', cs.length); }
+      track.setAttribute('aria-valuenow', Math.max(1, c + 1)); track.setAttribute('aria-label', t('chapter')); track.classList.toggle('lock', !live);
+      [...track.children].forEach((b, i) => {
         const lock = !live || (inter && i > reached);
-        b.disabled = lock; b.classList.toggle('done', live && i < c); b.classList.toggle('now', live && i === c);
+        b.classList.toggle('lock', lock); b.classList.toggle('done', live && i < c); b.classList.toggle('now', live && i === c);
         b.querySelector('i').style.setProperty('--p', live && i === c ? `${Math.round((A.progress?.() ?? 0) * 100)}%` : '0%');
         const lab = `${NUM[i] || i + 1} ${pickL(cs[i].label)}`; b.querySelector('.u2-tip').textContent = lock && live ? `${lab} · ${t('locked')}` : lab; b.ariaLabel = lab;
       });
@@ -225,7 +242,8 @@
     };
     addEventListener('resize', () => { showPic(); });
     paint();
-    return { root, paint, open, close, T };
+    const refresh = () => { if (!pops.set.hidden) renderPop('set'); paint(); };
+    return { root, under, paint, open, close, refresh, T };
   }
   window.MoHeatUI2 = { mount, T, I, NAMES };
 })();

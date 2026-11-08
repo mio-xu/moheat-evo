@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo07_KyotoIzakaya/media/cover/stamp.json": "7acd0736d0556c368d27311a81a82218a381a728"
+  },
+  "thumb": "f2925b162120c95b129a6e691e167201341dcac7"
+ },
+ "en": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo07_KyotoIzakaya/media/cover/stamp.json": "7acd0736d0556c368d27311a81a82218a381a728"
+  },
+  "thumb": "f2925b162120c95b129a6e691e167201341dcac7"
+ },
+ "ja": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo07_KyotoIzakaya/media/cover/stamp.json": "7acd0736d0556c368d27311a81a82218a381a728"
+  },
+  "thumb": "ba5fd7f6b1a89a758f68072b64dfa7f34c1527f9"
+ },
+ "zh": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo07_KyotoIzakaya/media/cover/stamp.json": "7acd0736d0556c368d27311a81a82218a381a728"
+  },
+  "thumb": "d8c0beaa6a66ade1e0682a7f1e56204c9e15187b"
+ }
+}

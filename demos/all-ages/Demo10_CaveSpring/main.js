@@ -629,8 +629,7 @@
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
 
   // the cover (DEMO_DESIGN_GUIDE §7.3 2b): Kohaku, happy, in front of the glowing spring — plate + his cut-out, on the standard spot
-  const coverArt = () => window.MoHeatCover.layered(ctx, { bg: 'media/art/bg_spring_glow.webp', char: 'media/art/kohaku_happy.webp', x: .5, y: 1, height: 1 },
-    { eye: [.433, .43], face: .31 }, { tone: '#0c1426', at: { y: .34, face: .29 }, redraw: () => { if (!S.started) coverArt(); } });
+  const coverArt = () => false;   // UI v2: the cover is the finished image
   // ---------------------------------------------------------------- pure listening: the puzzle solves itself, step by step (shared/shell.js hand)
   // Kohaku speaks first, then the hand acts: straw from the basket, drawers opened one by one until the flint, three strikes at the
   // hearth, a held breath on the ember, candle → hearth → door; at the gate it "feels" each candle in turn and blows out only the

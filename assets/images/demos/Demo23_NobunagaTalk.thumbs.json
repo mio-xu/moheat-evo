@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo23_NobunagaTalk/media/cover/stamp.json": "0c79cc9645606407ed1cbdc345c519e9fc55b2ce"
+  },
+  "thumb": "6c224ef1b4abad1f460a592f01bc8833d2e34139"
+ },
+ "en": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo23_NobunagaTalk/media/cover/stamp.json": "0c79cc9645606407ed1cbdc345c519e9fc55b2ce"
+  },
+  "thumb": "6c224ef1b4abad1f460a592f01bc8833d2e34139"
+ },
+ "ja": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo23_NobunagaTalk/media/cover/stamp.json": "0c79cc9645606407ed1cbdc345c519e9fc55b2ce"
+  },
+  "thumb": "cb404f8ee649482b0e2565e1b78da05da52fab23"
+ },
+ "zh": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo23_NobunagaTalk/media/cover/stamp.json": "0c79cc9645606407ed1cbdc345c519e9fc55b2ce"
+  },
+  "thumb": "494f9cf7e68d98419220e0752c1f0c1351af50bc"
+ }
+}

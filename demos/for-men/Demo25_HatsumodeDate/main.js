@@ -400,11 +400,7 @@
   $('startBtn').addEventListener('click', start);
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
-  function drawCover() {   // cover standard (shared/cover.js): the still with the face on the standard spot, the title in the shaded left column
-    const im = IMG.torii || IMG.stole, C = window.MoHeatCover; if (!im) { ctx.fillStyle = '#140d14'; ctx.fillRect(0, 0, W, H); return; }
-    const pic = () => ctx.drawImage(im, 460, 0, W, H);
-    if (C) C.fit(ctx, { eye: [.819, .256], face: .27 }, pic, { tone: '#140d14', covers: [.24, 0, 1.24, 1] }); else pic();   // eye / face: where the face is in this drawing (tools/web/check_cover.py)
-  }
+  function drawCover() {}   // UI v2: the cover is the finished image (media/cover/, tools/web/covers.py)
   window.TSUBAKI = { get S() { return S; }, thermal: () => thermal(.05), both: () => both, log: cmdLog, done: false };
   setStep(0);
   if (QS.has('cover')) { document.body.classList.add('cover-only'); artReady.then(drawCover); return; }

@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/for-women/Demo21_JinLounge/media/cover/stamp.json": "73e8f90dd89f244b1059cfe0af4b8c9bad9da490"
+  },
+  "thumb": "5f7bddc1cdb73a16157af6a79777e3d15d34c28a"
+ },
+ "en": {
+  "inputs": {
+   "demos/for-women/Demo21_JinLounge/media/cover/stamp.json": "73e8f90dd89f244b1059cfe0af4b8c9bad9da490"
+  },
+  "thumb": "5f7bddc1cdb73a16157af6a79777e3d15d34c28a"
+ },
+ "ja": {
+  "inputs": {
+   "demos/for-women/Demo21_JinLounge/media/cover/stamp.json": "73e8f90dd89f244b1059cfe0af4b8c9bad9da490"
+  },
+  "thumb": "a7b3acac5fb2e926aff1ba05c9406056fa4ad9ab"
+ },
+ "zh": {
+  "inputs": {
+   "demos/for-women/Demo21_JinLounge/media/cover/stamp.json": "73e8f90dd89f244b1059cfe0af4b8c9bad9da490"
+  },
+  "thumb": "c17ab72da4ab05f294c94dc3aeb06d04895879b4"
+ }
+}

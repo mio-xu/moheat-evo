@@ -30,8 +30,9 @@ function page(tpl, p, live) {
   let h = tpl;
   h = sub(h, /<title>[^<]*?(?= · (?:Live|MoHeat))/, `<title>${esc(p.title)}`, '<title>');
   h = sub(h, /<body[^>]*>/, `<body data-cast="${p.cast}">`, '<body>');
-  h = sub(h, /<h1>.*?<\/h1>/, `<h1>${p.h1.map((s) => `<span>${s}</span>`).join('')}</h1>`, '<h1>');
-  h = sub(h, /(<div class="cover-copy">[\s\S]*?<p class="en">)[^<]*/, `$1${esc(live ? p.liveEn : p.en)}`, 'cover <p class="en">');
+  // UI v2: the public pages have no cover text in the HTML any more (the cover is media/cover/, cover.json); only the private live/ template may still carry it
+  h = h.replace(/<h1>.*?<\/h1>/, `<h1>${p.h1.map((s) => `<span>${s}</span>`).join('')}</h1>`);
+  h = h.replace(/(<div class="cover-copy">[\s\S]*?<p class="en">)[^<]*/, `$1${esc(live ? p.liveEn : p.en)}`);
   h = sub(h, /(<p class="vv" id="vv">)[^<]*?(?=( · live AI)?<\/p>)/, `$1${p.vv}`, '#vv');
   h = h.replace(/\n\s*<p><small>相手 · With<\/small><span id="pickCast"><\/span><\/p>/, '');   // (old two-row picker)
   if (!live) {

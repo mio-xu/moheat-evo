@@ -36,7 +36,7 @@ Rule: one QA entry point — new checks go **into** `tools/qa/check_demo.py`, no
 | Tool | Use |
 |---|---|
 | `python3 tools/web/bump.py <files…> [--stage]` · `--auto [files…]` · `--check [--shared]` | `?v=` numbers; `--auto` = content hash (8 hex), `--check` lists stale ones (wrong hash, lower number, or a number set before the file's last commit) |
-| `merge_remake.py` · `remake_page.py` · `thumbs.py` (writes the `<dir>.thumbs.json` content stamp; commit it with the jpgs) · `check_cover.py` · `cover_shots.js` · `check_shell.js` · `check_mobile.html` | remakes, thumbnails, cover standard, UI shell, mobile check |
+| `merge_remake.py` · `remake_page.py` · `covers.py <demo> [--publish \| --publish-only \| --check]` (finished covers + menu thumbnails from `cover.json` + `media/cover/art.webp`, template `cover_tpl.html`; `thumbs.py` = alias) · `check_ui.js` (strict: every interface element identical to the reference demo) · `check_cover.py` (2b numbers on the art) · `check_shell.js` · `check_mobile.html` | remakes, finished covers, one-interface gate, UI shell, mobile check |
 | `node tools/l10n/check_missing.js <lang> [folder]` | untranslated strings |
 | `node tools/web/check_kiosk.js [--quick] [--size 1024x768] [--shots DIR]` · `python3 tools/web/kiosk_precache.py [--check]` | exhibition (kiosk) mode: the whole visitor loop in headless Chrome (guide §7.4) · offline file list `kiosk/precache.json` (rerun after adding / changing demos) |
 

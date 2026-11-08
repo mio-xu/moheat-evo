@@ -1,34 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/for-women/Demo20_HinataHandshake/l10n.js": "60a44e44bcc426e6fb068c636801d268cca60b84",
-   "demos/for-women/Demo20_HinataHandshake/media/cover.jpg": "c3a4c0df49bfa922c1cb25573127e5e5cdca558e",
-   "demos/shared/cover.js": "df1a4aeb324385f99220c2952a432617415e4b13"
+   "demos/for-women/Demo20_HinataHandshake/media/cover/stamp.json": "59cadcf2bfbb9c843cadc9698bb4b2da37fc0260"
   },
-  "thumb": "414616d87040509842dd3d2ed582228982f4f1df"
+  "thumb": "7d8fb452d056eeb30b8f416c3e0cde4d2e47cf8a"
  },
  "en": {
   "inputs": {
-   "demos/for-women/Demo20_HinataHandshake/l10n.js": "60a44e44bcc426e6fb068c636801d268cca60b84",
-   "demos/for-women/Demo20_HinataHandshake/media/cover.jpg": "c3a4c0df49bfa922c1cb25573127e5e5cdca558e",
-   "demos/shared/cover.js": "df1a4aeb324385f99220c2952a432617415e4b13"
+   "demos/for-women/Demo20_HinataHandshake/media/cover/stamp.json": "59cadcf2bfbb9c843cadc9698bb4b2da37fc0260"
   },
-  "thumb": "414616d87040509842dd3d2ed582228982f4f1df"
+  "thumb": "7d8fb452d056eeb30b8f416c3e0cde4d2e47cf8a"
  },
  "ja": {
   "inputs": {
-   "demos/for-women/Demo20_HinataHandshake/l10n.js": "60a44e44bcc426e6fb068c636801d268cca60b84",
-   "demos/for-women/Demo20_HinataHandshake/media/cover.jpg": "c3a4c0df49bfa922c1cb25573127e5e5cdca558e",
-   "demos/shared/cover.js": "df1a4aeb324385f99220c2952a432617415e4b13"
+   "demos/for-women/Demo20_HinataHandshake/media/cover/stamp.json": "59cadcf2bfbb9c843cadc9698bb4b2da37fc0260"
   },
-  "thumb": "247c49fd387186484bb82e899eba1c6c300fdc66"
+  "thumb": "68e2df0cd2e6478ff4af7ec1eae9ad2636ae89c3"
  },
  "zh": {
   "inputs": {
-   "demos/for-women/Demo20_HinataHandshake/l10n.js": "60a44e44bcc426e6fb068c636801d268cca60b84",
-   "demos/for-women/Demo20_HinataHandshake/media/cover.jpg": "c3a4c0df49bfa922c1cb25573127e5e5cdca558e",
-   "demos/shared/cover.js": "df1a4aeb324385f99220c2952a432617415e4b13"
+   "demos/for-women/Demo20_HinataHandshake/media/cover/stamp.json": "59cadcf2bfbb9c843cadc9698bb4b2da37fc0260"
   },
-  "thumb": "fa8d2366d571c1ea6a017aeb31f4f4c104050dc6"
+  "thumb": "7502cc37e38c51cd36dadd1faed943af6e433a9d"
  }
 }
