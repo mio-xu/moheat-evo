@@ -54,7 +54,7 @@ const SAMPLER = `(() => {
 (async () => {
   if (!DEMOS.length) { out.errors.push('usage: l10n_flash.js <demo folder> [...]'); console.log(JSON.stringify(out)); process.exit(2); }
   const hp = await freePort(), dp = await freePort();
-  const http = spawn('python3', ['-m', 'http.server', String(hp), '--bind', '127.0.0.1'], { cwd: ROOT, stdio: 'ignore' });
+  const http = spawn('python3', [require('path').join(__dirname, 'serve.py'), String(hp), '--bind', '127.0.0.1'], { cwd: ROOT, stdio: 'ignore' });
   const prof = fs.mkdtempSync(path.join(os.tmpdir(), 'l10nflash-'));
   const chrome = spawn(CHROME, ['--headless=new', `--remote-debugging-port=${dp}`, `--user-data-dir=${prof}`, '--autoplay-policy=no-user-gesture-required',
     '--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--disable-backgrounding-occluded-windows',

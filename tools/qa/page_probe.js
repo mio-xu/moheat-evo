@@ -29,7 +29,7 @@ const out = { demo: REL, play: null, mobile: null, errors: [] };
 
 (async () => {
   const hp = await freePort(), dp = await freePort();
-  const http = spawn('python3', ['-m', 'http.server', String(hp), '--bind', '127.0.0.1'], { cwd: ROOT, stdio: 'ignore' });
+  const http = spawn('python3', [require('path').join(__dirname, 'serve.py'), String(hp), '--bind', '127.0.0.1'], { cwd: ROOT, stdio: 'ignore' });
   const prof = fs.mkdtempSync(path.join(os.tmpdir(), 'qaprobe-'));
   const chrome = spawn(CHROME, ['--headless=new', `--remote-debugging-port=${dp}`, `--user-data-dir=${prof}`, '--autoplay-policy=no-user-gesture-required',
     '--use-angle=metal', '--enable-gpu', '--disable-background-timer-throttling', '--disable-renderer-backgrounding',

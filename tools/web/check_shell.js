@@ -21,7 +21,7 @@ const freePort = () => new Promise((res) => { const s = net.createServer(); s.li
 const out = { demo: REL, shell: false, pureEnded: false, secs: 0, mic: [], navDuringPlay: null, navOnCover: null, pause: null, seek: null, errors: [] };
 (async () => {
   const hp = await freePort(), dp = await freePort();
-  const http = spawn('python3', ['-m', 'http.server', String(hp), '--bind', '127.0.0.1'], { cwd: ROOT, stdio: 'ignore' });
+  const http = spawn('python3', [require('path').join(__dirname, '..', 'qa', 'serve.py'), String(hp), '--bind', '127.0.0.1'], { cwd: ROOT, stdio: 'ignore' });
   const prof = fs.mkdtempSync(path.join(os.tmpdir(), 'shellprobe-'));
   const chrome = spawn(CHROME, ['--headless=new', `--remote-debugging-port=${dp}`, `--user-data-dir=${prof}`, '--autoplay-policy=no-user-gesture-required', '--mute-audio',
     '--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--window-size=1440,900', 'about:blank'], { stdio: 'ignore' });
