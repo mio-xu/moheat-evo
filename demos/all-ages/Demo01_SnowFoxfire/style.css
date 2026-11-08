@@ -63,7 +63,7 @@ button, select, input { font: inherit; color: inherit; }
 
 .intro { position: absolute; inset: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; text-align: center; background: #070b18; }
 .intro.hidden { display: none; }
-.cover-bg { position: absolute; inset: -3%; background: url(media/art/room_bg.webp) center / cover; filter: blur(3px) brightness(.5) saturate(1.1); }
+.cover-bg { position: absolute; inset: -3%; background: url(../_kit/snowfox/art/room_bg.webp) center / cover; filter: blur(3px) brightness(.5) saturate(1.1); }
 .intro::before { content: ""; position: absolute; inset: 0; z-index: 1;
   background: radial-gradient(ellipse 45% 70% at 12% 70%, rgba(110,180,255,.35), transparent 70%),
               radial-gradient(ellipse 45% 70% at 88% 70%, rgba(255,140,70,.35), transparent 70%),

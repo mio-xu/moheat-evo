@@ -19,7 +19,7 @@
   const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000));
 
   // ---------------------------------------------------------------- art: Demo 1's sprites (transparent WebP, all frames of one pose aligned)
-  const ART = '../Demo01_SnowFoxfire/media/art/';
+  const ART = '../_kit/snowfox/art/';   // all-ages category kit (shared with Demo01)
   const FRAMES = ['room_bg',
     ...['base', 'blink', 'mouth_half', 'mouth_open', 'happy', 'shy', 'surprise', 'whisper', 'pout'].map((f) => 'K_bust_' + f),
     ...['base', 'blink', 'mouth_half', 'mouth_open', 'happy', 'shy', 'surprise', 'whisper', 'smug'].map((f) => 'H_bust_' + f),

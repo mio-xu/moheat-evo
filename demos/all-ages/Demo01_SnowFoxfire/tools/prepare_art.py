@@ -13,7 +13,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(sys.argv[0] if __name__ == "__main__" else __file__)))
-ART, OUT = os.path.join(ROOT, "art", "chatgpt"), os.path.join(ROOT, "media", "art")
+ART, OUT = os.path.join(ROOT, "art", "chatgpt"), os.path.join(ROOT, "..", "_kit", "snowfox", "art")   # category kit (Demo01 + Demo28)
 GROUPS = {   # base → variants whose face is composited onto the base;  face detection uses the `probe` variants
     "K_bust": dict(base="K_bust_base", probe=["K_bust_blink", "K_bust_mouth_open", "K_bust_mouth_half"]),
     "H_bust": dict(base="H_bust_base", probe=["H_bust_blink", "H_bust_mouth_open", "H_bust_mouth_half"]),

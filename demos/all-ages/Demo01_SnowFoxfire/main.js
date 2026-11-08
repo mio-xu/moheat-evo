@@ -197,13 +197,13 @@ function drawParts(ctx) {
   ctx.restore();
 }
 
-// ---------------------------------------------------------------- figures: designer art (art/chatgpt → tools/prepare_art.py → media/art)
+// ---------------------------------------------------------------- figures: designer art (art/chatgpt → tools/prepare_art.py → demos/all-ages/_kit/snowfox/art, shared with Demo28)
 // Bust frames (blink / mouth / expressions) are face-composited onto one base, so swapping them changes only the face.
 // Live2D-style motion on top: breathing, talk bounce, strip-mesh sway of hair and sleeves, lean, mirroring, cross-fades.
 const ART = new Set(D.art || []);
 const FACES = D.artFaces || {};
 const IMG = {};
-for (const f of ART) { const im = new Image(); im.src = `media/art/${f}.webp`; IMG[`art.${f}`] = im; }
+for (const f of ART) { const im = new Image(); im.src = `../_kit/snowfox/art/${f}.webp`; IMG[`art.${f}`] = im; }
 const ok = (key) => IMG[key] && IMG[key].complete && IMG[key].naturalWidth > 0;
 const POSE_FILE = { front: 'idle', near: 'idle', side: 'walk', run: 'run', blow: 'blow', magic: 'magic', rest: 'rest', appear: 'appear', hug: 'hug' };
 const FACING_R = new Set(['K_pose_walk', 'K_pose_run', 'K_pose_blow', 'H_pose_run', 'H_pose_blow', 'K_ear', 'K_ear_blow', 'H_ear', 'H_ear_blow']);
