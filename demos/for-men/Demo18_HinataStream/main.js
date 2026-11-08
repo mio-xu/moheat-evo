@@ -149,23 +149,23 @@
       for (let tryN = 1; tryN <= 2; tryN++) {
         const C = CR; C.tryN = tryN; C.label = true; C.won = false;
         SND.fx.coin(-.3);
-        // hold: the claw glides along the rail toward the cat (eased), whirring; it sways a little when it stops
+        // hold: the claw glides along the rail toward the cat (eased) while you hold; it swings on its cable from the moves (drawCrane)
         await hold('🕹', 'アームを動かす（長押し）', 'Move the claw (press and hold)', 2.2, (down, k) => {
           C.x = CLAW.park.x + (CAT.pile.x - CLAW.park.x) * ease(k); if (down && Math.random() < .2) SND.fx.whirr(); });
-        C.swing = .12; alive(my);
-        SND.fx.drop(); await tween(C, 'y', grabY(), 1.3); alive(my);          // down
-        SND.fx.clack(); await tween(C, 'closeK', 1, .35); C.swing = .05;
-        C.carry = true; SND.fx.whirr();
-        if (tryN === 1) {   // up — then the cat slips halfway and bounces back into the pile
-          await tween(C, 'y', CLAW.park.y + 150, .9); alive(my);
-          C.carry = false; C.swing = .18; SND.fx.plop();
-          await tween(CR, 'catY', CAT.pile.y, .55, bounce); await tween(C, 'closeK', 0, .3); alive(my);
-          await tween(C, 'y', CLAW.park.y, .6); await tween(C, 'x', CLAW.park.x, .9);
+        await sleep(.35); alive(my);                                              // let the sway settle a little
+        SND.fx.drop(); await tween(C, 'y', grabY(), 1.5); alive(my);            // down, open, round the head
+        SND.fx.clack(); await tween(C, 'closeK', 1, .45); C.kick = .1;          // the prongs swing in under the cheeks
+        await sleep(.3); C.carry = true; SND.fx.whirr(); alive(my);
+        if (tryN === 1) {   // up — the grip is weak: the cat slips out a little way up and bounces back into the pile
+          await tween(C, 'y', parkY() + (grabY() - parkY()) * .55, .8); alive(my);
+          C.carry = false; C.kick = .15; SND.fx.plop(); CR.catX = CAT.pile.x;
+          await tween(CR, 'catY', CAT.pile.y, .55, bounce); await tween(C, 'closeK', 0, .35); alive(my);
+          await tween(C, 'y', parkY(), .7); await tween(C, 'x', CLAW.park.x, 1.0);
           await say('h10x', FRONT_R);
-        } else {           // up, across to the prize chute, open: the cat drops in
-          await tween(C, 'y', CLAW.park.y, 1.0); alive(my);
-          await tween(C, 'x', CLAW.chute.x, 1.1); C.swing = .1; alive(my);
-          C.carry = false; tween(C, 'closeK', 0, .3); SND.fx.plop();
+        } else {           // up, across to the prize chute, settle, open: the cat drops in
+          await tween(C, 'y', parkY(), 1.2); alive(my);
+          await tween(C, 'x', CLAW.chute.x, 1.3); await sleep(.35); alive(my);
+          C.carry = false; tween(C, 'closeK', 0, .35); SND.fx.plop();
           await tween(CR, 'catY', CLAW.chute.dropY, .6, (u) => u * u); CR.catGone = true; C.won = true;
           SND.fx.jingle(); await sleep(.6); await say('h10', FRONT_R);
         }
@@ -290,42 +290,69 @@
     ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + (exact ? 0 : 4 * Math.sin(t * .9)), W, dh); ctx.restore();
     ctx.globalAlpha = 1;
   }
-  // ---------------------------------------------------------------- the crane game as layers (user: "make it with high-quality generated
-  // assets"): a generated claw (closing = its prongs squeezed in code; the generated closed claw redrew the housing) + cat plushie (scripts/props.py), the plate without its painted claw and cat
-  // (bg_crane_empty), animated here — eased moves, a cable from the ceiling, a pendulum sway, grab / lift / slip / prize chute.
+  // ---------------------------------------------------------------- the crane game as layers (user: "the claw animation looks weird,
+  // make it with high-quality generated assets"): a generated claw + cat plushie (scripts/props.py) over the plate without its painted
+  // claw and cat (bg_crane_empty), animated here. v9 (2026-11-08 review): v8 parked the claw deep in the pile (it was 518 px tall in a
+  // 635 px box, so the "drop" went UP 17 px and the "lift" went down), the cat was cut by the glass edge, the cable was a 3 px line on a
+  // 9 px painted cable, and the prongs were squeezed (hinges slid off the housing). Now: claw 220 px parked under the ceiling, cat sits
+  // on the pile, the whole claw hangs from a pivot at the ceiling (pendulum driven by the rail moves), side prongs ROTATE about their hinges.
   const PROP = {}; for (const n of ['prop_claw_open', 'prop_cat']) { const im = new Image(); im.onload = () => { PROP[n] = im; }; im.src = `media/art/${n}.webp?v=1`; }
-  const CLAW = { w: 300, park: { x: 600, y: 150 }, ceiling: 118, chute: { x: 610, dropY: 1060 } };   // frame px (1920×1080), the glass box is x 15–720, y 115–750
-  const CAT = { w: 215, pile: { x: 172, y: 628 } };
-  const SPLIT = .635;   // housing bottom in prop_claw_open (measured): the prongs below it close by squeezing
+  const CLAW = { w: 220, park: { x: 600 }, ceiling: 118, housingTop: 124, chute: { x: 610, dropY: 1060 } };   // frame px (1920×1080), the glass box is x 15–720, y 115–750
+  const CAT = { w: 185, pile: { x: 172, y: 515 } };   // sits on the pile, its bottom ≈ y 652 (above the glass ledge at 750)
+  // prop_claw_open.webp (459×793) measurements: painted cable x 223–236 down to row 255, housing rows 270–503, hinges at (150, 501) / (309, 501), centre prong x 205–255
+  const R = { cableX: 223, cableW: 14, cableEnd: 255, house: 270, split: 503, pivL: [150, 501], pivR: [309, 501], midU: [205, 255] };
+  const CLOSE = .17;   // rad each side prong turns in: the tips end under the cat's cheeks (≈ ±62 px), the knees just outside the head
   const GLASS = [15, 115, 720, 750];
-  const freshCrane = () => ({ x: CLAW.park.x, y: CLAW.park.y, closeK: 0, carry: false, swing: 0, ang: 0, catX: CAT.pile.x, catY: CAT.pile.y, catGone: false, label: false, tryN: 0, won: false });
+  const freshCrane = () => ({ x: CLAW.park.x, y: null, closeK: 0, carry: false, ang: 0, av: 0, kick: 0, vx: 0, lastX: CLAW.park.x,
+    catX: CAT.pile.x, catY: CAT.pile.y, catGone: false, label: false, tryN: 0, won: false });
   let CR = freshCrane();
   const ease = (u) => (u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2);
   const bounce = (u) => { const n = 7.5625, d = 2.75; if (u < 1 / d) return n * u * u; if (u < 2 / d) return n * (u -= 1.5 / d) * u + .75; if (u < 2.5 / d) return n * (u -= 2.25 / d) * u + .9375; return n * (u -= 2.625 / d) * u + .984375; };
   const tween = (o, k, to, sec, fn = ease) => new Promise((res) => { const from = o[k], t0 = performance.now();
     const step = () => { const u = Math.min(1, (performance.now() - t0) / (sec * 1000)); o[k] = from + (to - from) * fn(u); if (u < 1) requestAnimationFrame(step); else res(); }; requestAnimationFrame(step); });
-  const clawH = () => (PROP.prop_claw_open ? CLAW.w * PROP.prop_claw_open.height / PROP.prop_claw_open.width : 260);
-  const catH = () => (PROP.prop_cat ? CAT.w * PROP.prop_cat.height / PROP.prop_cat.width : 230);
-  const HEAD = -.02;   // the housing stops just above the cat's top (× cat height); the prongs hang down round the head and clamp its sides
-  const grabY = () => CR.catY - catH() / 2 + catH() * HEAD - clawH() * SPLIT;
+  const sc = () => CLAW.w / (PROP.prop_claw_open?.width || 459);
+  const catH = () => (PROP.prop_cat ? CAT.w * PROP.prop_cat.height / PROP.prop_cat.width : 274);
+  const HEAD = -.02;   // the housing stops just above the cat's top (× cat height)
+  // C.y = the claw image's top (row 0); park = housing top just under the ceiling; grab = housing bottom just above the cat's head
+  const parkY = () => CLAW.housingTop - R.house * sc();
+  const grabY = () => CR.catY - catH() / 2 + catH() * HEAD - R.split * sc();
+  const catDrop = () => R.split * sc() - catH() * HEAD + catH() / 2;   // claw top → carried cat centre
   function drawCrane(t, dt) {
-    const C = CR, ch = clawH(), cth = catH();
-    C.swing *= Math.exp(-dt * 1.6); C.ang = C.swing * Math.sin(t * 5.2);
-    if (C.carry) { C.catX = C.x; C.catY = C.y + ch * SPLIT - cth * HEAD + cth / 2; }
+    const C = CR, claw = PROP.prop_claw_open, cat = PROP.prop_cat, s = sc(), cth = catH();
+    if (C.y == null) C.y = parkY();
+    // pendulum from the ceiling pivot, driven by the rail's acceleration (sways when it starts / stops), plus kicks (grab, slip)
+    const now = performance.now(); dt = C.lastT ? Math.min(.25, (now - C.lastT) / 1000) : 0; C.lastT = now;   // own clock: the loop's dt is capped at .05
+    if (dt > 0) {
+      const v = (C.x - C.lastX) / dt; C.lastX = C.x; const a = clamp((v - C.vx) / dt, -2500, 2500); C.vx = v;
+      const L = Math.max(200, C.y - CLAW.ceiling + 330 * s), w2 = 9000 / L;   // ω² ≈ g/L in px units (ω ≈ 3–5 rad/s)
+      C.av += C.kick; C.kick = 0;
+      for (let n = Math.ceil(dt / .01), h = dt / n, i = 0; i < n; i++) {     // fixed small steps: same sway at 12 fps or 120 fps
+        C.av += (-w2 * C.ang - a / L * .6 - .5 * C.av) * h; C.ang = clamp(C.ang + C.av * h, -.07, .07);
+      }
+    }
+    const len = C.y - CLAW.ceiling;               // pivot → claw image top
+    if (C.carry) { const d = len + catDrop(); C.catX = C.x - d * Math.sin(C.ang); C.catY = CLAW.ceiling + d * Math.cos(C.ang); }
     ctx.save(); ctx.beginPath(); ctx.rect(GLASS[0], GLASS[1], GLASS[2] - GLASS[0], GLASS[3] - GLASS[1]); ctx.clip();
-    const cat = PROP.prop_cat, claw = PROP.prop_claw_open;
-    const drawCat = () => { if (cat && !C.catGone) { ctx.save(); ctx.translate(C.catX, C.catY); ctx.rotate(C.carry ? C.ang * .6 : 0); ctx.drawImage(cat, -CAT.w / 2, -cth / 2, CAT.w, cth); ctx.restore(); } };
-    // cat → prongs → cable → housing. The prongs close by squeezing toward the centre, only to the head's width (prong span ≈ .9 × pw),
-    // so they clamp its sides. v1 squeezed them onto the face (looked like wires on the cat); v2 hid them behind it (no grip seen)
-    const ph = ch * SPLIT, pw = CLAW.w * (1 - .2 * C.closeK);
-    const part = (which) => { if (!claw) return; const sh = claw.height * SPLIT; ctx.save(); ctx.translate(C.x, C.y); ctx.rotate(C.ang);
-      if (which === 'top') ctx.drawImage(claw, 0, 0, claw.width, sh, -CLAW.w / 2, 0, CLAW.w, ph);
-      else for (const [u0, u1] of which === 'mid' ? [[.4, .6]] : [[0, .4], [.6, 1]])   // the front-centre prong (x .47–.52) goes BEHIND the cat
-        ctx.drawImage(claw, claw.width * u0, sh, claw.width * (u1 - u0), claw.height - sh, -pw / 2 + pw * u0, ph, pw * (u1 - u0), ch - ph);
-      ctx.restore(); };
-    part('mid'); drawCat(); part('side');
-    ctx.strokeStyle = 'rgba(40,30,50,.85)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(C.x, CLAW.ceiling); ctx.lineTo(C.x, C.y); ctx.stroke();
-    part('top');
+    if (cat && !C.catGone && !C.carry && Math.abs(C.catX - CAT.pile.x) < 40) {   // a soft contact shadow on the pile (fades as the cat rises / drops)
+      const lift = clamp((CAT.pile.y - C.catY) / 160), k = 1 - lift;
+      if (k > .02 && C.catY < GLASS[3]) { ctx.save(); ctx.globalAlpha *= .28 * k; ctx.fillStyle = '#2a1640'; ctx.beginPath();
+        ctx.ellipse(CAT.pile.x, CAT.pile.y + cth * .47, CAT.w * .42, 16, 0, 0, 7); ctx.fill(); ctx.restore(); }
+    }
+    const drawCatWorld = () => { if (cat && !C.catGone && !C.carry) ctx.drawImage(cat, C.catX - CAT.w / 2, C.catY - cth / 2, CAT.w, cth); };
+    ctx.save(); ctx.translate(C.x, CLAW.ceiling); ctx.rotate(C.ang);
+    if (claw) {
+      const piece = (sx, sy, sw, sh) => ctx.drawImage(claw, sx, sy, sw, sh, (sx - claw.width / 2) * s, len + sy * s, sw * s, sh * s);
+      const prong = (x0, x1, piv, dir) => { ctx.save(); const px = (piv[0] - claw.width / 2) * s, py = len + piv[1] * s;
+        ctx.translate(px, py); ctx.rotate(dir * CLOSE * C.closeK); ctx.translate(-px, -py); piece(x0, R.split, x1 - x0, claw.height - R.split); ctx.restore(); };
+      piece(R.midU[0], R.split, R.midU[1] - R.midU[0], claw.height - R.split);          // centre prong: behind the cat
+      if (C.carry && cat) ctx.drawImage(cat, -CAT.w / 2, len + catDrop() - cth / 2, CAT.w, cth);
+      else { ctx.restore(); drawCatWorld(); ctx.save(); ctx.translate(C.x, CLAW.ceiling); ctx.rotate(C.ang); }
+      prong(0, R.midU[0], R.pivL, -1); prong(R.midU[1], claw.width, R.pivR, 1);              // side prongs: in front, turning in about their hinges
+      // the cable: the painted cable strip stretched from the ceiling down to the housing, then the housing
+      ctx.drawImage(claw, R.cableX, 0, R.cableW, 40, -R.cableW * s / 2, 0, R.cableW * s, len + R.cableEnd * s);
+      piece(0, R.cableEnd, claw.width, R.split - R.cableEnd);
+    } else drawCatWorld();
+    ctx.restore();
     ctx.restore();
     if (C.label) label(`TRY ${C.tryN} / 2`, 370, 70, 52, '#9ff3ff');
     if (C.won) label('GET!', 370, 420, 110, '#ffd36b');
@@ -358,7 +385,8 @@
         ctx.moveTo(W / 2 + Math.cos(s.a) * r0, H / 2 + Math.sin(s.a) * r0 * .6); ctx.lineTo(W / 2 + Math.cos(s.a) * r1, H / 2 + Math.sin(s.a) * r1 * .6); }
       ctx.stroke(); ctx.restore();
     }
-    if (S.view === 'crane' || viewB === 'crane') drawCrane(t, dt);
+    if (viewB === 'crane' || (viewA === 'crane' && mix < 1)) {   // fades in / out with the machine plate (v8 popped off while the plate cross-faded)
+      ctx.save(); ctx.globalAlpha = viewB === 'crane' ? mix : 1 - mix; drawCrane(t, dt); ctx.restore(); }
     if (S.shots && S.shots.n) label(String(S.shots.n), W * .5, H * .3, 220, '#ffffff');
     if (S.flash > 0) { ctx.fillStyle = `rgba(255,255,255,${S.flash * .85})`; ctx.fillRect(0, 0, W, H); }
     if (canK > .05) {   // steam from the hot can at the left edge
