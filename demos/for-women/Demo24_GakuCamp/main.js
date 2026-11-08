@@ -435,10 +435,6 @@
   }
   $('startBtn').addEventListener('click', () => { SND.init(); goLive(); });
   $('againBtn').addEventListener('click', goLive);
-  {   // keep ?embed=1 when hopping to the next demo (and start it right away)
-    const q = new URLSearchParams(location.search); q.delete('cover'); q.delete('auto'); if (q.has('embed')) q.set('autoplay', '1');
-    $('nextBtn').href = $('nextBtn').getAttribute('href') + (q.toString() ? '?' + q : '');
-  }
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
 

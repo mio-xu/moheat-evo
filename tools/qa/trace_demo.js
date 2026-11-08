@@ -2,7 +2,7 @@
 // Behaviour trace of one demo page — proves that a migration (move to a category _kit, remove <base>, engine port) changes NOTHING
 // the viewer sees / feels (docs/engine/2026-11-08_engine_plan.md §4.2, DEMO_DESIGN_GUIDE §14).
 //
-//   node tools/qa/trace_demo.js <demo folder> [--out trace.json] [--secs 90] [--alt] [--lang en] [--shots 0,4,12,30] [--seed 1] [--click]
+//   node tools/qa/trace_demo.js <demo folder> [--out trace.json] [--secs 90] [--alt] [--lang en] [--shots 0,4,12,30] [--seed 1] [--click] [--root DIR]
 //   node tools/qa/trace_demo.js --diff before.json after.json [--tol 1.5] [--px 0.5]      → exit 1 when they differ
 //
 // Record: own python http.server + own headless Chrome on free ports (never a tab someone is using, §11.1), Math.random replaced by a
@@ -20,7 +20,7 @@ const path = require('path'), fs = require('fs'), net = require('net'), os = req
 const ROOT = path.resolve(__dirname, '..', '..');
 const argv = process.argv.slice(2), flag = (f) => argv.includes(f);
 const opt = (f, d) => { const i = argv.indexOf(f); return i >= 0 ? argv[i + 1] : d; };
-const OPTS = ['--out', '--secs', '--lang', '--shots', '--seed', '--tol', '--px'];
+const OPTS = ['--root', '--out', '--secs', '--lang', '--shots', '--seed', '--tol', '--px'];
 const pos = argv.filter((a, i) => !a.startsWith('--') && !(i && OPTS.includes(argv[i - 1])));
 
 if (flag('--diff')) process.exit(diff(pos[0], pos[1]));
@@ -41,7 +41,9 @@ const SEEDED = `(() => { let a = ${SEED} >>> 0 || 1; Math.random = function () {
 
 (async () => {
   const hp = await freePort(), dp = await freePort();
-  const http = spawn('python3', ['-m', 'http.server', String(hp), '--bind', '127.0.0.1'], { cwd: ROOT, stdio: 'ignore' });
+  // --root DIR: serve another tree laid out like the repo (e.g. a mirror where only the files of the old version are swapped in) —
+  // the "before" trace of a change that is already in the working tree, without touching the shared working tree
+  const http = spawn('python3', ['-m', 'http.server', String(hp), '--bind', '127.0.0.1'], { cwd: path.resolve(opt('--root', ROOT)), stdio: 'ignore' });
   const prof = fs.mkdtempSync(path.join(os.tmpdir(), 'qatrace-'));
   const chrome = spawn(CHROME, ['--headless=new', `--remote-debugging-port=${dp}`, `--user-data-dir=${prof}`, '--autoplay-policy=no-user-gesture-required',
     '--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--disable-backgrounding-occluded-windows',
