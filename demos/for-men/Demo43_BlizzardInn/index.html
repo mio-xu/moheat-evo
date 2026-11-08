@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0d1018" />
+  <meta name="robots" content="noindex" />
+  <meta property="og:title" content="One Night at the White-Ridge Inn · MoHeat Evo ASMR Demo" />
+  <meta property="og:image" content="media/cover.jpg" />
+  <title>白嶺の峠、ひと晩の宿 · One Night at the White-Ridge Inn · MoHeat Evo ASMR Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Shippori+Mincho+B1:wght@600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../shared/game.css?v=1" />
+  <link rel="stylesheet" href="style.css?v=1" />
+  <link rel="stylesheet" href="../../shared/series.css?v=9" />
+  <script>if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add('embed');</script>
+  <style>/* ?embed=1 — used by the site's demo menu: stage only */
+    html.embed .bar, html.embed .side { display: none !important; }
+    html.embed body { background: #000; overflow: hidden; }
+    html.embed .layout { display: block; padding: 0; max-width: none; }
+    html.embed .stage { border-radius: 0; border: 0; box-shadow: none; }
+    html.embed .intro .hint { display: none; }
+  </style>
+</head>
+<body>
+  <header class="bar">
+    <a class="brand" href="../../../">MoHeat <span>Evo</span> <em>ASMR · Crossover</em></a>
+    <div class="device">
+      <select id="portSelect" aria-label="Serial port"></select>
+      <button class="btn sm" id="addPort" type="button" title="Authorize a USB or Bluetooth serial port">+ Add</button>
+      <button class="btn sm primary" id="connectBtn" type="button" disabled>Connect</button>
+      <p class="status" id="deviceStatus"><i></i><span>Not connected</span></p>
+    </div>
+    <button class="estop" id="estop" type="button" title="Esc">■ STOP</button>
+  </header>
+
+  <main class="layout">
+    <section class="stage-col">
+      <div class="stage" id="stage">
+        <canvas id="scene" width="1920" height="1080"></canvas>
+        <i class="glow l" id="glowL"></i><i class="glow r" id="glowR"></i>
+        <div class="hud-top"><button class="hud-btn" id="soundBtn" type="button">🔊</button></div>
+        <div class="choices" id="choices"></div>
+        <div class="act" id="act"></div>
+        <div class="subs" id="subs"><p class="line"><span class="ja"><em class="who" id="subWho"></em><span id="subJa"></span></span><span class="en" id="subEn"></span></p></div>
+        <p class="vv" id="vv">ミント・ひなた・渚 ElevenLabs</p>
+
+        <div class="intro" id="intro">
+          <div class="hero a" aria-hidden="true"></div>
+          <div class="cover-copy">
+            <p class="kicker">MoHeat Evo · Binaural ASMR × Thermal Haptics</p>
+            <h1><span>白嶺の峠、</span><span>ひと晩の宿</span></h1>
+            <p class="en">One Night at the White-Ridge Inn — a guard, an innkeeper and a sleepy doctor</p>
+            <p class="cast"><span class="chip p">🏮 吹雪の山の宿 · Interactive</span><span class="chip h">🔥 お灸・火鍋・耳元の声 · warm</span><span class="chip k">🌿 薄荷の軟膏・吹雪・夜風 · cool</span></p>
+            <p class="cleared" id="cleared" hidden></p>
+            <div class="intro-actions">
+              <button class="btn primary big" id="startBtn" type="button">▶ はじめる · Start</button>
+              <button class="btn" id="lrBtn" type="button">🎧 Left / Right check</button>
+            </div>
+            <div class="talk-pick" id="talkPick" hidden><small>💬 もっと話す · Keep talking</small>
+              <button class="tp" type="button" data-who="M" data-voice="ミント|みんと|mint|薄荷">ミント · Mint</button>
+              <button class="tp" type="button" data-who="H" data-voice="ひなた|日向|hinata">ひなた · Hinata</button>
+              <button class="tp" type="button" data-who="N" data-voice="なぎさ|渚|nagisa">渚 · Nagisa</button>
+              <button class="tp" type="button" data-who="MHN" data-voice="三人|さんにん|みんな|all|everyone|三个人">三人 · All three</button>
+            </div>
+            <p class="hint">Headphones on · tap / hold or answer by voice, and talk with them freely · connect MoHeat Evo to feel the blizzard, a hotpot, moxa and mint balm on the same ear, and their voices</p>
+            <p class="draft" id="credits">Original characters in a special version · everyone speaks Japanese there · voices ElevenLabs · art OpenAI gpt-image · layered stills · free talk = scripted preview</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side">
+      <div class="card"><div class="card-head"><span>Sounds around you</span><b id="posInfo"></b></div><canvas id="radar" width="480" height="420"></canvas></div>
+      <div class="card">
+        <div class="card-head"><span>Thermal output</span><b id="cmd" class="mono">stop</b></div>
+        <div class="meters">
+          <div class="meter-row"><span>L cool</span><div class="m cool"><i id="mLc"></i></div><b id="vLc">0</b></div>
+          <div class="meter-row"><span>L warm</span><div class="m heat"><i id="mLh"></i></div><b id="vLh">0</b></div>
+          <div class="meter-row"><span>R cool</span><div class="m cool"><i id="mRc"></i></div><b id="vRc">0</b></div>
+          <div class="meter-row"><span>R warm</span><div class="m heat"><i id="mRh"></i></div><b id="vRh">0</b></div>
+        </div>
+        <p class="note">Live (DUAL): each voice warms the ear it speaks at, with its loudness; blizzard gusts sweep left → right, the hotpot and the brazier warm you, moxa circles your right ear while mint balm cools the same ear, and the door bursts open on your left.</p>
+      </div>
+      <div class="card"><div class="card-head"><span>Progress</span><b id="clock" class="mono">0:00</b></div><ol class="steps" id="steps"></ol></div>
+      <div class="card">
+        <label class="row"><span>Intensity</span><input id="intensity" type="range" min="0" max="100" value="100" /><b id="intensityVal">100%</b></label>
+        <label class="row check"><input id="sendOn" type="checkbox" checked /> <span>Send to device</span></label>
+      </div>
+    </aside>
+  </main>
+
+  <script src="../../../device.js?v=2"></script>
+  <script src="lines.js?v=1"></script>
+  <script src="audio.js?v=1"></script>
+  <script src="../../shared/talk.js?v=1"></script>
+  <!-- layered art (DEMO_DESIGN_GUIDE §6 standard): shared/layers.js draws the live composite wherever main.js draws a still -->
+  <script>window.MoHeatLayers = { level: () => window.INN?.S?.env || 0, raw: () => window.INN?.S?.lv || 0, current: () => window.INN?.S?.view || 'pass' };</script>
+  <script src="media/layers.js?v=2"></script>
+  <script src="../../shared/layers.js?v=7"></script>
+  <script src="../../shared/cover.js?v=1"></script>
+  <script src="main.js?v=1"></script>
+  <script src="../../shared/voice.js?v=5"></script>
+  <script src="../../shared/nav.js?v=43"></script>
+</body>
+</html>

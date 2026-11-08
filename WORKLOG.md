@@ -85,6 +85,22 @@
 
 ---
 
+## 2026-11-08 · 穿越篇试点：Demo43 白嶺の峠、ひと晩の宿（男性向 · 架空东方 · 风雪客栈）+ 共用对话引擎 · 后台 agent
+
+**做了什么**
+- 新 Demo `demos/for-men/Demo43_BlizzardInn/`（方案 `docs/proposals/2026-11-08_crossover.md` M1-East）：渚（女镖师）/ ひなた（客栈小老板娘）/ ミント（游方女医）三位特别版，5 段 ≈ 2:40 + 3 个自由对话窗口 + 三选一信物结局（3 个结局）+ 结束后「もっと話す」（选人）。每人 2 个造型选一（`project/designs_contact.jpg`；选 ミント B、ひなた A、渚 B），`project/face_compare.jpg` 和原角色并排。
+- 分层标准出图（Seedance 探测 429 → OpenAI gpt-image-2，共 30 次调用 ≈ $7.3，0 Seedance credits）；ElevenLabs 3,814 字（105 句，mint / hinata_s / nagisa 原声）。
+- **共用对话引擎抽出**：`demos/shared/talk.js`（话题判定、过渡句、一轮语音 / 打字输入、实时 agent 客户端）+ `tools/talk/server.py`（所有实时 Demo 共用一个私密服务器，注册表 `tools/talk/demos.json`）。Demo23 的 `server.py` 变成运行它的薄壳，`live/live.js` 改用共用客户端（Demo23 / 41 / 42 路由、登录、status 实测正常）。Demo43 私密实时版入口 `/live/inn`；文字 agent 冒烟测试 `scripts/live_smoke.mjs`（3 轮，无 TTS）通过。
+- 封面按新的 §7.3 封面标准（`shared/cover.js`，`scripts/make_trio.py` 排三人，`tools/web/check_cover.py` PASS）。菜单、官网、credits、三语缩略图都加了；交付表见下一步。
+
+**现在的状态**：本地已提交（未 push，由统筹会话 push）。`check_demo.py` 见最终报告；`?auto` 两条分支通关，三语语音判定测过。
+
+**下一步**：统筹审查；通过后按 TASKS #47 做 ② 魔法学院（复用 `scripts/script_data.py` 这套数据结构和 talk.js）。
+
+**问题**（详见 §11.1）：实时回复在下一轮重复（已修）；thermal 快速切换要从"只热"切到"只冷"（已重排艾灸段）；thumbs.py 需要 8765 服务器；`xcode-select` 被切到未接受许可的 Xcode，`/usr/bin/git`、`python3` 报错（临时用 `DEVELOPER_DIR=/Library/Developer/CommandLineTools`，需要用户 `sudo xcodebuild -license accept`）；语音判定：英文长句里碰巧有 "he"+"el" 这样的字母对时，短选项「Help me」会被误判（`shared/voice.js` 的字母对匹配，影响所有 Demo，未改）。
+
+---
+
 ## 2026-11-08 · 女性向重制收尾：莲 / 仁 / 紫苑 合并上线（Demo33→12、Demo34→21、Demo35→22）· 后台 agent（接 moheat-evo-24 的交接）
 
 **做了什么**

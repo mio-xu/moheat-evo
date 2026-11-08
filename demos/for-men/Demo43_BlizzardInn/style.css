@@ -1,0 +1,57 @@
+/* 白嶺の峠、ひと晩の宿 — Demo19's style.css with a snowy-inn palette (night slate + lantern amber + ember orange + mint). */
+:root { --bg: #0d1018; --panel: #161a24; --panel-2: #1f2432; --line: #3d4658; --gold: #ffc27a; }
+.bar { background: #090b12; }
+.brand span { color: #ffb46b; }
+.btn.primary { background: linear-gradient(135deg, #d9542b, #f2b45a); }
+.vv { bottom: auto; top: .6cqw; }
+
+/* cover */
+.intro::before { background: linear-gradient(to right, rgba(13, 16, 24, .82), rgba(13, 16, 24, .5) 42%, rgba(13, 16, 24, 0) 62%); }
+body.cover-only .intro::before { background: linear-gradient(to right, rgba(13, 16, 24, .76), rgba(13, 16, 24, .38) 42%, rgba(13, 16, 24, 0) 60%); }
+body.cover-only .cover-copy { margin-top: 0 !important; }
+.intro .hero.a { position: absolute; width: 1px; height: 1px; }
+.intro h1 { background: linear-gradient(100deg, #ffffff 0%, #eaf6ff 35%, #ffc27a 70%, #ff8a5c 100%); -webkit-background-clip: text; background-clip: text; }
+.intro .chip.p { background: rgba(217, 84, 43, .2); color: #eef3ff; border-color: rgba(255, 194, 122, .55); }
+.intro .cleared { color: #f2f6ff; background: rgba(217, 84, 43, .3); border-color: rgba(255, 194, 122, .6); }
+
+/* subtitles (sizes from series.css) */
+.subs { position: absolute; z-index: 3; display: flex; justify-content: center; pointer-events: none; opacity: 0; transition: opacity .25s; }
+.subs.show { opacity: 1; }
+.subs .line { display: flex; flex-direction: column; align-items: center; background: rgba(13, 16, 24, .64); }
+.subs .ja { color: #fff; font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif; font-weight: 700; }
+.subs .en { color: #dfe6f6; font-family: Inter, sans-serif; }
+
+/* your turn: choices / action / hold */
+.choices, .act { position: absolute; left: 50%; bottom: 12cqw; transform: translate(-50%, .6cqw); z-index: 4; opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s; }
+.choices.show, .act.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.choices { display: flex; gap: 1.2cqw; }
+.ch, .act-btn { cursor: pointer; border-radius: 1.4cqw; border: 1px solid rgba(255, 194, 122, .55); background: rgba(22, 20, 26, .82); color: #fff; padding: 1cqw 2cqw;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background .15s, transform .15s; user-select: none; -webkit-user-select: none; touch-action: none; }
+.ch:hover, .act-btn:hover { background: rgba(217, 84, 43, .55); transform: translateY(-2px); }
+.ch b, .act-btn b { display: block; font: 700 clamp(11px, 1.6cqw, 26px)/1.3 "Zen Maru Gothic", "Noto Sans JP", sans-serif; }
+.ch span, .act-btn span { display: block; font: 500 clamp(9px, 1.05cqw, 16px)/1.3 Inter, sans-serif; color: #dfe6f6; }
+.act-btn { display: grid; grid-template-columns: auto auto; grid-template-rows: auto auto; column-gap: 1cqw; align-items: center; text-align: left; animation: nudge 1.6s ease-in-out infinite; }
+.act-btn i { grid-row: span 2; font-style: normal; font-size: clamp(18px, 2.6cqw, 40px); }
+.act-btn.hold { grid-template-rows: auto auto auto; }
+.act-btn.hold.down { background: rgba(217, 84, 43, .7); transform: scale(.97); }
+.act-btn .bar { grid-column: 2; display: block; height: .45cqw; min-height: 4px; margin-top: .5cqw; border-radius: 9px; background: rgba(255, 255, 255, .15); overflow: hidden; }
+.act-btn .bar u { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ffb46b, #ffd28a); }
+@keyframes nudge { 50% { box-shadow: 0 0 1.6cqw rgba(255, 194, 122, .6); } }
+.stage:has(.intro:not(.hidden)) :is(.choices, .act, .subs, .hud-top) { display: none !important; }
+@container (max-width: 620px) {
+  .choices { flex-direction: column; bottom: 14cqw; } .ch b, .act-btn b { font-size: 3.2cqw; } .ch span, .act-btn span { font-size: 2.3cqw; }
+}
+
+/* the keep-still hold sits on the left (Mint and her moxa stick are on the right) */
+.act.side { left: 22%; }
+@container (max-width: 620px) { .act.side { left: 26%; } }
+/* speaker name in the subtitle */
+.subs .who { font-style: normal; margin-right: .6em; opacity: .9; }
+.subs .who.wM { color: #9ff0d8; } .subs .who.wH { color: #ffb070; } .subs .who.wN { color: #ffd27a; } .subs .who.wあなた { color: #c9d4ff; }
+/* もっと話す · keep talking (after the story): who you talk with */
+.intro .talk-pick { margin: .6cqw 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: .6cqw; }
+.intro .talk-pick[hidden] { display: none; }
+.intro .talk-pick > small { flex-basis: 100%; font: 700 clamp(10px, 1.05cqw, 15px)/1.3 Inter, "Noto Sans JP", sans-serif; color: #ffd9a8; }
+.intro .talk-pick .tp { min-height: 44px; min-width: 44px; padding: 0 1.2cqw; border-radius: 99px; border: 1px solid rgba(255, 194, 122, .6); background: rgba(22, 20, 26, .7); color: #fff;
+  font: 700 clamp(11px, 1.15cqw, 17px) "Zen Maru Gothic", "Noto Sans JP", sans-serif; cursor: pointer; }
+.intro .talk-pick .tp:hover { background: rgba(217, 84, 43, .55); }

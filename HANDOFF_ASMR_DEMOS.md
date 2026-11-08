@@ -493,6 +493,11 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 共用引擎：`main.js`（画面、走位、HRTF、DUAL 冷热、雷达、设备、语音识别 / 打字），"大脑"是可替换的 `window.TALK_BRAIN`（`scripted.js` / `live/live.js`）。
 - 实时版架构：`server.py`（持有 key，执行 `limits.json`）+ ElevenLabs **text-only agent**（`agent.json`，LLM claude-sonnet-5-5，prompt 每次在 `scenes.js` 生成后 override）+ 每句 ElevenLabs v4 TTS → 每个角色独立 HRTF。一次 2 分钟三人对话 ≈ 600–700 credits。细节见该目录 README。
 
+### Demo43_BlizzardInn ✅ 可玩 —《白嶺の峠、ひと晩の宿 / One Night at the White-Ridge Inn》（男性向 · 穿越篇 ① 架空东方，纯交互 + 自由对话，2026-11-08）
+- 方案：`docs/proposals/2026-11-08_crossover.md` M1-East（用户批准，第一个试点）。特别版：渚 = 女镖师（造型 B）、ひなた = 客栈小老板娘（A）、ミント = 游方女医（B）；脸 / 发色 / 性格 / 声音不变（nagisa r1_b、hinata_s r1_b、mint r1_a），对比图 `project/designs_contact.jpg`、`project/face_compare.jpg`。详情（流程、冷热、文件、花费）见该目录 README。
+- **共用对话引擎**（这次抽出来，后面三个穿越 Demo 复用）：`demos/shared/talk.js`（`MoHeatTalk`：`topic` / `bridges` / `listen` / `live`）+ 私密服务器 `tools/talk/server.py` + 注册表 `tools/talk/demos.json`（路由、说话人 → 声音）。Demo23 的 `server.py` 现在只是运行它（端口 8771、密码、limits 不变），`live/live.js` 改用 `MoHeatTalk.live`。私密实时版入口 `/live/inn`；加一个实时 Demo = demos.json 一项 + 它的 `live/` 页面（`scripts/pages.py` 从 index.html 生成）。冒烟测试（不花 TTS）：`scripts/live_smoke.mjs`。
+- 下一个穿越 Demo：复制这个文件夹的结构（`scripts/script_data.py` 一处写台词 → lines.js / l10n / voice，`prompts.py` + `face_points.json` + `make_stage.py` 出图合成）。
+
 ### Demo switcher (`demos/shared/nav.js`)
 Every full demo page loads `../shared/nav.js`, which adds ‹ ☰ Demos N/9 › to the top bar and a thumbnail panel of all demos (thumbs = `assets/images/demos/demoN.jpg`). `#demos` in the URL opens the panel. Hidden with `?embed`, `?cover`, `?render`. **A new demo must be added to the `DEMOS` list in nav.js.**
 

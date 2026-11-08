@@ -1,0 +1,766 @@
+// Layer data for ../../shared/layers.js — written by tools/art/build_stage.py from project/stage.json (do not edit by hand).
+window.MOHEAT_LAYERS = {
+ "views": {
+  "nagisa_pass": {
+   "view": "pass",
+   "alias": [
+    "white"
+   ],
+   "fire": null,
+   "bg": {
+    "src": "art/bg_pass.webp?v=b43bde43",
+    "fire": [
+     0.5,
+     0.5
+    ]
+   },
+   "char": {
+    "src": "art/char_nagisa_base.webp?v=d791f9e2",
+    "w": 1414,
+    "h": 1440,
+    "x": 0.502,
+    "y": 1.0,
+    "height": 1.0,
+    "box": [
+     578,
+     0,
+     1992,
+     1440
+    ]
+   },
+   "patches": [
+    {
+     "src": "art/nagisa_base_eyes.webp?v=cb26d858",
+     "rect": [
+      518,
+      289,
+      291,
+      147
+     ],
+     "kind": "eyes"
+    },
+    {
+     "src": "art/nagisa_base_mouth0.webp?v=3b57b884",
+     "rect": [
+      636,
+      421,
+      120,
+      103
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/nagisa_base_mouth1.webp?v=169b4f58",
+     "rect": [
+      636,
+      421,
+      120,
+      103
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/nagisa_base_mouth2.webp?v=99e54bc5",
+     "rect": [
+      636,
+      421,
+      120,
+      103
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/nagisa_base_mouth3.webp?v=d988c085",
+     "rect": [
+      636,
+      421,
+      120,
+      103
+     ],
+     "kind": "mouth_lv",
+     "level": 3
+    }
+   ]
+  },
+  "hinata_hall": {
+   "view": "hall",
+   "fire": [
+    0.725,
+    0.64
+   ],
+   "bg": {
+    "src": "art/bg_hall.webp?v=0ddcaf2c",
+    "fire": [
+     0.725,
+     0.64
+    ]
+   },
+   "char": {
+    "src": "art/char_hinata_base.webp?v=4250fcdd",
+    "w": 1177,
+    "h": 1421,
+    "x": 0.4928,
+    "y": 1.0,
+    "height": 0.9868,
+    "box": [
+     673,
+     19,
+     1850,
+     1440
+    ]
+   },
+   "patches": [
+    {
+     "src": "art/hinata_base_eyes.webp?v=6d494044",
+     "rect": [
+      422,
+      248,
+      265,
+      161
+     ],
+     "kind": "eyes"
+    },
+    {
+     "src": "art/hinata_base_mouth0.webp?v=2eb7722a",
+     "rect": [
+      510,
+      343,
+      168,
+      143
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/hinata_base_mouth1.webp?v=bbef5c11",
+     "rect": [
+      510,
+      343,
+      168,
+      143
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/hinata_base_mouth2.webp?v=74f3d35a",
+     "rect": [
+      510,
+      343,
+      168,
+      143
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/hinata_base_mouth3.webp?v=35395ed3",
+     "rect": [
+      510,
+      343,
+      168,
+      143
+     ],
+     "kind": "mouth_lv",
+     "level": 3
+    }
+   ]
+  },
+  "hinata_dice": {
+   "view": "dice",
+   "fire": [
+    0.725,
+    0.64
+   ],
+   "bg": {
+    "src": "art/bg_hall.webp?v=0ddcaf2c",
+    "fire": [
+     0.725,
+     0.64
+    ]
+   },
+   "char": {
+    "src": "art/char_hinata_dice.webp?v=c6a003ae",
+    "w": 938,
+    "h": 1420,
+    "x": 0.482,
+    "y": 1.0,
+    "height": 0.9861,
+    "box": [
+     765,
+     20,
+     1703,
+     1440
+    ]
+   },
+   "patches": [
+    {
+     "src": "art/hinata_dice_eyes.webp?v=c0afd54d",
+     "rect": [
+      333,
+      247,
+      262,
+      160
+     ],
+     "kind": "eyes"
+    },
+    {
+     "src": "art/hinata_dice_mouth0.webp?v=912655b8",
+     "rect": [
+      419,
+      345,
+      167,
+      142
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/hinata_dice_mouth1.webp?v=ef8debf4",
+     "rect": [
+      419,
+      345,
+      167,
+      142
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/hinata_dice_mouth2.webp?v=37034588",
+     "rect": [
+      419,
+      345,
+      167,
+      142
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/hinata_dice_mouth3.webp?v=b7213abb",
+     "rect": [
+      419,
+      345,
+      167,
+      142
+     ],
+     "kind": "mouth_lv",
+     "level": 3
+    }
+   ]
+  },
+  "hinata_hear": {
+   "view": "hear",
+   "fire": [
+    0.725,
+    0.64
+   ],
+   "bg": {
+    "src": "art/bg_hall.webp?v=0ddcaf2c",
+    "fire": [
+     0.725,
+     0.64
+    ]
+   },
+   "char": {
+    "src": "art/char_hinata_ear.webp?v=05412d35",
+    "w": 1700,
+    "h": 1283,
+    "x": 0.4328,
+    "y": 1.0,
+    "height": 1.0,
+    "box": [
+     154,
+     0,
+     2062,
+     1440
+    ]
+   },
+   "patches": [
+    {
+     "src": "art/hinata_ear_mouth.webp?v=3039157d",
+     "rect": [
+      1263,
+      506,
+      232,
+      146
+     ],
+     "kind": "mouth"
+    },
+    {
+     "src": "art/hinata_ear_eyes.webp?v=c12ef6bd",
+     "rect": [
+      1112,
+      360,
+      451,
+      226
+     ],
+     "kind": "eyes"
+    }
+   ]
+  },
+  "mint_room": {
+   "view": "room",
+   "fire": null,
+   "bg": {
+    "src": "art/bg_room.webp?v=38fba2bb",
+    "fire": [
+     0.5,
+     0.5
+    ]
+   },
+   "char": {
+    "src": "art/char_mint_base.webp?v=79ec4e6b",
+    "w": 1210,
+    "h": 1416,
+    "x": 0.4957,
+    "y": 1.0,
+    "height": 0.9833,
+    "box": [
+     664,
+     24,
+     1874,
+     1440
+    ]
+   },
+   "patches": [
+    {
+     "src": "art/mint_base_eyes.webp?v=3c8ec547",
+     "rect": [
+      409,
+      213,
+      255,
+      132
+     ],
+     "kind": "eyes"
+    },
+    {
+     "src": "art/mint_base_mouth0.webp?v=e80ffb33",
+     "rect": [
+      538,
+      320,
+      120,
+      104
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/mint_base_mouth1.webp?v=4f9c7409",
+     "rect": [
+      538,
+      320,
+      120,
+      104
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/mint_base_mouth2.webp?v=cf0c9338",
+     "rect": [
+      538,
+      320,
+      120,
+      104
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/mint_base_mouth3.webp?v=de6b89fa",
+     "rect": [
+      538,
+      320,
+      120,
+      104
+     ],
+     "kind": "mouth_lv",
+     "level": 3
+    }
+   ]
+  },
+  "mint_mear": {
+   "view": "mear",
+   "fire": null,
+   "bg": {
+    "src": "art/bg_room.webp?v=38fba2bb",
+    "fire": [
+     0.5,
+     0.5
+    ]
+   },
+   "char": {
+    "src": "art/char_mint_ear.webp?v=a6012163",
+    "w": 1700,
+    "h": 1320,
+    "x": 0.66,
+    "y": 1.0,
+    "height": 1.0,
+    "box": [
+     506,
+     0,
+     2360,
+     1440
+    ]
+   },
+   "patches": [
+    {
+     "src": "art/mint_ear_eyes.webp?v=34c01f2a",
+     "rect": [
+      503,
+      363,
+      352,
+      216
+     ],
+     "kind": "eyes"
+    },
+    {
+     "src": "art/mint_ear_mouth0.webp?v=91b947bf",
+     "rect": [
+      651,
+      548,
+      171,
+      145
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/mint_ear_mouth1.webp?v=64f85156",
+     "rect": [
+      651,
+      548,
+      171,
+      145
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/mint_ear_mouth2.webp?v=0e463f32",
+     "rect": [
+      651,
+      548,
+      171,
+      145
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/mint_ear_mouth3.webp?v=25a0404a",
+     "rect": [
+      651,
+      548,
+      171,
+      145
+     ],
+     "kind": "mouth_lv",
+     "level": 3
+    }
+   ]
+  },
+  "nagisa_door": {
+   "view": "door",
+   "fire": [
+    0.81,
+    0.62
+   ],
+   "bg": {
+    "src": "art/bg_door.webp?v=f624f870",
+    "fire": [
+     0.81,
+     0.62
+    ]
+   },
+   "char": {
+    "src": "art/char_nagisa_guard.webp?v=d3445f62",
+    "w": 1375,
+    "h": 1440,
+    "x": 0.4,
+    "y": 1.0,
+    "height": 1.0,
+    "box": [
+     457,
+     0,
+     1832,
+     1440
+    ]
+   },
+   "patches": [
+    {
+     "src": "art/nagisa_guard_eyes.webp?v=535327f1",
+     "rect": [
+      250,
+      322,
+      400,
+      200
+     ],
+     "kind": "eyes"
+    },
+    {
+     "src": "art/nagisa_guard_mouth0.webp?v=0f46b185",
+     "rect": [
+      438,
+      508,
+      157,
+      134
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/nagisa_guard_mouth1.webp?v=b736042e",
+     "rect": [
+      438,
+      508,
+      157,
+      134
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/nagisa_guard_mouth2.webp?v=460611bf",
+     "rect": [
+      438,
+      508,
+      157,
+      134
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/nagisa_guard_mouth3.webp?v=3117dcdc",
+     "rect": [
+      438,
+      508,
+      157,
+      134
+     ],
+     "kind": "mouth_lv",
+     "level": 3
+    }
+   ]
+  },
+  "mint_dawn": {
+   "view": "end_m",
+   "fire": null,
+   "bg": {
+    "src": "art/bg_dawn.webp?v=d41d7514",
+    "fire": [
+     0.5,
+     0.5
+    ]
+   },
+   "char": {
+    "src": "art/char_mint_ear.webp?v=a6012163",
+    "w": 1700,
+    "h": 1320,
+    "x": 0.66,
+    "y": 1.0,
+    "height": 1.0,
+    "box": [
+     506,
+     0,
+     2360,
+     1440
+    ]
+   },
+   "patches": [
+    {
+     "src": "art/mint_ear_eyes.webp?v=34c01f2a",
+     "rect": [
+      503,
+      363,
+      352,
+      216
+     ],
+     "kind": "eyes"
+    },
+    {
+     "src": "art/mint_ear_mouth0.webp?v=91b947bf",
+     "rect": [
+      651,
+      548,
+      171,
+      145
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/mint_ear_mouth1.webp?v=64f85156",
+     "rect": [
+      651,
+      548,
+      171,
+      145
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/mint_ear_mouth2.webp?v=0e463f32",
+     "rect": [
+      651,
+      548,
+      171,
+      145
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/mint_ear_mouth3.webp?v=25a0404a",
+     "rect": [
+      651,
+      548,
+      171,
+      145
+     ],
+     "kind": "mouth_lv",
+     "level": 3
+    }
+   ]
+  },
+  "hinata_dawn": {
+   "view": "end_h",
+   "fire": null,
+   "bg": {
+    "src": "art/bg_dawn.webp?v=d41d7514",
+    "fire": [
+     0.5,
+     0.5
+    ]
+   },
+   "char": {
+    "src": "art/char_hinata_ear.webp?v=05412d35",
+    "w": 1700,
+    "h": 1283,
+    "x": 0.4328,
+    "y": 1.0,
+    "height": 1.0,
+    "box": [
+     154,
+     0,
+     2062,
+     1440
+    ]
+   },
+   "patches": [
+    {
+     "src": "art/hinata_ear_mouth.webp?v=3039157d",
+     "rect": [
+      1263,
+      506,
+      232,
+      146
+     ],
+     "kind": "mouth"
+    },
+    {
+     "src": "art/hinata_ear_eyes.webp?v=c12ef6bd",
+     "rect": [
+      1112,
+      360,
+      451,
+      226
+     ],
+     "kind": "eyes"
+    }
+   ]
+  },
+  "nagisa_dawn": {
+   "view": "end_n",
+   "fire": null,
+   "bg": {
+    "src": "art/bg_dawn.webp?v=d41d7514",
+    "fire": [
+     0.5,
+     0.5
+    ]
+   },
+   "char": {
+    "src": "art/char_nagisa_guard.webp?v=d3445f62",
+    "w": 1375,
+    "h": 1440,
+    "x": 0.4,
+    "y": 1.0,
+    "height": 1.0,
+    "box": [
+     457,
+     0,
+     1832,
+     1440
+    ]
+   },
+   "patches": [
+    {
+     "src": "art/nagisa_guard_eyes.webp?v=535327f1",
+     "rect": [
+      250,
+      322,
+      400,
+      200
+     ],
+     "kind": "eyes"
+    },
+    {
+     "src": "art/nagisa_guard_mouth0.webp?v=0f46b185",
+     "rect": [
+      438,
+      508,
+      157,
+      134
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/nagisa_guard_mouth1.webp?v=b736042e",
+     "rect": [
+      438,
+      508,
+      157,
+      134
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/nagisa_guard_mouth2.webp?v=460611bf",
+     "rect": [
+      438,
+      508,
+      157,
+      134
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/nagisa_guard_mouth3.webp?v=3117dcdc",
+     "rect": [
+      438,
+      508,
+      157,
+      134
+     ],
+     "kind": "mouth_lv",
+     "level": 3
+    }
+   ]
+  }
+ },
+ "hooks": {
+  "view": "INN.S.view",
+  "lv": "INN.S.lv"
+ }
+};

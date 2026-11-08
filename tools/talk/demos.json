@@ -1,0 +1,22 @@
+{
+ "_doc": "Private live-talk demos served by tools/talk/server.py (one password ~/.moheat_live_pass, one set of limits and one usage file for all). routes: URL → page inside <dir>/<live>. voices: speaker letter → tools/eleven/cast.json key (confirmed voices). Add a demo = one entry here + its live/ page (shared/talk.js live()).",
+ "limits": "demos/nobunaga-suntory/Demo23_NobunagaTalk/limits.json",
+ "usage": "demos/nobunaga-suntory/Demo23_NobunagaTalk/local/usage.json",
+ "agent": "demos/nobunaga-suntory/Demo23_NobunagaTalk/agent.json",
+ "default": "nobunaga",
+ "home": "/live",
+ "demos": {
+  "nobunaga": {
+   "title": "信長と、語らう · 家康と、語らう · 座談会",
+   "dir": "demos/nobunaga-suntory/Demo23_NobunagaTalk", "live": "live/",
+   "routes": {"/live": "", "/live/nobunaga": "", "/live/ieyasu": "ieyasu.html", "/live/roundtable": "roundtable.html"},
+   "voices": {"N": "nobunaga", "I": "ieyasu"}
+  },
+  "inn": {
+   "title": "白嶺の峠、ひと晩の宿 · One Night at the White-Ridge Inn",
+   "dir": "demos/for-men/Demo43_BlizzardInn", "live": "live/",
+   "routes": {"/live/inn": ""},
+   "voices": {"M": "mint", "H": "hinata_s", "N": "nagisa"}
+  }
+ }
+}
