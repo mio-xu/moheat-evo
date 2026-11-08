@@ -52,7 +52,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/nagisa_base_mouth1.webp?v=169b4f58",
+     "src": "art/nagisa_base_mouth1.webp?v=199abcdb",
      "rect": [
       636,
       421,
@@ -63,7 +63,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/nagisa_base_mouth2.webp?v=99e54bc5",
+     "src": "art/nagisa_base_mouth2.webp?v=59f7b11c",
      "rect": [
       636,
       421,
@@ -74,7 +74,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/nagisa_base_mouth3.webp?v=d988c085",
+     "src": "art/nagisa_base_mouth3.webp?v=1a9245b9",
      "rect": [
       636,
       421,
@@ -137,7 +137,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/hinata_base_mouth1.webp?v=bbef5c11",
+     "src": "art/hinata_base_mouth1.webp?v=18449f02",
      "rect": [
       510,
       343,
@@ -148,7 +148,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hinata_base_mouth2.webp?v=74f3d35a",
+     "src": "art/hinata_base_mouth2.webp?v=33154869",
      "rect": [
       510,
       343,
@@ -159,7 +159,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hinata_base_mouth3.webp?v=35395ed3",
+     "src": "art/hinata_base_mouth3.webp?v=bc248ded",
      "rect": [
       510,
       343,
@@ -222,7 +222,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/hinata_dice_mouth1.webp?v=ef8debf4",
+     "src": "art/hinata_dice_mouth1.webp?v=0ab52ee1",
      "rect": [
       419,
       345,
@@ -233,7 +233,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hinata_dice_mouth2.webp?v=37034588",
+     "src": "art/hinata_dice_mouth2.webp?v=2387fead",
      "rect": [
       419,
       345,
@@ -244,7 +244,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hinata_dice_mouth3.webp?v=b7213abb",
+     "src": "art/hinata_dice_mouth3.webp?v=8858c518",
      "rect": [
       419,
       345,
@@ -286,16 +286,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/hinata_ear_mouth.webp?v=3039157d",
-     "rect": [
-      1263,
-      506,
-      232,
-      146
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/hinata_ear_eyes.webp?v=c12ef6bd",
      "rect": [
       1112,
@@ -304,6 +294,50 @@ window.MOHEAT_LAYERS = {
       226
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/hinata_ear_mouth0.webp?v=cfb95416",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/hinata_ear_mouth1.webp?v=f5b5670b",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/hinata_ear_mouth2.webp?v=bb4010e2",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/hinata_ear_mouth3.webp?v=017599d8",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -355,7 +389,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/mint_base_mouth1.webp?v=4f9c7409",
+     "src": "art/mint_base_mouth1.webp?v=d3d18c8d",
      "rect": [
       538,
       320,
@@ -366,7 +400,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/mint_base_mouth2.webp?v=cf0c9338",
+     "src": "art/mint_base_mouth2.webp?v=c62441b0",
      "rect": [
       538,
       320,
@@ -377,7 +411,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/mint_base_mouth3.webp?v=de6b89fa",
+     "src": "art/mint_base_mouth3.webp?v=0e9cb3d6",
      "rect": [
       538,
       320,
@@ -437,7 +471,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/mint_ear_mouth1.webp?v=64f85156",
+     "src": "art/mint_ear_mouth1.webp?v=d1f9586e",
      "rect": [
       651,
       548,
@@ -448,7 +482,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/mint_ear_mouth2.webp?v=0e463f32",
+     "src": "art/mint_ear_mouth2.webp?v=4ded52ff",
      "rect": [
       651,
       548,
@@ -459,7 +493,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/mint_ear_mouth3.webp?v=25a0404a",
+     "src": "art/mint_ear_mouth3.webp?v=de607528",
      "rect": [
       651,
       548,
@@ -522,7 +556,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/nagisa_guard_mouth1.webp?v=b736042e",
+     "src": "art/nagisa_guard_mouth1.webp?v=b24c6bf3",
      "rect": [
       438,
       508,
@@ -533,7 +567,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/nagisa_guard_mouth2.webp?v=460611bf",
+     "src": "art/nagisa_guard_mouth2.webp?v=35470684",
      "rect": [
       438,
       508,
@@ -544,7 +578,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/nagisa_guard_mouth3.webp?v=3117dcdc",
+     "src": "art/nagisa_guard_mouth3.webp?v=6413d49f",
      "rect": [
       438,
       508,
@@ -604,7 +638,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/mint_ear_mouth1.webp?v=64f85156",
+     "src": "art/mint_ear_mouth1.webp?v=d1f9586e",
      "rect": [
       651,
       548,
@@ -615,7 +649,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/mint_ear_mouth2.webp?v=0e463f32",
+     "src": "art/mint_ear_mouth2.webp?v=4ded52ff",
      "rect": [
       651,
       548,
@@ -626,7 +660,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/mint_ear_mouth3.webp?v=25a0404a",
+     "src": "art/mint_ear_mouth3.webp?v=de607528",
      "rect": [
       651,
       548,
@@ -665,16 +699,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/hinata_ear_mouth.webp?v=3039157d",
-     "rect": [
-      1263,
-      506,
-      232,
-      146
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/hinata_ear_eyes.webp?v=c12ef6bd",
      "rect": [
       1112,
@@ -683,6 +707,50 @@ window.MOHEAT_LAYERS = {
       226
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/hinata_ear_mouth0.webp?v=cfb95416",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/hinata_ear_mouth1.webp?v=f5b5670b",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/hinata_ear_mouth2.webp?v=bb4010e2",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/hinata_ear_mouth3.webp?v=017599d8",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -734,7 +802,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/nagisa_guard_mouth1.webp?v=b736042e",
+     "src": "art/nagisa_guard_mouth1.webp?v=b24c6bf3",
      "rect": [
       438,
       508,
@@ -745,7 +813,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/nagisa_guard_mouth2.webp?v=460611bf",
+     "src": "art/nagisa_guard_mouth2.webp?v=35470684",
      "rect": [
       438,
       508,
@@ -756,7 +824,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/nagisa_guard_mouth3.webp?v=3117dcdc",
+     "src": "art/nagisa_guard_mouth3.webp?v=6413d49f",
      "rect": [
       438,
       508,
@@ -816,7 +884,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/mint_base_mouth1.webp?v=4f9c7409",
+     "src": "art/mint_base_mouth1.webp?v=d3d18c8d",
      "rect": [
       538,
       320,
@@ -827,7 +895,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/mint_base_mouth2.webp?v=cf0c9338",
+     "src": "art/mint_base_mouth2.webp?v=c62441b0",
      "rect": [
       538,
       320,
@@ -838,7 +906,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/mint_base_mouth3.webp?v=de6b89fa",
+     "src": "art/mint_base_mouth3.webp?v=0e9cb3d6",
      "rect": [
       538,
       320,
@@ -898,7 +966,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/hinata_base_mouth1.webp?v=bbef5c11",
+     "src": "art/hinata_base_mouth1.webp?v=18449f02",
      "rect": [
       510,
       343,
@@ -909,7 +977,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hinata_base_mouth2.webp?v=74f3d35a",
+     "src": "art/hinata_base_mouth2.webp?v=33154869",
      "rect": [
       510,
       343,
@@ -920,7 +988,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hinata_base_mouth3.webp?v=35395ed3",
+     "src": "art/hinata_base_mouth3.webp?v=bc248ded",
      "rect": [
       510,
       343,
@@ -959,16 +1027,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/hinata_ear_mouth.webp?v=3039157d",
-     "rect": [
-      1263,
-      506,
-      232,
-      146
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/hinata_ear_eyes.webp?v=c12ef6bd",
      "rect": [
       1112,
@@ -977,6 +1035,50 @@ window.MOHEAT_LAYERS = {
       226
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/hinata_ear_mouth0.webp?v=cfb95416",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/hinata_ear_mouth1.webp?v=f5b5670b",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/hinata_ear_mouth2.webp?v=bb4010e2",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/hinata_ear_mouth3.webp?v=017599d8",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -1028,7 +1130,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/nagisa_guard_mouth1.webp?v=b736042e",
+     "src": "art/nagisa_guard_mouth1.webp?v=b24c6bf3",
      "rect": [
       438,
       508,
@@ -1039,7 +1141,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/nagisa_guard_mouth2.webp?v=460611bf",
+     "src": "art/nagisa_guard_mouth2.webp?v=35470684",
      "rect": [
       438,
       508,
@@ -1050,7 +1152,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/nagisa_guard_mouth3.webp?v=3117dcdc",
+     "src": "art/nagisa_guard_mouth3.webp?v=6413d49f",
      "rect": [
       438,
       508,
@@ -1110,7 +1212,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/mint_base_mouth1.webp?v=4f9c7409",
+     "src": "art/mint_base_mouth1.webp?v=d3d18c8d",
      "rect": [
       538,
       320,
@@ -1121,7 +1223,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/mint_base_mouth2.webp?v=cf0c9338",
+     "src": "art/mint_base_mouth2.webp?v=c62441b0",
      "rect": [
       538,
       320,
@@ -1132,7 +1234,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/mint_base_mouth3.webp?v=de6b89fa",
+     "src": "art/mint_base_mouth3.webp?v=0e9cb3d6",
      "rect": [
       538,
       320,
@@ -1183,7 +1285,7 @@ window.MOHEAT_LAYERS = {
        "level": 0
       },
       {
-       "src": "art/nagisa_base_mouth1.webp?v=169b4f58",
+       "src": "art/nagisa_base_mouth1.webp?v=199abcdb",
        "rect": [
         636,
         421,
@@ -1194,7 +1296,7 @@ window.MOHEAT_LAYERS = {
        "level": 1
       },
       {
-       "src": "art/nagisa_base_mouth2.webp?v=99e54bc5",
+       "src": "art/nagisa_base_mouth2.webp?v=59f7b11c",
        "rect": [
         636,
         421,
@@ -1205,7 +1307,7 @@ window.MOHEAT_LAYERS = {
        "level": 2
       },
       {
-       "src": "art/nagisa_base_mouth3.webp?v=d988c085",
+       "src": "art/nagisa_base_mouth3.webp?v=1a9245b9",
        "rect": [
         636,
         421,
@@ -1256,7 +1358,7 @@ window.MOHEAT_LAYERS = {
        "level": 0
       },
       {
-       "src": "art/hinata_base_mouth1.webp?v=bbef5c11",
+       "src": "art/hinata_base_mouth1.webp?v=18449f02",
        "rect": [
         510,
         343,
@@ -1267,7 +1369,7 @@ window.MOHEAT_LAYERS = {
        "level": 1
       },
       {
-       "src": "art/hinata_base_mouth2.webp?v=74f3d35a",
+       "src": "art/hinata_base_mouth2.webp?v=33154869",
        "rect": [
         510,
         343,
@@ -1278,7 +1380,7 @@ window.MOHEAT_LAYERS = {
        "level": 2
       },
       {
-       "src": "art/hinata_base_mouth3.webp?v=35395ed3",
+       "src": "art/hinata_base_mouth3.webp?v=bc248ded",
        "rect": [
         510,
         343,
@@ -1343,7 +1445,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/mint_base_mouth1.webp?v=4f9c7409",
+     "src": "art/mint_base_mouth1.webp?v=d3d18c8d",
      "rect": [
       538,
       320,
@@ -1354,7 +1456,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/mint_base_mouth2.webp?v=cf0c9338",
+     "src": "art/mint_base_mouth2.webp?v=c62441b0",
      "rect": [
       538,
       320,
@@ -1365,7 +1467,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/mint_base_mouth3.webp?v=de6b89fa",
+     "src": "art/mint_base_mouth3.webp?v=0e9cb3d6",
      "rect": [
       538,
       320,
@@ -1428,7 +1530,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/nagisa_base_mouth1.webp?v=169b4f58",
+     "src": "art/nagisa_base_mouth1.webp?v=199abcdb",
      "rect": [
       636,
       421,
@@ -1439,7 +1541,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/nagisa_base_mouth2.webp?v=99e54bc5",
+     "src": "art/nagisa_base_mouth2.webp?v=59f7b11c",
      "rect": [
       636,
       421,
@@ -1450,7 +1552,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/nagisa_base_mouth3.webp?v=d988c085",
+     "src": "art/nagisa_base_mouth3.webp?v=1a9245b9",
      "rect": [
       636,
       421,
@@ -1513,7 +1615,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/nagisa_guard_mouth1.webp?v=b736042e",
+     "src": "art/nagisa_guard_mouth1.webp?v=b24c6bf3",
      "rect": [
       438,
       508,
@@ -1524,7 +1626,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/nagisa_guard_mouth2.webp?v=460611bf",
+     "src": "art/nagisa_guard_mouth2.webp?v=35470684",
      "rect": [
       438,
       508,
@@ -1535,7 +1637,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/nagisa_guard_mouth3.webp?v=3117dcdc",
+     "src": "art/nagisa_guard_mouth3.webp?v=6413d49f",
      "rect": [
       438,
       508,
@@ -1598,7 +1700,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/mint_base_mouth1.webp?v=4f9c7409",
+     "src": "art/mint_base_mouth1.webp?v=d3d18c8d",
      "rect": [
       538,
       320,
@@ -1609,7 +1711,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/mint_base_mouth2.webp?v=cf0c9338",
+     "src": "art/mint_base_mouth2.webp?v=c62441b0",
      "rect": [
       538,
       320,
@@ -1620,7 +1722,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/mint_base_mouth3.webp?v=de6b89fa",
+     "src": "art/mint_base_mouth3.webp?v=0e9cb3d6",
      "rect": [
       538,
       320,
@@ -1671,7 +1773,7 @@ window.MOHEAT_LAYERS = {
        "level": 0
       },
       {
-       "src": "art/nagisa_base_mouth1.webp?v=169b4f58",
+       "src": "art/nagisa_base_mouth1.webp?v=199abcdb",
        "rect": [
         636,
         421,
@@ -1682,7 +1784,7 @@ window.MOHEAT_LAYERS = {
        "level": 1
       },
       {
-       "src": "art/nagisa_base_mouth2.webp?v=99e54bc5",
+       "src": "art/nagisa_base_mouth2.webp?v=59f7b11c",
        "rect": [
         636,
         421,
@@ -1693,7 +1795,7 @@ window.MOHEAT_LAYERS = {
        "level": 2
       },
       {
-       "src": "art/nagisa_base_mouth3.webp?v=d988c085",
+       "src": "art/nagisa_base_mouth3.webp?v=1a9245b9",
        "rect": [
         636,
         421,
@@ -1744,7 +1846,7 @@ window.MOHEAT_LAYERS = {
        "level": 0
       },
       {
-       "src": "art/hinata_base_mouth1.webp?v=bbef5c11",
+       "src": "art/hinata_base_mouth1.webp?v=18449f02",
        "rect": [
         510,
         343,
@@ -1755,7 +1857,7 @@ window.MOHEAT_LAYERS = {
        "level": 1
       },
       {
-       "src": "art/hinata_base_mouth2.webp?v=74f3d35a",
+       "src": "art/hinata_base_mouth2.webp?v=33154869",
        "rect": [
         510,
         343,
@@ -1766,7 +1868,7 @@ window.MOHEAT_LAYERS = {
        "level": 2
       },
       {
-       "src": "art/hinata_base_mouth3.webp?v=35395ed3",
+       "src": "art/hinata_base_mouth3.webp?v=bc248ded",
        "rect": [
         510,
         343,
@@ -1828,7 +1930,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/hinata_base_mouth1.webp?v=bbef5c11",
+     "src": "art/hinata_base_mouth1.webp?v=18449f02",
      "rect": [
       510,
       343,
@@ -1839,7 +1941,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hinata_base_mouth2.webp?v=74f3d35a",
+     "src": "art/hinata_base_mouth2.webp?v=33154869",
      "rect": [
       510,
       343,
@@ -1850,7 +1952,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hinata_base_mouth3.webp?v=35395ed3",
+     "src": "art/hinata_base_mouth3.webp?v=bc248ded",
      "rect": [
       510,
       343,
@@ -1889,16 +1991,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/hinata_ear_mouth.webp?v=3039157d",
-     "rect": [
-      1263,
-      506,
-      232,
-      146
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/hinata_ear_eyes.webp?v=c12ef6bd",
      "rect": [
       1112,
@@ -1907,6 +1999,50 @@ window.MOHEAT_LAYERS = {
       226
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/hinata_ear_mouth0.webp?v=cfb95416",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/hinata_ear_mouth1.webp?v=f5b5670b",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/hinata_ear_mouth2.webp?v=bb4010e2",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/hinata_ear_mouth3.webp?v=017599d8",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -1958,7 +2094,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/nagisa_base_mouth1.webp?v=169b4f58",
+     "src": "art/nagisa_base_mouth1.webp?v=199abcdb",
      "rect": [
       636,
       421,
@@ -1969,7 +2105,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/nagisa_base_mouth2.webp?v=99e54bc5",
+     "src": "art/nagisa_base_mouth2.webp?v=59f7b11c",
      "rect": [
       636,
       421,
@@ -1980,7 +2116,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/nagisa_base_mouth3.webp?v=d988c085",
+     "src": "art/nagisa_base_mouth3.webp?v=1a9245b9",
      "rect": [
       636,
       421,
@@ -2040,7 +2176,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/nagisa_guard_mouth1.webp?v=b736042e",
+     "src": "art/nagisa_guard_mouth1.webp?v=b24c6bf3",
      "rect": [
       438,
       508,
@@ -2051,7 +2187,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/nagisa_guard_mouth2.webp?v=460611bf",
+     "src": "art/nagisa_guard_mouth2.webp?v=35470684",
      "rect": [
       438,
       508,
@@ -2062,7 +2198,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/nagisa_guard_mouth3.webp?v=3117dcdc",
+     "src": "art/nagisa_guard_mouth3.webp?v=6413d49f",
      "rect": [
       438,
       508,
@@ -2122,7 +2258,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/mint_base_mouth1.webp?v=4f9c7409",
+     "src": "art/mint_base_mouth1.webp?v=d3d18c8d",
      "rect": [
       538,
       320,
@@ -2133,7 +2269,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/mint_base_mouth2.webp?v=cf0c9338",
+     "src": "art/mint_base_mouth2.webp?v=c62441b0",
      "rect": [
       538,
       320,
@@ -2144,7 +2280,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/mint_base_mouth3.webp?v=de6b89fa",
+     "src": "art/mint_base_mouth3.webp?v=0e9cb3d6",
      "rect": [
       538,
       320,
@@ -2195,7 +2331,7 @@ window.MOHEAT_LAYERS = {
        "level": 0
       },
       {
-       "src": "art/nagisa_base_mouth1.webp?v=169b4f58",
+       "src": "art/nagisa_base_mouth1.webp?v=199abcdb",
        "rect": [
         636,
         421,
@@ -2206,7 +2342,7 @@ window.MOHEAT_LAYERS = {
        "level": 1
       },
       {
-       "src": "art/nagisa_base_mouth2.webp?v=99e54bc5",
+       "src": "art/nagisa_base_mouth2.webp?v=59f7b11c",
        "rect": [
         636,
         421,
@@ -2217,7 +2353,7 @@ window.MOHEAT_LAYERS = {
        "level": 2
       },
       {
-       "src": "art/nagisa_base_mouth3.webp?v=d988c085",
+       "src": "art/nagisa_base_mouth3.webp?v=1a9245b9",
        "rect": [
         636,
         421,
@@ -2268,7 +2404,7 @@ window.MOHEAT_LAYERS = {
        "level": 0
       },
       {
-       "src": "art/hinata_base_mouth1.webp?v=bbef5c11",
+       "src": "art/hinata_base_mouth1.webp?v=18449f02",
        "rect": [
         510,
         343,
@@ -2279,7 +2415,7 @@ window.MOHEAT_LAYERS = {
        "level": 1
       },
       {
-       "src": "art/hinata_base_mouth2.webp?v=74f3d35a",
+       "src": "art/hinata_base_mouth2.webp?v=33154869",
        "rect": [
         510,
         343,
@@ -2290,7 +2426,7 @@ window.MOHEAT_LAYERS = {
        "level": 2
       },
       {
-       "src": "art/hinata_base_mouth3.webp?v=35395ed3",
+       "src": "art/hinata_base_mouth3.webp?v=bc248ded",
        "rect": [
         510,
         343,
@@ -2355,7 +2491,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/mint_base_mouth1.webp?v=4f9c7409",
+     "src": "art/mint_base_mouth1.webp?v=d3d18c8d",
      "rect": [
       538,
       320,
@@ -2366,7 +2502,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/mint_base_mouth2.webp?v=cf0c9338",
+     "src": "art/mint_base_mouth2.webp?v=c62441b0",
      "rect": [
       538,
       320,
@@ -2377,7 +2513,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/mint_base_mouth3.webp?v=de6b89fa",
+     "src": "art/mint_base_mouth3.webp?v=0e9cb3d6",
      "rect": [
       538,
       320,
@@ -2440,7 +2576,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/hinata_base_mouth1.webp?v=bbef5c11",
+     "src": "art/hinata_base_mouth1.webp?v=18449f02",
      "rect": [
       510,
       343,
@@ -2451,7 +2587,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hinata_base_mouth2.webp?v=74f3d35a",
+     "src": "art/hinata_base_mouth2.webp?v=33154869",
      "rect": [
       510,
       343,
@@ -2462,7 +2598,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hinata_base_mouth3.webp?v=35395ed3",
+     "src": "art/hinata_base_mouth3.webp?v=bc248ded",
      "rect": [
       510,
       343,
@@ -2504,16 +2640,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/hinata_ear_mouth.webp?v=3039157d",
-     "rect": [
-      1263,
-      506,
-      232,
-      146
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/hinata_ear_eyes.webp?v=c12ef6bd",
      "rect": [
       1112,
@@ -2522,6 +2648,50 @@ window.MOHEAT_LAYERS = {
       226
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/hinata_ear_mouth0.webp?v=cfb95416",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/hinata_ear_mouth1.webp?v=f5b5670b",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/hinata_ear_mouth2.webp?v=bb4010e2",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/hinata_ear_mouth3.webp?v=017599d8",
+     "rect": [
+      1276,
+      549,
+      204,
+      129
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -2576,7 +2746,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/mint_base_mouth1.webp?v=4f9c7409",
+     "src": "art/mint_base_mouth1.webp?v=d3d18c8d",
      "rect": [
       538,
       320,
@@ -2587,7 +2757,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/mint_base_mouth2.webp?v=cf0c9338",
+     "src": "art/mint_base_mouth2.webp?v=c62441b0",
      "rect": [
       538,
       320,
@@ -2598,7 +2768,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/mint_base_mouth3.webp?v=de6b89fa",
+     "src": "art/mint_base_mouth3.webp?v=0e9cb3d6",
      "rect": [
       538,
       320,
@@ -2649,7 +2819,7 @@ window.MOHEAT_LAYERS = {
        "level": 0
       },
       {
-       "src": "art/nagisa_base_mouth1.webp?v=169b4f58",
+       "src": "art/nagisa_base_mouth1.webp?v=199abcdb",
        "rect": [
         636,
         421,
@@ -2660,7 +2830,7 @@ window.MOHEAT_LAYERS = {
        "level": 1
       },
       {
-       "src": "art/nagisa_base_mouth2.webp?v=99e54bc5",
+       "src": "art/nagisa_base_mouth2.webp?v=59f7b11c",
        "rect": [
         636,
         421,
@@ -2671,7 +2841,7 @@ window.MOHEAT_LAYERS = {
        "level": 2
       },
       {
-       "src": "art/nagisa_base_mouth3.webp?v=d988c085",
+       "src": "art/nagisa_base_mouth3.webp?v=1a9245b9",
        "rect": [
         636,
         421,
@@ -2722,7 +2892,7 @@ window.MOHEAT_LAYERS = {
        "level": 0
       },
       {
-       "src": "art/hinata_base_mouth1.webp?v=bbef5c11",
+       "src": "art/hinata_base_mouth1.webp?v=18449f02",
        "rect": [
         510,
         343,
@@ -2733,7 +2903,7 @@ window.MOHEAT_LAYERS = {
        "level": 1
       },
       {
-       "src": "art/hinata_base_mouth2.webp?v=74f3d35a",
+       "src": "art/hinata_base_mouth2.webp?v=33154869",
        "rect": [
         510,
         343,
@@ -2744,7 +2914,7 @@ window.MOHEAT_LAYERS = {
        "level": 2
       },
       {
-       "src": "art/hinata_base_mouth3.webp?v=35395ed3",
+       "src": "art/hinata_base_mouth3.webp?v=bc248ded",
        "rect": [
         510,
         343,
@@ -2806,7 +2976,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/mint_base_mouth1.webp?v=4f9c7409",
+     "src": "art/mint_base_mouth1.webp?v=d3d18c8d",
      "rect": [
       538,
       320,
@@ -2817,7 +2987,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/mint_base_mouth2.webp?v=cf0c9338",
+     "src": "art/mint_base_mouth2.webp?v=c62441b0",
      "rect": [
       538,
       320,
@@ -2828,7 +2998,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/mint_base_mouth3.webp?v=de6b89fa",
+     "src": "art/mint_base_mouth3.webp?v=0e9cb3d6",
      "rect": [
       538,
       320,
@@ -2888,7 +3058,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/hinata_base_mouth1.webp?v=bbef5c11",
+     "src": "art/hinata_base_mouth1.webp?v=18449f02",
      "rect": [
       510,
       343,
@@ -2899,7 +3069,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hinata_base_mouth2.webp?v=74f3d35a",
+     "src": "art/hinata_base_mouth2.webp?v=33154869",
      "rect": [
       510,
       343,
@@ -2910,7 +3080,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hinata_base_mouth3.webp?v=35395ed3",
+     "src": "art/hinata_base_mouth3.webp?v=bc248ded",
      "rect": [
       510,
       343,
@@ -2970,7 +3140,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/nagisa_base_mouth1.webp?v=169b4f58",
+     "src": "art/nagisa_base_mouth1.webp?v=199abcdb",
      "rect": [
       636,
       421,
@@ -2981,7 +3151,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/nagisa_base_mouth2.webp?v=99e54bc5",
+     "src": "art/nagisa_base_mouth2.webp?v=59f7b11c",
      "rect": [
       636,
       421,
@@ -2992,7 +3162,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/nagisa_base_mouth3.webp?v=d988c085",
+     "src": "art/nagisa_base_mouth3.webp?v=1a9245b9",
      "rect": [
       636,
       421,
@@ -3052,7 +3222,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/mint_base_mouth1.webp?v=4f9c7409",
+     "src": "art/mint_base_mouth1.webp?v=d3d18c8d",
      "rect": [
       538,
       320,
@@ -3063,7 +3233,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/mint_base_mouth2.webp?v=cf0c9338",
+     "src": "art/mint_base_mouth2.webp?v=c62441b0",
      "rect": [
       538,
       320,
@@ -3074,7 +3244,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/mint_base_mouth3.webp?v=de6b89fa",
+     "src": "art/mint_base_mouth3.webp?v=0e9cb3d6",
      "rect": [
       538,
       320,
@@ -3125,7 +3295,7 @@ window.MOHEAT_LAYERS = {
        "level": 0
       },
       {
-       "src": "art/nagisa_base_mouth1.webp?v=169b4f58",
+       "src": "art/nagisa_base_mouth1.webp?v=199abcdb",
        "rect": [
         636,
         421,
@@ -3136,7 +3306,7 @@ window.MOHEAT_LAYERS = {
        "level": 1
       },
       {
-       "src": "art/nagisa_base_mouth2.webp?v=99e54bc5",
+       "src": "art/nagisa_base_mouth2.webp?v=59f7b11c",
        "rect": [
         636,
         421,
@@ -3147,7 +3317,7 @@ window.MOHEAT_LAYERS = {
        "level": 2
       },
       {
-       "src": "art/nagisa_base_mouth3.webp?v=d988c085",
+       "src": "art/nagisa_base_mouth3.webp?v=1a9245b9",
        "rect": [
         636,
         421,
@@ -3198,7 +3368,7 @@ window.MOHEAT_LAYERS = {
        "level": 0
       },
       {
-       "src": "art/hinata_base_mouth1.webp?v=bbef5c11",
+       "src": "art/hinata_base_mouth1.webp?v=18449f02",
        "rect": [
         510,
         343,
@@ -3209,7 +3379,7 @@ window.MOHEAT_LAYERS = {
        "level": 1
       },
       {
-       "src": "art/hinata_base_mouth2.webp?v=74f3d35a",
+       "src": "art/hinata_base_mouth2.webp?v=33154869",
        "rect": [
         510,
         343,
@@ -3220,7 +3390,7 @@ window.MOHEAT_LAYERS = {
        "level": 2
       },
       {
-       "src": "art/hinata_base_mouth3.webp?v=35395ed3",
+       "src": "art/hinata_base_mouth3.webp?v=bc248ded",
        "rect": [
         510,
         343,

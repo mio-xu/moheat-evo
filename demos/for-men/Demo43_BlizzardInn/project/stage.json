@@ -197,7 +197,22 @@
      46,
      32
     ]
-   ]
+   ],
+   "lp": {
+    "warp": false,
+    "centre": [
+     1700,
+     688
+    ],
+    "radius": [
+     88,
+     46
+    ],
+    "lift": 0.1,
+    "drop": 0.24,
+    "dark": 10
+   },
+   "mouth": "lp"
   },
   "mint_base": {
    "src": "mint_base",
