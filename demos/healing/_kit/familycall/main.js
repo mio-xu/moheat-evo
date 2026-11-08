@@ -439,6 +439,22 @@
     const C = window.MoHeatCover, pic = () => ctx.drawImage(coverCv, 0, 0);   // cover standard (shared/cover.js): the couple is already on the standard spot
     if (C) C.fit(ctx, PART === 2 ? { eye: [.77, .325], face: .25 } : { eye: [.765, .275], face: .24 }, pic, { duo: true, tone: '#2a1a12' }); else pic();
   }
+  // pure listening (shared/shell.js hand): your part of the call happens by itself — the hand taps the heater, the 📞 Call button,
+  // the front door, your right / left cheek (the spot on the picture each action names, as a finger would), the other actions'
+  // buttons; answers and "say it" prompts take the default after a natural pause (the shell's own default, by the same hand).
+  if (window.MoHeatShell) {
+    let since = 0, what = '';
+    MoHeatShell.autoplay = (G) => {
+      if (!S.started) return true;
+      const dial = $('dialer').classList.contains('show'), act = actEl.classList.contains('show') && actEl.querySelector('.act-btn'), key = dial ? 'dial' : act ? act.textContent : '';
+      if (key !== what) { what = key; since = performance.now(); }
+      if (!key) return false;   // choices / speak: the shell's default answer
+      if (performance.now() - since < 1800) return true;
+      if (dial) return G.run(() => G.tap($('callBtn')));
+      if (hot) return G.run(() => G.tap(cv, (hot.x0 + hot.x1) / 2 / W, (hot.y0 + hot.y1) / 2 / H));
+      return G.run(() => G.tap(act));
+    };
+  }
   window.FAMILY = { get S() { return S; }, FW, thermal: () => thermal(.05), conflicts: () => conflicts, both: () => both };
   setStep(0);
   if (QS.has('cover')) { document.body.classList.add('cover-only'); artReady.then(drawCover); return; }

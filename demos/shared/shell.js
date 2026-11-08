@@ -1,7 +1,7 @@
 // The unified UI shell for every MoHeat Evo demo (DEMO_DESIGN_GUIDE §2 + §7.3 "统一外壳", user 2026-11-08). Load it BEFORE main.js
 // (right after device.js):   <script src="../../shared/shell.js?v=1"></script>   — it has to wrap the clock before the demo starts.
 // What every demo gets from it, with no per-demo code:
-//   · PURE listening mode (default) / INTERACTIVE mode, picked on the cover (and on the end cover). Pure: no microphone
+//   · INTERACTIVE mode (default) / PURE listening mode, picked on the cover (and on the end cover). Pure: no microphone
 //     (shared/voice.js reads MoHeatPlay.pure), every choice / action / hold resolves itself after a short natural pause on the
 //     default answer (the first button). window.MoHeatPlay = { pure, mode }, event 'moheat:playmode'.
 //   · Pause: Space or a tap on the picture while the story plays — the demo's clock, timers, animation frames, Web Audio and
@@ -11,7 +11,6 @@
 //   · Settings remembered (try / catch): mode, thermal on / off, intensity, subtitles on / off + size S / M / L, reduced motion.
 //   · Loading veil until the page's art / voices / fonts are in; unified error toasts (device lost, mic denied, load failure).
 //   · Subtitles on / off + size, reduced motion (also prefers-reduced-motion: html.reduce-motion, MoHeatPlay.reduced), visible focus.
-// Games with their own HUD at the bottom: <html data-shbar="top"> puts the chapter bar at the top centre and 🌡 under the top-right buttons.
 // Per-demo hooks are optional: window.MoHeatShell.chapters = [{ t: seconds | step index, ja, en, zh }] + .seek(i) for the seek bar.
 (() => {
   if (window.MoHeatShell) return;
@@ -101,7 +100,7 @@
   const stopDevice = () => devSend.forEach((s) => { try { s('stop'); } catch {} });
 
   // ---------------------------------------------------------------- mode
-  let mode = QS.has('interactive') ? 'interactive' : QS.has('pure') ? 'pure' : LS.get('mode', 'pure');
+  let mode = QS.has('interactive') ? 'interactive' : QS.has('pure') ? 'pure' : LS.get('mode', 'interactive');   // default = interactive (user 2026-11-08); pure (just listen) is the option, a remembered choice wins
   const Play = window.MoHeatPlay = { get mode() { return mode; }, get pure() { return mode === 'pure' && !QS.has('auto'); }, reduced: false };
   const setMode = (m) => { mode = m; LS.set('mode', m); document.documentElement.dataset.playmode = m; paint(); dispatchEvent(new CustomEvent('moheat:playmode', { detail: m })); };
 
@@ -261,9 +260,6 @@
   .sh-bar button:disabled { opacity: .45; cursor: not-allowed; }
   @container (max-width: 620px) { .sh-bar { left: 2cqw; right: 2cqw; } .sh-bar button span { display: none; } .sh-bar button { justify-content: center; height: 5cqw; } }
   .stage:has(.intro:not(.hidden)) .sh-heat { display: none; }
-  html[data-shbar=top] .sh-bar { top: 1.2cqw; bottom: auto; left: 28cqw; right: 28cqw; }   /* games whose own HUD (inventory, dock, hearts) is at the bottom */
-  html[data-shbar=top] .sh-heat { left: auto; right: 1cqw; top: 5.4cqw; bottom: auto; }
-  @container (max-width: 620px) { html[data-shbar=top] .sh-bar { top: 12cqw; left: 22cqw; right: 22cqw; } html[data-shbar=top] .sh-heat { top: 12cqw; } }
   .sh-veil { position: absolute; inset: 0; z-index: 40; display: flex; align-items: center; justify-content: center; background: #0b0a12; color: #d8d0e4;
     font: 500 clamp(11px, 1.3cqw, 22px)/1 inherit; transition: opacity .35s; }
   .sh-veil.gone { opacity: 0; pointer-events: none; }
