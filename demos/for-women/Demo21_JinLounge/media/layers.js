@@ -378,7 +378,7 @@ window.MOHEAT_LAYERS = {
     "zoom": 1.3
    },
    "char": {
-    "src": "art/char_whisper.webp?v=837dcd80",
+    "src": "art/char_whisper.webp?v=88be8702",
     "w": 1700,
     "h": 1150,
     "x": 0.6122,

@@ -16,7 +16,7 @@
   // end (identical frames → hard cut, no ghosting); the story asks for a transition with go(). ?stills = no video.
   const VIEWS = ['lounge', 'can', 'wrist', 'glasses', 'gaze', 'whisper', 'jacket'];
   const IMG = {};
-  const artReady = Promise.all(VIEWS.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/jin_${n}.jpg?v=2`; })));
+  const artReady = Promise.all(VIEWS.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/jin_${n}.jpg?v=3`; })));
   const CLIP_NAMES = ['v_lounge', 'v_lounge_idle', 'v_can', 'v_can_idle', 'v_wrist', 'v_glasses', 'v_gaze_idle', 'v_whisper', 'v_jacket', 'v_jacket_idle',
     't_lounge_can', 't_can_wrist', 't_wrist_glasses', 't_glasses_gaze', 't_gaze_whisper', 't_whisper_jacket'];
   const ONCE = new Set(CLIP_NAMES.filter((n) => n.startsWith('t_')));
