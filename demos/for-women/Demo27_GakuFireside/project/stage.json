@@ -1,0 +1,220 @@
+{
+ "src": "assets/art",
+ "skipVideo": "media/video/[vt]_",
+ "bgs": {
+  "camp": {
+   "src": "bg_camp"
+  }
+ },
+ "poses": {
+  "sit": {
+   "src": "gaku_ref",
+   "talk": "gaku_ref_talk",
+   "blink": "gaku_ref_blink",
+   "near_mouth": [
+    1262,
+    631
+   ],
+   "near_eyes": [
+    1244,
+    440
+   ]
+  },
+  "coffee": {
+   "src": "gaku_coffee",
+   "talk": "gaku_ref_talk",
+   "blink": "gaku_ref_blink",
+   "near_mouth": [
+    1262,
+    631
+   ],
+   "near_eyes": [
+    1244,
+    440
+   ],
+   "keep": [
+    [
+     1100,
+     700,
+     1500,
+     1020
+    ]
+   ]
+  },
+  "imo": {
+   "src": "gaku_imo",
+   "talk": "gaku_ref_talk",
+   "blink": "gaku_ref_blink",
+   "near_mouth": [
+    1262,
+    631
+   ],
+   "near_eyes": [
+    1244,
+    440
+   ]
+  },
+  "blanket": {
+   "src": "gaku_blanket",
+   "talk": "gaku_ref_talk",
+   "blink": "gaku_ref_blink",
+   "near_mouth": [
+    1262,
+    631
+   ],
+   "near_eyes": [
+    1244,
+    440
+   ]
+  },
+  "bye": {
+   "src": "gaku_bye",
+   "talk": "gaku_ref_talk",
+   "blink": "gaku_ref_blink",
+   "near_mouth": [
+    1262,
+    631
+   ],
+   "near_eyes": [
+    1244,
+    440
+   ]
+  },
+  "log": {
+   "src": "gaku_log",
+   "talk": "gaku_log_talk",
+   "blink": "gaku_log_blink",
+   "erase": [
+    [
+     2240,
+     1240,
+     2560,
+     1440
+    ]
+   ],
+   "near_mouth": [
+    1175,
+    545
+   ],
+   "near_eyes": [
+    1167,
+    384
+   ]
+  },
+  "left": {
+   "src": "gaku_left",
+   "talk": "gaku_left_talk",
+   "blink": "gaku_left_blink",
+   "near_mouth": [
+    1133,
+    848
+   ]
+  },
+  "whisper": {
+   "src": "gaku_whisper",
+   "talk": "gaku_whisper_talk",
+   "near_mouth": [
+    1100,
+    850
+   ]
+  }
+ },
+ "views": {
+  "live": {
+   "still": "gaku_live",
+   "pose": "sit",
+   "bg": "camp",
+   "fire": [
+    0.9,
+    0.74
+   ],
+   "x": 0.43,
+   "y": 1.04,
+   "height": 1.0
+  },
+  "log": {
+   "still": "gaku_log",
+   "pose": "log",
+   "bg": "camp",
+   "fire": [
+    0.76,
+    0.8
+   ],
+   "x": 0.42,
+   "y": 1.04,
+   "height": 1.0
+  },
+  "left": {
+   "still": "gaku_left",
+   "pose": "left",
+   "bg": "camp",
+   "fire": [
+    0.76,
+    0.62
+   ],
+   "x": 0.3,
+   "y": 1.02,
+   "height": 1.05
+  },
+  "coffee": {
+   "still": "gaku_coffee",
+   "pose": "coffee",
+   "bg": "camp",
+   "fire": [
+    0.92,
+    0.55
+   ],
+   "x": 0.43,
+   "y": 1.12,
+   "height": 1.3
+  },
+  "imo": {
+   "still": "gaku_imo",
+   "pose": "imo",
+   "bg": "camp",
+   "fire": [
+    0.92,
+    0.63
+   ],
+   "x": 0.55,
+   "y": 1.2,
+   "height": 1.08
+  },
+  "blanket": {
+   "still": "gaku_blanket",
+   "pose": "blanket",
+   "bg": "camp",
+   "fire": [
+    0.94,
+    0.63
+   ],
+   "x": 0.43,
+   "y": 1.06,
+   "height": 1.08
+  },
+  "whisper_R": {
+   "still": "gaku_whisper_R",
+   "pose": "whisper",
+   "bg": "camp",
+   "fire": [
+    0.95,
+    0.7
+   ],
+   "x": 0.58,
+   "y": 1.03,
+   "height": 1.05
+  },
+  "bye": {
+   "still": "gaku_bye",
+   "pose": "bye",
+   "bg": "camp",
+   "fire": [
+    0.74,
+    0.7
+   ],
+   "x": 0.43,
+   "y": 1.04,
+   "height": 1.0
+  }
+ }
+}

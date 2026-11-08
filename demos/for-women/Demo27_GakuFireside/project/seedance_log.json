@@ -1,0 +1,38 @@
+{
+ "gaku_ref": {
+  "generation": "api_5dd433051d54e5c835210ed9074f987ed7a8b12fab524146b5dbc2a766716b63",
+  "idempotency_key": "moheat-d27-gaku-ref-v1",
+  "variant": 1,
+  "url": "https://21763b158e26a730dc010e7dacc02fac.r2.cloudflarestorage.com/seedance2-5-ugc-temp-prod/temp/v1/kie/image/cdb6ca784cf3d61666883209be42da72/0.png?X-Amz-Expires=900&X-Amz-Date=20261108T004434Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=3e77009c9cac8a1014054d5fa812904e%2F20261108%2Fauto%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=a71b985c56a190e739fb91fd08da4f486c4e9d2ffb0e83029c5d0e8ea226f932",
+  "credits": {
+   "cost": 25
+  }
+ },
+ "bg_camp": {
+  "generation": "api_85d953cf72e793dd60afcdb7965d342220e60f0754beaa2de8c6eb4a8d626aa4",
+  "idempotency_key": "moheat-d27-bg-camp-v1",
+  "variant": 1,
+  "url": "https://21763b158e26a730dc010e7dacc02fac.r2.cloudflarestorage.com/seedance2-5-ugc-temp-prod/temp/v1/kie/image/3f1a7284e37ac58890732fee4452a7ac/0.png?X-Amz-Expires=900&X-Amz-Date=20261108T004649Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=3e77009c9cac8a1014054d5fa812904e%2F20261108%2Fauto%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=882bfaa304ba390366a16908289f1bb67dba3b4b7d5927dd9019c49fa00fb1ba",
+  "credits": {
+   "cost": 25
+  }
+ },
+ "gaku_ref_talk": {
+  "generation": "api_1a2bda9b43557f011001b0359abc07ecc5341894b2f151a5275d76cf50e97bf7",
+  "idempotency_key": "moheat-d27-gaku-ref-talk-v1",
+  "variant": 1,
+  "url": "https://21763b158e26a730dc010e7dacc02fac.r2.cloudflarestorage.com/seedance2-5-ugc-temp-prod/temp/v1/kie/image/ccd87d8f5a06f1e86ac83df2ae4ca8b0/0.png?X-Amz-Expires=900&X-Amz-Date=20261108T004751Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=3e77009c9cac8a1014054d5fa812904e%2F20261108%2Fauto%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=48ad7af89c9a0db5e829b28906693d738dc2a26a9d6ccc7edb8934c8289e1baf",
+  "credits": {
+   "cost": 25
+  }
+ },
+ "gaku_ref_blink": {
+  "generation": "api_4095cd2a63e3a22291c958789e1068a293875a0e822401f74ab6992648ec8be3",
+  "idempotency_key": "moheat-d27-gaku-ref-blink-v1",
+  "variant": 1,
+  "url": "https://21763b158e26a730dc010e7dacc02fac.r2.cloudflarestorage.com/seedance2-5-ugc-temp-prod/temp/v1/kie/image/f21bc0d38514846bafdcb17c0f2297fd/0.png?X-Amz-Expires=900&X-Amz-Date=20261108T004839Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=3e77009c9cac8a1014054d5fa812904e%2F20261108%2Fauto%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=87b63d8a891e7466a39b199e48e00322825827b9ab798bc6a3020cc8e668deb6",
+  "credits": {
+   "cost": 25
+  }
+ }
+}

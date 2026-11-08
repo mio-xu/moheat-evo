@@ -5,7 +5,8 @@
 Reads <demo>/project/stage.json:
   { "src": "assets/art", "skipVideo": "media/video/[vt]_",
     "bgs":   { "camp": { "src": "bg_camp", "fire": [0.75, 0.72] } },               fire in the plate (fraction); omit → found automatically
-    "poses": { "sit": { "src": "gaku_ref", "talk": "gaku_ref_talk", "blink": "gaku_ref_blink", "near_mouth": [x, y], "near_eyes": [x, y] } },
+    "poses": { "sit": { "src": "gaku_ref", "talk": "gaku_ref_talk", "blink": "gaku_ref_blink", "near_mouth": [x, y], "near_eyes": [x, y],
+                        "erase": [[x0, y0, x1, y1]], "keep": [[x0, y0, x1, y1]] } },             erase = source boxes cleared (e.g. a fire drawn in the pose); keep = source boxes never keyed (grey steam, smoke)
     "views": { "live": { "still": "gaku_live", "pose": "sit", "bg": "camp", "fire": [0.9, 0.74], "x": 0.42, "y": 1.06, "height": 1.1 } } }
   view: still = the file stem the page draws (media/art/<still>.jpg is written as the flat fallback), fire = where the page expects the
   fire (or null), x / y = the character's bottom centre (frame fraction), height = the character's height as a fraction of the frame.
@@ -28,26 +29,35 @@ src = lambda n: os.path.join(SRC, n + ".png")
 MAXDIM = 1700   # character textures are uploaded every frame: keep them modest
 
 
-def cutout(path):
+def cutout(path, erase=(), keep=()):
     """plain-background pose → RGBA, cropped. Background colour = median of the border; background = connected to the border."""
     im = np.asarray(Image.open(path).convert("RGB"), np.float32); H, W, _ = im.shape
-    border = np.concatenate([im[0], im[-1], im[:, 0], im[:, -1]]); bgc = np.median(border, 0)
+    border = np.concatenate([im[0], im[-1], im[:, 0], im[:, -1]])
+    light = border[(border.max(1) - border.min(1) < 18) & (border.mean(1) > 120)]   # the plain background on the border, not the figure
+    bgc = np.median(light if len(light) > 50 else border, 0)
     diff = np.abs(im - bgc).max(2)
-    # connected-to-border background on a small grid (fast), then a soft edge at full size
-    k = 4; small = (diff[::k, ::k] < 26)
-    seen = np.zeros_like(small); stack = [(y, x) for y in range(small.shape[0]) for x in (0, small.shape[1] - 1) if small[y, x]]
-    stack += [(y, x) for x in range(small.shape[1]) for y in (0, small.shape[0] - 1) if small[y, x]]
-    for y, x in stack: seen[y, x] = True
-    while stack:
-        y, x = stack.pop()
-        for yy, xx in ((y + 1, x), (y - 1, x), (y, x + 1), (y, x - 1)):
-            if 0 <= yy < small.shape[0] and 0 <= xx < small.shape[1] and small[yy, xx] and not seen[yy, xx]:
-                seen[yy, xx] = True; stack.append((yy, xx))
+    # background = connected to the border, or a large enclosed patch of it (between chair legs, under an arm) — on a small grid
+    k = 4; small = (diff[::k, ::k] < 30)
+    seen = np.zeros_like(small); lab = np.zeros(small.shape, np.int32); n = 0
+    for y0, x0 in zip(*np.where(small)):
+        if lab[y0, x0]: continue
+        n += 1; stack = [(y0, x0)]; lab[y0, x0] = n; pts = []; edge = False
+        while stack:
+            y, x = stack.pop(); pts.append((y, x))
+            if y in (0, small.shape[0] - 1) or x in (0, small.shape[1] - 1): edge = True
+            for yy, xx in ((y + 1, x), (y - 1, x), (y, x + 1), (y, x - 1)):
+                if 0 <= yy < small.shape[0] and 0 <= xx < small.shape[1] and small[yy, xx] and not lab[yy, xx]:
+                    lab[yy, xx] = n; stack.append((yy, xx))
+        ys_, xs_ = zip(*pts); dd = diff[::k, ::k][list(ys_), list(xs_)]
+        if edge or len(pts) > small.size * .0015 or (len(pts) > 30 and dd.mean() < 14):   # small enclosed gaps only if really the bg colour
+            ys, xs = zip(*pts); seen[list(ys), list(xs)] = True
+    for x0, y0, x1, y1 in keep: seen[y0 // k:y1 // k + 1, x0 // k:x1 // k + 1] = False   # grey things that belong to the figure (steam)
     bgm = np.asarray(Image.fromarray(seen.astype(np.uint8) * 255).resize((W, H), Image.NEAREST), np.float32) / 255
     bgm = np.asarray(Image.fromarray((bgm * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(9)), np.float32) / 255   # reach the edge
     soft = np.clip((diff - 8) / 34, 0, 1)                         # how unlike the background each pixel is
     alpha = np.where(bgm > .5, soft, 1.0)
     alpha = np.asarray(Image.fromarray((alpha * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(.7)), np.float32) / 255
+    for x0, y0, x1, y1 in erase: alpha[y0:y1, x0:x1] = 0   # things drawn that belong to another layer (a fire, a table)
     # unmix the grey fringe: C = a·F + (1−a)·BG  →  F = (C − (1−a)·BG) / a
     a3 = np.maximum(alpha, .05)[..., None]
     fg = np.clip((im - (1 - a3) * bgc) / a3, 0, 255)
@@ -77,7 +87,7 @@ for name, b in cfg["bgs"].items():
 # face patches: run face_patches.py on the full-size sources through a temporary config
 poses, pcfg = {}, {"src": SRC, "dst": os.path.join(D, "assets", "patches"), "size": None, "patches": []}
 for name, p in cfg["poses"].items():
-    cut, box, size = cutout(src(p["src"]))
+    cut, box, size = cutout(src(p["src"]), p.get("erase", ()), p.get("keep", ()))
     f = min(1, MAXDIM / max(cut.size)); cut = cut.resize((round(cut.width * f), round(cut.height * f)), Image.LANCZOS)
     cut.save(os.path.join(ART, f"char_{name}.webp"), quality=88, method=6)
     poses[name] = {"src": f"art/char_{name}.webp", "w": cut.width, "h": cut.height, "box": box, "f": f, "cut": cut, "patches": []}
@@ -111,8 +121,6 @@ for vname, v in cfg["views"].items():
     else: ox = oy = (1 - z) / 2
     flat = b["im"].resize((round(FW * z), round(FH * z)), Image.LANCZOS).crop((round(-ox * FW), round(-oy * FH), round(-ox * FW) + FW, round(-oy * FH) + FH)).convert("RGBA")
     ch = p["cut"].copy()
-    for pt in p["patches"]:
-        pass   # the flat still is the neutral face (mouth closed, eyes open)
     hpx = v["height"] * FH; wpx = hpx * p["w"] / p["h"]
     ch = ch.resize((round(wpx), round(hpx)), Image.LANCZOS)
     flat.alpha_composite(ch, (round(v["x"] * FW - wpx / 2), round(v["y"] * FH - hpx))) if v["x"] * FW - wpx / 2 >= 0 and v["y"] * FH - hpx >= 0 else \
