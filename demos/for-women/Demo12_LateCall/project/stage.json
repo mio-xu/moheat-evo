@@ -21,7 +21,8 @@
    "near_mouth": [
     1710,
     560
-   ]
+   ],
+   "mouth": "lp"
   },
   "close": {
    "src": "ren_close",
@@ -49,7 +50,15 @@
      135,
      72
     ]
-   ]
+   ],
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.18,
+     0.26
+    ]
+   }
   },
   "door": {
    "src": "ren_door",
@@ -77,12 +86,21 @@
      92,
      48
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "hug": {
    "src": "ren_hug_ext",
    "talk": "ren_hug_ext_talk",
-   "matte": "ai"
+   "matte": "ai",
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.1,
+     0.18,
+     0.26
+    ]
+   }
   }
  },
  "views": {
