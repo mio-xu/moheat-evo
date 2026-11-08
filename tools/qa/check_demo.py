@@ -10,8 +10,7 @@ table; exit code 1 when anything FAILs. Every lesson in §11.1 that a script can
   python3 tools/qa/check_demo.py <demo folder> --checklist      # also write / refresh <demo>/project/CHECKLIST.md (manual items kept)
   options: --secs N (playthrough limit, default 300) · --json (machine-readable) · --no-mobile
 Per-demo exceptions (each with a reason) go in <demo>/project/qa.json:
-  { "allow_foreign": ["Demo15_FamilyCall"],          pages / code that may load from another demo folder (Demo16 → Demo15)
-    "l10n_ignore": ["…"],                              Japanese strings that are never shown (TTS readings, keys)
+  { "l10n_ignore": ["…"],                              Japanese strings that are never shown (TTS readings, keys)
     "skip": { "patches": "why", "thermal": "why" } }    a check id → reason (shown as SKIP)
 What is checked (id → lesson / rule):
   syntax     node --check of every JS the page loads (§11.1 script edits that broke syntax)
@@ -19,7 +18,8 @@ What is checked (id → lesson / rule):
   cut-body   tools/art/check_cut_body.py (half bodies floating in the frame)
   patches    tools/art/check_patches.py (mouth drift / seams / outer ring / patch outside; NO-MOUTH = WARN)
   eyes       every eyes patch covers two eyes (one-eye blinks)
-  refs       no <base href>, no page / code from another demo's folder (a remake replaces that folder: Demo24 ← Demo14 style.css)
+  refs       only own folder + demos/shared + own category _kit (tools/qa/check_deps.py): no <base href>, no other demo folder / other
+             category's kit, no hard link to another demo, no symlink out (engine plan §3.1, guide §12; WARN until P1 is done, then FAIL)
   links      no broken symlinks (Pages build fails), symlinks into other demos listed
   files      every local file the page / its code names exists (static 404 scan)
   cache      ?v= of shared files = the highest on the site and newer than the file's last change; same for the demo's own files
@@ -163,18 +163,22 @@ else:
     row('G4', 'layers', 'SKIP', 'no media/layers.js (not a layered page)')
 
 # ---------------------------------------------------------------- G5 refs / links / files
-foreign = []
-if re.search(r'<base\s', html): foreign.append('<base href> in index.html (the page depends on another folder)')
-allowed = set(QA.get('allow_foreign', [])) | ({ORIG} if ORIG else set())
-for src_name, text in [('index.html', html)] + [(os.path.relpath(p, D), t) for p, t in code.items()]:
-    for m in re.finditer(r'(?:\.\./)+(?:[\w-]+/)?(Demo\d{2}_\w+)/', text):
-        if m.group(1) != NAME and m.group(1) not in allowed:
-            foreign.append(f'{src_name}: {m.group(0)}')
-for r, p in loaded:
-    m = re.search(r'/demos/[\w-]+/(Demo\d{2}_\w+)/', p)
-    if m and m.group(1) != NAME and m.group(1) not in allowed: foreign.append(f'loads {r}')
-foreign = sorted(set(foreign))
-row('G5', 'refs', 'FAIL' if foreign else 'PASS', f'{len(foreign)} reference(s) to another demo — copy what you need into this folder' if foreign else 'self-contained (no <base>, no other demo folders)', foreign)
+# refs = the dependency rule of the engine plan (docs/engine/2026-11-08_engine_plan.md §3.1, guide §12 / §14): a demo loads only from its
+# own folder, demos/shared/** and its OWN category kit demos/<cat>/_kit/**; no <base href> to another folder, no hard link to another
+# demo (navigation = nav.js data), no symlink out of the folder. Same scan as the site-wide tools/qa/check_deps.py (one rule, one code).
+# qa.json allow_foreign is gone; only --remake-of <orig> lets a staging folder point at the folder it replaces.
+REFS_LEVEL = 'WARN'   # P0 = WARN; becomes 'FAIL' when P1 of the engine plan is done (check_deps.py = 0 violations)
+r = subprocess.run([sys.executable, os.path.join(REPO, 'tools', 'qa', 'check_deps.py'), '--json', '--demo', NAME], capture_output=True, text=True)
+try:
+    dep = next((x for x in json.loads(r.stdout)['rows'] if x['demo'] == f'{CAT}/{NAME}'), {'details': {}})
+    LABEL = {'R': 'loads', 'B!': 'base', 'L': 'link', 'S': 'symlink', 'K': 'kit'}
+    foreign = sorted(f'{LABEL[k]} {m}' for k in LABEL for m in dep['details'].get(k, []) if not (ORIG and ORIG in m))
+    row('G5', 'refs', REFS_LEVEL if foreign else 'PASS',
+        f'{len(foreign)} reference(s) outside own folder / shared / own _kit — move what two demos share into demos/{CAT}/_kit/ (rule: guide §12)'
+        if foreign else f'self-contained (own folder + demos/shared + demos/{CAT}/_kit only)', foreign)
+except (ValueError, KeyError, StopIteration) as e:
+    row('G5', 'refs', 'FAIL', f'tools/qa/check_deps.py failed: {e} {r.stderr.strip()[-200:]}')
+allowed = {ORIG} if ORIG else set()
 
 broken, outside = [], []
 tracked = set(git('ls-files', '--', REL).splitlines())
