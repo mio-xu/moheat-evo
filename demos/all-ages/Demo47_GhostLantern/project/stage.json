@@ -5,20 +5,6 @@
   "who": "LANTERN.S.who"
  },
  "bgs": {
-  "gate": {
-   "src": "bg_gate",
-   "fire": [
-    0.5,
-    0.55
-   ]
-  },
-  "corridor": {
-   "src": "bg_corridor",
-   "fire": [
-    0.5,
-    0.45
-   ]
-  },
   "tatami": {
    "src": "bg_tatami",
    "fire": [
@@ -31,6 +17,55 @@
    "fire": [
     0.5,
     0.8
+   ]
+  },
+  "gate_b50h62": {
+   "src": "bg_gate_b50h62",
+   "fire": [
+    0.5,
+    0.55
+   ]
+  },
+  "gate_b72h50": {
+   "src": "bg_gate_b72h50",
+   "fire": [
+    0.5,
+    0.55
+   ]
+  },
+  "corridor_b50h62": {
+   "src": "bg_corridor_b50h62",
+   "fire": [
+    0.5,
+    0.45
+   ]
+  },
+  "corridor_b50h50": {
+   "src": "bg_corridor_b50h50",
+   "fire": [
+    0.5,
+    0.45
+   ]
+  },
+  "tatami_b50h62": {
+   "src": "bg_tatami_b50h62",
+   "fire": [
+    0.86,
+    0.7
+   ]
+  },
+  "tatami_b50h50": {
+   "src": "bg_tatami_b50h50",
+   "fire": [
+    0.86,
+    0.7
+   ]
+  },
+  "tatami_b84h40": {
+   "src": "bg_tatami_b84h40",
+   "fire": [
+    0.86,
+    0.7
    ]
   }
  },
@@ -306,27 +341,27 @@
  "views": {
   "gate_B": {
    "still": "lantern_gate",
-   "bg": "gate",
+   "bg": "gate_b50h62",
    "fire": [
     0.5,
     0.55
    ],
    "pose": "bonchan_base",
    "x": 0.5,
-   "y": 1.0,
+   "y": 0.96,
    "height": 0.62,
    "who": "B"
   },
   "gate_ghost": {
    "still": "lantern_gate_ghost",
-   "bg": "gate",
+   "bg": "gate_b72h50",
    "fire": [
     0.5,
     0.55
    ],
    "pose": "bonchan_base",
    "x": 0.72,
-   "y": 1.0,
+   "y": 0.96,
    "height": 0.5,
    "who": "B",
    "more": [
@@ -341,27 +376,27 @@
   },
   "hall_B": {
    "still": "lantern_hall",
-   "bg": "corridor",
+   "bg": "corridor_b50h62",
    "fire": [
     0.5,
     0.45
    ],
    "pose": "bonchan_base",
    "x": 0.5,
-   "y": 1.0,
+   "y": 0.96,
    "height": 0.62,
    "who": "B"
   },
   "hall_ghosts": {
    "still": "lantern_hall_ghosts",
-   "bg": "corridor",
+   "bg": "corridor_b50h50",
    "fire": [
     0.5,
     0.45
    ],
    "pose": "bonchan_scared",
    "x": 0.5,
-   "y": 1.0,
+   "y": 0.96,
    "height": 0.5,
    "who": "B",
    "more": [
@@ -383,40 +418,40 @@
   },
   "hall_hit": {
    "still": "lantern_hall_hit",
-   "bg": "corridor",
+   "bg": "corridor_b50h62",
    "fire": [
     0.5,
     0.45
    ],
    "pose": "bonchan_scared",
    "x": 0.5,
-   "y": 1.0,
+   "y": 0.96,
    "height": 0.62,
    "who": "B"
   },
   "room_B": {
    "still": "lantern_room",
-   "bg": "tatami",
+   "bg": "tatami_b50h62",
    "fire": [
     0.86,
     0.7
    ],
    "pose": "bonchan_base",
    "x": 0.5,
-   "y": 1.0,
+   "y": 0.96,
    "height": 0.62,
    "who": "B"
   },
   "room_behind": {
    "still": "lantern_room_behind",
-   "bg": "tatami",
+   "bg": "tatami_b50h50",
    "fire": [
     0.86,
     0.7
    ],
    "pose": "bonchan_scared",
    "x": 0.5,
-   "y": 1.0,
+   "y": 0.96,
    "height": 0.5,
    "who": "B",
    "more": [
@@ -452,7 +487,7 @@
    ],
    "pose": "bonchan_scared",
    "x": 0.5,
-   "y": 1.0,
+   "y": 0.96,
    "height": 0.62,
    "who": "B"
   },
@@ -465,13 +500,13 @@
    ],
    "pose": "bonchan_base",
    "x": 0.5,
-   "y": 1.0,
+   "y": 0.96,
    "height": 0.62,
    "who": "B"
   },
   "yurari_far": {
    "still": "yurari_far",
-   "bg": "tatami",
+   "bg": "tatami_b84h40",
    "fire": [
     0.86,
     0.7
@@ -485,7 +520,7 @@
     {
      "pose": "bonchan_base",
      "x": 0.84,
-     "y": 1.0,
+     "y": 0.96,
      "height": 0.4,
      "who": "B"
     }
@@ -503,7 +538,7 @@
   },
   "yurari_happy": {
    "still": "yurari_happy",
-   "bg": "tatami",
+   "bg": "tatami_b84h40",
    "fire": [
     0.86,
     0.7
@@ -517,7 +552,7 @@
     {
      "pose": "bonchan_base",
      "x": 0.84,
-     "y": 1.0,
+     "y": 0.96,
      "height": 0.4,
      "who": "B"
     }
@@ -525,7 +560,7 @@
   },
   "finale": {
    "still": "lantern_finale",
-   "bg": "tatami",
+   "bg": "tatami_b84h40",
    "fire": [
     0.86,
     0.7
@@ -560,8 +595,8 @@
     {
      "pose": "bonchan_base",
      "x": 0.84,
-     "y": 1.0,
-     "height": 0.42,
+     "y": 0.96,
+     "height": 0.4,
      "who": "B"
     }
    ]

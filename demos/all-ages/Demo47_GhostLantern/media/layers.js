@@ -8,7 +8,7 @@ window.MOHEAT_LAYERS = {
     0.55
    ],
    "bg": {
-    "src": "art/bg_gate.webp?v=3f04f3f5",
+    "src": "art/bg_gate_b50h62.webp?v=b505cb92",
     "fire": [
      0.5,
      0.55
@@ -19,7 +19,7 @@ window.MOHEAT_LAYERS = {
     "w": 804,
     "h": 1240,
     "x": 0.5,
-    "y": 1.0,
+    "y": 0.96,
     "height": 0.62,
     "box": [
      876,
@@ -93,7 +93,7 @@ window.MOHEAT_LAYERS = {
     0.55
    ],
    "bg": {
-    "src": "art/bg_gate.webp?v=3f04f3f5",
+    "src": "art/bg_gate_b72h50.webp?v=d4c50455",
     "fire": [
      0.5,
      0.55
@@ -104,7 +104,7 @@ window.MOHEAT_LAYERS = {
     "w": 804,
     "h": 1240,
     "x": 0.72,
-    "y": 1.0,
+    "y": 0.96,
     "height": 0.5,
     "box": [
      876,
@@ -209,7 +209,7 @@ window.MOHEAT_LAYERS = {
     0.45
    ],
    "bg": {
-    "src": "art/bg_corridor.webp?v=06328361",
+    "src": "art/bg_corridor_b50h62.webp?v=7689e924",
     "fire": [
      0.5,
      0.45
@@ -220,7 +220,7 @@ window.MOHEAT_LAYERS = {
     "w": 804,
     "h": 1240,
     "x": 0.5,
-    "y": 1.0,
+    "y": 0.96,
     "height": 0.62,
     "box": [
      876,
@@ -294,7 +294,7 @@ window.MOHEAT_LAYERS = {
     0.45
    ],
    "bg": {
-    "src": "art/bg_corridor.webp?v=06328361",
+    "src": "art/bg_corridor_b50h50.webp?v=46d0c3bc",
     "fire": [
      0.5,
      0.45
@@ -305,7 +305,7 @@ window.MOHEAT_LAYERS = {
     "w": 856,
     "h": 1240,
     "x": 0.5,
-    "y": 1.0,
+    "y": 0.96,
     "height": 0.5,
     "box": [
      835,
@@ -439,7 +439,7 @@ window.MOHEAT_LAYERS = {
     0.45
    ],
    "bg": {
-    "src": "art/bg_corridor.webp?v=06328361",
+    "src": "art/bg_corridor_b50h62.webp?v=7689e924",
     "fire": [
      0.5,
      0.45
@@ -450,7 +450,7 @@ window.MOHEAT_LAYERS = {
     "w": 856,
     "h": 1240,
     "x": 0.5,
-    "y": 1.0,
+    "y": 0.96,
     "height": 0.62,
     "box": [
      835,
@@ -524,7 +524,7 @@ window.MOHEAT_LAYERS = {
     0.7
    ],
    "bg": {
-    "src": "art/bg_tatami.webp?v=d5036d42",
+    "src": "art/bg_tatami_b50h62.webp?v=d5eb0e03",
     "fire": [
      0.86,
      0.7
@@ -535,7 +535,7 @@ window.MOHEAT_LAYERS = {
     "w": 804,
     "h": 1240,
     "x": 0.5,
-    "y": 1.0,
+    "y": 0.96,
     "height": 0.62,
     "box": [
      876,
@@ -609,7 +609,7 @@ window.MOHEAT_LAYERS = {
     0.7
    ],
    "bg": {
-    "src": "art/bg_tatami.webp?v=d5036d42",
+    "src": "art/bg_tatami_b50h50.webp?v=51062a79",
     "fire": [
      0.86,
      0.7
@@ -620,7 +620,7 @@ window.MOHEAT_LAYERS = {
     "w": 856,
     "h": 1240,
     "x": 0.5,
-    "y": 1.0,
+    "y": 0.96,
     "height": 0.5,
     "box": [
      835,
@@ -794,7 +794,7 @@ window.MOHEAT_LAYERS = {
     "w": 856,
     "h": 1240,
     "x": 0.5,
-    "y": 1.0,
+    "y": 0.96,
     "height": 0.62,
     "box": [
      835,
@@ -879,7 +879,7 @@ window.MOHEAT_LAYERS = {
     "w": 804,
     "h": 1240,
     "x": 0.5,
-    "y": 1.0,
+    "y": 0.96,
     "height": 0.62,
     "box": [
      876,
@@ -953,7 +953,7 @@ window.MOHEAT_LAYERS = {
     0.7
    ],
    "bg": {
-    "src": "art/bg_tatami.webp?v=d5036d42",
+    "src": "art/bg_tatami_b84h40.webp?v=8170b7eb",
     "fire": [
      0.86,
      0.7
@@ -1037,7 +1037,7 @@ window.MOHEAT_LAYERS = {
       "w": 804,
       "h": 1240,
       "x": 0.84,
-      "y": 1.0,
+      "y": 0.96,
       "height": 0.4,
       "box": [
        876,
@@ -1198,7 +1198,7 @@ window.MOHEAT_LAYERS = {
     0.7
    ],
    "bg": {
-    "src": "art/bg_tatami.webp?v=d5036d42",
+    "src": "art/bg_tatami_b84h40.webp?v=8170b7eb",
     "fire": [
      0.86,
      0.7
@@ -1282,7 +1282,7 @@ window.MOHEAT_LAYERS = {
       "w": 804,
       "h": 1240,
       "x": 0.84,
-      "y": 1.0,
+      "y": 0.96,
       "height": 0.4,
       "box": [
        876,
@@ -1358,7 +1358,7 @@ window.MOHEAT_LAYERS = {
     0.7
    ],
    "bg": {
-    "src": "art/bg_tatami.webp?v=d5036d42",
+    "src": "art/bg_tatami_b84h40.webp?v=8170b7eb",
     "fire": [
      0.86,
      0.7
@@ -1529,8 +1529,8 @@ window.MOHEAT_LAYERS = {
       "w": 804,
       "h": 1240,
       "x": 0.84,
-      "y": 1.0,
-      "height": 0.42,
+      "y": 0.96,
+      "height": 0.4,
       "box": [
        876,
        86,

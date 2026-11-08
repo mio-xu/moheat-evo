@@ -38,7 +38,7 @@ for p in ('yurari_base', 'yurari_ear', 'yurari_happy'):
 if os.environ.get('NOLP'):   # first build only: lp_mouths.py needs media/layers.js (guide §11.1)
     for v in POSES.values(): v.pop('mouth', None)
 
-B = lambda pose='bonchan_base', x=.78, h=.5: {'pose': pose, 'x': x, 'y': 1.0, 'height': h, 'who': 'B'}
+B = lambda pose='bonchan_base', x=.78, h=.5: {'pose': pose, 'x': x, 'y': .96, 'height': h, 'who': 'B'}   # feet inside the frame with a margin (coordinator QA)
 GH = {'kasa': .6, 'white': .42, 'wisp': .42}
 G = lambda g, x, h=None, y=.86: {'pose': 'ghost_' + g, 'x': x, 'y': y, 'height': h or GH[g], 'who': 'G'}
 VIEWS = {   # view: (still, bg, main figure, more figures)
@@ -55,13 +55,20 @@ VIEWS = {   # view: (still, bg, main figure, more figures)
     'yurari_ear': ('yurari_whisper', 'tatami', {'pose': 'yurari_ear', 'who': 'Y'}, []),
     'yurari_happy': ('yurari_happy', 'tatami', {'pose': 'yurari_happy', 'x': .5, 'y': .98, 'height': .8, 'who': 'Y'}, [B(x=.84, h=.4)]),
     'finale': ('lantern_finale', 'tatami', {'pose': 'yurari_happy', 'x': .5, 'y': .98, 'height': .74, 'who': 'Y'},
-               [G('kasa', .17, .46, .8), G('white', .32, .3, .62), G('wisp', .7, .3, .6), B(x=.84, h=.42)]),
+               [G('kasa', .17, .46, .8), G('white', .32, .3, .62), G('wisp', .7, .3, .6), B(x=.84, h=.4)]),
 }
 cfg = {"src": "assets/art", "hooks": {"view": "LANTERN.S.view", "who": "LANTERN.S.who"},
        "bgs": {k: {"src": f"bg_{k}", "fire": v} for k, v in BGS.items()}, "poses": POSES, "views": {}}
+import importlib.util
+_sp = importlib.util.spec_from_file_location('lantern_glow', os.path.join(ROOT, 'scripts', 'lantern_glow.py')); LG = importlib.util.module_from_spec(_sp); _sp.loader.exec_module(LG)
 for v, (still, bg, main, more) in VIEWS.items():
+    b = next((f for f in [main] + more if f['who'] == 'B'), None)   # Bon-chan's candle lights the floor where he stands (lantern_glow.py)
+    if b and not (bg == 'kura' and abs(b['x'] - .5) < .02):
+        stem = LG.make(bg, b['x'], b['height']); key = stem[3:]
+        cfg["bgs"][key] = {"src": stem, "fire": BGS[bg]}; BGS[key] = BGS[bg]; bg = key
     d = {"still": still, "bg": bg, "fire": BGS[bg]}; d.update(main)
     if more: d["more"] = more
     cfg["views"][v] = d
+used = {d['bg'] for d in cfg['views'].values()}; cfg['bgs'] = {k: v for k, v in cfg['bgs'].items() if k in used}
 json.dump(cfg, open(os.path.join(ROOT, 'project', 'stage.json'), 'w'), indent=1)
 print(len(cfg['views']), 'views,', len(POSES), 'poses')

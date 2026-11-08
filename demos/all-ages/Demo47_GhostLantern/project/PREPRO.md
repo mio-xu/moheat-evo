@@ -23,6 +23,8 @@ After the picks: `project/script.md` (proposal A2: 5 stages, ghosts are cool = s
 - `scripts/make_stage.py` → `project/stage.json`: 13 views (gate / corridor / tatami / storehouse with Bon-chan + ghosts on their sides,
   Yurari far / ear / happy, finale with everyone), hooks `LANTERN.S.view / who`; `media/layers.js` + `media/art/` built.
 - Checks: check_cut_body 0 · check_patches 0 FAIL (NO-MOUTH warnings = the silent ghosts only) · check_art 0 / 0 · style_card ok (fairy).
+- Coordinator QA fix: Bon-chan's feet sit inside the frame (y .96) in every view; his candle lights the floor where he stands in every
+  plate (`scripts/lantern_glow.py`: bg_<place>_b<x>h<h> = plate + warm screen-blended pool / halo; the storehouse plate has it baked).
 - Contact sheet: `project/stills_contact.jpg`.
 
 ## Left (G5+)
