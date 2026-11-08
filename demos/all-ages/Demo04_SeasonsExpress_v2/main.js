@@ -197,7 +197,7 @@ const ICE = (() => {
   for (let i = 0; i < 180; i++) { c.fillStyle = `rgba(255,255,255,${.3 + hash(i + 50) * .5})`; c.beginPath(); c.arc(hash(i + 60) * W / 2, hash(i + 70) * H, 1 + hash(i + 80) * 2, 0, 7); c.fill(); }
   return cv;
 })();
-const shieldAt = (side, t) => { const t0 = side === 'L' ? 2.6 : 5.4; return smooth((t - t0) / 2.6) * (1 - smooth((t - 12.5) / 2.5)); };
+const shieldAt = (side, t) => { if (COVERART) return side === 'L' ? .62 : 0; const t0 = side === 'L' ? 2.6 : 5.4; return smooth((t - t0) / 2.6) * (1 - smooth((t - 12.5) / 2.5)); };
 function drawShield(c, side, t) {
   const h = shieldAt(side, t); if (h <= .01) return;
   const b = BOX[side], top = H * (1 - h);
@@ -239,7 +239,7 @@ function lightWeights(t) {
 }
 function powerDim(t) {   // 0 = lights on … 1 = power cut
   const [s0, s1] = A.silence;
-  if (t >= s0 && t < s1) return gate.cur && gate.cur.id === 'spring' ? 1 : 1;
+  if (t >= s0 && t < s1) return 1;
   if (t >= s0 - .6 && t < s0) return hash(Math.floor(t * 18)) > .5 ? .75 : .1;
   if (t >= s1 && t < s1 + .8) return hash(Math.floor(t * 14) + 7) > .45 ? 0 : .8;
   return 0;
@@ -258,10 +258,9 @@ function drawCar(t, th, tv) {
     const sc = p.kind === 'vent' ? { ice: 0, fire: 1, v: .7 } : sideColour(th, p.side);
     const [x0, y0, x1, y1] = p.box, w = x1 - x0, h = y1 - y0;
     c.save(); c.beginPath(); c.rect(x0, y0, w, h); c.clip();
-    if (chaosOn(t) && p.kind !== 'vent') c.filter = `hue-rotate(${Math.round((tv * 300 + p.i * 47) % 360)}deg) saturate(1.8)`;   // the runes glitch neon
     if (sc.ice > .01 && ok('car_runes_ice')) { c.globalAlpha = sc.ice; c.drawImage(IMG.car_runes_ice, 0, 0, W, H); }
     if (sc.fire > .01 && ok('car_runes_fire')) { c.globalAlpha = sc.fire; c.drawImage(IMG.car_runes_fire, 0, 0, W, H); }
-    c.filter = 'none'; c.globalAlpha = 1;
+    c.globalAlpha = 1;
     if (o < .999 && ok('car_base')) {   // the wooden panel still turning on its hinge
       const k = 1 - o, hx = (p.side === 'L') === (p.hinge === 'out') ? x0 : x1, nw = Math.max(1, w * k);
       c.drawImage(IMG.car_base, x0, y0, w, h, hx === x0 ? x0 : x1 - nw, y0, nw, h);
@@ -286,8 +285,13 @@ function drawCar(t, th, tv) {
     if (open < .01 || dim > .9) continue;
     const b = (.25 + .75 * clamp(sc.v / .6, 0, 1)) * open * (1 - dim) * (chaosOn(t) ? .6 + .4 * hash(Math.floor(tv * 12) + (side === 'L' ? 0 : 5)) : 1);
     c.save(); c.beginPath(); for (const p of PANELS) if (p.side === side && p.kind !== 'vent' && panelOpen(p, t) > .5) c.rect(...[p.box[0], p.box[1], p.box[2] - p.box[0], p.box[3] - p.box[1]]); c.clip();
-    if (sc.ice > .01) { const g = tinted('runes_glow', '150,215,255'); if (g) { c.globalAlpha = b * sc.ice; c.drawImage(g, 0, 0); } }
-    if (sc.fire > .01) { const g = tinted('runes_glow', '255,140,60'); if (g) { c.globalAlpha = b * sc.fire; c.drawImage(g, 0, 0); } }
+    if (chaosOn(t)) {   // seasons out of control: the rune light itself cycles neon colours (only the glowing lines, never the wood)
+      const NEON = ['255,60,200', '60,240,255', '170,255,60', '180,90,255'], g = tinted('runes_glow', NEON[(Math.floor(tv * 3) + (side === 'L' ? 0 : 2)) % 4]);
+      if (g) { c.globalAlpha = Math.min(1, b * 1.3); c.drawImage(g, 0, 0); }
+    } else {
+      if (sc.ice > .01) { const g = tinted('runes_glow', '150,215,255'); if (g) { c.globalAlpha = b * sc.ice; c.drawImage(g, 0, 0); } }
+      if (sc.fire > .01) { const g = tinted('runes_glow', '255,140,60'); if (g) { c.globalAlpha = b * sc.fire; c.drawImage(g, 0, 0); } }
+    }
     c.restore();
   }
   c.globalAlpha = 1; c.globalCompositeOperation = 'source-over';
@@ -452,15 +456,40 @@ function drawFig(c, view, cx, bottom, height, o = {}) {
   c.translate(cx, bottom); c.scale(o.flip ? -1 : 1, br); c.translate(-cx, -bottom);
   c.drawImage(F.im, x0, bottom - height, w, height);
   const tv = o.tv || 0;
-  if (tv > F.blinkAt + 3 || tv < F.blinkAt - 8) F.blinkAt = tv + 1 + Math.random() * 3;   // after a seek / pause
-  if (tv >= F.blinkAt) { F.blinkTo = tv + .11 + Math.random() * .04; F.blinkAt = tv + (Math.random() < .15 ? .32 : 2 + Math.random() * 4); }
+  if (!(tv - (F.lastDrawn ?? -9) < .25)) F.appear = tv;   // (re)appearing: no blink in the first 0.7 s (guide §6.4)
+  F.lastDrawn = tv; LAST_FIG = view;
+  if (tv > F.blinkAt + 8 || tv < F.blinkAt - 8) F.blinkAt = tv + 1 + Math.random() * 3;   // after a seek / pause
+  if (tv >= F.blinkAt && tv - F.appear > .7) { F.blinkTo = tv + .11 + Math.random() * .04; BLINKS.push([tv, F.blinkTo, view, tv]); F.blinkAt = tv + (Math.random() < .15 ? .32 : 2 + Math.random() * 4); }
+  if (API_DEBUG && API_DEBUG.blink != null) F.blinkTo = API_DEBUG.blink ? tv + 1 : 0;
   const at = (p) => [x0 + p.rect[0] * k, bottom - height + p.rect[1] * k, p.rect[2] * k, p.rect[3] * k];
   if (tv < F.blinkTo) for (const p of F.eyes) if (okI(p.im)) c.drawImage(p.im, ...at(p));
   const e = o.talk || 0, lv = e < .12 ? 0 : e < .55 ? 1 : e < .85 ? 2 : 3, mp = F.mouth[Math.min(lv, F.mouth.length - 1)];
   if (mp && lv > 0 && okI(mp.im)) c.drawImage(mp.im, ...at(mp));
-  F.state = { lv, blink: tv < F.blinkTo };
+  F.state = { lv, e, blink: tv < F.blinkTo, tv };
   c.restore();
 }
+// MoHeatLayers-compatible test API (tools/art/check_mouth.js / check_motion.js): this page draws its own conductor layers (no parallax:
+// the figure sits still in the carriage; the scenery moves behind the glass), so check the same mouth / blink / breathing rules here.
+let LAST_FIG = null, API_DEBUG = null; const BLINKS = [];
+const VIEW_STEM = Object.fromEntries(Object.entries(LY).map(([stem, v]) => [v.view, stem]));
+const curView = () => { const ln = lineNow(lastT), w = ln && { holo: 'holo', ear: 'ear', aisle: 'wave' }[ln.where]; if (w) return w;
+  return LAST_FIG && FIG[LAST_FIG]?.state && tvClock - FIG[LAST_FIG].state.tv < .3 ? LAST_FIG : 'none'; };
+window.MoHeatLayers = {
+  live: true,
+  get debug() { return API_DEBUG; }, set debug(v) { API_DEBUG = v; },
+  render(stem) {
+    const v = LY[stem]; if (!v || !okI(FIG[v.view]?.im)) return null;
+    const g = document.createElement('canvas'); g.width = W; g.height = H; const x = g.getContext('2d');
+    x.fillStyle = API_DEBUG?.solid ? '#ff00ff' : '#0e4660'; x.fillRect(0, 0, W, H);
+    const P = { holo: [W / 2, H * 1.0, H * .95], ear: [W * .83, H * 1.06, H], wave: [W / 2, H * 1.0, H * .9] }[v.view];
+    drawFig(x, v.view, P[0], P[1], P[2], { tv: tvClock, alpha: 1 }); return g;
+  },
+  state() { const view = curView(), st = (view !== 'none' && FIG[view]?.state) || { lv: 0, e: 0, blink: false }, ln = lineNow(lastT), e = ln ? ln.e : 0;
+    return { mouth: st.lv > 0 ? 1 : 0, open: st.lv > 0, level: st.lv, tgt: e, rel: e, env: e, blink: st.blink, view, stem: VIEW_STEM[view] || '', speaker: null, figs: null,
+      patches: view !== 'none' ? (LY[VIEW_STEM[view]]?.patches || []).map((p) => p.kind) : [] }; },
+  motion() { const view = curView(), st = view !== 'none' && FIG[view]?.state; return { t: tvClock, liveT: tvClock, blink: !!(st && st.blink), blinks: BLINKS.slice(-400),
+    breath: 0, phase: (tvClock * Math.PI * 2 / 4) % (Math.PI * 2), view, stem: VIEW_STEM[view] || '', draw: null, live: true }; },
+};
 // in person in the aisle, right behind your table (cut at the knees by the table edge): the tea, the storm lamp, "next stop, spring!", goodbye
 const TABLE_Y = 946;
 const AISLE = [{ t0: 7.6, t1: 12.0, x: .62, gate: 'tea' }, { t0: 37.1, t1: 41.9, x: .4 }, { t0: 126.0, t1: 130.4, x: .6 }, { t0: 145.6, t1: 999, x: .6 }];
@@ -536,7 +565,7 @@ function emitFx(t, dt) {
 
 // ---------------------------------------------------------------- voices (Web Audio: the subtitle language; holo = front, ear = right ear, aisle = front)
 const LANG = () => (window.MoHeatSub && ['en', 'ja', 'zh'].includes(window.MoHeatSub.lang) ? window.MoHeatSub.lang : 'en');   // subtitle / UI language
-const VLANG = 'ja';   // user 2026-11-09: every voice is Japanese; other languages are subtitles only
+const voiceLang = () => { const l = (window.MoHeatShell?.voiceLang?.() ) || LANG(); return VO.lines.a1.dur[l] ? l : 'ja'; };   // user 2026-11-09 (latest): the voice follows the subtitle language (ja / en / zh), ja fallback; the MP4 stays Japanese
 let ac = null; const BUF = {}; let playingLine = null;
 function audio() { if (!ac) { const C = window.AudioContext || window.webkitAudioContext; ac = new C(); } if (ac.state === 'suspended') ac.resume().catch(() => {}); return ac; }
 function loadLang(l) {
@@ -546,7 +575,8 @@ function loadLang(l) {
   }
 }
 function startLine(id, offset) {
-  const l = VLANG, buf = BUF[`${id}.${l}`]; if (!buf || buf instanceof Promise) return;
+  let l = voiceLang(), buf = BUF[`${id}.${l}`];
+  if (!buf || buf instanceof Promise) { l = 'ja'; buf = BUF[`${id}.ja`]; }   // that language not decoded yet: Japanese if (!buf || buf instanceof Promise) return;
   const a = audio(), src = a.createBufferSource(), g = a.createGain(), where = VO.lines[id].where;
   src.buffer = buf; g.gain.value = where === 'ear' ? 1.0 : where === 'holo' ? .85 : .9;
   const pan = a.createStereoPanner(); pan.pan.value = where === 'ear' ? .9 : 0;
@@ -793,7 +823,7 @@ const toggle = () => (media.paused ? play() : pause());
 playBtn?.addEventListener('click', toggle);
 $('startBtn').addEventListener('click', () => {
   media.currentTime = 0; reset(); gate.done.clear(); gate.cur = null; gateBox.innerHTML = ''; gateBox.hidden = true; win.side = null; teaLift = 0;
-  audio(); loadLang(VLANG); voiceSeek(0); lastT = 0; play();
+  audio(); loadLang('ja'); loadLang(voiceLang()); voiceSeek(0); lastT = 0; play();
 });
 
 mix.addEventListener('play', () => { if (playBtn) playBtn.textContent = '❚❚'; });
@@ -920,10 +950,9 @@ async function coverArt() {   // media/cover/art.webp: the split carriage (winte
   const t = 26.0, th = { Lc: .8, Lh: 0, Rc: 0, Rh: .85 };
   for (let k = 60; k > 0; k--) { tvClock = 30 - k / 30; frame(t, 1 / 30, th); }
   tvClock = 30; frame(t, 1 / 30, th);
-  ctx.save(); drawShield(ctx, 'L', 9); ctx.restore();   // frost shield on the winter half
   drawIcicles(ctx, 9);
-  const F = FIG.wave, eye = [(723 - F.c.box[0]), (450 - F.c.box[1])], face = 230, k = (+QS.get('face') || .245) * H / face;
-  const hgt = F.c.h * k, ex = (+QS.get('ex') || .72) * W, ey = (+QS.get('ey') || .335) * H, x0 = ex - eye[0] * k, top = ey - eye[1] * k;
+  const F = FIG.wave, eye = [(723 - F.c.box[0]), (450 - F.c.box[1])], face = 230, k = (+QS.get('face') || .22) * H / face;
+  const hgt = F.c.h * k, ex = (+QS.get('ex') || .72) * W, ey = (+QS.get('ey') || .35) * H, x0 = ex - eye[0] * k, top = ey - eye[1] * k;
   ctx.save(); ctx.globalCompositeOperation = 'lighter'; const g = ctx.createRadialGradient(ex, ey + 120, 0, ex, ey + 120, 520); g.addColorStop(0, 'rgba(255,220,170,.22)'); g.addColorStop(1, 'rgba(255,220,170,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore();
   drawFig(ctx, 'wave', x0 + F.c.w * k / 2, top + hgt, hgt, { tv: 0 });
   ctx.save(); ctx.beginPath(); ctx.rect(0, TABLE_Y, W, H - TABLE_Y); ctx.clip(); ctx.drawImage(car, 0, 0); ctx.restore(); drawTable(ctx, t, 30);   // in the aisle behind your table
@@ -933,4 +962,4 @@ async function coverArt() {   // media/cover/art.webp: the split carriage (winte
 if (RENDER) { document.body.classList.add('rendering'); renderAll(); }
 else if (COVERART) { document.body.classList.add('rendering'); coverArt(); }
 else if (QS.has('cover') && previewT == null) mix.preload = 'none';
-else { requestAnimationFrame(loop); if (!LINEAR) loadLang(VLANG); }   // decode the voices early (a suspended context decodes too)
+else { requestAnimationFrame(loop); if (!LINEAR) { loadLang('ja'); loadLang(voiceLang()); addEventListener('moheat:sublang', () => loadLang(voiceLang())); } }   // decode the voices early (a suspended context decodes too)

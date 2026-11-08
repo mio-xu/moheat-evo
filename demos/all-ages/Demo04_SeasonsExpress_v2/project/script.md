@@ -73,7 +73,7 @@ DUAL showcase planned: [x] fast hot↔cold on one ear (100–108) · [x] a peak 
 | a6 | 90.3 | Uh-oh! The seasons are out of control! | わわっ！ 季節が暴走してる〜！ | 糟糕！四季失控啦！ |
 | a7 (in person, whisper, right ear) | 118.6 | [whispers] Psst… it's really me. Shout "Spring!" with me, and the train comes back. | [whispers] ねえ…ほんものの、ぼくだよ。いっしょに「春！」ってさけんで。列車がもどるから。 | [whispers] 嘘…是真的我哦。和我一起喊「春天！」，列车就会回来。 |
 | a8 (in person, aisle) | 126.3 | Next stop, spring! Cherry Blossom Station! | つぎは〜、はる！ さくら駅〜！ | 下一站，春天！樱花站！ |
-| a9 (in person, aisle) | 146.6 | We've arrived! Thanks for riding the Seasons Express! | とうちゃく〜！ 季節急行に乗ってくれて、ありがとう！ | 到站啦！谢谢你乘坐四季特快！ |
+| a9 (in person, aisle) | 145.7 | We've arrived! Thanks for riding the Seasons Express! | とうちゃく〜！ 季節急行に乗ってくれて、ありがとう！ | 到站啦！谢谢你乘坐四季特快！ |
 
 ## 7. Review
 - Reviewed by: coordinator brief (2026-11-09, user asked not to wait); conductor design + voice pick by this agent, the three auditions + pick saved in `project/` for the user to override.

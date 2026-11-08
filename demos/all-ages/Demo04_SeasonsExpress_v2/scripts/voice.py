@@ -4,8 +4,8 @@
   python3 scripts/voice.py            # synthesise what is missing (cache: audio/voice_cache.json), write media/voice/<id>.<lang>.m4a
                                       # + media/voice.js (times, texts, loudness envelopes for lip-sync and voice warmth)
 
-User rule 2026-11-09: all voice acting is in JAPANESE (every demo); en / zh are subtitles only — the page and the MP4 play the
-Japanese voice. The en / zh takes are kept (rendered once, unused by the page): `--langs ja,en,zh` (re)renders them; default = ja.
+User rule 2026-11-09 (latest): the voice follows the subtitle language (ja / en / zh, ja fallback); the MP4 uses Japanese.
+Render all three with `--langs ja,en,zh` (the default run renders ja only and keeps the others' timing out of voice.js — always pass --langs).
 Standard: handoff §4 (eleven_v4, stability .4, similarity .8, seed 7, English bracket tags). Text = project/script.md §6.
 """
 import hashlib, io, json, os, subprocess, sys, wave
@@ -26,7 +26,7 @@ LINES = {
     "a6": (90.3, "holo", {"en": "[surprised] Uh-oh! The seasons are out of control!", "ja": "[surprised] わわっ！ 季節が暴走してる〜！", "zh": "[surprised] 糟糕！四季失控啦！"}),
     "a7": (118.6, "ear", {"en": "[whispers] Psst… it's really me. Shout “Spring!” with me, and the train comes back.", "ja": "[whispers] ねえ…ほんものの、ぼくだよ。いっしょに「春！」ってさけんで。列車がもどるから。", "zh": "[whispers] 嘘……是真的我哦。和我一起喊「春天！」，列车就会回来。"}),
     "a8": (126.3, "aisle", {"en": "[cheerful] Next stop, spring! Cherry Blossom Station!", "ja": "[cheerful] つぎは〜、はる！ さくら駅〜！", "zh": "[cheerful] 下一站，春天！樱花站！"}),
-    "a9": (146.6, "aisle", {"en": "[cheerful] We've arrived! Thanks for riding the Seasons Express!", "ja": "[cheerful] とうちゃく〜！ 季節急行に乗ってくれて、ありがとう！", "zh": "[cheerful] 到站啦！谢谢你乘坐四季特快！"}),
+    "a9": (145.7, "aisle", {"en": "[cheerful] We've arrived! Thanks for riding the Seasons Express!", "ja": "[cheerful] とうちゃく〜！ 季節急行に乗ってくれて、ありがとう！", "zh": "[cheerful] 到站啦！谢谢你乘坐四季特快！"}),
 }
 LANG = {"en": "en", "ja": "ja", "zh": "zh"}
 CACHE = os.path.join(ROOT, "audio", "voice_cache.json")
@@ -57,7 +57,7 @@ def envelope(x, sr=24000):
     return np.clip((db - (ref - 30)) / 30, 0, 1).round(3).tolist()
 
 
-VOICED = sys.argv[sys.argv.index("--langs") + 1].split(",") if "--langs" in sys.argv else ["ja"]
+VOICED = sys.argv[sys.argv.index("--langs") + 1].split(",") if "--langs" in sys.argv else ["ja", "en", "zh"]
 
 
 def main():
