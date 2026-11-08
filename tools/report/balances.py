@@ -10,12 +10,12 @@ Seedance: credits balance (via Demo10's seedance_images.py client, ~/.seedance_k
 ElevenLabs: characters used / limit this period (tools/eleven/tts.py client).
 OpenAI: no balance API with a normal key → spend estimated per demo from demos/*/*/project/openai_log.json: tokens × PRICE where the
         log has usage, else ~$0.2 per image; re-runs of the same job are counted through "prior_usage" (tools/openai/images.py keeps
-        it). Cap: $10 per demo (user 2026-11-08) → ⚠ at 80 %, ✗ STOP over the cap (leave it to the user). Real balance: OpenAI billing.
+        it). Cap: $20 per demo (user 2026-11-09, raised from $10) → ⚠ at 80 %, ✗ STOP over the cap (leave it to the user). Real balance: OpenAI billing.
 """
 import argparse, glob, importlib.util, json, os, sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-CAP_USD, WARN_AT = 10.0, 0.8
+CAP_USD, WARN_AT = 20.0, 0.8
 # $ per 1M tokens — gpt-image estimate (text in / image in / image out); edit here when OpenAI's price list changes.
 PRICE = {'text_in': 5.0, 'image_in': 8.0, 'image_out': 30.0}
 FALLBACK_USD = 0.2   # one 2K image when the log has no usage
@@ -55,7 +55,7 @@ def budget_rows():
 
 
 def table(rows):
-    out = ['| Demo | OpenAI images | est. $ | of $10 cap | state |', '|---|---:|---:|---:|---|']
+    out = ['| Demo | OpenAI images | est. $ | of $20 cap | state |', '|---|---:|---:|---:|---|']
     for d, n, s, st in rows: out.append(f'| {d} | {n} | {s:.2f} | {s / CAP_USD:.0%} | {st} |')
     out.append(f'| **total** | {sum(r[1] for r in rows)} | {sum(r[2] for r in rows):.2f} | | |')
     return '\n'.join(out)
@@ -92,7 +92,7 @@ def main():
     if a.write:
         p = os.path.join(REPO, a.write); tmp = p + '.tmp'
         open(tmp, 'w').write('# OpenAI budget per demo\n\nWritten by `python3 tools/report/balances.py --budget --write ' + a.write
-                             + '` (estimate; cap $10 per demo, ⚠ at 80 %).\n\n' + table(rows) + '\n')
+                             + '` (estimate; cap $20 per demo, ⚠ at 80 %).\n\n' + table(rows) + '\n')
         os.replace(tmp, p); print('wrote', a.write)
 
 
