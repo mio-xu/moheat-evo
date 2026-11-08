@@ -32,22 +32,30 @@ His phone streams from a tripod at his eye level, a binaural mic clipped under i
 
 Nothing for being shy or praised. `STREAM.both()` counts frames with cool + warm on the same ear; `STREAM.log()` lists every command sent.
 
+## Picture: layers (2026-11-08, the standard way — DEMO_DESIGN_GUIDE §6 标准制作流程)
+
+Redone from Gaku's design (look C) as layers instead of video (user: "重做版直接接管原版"; the first version — 8 scene stills + 3 of 18
+Seedance clips — is backed up outside the repo: `~/Desktop/MoHeat Evo 备份/for-women/Demo24_GakuCamp_20261108-1217/`). ≈ 425 Seedance credits, no video.
+
+| Layer | Art | Moves by |
+|---|---|---|
+| background | one empty campsite plate (`bg_camp`) | parallax (mouse / tilt + slow sway), heat shimmer + flicker over the fire; zoomed / panned per view so its fire lands where `main.js` draws sparks |
+| Gaku | 8 poses on a plain grey background: `gaku_ref` (sit) and four same-face edits of it (coffee, sweet potato, blanket, wave), plus `gaku_log`, `gaku_left` (close-up), `gaku_whisper` (event CG) | breathing, a small bob while talking, warm rim light facing the fire (code) |
+| face | Seedance edits of each pose: mouth slightly open, eyes closed (his fringe stays over his eye) → feathered patches | the mouth fades with the voice loudness, ~0.13 s blinks; same-face poses share `gaku_ref`'s patches |
+| effects | — | `main.js`'s canvas code: sparks, snow, steam, wind / blanket washes |
+
 ## Files
 
-- `index.html`, `style.css` (on top of `Demo14_MintStream/style.css` and `shared/game.css`, both by path), `main.js`, `audio.js` (Demo 14's audio.js + campfire, lake wind, snow steps, log, foil), `lines.js`.
-- `scripts/voice.py` → `media/voice/*.m4a` (ElevenLabs, tags per line); `scripts/seedance.py` (prompts: `designs`, `scenes`; also in `project/web_prompts.json` for the website); `scripts/prepare_art.sh` → `media/art/*.jpg`.
-- Art: 8 stills, Seedance website (GPT Image 2, 16:9 2K), 2026-11-08 — the API upload was rate-limited. v1 (low camera, `assets/art/v1/`) → v2 eye level from `ref_gaku.jpg` (drew the phone rig in frame, `assets/art/v2_rig/`) → final = v2 edited ("remove the phone and tripod, look into the lens"). Raw PNGs in `assets/` stay out of git.
-- `?embed=1` site menu · `?cover=1` poster (`media/cover.jpg`, headless Chrome 1920×1080) · `?auto=1` auto-picks the first option, `?auto=1&alt=1` the last (testing).
-
-## Animation (handoff §4b)
-
-18 clips, Seedance 2.5 Lite 1080p 4 s First & Last Frame (user OK'd 1152 credits): talk loops for all 8 views + a quiet loop at the fire,
-9 transitions in story order (live → log → left → live → coffee | imo → blanket → whisper_R → bye). Prompts and frames:
-`project/web_video_prompts.json`; frames `assets/frames/` (`end_*.jpg` = copies for the end slot). `scripts/prepare_video.py` snaps each clip's
-ends onto the stills → `media/video/`. The player (`go(transition, view, onStart)`, switches only at a clip's end) falls back to the still for
-any clip that is missing, so the page works with a partial set. `?stills` = no video.
+- `index.html` (+ `../../for-men/Demo14_MintStream/style.css` and `../../shared/game.css` by path), `style.css`, `main.js` (story, chat, thermal),
+  `audio.js`, `lines.js`, `l10n.js` — unchanged by the layered picture. `media/layers.js` + `../../shared/layers.js` (loaded before `main.js`)
+  draw the live composite wherever `main.js` draws a still (`media/art/gaku_<view>.jpg`, now the flat fallbacks); `?flat` = those stills.
+- Art build (Pillow + numpy, ~1 min): `python3 tools/art/build_stage.py demos/for-women/Demo24_GakuCamp --preview` from `project/stage.json`
+  (poses, near-hints, `erase` = the fire drawn in `gaku_log`, `keep` = the coffee steam, placements) → `media/art/` + `media/layers.js`.
+- Prompts: `scripts/seedance_layers.py` (imports the first version's `scripts/seedance.py` for the look; `prompts` → `project/web_prompts.json`),
+  layer plan `project/layers.md`. Raw PNGs in `assets/art/` (not in git). Voices: `scripts/voice.py` (ElevenLabs `gaku r2_a`).
+- `?embed=1` site menu · `?cover=1` poster (`media/cover.jpg`, headless Chrome) · `?auto=1` / `?auto=1&alt=1` auto-pick the first / last option.
 
 ## Status
 
-Stills version done and auto-tested (both branches, 0 errors). Animation in progress: 3 / 18 clips done (v_live, v_live_idle, v_log);
-2026-11-08 the account's daily upload limit (web and API share it) was reached → the other 15 after the reset (~09:00 JST).
+Layered version tested in Chrome (both branches, 0 errors, no 404s, EN / 日本語 / 中文, one screen). In the menu under this folder.
+Video: none; dynamic CGs only if the user asks after playing (sitting down beside you, the blanket over the mic — 64 each).

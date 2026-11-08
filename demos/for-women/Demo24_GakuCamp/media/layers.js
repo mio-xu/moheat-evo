@@ -17,7 +17,7 @@ window.MOHEAT_LAYERS = {
    "char": {
     "src": "art/char_sit.webp",
     "w": 1700,
-    "h": 1319,
+    "h": 1317,
     "x": 0.43,
     "y": 1.04,
     "height": 1.0
@@ -26,8 +26,8 @@ window.MOHEAT_LAYERS = {
     {
      "src": "art/sit_mouth.webp",
      "rect": [
-      773,
-      523,
+      774,
+      522,
       185,
       112
      ],
@@ -38,7 +38,7 @@ window.MOHEAT_LAYERS = {
      "rect": [
       659,
       337,
-      331,
+      330,
       132
      ],
      "kind": "eyes"
@@ -61,7 +61,7 @@ window.MOHEAT_LAYERS = {
    "char": {
     "src": "art/char_log.webp",
     "w": 1700,
-    "h": 1127,
+    "h": 1195,
     "x": 0.42,
     "y": 1.04,
     "height": 1.0
@@ -70,20 +70,20 @@ window.MOHEAT_LAYERS = {
     {
      "src": "art/log_mouth.webp",
      "rect": [
-      562,
-      366,
-      139,
-      92
+      596,
+      389,
+      147,
+      97
      ],
      "kind": "mouth"
     },
     {
      "src": "art/log_eyes.webp",
      "rect": [
-      468,
-      235,
-      246,
-      118
+      497,
+      250,
+      261,
+      125
      ],
      "kind": "eyes"
     }
@@ -149,7 +149,7 @@ window.MOHEAT_LAYERS = {
    "char": {
     "src": "art/char_coffee.webp",
     "w": 1700,
-    "h": 1094,
+    "h": 1318,
     "x": 0.43,
     "y": 1.12,
     "height": 1.3
@@ -158,20 +158,20 @@ window.MOHEAT_LAYERS = {
     {
      "src": "art/coffee_mouth.webp",
      "rect": [
-      642,
-      434,
-      149,
-      93
+      775,
+      523,
+      179,
+      112
      ],
      "kind": "mouth"
     },
     {
      "src": "art/coffee_eyes.webp",
      "rect": [
-      548,
-      286,
-      270,
-      102
+      662,
+      344,
+      325,
+      123
      ],
      "kind": "eyes"
     }
@@ -193,7 +193,7 @@ window.MOHEAT_LAYERS = {
    "char": {
     "src": "art/char_imo.webp",
     "w": 1700,
-    "h": 1278,
+    "h": 1277,
     "x": 0.55,
     "y": 1.2,
     "height": 1.08
@@ -203,7 +203,7 @@ window.MOHEAT_LAYERS = {
      "src": "art/imo_mouth.webp",
      "rect": [
       804,
-      508,
+      507,
       174,
       103
      ],
@@ -237,7 +237,7 @@ window.MOHEAT_LAYERS = {
    "char": {
     "src": "art/char_blanket.webp",
     "w": 1700,
-    "h": 952,
+    "h": 953,
     "x": 0.43,
     "y": 1.06,
     "height": 1.08
@@ -247,7 +247,7 @@ window.MOHEAT_LAYERS = {
      "src": "art/blanket_mouth.webp",
      "rect": [
       776,
-      375,
+      376,
       130,
       81
      ],
@@ -257,7 +257,7 @@ window.MOHEAT_LAYERS = {
      "src": "art/blanket_eyes.webp",
      "rect": [
       693,
-      244,
+      245,
       236,
       90
      ],
@@ -281,7 +281,7 @@ window.MOHEAT_LAYERS = {
    "char": {
     "src": "art/char_whisper.webp",
     "w": 1700,
-    "h": 970,
+    "h": 978,
     "x": 0.58,
     "y": 1.03,
     "height": 1.05
@@ -290,10 +290,10 @@ window.MOHEAT_LAYERS = {
     {
      "src": "art/whisper_mouth.webp",
      "rect": [
-      655,
-      531,
-      163,
-      113
+      647,
+      535,
+      164,
+      114
      ],
      "kind": "mouth"
     }
@@ -335,7 +335,7 @@ window.MOHEAT_LAYERS = {
      "src": "art/bye_eyes.webp",
      "rect": [
       678,
-      319,
+      318,
       304,
       116
      ],

@@ -23,7 +23,7 @@
     { cat: 'for-women', dir: 'Demo20_HinataHandshake', ja: 'あと10秒だけ、ね？', en: 'Just Ten More Seconds?', zh: '再多10秒，好吗？', group: 3 },
     { cat: 'for-women', dir: 'Demo21_JinLounge', ja: '俺だけ見てろ', en: 'Look Only at Me', zh: '只准看着我', group: 3 },
     { cat: 'for-women', dir: 'Demo22_ShionRain', ja: '雨が止むまで', en: 'Until the Rain Stops', zh: '直到雨停', group: 3 },
-    { cat: 'for-women', dir: 'Demo27_GakuFireside', ja: 'ガクの、焚き火キャンプ配信', en: "Gaku's Campfire Stream", zh: '岳的篝火露营直播', group: 3 },
+    { cat: 'for-women', dir: 'Demo24_GakuCamp', ja: 'ガクの、焚き火キャンプ配信', en: "Gaku's Campfire Stream", zh: '岳的篝火露营直播', group: 3 },
     { cat: 'for-women', dir: 'Demo30_SakuFestival', ja: 'なつまつり、ふたりで', en: 'Summer Festival, Just Us', zh: '夏日祭典，只有我们俩', group: 3 },
     { cat: 'nobunaga-suntory', dir: 'Demo05_GifuCastle', ja: '信長の岐阜城へようこそ', en: "Welcome to Nobunaga's Gifu Castle", zh: '欢迎来到信长的岐阜城', group: 4, ep: 1 },
     { cat: 'nobunaga-suntory', dir: 'Demo06_FutureWhisky', ja: '未来の酒と、安土の夜', en: 'Future Whisky at Azuchi', zh: '未来之酒与安土之夜', group: 4, ep: 2 },

@@ -12,10 +12,10 @@ Raw PNGs → assets/art/ (not in git); log with each generation's output URL →
 import glob, importlib.util, json, os, sys, time, urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-spec = importlib.util.spec_from_file_location('d24', os.path.join(ROOT, '..', 'Demo24_GakuCamp', 'scripts', 'seedance.py'))
+spec = importlib.util.spec_from_file_location('d24', os.path.join(ROOT, 'scripts', 'seedance.py'))
 d24 = importlib.util.module_from_spec(spec); spec.loader.exec_module(d24)
 m = d24.m
-OUT, LOG = os.path.join(ROOT, 'assets', 'art'), os.path.join(ROOT, 'project', 'seedance_log.json')
+OUT, LOG = os.path.join(ROOT, 'assets', 'art'), os.path.join(ROOT, 'project', 'seedance_log_layers.json')
 
 GAKU = ("Gaku, 26, a solo winter-camping live streamer: " + d24.DESIGNS['design_C'].split(':', 1)[1].split('Sitting')[0].strip() +
         " Extremely handsome, cool and quiet (kuudere), secretly gentle and shy. Keep his signature hair exactly: sleek short black hair "

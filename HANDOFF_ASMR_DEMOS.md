@@ -444,16 +444,16 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 镜头（用户 2026-11-08）：第一版麦克风放在椅子上、镜头太低，他看镜头像在往下看 → 改成**手机装在三脚架上、和他眼睛齐平，双耳麦克风夹在手机下面**，画面里不出现手机（你就是镜头）。做法：先按平视重出（模型把手机支架画进了画面），再用这批图做图生图编辑"去掉手机和支架、直视镜头"（提示词 `project/web_prompts.json` 的 `edit`）。静帧一共花了 700 credits。
 - 自动通关：两条分支都跑过（`?auto=1` / `?auto=1&alt=1`），0 报错。已加入 nav.js（女性向最后）、官网菜单、credits.html。动画（§4b）还没做，等用户反馈。
 
-### Demo27_GakuFireside ✅ 可玩（已替换菜单里的 Demo24）—《ガクの、焚き火キャンプ配信（レイヤー版）》（Demo24 用新做法重做，2026-11-08）
+### Demo24_GakuCamp ✅ 可玩（分层版，原 Demo27，2026-11-08 并回 Demo24）—《ガクの、焚き火キャンプ配信（レイヤー版）》（Demo24 用新做法重做，2026-11-08）
 
 - 新做法的第一个 Demo（DEMO_DESIGN_GUIDE §6.2 / §6.3）：一张空营地背景 + 8 个纯色底姿势（其中 4 个是 live 底图的"脸不变"编辑，共用脸部差分）+ Seedance 画的张嘴 / 闭眼差分 → 脸部差分块。没有视频，约 425 credits（Demo24 原计划 18 段 1152）。
-- 合成：`python3 tools/art/build_stage.py demos/for-women/Demo27_GakuFireside --preview`（Pillow + numpy，不占 GPU）；网页：`demos/shared/layers.js` 在 Demo24 的 `main.js` 画静帧的地方画分层合成（Demo24 的剧情 / 声音 / 冷热 / 翻译都按路径引用，不复制）。
-- 已测：两条分支自动跑完、0 报错、无 404、三种语言、一屏。**用户 2026-11-08 决定直接替换 Demo24**：nav.js DEMOS、官网菜单、缩略图都换成 Demo27；Demo24 留在仓库作备份（不在菜单里）。
+- 合成：`python3 tools/art/build_stage.py demos/for-women/Demo24_GakuCamp --preview`（Pillow + numpy，不占 GPU）；网页：`demos/shared/layers.js` 在 Demo24 的 `main.js` 画静帧的地方画分层合成（Demo24 的剧情 / 声音 / 冷热 / 翻译都按路径引用，不复制）。
+- 已测：两条分支自动跑完、0 报错、无 404、三种语言、一屏。**用户 2026-11-08：重做版直接接管原版**——分层版已并回 `Demo24_GakuCamp`（同一网址），旧版（视频、旧静帧）备份在仓库外 `~/Desktop/MoHeat Evo 备份/for-women/Demo24_GakuCamp_20261108-1217/`。
 - 坑：API 输出链接 30–60 分钟失效（第 2 批 7 张因此失败，未扣费），上传又限流 → 第 2 批改用网页端（`scripts/web_take.py`）。
 
 ### Demo30_SakuFestival ✅ 可玩 —《なつまつり、ふたりで / Summer Festival, Just Us》（女性向，2026-11-08）
 - 用户从 4 个方案里选了 C（夏祭り）、造型 A（栗色发 + 泪痣 + 靛蓝浪纹浴衣 + 白狐面）、声音 ElevenLabs **saku r1_a**（`7R01hi42FiEiqOj5XqSE`）。原创角色 宮代 朔，20 岁，神社继承人、青梅竹马。全系列第一部夏天。
-- **用户要求：最终效果和制作做法与岳（Demo27）一致** → 空场景背景 + 纯灰底姿势 + 画出来的张嘴 / 闭眼差分（`build_stage.py`，所有姿势 `matte: ai`），`shared/layers.js` 合成，不做视频。
+- **用户要求：最终效果和制作做法与岳（Demo24）一致** → 空场景背景 + 纯灰底姿势 + 画出来的张嘴 / 闭眼差分（`build_stage.py`，所有姿势 `matte: ai`），`shared/layers.js` 合成，不做视频。
 - 招牌：团扇凉风绕头转（移动冷源）+ 吃完刨冰往左耳吹凉气；烟花盖住的话在右耳重说。详见 Demo 的 README / `project/DESIGN.md`。
 - 坑：特写图会把"你"的手 / 头发画进来（POV 不该出现）→ 编辑去掉；编辑有时整张重画或改构图（左耳特写失败 2 次）→ 改用镜像；纯灰底在夜景上留浅色描边 → `matte: ai`；差分自动搜索会被手 / 道具带偏 → `build_stage.py` 新增 `centre_<kind>` + `radius_<kind>`（固定椭圆）。共用约 775 credits（含作废的整图 175 和失败编辑 75）。
 
@@ -481,7 +481,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 
 ### Demo31_SummerRooftop 🚧 做到一半 —《なつの、おくじょうで / Up on the Summer Roof》（男性向，纯交互，2026-11-08）
 - 用户要求：再做一个男性向剧情；从 4 个方案里选了 **A 夏夜屋顶 · 青梅竹马**。女主 **早瀬渚**（20 岁，暑假回老家的青梅竹马，嘴硬型），造型 **A**（栗色高马尾、橙色发圈、藏青烟花纹浴衣、橙腰带；`project/designs_contact.jpg`），声音 ElevenLabs **nagisa r1_b**（`IRIujaFF31qohpDbrkrj`）。
-- 用户（2026-11-08）：最终效果和制作要求**和岳（Demo27 ガク）一致** → 指南 §6 标准制作流程（空场景 + 纯色底姿势 + 画出来的差分 + build_stage.py + layers.js）。分层计划 `project/layers.md`（1 背景 + 8 姿势 + 差分，约 425 credits，不做视频），用户同意先试 100。
+- 用户（2026-11-08）：最终效果和制作要求**和岳（Demo24 ガク）一致** → 指南 §6 标准制作流程（空场景 + 纯色底姿势 + 画出来的差分 + build_stage.py + layers.js）。分层计划 `project/layers.md`（1 背景 + 8 姿势 + 差分，约 425 credits，不做视频），用户同意先试 100。
 - 已完成：剧情 / 22 句配音 / 页面（Demo25 的框架）/ 声音 / DUAL 冷热 / 三语 / 语音回答；两条分支自动通关 0 报错；分层的「登场」画面（bg_roof + nagisa_ref + 嘴 / 眼差分，用户看过说可以）。
 - 卡住：Seedance **每日上传上限**（网页 + API 共用）2026-11-08 用完，剩下 13 张（325 credits，提示词在 `scripts/seedance.py` 的 `JOBS3` 和 `project/web_prompts.json` 的 `_layered`）等第二天。之后：stage.json 补全 7 个画面 → build_stage → 测试 → 封面 / 缩略图 / 菜单。另外 200 credits 的 8 张整图是标准定下之前出的，只作构图参考。细节见该目录 README。
 

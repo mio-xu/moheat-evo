@@ -203,12 +203,12 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 
 > **先看 §6.3**：Seedance 只给通过准入的素材；下面的循环 / 过渡片段规则只适用于已经决定要做的视频片段，不再是每个画面的默认做法（用户 2026-11-08）。
 
-### 标准制作流程：岳（Demo27_GakuFireside）的做法（用户 2026-11-08 定为所有新 Demo 的标准）
+### 标准制作流程：岳（Demo24_GakuCamp (layered, ex-岳（Demo24）)）的做法（用户 2026-11-08 定为所有新 Demo 的标准）
 
-画面一律这样做；Seedance 视频只给通过 §6.3 三条准入的动态 CG。范例：`demos/for-women/Demo27_GakuFireside/`（`project/stage.json`、`scripts/seedance.py`、`project/layers.md`）。
+画面一律这样做；Seedance 视频只给通过 §6.3 三条准入的动态 CG。范例：`demos/for-women/Demo24_GakuCamp/`（`project/stage.json`、`scripts/seedance.py`、`project/layers.md`）。
 
-1. **设定图**：用户选定造型（人物设计方案 → 设定图）。保留角色的辨识度（Demo27 保留了遮眼刘海）。
-2. **分层计划**：先写 `project/layers.md`，列出每个画面用哪个姿势、哪些姿势可以共用一张脸、哪些是事件 CG、一共多少 credits，发给用户确认。Demo27 一共 8 个画面，约 425 credits。
+1. **设定图**：用户选定造型（人物设计方案 → 设定图）。保留角色的辨识度（岳（Demo24） 保留了遮眼刘海）。
+2. **分层计划**：先写 `project/layers.md`，列出每个画面用哪个姿势、哪些姿势可以共用一张脸、哪些是事件 CG、一共多少 credits，发给用户确认。岳（Demo24） 一共 8 个画面，约 425 credits。
 3. **出图**（按 §5.3 的工具顺序：Seedance API → OpenAI API → Seedance 网页端；16:9 2K）：
    - 每个场地出一张**空场景背景**（"empty scene, no people"），火、灯这类光源放在固定的位置。
    - **立绘基准**：纯色底，颜色按角色的主色选，要拉开反差：深色角色（黑发、黑衣）用浅灰 #c8c8c8，浅色角色（银发、白金发、白衣、粉彩）用深灰 #404040，深浅混合的用中灰 #707070。正面、眼睛高度的机位，光线方向和背景一致。浅色角色在 `stage.json` 里加 `"matte": "ai"` 作保险。
@@ -218,9 +218,9 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
    - **差分**：在每张底图上编辑出"嘴微张（不露牙）"和"闭眼（刘海保持不变）"，提示词写明"只改嘴 / 眼，不移动、不缩放"。
    - **OpenAI API（gpt-image-2）也可以出图**（2026-11-08 配好，key 在 `~/.openai_key`）：`python3 tools/openai/images.py <demo> <job…>`，直接用 `project/web_prompts.json` 里的提示词和参考图（本地文件上传，不受 Seedance 上传额度限制），2560×1440 高质量约 3 分钟一张、约 0.2 美元（按返回用量估算，以 OpenAI 账单为准），可以几张同时跑。Seedance API 上传被限流时用它（顺序见 §5.3）；ChatGPT 网页版（`web_take.py --chatgpt`）也能出差分，但输出只有 1672×941。
    - 底图出来后，同一批差分和姿势**马上一起提交**：API 输出链接 30–60 分钟就失效（§11）。API 不能上传时改用网页端，提示词完全一样（`project/web_prompts.json`），下载后用 `python3 tools/seedance/web_take.py <demo> <name>` 改名；网页操作用 `tools/seedance/web_helpers.js`（填提示词、选 16:9 + 2K、只在显示 25 credits 时提交、按提示词找卡片下载）。
-4. **检查每张图**：长相是否一致、有没有多出来的道具（Demo27 "坐到左边" 被加了一个杯子，重出了）、画里有没有画进背景层的东西（火、桌子）。
+4. **检查每张图**：长相是否一致、有没有多出来的道具（岳（Demo24） "坐到左边" 被加了一个杯子，重出了）、画里有没有画进背景层的东西（火、桌子）。
 5. **合成**：写 `project/stage.json`（姿势、`near_mouth` / `near_eyes` 位置提示、`erase` / `keep` 区域、每个画面的摆位和火的位置），然后运行 `python3 tools/art/build_stage.py <demo> --preview`。这一步用 Pillow + numpy，约 1 分钟，不占 GPU。每次都要看截取预览和备用静帧拼图。
-6. **页面**：剧情代码只需要画静帧 `media/art/<still>.jpg`（`build_stage.py` 生成的备用静帧）。页面在剧情代码之前加载 `media/layers.js` 和 `../../shared/layers.js`，它们会把每张静帧自动换成分层动画：背景视差、火光、呼吸、口型、眨眼、边缘光。重做旧 Demo 时，旧的 `main.js` 可以按路径原样复用（Demo27 复用了 Demo24 的）。火星、热气、雪这些特效继续用代码画，摆位时要让道具对齐代码里写死的位置。
+6. **页面**：剧情代码只需要画静帧 `media/art/<still>.jpg`（`build_stage.py` 生成的备用静帧）。页面在剧情代码之前加载 `media/layers.js` 和 `../../shared/layers.js`，它们会把每张静帧自动换成分层动画：背景视差、火光、呼吸、口型、眨眼、边缘光。重做旧 Demo 时，旧的 `main.js` 可以按路径原样复用（岳（Demo24） 复用了 Demo24 的）。火星、热气、雪这些特效继续用代码画，摆位时要让道具对齐代码里写死的位置。
 7. **测试**：两条分支都用 `?auto=1` / `?auto=1&alt=1` 自动跑完，0 报错、没有 404，三种语言，一屏。`?flat` 可以对照原始静帧。
 8. **封面和缩略图**：用 headless Chrome 截 `?cover=1` 存成 `media/cover.jpg`，再运行 `python3 tools/web/thumbs.py <文件夹>` 生成三种语言的缩略图，菜单用的缩略图存成 `assets/images/demos/<文件夹>.jpg`。
 9. **动态 CG**：只在用户试玩后觉得需要时才做（§6.3），按 §4b 的视频标准。
@@ -307,7 +307,7 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 **高效、不容易出错的原则（用户 2026-11-08）**：先预防，再修补；同一类问题只用一套机制；按"投入小、见效快"的顺序做，每一步都让用户看过再继续。
 
 - **可动立绘的出图规则**（预防，成本为 0，最有效）。会用 LivePortrait 动的画面，出图时就写进提示词：
-  - 表情用画出来的差分（见下面「表情」），所以刘海遮眼可以保留（Demo27 ガク 就保留了）；只有要用 LivePortrait 动脸的画面，眼睛和嘴才不能被头发、手、道具挡住。
+  - 表情用画出来的差分（见下面「表情」），所以刘海遮眼可以保留（岳（Demo24） 就保留了）；只有要用 LivePortrait 动脸的画面，眼睛和嘴才不能被头发、手、道具挡住。
   - 手和道具放在下巴以下，不横跨脸部。
   - 脸不要太小（脸宽至少约为画面宽的 1/8），正脸或微侧脸。
   - 同一角色的姿势用统一机位、统一大小（VN 立绘）。
@@ -317,7 +317,7 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
   - 叠放顺序：背景 → 身体 → 会动的头 → 遮挡层。遮挡层直接用原图像素，永远不变形。
   - 遮挡物自动从深度图找（脸周围比脸更近的像素）；边缘不准的画面，再用分割模型补。
   - 嘴被挡住一半以上时，这个画面就不做口型（VN 惯例），只保留眨眼和轻微动作。
-- **表情：画出来的差分（爷爷奶奶 Demo 的做法，2026-11-08 定为标准，Demo27 第一个照做）**：
+- **表情：画出来的差分（爷爷奶奶 Demo 的做法，2026-11-08 定为标准，岳（Demo24） 第一个照做）**：
   - 每个姿势出一张底图（纯色底），再用 Seedance 在底图上编辑出差分：张嘴（微张、不露牙）、闭眼。差分是画出来的，刘海遮眼、手挡脸这类遮挡也会一起画对，不需要遮挡层。
   - `python3 tools/art/build_stage.py <demo>` 一次做完：按颜色抠图（约 1 秒）、自动截取差分（`face_patches.py`：只截嘴或两只眼，局部对齐后羽化）、背景摆位、备用静帧、网页数据。只用 Pillow + numpy，不占 GPU。每次都看 `--preview` 的截取预览；搜索被带偏时，给一个 `near_mouth` / `near_eyes` 位置提示。
   - 网页（`demos/shared/layers.js`）：嘴按音量淡入淡出，眼睛约 0.13 秒眨一次；呼吸、说话时的轻微起伏、视差、火光、边缘光都是代码做的。
@@ -406,7 +406,7 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 
 ## 7. 页面与版式
 
-- **以最近一个同类 Demo 为模板**复制（女性向：Demo21 / 22 的 `index.html` + `style.css` + `main.js` + `audio.js` + `lines.js` + `l10n.js`），共用 `../../shared/game.css`、`../../shared/series.css`、`../../shared/nav.js`、`../../../device.js`；画面按 §6「标准制作流程」用 `media/layers.js` + `../../shared/layers.js`（范例 Demo27）。
+- **以最近一个同类 Demo 为模板**复制（女性向：Demo21 / 22 的 `index.html` + `style.css` + `main.js` + `audio.js` + `lines.js` + `l10n.js`），共用 `../../shared/game.css`、`../../shared/series.css`、`../../shared/nav.js`、`../../../device.js`；画面按 §6「标准制作流程」用 `media/layers.js` + `../../shared/layers.js`（范例 岳（Demo24））。
 - **固定结构**：见 §7.3 UI 规范（所有 Demo 一样，新 Demo 必须照做）。
 - **一屏检查**：在 1280×720、1440×800、1920×1080 下 `scrollHeight <= innerHeight`，**右侧栏也不能出现内部滚动**（§7.3）。
 - **URL 参数**：
@@ -516,7 +516,7 @@ main.layout
 
 - **上传额度是网页端和 API 共用的**：额度用完后，网页端上传参考图也会显示 "Failed"，卡片上的 "Edit" 按钮同样要重新上传，一样会失败。只能等额度恢复（`Retry-After` 可能长达约 22 小时）。所以一个 Demo 需要上传的参考图（底图、设定图）要尽量集中在同一天提交（2026-11-08，Demo32 因此卡在差分这一步）。
 - **纯色底的颜色要和角色的主色拉开**：浅色、粉彩系角色（米色开衫、白衣服）放在浅灰底上，按颜色抠图会把衣服抠穿。这种姿势在 `stage.json` 里加 `"matte": "ai"`（isnet-anime 抠轮廓，内部补实）；新出图时浅色角色改用深色底或绿幕底。
-- **API 输出图的链接约 30–60 分钟就失效**（403），之后连生成记录也查不到（503）。用"引用输出链接"做差分或新姿势（上传限流时不用上传的办法）时，底图一出来就把同一批全部提交，不要隔一段时间再出。失效后引用它的生成会失败（不扣 credits），只能重新上传底图或改用网页端（2026-11-08，Demo27 的 7 张因此失败）。
+- **API 输出图的链接约 30–60 分钟就失效**（403），之后连生成记录也查不到（503）。用"引用输出链接"做差分或新姿势（上传限流时不用上传的办法）时，底图一出来就把同一批全部提交，不要隔一段时间再出。失效后引用它的生成会失败（不扣 credits），只能重新上传底图或改用网页端（2026-11-08，岳（Demo24） 的 7 张因此失败）。
 - 同一个 file input 连续上传要先把 `input.value = ''` 清空，否则每隔一次不生效；上传后检查 `(n/8)` 或 `(n/2)` 计数。
 - 图生图提交后比例会被重置成 Auto，每次提交前都要确认 16:9 / 2K。
 - 下载文件名不带场景名（`image_batch_xx.png`、`video_batch_xx.mp4`），按下载时间对应，再用画面核对。
@@ -532,7 +532,7 @@ main.layout
 
 格式：**现象** → 原因 → 以后怎么做。新问题追加在最后。
 
-- **把用户的话理解错了**（Demo31：「和岳保持一致」被当成"和约会那一集一致"，其实是 Demo27 ガク（岳）的分层做法）→ 用户提到的名字没有在对话里出现过，就去 `git log`、交接文档、指南里查；还对不上就先问，不要猜。
+- **把用户的话理解错了**（Demo31：「和岳保持一致」被当成"和约会那一集一致"，其实是 岳（Demo24）（岳）的分层做法）→ 用户提到的名字没有在对话里出现过，就去 `git log`、交接文档、指南里查；还对不上就先问，不要猜。
 - **按旧标准开工**（Demo31 先做了 8 张整图，200 credits 浪费）→ 标准一天会改好几次。每次开始出图、写页面之前，先 `git log --oneline -15` 看最近的规则提交，再重读指南 §6 / §7。
 - **脚本"成功"了但其实没提交**（Seedance 网页：上传额度用完时生成按钮变灰，脚本照样点击）→ 每次提交后确认历史里多了一张卡片；不要只看脚本的返回值。
 - **新图和旧图重名，脚本跳过了**（Demo31：`gpt_image.py` 见到同名的旧整图就输出 exists，后面的差分全都做在旧图上）→ 新一轮出图前先把旧图改名（`flat_*`），并把脚本输出里的 `exists` 当成错误处理。
