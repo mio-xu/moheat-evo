@@ -15,7 +15,7 @@
   const IMG = {};
   const PATCH = window.REN_PATCHES || {};   // small face patches (mouth / eyes) laid over the base frame — scripts/prepare_art.py
   const NAMES = ['bg_room', 'bg_room_open', 'ren_call', 'ren_close', 'ren_door', 'ren_hug', ...Object.keys(PATCH)];
-  const artReady = Promise.all(NAMES.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/${n}.webp?v=2`; })));
+  const artReady = Promise.all(NAMES.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/${n}.webp?v=3`; })));
 
   // ---------------------------------------------------------------- state
   const fresh = () => ({ started: false, done: false, t: 0, clock: 0, callT: 0, inCall: false, ear: -1, view: 'room', windowOpen: 0, doorCold: 0, near: 0, hug: 0, shy: 0, whisper: 0, real: null, step: 0, fade: 0 });

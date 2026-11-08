@@ -12,10 +12,10 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_call.webp?v=b73c6099",
+    "src": "art/char_call.webp?v=c70fb8b6",
     "w": 1700,
     "h": 1304,
-    "x": 0.71,
+    "x": 0.74,
     "y": 1.02,
     "height": 1.04,
     "box": [
@@ -93,10 +93,10 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_close.webp?v=2da72094",
+    "src": "art/char_close.webp?v=7133c6c0",
     "w": 1700,
     "h": 1061,
-    "x": 0.55,
+    "x": 0.56,
     "y": 1.02,
     "height": 1.02,
     "box": [
@@ -174,7 +174,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_door.webp?v=9aa2a55b",
+    "src": "art/char_door.webp?v=aaf78467",
     "w": 1597,
     "h": 1440,
     "x": 0.5,
@@ -256,7 +256,7 @@ window.MOHEAT_LAYERS = {
     "zoom": 1.2
    },
    "char": {
-    "src": "art/char_hug.webp?v=546d444c",
+    "src": "art/char_hug.webp?v=c48199be",
     "w": 1700,
     "h": 1012,
     "x": 0.5541,

@@ -80,6 +80,18 @@ def fringe(a, key):
     return float(like[rim].mean() - like[inner].mean()), float(like[rim].mean())
 
 
+def cut_outside(al, side, c):
+    """where the longest straight cut of a layer lands in the 16:9 frame; True when it is ≥ MARGIN_OK outside the frame there."""
+    o, t = al[10:-10, 10:-10] > 200, al[10:-10, 10:-10] < 30
+    e = {'right': o[:, :-3] & t[:, 3:], 'left': t[:, :-3] & o[:, 3:], 'top': t[:-3] & o[3:], 'bottom': o[:-3] & t[3:]}[side]
+    H, W = al.shape; hf = c['height']; wf = hf * (c['w'] / c['h']) * (9 / 16)
+    if side in ('right', 'left'):
+        x = (int(np.argmax(e.sum(0))) + 10 + (2 if side == 'right' else 1)) / W; fx = c['x'] - wf / 2 + x * wf
+        return fx >= 1 + MARGIN_OK if side == 'right' else fx <= -MARGIN_OK
+    y = (int(np.argmax(e.sum(1))) + 11) / H; fy = c['y'] - hf + y * hf
+    return fy >= 1 + MARGIN_OK if side == 'bottom' else fy <= -MARGIN_OK
+
+
 def regions(diff, mask):
     """two eye boxes from a changed-pixel map: split at the widest gap of the column profile."""
     cols = (diff * mask).sum(0); idx = np.where(cols > cols.max() * 0.08)[0]
@@ -115,6 +127,8 @@ def check(D, verbose=False):
             try:
                 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import check_cut_body
                 for side, f in check_cut_body.straight_cuts(a[10:-10, 10:-10, 3]):   # border rows = the picture edge (check_cut_body)
+                    if all(cut_outside(a[..., 3], side, w['char']) for w in views.values() if (w.get('char') or {}).get('src', '').split('?')[0] == src):
+                        continue   # the ruler line lies ≥ 1.5 % outside the frame in every view that shows this layer (Demo12 call, moved right)
                     out.append(('FAIL' if side == 'top' else 'WARN', 'edge-margin', f'{src}: straight {side} cut {f:.0%} long inside the picture (flat head / ruler-cut body) → tools/art/complete_cutout.py or extend_pose.py'))
             except Exception: pass
         # fringe (once per char layer)
