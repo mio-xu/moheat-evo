@@ -59,7 +59,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/door_mouth2.webp?v=3cefbe85",
+     "src": "art/door_mouth2.webp?v=f012c8b7",
      "rect": [
       763,
       385,
@@ -70,7 +70,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/door_mouth3.webp?v=244714ee",
+     "src": "art/door_mouth3.webp?v=61e92279",
      "rect": [
       763,
       385,
@@ -141,7 +141,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/towel_mouth2.webp?v=de796002",
+     "src": "art/towel_mouth2.webp?v=6e6753ee",
      "rect": [
       783,
       345,
@@ -152,7 +152,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/towel_mouth3.webp?v=e82b1213",
+     "src": "art/towel_mouth3.webp?v=5d1e9dfc",
      "rect": [
       783,
       345,
@@ -225,7 +225,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/dryer_mouth2.webp?v=9681dcaf",
+     "src": "art/dryer_mouth2.webp?v=ca956fea",
      "rect": [
       760,
       267,
@@ -236,7 +236,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/dryer_mouth3.webp?v=7bda208a",
+     "src": "art/dryer_mouth3.webp?v=91bef6ca",
      "rect": [
       760,
       267,
@@ -307,7 +307,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/glasses_mouth2.webp?v=b1e5ccf4",
+     "src": "art/glasses_mouth2.webp?v=f02457db",
      "rect": [
       622,
       387,
@@ -318,7 +318,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/glasses_mouth3.webp?v=4ebdb5f9",
+     "src": "art/glasses_mouth3.webp?v=fce661df",
      "rect": [
       622,
       387,
@@ -379,7 +379,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/whisper_mouth2.webp?v=75c61770",
+     "src": "art/whisper_mouth2.webp?v=c84b0736",
      "rect": [
       211,
       396,
@@ -390,7 +390,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/whisper_mouth3.webp?v=034be800",
+     "src": "art/whisper_mouth3.webp?v=cc5d8e95",
      "rect": [
       211,
       396,
@@ -460,7 +460,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/window_mouth2.webp?v=20f79b1a",
+     "src": "art/window_mouth2.webp?v=1d1918f0",
      "rect": [
       928,
       321,
@@ -471,7 +471,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/window_mouth3.webp?v=01735b08",
+     "src": "art/window_mouth3.webp?v=0e17f0c4",
      "rect": [
       928,
       321,
