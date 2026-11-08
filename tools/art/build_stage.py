@@ -11,7 +11,8 @@ Reads <demo>/project/stage.json:
     "views": { "live": { "still": "gaku_live", "pose": "sit", "bg": "camp", "fire": [0.9, 0.74], "x": 0.42, "y": 1.06, "height": 1.1 } } }
   view: still = the file the page draws (stem, or stem.ext; media/art/<still> is written as the flat fallback), alias = other view names
   that draw the same still (e.g. a mirrored side), fire = where the page expects the
-  fire (or null), x / y = the character's bottom centre (frame fraction), height = the character's height as a fraction of the frame.
+  fire (or null), x / y = the character's bottom centre (frame fraction), height = the character's height as a fraction of the frame
+  (leave all three out = the figure stays where it is in its own source picture, for poses drawn with a still's framing).
 Does:
   1. cuts every pose out of its plain background (flood from the border on the background colour, soft edge, grey fringe unmixed)
   2. face patches from the talk / blink variants (tools/art/face_patches.py logic, run on the full-size sources)
@@ -186,6 +187,9 @@ if pcfg["patches"]:
 FW, FH = 1920, 1080
 for vname, v in cfg["views"].items():
     b, p = bgs[v["bg"]], poses[v["pose"]]
+    if "height" not in v:   # no placement given: where the figure is in its own source frame (poses drawn with a still's framing, Demo40)
+        (x0, y0, x1, y1), (sw, sh) = p["box"], pcfg["size"]
+        v = {**v, "x": round((x0 + x1) / 2 / sw, 4), "y": round(y1 / sh, 4), "height": round((y1 - y0) / sh, 4)}
     f, bf = v.get("fire"), b["fire"]; z = v.get("zoom", 1)
     if f:
         for k in (0, 1): z = max(z, f[k] / bf[k], (1 - f[k]) / (1 - bf[k]))

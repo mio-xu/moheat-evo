@@ -1,8 +1,38 @@
 {
  "src": "assets/art",
+ "hooks": {
+  "view": "TSUBAKI.S.view",
+  "lv": "TSUBAKI.S.lv"
+ },
  "bgs": {
   "torii": {
    "src": "bg_torii",
+   "fire": null
+  },
+  "stall": {
+   "src": "bg_stall",
+   "fire": null
+  },
+  "amazake": {
+   "src": "bg_amazake",
+   "fire": null
+  },
+  "fire": {
+   "src": "bg_fire"
+  },
+  "close": {
+   "src": "bg_close"
+  },
+  "pray": {
+   "src": "bg_pray",
+   "fire": null
+  },
+  "omikuji": {
+   "src": "bg_omikuji",
+   "fire": null
+  },
+  "stole": {
+   "src": "bg_stole",
    "fire": null
   }
  },
@@ -24,6 +54,48 @@
     1485,
     385
    ]
+  },
+  "stall": {
+   "src": "tsubaki_stall",
+   "talk": "tsubaki_stall_talk",
+   "blink": "tsubaki_stall_blink",
+   "matte": "green"
+  },
+  "amazake": {
+   "src": "tsubaki_amazake",
+   "talk": "tsubaki_amazake_talk",
+   "blink": "tsubaki_amazake_blink",
+   "matte": "green"
+  },
+  "fire": {
+   "src": "tsubaki_fire",
+   "talk": "tsubaki_fire_talk",
+   "blink": "tsubaki_fire_blink",
+   "matte": "green"
+  },
+  "close": {
+   "src": "tsubaki_close",
+   "talk": "tsubaki_close_talk",
+   "blink": "tsubaki_close_blink",
+   "matte": "green"
+  },
+  "pray": {
+   "src": "tsubaki_pray",
+   "talk": "tsubaki_pray_talk",
+   "blink": "tsubaki_pray_blink",
+   "matte": "green"
+  },
+  "omikuji": {
+   "src": "tsubaki_omikuji",
+   "talk": "tsubaki_omikuji_talk",
+   "blink": "tsubaki_omikuji_blink",
+   "matte": "green"
+  },
+  "stole": {
+   "src": "tsubaki_stole",
+   "talk": "tsubaki_stole_talk",
+   "blink": "tsubaki_stole_blink",
+   "matte": "green"
   }
  },
  "views": {
@@ -31,10 +103,49 @@
    "still": "tsubaki_torii",
    "pose": "torii",
    "bg": "torii",
-   "fire": null,
-   "x": 0.5,
-   "y": 1.0,
-   "height": 1.0
+   "fire": null
+  },
+  "stall": {
+   "still": "tsubaki_stall",
+   "pose": "stall",
+   "bg": "stall",
+   "fire": null
+  },
+  "amazake": {
+   "still": "tsubaki_amazake",
+   "pose": "amazake",
+   "bg": "amazake",
+   "fire": null
+  },
+  "fire": {
+   "still": "tsubaki_fire",
+   "pose": "fire",
+   "bg": "fire",
+   "fire": null
+  },
+  "close": {
+   "still": "tsubaki_close",
+   "pose": "close",
+   "bg": "close",
+   "fire": null
+  },
+  "pray": {
+   "still": "tsubaki_pray",
+   "pose": "pray",
+   "bg": "pray",
+   "fire": null
+  },
+  "omikuji": {
+   "still": "tsubaki_omikuji",
+   "pose": "omikuji",
+   "bg": "omikuji",
+   "fire": null
+  },
+  "stole": {
+   "still": "tsubaki_stole",
+   "pose": "stole",
+   "bg": "stole",
+   "fire": null
   }
  }
 }

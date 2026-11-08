@@ -10,7 +10,7 @@ requested; the credits line gets " · layered stills". Also: <new>/l10n.js (a st
 translations come from the original's l10n.js loaded in <head>) and the symlink media/voice → the original's voices.
 Run tools/art/build_stage.py for the art, then test (?auto=1 / ?auto=1&alt=1, ?sub=…) and make media/cover.jpg (?cover=1).
 """
-import argparse, os, re
+import argparse, glob, os, re
 
 ap = argparse.ArgumentParser(); ap.add_argument("orig"); ap.add_argument("new"); ap.add_argument("--skip-video", default="media/video/")
 a = ap.parse_args()
@@ -31,9 +31,12 @@ s = re.sub(r'(href|src)="([^"]+\.(?:css|js)(?:\?[^"]*)?)"', fix, s)
 s = s.replace("</head>", f'  <script src="../{on}/l10n.js?v=3"></script><!-- the original\'s languages (same page text) -->\n</head>', 1)
 mm = re.search(rf'<script src="\.\./{re.escape(on)}/main\.js[^"]*"></script>', s)
 assert mm, "no main.js script tag"
+# the shared layers.js at the version the other pages already use (a stale ?v= serves a cached old file: Demo20 mouth, Demo40)
+LV = max([int(v) for f in glob.glob(os.path.join(os.path.dirname(os.path.dirname(N)), "*", "*", "index.html"))
+          for v in re.findall(r"shared/layers\.js\?v=(\d+)", open(f, encoding="utf-8").read())] or [1])
 s = s[:mm.start()] + (f'<!-- {on}\'s story / sound / thermal code by path (unchanged); shared/layers.js draws the layered art in place of its stills -->\n'
                       f'  <script src="media/layers.js?v=1"></script>\n  <script>MOHEAT_LAYERS.skipVideo = {a.skip_video!r};</script>\n'
-                      f'  <script src="../../shared/layers.js?v=1"></script>\n  ') + s[mm.start():]
+                      f'  <script src="../../shared/layers.js?v={LV}"></script>\n  ') + s[mm.start():]
 s = re.sub(r'(art|art and animation|animation) (made )?with Seedance( video)?', lambda m: 'art made with Seedance', s)   # no video in a remake
 s = re.sub(r'(<p class="draft" id="credits">[^<]*?)(</p>)', lambda m: m.group(1) + ("" if "layered stills" in m.group(1) else " · layered stills") + m.group(2), s, 1)
 os.makedirs(os.path.join(N, "media", "art"), exist_ok=True)
