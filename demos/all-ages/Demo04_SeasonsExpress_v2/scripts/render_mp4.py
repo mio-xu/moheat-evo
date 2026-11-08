@@ -48,7 +48,9 @@ def film_audio():
     import json, wave
     import numpy as np
     src = os.path.join(ROOT, "audio", "final", "final_binaural_150s.wav")
-    with wave.open(src) as w: sr = w.getframerate(); x = np.frombuffer(w.readframes(w.getnframes()), np.int16).reshape(-1, 2).astype(np.float32) / 32768
+    sr = 48000   # the mix is WAVE_FORMAT_EXTENSIBLE (python's wave cannot read it): decode with ffmpeg
+    raw = subprocess.run(["ffmpeg", "-loglevel", "error", "-i", src, "-f", "f32le", "-ac", "2", "-ar", str(sr), "-"], capture_output=True, check=True).stdout
+    x = np.frombuffer(raw, np.float32).reshape(-1, 2).copy()
     v = open(os.path.join(ROOT, "media", "voice.js"), encoding="utf-8").read(); V = json.loads(v[v.index("{"):v.rindex("}") + 1])
     GAIN = {"holo": (.42, .42), "ear": (.12, .95), "aisle": (.45, .45)}   # hologram speaker in front, whisper at the right ear, in the aisle
     for lid, L in V["lines"].items():
@@ -76,8 +78,10 @@ def main():
         OUT_DIR[0] = os.path.join(ROOT, "video", "clips", "preview"); shutil.rmtree(OUT_DIR[0], ignore_errors=True); os.makedirs(OUT_DIR[0])
         run_chrome(f"render=1&at={at}" + ("&clean=1" if "--clean" in sys.argv else ""), len(at.split(",")))
         print("preview →", OUT_DIR[0]); return
-    frames = OUT_DIR[0]; shutil.rmtree(frames, ignore_errors=True); os.makedirs(frames)
-    run_chrome("render=1", 4500)
+    frames = OUT_DIR[0]
+    if "--encode-only" not in sys.argv:   # --encode-only: frames already rendered, only mux the video + soundtrack
+        shutil.rmtree(frames, ignore_errors=True); os.makedirs(frames)
+        run_chrome("render=1", 4500)
     os.makedirs(os.path.join(ROOT, "video", "final"), exist_ok=True)
     out = os.path.join(ROOT, "video", "final", "final_seasons_express_150s.mp4")
     main_mp4 = out + ".main.mp4"
