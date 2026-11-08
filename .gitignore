@@ -81,3 +81,15 @@ demos/for-men/Demo19_LunaStream/assets/
 demos/for-men/Demo43_BlizzardInn/assets/
 demos/for-men/Demo17_CocoaStream/audio/
 demos/for-men/Demo44_MagicAcademy/assets/
+# Demo04 v2 (d04, 2026-11-09): raw art, mouth sets, QA sheets, audio, video stay local (both the staging folder and the merged original)
+demos/all-ages/Demo04_SeasonsExpress*/assets/art/
+demos/all-ages/Demo04_SeasonsExpress*/assets/lp_mouths/
+demos/all-ages/Demo04_SeasonsExpress*/assets/patch_check/
+demos/all-ages/Demo04_SeasonsExpress*/assets/patches/
+demos/all-ages/Demo04_SeasonsExpress*/assets/patches_cfg/
+demos/all-ages/Demo04_SeasonsExpress*/assets/poses_preview.jpg
+demos/all-ages/Demo04_SeasonsExpress*/assets/patches_preview.jpg
+demos/all-ages/Demo04_SeasonsExpress*/assets/motion_check/
+demos/all-ages/Demo04_SeasonsExpress*/assets/mouth_check/
+demos/all-ages/Demo04_SeasonsExpress_v2/audio/
+demos/all-ages/Demo04_SeasonsExpress_v2/video/
