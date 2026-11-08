@@ -37,7 +37,7 @@ Rule: one QA entry point — new checks go **into** `tools/qa/check_demo.py`, no
 |---|---|
 | `python3 tools/web/bump.py <files…> [--stage]` · `--auto [files…]` · `--check` | `?v=` numbers; `--auto` = content hash (8 hex), `--check` lists stale ones |
 | `merge_remake.py` · `remake_page.py` · `thumbs.py` · `check_cover.py` · `cover_shots.js` · `check_shell.js` · `check_mobile.html` | remakes, thumbnails, cover standard, UI shell, mobile check |
-| `python3 tools/l10n/check_missing.js <lang> [folder]` (node) | untranslated strings |
+| `node tools/l10n/check_missing.js <lang> [folder]` | untranslated strings |
 
 ## Workflow (several sessions, one working tree)
 | Tool | Use |

@@ -7,6 +7,25 @@
 
 ---
 
+## 2026-11-08 · 流程标准 → 门禁和工具（素材标准 14 条、提效标准 13 条、成品要求、造型、类别风格卡）· 后台 agent "workflow"（统筹分派）
+
+**做了什么**（每项一个提交，`git log --oneline` 搜 "commit_mine" 之后）：
+- **Demo23 / 41 / 42 的 `banquet_bg` 404 是误报**：`_kit/talk/scenes.js` 用 `ART + 'banquet_bg.webp'`，headless Chrome 实测三页所有场景图 200。`check_demo.py` 的 files 扫描现在解析同文件的前缀常量；全站 files 0 FAIL。
+- **工具**：`tools/git/commit_mine.py`（只提交自己的路径 / hunk / patch，本次所有提交都用它）、`tools/git/claim.py` + `docs/CLAIMS.md`（认领表、scratch 前缀）、`.github/workflows/qa.yml` + `tools/qa/ci_report.py`（推送自动检查，只提示）、`bump.py --auto / --check`（内容哈希 ?v）、`tools/report/balances.py --budget / --demo`（每 Demo OpenAI 估算，80 % 预警；images.py / extend_pose.py 重跑留 `prior_usage`）、`tools/qa/changed.py`（按改动派测试）、`tools/art/check_art.py`（edges / fringe / blink / far-motion / looks → check_demo G4）、`tools/art/prompts/`（6 个模板 + fill.py）、`docs/characters/`（20 张角色卡）、`tools/library/index.py` → `docs/library.md`、`tools/art/style_card.py`（各类别 `_kit/style.json` / `STYLE.md` / `style.js` + `style_family.jpg` 全家福 + check_demo G7 style）、`tools/qa/SCRIPT_TEMPLATE.md`（世界规则卡、镜头表含 look 列、冷热表）、`tools/README.md`（全部工具一张表）。
+- **指南**：§0.1 成品要求（含魔法世界 6 条）；§5.1 类别风格卡；§6 G1 / G3 / G4 / G6 / G7 / G8 门禁更新（剧本 + 镜头表 + 冷热表审过才出图；先 1 个完整画面打样再批量）；§6.5 素材标准 S1–S15；§6.6 效率工具 + 多会话规则（认领、scratch 前缀、用量上限前先存进度）；§7.2 自动 ?v；§14；§11.1 两条教训。
+
+**新检查报出的问题（交给各自的会话 / 统筹）**：
+- Demo24 Gaku：`char_sit / log / coffee / imo / bye` 抠图边缘有一圈浅灰（灰幕 #c8c8c8 残色，40–57 % 的边缘像素）→ fringe FAIL；要 `clean_cutout.py` 或换绿幕重抠。
+- Demo12 / 21 / 22（灰幕）边缘残色 WARN；Demo21 jin_jacket、Demo30 saku_breath_L 闭眼下瞳孔半遮 WARN；Demo25 omikuji、Demo12 call / hug 直线切口 WARN。
+- Demo25：OpenAI 估算 $8.5（85 %）→ 预警。
+- 全站 37 处 `?v=` 落后（多为 `nav.js?v=42` vs 43，UI 外壳会话进行中）：`python3 tools/web/bump.py --check`。
+- 风格漂移 WARN：Demo04 封面、Demo20 hina_booth、Demo29 visit_yard（看 `_kit/style_family.jpg`）。
+- `Demo18_HinataStream/assets/art/ref_hinata.png` 是断开的符号链接（指向已删除的 Demo14 文件）。
+
+**下一步**：UI 外壳会话把 `_kit/style.js`（`window.MOHEAT_STYLE`）接进封面 / 外壳；新 Demo 用 `SCRIPT_TEMPLATE.md` + `fill.py`；check_art 的 looks 是粗查（颜色），以 `poses_preview.jpg` 为准；角色卡里 Cocoa / Mint / Luna 姓氏读音是猜的，需要确认。CI 第一次推送后看 Actions 页的运行摘要。
+
+---
+
 ## 2026-11-08 · 嘴型统一改用 LivePortrait 嘴套组（12 个分层 Demo）· 后台 agent（统筹分派）
 
 **问题**（用户）：很多 Demo 说话时，闭嘴的线到张嘴永远对不上——闭嘴和张嘴是两张分别画的图，嘴角和形状不同，换贴片时会跳；遮罩、对位只能减轻。
