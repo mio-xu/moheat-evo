@@ -163,6 +163,20 @@ if os.path.exists(LJ):
         except Exception as e:
             one.append(f'could not read eyes patches: {e}')
         row('G4', 'eyes', 'WARN' if one else 'PASS', f'{len(one)} eyes patch(es) may cover one eye only' if one else 'every eyes patch spans two eyes', one)
+        # asset standard checks (USER_PREFERENCES 素材制作标准, guide §6 G3 / G4): tools/art/check_art.py
+        try:
+            import check_art
+            res = check_art.check(D)
+            DESC = {'edges': ('no flat head / ruler cut, cut edges ≥ 1.5 % outside the frame', 'flat head / straight cut or a cut edge close to the frame'),
+                    'fringe': ('no backdrop colour on the cut-out rim', 'backdrop colour on the cut-out rim (grey / green / magenta halo)'),
+                    'blink': ('both eyes close, no iris through the lids', 'one-eye blink or iris through the closed lid'),
+                    'far-motion': ('mouth / blink readable at 1080p on every view', 'mouth / blink too small to read on a far shot')}
+            for k, (ok, bad) in DESC.items():
+                got = [m for lv, kk, m in res if kk == (k if k != 'edges' else 'edge-margin')]
+                lvl = 'FAIL' if any(lv == 'FAIL' and kk == (k if k != 'edges' else 'edge-margin') for lv, kk, _ in res) else 'WARN' if got else 'PASS'
+                row('G4', k, lvl, f'{len(got)} × {bad}' if got else ok, got)
+        except Exception as e:
+            row('G4', 'fringe', 'WARN', f'tools/art/check_art.py failed: {e}')
 else:
     row('G4', 'layers', 'SKIP', 'no media/layers.js (not a layered page)')
 
