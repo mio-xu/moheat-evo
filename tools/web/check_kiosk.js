@@ -44,6 +44,11 @@ const step = (k, v, detail) => { out.steps[k] = detail === undefined ? !!v : { o
   const base = `http://127.0.0.1:${hp}`;
   const nav = async (u) => { await cdp('Page.navigate', { url: base + u }); await until('document.readyState === "complete"', 20000); await sleep(600); };
 
+  // 0 intro voice clips: each ≤ 15 s (user 2026-11-08), every language present
+  { const dir = path.join(ROOT, 'kiosk', 'media', 'voice'), want = ['homura_lr', 'koyuki_lr', 'koyuki_vol', 'homura', 'koyuki'].flatMap((k) => ['en', 'ja', 'zh'].map((l) => `${k}_${l}.m4a`));
+    const dur = {}; for (const f of want) { try { dur[f] = +require('child_process').execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', path.join(dir, f)]).toString().trim(); } catch { dur[f] = null; } }
+    const bad = Object.entries(dur).filter(([, d]) => d == null || d > 15);
+    step('clips15s', !bad.length, { longest: Math.max(...Object.values(dur).filter(Boolean)).toFixed(1), bad: bad.map(([f, d]) => `${f}: ${d == null ? 'missing' : d.toFixed(1) + ' s'}`) }); }
   // 1 welcome
   await nav('/kiosk/?kiosk=1');
   await ev(`(localStorage.setItem('moheat.kiosk.cfg', JSON.stringify({ idle: 45 })), localStorage.setItem('moheat.intensity', '95'), localStorage.setItem('moheat.mode', '"pure"'), 1)`);
@@ -56,24 +61,43 @@ const step = (k, v, detail) => { out.steps[k] = detail === undefined ? !!v : { o
   await click('.langs [data-l=en]'); await shot('1_welcome');
 
   // 2 intro
-  await click('#startVisit');
+  await click('#startVisit'); const tIntro = Date.now();
   step('intro', await until(`MoHeatKioskApp.view === 'intro' && document.querySelector('.mi')`, 3000));
-  await until(`MoHeatKioskApp.intro.step === 'volume'`, 12000); await sleep(500); await shot('2_intro_volume');
+  // the intro (user's exact flow): headphones → L / R tapping check (Yes, Yes) → volume → warm ramp (tap) → cool ramp (no tap: stops at the
+  // cap) → Homura's warm whisper (Just right) → Koyuki's cool whisper (Too strong) → menu
+  await until(`MoHeatKioskApp.intro.step === 'wear'`, 6000); await sleep(400); await shot('2_intro_wear'); await click('.mi .go');
+  step('introLR', await until(`MoHeatKioskApp.intro.step === 'lr'`, 4000)); await sleep(500); await shot('2_intro_lr');
+  await click('.mi [data-a=n]'); await sleep(200); step('lrTurn', await ev(`/↻/.test(document.querySelector('.mi .sub').textContent)`));
+  await click('.mi [data-a=y]'); await sleep(200); await click('.mi [data-a=y]');
+  await until(`MoHeatKioskApp.intro.step === 'volume'`, 4000); await sleep(500); await shot('2_intro_volume');
   step('introVolume', await ev(`!!document.querySelector('.mi .vol input')`));
-  await click('.mi .go'); await until(`MoHeatKioskApp.intro.step === 'left'`, 6000); await sleep(800); await shot('2_intro_left');
-  await until(`MoHeatKioskApp.intro.step === 'dual'`, 20000); await sleep(600); await shot('2_intro_dual');
-  await until(`MoHeatKioskApp.intro.step === 'warm'`, 10000); await sleep(2500); await shot('2_intro_warm');
+  await click('.mi .go');
+  step('staffA', await until(`MoHeatKioskApp.intro.step === 'staffA'`, 4000)); await sleep(300); await shot('2_intro_staffA');
+  await click('.mi [data-a=wrong]'); await sleep(150); step('staffHint', await ev(`!document.querySelector('.mi .hint').hidden`));
+  await sleep(1500); await click('.mi [data-a=go]');   // ≈ the staff checks with the visitor
+  await until(`MoHeatKioskApp.intro.step === 'fit'`, 3000); await sleep(300); await shot('2_intro_fit'); await sleep(2500); await click('.mi .go');
+  step('outputCheck', await until(`MoHeatKioskApp.intro.step === 'check'`, 3000)); await sleep(2600); await shot('2_intro_check');
+  await until(`MoHeatKioskApp.intro.step === 'staffB'`, 9000); await sleep(1500); await click('.mi [data-a=go]');
+  await until(`MoHeatKioskApp.intro.step === 'warm'`, 6000); await sleep(2500); await shot('2_intro_warm');
   await tap(W / 2, H * .3); await sleep(300); await shot('2_intro_warm_tapped');   // a tap anywhere stops the warm ramp at once
   await until(`MoHeatKioskApp.intro.step === 'cool'`, 4000); await sleep(3000); await shot('2_intro_cool');
-  await until(`MoHeatKioskApp.view === 'menu'`, 12000); await sleep(200);   // nobody taps: the cool ramp stops at the staff cap
+  step('hsample', await until(`MoHeatKioskApp.intro.step === 'hsample'`, 12000)); await sleep(2500); await shot('2_intro_homura');   // nobody taps: the cool ramp stopped at the cap
+  await until(`!!document.querySelector('.mi .nat')`, 25000); await shot('2_intro_homura_ask');
+  await click('.mi .nat [data-n=ok]');
+  step('ksample', await until(`MoHeatKioskApp.intro.step === 'ksample'`, 4000)); await sleep(2500); await shot('2_intro_koyuki');
+  await until(`!!document.querySelector('.mi .nat')`, 25000); await click('.mi .nat [data-n=strong]');
+  await until(`MoHeatKioskApp.view === 'menu'`, 5000); out.steps.introSecs = Math.round((Date.now() - tIntro) / 1000); await sleep(200);
   const log = await ev('MoHeatKioskApp.intro.log');
-  step('introThermal', log && log.some((l) => /^LC\d+ RC\d+$/.test(l)) && log.some((l) => /^LH\d+ RH0$/.test(l)) && log.some((l) => /^LH0 RC\d+$/.test(l)) && log.some((l) => /^DUAL LC\d+ LH\d+ RC\d+ RH\d+$/.test(l)) && log.at(-1) === 'stop', { n: log && log.length });
+  step('introThermal', log && log.some((l) => /^LH[1-9]\d* RH0$/.test(l)) && log.some((l) => /^LH0 RC[1-9]\d*$/.test(l)) && !log.some((l) => /^DUAL/.test(l)) && [/^LH\d+ RH0$/, /^LH0 RH\d+$/, /^LC\d+ RH0$/, /^LH0 RC\d+$/].every((r) => log.some((l) => r.test(l))) && log.at(-1) === 'stop', { n: log && log.length, last: log && log.at(-1) });
   const sc = { warm: +(await ev(`localStorage.getItem('moheat.warmScale')`)), cool: +(await ev(`localStorage.getItem('moheat.coolScale')`)) };
-  step('introLevel', sc.warm > .1 && sc.warm < .5 && Math.abs(sc.cool - .64) < .011, sc);   // warm: 80 % of the tapped level · cool: 80 % of the 80 % cap
+  step('introLevel', sc.warm > .1 && sc.warm < .5 && Math.abs(sc.cool - .54) < .011, sc);   // warm: 80 % of the tapped level · cool: 80 % of the 80 % cap, then "too strong" × .85
   const warmRamp = log ? log.map((l) => (/^LH(\d+) RH0$/.exec(l) || [])[1]).filter(Boolean).map(Number) : [];
-  const iw = log ? log.lastIndexOf('LH' + warmRamp.at(-1) + ' RH0') : -1;
-  step('introRamp', warmRamp.length > 5 && warmRamp.at(-1) > warmRamp[warmRamp.length - 6] && log[iw + 1] === 'stop' && log.some((l) => l === 'LH0 RC71'), { warmTail: warmRamp.slice(-4), afterTap: log && log[iw + 1] });
-  const cal = await ev(`MoHeatKiosk.stats.table('today').calib`); step('calibStats', cal && cal.n === 1 && cal.coolCapHits === 1 && cal.warmCapHits === 0, cal);
+  const rampEnd = log ? log.findIndex((l, k) => k > 3 && l === 'stop' && /^LH\d+ RH0$/.test(log[k - 1])) : -1;
+  step('introRamp', warmRamp.length > 5 && rampEnd > 0 && log.some((l) => l === 'LH0 RC71'), { warmHead: warmRamp.slice(0, 6), rampEnd });
+  // the samples: the heat / cool follows the voice (several different levels while she speaks)
+  const hs = new Set(log.slice(rampEnd).map((l) => (/^LH(\d+) RH0$/.exec(l) || [])[1]).filter(Boolean)), ks = new Set(log.map((l) => (/^LH0 RC(\d+)$/.exec(l) || [])[1]).filter(Boolean));
+  step('samplesFollowVoice', hs.size >= 3 && ks.size >= 3, { warmLevels: hs.size, coolLevels: ks.size });
+  const cal = await ev(`MoHeatKiosk.stats.table('today').calib`); step('calibStats', cal && cal.n === 1 && cal.coolCapHits === 1 && cal.warmCapHits === 0 && cal.natural.warm.ok === 1 && cal.natural.cool.strong === 1, cal);
   step('menu', await until(`MoHeatKioskApp.view === 'menu' && document.querySelectorAll('.menu-grid button').length > 5`, 3000)); await shot('3_menu');
   step('menuFits', await ev(`document.documentElement.scrollHeight <= innerHeight + 1`));
 
@@ -85,26 +109,29 @@ const step = (k, v, detail) => { out.steps[k] = detail === undefined ? !!v : { o
     step('demoScales', await ev(`(() => { const s = MoHeatKiosk.scales(); return MoHeatKiosk.scaleLine('DUAL LC80 LH200 RC0 RH100') === 'DUAL LC' + Math.max(35, Math.round(35 + 45 * s.cool)) + ' LH' + Math.round(200 * s.warm) + ' RC0 RH' + Math.round(100 * s.warm) && +document.getElementById('intensity').value === 100; })()`), { line: await ev(`MoHeatKiosk.scaleLine('DUAL LC80 LH200 RC0 RH100')`) });
     await shot('4_demo_cover');
     await ev(`(document.getElementById('startBtn').click(), 1)`);   // the visitor's default mode (interactive) await sleep(3000);
-    step('volumeSlider', await ev(`(() => { const r = document.querySelector('.mk-vol input'); return !!r && r.getBoundingClientRect().height >= 44; })()`));
+    step('volumeSlider', await ev(`(() => { if (typeof window.MoHeatShell?.setVolume === 'function') return true; const r = document.querySelector('.mk-vol input'); return !!r && r.getBoundingClientRect().height >= 44; })()`));   // the shell's own volume control wins when it has one
     await sleep(6000); await shot('4_demo_play');
     step('showCut', await ev(`!!document.querySelector('.mk-cut') && document.querySelector('.mk-cut').textContent.includes(':')`), { chip: await ev(`document.querySelector('.mk-cut')?.textContent`) });
     const t1 = Date.now();   // the show cut (kiosk default) ends by itself after ~80 s of story time → the card
-    step('demoEndToCard', await until(`location.pathname.startsWith('/kiosk/') && window.MoHeatKioskApp?.view === 'card'`, 240000), { secs: Math.round((Date.now() - t1) / 1000) });
+    step('demoEndToEnding', await until(`location.pathname.startsWith('/kiosk/') && window.MoHeatKioskApp?.view === 'end'`, 240000), { secs: Math.round((Date.now() - t1) / 1000) });
   } else {
     await ev(`(MoHeatKiosk.stats.started('Demo28_SnowFoxLullaby', 'interactive'), MoHeatKiosk.stats.finished('Demo28_SnowFoxLullaby'), MoHeatKiosk.visit.set({ dir: 'Demo28_SnowFoxLullaby', started: true, finished: true, moments: [{ k: 1, label: 'Snow falls', kind: 'cool' }, { k: 2, label: 'Foxfire', kind: 'warm' }] }), location.hash = 'card', location.reload(), 1)`);
     await sleep(1500); await until('document.readyState === "complete"'); await sleep(500);
-    step('demoEndToCard', await ev(`MoHeatKioskApp.view === 'card'`));
+    step('demoEndToEnding', await ev(`MoHeatKioskApp.view === 'end'`));
   }
   // 4 card
   const vis = await ev('MoHeatKiosk.visit.get()');
   out.steps.visit = { started: vis?.started, finished: vis?.finished, moments: (vis?.moments || []).length };
   // one question per screen: a tap answers and moves on (time it: a first-time visitor must be done in < 10 s)
+  // the ending (queue on): take off MoHeat Evo (staff Continue) → take off the headphones → card
+  await shot('5_end_evo'); await click('#endGo'); await sleep(300); await shot('5_end_phones'); await click('#endGo');
+  step('demoEndToCard', await until(`MoHeatKioskApp.view === 'card'`, 3000));
   const t0 = Date.now(), q = () => ev(`document.querySelector('#v-card .q').dataset.q`);
   await shot('5_card_rate'); step('cardFits', await fits());
   await sleep(300); const tClick = Date.now(); await click('#v-card .q [data-v="4"]'); await sleep(250);
   step('confirmHold', await ev(`document.querySelector('#v-card .q').dataset.q === 'rate' && !!document.querySelector('#v-card .q .stars .sel')`)); await shot('5_card_rate_picked');   // the pick stays lit, no instant jump
   step('dwell', await until(`document.querySelector('#v-card .q').dataset.q === 'buy'`, 4000) && Date.now() - tClick >= 700, { msAfterTap: Date.now() - tClick });
-  await click('#v-card .q [data-v=no]'); await sleep(150); await click('#cardBack');   // back one question before the "no" moves on
+  await ev(`(document.querySelector('#v-card .q [data-v=no]').click(), document.getElementById('cardBack').click(), 1)`);   // back one question before the "no" moves on
   await sleep(200); step('back', await ev(`document.querySelector('#v-card .q').dataset.q === 'rate'`));
   await sleep(1500); await click('#v-card .q [data-v="4"]'); await until(`document.querySelector('#v-card .q').dataset.q === 'buy'`, 4000);
   await sleep(1500); await click('#v-card .q [data-v=yes]'); step('priceShown', await until(`document.querySelector('#v-card .q').dataset.q === 'price' && document.querySelectorAll('#v-card .q button').length >= 4`, 4000));
@@ -116,7 +143,7 @@ const step = (k, v, detail) => { out.steps[k] = detail === undefined ? !!v : { o
   await click('#v-card .q button'); await until(`!document.querySelector('.q-thanks').hidden`, 4000);
   step('thanks', await ev(`!document.querySelector('.q-thanks').hidden`)); await shot('5_card_thanks');
   out.steps.cardSecs = Math.round((Date.now() - t0) / 100) / 10;
-  await sleep(2000);
+  step('thanksQr', await ev(`!!document.querySelector('.thanks-qr svg')`)); await sleep(1200); await click('.q-thanks'); await sleep(400);
   step('cardToWelcome', await ev(`MoHeatKioskApp.view === 'welcome' && localStorage.getItem('moheat.warmScale') === '0.5' && !sessionStorage.getItem('moheat.sublang') && !sessionStorage.getItem('moheat.kiosk.visit')`));
   const st = await ev(`MoHeatKiosk.stats.table('today')`), row = st?.rows?.find((r) => r.dir === DEMO.split('/')[1]);
   step('stats', st && st.visitors >= 1 && row && row.started >= 1 && row.finished >= 1 && row.interactive >= 1 && row.avg === 4 && row.buy.yes === 1 && Object.keys(st.cross).length === 1 && st.scenes.travel === 1 && st.scenes.games === 1 && !!row.top,
@@ -124,6 +151,15 @@ const step = (k, v, detail) => { out.steps[k] = detail === undefined ? !!v : { o
   const csv = await ev('MoHeatKiosk.stats.csv()');
   step('csv', csv && csv.includes('buy_yes') && csv.includes('scene x purchase intent') && csv.includes(DEMO.split('/')[1]), { head: csv && csv.split('\n')[0] });
 
+  // 4b nobody queuing (key Q) → after a demo: "another story?" with the calibration kept
+  await cdp('Input.dispatchKeyEvent', { type: 'keyDown', key: 'q', code: 'KeyQ', text: 'q' }); await cdp('Input.dispatchKeyEvent', { type: 'keyUp', key: 'q', code: 'KeyQ' }); await sleep(200);
+  step('queueToggle', await ev(`MoHeatKiosk.cfg().queue === false && !document.getElementById('qdot').classList.contains('on')`));
+  await ev(`(localStorage.setItem('moheat.warmScale', '0.33'), MoHeatKiosk.visit.set({ dir: 'Demo28_SnowFoxLullaby', started: true, finished: true, moments: [] }), location.hash = 'card', location.reload(), 1)`);
+  await sleep(1500); await until('document.readyState === "complete"'); await sleep(500);
+  step('anotherStory', await ev(`MoHeatKioskApp.view === 'more' && document.querySelectorAll('#v-more .rec-row button').length === 3 && localStorage.getItem('moheat.warmScale') === '0.33'`)); await shot('5_more');
+  await click('#moreFinish'); step('finishToEnding', await ev(`MoHeatKioskApp.view === 'end'`));
+  await cdp('Input.dispatchKeyEvent', { type: 'keyDown', key: 'q', code: 'KeyQ', text: 'q' }); await cdp('Input.dispatchKeyEvent', { type: 'keyUp', key: 'q', code: 'KeyQ' });
+  await ev(`(MoHeatKioskApp.reset(), 1)`); await sleep(300);
   // 5 idle → attract (idle 45 s), tap → welcome
   step('attract', await until(`MoHeatKioskApp.view === 'attract' && document.querySelector('.att-slides img.on')`, 60000)); await sleep(1500); await shot('6_attract');
   await tap(W / 2, H / 2); await sleep(400); step('attractTap', await ev(`MoHeatKioskApp.view === 'welcome'`));

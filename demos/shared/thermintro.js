@@ -1,24 +1,27 @@
-// MoHeatIntro — the 30-second thermal intro (TASKS #50 ① + #52 ⑦ + #54; DEMO_DESIGN_GUIDE §7.4 "展示模式"). Used by the kiosk
-// (kiosk/index.html, every new visitor) and by the stand-alone page kiosk/intro.html (anyone, outside kiosk mode).
-//   0 opening sting (2.4 s): MoHeat Evo logo, a cold → warm sweep across both ears (also confirms the device works)
-//   1 put the headset on (L on the left ear)          2 left · warm            3 right · cool
-//   4 fast hot ↔ cold switch (both ears)               5 cool + warm on the SAME ear (DUAL)
-//   6 WARM auto-calibration   7 COOL auto-calibration → done (user 2026-11-08, REQUIREMENTS §10: separately, no buttons to judge):
-//     the left ear (warm) / right ear (cool) ramps slowly from very weak up to the staff cap (~7 s); big text "Tap when it's ALMOST too
-//     strong". Any tap / key / Esc stops the output AT ONCE and records that level as the visitor's personal max; no tap → stops at the
-//     cap. The visitor's 100 % = 80 % of the personal max (headroom). A short pause between warm and cool.
-// Skip is always there. Text: en / ja / zh (+ ko falls back to en until a column is added). Thermal: old per-ear commands
-// (LH / RH / LC / RC, one mode per ear) except step 5 (DUAL LC.. LH.. RC.. RH..). Levels scale with the visitor's intensity k:
-// heat PWM = 150·k, cool PWM = 35 + 45·k (35–80, never colder than the device's own range).
-//   const intro = MoHeatIntro.mount(el, { send(line), warm: .5, cool: .5, capWarm: .8, capCool: .8, lang: () => 'en', onLevel({ warm, cool }),
-//     onDone({ warm, cool, maxWarm, maxCool, hit: { warm: 'tap' | 'cap', cool }, skipped }), only: ['warm', 'cool'] (staff self-calibration) });
-//   (old options level / cap still work: they set both)
-//   intro.start(); intro.skip(); intro.stop();  — everything stops (device "stop") on done, skip and stop.
+// MoHeatIntro — the kiosk intro (user 2026-11-08, exact flow; docs/kiosk/REQUIREMENTS.md §11; DEMO_DESIGN_GUIDE §7.4). Used by the kiosk
+// (kiosk/index.html, every new visitor) and outside kiosk mode by kiosk/intro.html. Readable WITHOUT sound: big pictograms, the ear diagram
+// lights up on the active side (orange = warm, blue = cool), a step progress bar, one large action, short text in the display language.
+//   0 sting (logo, visual only)
+//   A  1 put on the noise-cancelling HEADPHONES (audio only, L / R marked)
+//      2 L / R check: Homura speaks on the LEFT (Yes / No → "turn the headset around", again), Koyuki on the RIGHT
+//      3 volume: Koyuki's line loops while the visitor sets a big slider   4 "Sound OK? Please tell the staff 👋" — staff "Continue"
+//   B  5 the staff fits the MoHeat Evo thermal earpieces (pictogram) — staff "Continue"
+//      6 output check: left warm, right warm, left cool, right cool (~2 s each, the ear lights up)   7 "Felt warm and cool on both sides?
+//        Please tell the staff 👋" — staff "Continue" (device not connected → a big notice)
+//   C  8 WARM · 9 COOL auto-calibration: slow ramp (~7 s) to the staff cap, a huge STOP; any tap / key / Esc stops at once = personal max;
+//        no tap = stops at the cap; the visitor's 100 % = 80 % of that max
+//     10 warm sample (焰 Homura) · 11 cool sample (小雪 Koyuki: her breath is cool) → "Did that feel natural?" Too weak / Just right / Too
+//        strong (± 15 %, ↺ replay)
+// AUDIO RULE: every intro voice is in the visitor's language and spatialised (Web Audio HRTF panner): the speaker starts away on the left
+// and moves closer / across until she whispers right at the ear. Thermal in the samples = voice loudness × closeness at that ear.
+// Voices: kiosk/media/voice/<key>_<en|ja|zh>.m4a (kiosk/scripts/voice.py, ElevenLabs). Heat PWM = 150·k, cool PWM = 35 + 45·k.
+//   const intro = MoHeatIntro.mount(el, { send(line), warm, cool, capWarm, capCool, volume(), onVolume(v), lang: () => 'en', connected(),
+//     onLevel({ warm, cool }), onDone({ warm, cool, maxWarm, maxCool, hit, natural: { warm, cool }, skipped }), only: ['warm', 'cool'] });
 (() => {
   if (window.MoHeatIntro) return;
   const T = {
     stingSub: { en: 'Binaural ASMR × thermal haptics', ja: '立体音響 ASMR × 温冷ハプティクス', zh: '立体声 ASMR × 冷热触感' },
-    wear: { en: 'Put the headset on', ja: 'ヘッドホンをつけてください', zh: '请戴上耳机' },
+    wear: { en: 'Put on the headphones', ja: 'ヘッドホンをつけてください', zh: '请戴上耳机' },
     vol: { en: 'Set the volume', ja: '音量を合わせてください', zh: '调节音量' },
     volSub: { en: 'Slide until the chime is clearly audible but soft.', ja: 'チャイムが、はっきり・やさしく聞こえるように。', zh: '拖动滑块，让提示音清楚又柔和。' },
     wearSub: { en: 'L on your left ear, R on your right. Then just relax.', ja: 'L を左耳、R を右耳に。あとはリラックス。', zh: 'L 戴左耳，R 戴右耳，然后放松就好。' },
@@ -37,6 +40,31 @@
     tapNow: { en: 'Tap when it’s ALMOST too strong', ja: '「ちょっと強すぎるかも」と思ったらタップ', zh: '快要太强的时候，点一下' },
     tapBtn: { en: 'Now!', ja: 'いま！', zh: '就是现在！' },
     gotIt: { en: '✓ Got it — your level is set', ja: '✓ OK — あなたの強さを記録しました', zh: '✓ 好的 — 已记下你的强度' },
+    lrL: { en: 'Did you hear it on the LEFT?', ja: '左から聞こえましたか？', zh: '声音是从左边传来的吗？' },
+    lrR: { en: 'And now on the RIGHT?', ja: 'こんどは右から聞こえましたか？', zh: '现在是从右边传来的吗？' },
+    lrSub: { en: 'A voice comes close to that ear…', ja: '声が、その耳に近づいてきます…', zh: '声音正靠近那只耳朵…' },
+    yes: { en: 'Yes', ja: 'はい', zh: '是' }, no: { en: 'No', ja: 'いいえ', zh: '不是' },
+    turn: { en: 'Turn the headset around: L on your left ear', ja: 'ヘッドホンを反対にしてください（L を左耳に）', zh: '请把耳机转过来戴：L 在左耳' },
+    stop: { en: 'STOP', ja: 'ストップ', zh: '停' },
+    almost: { en: 'Tap STOP when it’s almost uncomfortable', ja: '「少しつらいかも」と思ったら STOP', zh: '快要不舒服时，点「停」' },
+    sampleH: { en: '…hey, it’s Homura. Is your left ear getting warm? My foxfire warmth… it comes closer with my voice.', ja: '…ねえ、ほむらだよ。左の耳、ぽかぽかしてきた？ 狐火のぬくもり…わたしの声といっしょに、近づくでしょ。', zh: '…嘿，我是焰。左耳是不是暖起来了？ 狐火的温度…会跟着我的声音靠近哦。' },
+    sampleK: { en: '…it’s Koyuki. Your right ear… fuuu. My snowy breath… cool and gentle, isn’t it?', ja: '…こゆきです。右の耳に…ふぅーっ。 雪のいき…ひんやりして、気持ちいいでしょう？', zh: '…我是小雪。在你右耳边…呼——。 雪的气息…凉凉的，很舒服吧？' },
+    whoH: { en: 'Homura · warm voice at your left ear', ja: '焰 · 左耳に、あたたかい声', zh: '焰 · 左耳边温暖的声音' },
+    whoK: { en: 'Koyuki · cool breath at your right ear', ja: '小雪 · 右耳に、ひんやりした息', zh: '小雪 · 右耳边清凉的气息' },
+    natural: { en: 'Did that feel natural?', ja: '自然に感じましたか？', zh: '感觉自然吗？' },
+    weak: { en: 'Too weak', ja: '弱すぎる', zh: '太弱' }, right: { en: 'Just right', ja: 'ちょうどいい', zh: '刚刚好' }, strong: { en: 'Too strong', ja: '強すぎる', zh: '太强' },
+    replay: { en: '↺ Replay', ja: '↺ もう一度', zh: '↺ 再听一次' },
+    soundOk: { en: 'Sound OK? Please tell the staff 👋', ja: '音は大丈夫ですか？ スタッフに声をかけてください 👋', zh: '声音没问题吗？请告诉工作人员 👋' },
+    feltOk: { en: 'Felt warm and cool on both sides? Please tell the staff 👋', ja: '左右で温かさと冷たさを感じましたか？ スタッフに声をかけてください 👋', zh: '两边都感到暖和凉了吗？请告诉工作人员 👋' },
+    staffGo: { en: 'Continue (staff)', ja: '続ける（スタッフ）', zh: '继续（工作人员）' }, wrong: { en: 'Something’s wrong', ja: 'うまくいかない', zh: '有问题' },
+    hintA: { en: 'Staff: check the headphone plug / Bluetooth, the system volume and that L is on the left ear, then repeat the check.', ja: 'スタッフへ：ヘッドホンの接続・システム音量・L が左耳か を確認して、もう一度チェック。', zh: '工作人员：检查耳机连接、系统音量、L 是否在左耳，然后重新检查。' },
+    hintB: { en: 'Staff: check the earpieces sit on the skin, the green device dot (top right) and the intensity cap; repeat the check.', ja: 'スタッフへ：イヤーピースが肌に当たっているか・右上の緑の点・強度上限を確認して、もう一度チェック。', zh: '工作人员：检查耳件是否贴住皮肤、右上角绿点、强度上限，然后重新检查。' },
+    again: { en: '↺ Check again', ja: '↺ もう一度', zh: '↺ 再检查一次' },
+    fit: { en: 'The staff now puts the MoHeat Evo earpieces on you', ja: 'スタッフが MoHeat Evo のイヤーピースをつけます', zh: '工作人员现在为你戴上 MoHeat Evo 耳件' },
+    fitSub: { en: 'Warm / cool on each ear — a separate device from the headphones.', ja: '左右の耳の温冷用。ヘッドホンとは別のデバイスです。', zh: '用于左右耳的冷热，和耳机是两个设备。' },
+    check: { en: 'Output check', ja: '出力チェック', zh: '输出检查' },
+    chk: { en: ['Left · warm', 'Right · warm', 'Left · cool', 'Right · cool'], ja: ['左 · あたたかい', '右 · あたたかい', '左 · つめたい', '右 · つめたい'], zh: ['左 · 暖', '右 · 暖', '左 · 凉', '右 · 凉'] },
+    devMissing: { en: 'MoHeat Evo is not connected — staff: 5 taps top-left → Device → Connect', ja: 'MoHeat Evo が未接続です — スタッフ：左上を 5 回タップ → Device → Connect', zh: 'MoHeat Evo 未连接 — 工作人员：左上角连点 5 次 → Device → Connect' },
     nextCool: { en: 'Next: cool', ja: 'つぎは冷たさ', zh: '接下来：凉' },
     levelSub: { en: 'You can change it any time during the demo.', ja: 'デモの途中でもいつでも変えられます。', zh: '体验中也可以随时调整。' },
     softer: { en: 'Softer', ja: '弱く', zh: '弱一点' }, ok: { en: 'Just right', ja: 'ちょうどいい', zh: '刚刚好' }, stronger: { en: 'Stronger', ja: '強く', zh: '强一点' },
@@ -66,7 +94,7 @@
   .mi .lvl i { display: inline-block; width: 1.6em; height: .55em; margin: 0 .12em; border-radius: 3px; background: rgba(255,255,255,.18); vertical-align: middle; }
   .mi .lvl i.on { background: linear-gradient(90deg, #ffb070, #ff7a3a); } .mi .lvl.cool i.on { background: linear-gradient(90deg, #bfe9ff, #5cb8ff); }
   .mi .dots { position: absolute; bottom: 3.2vmin; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
-  .mi .dots b { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.22); } .mi .dots b.on { background: #ffd58a; }
+  .mi .dots b { width: 5vmin; max-width: 56px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.22); } .mi .dots b.on { background: #ffd58a; }
   .mi .skip { position: absolute; right: 3vmin; bottom: 2.2vmin; font-size: clamp(14px, 2vmin, 20px); min-height: 48px; border-color: rgba(255,255,255,.2); color: #cfc3dc; }
   .mi .nodev { position: absolute; left: 3vmin; bottom: 3vmin; max-width: 40%; text-align: left; font: 500 clamp(11px, 1.6vmin, 15px)/1.35 var(--ff); color: #a99ab8; }
   .mi .vol { display: flex; align-items: center; gap: 3vmin; } .mi .vol svg { width: clamp(64px, 12vmin, 120px); }
@@ -78,12 +106,45 @@
   @keyframes miTap { 50% { transform: scale(1.06); opacity: .8; } }
   .mi button.now { min-height: 84px; min-width: 260px; font-size: clamp(22px, 4vmin, 40px); }
   .mi .got { color: #a6f0c0; font-weight: 700; }
+  .mi .ear.sound { background: rgba(255, 255, 255, .9); color: #17121f; animation: miSound 1s ease-in-out infinite; } @keyframes miSound { 50% { box-shadow: 0 0 0 1.2vmin rgba(160, 215, 255, .25); } }
+  .mi button.big1 { min-height: 76px; min-width: 200px; font-size: clamp(20px, 3.4vmin, 34px); }
+  .mi button.stopbtn { min-height: clamp(110px, 18vmin, 180px); min-width: clamp(260px, 40vmin, 420px); font-size: clamp(34px, 7vmin, 72px); border-radius: 999px; letter-spacing: .08em; }
+  .mi .sample { display: flex; align-items: center; gap: 4vmin; max-width: 92vw; } .mi .sample img { height: min(62vh, 520px); width: auto; filter: drop-shadow(0 0 30px rgba(255, 140, 60, .35)); }
+  .mi .sample.cool img { filter: drop-shadow(0 0 30px rgba(110, 190, 255, .4)); } .mi .sample > div { display: flex; flex-direction: column; align-items: center; gap: 2vmin; max-width: 640px; }
+  .mi .sample .who { margin: 0; font: 700 clamp(16px, 2.6vmin, 26px)/1.3 var(--ff); } .mi .sample.warm .who { color: #ffc9a0; } .mi .sample.cool .who { color: #cfeaff; }
+  .mi .sample .line { margin: 0; font: 600 clamp(18px, 3vmin, 30px)/1.45 var(--ff); color: #fff; text-align: center; }
+  .mi .sample .head { width: min(30vmin, 260px); } .mi .replay { background: none; border: 0; color: #cfc3dc; text-decoration: underline; min-height: 48px; }
+  .mi button.picked { box-shadow: 0 0 0 5px rgba(255, 213, 138, .5); transform: scale(1.04); }
+  .mi .phones { position: relative; width: min(40vmin, 340px); } .mi .phones svg { width: 100%; display: block; }
+  .mi .phones span { position: absolute; top: 52%; width: 24%; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+  .mi .phones .l { left: 18%; } .mi .phones .r { left: 82%; }
+  .mi .phones span.sound { box-shadow: 0 0 0 0 rgba(255, 255, 255, .6); animation: miRing 1.1s ease-out infinite; }
+  @keyframes miRing { to { box-shadow: 0 0 0 4vmin rgba(255, 255, 255, 0); } }
+  .mi .fitpic { width: min(52vmin, 460px); } .mi .fitpic svg { width: 100%; display: block; }
+  .mi .staffq { display: flex; flex-direction: column; align-items: center; gap: 2.4vmin; max-width: 900px; }
+  .mi .staffq .wave { font-size: clamp(60px, 14vmin, 150px); animation: miWave 1.6s ease-in-out infinite; transform-origin: 70% 80%; }
+  @keyframes miWave { 25% { transform: rotate(16deg); } 50% { transform: rotate(-8deg); } 75% { transform: rotate(12deg); } }
+  .mi .hint { color: #ffe1a8; } .mi .devmiss { margin: 0; padding: 1.4vmin 2.4vmin; border-radius: 14px; background: #3a0f1a; border: 2px solid #ff7a90; font: 700 clamp(16px, 2.6vmin, 26px)/1.3 var(--ff); }
+  .mi .chk[data-kind=warm] { color: #ffb36b; } .mi .chk[data-kind=cool] { color: #9fd8ff; }
+  @media (prefers-reduced-motion: reduce) { .mi .phones span.sound, .mi .staffq .wave { animation: none; } }
   .mi .bar { width: min(50vmin, 420px); height: 6px; border-radius: 3px; background: rgba(255,255,255,.12); overflow: hidden; }
   .mi .bar i { display: block; height: 100%; width: 0; background: #ffd58a; transition: width linear; }
   @media (prefers-reduced-motion: reduce) { .mi .ear { transition: none; } }`;
   const STEPS = [
-    { id: 'sting', s: 2.4 }, { id: 'wear', s: 6 }, { id: 'volume', s: 9 }, { id: 'left', s: 4 }, { id: 'right', s: 4 }, { id: 'swap', s: 6 }, { id: 'dual', s: 5 }, { id: 'warm', s: 11 }, { id: 'cool', s: 12 },
+    { id: 'sting', s: 2.4 }, { id: 'wear', s: 10 }, { id: 'lr', s: 40 }, { id: 'volume', s: 15 }, { id: 'staffA', s: 180 },
+    { id: 'fit', s: 180 }, { id: 'check', s: 10 }, { id: 'staffB', s: 180 },
+    { id: 'warm', s: 11 }, { id: 'cool', s: 12 }, { id: 'hsample', s: 30 }, { id: 'ksample', s: 30 },
   ];
+  // pictograms: headphones with L / R cups; the staff fitting the thermal earpieces (orange / blue)
+  const PHONES = `<div class="phones"><svg viewBox="0 0 160 110" aria-hidden="true"><path d="M30 70 Q30 12 80 12 Q130 12 130 70" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+    <rect x="12" y="58" width="34" height="46" rx="14" fill="#2b2536" stroke="#fff" stroke-width="3"/><rect x="114" y="58" width="34" height="46" rx="14" fill="#2b2536" stroke="#fff" stroke-width="3"/>
+    <text x="29" y="88" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">L</text><text x="131" y="88" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">R</text></svg>
+    <span class="l"></span><span class="r"></span></div>`;
+  const FIT = `<div class="fitpic"><svg viewBox="0 0 220 130" aria-hidden="true"><ellipse cx="110" cy="70" rx="42" ry="52" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+    <circle cx="62" cy="72" r="13" fill="#ff8a3d"/><circle cx="158" cy="72" r="13" fill="#9fd8ff"/>
+    <path d="M18 40 q16 -6 30 18 l8 10" stroke="#ffd479" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M202 40 q-16 -6 -30 18 l-8 10" stroke="#ffd479" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <text x="110" y="20" text-anchor="middle" font-size="13" fill="#ffd479">MoHeat Evo</text></svg></div>`;
+  const MEDIA = (() => { try { return new URL('../../kiosk/media/', document.currentScript.src).href; } catch { return '../kiosk/media/'; } })();
 
   function mount(el, o = {}) {
     if (!document.getElementById('mi-css')) { const st = document.createElement('style'); st.id = 'mi-css'; st.textContent = css; document.head.appendChild(st); }
@@ -95,10 +156,49 @@
     const capW = Math.max(.2, Math.min(1, o.capWarm ?? o.cap ?? 1)), capC = Math.max(.2, Math.min(1, o.capCool ?? o.cap ?? 1));
     let kW = Math.min(capW, Math.max(.2, o.warm ?? o.level ?? .5)), kC = Math.min(capC, Math.max(.2, o.cool ?? o.level ?? .5)), i = -1, timers = [], over = false, ac = null;
     const H = () => Math.round(150 * kW), C = () => Math.round(35 + 45 * kC);
-    const HEADROOM = .8, RAMP_S = 7, FLOOR = .08; let maxW = null, maxC = null; const hit = {};
+    const HEADROOM = .8, RAMP_S = 7, FLOOR = .08; let maxW = null, maxC = null; const hit = {}, natural = { warm: null, cool: null };
     const at = (ms, fn) => timers.push(setTimeout(fn, ms));
-    const clear = () => { timers.forEach((x) => { if (x && x.clear) x.clear(); else { clearTimeout(x); clearInterval(x); } }); timers = []; };
+    const clear = () => { timers.forEach((x) => { if (x && x.clear) x.clear(); else { clearTimeout(x); clearInterval(x); } }); timers = []; stopTapping(); stopVoice(); };
     // a soft panned tone confirms left / right by ear too (no tone in the sting: the logo is enough)
+    // soft ASMR tapping: short band-passed noise ticks at the given pan, randomly spaced (used for the L / R check and the volume loop)
+    let tapT = 0;
+    const tapping = (pan) => { stopTapping(); const tick = () => { try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); ac.resume?.();
+        const n = ac.createBufferSource(), b = ac.createBuffer(1, Math.round(ac.sampleRate * .05), ac.sampleRate), d = b.getChannelData(0);
+        for (let x = 0; x < d.length; x++) d[x] = (Math.random() * 2 - 1) * Math.exp(-x / (ac.sampleRate * .008));
+        const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 2200 + Math.random() * 1800; bp.Q.value = 1.4;
+        const g = ac.createGain(); g.gain.value = .9 * vol(); n.buffer = b; n.connect(bp); bp.connect(g);
+        if (ac.createStereoPanner) { const p = ac.createStereoPanner(); p.pan.value = pan; g.connect(p); p.connect(ac.destination); } else g.connect(ac.destination); n.start(); } catch {}
+        tapT = setTimeout(tick, 160 + Math.random() * 260); }; tick(); };
+    const stopTapping = () => { clearTimeout(tapT); tapT = 0; };
+    let vEl = null, vRaf = 0;
+    const stopVoice = () => { cancelAnimationFrame(vRaf); if (vEl) { try { vEl.pause(); } catch {} vEl = null; } };
+    const voiceAt = (url, path, onEnv, onEnd) => {
+      stopVoice(); try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); ac.resume?.(); } catch {}
+      const a = vEl = new Audio(url); a.crossOrigin = 'anonymous'; let an = null, buf = null, pn = null, peak = .02;
+      try { const src = ac.createMediaElementSource(a), g = ac.createGain(); g.gain.value = 1.6 * vol(); an = ac.createAnalyser(); an.fftSize = 1024; buf = new Float32Array(an.fftSize);
+        pn = ac.createPanner(); pn.panningModel = 'HRTF'; pn.distanceModel = 'inverse'; pn.refDistance = .25; pn.rolloffFactor = .7; pn.maxDistance = 20;
+        src.connect(an); an.connect(g); g.connect(pn); pn.connect(ac.destination); } catch {}
+      const place = (t) => { if (!pn) return; const [x0, z0] = path.from, [x1, z1] = path.to, e = 1 - Math.pow(1 - t, 2);   // ease-out: arrives softly
+        const x = x0 + (x1 - x0) * e, z = z0 + (z1 - z0) * e; if (pn.positionX) { pn.positionX.value = x; pn.positionY.value = 0; pn.positionZ.value = z; } else pn.setPosition(x, 0, z); };
+      place(0);
+      let last = 0;
+      const loop = () => { if (vEl !== a) return; vRaf = requestAnimationFrame(loop); const now = performance.now(); if (now - last < 100) return; last = now;
+        const t = a.duration ? Math.min(1, a.currentTime / (a.duration * (path.arrive || .6))) : 0; place(t);
+        let env = 0; if (an) { an.getFloatTimeDomainData(buf); let s2 = 0; for (const v of buf) s2 += v * v; const rms = Math.sqrt(s2 / buf.length); peak = Math.max(peak * .995, rms); env = rms / peak; }
+        else env = a.paused ? 0 : .6;
+        onEnv?.(env, t); };
+      a.addEventListener('ended', () => { if (vEl === a) { stopVoice(); onEnd?.(); } });
+      a.play().then(loop).catch(() => { onEnv?.(.6, 1); timers.push(setTimeout(() => { if (vEl === a) { stopVoice(); onEnd?.(); } }, 4000)); });
+    };
+    const LG = () => (['en', 'ja', 'zh'].includes(lang()) ? lang() : 'en');
+    const PATH = { left: { from: [-2.2, -1.6], to: [-.16, 0], arrive: .6 }, right: { from: [2.2, -1.6], to: [.16, 0], arrive: .6 },
+      acrossToRight: { from: [-1.8, -1.6], to: [.16, 0], arrive: .7 } };
+    const staffScreen = (title, hint, onRepeat) => {   // big "tell the staff" screen: staff Continue + visitor "Something's wrong" → staff hint
+      A.innerHTML = `<div class="staffq"><div class="wave">👋</div><h2>${tx(title)}</h2><div class="row"><button type="button" class="go big1" data-a="go">${tx('staffGo')}</button>
+        <button type="button" class="big1" data-a="wrong">${tx('wrong')}</button></div><p class="sub hint" hidden>${tx(hint)}</p><button type="button" class="replay" data-a="again" hidden>${tx('again')}</button></div>`;
+      A.querySelector('.staffq').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return;
+        if (b.dataset.a === 'go') show(i + 1); else if (b.dataset.a === 'wrong') { A.querySelector('.hint').hidden = false; A.querySelector('[data-a=again]').hidden = false; } else onRepeat(); });
+    };
     const tone = (pan, f = 523) => {
       try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); ac.resume?.();
         const g = ac.createGain(), os = ac.createOscillator(), p = ac.createStereoPanner ? ac.createStereoPanner() : null; os.type = 'sine'; os.frequency.value = f;
@@ -124,18 +224,18 @@
     function show(n) {
       clear(); i = n; if (i >= STEPS.length) return finish(false);
       const st = STEPS[i]; paintChrome(); root.dataset.step = st.id;
+      document.documentElement.dataset.tint = { warm: 'warm', hsample: 'warm', cool: 'cool', ksample: 'cool' }[st.id] || '';   // kiosk theme B leans warm / cool
       const next = () => show(i + 1);
       if (st.id === 'sting') {
         A.innerHTML = `<div class="logo" style="--p:0%">MoHeat <span>Evo</span></div>${head()}<p class="sub">${tx('stingSub')}</p>`;
         const logo = A.querySelector('.logo');
-        send(`LC${C()} RC${C()}`); ears('cool', 'cool');
+        ears('cool', 'cool');   // visual only: the thermal earpieces are fitted later (step 5)
         let p = 0; const sweep = setInterval(() => { p = Math.min(100, p + 4); logo.style.setProperty('--p', `${p}%`); if (p >= 100) clearInterval(sweep); }, 60); timers.push(sweep);
-        at(1000, () => { send(`LH${H()} RC${C()}`); ears('warm', 'cool'); });
-        at(1600, () => { send(`LH${H()} RH${H()}`); ears('warm', 'warm'); });
-        at(st.s * 1000, () => { send('stop'); next(); });
+        at(1000, () => ears('warm', 'cool')); at(1600, () => ears('warm', 'warm'));
+        at(st.s * 1000, next);
       } else if (st.id === 'wear') {
         send('stop');
-        A.innerHTML = `<h2>${tx('wear')}</h2>${head()}<p class="sub">${tx('wearSub')}</p><div class="row"><button type="button" class="go">${tx('ready')}</button></div>`;
+        A.innerHTML = `<h2>${tx('wear')}</h2>${PHONES}<p class="sub">${tx('wearSub')}</p><div class="row"><button type="button" class="go big1">${tx('ready')}</button></div>`;
         A.querySelector('.go').addEventListener('click', next);
         at(st.s * 1000, next);
       } else if (st.id === 'volume') {   // a big slider + a soft chime every second (pictogram, readable without sound)
@@ -143,21 +243,55 @@
           <input type="range" min="0" max="100" value="${Math.round(volume * 100)}" aria-label="${tx('vol')}"></div><p class="sub">${tx('volSub')}</p><div class="row"><button type="button" class="go">✓</button></div>`;
         const r = A.querySelector('input'); r.addEventListener('input', () => { volume = +r.value / 100; o.onVolume?.(volume); clearTimeout(auto); auto = setTimeout(next, st.s * 1000); timers.push(auto); });
         A.querySelector('.go').addEventListener('click', next);
-        const beep = () => tone(0, 587); beep(); const iv = setInterval(beep, 1100); timers.push(iv);
+        const say = () => voiceAt(`${MEDIA}voice/koyuki_vol_${LG()}.m4a`, PATH.acrossToRight, null, () => at(900, say)); say();   // her line loops while the slider moves
         let auto = setTimeout(next, st.s * 1000); timers.push(auto);
-      } else if (st.id === 'left' || st.id === 'right') {
-        const L = st.id === 'left';
-        A.innerHTML = `<h2>${tx(st.id)}</h2>${head()}<p class="sub">${tx(st.id + 'Sub')}</p>${bar(st.s)}`; runBar();
-        send(L ? `LH${H()} RH0` : `LH0 RC${C()}`); ears(L ? 'warm' : '', L ? '' : 'cool'); tone(L ? -1 : 1, L ? 440 : 660);
-        at(st.s * 1000, next);
-      } else if (st.id === 'swap') {
-        A.innerHTML = `<h2>${tx('swap')}</h2>${head()}<p class="sub">${tx('swapSub')}</p>${bar(st.s)}`; runBar();
-        const flips = 4; for (let f = 0; f < flips; f++) at(f * st.s * 1000 / flips, () => { const w = f % 2 === 0; send(w ? `LH${H()} RH${H()}` : `LC${C()} RC${C()}`); ears(w ? 'warm' : 'cool', w ? 'warm' : 'cool'); });
-        at(st.s * 1000, next);
-      } else if (st.id === 'dual') {
-        A.innerHTML = `<h2>${tx('dual')}</h2>${head()}<p class="sub">${tx('dualSub')}</p>${bar(st.s)}`; runBar();
-        send(`DUAL LC${C()} LH${H()} RC${C()} RH${H()}`); ears('dual', 'dual');
-        at(st.s * 1000, () => { send('stop'); next(); });
+      } else if (st.id === 'lr') {   // L / R check: Homura comes in on the LEFT, Koyuki on the RIGHT (their voices, the visitor's language)
+        let side = 'L';
+        const ask = (turn) => {
+          const L = side === 'L', say = () => voiceAt(`${MEDIA}voice/${L ? 'homura' : 'koyuki'}_lr_${LG()}.m4a`, L ? PATH.left : PATH.right, null, () => at(1200, say));
+          A.innerHTML = `<h2>${tx(L ? 'lrL' : 'lrR')}</h2>${PHONES}<p class="sub">${turn ? `↻ ${tx('turn')}` : tx('lrSub')}</p>
+            <div class="row"><button type="button" class="go big1" data-a="y">${tx('yes')}</button><button type="button" class="big1" data-a="n">${tx('no')}</button></div>`;
+          A.querySelector(`.phones .${L ? 'l' : 'r'}`)?.classList.add('sound');
+          A.querySelector('.row').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return;
+            if (b.dataset.a === 'y') { if (L) { side = 'R'; ask(false); } else next(); } else ask(true); });
+          say();
+        };
+        ask(false); at(st.s * 1000, next);
+      } else if (st.id === 'staffA') {
+        staffScreen('soundOk', 'hintA', () => show(STEPS.findIndex((x) => x.id === 'lr')));
+      } else if (st.id === 'fit') {   // the staff fits the separate thermal earpieces
+        A.innerHTML = `<h2>${tx('fit')}</h2>${FIT}<p class="sub">${tx('fitSub')}</p><div class="row"><button type="button" class="go big1">${tx('staffGo')}</button></div>`;
+        A.querySelector('.go').addEventListener('click', next);
+      } else if (st.id === 'check') {   // left warm, right warm, left cool, right cool, ~2 s each
+        const seq = [['l', 'warm', `LH${H()} RH0`], ['r', 'warm', `LH0 RH${H()}`], ['l', 'cool', `LC${C()} RH0`], ['r', 'cool', `LH0 RC${C()}`]];
+        A.innerHTML = `<h2>${tx('check')}</h2>${head()}<p class="tapnow chk"></p>${o.connected && !o.connected() ? `<p class="devmiss">⚠ ${tx('devMissing')}</p>` : ''}`;
+        seq.forEach(([side, kind, cmd], k) => at(k * 2000, () => { send(cmd); ears(side === 'l' ? kind : '', side === 'r' ? kind : '');
+          const c = A.querySelector('.chk'); c.textContent = tx('chk')[k]; c.dataset.kind = kind; document.documentElement.dataset.tint = kind; }));
+        at(8000, () => { send('stop'); ears('', ''); next(); });
+      } else if (st.id === 'staffB') {
+        staffScreen('feltOk', 'hintB', () => show(STEPS.findIndex((x) => x.id === 'check')));
+      } else if (st.id === 'hsample' || st.id === 'ksample') {   // a character whispers at one ear; the thermal follows her loudness
+        const H = st.id === 'hsample', who = H ? 'homura' : 'koyuki', lg = LG();
+        const play = () => {
+          A.innerHTML = `<div class="sample ${H ? 'warm' : 'cool'}"><img src="${MEDIA}art/${who}_ear.webp" alt=""><div><p class="who">${tx(H ? 'whoH' : 'whoK')}</p>
+            ${head()}<p class="line">${tx(H ? 'sampleH' : 'sampleK')}</p></div></div>`;
+          // she starts away on the left and comes close to the ear; the thermal = her loudness × how close she is (a voice is warm, Koyuki's breath cool)
+          voiceAt(`${MEDIA}voice/${who}_${lg}.m4a`, H ? PATH.left : PATH.acrossToRight, (env, t) => { const near = .3 + .7 * t, e = Math.min(1, env) * near;
+            if (H) { const h = env > .06 ? Math.round(150 * kW * e) : 0; send(`LH${h} RH0`); ears(h ? 'warm' : '', ''); }
+            else { const cv = env > .06 ? Math.round(35 + 45 * kC * e) : 0; send(`LH0 RC${cv}`); ears('', cv ? 'cool' : ''); }
+          }, ask);
+        };
+        const ask = () => { send('stop'); ears('', '');
+          A.innerHTML = `<div class="sample ${H ? 'warm' : 'cool'}"><img src="${MEDIA}art/${who}_ear.webp" alt=""><div><h2>${tx('natural')}</h2>
+            <div class="row nat"><button type="button" class="big1" data-n="weak">${tx('weak')}</button><button type="button" class="go big1" data-n="ok">${tx('right')}</button><button type="button" class="big1" data-n="strong">${tx('strong')}</button></div>
+            <button type="button" class="replay">${tx('replay')}</button></div></div>`;
+          A.querySelector('.replay').addEventListener('click', () => { clear(); play(); at(st.s * 1000, ask); });
+          A.querySelector('.nat').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; const n = b.dataset.n; natural[H ? 'warm' : 'cool'] = n;
+            const f = n === 'weak' ? 1.15 : n === 'strong' ? .85 : 1;
+            if (H) kW = Math.round(Math.min(capW, Math.max(FLOOR, kW * f)) * 100) / 100; else kC = Math.round(Math.min(capC, Math.max(FLOOR, kC * f)) * 100) / 100;
+            o.onLevel?.({ warm: kW, cool: kC }); b.classList.add('picked'); setTimeout(() => (H ? next() : finish(false)), 600); });
+        };
+        play(); at(st.s * 1000, () => (H ? next() : finish(false)));
       } else if (st.id === 'warm' || st.id === 'cool') {   // auto-calibration: slow ramp, the visitor taps at "almost too strong"
         const W = st.id === 'warm', cap = W ? capW : capC;
         let k = FLOOR, ramp = 0, stopped = false;
@@ -169,12 +303,12 @@
           hit[st.id] = how; o.onLevel?.({ warm: kW, cool: kC, maxWarm: maxW, maxCool: maxC });
           root.removeEventListener('pointerdown', onTap, true); removeEventListener('keydown', onKey, true);
           A.querySelector('.tapzone')?.remove(); const g = document.createElement('p'); g.className = 'sub got'; g.textContent = tx('gotIt') + (W && !only ? ` · ${tx('nextCool')}` : ''); A.appendChild(g);
-          at(1600, () => (W && !(only && !only.includes('cool')) ? next() : finish(false)));   // the short pause between warm and cool
+          at(1600, () => (only && (!W || !only.includes('cool')) ? finish(false) : next()));   // the short pause between warm and cool, then the samples
         };
         const onTap = (e) => { if (e.target.closest?.('.skip')) return; e.preventDefault(); e.stopPropagation(); stop('tap'); };
         const onKey = (e) => { e.preventDefault(); stop('tap'); };
-        A.innerHTML = `<h2>${tx(W ? 'warmQ' : 'coolQ')}</h2>${head()}<div class="ramp${W ? '' : ' cool'}"><i></i></div><p class="tapnow">${tx('tapNow')}</p>
-          <div class="row tapzone"><button type="button" class="go now">👆 ${tx('tapBtn')}</button></div>`;
+        A.innerHTML = `<h2>${tx(W ? 'warmQ' : 'coolQ')}</h2>${head()}<div class="ramp${W ? '' : ' cool'}"><i></i></div><p class="tapnow">${tx('almost')}</p>
+          <div class="row tapzone"><button type="button" class="go now stopbtn">■ ${tx('stop')}</button></div>`;
         ears(W ? 'warm' : '', W ? '' : 'cool');
         root.addEventListener('pointerdown', onTap, true); addEventListener('keydown', onKey, true);
         timers.push({ clear: () => { clearInterval(ramp); root.removeEventListener('pointerdown', onTap, true); removeEventListener('keydown', onKey, true); } });
@@ -183,8 +317,8 @@
       }
     }
     function finish(skipped) {
-      if (over) return; over = true; clear(); send('stop');
-      o.onDone?.({ warm: kW, cool: kC, maxWarm: maxW, maxCool: maxC, hit, level: Math.max(kW, kC), skipped, step: STEPS[i]?.id || 'end' });
+      if (over) return; over = true; clear(); send('stop'); document.documentElement.dataset.tint = '';
+      o.onDone?.({ warm: kW, cool: kC, maxWarm: maxW, maxCool: maxC, hit, natural, level: Math.max(kW, kC), skipped, step: STEPS[i]?.id || 'end' });
     }
     const only = o.only || null;   // e.g. ['warm', 'cool']: staff self-calibration runs just those steps
     return { start: () => { over = false; show(only ? STEPS.findIndex((x) => x.id === only[0]) : 0); }, skip: () => finish(true), stop: () => { over = true; clear(); send('stop'); },

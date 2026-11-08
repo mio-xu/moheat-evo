@@ -22,7 +22,10 @@
   if (QS.get('kiosk') === '1') { try { localStorage.setItem('moheat.kiosk', '1'); } catch {} }
 
   // ---------------------------------------------------------------- staff settings
-  const DEF = { lang: 'en', cap: 80, start: 50, idle: 60, demos: null, pin: '0000', site: 'https://moheat-evo.github.io/', newsUrl: '', langs: ['en', 'ja', 'zh'], currency: 'auto', bands: {}, cut: 'show', hygiene: false, pickUrl: '' };
+  const DEF = { lang: 'en', cap: 80, start: 50, idle: 60, demos: null, pin: '0000', site: 'https://moheat-evo.github.io/', newsUrl: '', langs: ['en', 'ja', 'zh'], currency: 'auto', bands: {}, cut: 'show', hygiene: false, pickUrl: '',
+    // queue screen (window 2): 'live' (attract + thermal view) | 'promo' (looping video + QR badge) | 'alt' (switch every altMin minutes)
+    queue: true, maxDemos: 0, maxMin: 0,   // queue on = the visit ends after one demo (staff: long-press the tiny dot bottom-left or key Q)
+    queueMode: 'promo', altMin: 3, promoSrc: '', promoSound: false, promoNow: true, qrSize: 'l', qrCorner: 'br' };
   // purchase-intent card: price bands per currency (staff can replace them in the panel; 'auto' = from the display language)
   const BANDS = { JPY: ['≤ ¥10,000', '¥10,000–20,000', '¥20,000–30,000', '¥30,000+'], USD: ['≤ $70', '$70–140', '$140–200', '$200+'],
     CNY: ['≤ ¥500', '¥500–1,000', '¥1,000–1,500', '¥1,500+'], EUR: ['≤ €65', '€65–130', '€130–190', '€190+'], KRW: ['≤ ₩100,000', '₩100,000–200,000', '₩200,000–300,000', '₩300,000+'] };
@@ -73,7 +76,7 @@
       if (r.comment) { d.comments.push({ t: new Date().toISOString().slice(11, 16), dir, stars: r.stars || null, text: String(r.comment).slice(0, 120) }); if (d.comments.length > 500) d.comments.shift(); }
     }),
     // the visitor's auto-calibration (personal max, 0–1 of the full device scale; 'tap' or 'cap' = nobody tapped before the staff cap)
-    calib: (r) => edit((d) => { if (r?.maxWarm == null && r?.maxCool == null) return; (d.calib ||= []).push({ w: r.maxWarm ?? null, c: r.maxCool ?? null, hw: r.hit?.warm || null, hc: r.hit?.cool || null });
+    calib: (r) => edit((d) => { if (r?.maxWarm == null && r?.maxCool == null && !r?.natural?.warm && !r?.natural?.cool) return; (d.calib ||= []).push({ w: r.maxWarm ?? null, c: r.maxCool ?? null, hw: r.hit?.warm || null, hc: r.hit?.cool || null, nw: r.natural?.warm || null, nc: r.natural?.cool || null });
       if (d.calib.length > 3000) d.calib.shift(); }),
     // rows per demo: { dir, started, finished, pure, interactive, avg, rated, top } for today ('today') or all days ('all')
     table(which = 'today') {
@@ -91,7 +94,8 @@
       const rows = Object.values(m).map((r) => ({ ...r, avg: r.rated ? Math.round(r.stars / r.rated * 10) / 10 : null,
         top: Object.entries(r.moments).sort((a, b) => b[1] - a[1])[0]?.[0] || '' })).sort((a, b) => b.started - a.started || b.finished - a.finished);
       const cal = days.flatMap((d) => d.calib || []), avg = (k) => { const v = cal.map((x) => x[k]).filter((x) => x != null); return v.length ? Math.round(100 * v.reduce((a, b) => a + b, 0) / v.length) / 100 : null; };
-      const calib = { n: cal.length, warm: avg('w'), cool: avg('c'), warmCapHits: cal.filter((x) => x.hw === 'cap').length, coolCapHits: cal.filter((x) => x.hc === 'cap').length };
+      const calib = { n: cal.length, warm: avg('w'), cool: avg('c'), warmCapHits: cal.filter((x) => x.hw === 'cap').length, coolCapHits: cal.filter((x) => x.hc === 'cap').length,
+        natural: Object.fromEntries(['nw', 'nc'].map((k) => [k === 'nw' ? 'warm' : 'cool', Object.fromEntries(['weak', 'ok', 'strong'].map((a) => [a, cal.filter((x) => x[k] === a).length]))])) };
       return { visitors, cards, skipped, rows, buy, cross, scenes, sceneBuy, calib };
     },
     json: () => JSON.stringify({ exported: new Date().toISOString(), note: 'MoHeat Evo kiosk · anonymous local counts (this browser only)', ...load() }, null, 1),
@@ -107,8 +111,8 @@
       }
       out.push('', 'purchase intent x price band (all days)', 'date,intent,price_band,count');
       for (const [date, d] of days) for (const [k, n] of Object.entries(d.cross || {})) { const [b, pr] = k.split('|'); out.push([date, b, pr, n].map(q).join(',')); }
-      out.push('', 'auto-calibration: personal max per visitor (0-1 of the full device scale; cap = no tap before the staff cap)', 'date,max_warm,max_cool,warm_stop,cool_stop');
-      for (const [date, d] of days) for (const c of d.calib || []) out.push([date, c.w ?? '', c.c ?? '', c.hw ?? '', c.hc ?? ''].map(q).join(','));
+      out.push('', 'auto-calibration: personal max per visitor (0-1 of the full device scale; cap = no tap before the staff cap)', 'date,max_warm,max_cool,warm_stop,cool_stop,warm_sample_feel,cool_sample_feel');
+      for (const [date, d] of days) for (const c of d.calib || []) out.push([date, c.w ?? '', c.c ?? '', c.hw ?? '', c.hc ?? '', c.nw ?? '', c.nc ?? ''].map(q).join(','));
       out.push('', 'scene x purchase intent (all days)', 'date,scene,intent,count');
       for (const [date, d] of days) for (const [k, n] of Object.entries(d.sceneBuy || {})) { const [sc, b] = k.split('|'); out.push([date, sc, b, n].map(q).join(',')); }
       return out.join('\n') + '\n';
@@ -155,7 +159,11 @@
   const post = (m) => { try { bc?.postMessage(m); } catch {} };
   const thermalOf = (s) => { const th = { l: { h: 0, c: 0 }, r: { h: 0, c: 0 } };   // device text → 0–1 per ear (heat 0–200, cool 35–80)
     for (const m of String(s).matchAll(/\b([LR])([HC])\s*(\d+)/g)) { const n = +m[3], e = th[m[1].toLowerCase()]; if (m[2] === 'H') e.h = Math.min(1, n / 200); else e.c = n ? Math.max(0, Math.min(1, (n - 35) / 45)) : 0; } return th; };
-  const K = window.MoHeatKiosk = { currency, bands, BANDS, SCENES, on: flag, cfg, setCfg, stats, resetVisitor, enter, exit, visit, day, DEF, stopDevice,
+  // a local file the staff picked (promo video) → IndexedDB 'moheat-kiosk' / store 'files' (this machine only)
+  const idb = { open: () => new Promise((res, rej) => { const r = indexedDB.open('moheat-kiosk', 1); r.onupgradeneeded = () => r.result.createObjectStore('files'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }),
+    async put(k, v) { const db = await idb.open(); return new Promise((res, rej) => { const t = db.transaction('files', 'readwrite'); t.objectStore('files').put(v, k); t.oncomplete = res; t.onerror = () => rej(t.error); }); },
+    async get(k) { try { const db = await idb.open(); return await new Promise((res) => { const r = db.transaction('files').objectStore('files').get(k); r.onsuccess = () => res(r.result || null); r.onerror = () => res(null); }); } catch { return null; } } };
+  const K = window.MoHeatKiosk = { idb, currency, bands, BANDS, SCENES, on: flag, cfg, setCfg, stats, resetVisitor, enter, exit, visit, day, DEF, stopDevice,
     offered, num, top3, pickUrl, dnum, post, thermalOf, scales, setScales, scaleLine, get queueOn() { return Date.now() - queueSeen < 6000; } };
 
   // ================================================================ demo pages (kiosk mode on)
@@ -318,7 +326,7 @@
       let from = SHOWCUT[dir]?.from ?? (best ? +best[0] : n >= 3 ? 1 : 0);
       from = Math.max(0, Math.min(from, n - 1)); if (n > 1 && from >= n - 1 && n > 2) from = n - 2;   // leave room to play
       if (from > 0) { try { window.MoHeatShell?.seekTo?.(from); } catch {} }
-      const go = () => { if (window.MoHeatShell?.chapter && from > 0 && window.MoHeatShell.chapter() < from) return realT(go, 500); cutEnd = Date.now() + CUT_S * 1000; tick(); };
+      const t0 = RN(), go = () => { if (window.MoHeatShell?.chapter && from > 0 && window.MoHeatShell.chapter() < from && RN() - t0 < 10000) return realT(go, 500); cutEnd = Date.now() + CUT_S * 1000; tick(); };   // a seek that never arrives (shell changes) must not stall the cut
       realT(go, 600);
     }, 400);
     chip = document.createElement('div'); chip.className = 'mk-cut'; document.body.appendChild(chip);

@@ -18,6 +18,7 @@ SKIP_EXT = {'.py', '.md', '.csv', '.command', '.txt', '.sh', '.psd'}
 def files():
     out = subprocess.run(['git', 'ls-files', 'demos', 'kiosk', 'assets/images/demos', 'device.js', 'index.html', 'styles.css', 'script.js', 'credits.html'],
                          cwd=ROOT, capture_output=True, text=True).stdout.split('\n')
+    out += subprocess.run(['git', 'ls-files', '--others', '--exclude-standard', 'kiosk'], cwd=ROOT, capture_output=True, text=True).stdout.split('\n')   # new kiosk files before their commit
     shared, demos = [], {}
     for f in filter(None, out):
         parts = f.split('/')

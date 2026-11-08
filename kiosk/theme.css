@@ -1,0 +1,91 @@
+/* Kiosk style B "warm-cool brand" (user 2026-11-08): warm orange on one side, ice blue on the other, slowly blending in the middle;
+   breathing glow on the logo + Start; warm steps tinted orange, cool steps blue; one palette for every kiosk page (welcome, intro,
+   calibration, survey, queue screen, pick page, poster). Same font / button system as the unified UI (demos/shared/ui2.css: --u2-ui,
+   --u2-warm, --u2-cool, --u2-accent) — only the theme colours differ. GPU-cheap: two blurred layers move with transform / opacity only;
+   prefers-reduced-motion stops every animation. Load AFTER the page's own stylesheet. */
+:root {
+  --ff: "Inter", "Noto Sans JP", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+  --warm: #ff8a3d; --warm-2: #ffb36b; --warm-deep: #7a2a0a; --cool: #9fd8ff; --cool-2: #5cb8ff; --cool-deep: #0b2f57;
+  --gold: #ffd479; --on-gold: #1b1406; --ink: #f7f3fb; --dim: rgba(247, 243, 251, .7); --glass: rgba(14, 12, 22, .55); --line: rgba(255, 255, 255, .16);
+  --bg: #0c0a14;
+}
+html, body { background: var(--bg); font-family: var(--ff); letter-spacing: .005em; }
+
+/* the flowing warm | cool background (behind every view) */
+.kb-flow { position: fixed; inset: -10%; z-index: -1; pointer-events: none; overflow: hidden; background: var(--bg); }
+.kb-flow::before, .kb-flow::after { content: ""; position: absolute; top: 0; bottom: 0; width: 75%; filter: blur(60px); will-change: transform; }
+.kb-flow::before { left: -10%; background: radial-gradient(ellipse at 30% 50%, rgba(255, 128, 50, .55), rgba(255, 128, 50, .12) 45%, transparent 70%); animation: kbWarm 18s ease-in-out infinite alternate; }
+.kb-flow::after { right: -10%; background: radial-gradient(ellipse at 70% 50%, rgba(90, 180, 255, .5), rgba(90, 180, 255, .12) 45%, transparent 70%); animation: kbCool 21s ease-in-out infinite alternate; }
+@keyframes kbWarm { from { transform: translate3d(-4%, -3%, 0) scale(1); } to { transform: translate3d(6%, 3%, 0) scale(1.08); } }
+@keyframes kbCool { from { transform: translate3d(4%, 3%, 0) scale(1.05); } to { transform: translate3d(-6%, -2%, 0) scale(1); } }
+/* steps that are about warm / cool lean to their side */
+html[data-tint="warm"] .kb-flow::after { opacity: .25; } html[data-tint="cool"] .kb-flow::before { opacity: .25; }
+.kb-flow::before, .kb-flow::after { transition: opacity 1.2s ease; }
+
+/* views sit on the flow (no own backgrounds) */
+.view, #v-welcome, #v-intro, #v-card { background: transparent !important; }
+#v-attract { background: #000 !important; }
+
+/* logo + Start breathe */
+.logo { font-weight: 800; letter-spacing: -.025em; background: linear-gradient(90deg, var(--warm-2) 0%, #fff4ea 50%, var(--cool) 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 18px rgba(255, 200, 150, .25)); animation: kbBreath 4.5s ease-in-out infinite; }
+.logo span { font-weight: 300; }
+@keyframes kbBreath { 50% { filter: drop-shadow(0 0 30px rgba(255, 190, 140, .45)) drop-shadow(0 0 20px rgba(150, 210, 255, .3)); } }
+button.go, .mi button.go { background: linear-gradient(120deg, var(--warm-2), var(--gold) 50%, #fff1d6); color: var(--on-gold); border: 0;
+  box-shadow: 0 0 0 0 rgba(255, 190, 120, .5), 0 10px 30px rgba(255, 140, 60, .25); animation: kbGlow 3.2s ease-in-out infinite; }
+@keyframes kbGlow { 50% { box-shadow: 0 0 0 10px rgba(255, 190, 120, 0), 0 10px 40px rgba(255, 140, 60, .45); } }
+button.big { font-weight: 700; letter-spacing: .01em; }
+#startVisit { min-height: clamp(64px, 9vmin, 92px); padding: 0 2.2em; font-size: clamp(20px, 3.4vmin, 34px); }
+
+/* welcome: fewer, cleaner elements */
+.wel-tag { color: var(--dim); font-weight: 500; }
+.langs button { border-color: var(--line); background: var(--glass); backdrop-filter: blur(6px); }
+.langs button[aria-pressed=true] { background: #fff; color: #17121f; }
+.picto li { color: var(--ink); } .picto b::before { background: var(--gold); color: var(--on-gold); }
+.rec h3 { color: var(--gold); letter-spacing: .14em; font-weight: 700; }
+.rec-row button, .menu-top button, .menu-grid button { background: var(--glass); border-color: var(--line); backdrop-filter: blur(6px); border-radius: 18px; }
+.rec-row em, .menu-top em { color: #ffd0b0; }
+.nums > span { color: var(--dim); }
+.nums-row { gap: 5px; }
+.nums-row button { min-width: 44px; height: 44px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, .22); background: rgba(255, 255, 255, .06); color: var(--ink); font: 700 15px/1 var(--ff); }
+.nums-row button:hover, .nums-row button:active { background: var(--gold); color: var(--on-gold); border-color: transparent; }
+.no { background: var(--gold); color: var(--on-gold); }
+.qq .qr, .card-qr .qr { box-shadow: 0 8px 30px rgba(0, 0, 0, .35); }
+.hygiene { color: #bfeed6; }
+
+/* the headset pictogram: heat steam on the left ear, snowflakes on the right */
+.kb-steam path { animation: kbSteam 2.4s ease-in-out infinite; } .kb-steam path:nth-child(2) { animation-delay: .4s; } .kb-steam path:nth-child(3) { animation-delay: .8s; }
+@keyframes kbSteam { 0% { transform: translateY(4px); opacity: 0; } 40% { opacity: 1; } 100% { transform: translateY(-6px); opacity: 0; } }
+.kb-snow g { animation: kbSnow 3s linear infinite; transform-box: fill-box; transform-origin: center; } .kb-snow g:nth-child(2) { animation-delay: 1s; } .kb-snow g:nth-child(3) { animation-delay: 2s; }
+@keyframes kbSnow { 0% { transform: translateY(-6px) rotate(0); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(8px) rotate(90deg); opacity: 0; } }
+
+/* intro / calibration: warm steps orange, cool steps blue (thermintro sets .mi[data-step]) */
+.mi h2 { font-weight: 800; letter-spacing: -.01em; }
+.mi[data-step="left"] h2, .mi[data-step="warm"] h2 { color: #ffd2b0; } .mi[data-step="right"] h2, .mi[data-step="cool"] h2 { color: #d4eeff; }
+.mi[data-step="warm"] .tapnow { color: var(--warm-2); } .mi[data-step="cool"] .tapnow { color: var(--cool); }
+.mi[data-step="cool"] button.go { background: linear-gradient(120deg, #e8f6ff, var(--cool) 50%, var(--cool-2)); color: #06192a; box-shadow: 0 10px 30px rgba(80, 170, 255, .3); }
+.mi .dots b { width: 10px; height: 10px; } .mi .dots b.on { background: var(--gold); }
+.mi .skip { background: var(--glass); }
+
+/* survey */
+.card-kicker .card-title { color: var(--gold); }
+.q h2 { font-weight: 800; letter-spacing: -.01em; }
+.big-chips button, .stars button { background: var(--glass); border-color: var(--line); backdrop-filter: blur(6px); }
+.big-chips button[aria-pressed=true] { background: #fff; color: #17121f; }
+.stars button.on { color: var(--gold); border-color: var(--gold); background: rgba(255, 212, 121, .12); }
+.q-dots i.now { background: var(--gold); border-color: var(--gold); }
+
+@media (prefers-reduced-motion: reduce) {
+  .kb-flow::before, .kb-flow::after, .logo, button.go, .mi button.go, .kb-steam path, .kb-snow g, .mi .tapnow { animation: none !important; }
+}
+
+/* the flow must show through: only <html> paints the base colour */
+body { background: transparent !important; }
+/* welcome: lighter — the pitch line stays on the menu / phone page, the welcome tiles show title + thermal highlight */
+#v-welcome { gap: 1.6vmin; justify-content: center; padding-top: 2.5vmin; }
+#v-welcome .logo { font-size: clamp(34px, 7vmin, 84px); }
+.rec-row small { display: none; } .rec-row img { height: clamp(60px, 11vmin, 130px); }
+#skipIntro { font-size: clamp(13px, 1.7vmin, 17px); min-height: 40px; }
+.nums { margin-top: .6vmin; }
+/* short screens (tablets in landscape, 768 px): the three-step pictograms give way — the intro shows each step big anyway */
+@media (max-height: 800px) { #v-welcome .picto { display: none; } #v-welcome { gap: 1.4vmin; } }

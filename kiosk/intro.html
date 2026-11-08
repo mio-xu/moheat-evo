@@ -18,15 +18,17 @@
     .start h1 { margin: 0; font: 800 clamp(26px, 6vmin, 60px)/1.15 var(--ff); } .start p { margin: 0; color: #cfc3dc; font-size: clamp(15px, 2.4vmin, 22px); max-width: 32em; }
     .start button { min-height: 60px; padding: 0 30px; border-radius: 999px; border: 0; background: linear-gradient(135deg, #ffd58a, #ff9f6e); color: #2a1606; font: 700 clamp(18px, 3vmin, 28px)/1 var(--ff); cursor: pointer; }
   </style>
+  <link rel="stylesheet" href="theme.css?v=9ef27d2c" />
 </head>
 <body>
+  <div class="kb-flow" aria-hidden="true"></div>
   <div class="bar"><a href="../">← MoHeat Evo</a>
     <span class="langs"><button data-l="en">EN</button> <button data-l="ja">日本語</button> <button data-l="zh">中文</button></span>
     <select id="portSelect"></select><button id="addPort">+ Add</button><button id="connectBtn">Connect</button><span class="status" id="deviceStatus"><span>Not connected</span></span></div>
   <div id="host"></div>
   <div class="start" id="start"><h1 data-t="h"></h1><p data-t="p"></p><button type="button" id="go" data-t="go"></button></div>
   <script src="../device.js?v=2"></script>
-  <script src="../demos/shared/thermintro.js?v=eb5f2929"></script>
+  <script src="../demos/shared/thermintro.js?v=7e4a0b2b"></script>
   <script>
     (() => {
       const T = { h: { en: '30-second thermal intro', ja: '30 秒の温冷入門', zh: '30 秒冷热入门' },

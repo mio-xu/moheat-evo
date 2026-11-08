@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>MoHeat Evo · Exhibition</title>
   <meta name="robots" content="noindex" />
-  <link rel="stylesheet" href="kiosk.css?v=1" />
+  <link rel="stylesheet" href="kiosk.css?v=3e4f3fd6" />
+  <link rel="stylesheet" href="theme.css?v=9ef27d2c" />
 </head>
 <body>
+  <div class="kb-flow" aria-hidden="true"></div>
   <!-- MoHeat Evo exhibition (kiosk) mode — DEMO_DESIGN_GUIDE §7.4, staff guide docs/kiosk.md. Views: attract · welcome · intro · menu · card; staff panel behind 5 taps top-left + PIN. -->
   <main id="app">
     <section id="v-attract" class="view" hidden>
@@ -19,7 +21,9 @@
       <div class="wel-top"><div class="logo">MoHeat <span>Evo</span></div><p class="wel-tag" data-t="tag"></p></div>
       <div class="langs" role="group" aria-label="Language"></div>
       <ol class="picto">
-        <li><svg viewBox="0 0 120 90" aria-hidden="true"><path d="M20 52 Q20 10 60 10 Q100 10 100 52" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><rect x="8" y="44" width="24" height="34" rx="10" fill="#6cc4ff"/><rect x="88" y="44" width="24" height="34" rx="10" fill="#ff8a4a"/><text x="20" y="67" text-anchor="middle" font-size="16" font-weight="800" fill="#08121e">L</text><text x="100" y="67" text-anchor="middle" font-size="16" font-weight="800" fill="#2a1206">R</text></svg><b data-t="p1"></b></li>
+        <li><svg viewBox="0 0 120 96" aria-hidden="true"><g transform="translate(0 6)"><path d="M20 52 Q20 10 60 10 Q100 10 100 52" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><rect x="8" y="44" width="24" height="34" rx="10" fill="#ff8a3d"/><rect x="88" y="44" width="24" height="34" rx="10" fill="#9fd8ff"/><text x="20" y="67" text-anchor="middle" font-size="16" font-weight="800" fill="#2a1206">L</text><text x="100" y="67" text-anchor="middle" font-size="16" font-weight="800" fill="#08121e">R</text></g>
+          <g class="kb-steam" stroke="#ffb36b" stroke-width="2.6" fill="none" stroke-linecap="round"><path d="M12 40 q-4 -6 0 -12 q4 -6 0 -12"/><path d="M20 38 q-4 -6 0 -12 q4 -6 0 -12"/><path d="M28 40 q-4 -6 0 -12 q4 -6 0 -12"/></g>
+          <g class="kb-snow" stroke="#d6f1ff" stroke-width="2" stroke-linecap="round"><g><path d="M92 18 v8 M88 22 h8 M89 19 l6 6 M95 19 l-6 6"/></g><g><path d="M104 30 v6 M101 33 h6"/></g><g><path d="M112 16 v6 M109 19 h6"/></g></g></svg><b data-t="p1"></b></li>
         <li><svg viewBox="0 0 120 90" aria-hidden="true"><circle cx="34" cy="45" r="22" fill="#ff8a4a"/><circle cx="86" cy="45" r="22" fill="#6cc4ff"/><path d="M34 14 q-6 -8 0 -12 M44 16 q-6 -8 0 -12 M24 16 q-6 -8 0 -12" stroke="#ffb070" stroke-width="3" fill="none"/><path d="M86 10 v10 M80 13 l12 6 M92 13 l-12 6" stroke="#bfe9ff" stroke-width="3"/></svg><b data-t="p2"></b></li>
         <li><svg viewBox="0 0 120 90" aria-hidden="true"><rect x="10" y="14" width="44" height="28" rx="5" fill="rgba(255,255,255,.25)"/><rect x="66" y="14" width="44" height="28" rx="5" fill="rgba(255,255,255,.25)"/><rect x="10" y="50" width="44" height="28" rx="5" fill="rgba(255,255,255,.25)"/><rect x="66" y="50" width="44" height="28" rx="5" fill="#ffd58a"/><path d="M84 58 l12 6 l-12 6z" fill="#2a1606"/></svg><b data-t="p3"></b></li>
       </ol>
@@ -38,6 +42,17 @@
       <div class="menu-grid"></div>
     </section>
 
+    <section id="v-more" class="view" hidden>
+      <h2 class="more-h" data-t="moreH"></h2>
+      <div class="rec more-rec"><div class="rec-row"></div></div>
+      <div class="row2"><button type="button" class="big" id="moreAll" data-t="moreAll"></button><button type="button" class="big go" id="moreFinish" data-t="finish"></button></div>
+    </section>
+
+    <section id="v-end" class="view" hidden>
+      <div class="endpic"></div><h2 class="end-h"></h2><p class="end-sub"></p>
+      <button type="button" class="big go" id="endGo"></button>
+    </section>
+
     <section id="v-card" class="view" hidden>
       <!-- one question per screen, auto-advance on tap, Skip + Skip all everywhere, closes itself after 15 s without input (user 2026-11-08) -->
       <div class="card-wrap">
@@ -50,12 +65,13 @@
         </div>
         <aside class="card-qr"><div class="qr"></div><p data-t="scan"></p><p class="small" data-t="nodata"></p></aside>
       </div>
-      <div class="q-thanks" hidden><div class="logo">MoHeat <span>Evo</span></div><p data-t="thanksBig"></p></div>
+      <div class="q-thanks" hidden><div class="logo">MoHeat <span>Evo</span></div><p data-t="thanksBig"></p><div class="qr thanks-qr"></div><p class="small" data-t="scan"></p></div>
     </section>
   </main>
 
   <div class="corner" id="corner" aria-hidden="true"></div>
   <div class="devdot" id="devdot" aria-hidden="true"></div>
+  <div class="qdot" id="qdot" title="Queue (staff: long-press or Q)"></div>
 
   <div class="overlay" id="pinBox" hidden>
     <div class="panel pin"><h3>Staff · PIN</h3><input type="password" inputmode="numeric" id="pin" maxlength="8" autocomplete="off" /><p class="err" id="pinErr"></p>
@@ -77,6 +93,8 @@
           <label>Warm start <input type="range" id="sStartW" min="20" max="100" step="5" /><b id="sStartWV"></b></label>
           <label>Cool cap <input type="range" id="sCapC" min="30" max="100" step="5" /><b id="sCapCV"></b></label>
           <label>Cool start <input type="range" id="sStartC" min="20" max="100" step="5" /><b id="sStartCV"></b></label>
+          <label><input type="checkbox" id="sQueue" /> People are queuing (the visit ends after one demo) — also: long-press the tiny dot bottom-left, or key Q</label>
+          <label>When nobody queues: max demos <input type="number" id="sMaxD" min="0" max="20" style="width:4em" /> · max minutes <input type="number" id="sMaxM" min="0" max="60" style="width:4em" /> (0 = no limit)</label>
           <label>Idle reset after <input type="number" id="sIdle" min="20" max="600" step="5" /> s</label>
           <label>Site link (QR) <input type="url" id="sSite" /></label>
           <label>Price currency <select id="sCur"><option value="auto">auto (from language)</option><option>JPY</option><option>USD</option><option>CNY</option><option>EUR</option><option>KRW</option></select></label>
@@ -84,6 +102,12 @@
           <label>Experience <select id="sCut"><option value="show">Show cut (60–90 s, default)</option><option value="full">Full demo</option></select></label>
           <label><input type="checkbox" id="sHyg" /> Hygiene badge on the welcome screen</label>
           <label>Queue pick page (QR) <input type="url" id="sPick" placeholder="default: site link + kiosk/pick.html" /></label>
+          <h4>Queue screen (window 2)</h4>
+          <label>Mode <select id="sQMode"><option value="promo">Promo video (fallback: live view)</option><option value="live">Live view (attract + thermal)</option><option value="alt">Alternate</option></select> every <input type="number" id="sAlt" min="1" max="30" style="width:4em" /> min</label>
+          <label>Video <input type="text" id="sPromo" placeholder="empty = kiosk/media/promo.mp4 · or a URL" style="flex:1" /></label>
+          <label>…or a local file <input type="file" id="sPromoFile" accept="video/*" /></label>
+          <label><input type="checkbox" id="sPromoSound" /> Sound on</label> <label><input type="checkbox" id="sPromoNow" /> "Now playing" tag</label>
+          <label>QR size <select id="sQrSize"><option value="s">S</option><option value="m">M</option><option value="l">L</option></select> corner <select id="sQrCorner"><option value="br">bottom right</option><option value="bl">bottom left</option><option value="tr">top right</option><option value="tl">top left</option></select></label>
           <label>Product-news form (optional QR) <input type="url" id="sNews" placeholder="https://… (empty = no QR)" /></label>
           <label>New PIN <input type="password" inputmode="numeric" id="sPin" maxlength="8" placeholder="4–8 digits" /></label>
           <h4>Demos offered</h4>
@@ -107,11 +131,11 @@
 
   <script src="../device.js?v=2"></script>
   <script>window.MOHEAT_NAV_DATA_ONLY = true;</script>
-  <script src="../demos/shared/nav.js?v=e29bab1e"></script>
-  <script src="../demos/shared/kiosk.js?v=a088684b"></script>
-  <script src="../demos/shared/thermintro.js?v=eb5f2929"></script>
+  <script src="../demos/shared/nav.js?v=ef7f790f"></script>
+  <script src="../demos/shared/kiosk.js?v=8f606105"></script>
+  <script src="../demos/shared/thermintro.js?v=7e4a0b2b"></script>
   <script src="qrcode.min.js"></script>
-  <script src="pitches.js?v=1"></script>
-  <script src="app.js?v=1"></script>
+  <script src="pitches.js?v=640c3555"></script>
+  <script src="app.js?v=54353c7f"></script>
 </body>
 </html>

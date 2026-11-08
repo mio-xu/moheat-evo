@@ -41,6 +41,13 @@
     news: { en: 'Product news? (optional, your choice)', ja: '製品ニュース（任意）', zh: '产品消息？（可选）' },
     lost: { en: 'Headset disconnected', ja: 'ヘッドホンの接続が切れました', zh: '耳机已断开' }, bat: { en: 'Headset battery low', ja: 'ヘッドホンの電池が少なくなっています', zh: '耳机电量低' },
     staffHelp: { en: 'Please ask the staff.', ja: 'スタッフにお声がけください。', zh: '请联系工作人员。' },
+    moreH: { en: 'Want to try another story?', ja: 'ほかの物語も体験しますか？', zh: '想再体验一个故事吗？' },
+    moreAll: { en: 'All stories', ja: 'すべての物語', zh: '全部故事' }, finish: { en: 'Finish', ja: 'おわる', zh: '结束' },
+    endA: { en: 'Please take off the MoHeat Evo first', ja: 'まず MoHeat Evo を外してください', zh: '请先取下 MoHeat Evo' },
+    endASub: { en: 'The warm / cool output is already off. Please tell the staff 👋', ja: '温冷の出力はもう止まっています。スタッフに声をかけてください 👋', zh: '冷热输出已经停止。请告诉工作人员 👋' },
+    endB: { en: 'Now take off the headphones', ja: 'つぎにヘッドホンを外してください', zh: '现在请摘下耳机' },
+    endBSub: { en: 'Then a few quick taps about your experience.', ja: 'そのあと、かんたんなアンケートにタップで答えてください。', zh: '然后点几下，告诉我们你的感受。' },
+    staffGo: { en: 'Continue (staff)', ja: '続ける（スタッフ）', zh: '继续（工作人员）' }, done2: { en: 'Done', ja: 'できた', zh: '好了' },
     touch: { en: 'Touch to start · タッチしてスタート · 点击开始', ja: 'Touch to start · タッチしてスタート · 点击开始', zh: 'Touch to start · タッチしてスタート · 点击开始' },
   };
   const t = (k) => (T[k] && (T[k][lang()] || T[k].en)) || '';
@@ -82,7 +89,7 @@
     if (v === 'menu') renderMenu();
     document.documentElement.dataset.view = v; last = Date.now();
   }
-  function newVisitor() { pending = null; K.resetVisitor(); cfg = K.cfg(); document.documentElement.lang = lang(); paint(); }
+  function newVisitor() { pending = null; try { sessionStorage.removeItem('moheat.kiosk.session'); } catch {} K.resetVisitor(); cfg = K.cfg(); document.documentElement.lang = lang(); paint(); }
   function reset(toAttract = false) { send('stop'); newVisitor(); go(toAttract ? 'attract' : 'welcome'); }
 
   const volGet = () => { try { return (+JSON.parse(localStorage.getItem('moheat.volume')) || 70) / 100; } catch { return .7; } };
@@ -171,12 +178,35 @@
   $('#addComment').addEventListener('click', () => { $('#addComment').hidden = true; $('#comment').hidden = false; $('#comment').focus(); });
   $('#comment').addEventListener('keydown', (e) => { if (e.key === 'Enter') nextQ(); });
   let carded = false;
+  // ---------------------------------------------------------------- end of a demo / of the visit (REQUIREMENTS §11)
+  // nobody queuing (staff toggle) and within the staff's max demos / minutes → "another story?" keeping the calibration (no intro);
+  // otherwise the ending: (a) take off MoHeat Evo (output already stopped, staff Continue) → (b) take off the headphones → card → thanks + QR
+  const sess = { get: () => { try { return JSON.parse(sessionStorage.getItem('moheat.kiosk.session')) || { n: 0, t0: Date.now() }; } catch { return { n: 0, t0: Date.now() }; } },
+    set: (v) => { try { sessionStorage.setItem('moheat.kiosk.session', JSON.stringify(v)); } catch {} } };
+  function afterDemo() {
+    const se = sess.get(); se.n++; sess.set(se); cfg = K.cfg();
+    const over = (cfg.maxDemos && se.n >= cfg.maxDemos) || (cfg.maxMin && Date.now() - se.t0 > cfg.maxMin * 60000);
+    if (!cfg.queue && !over) { go('more'); $('#v-more .rec-row').innerHTML = top3().map((d) => tile(d, true)).join(''); paint(); } else endSeq();
+  }
+  $('#v-more').addEventListener('click', (e) => { const b = e.target.closest('.rec-row button'); if (b) openDemo(b.dataset.dir); });
+  $('#moreAll').addEventListener('click', () => go('menu'));
+  $('#moreFinish').addEventListener('click', () => endSeq());
+  const PIC_EVO = `<svg viewBox="0 0 220 130" aria-hidden="true"><ellipse cx="110" cy="70" rx="42" ry="52" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+    <g class="lift"><circle cx="40" cy="58" r="14" fill="#ff8a3d"/><circle cx="180" cy="58" r="14" fill="#9fd8ff"/></g><path d="M40 92 v-18 M34 80 l6 -6 6 6 M180 92 v-18 M174 80 l6 -6 6 6" stroke="#ffd479" stroke-width="4" fill="none" stroke-linecap="round"/></svg>`;
+  const PIC_PHONES = `<svg viewBox="0 0 220 130" aria-hidden="true"><g class="lift"><path d="M60 80 Q60 18 110 18 Q160 18 160 80" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+    <rect x="42" y="68" width="34" height="46" rx="14" fill="#2b2536" stroke="#fff" stroke-width="3"/><rect x="144" y="68" width="34" height="46" rx="14" fill="#2b2536" stroke="#fff" stroke-width="3"/></g>
+    <path d="M110 126 v-20 M102 114 l8 -8 8 8" stroke="#ffd479" stroke-width="4" fill="none" stroke-linecap="round"/></svg>`;
+  function endSeq(phase = 'a') {
+    send('stop'); go('end'); const a = phase === 'a';
+    $('.endpic').innerHTML = a ? PIC_EVO : PIC_PHONES; $('.end-h').textContent = t(a ? 'endA' : 'endB'); $('.end-sub').textContent = t(a ? 'endASub' : 'endBSub');
+    $('#endGo').textContent = t(a ? 'staffGo' : 'done2'); $('#endGo').onclick = () => (a ? endSeq('b') : (carded = false, go('card'), renderCard(true), paint(), last = Date.now()));
+  }
   function closeCard(save) {
     if (carded) return; carded = true; clearTimeout(sceneT);
     const v = K.visit.get() || {}, r = { ...answer, comment: $('#comment').value.trim() };
     if (v.dir) K.stats.card(v.dir, save ? r : null);
-    $('.card-wrap').hidden = true; $('.q-thanks').hidden = false;
-    setTimeout(() => reset(), 1600);
+    $('.card-wrap').hidden = true; $('.q-thanks').hidden = false; qr($('.thanks-qr'), summaryUrl(v));   // thank-you + the take-home QR, then the next visitor
+    const done = () => { clearTimeout(tq); $('.q-thanks').removeEventListener('click', done); reset(); }, tq = setTimeout(done, 9000); $('.q-thanks').addEventListener('click', done);
   }
   $('#cardBack').addEventListener('click', prevQ);
   $('#cardSkip').addEventListener('click', () => nextQ());
@@ -211,10 +241,18 @@
     const idle = (Date.now() - last) / 1000;
     if (view === 'intro') return;   // the intro runs by itself and ends on the menu
     if (view === 'card' && idle > 15) return closeCard(true);   // never block the next visitor
-    if ((view === 'menu') && idle > cfg.idle) return reset();
+    if ((view === 'menu') && idle > cfg.idle) return (sess.get().n ? endSeq() : reset());
+    if (view === 'more' && idle > cfg.idle) return endSeq();
+    if (view === 'end' && idle > 180) { carded = false; return closeCard(false); }
     if (view === 'welcome' && idle > cfg.idle) go('attract');
   }, 1000);
 
+  // ---------------------------------------------------------------- queue toggle (no PIN): long-press the tiny dot bottom-left or key Q
+  const qpaint = () => { $('#qdot').classList.toggle('on', !!K.cfg().queue); };
+  const qtoggle = () => { K.setCfg({ queue: !K.cfg().queue }); cfg = K.cfg(); qpaint(); const q = $('#qdot'); q.classList.add('flash'); setTimeout(() => q.classList.remove('flash'), 900); };
+  let qT = 0; $('#qdot').addEventListener('pointerdown', () => { qT = setTimeout(qtoggle, 800); }); for (const e of ['pointerup', 'pointerleave', 'pointercancel']) $('#qdot').addEventListener(e, () => clearTimeout(qT));
+  addEventListener('keydown', (e) => { if ((e.key === 'q' || e.key === 'Q') && !/input|textarea|select/i.test(e.target.tagName) && view !== 'intro') qtoggle(); });
+  qpaint();
   // ---------------------------------------------------------------- staff: 5 taps top-left + PIN
   let taps = [];
   $('#corner').addEventListener('click', () => { const n = Date.now(); taps = taps.filter((x) => n - x < 3000).concat(n); if (taps.length >= 5) { taps = []; askPin(); } });
@@ -227,7 +265,9 @@
     send('stop'); cfg = K.cfg(); $('#staff').hidden = false;
     $('#sLang').innerHTML = (cfg.langs || ['en', 'ja', 'zh']).map((l) => `<option value="${l}"${l === cfg.lang ? ' selected' : ''}>${LANG_NAMES[l] || l}</option>`).join('');
     $('#sCapW').value = cfg.capWarm; $('#sStartW').value = cfg.startWarm; $('#sCapC').value = cfg.capCool; $('#sStartC').value = cfg.startCool; $('#sIdle').value = cfg.idle; $('#sSite').value = cfg.site; $('#sNews').value = cfg.newsUrl || '';
-    $('#sCur').value = cfg.currency || 'auto'; bandsField(); $('#sCut').value = cfg.cut || 'show'; $('#sHyg').checked = !!cfg.hygiene; $('#sPick').value = cfg.pickUrl || '';
+    $('#sCur').value = cfg.currency || 'auto'; bandsField(); $('#sCut').value = cfg.cut || 'show'; $('#sHyg').checked = !!cfg.hygiene; $('#sPick').value = cfg.pickUrl || ''; $('#sQueue').checked = !!cfg.queue; $('#sMaxD').value = cfg.maxDemos || 0; $('#sMaxM').value = cfg.maxMin || 0;
+    $('#sQMode').value = cfg.queueMode; $('#sAlt').value = cfg.altMin; $('#sPromo').value = cfg.promoSrc === 'idb' ? '' : cfg.promoSrc || ''; $('#sPromo').placeholder = cfg.promoSrc === 'idb' ? 'local file in use (pick another or type a URL)' : 'empty = kiosk/media/promo.mp4 · or a URL';
+    $('#sPromoSound').checked = !!cfg.promoSound; $('#sPromoNow').checked = !!cfg.promoNow; $('#sQrSize').value = cfg.qrSize; $('#sQrCorner').value = cfg.qrCorner;
     $('#sDemos').innerHTML = D.DEMOS.map((d, i) => `<label><input type="checkbox" value="${d.dir}"${!cfg.demos || cfg.demos.includes(d.dir) ? ' checked' : ''}> ${i + 1} · ${d.en}</label>`).join('');
     capLabels(); renderStats();
   }
@@ -238,7 +278,9 @@
     const cur = $('#sBands').dataset.cur, list = $('#sBands').value.split(',').map((x) => x.trim()).filter(Boolean);
     const bands = { ...(K.cfg().bands || {}) }; if (cur && list.length >= 2) bands[cur] = list.slice(0, 6);
     K.setCfg({ lang: $('#sLang').value, capWarm: +$('#sCapW').value, startWarm: Math.min(+$('#sStartW').value, +$('#sCapW').value), capCool: +$('#sCapC').value, startCool: Math.min(+$('#sStartC').value, +$('#sCapC').value), idle: Math.max(20, +$('#sIdle').value || 60),
-      site: $('#sSite').value.trim() || K.DEF.site, cut: $('#sCut').value, hygiene: $('#sHyg').checked, pickUrl: $('#sPick').value.trim(), newsUrl: $('#sNews').value.trim(), currency: $('#sCur').value, bands,
+      site: $('#sSite').value.trim() || K.DEF.site, cut: $('#sCut').value, hygiene: $('#sHyg').checked, pickUrl: $('#sPick').value.trim(), queue: $('#sQueue').checked, maxDemos: Math.max(0, +$('#sMaxD').value || 0), maxMin: Math.max(0, +$('#sMaxM').value || 0),
+      queueMode: $('#sQMode').value, altMin: Math.max(1, +$('#sAlt').value || 3), promoSrc: $('#sPromo').value.trim() || (K.cfg().promoSrc === 'idb' ? 'idb' : ''),
+      promoSound: $('#sPromoSound').checked, promoNow: $('#sPromoNow').checked, qrSize: $('#sQrSize').value, qrCorner: $('#sQrCorner').value, newsUrl: $('#sNews').value.trim(), currency: $('#sCur').value, bands,
       demos: demos.length === D.DEMOS.length ? null : demos, ...(/^\d{4,8}$/.test(pin) ? { pin } : {}) });
     cfg = K.cfg(); capLabels();
   }
@@ -276,6 +318,9 @@
       onDone: (r) => { const r5 = (x) => Math.max(30, Math.min(100, Math.round(x * 20) * 5));
         if (!r.skipped) K.setCfg({ ...(r.maxWarm != null ? { capWarm: r5(r.maxWarm) } : {}), ...(r.maxCool != null ? { capCool: r5(r.maxCool) } : {}) });
         cfg = K.cfg(); go('welcome'); openStaff(); } }); intro.start(); });
+  $('#sPromoFile').addEventListener('change', async (e) => { const f = e.target.files?.[0]; if (!f) return;
+    try { await K.idb.put('promo', f); K.setCfg({ promoSrc: 'idb' }); cfg = K.cfg(); K.post({ t: 'promo' }); $('#offlineOut').textContent = `Promo video saved on this machine: ${f.name} (${Math.round(f.size / 1048576)} MB)`; }
+    catch (err) { $('#offlineOut').textContent = `Could not store the video: ${err.message}`; } });
   $('#queueBtn').addEventListener('click', () => { window.open('queue.html', 'moheat-queue', 'popup,width=1280,height=720'); });
   $('#posterBtn').addEventListener('click', () => { window.open('poster.html', 'moheat-poster'); });
   $('#reportBtn').addEventListener('click', () => { window.open('report.html', 'moheat-report'); });
@@ -297,7 +342,7 @@
   addEventListener('pagehide', () => send('stop'));
   const route = () => {
     const h = location.hash.slice(1); history.replaceState(null, '', location.pathname + location.search);
-    if (h === 'card' && (K.visit.get() || {}).dir) { carded = false; go('card'); renderCard(true); paint(); last = Date.now(); }
+    if (h === 'card' && (K.visit.get() || {}).dir) { send('stop'); afterDemo(); }
     else if (h === 'staff') { reset(); askPin(); }
     else if (h === 'attract') reset(true);
     else reset();

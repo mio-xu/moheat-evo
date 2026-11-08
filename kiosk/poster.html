@@ -9,6 +9,7 @@
     @page { size: A4 portrait; margin: 12mm; }
     * { box-sizing: border-box; }
     body { margin: 0; font-family: Inter, "Noto Sans JP", "PingFang SC", "Hiragino Sans", system-ui, sans-serif; color: #17121f; background: #fff; }
+    .page::before { content: ""; display: block; width: 100%; height: 6mm; border-radius: 3mm; background: linear-gradient(90deg, #ff8a3d, #ffd479 50%, #9fd8ff); -webkit-print-color-adjust: exact; print-color-adjust: exact; }   /* style B: warm | cool */
     .page { width: 186mm; min-height: 270mm; margin: 0 auto; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 5mm; padding-top: 4mm; }
     .logo { font: 800 18mm/1 Inter, sans-serif; background: linear-gradient(90deg, #2a8de0, #f0652a); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .logo span { font-weight: 300; }
@@ -33,8 +34,8 @@
     <p class="foot">Nothing is stored or sent · 何も保存・送信しません · 不保存、不发送任何信息 — <span id="url"></span></p>
   </div>
   <script>window.MOHEAT_NAV_DATA_ONLY = true;</script>
-  <script src="../demos/shared/nav.js?v=e29bab1e"></script>
-  <script src="../demos/shared/kiosk.js?v=a088684b"></script>
+  <script src="../demos/shared/nav.js?v=ef7f790f"></script>
+  <script src="../demos/shared/kiosk.js?v=8f606105"></script>
   <script src="qrcode.min.js"></script>
   <script>
     (() => { const K = window.MoHeatKiosk, D = window.MoHeatDemos.DEMOS, u = K.pickUrl(D);

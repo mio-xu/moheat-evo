@@ -164,3 +164,14 @@ table.stat th { color: var(--dim); font-weight: 600; } table.stat td.n { text-al
 @keyframes picked { 0% { transform: scale(1); } 30% { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(255,213,138,.25); } 100% { transform: scale(1); } }
 #cardBack[hidden] { display: none; }
 @media (prefers-reduced-motion: reduce) { .q [aria-pressed=true], .q .stars button.sel { animation: none; } }
+
+/* end of the visit */
+.more-h, .end-h { margin: 0; text-align: center; font: 800 clamp(24px, 5vmin, 54px)/1.2 var(--ff); }
+.end-sub { margin: 0; text-align: center; color: var(--dim); font: 500 clamp(16px, 2.6vmin, 26px)/1.4 var(--ff); max-width: 30em; }
+.endpic { width: min(56vmin, 480px); } .endpic svg { width: 100%; display: block; } .endpic .lift { animation: kLift 1.8s ease-in-out infinite; }
+@keyframes kLift { 50% { transform: translateY(-8px); } }
+.row2 { display: flex; gap: 2vmin; flex-wrap: wrap; justify-content: center; }
+.qdot { position: fixed; left: 6px; bottom: 6px; width: 14px; height: 14px; border-radius: 50%; background: #4a4256; z-index: 50; touch-action: none; }
+.qdot.on { background: #c98a2e; } .qdot.flash { box-shadow: 0 0 0 10px rgba(255, 212, 121, .4); }
+.thanks-qr { width: clamp(150px, 22vmin, 240px); background: #fff; border-radius: 14px; padding: 8px; } .thanks-qr svg { display: block; width: 100%; height: auto; }
+@media (prefers-reduced-motion: reduce) { .endpic .lift { animation: none; } }

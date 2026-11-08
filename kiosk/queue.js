@@ -28,6 +28,38 @@
   setInterval(() => { if (Date.now() - st.seen > 600000 && st.view !== 'attract') { st.view = 'attract'; paint(); } }, 5000);
 
   const offered = () => K.offered(D.DEMOS), top3 = () => K.top3(D.DEMOS);
+
+  // ---------------------------------------------------------------- promo video mode (staff panel: queue screen mode / source / QR)
+  // source: cfg.promoSrc = '' → kiosk/media/promo.mp4 if it exists · a URL / path · 'idb' = a local file the staff picked (IndexedDB).
+  // No video → the live view (attract loop + thermal view). 'alt' switches promo ↔ live every altMin minutes.
+  const pv = $('#pv'); let promoUrl = null, promoOk = false, altT = 0, showPromo = false;
+  async function loadPromo() {
+    const c = K.cfg(); let url = null;
+    if (c.promoSrc === 'idb') { const b = await K.idb.get('promo'); if (b) url = URL.createObjectURL(b); }
+    else if (c.promoSrc) url = c.promoSrc;
+    else { try { const r = await fetch('media/promo.mp4', { method: 'HEAD', cache: 'no-store' }); if (r.ok) url = 'media/promo.mp4'; } catch {} }
+    if (url !== promoUrl) { promoUrl = url; promoOk = false; if (url) { pv.src = url; pv.load(); } else pv.removeAttribute('src'); }
+    pv.muted = !c.promoSound; applyMode();
+  }
+  pv.addEventListener('canplay', () => { promoOk = true; applyMode(); });
+  pv.addEventListener('error', () => { promoOk = false; applyMode(); });
+  function applyMode() {
+    const c = K.cfg(), want = c.queueMode === 'promo' || (c.queueMode === 'alt' && altPhase);
+    showPromo = want && !!promoUrl && promoOk;
+    $('#promo').hidden = !showPromo;
+    if (showPromo) pv.play().catch(() => { pv.muted = true; pv.play().catch(() => {}); }); else pv.pause();
+    const b = $('#qbadge'); b.dataset.c = c.qrCorner || 'br'; b.style.setProperty('--qs', { s: '18vh', m: '24vh', l: '32vh' }[c.qrSize] || '32vh');
+    const q = K.pickUrl(D.DEMOS), box = $('#pqr'); if (box.dataset.q !== q) { box.dataset.q = q; try { const qq = qrcode(0, 'M'); qq.addData(q); qq.make(); box.innerHTML = qq.createSvgTag({ cellSize: 6, margin: 2, scalable: true }); } catch {} }
+    $('#pqT').textContent = t('qr');
+    const d = st.dir && D.DEMOS.find((x) => x.dir === st.dir); const tag = $('#ptag');
+    tag.hidden = !(c.promoNow && d && st.view === 'demo'); if (!tag.hidden) tag.textContent = `${t('now')}: ${K.num(D.DEMOS, d)} · ${d[L()] || d.en}`;
+  }
+  let altPhase = true;
+  setInterval(() => { const c = K.cfg(); if (c.queueMode === 'alt') { altPhase = !altPhase; applyMode(); } }, Math.max(1, K.cfg().altMin || 3) * 60000);
+  addEventListener('storage', (e) => { if (e.key === 'moheat.kiosk.cfg') loadPromo(); });
+  bc?.addEventListener('message', (e) => { if (e.data?.t === 'promo') loadPromo(); else if (e.data?.t === 'state') applyMode(); });
+  setInterval(applyMode, 8000);   // the rotating language of the badge
+  loadPromo();
   const frame = document.createElement('img'); frame.className = 'frame';
   const mirror = $('#mirror'); mirror.prepend(frame);
   let slides = [], si = 0;
@@ -88,5 +120,5 @@
   addEventListener('dblclick', () => document.documentElement.requestFullscreen?.().catch?.(() => {}));
   addEventListener('storage', paint);   // staff changed the offered demos / settings in window 1
   paint(); draw();
-  window.MoHeatQueue = { st };
+  window.MoHeatQueue = { st, get promo() { return showPromo; }, loadPromo };
 })();
