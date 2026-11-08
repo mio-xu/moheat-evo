@@ -118,6 +118,13 @@
     } else e.click();
   }, 300);
 
+  // pure mode never opens the microphone, also for games that read the mic level themselves (blowing, calling): they get the
+  // same answer as a denied mic and fall back to taps / their own timers
+  if (navigator.mediaDevices?.getUserMedia && !EXPORT) {
+    const gum = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+    navigator.mediaDevices.getUserMedia = (c) => (Play.pure && c?.audio ? Promise.reject(new DOMException('pure listening mode', 'NotAllowedError')) : gum(c));
+  }
+
   // ---------------------------------------------------------------- pause
   const pause = (on) => {
     if (on === paused || EXPORT) return;
@@ -154,7 +161,7 @@
       ui.bar.dataset.n = cs.length; ui.bar.dataset.l = L();
       ui.bar.innerHTML = cs.map((c, k) => `<button type="button" data-i="${k}" title="${c.label}"><i>${'①②③④⑤⑥⑦⑧⑨⑩'[k] || k + 1}</i><span>${c.label}</span></button>`).join('');
     }
-    ui.bar.hidden = !playing() || cs.length < 2;
+    ui.bar.hidden = !playing() || cs.length < 2 || FILM();
     [...ui.bar.children].forEach((b, k) => { b.classList.toggle('done', k < cur); b.classList.toggle('now', k === cur);
       b.disabled = Play.mode === 'interactive' && k > reached; });
   }, 250);
@@ -244,7 +251,8 @@
     ui.pause = document.createElement('div'); ui.pause.className = 'sh-pause'; ui.pause.setAttribute('role', 'button'); ui.pause.tabIndex = -1; stage.appendChild(ui.pause);
     ui.pause.addEventListener('click', () => pause(false));
     const canvas = stage.querySelector('canvas, video');
-    canvas?.addEventListener('click', () => { if (playing() && !QS.has('auto')) pause(true); });
+    if (!FILM()) canvas?.addEventListener('click', () => { if (playing() && !QS.has('auto')) pause(true); });
+    film(stage);
     // the demo's progress list (#steps, written by its setStep()) is the chapter list; demos without one still get it
     if (!document.getElementById('steps')) { const ol = document.createElement('ol'); ol.id = 'steps'; ol.hidden = true; ol.className = 'sh-steps'; document.body.appendChild(ol); }
     // the chapter bar (bottom of the picture, only while the story plays)
@@ -266,10 +274,42 @@
     paint(); addEventListener('moheat:sublang', paint);
   };
 
+  // ---------------------------------------------------------------- films (Demo 1–9: media/data.js timeline + #timelineWrap + interact.js)
+  // the mode drives interact.js's own "join in" switch (hidden: the shell's two buttons replace it); the chapter bar is merged into
+  // the film's timeline as numbered marks (DEMO_DATA.anim.scenes); interactive mode cannot jump past the furthest point heard.
+  const FILM = () => !!(window.DEMO_DATA?.anim && document.getElementById('timelineWrap'));
+  const film = (stage) => {
+    if (!FILM()) return;
+    const A = DEMO_DATA.anim, wrap = document.getElementById('timelineWrap'), media = ['mix', 'film'].map((k) => document.getElementById(k)).find((e) => e instanceof HTMLMediaElement);   // the soundtrack is the clock
+    const st = document.createElement('style'); st.textContent = `.intro .ix-toggle, .stage .ix-chip { display: none !important; }
+      .sh-marks { position: absolute; inset: 0; pointer-events: none; z-index: 2; } .sh-marks i { position: absolute; top: 0; bottom: 0; width: 2px; background: #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.5); }
+      .sh-marks b { position: absolute; top: 1px; transform: translateX(3px); text-shadow: 0 0 3px #000; font: 700 11px/1 system-ui, sans-serif; color: #ffd679; pointer-events: auto; cursor: pointer; }`;
+    document.head.appendChild(st);
+    const sync = () => { const box = document.querySelector('.ix-toggle input'); if (box && box.checked === Play.pure) { box.checked = !Play.pure; box.dispatchEvent(new Event('change', { bubbles: true })); } };
+    addEventListener('moheat:playmode', sync); addEventListener('load', sync); real.st(sync, 800);
+    if (getComputedStyle(wrap).position === 'static') wrap.style.position = 'relative';
+    const marks = document.createElement('div'); marks.className = 'sh-marks';
+    marks.innerHTML = (A.scenes || []).map((c, k) => `<i style="left:${100 * c.t / A.duration}%"></i><b data-t="${c.t}" style="left:${100 * c.t / A.duration}%" title="${c.en}">${'①②③④⑤⑥⑦⑧⑨⑩'[k] || k + 1}</b>`).join('');
+    wrap.appendChild(marks);
+    let far = 0; real.st(function track() { if (media && !media.paused) far = Math.max(far, media.currentTime); real.st(track, 500); }, 500);
+    const jump = (t) => { const r = wrap.getBoundingClientRect(), x = r.left + r.width * (t + .05) / A.duration, y = r.top + r.height / 2;
+      marks.style.display = 'none'; const el = document.elementFromPoint(x, y) || wrap; marks.style.display = '';   // the timeline's own element under that point
+      el.dispatchEvent(new MouseEvent('click', { bubbles: true, clientX: x, clientY: y })); };
+    // films end on their own cover too (§7.3): the cover comes back with Play again when the soundtrack ends
+    media?.addEventListener('ended', () => { const i = document.getElementById('intro'), b = document.getElementById('startBtn');
+      if (i?.classList.contains('hidden')) { try { media.currentTime = 0; } catch {} if (b) b.textContent = '↺ もう一度 · Play again'; i.classList.remove('hidden'); window.MoHeatSub?.set?.(window.MoHeatSub.lang); } });
+    marks.addEventListener('click', (e) => { const b = e.target.closest('b'); if (b) { e.stopPropagation(); if (Play.mode === 'interactive' && +b.dataset.t > far + 1) return; jump(+b.dataset.t); } });
+    wrap.addEventListener('click', (e) => { if (Play.mode !== 'interactive' || !e.isTrusted) return; const r = wrap.getBoundingClientRect(), t = (e.clientX - r.left) / r.width * A.duration;
+      if (t > far + 1) { e.stopImmediatePropagation(); e.preventDefault(); } }, true);   // interactive: back, or up to where you have been
+    SH.chapters = (A.scenes || []).map((c) => ({ label: c.en, t: c.t })); SH.current = () => { const t = media?.currentTime || 0; let k = 0; (A.scenes || []).forEach((c, i) => { if (t >= c.t) k = i; }); return k; };
+    SH.seek = (i) => jump(A.scenes[i].t);
+  };
+
   // ---------------------------------------------------------------- keys / swipes
   const step = (dir) => { const a = document.querySelectorAll('.dnav .dn-step')[dir > 0 ? 1 : 0]; if (a && a.getAttribute('aria-disabled') !== 'true' && a.href && !a.href.endsWith('#')) location.href = a.href; };
   addEventListener('keydown', (e) => {
     if (EXPORT || e.metaKey || e.ctrlKey || e.altKey || /input|textarea|select/i.test(e.target.tagName) || e.target.isContentEditable) return;
+    if (e.code === 'Space' && FILM()) return;   // films: their own Space = play / pause (time comes from the media element)
     if (e.code === 'Space' && playing()) { e.preventDefault(); e.stopImmediatePropagation(); pause(!paused); return; }
     if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && !playing() && !e.repeat) { e.preventDefault(); step(e.key === 'ArrowRight' ? 1 : -1); }
   }, true);
