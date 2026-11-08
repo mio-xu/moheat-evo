@@ -12,7 +12,7 @@ Poses: those named on the command line, else every pose with "mouth": "lp" in pr
           "lips": [.1, .2, .34] (LivePortrait opening per level; lower = safer on anime faces), "minh": .26 (smallest height of the widest
           opening, fraction of the mouth width: lower for realistic / adult faces, Demo24 Gaku .16), "light": 0..1 (interior blended
           toward a shaded skin tone: pastel styles, Demo20 .4), "pad": 1.5 (block size around the moving part),
-          "centre": [x, y] + "radius": [rx, ry] (fixed block, source px), "src": other picture to warp (must be the same size),
+          "centre": [x, y] + "radius": [rx, ry] (fixed block, source px), "feather": px (block rim; small when the pose is drawn open), "src": other picture to warp (must be the same size),
           "warp": false (no LivePortrait: the opening grows on the DRAWN closed line, "lift" .12 / "drop" .22 of the mouth width — strong
           profiles, fingers over the mouth), "hide": [[[x, y], …]] (source px polygons in front of the mouth: the opening is clipped),
           "drawn_open": true (drawn with the teeth showing: the drawn grin is the starting shape), "fang": [[[x, y], …]] (source px polygons of a
@@ -50,7 +50,7 @@ def char_info(pose):
 def source_for(name, p):
     """the picture to warp: the pose's source, or (drawn open + quiet variant) the source with its closed-mouth patch pasted in"""
     path = os.path.join(SRC, p.get("lp", {}).get("src", p["src"]) + ".png"); kept = os.path.join(OUT, f"_{name}_closed.png")
-    if os.path.exists(kept): return kept     # built before: with "mouth": "lp" the quiet patch is no longer in layers.js
+    if os.path.exists(kept) and not p.get("lp", {}).get("src"): return kept     # built before: with "mouth": "lp" the quiet patch is no longer in layers.js
     v = char_info(name); q = next((x for x in (v or {}).get("patches", []) if x["kind"] == "mouth_quiet"), None)
     if not q: return path
     im = Image.open(path).convert("RGBA"); x0, y0 = v["char"]["box"][:2]; f = v["char"]["w"] / (v["char"]["box"][2] - v["char"]["box"][0])
@@ -100,10 +100,11 @@ def opening(Sn, S0, B, a, minh=None):
     return dict(c=c, ax=ax, nr=nr, u0=u0, top=top, bot=bot, line=line)
 
 
-def drawn_lens(B, a, wm, lift=.12, drop=.22, dark=45):
+def drawn_lens(B, a, wm, lift=.12, drop=.22, dark=45, search=None):
     """no opening in the render (side faces): build the lens on the DRAWN closed line itself; its ends are the drawn corners"""
     g = cv2.GaussianBlur(B.mean(2), (0, 0), .8); cy_, cx_ = (np.array(a.shape) - 1) / 2; yy, xx = np.mgrid[0:a.shape[0], 0:a.shape[1]]
-    inner = ((xx - cx_) / (cx_ * .7)) ** 2 + ((yy - cy_) / (cy_ * .62)) ** 2 < 1
+    sx, sy = search if search else (cx_ * .7, cy_ * .62)   # "search": [rx, ry] — where the drawn mouth line is looked for (a big block over a drawn-open mouth also holds blush hatching, Demo31 laugh)
+    inner = ((xx - cx_) / sx) ** 2 + ((yy - cy_) / sy) ** 2 < 1
     m = ((g < np.median(g[inner]) - dark) & inner).astype(np.uint8)   # "dark": lower for a faint / thin drawn line (Demo20 hands)
     n, lab, st, _ = cv2.connectedComponentsWithStats(cv2.dilate(m, np.ones((5, 5), np.uint8)), 8)
     if n < 2: return None
@@ -271,7 +272,7 @@ for name, p in poses.items():
         P = lambda i: pup.lmk[i]
         c1, c2, u_, d_ = P(48), P(66), P(90), P(102); wm = np.hypot(*(c1 - c2)); cx, cy = (c1 + c2) / 2
         cy += wm * .06; rx = wm * .5 * lp.get("pad", PAD) * .8 + 6; ry = wm * .38 * lp.get("pad", PAD) * .8 + 6
-    feather = max(5, round(min(rx, ry) * .28)); rx_, ry_ = rx + feather * 2, ry + feather * 2
+    feather = lp.get("feather") or max(5, round(min(rx, ry) * .28)); rx_, ry_ = rx + feather * 2, ry + feather * 2   # "feather": px — small on a pose DRAWN open (Demo31 laugh): a soft rim let the drawn open mouth show through as a ghost ring
     x0, y0, x1, y1 = max(0, int(cx - rx_)), max(0, int(cy - ry_)), min(W, int(cx + rx_) + 1), min(H, int(cy + ry_) + 1)
     w, h = x1 - x0, y1 - y0
     mask = Image.new("L", (w * 2, h * 2), 0)
@@ -282,7 +283,7 @@ for name, p in poses.items():
     if border > 4: a = (np.clip((a.astype(np.float32) - border) / (255 - border), 0, 1) * 255).astype(np.uint8)
     B = np.asarray(Image.open(path).convert("RGB"), np.float32)[y0:y1, x0:x1]; C0 = S0[y0:y1, x0:x1]
     L = opening(SS[-1][y0:y1, x0:x1], C0, B, a, lp.get("minh")) if lp.get("warp", True) else None; kind = "render"
-    if L is None: L = drawn_lens(B, a, wm if not lp.get("centre") else rx, lp.get("lift", .12), lp.get("drop", .22), lp.get("dark", 45)); kind = "drawn line"
+    if L is None: L = drawn_lens(B, a, wm if not lp.get("centre") else rx, lp.get("lift", .12), lp.get("drop", .22), lp.get("dark", 45), lp.get("search")); kind = "drawn line"
     if L is not None and lp.get("hide"):   # occluders (source px polygons) → the opening never paints over them
         hm = np.zeros(a.shape, np.uint8)
         for poly in lp["hide"]: cv2.fillPoly(hm, [np.round(np.array(poly, np.float32) - [x0, y0]).astype(np.int32)], 255)
