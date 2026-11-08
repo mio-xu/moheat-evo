@@ -517,6 +517,29 @@ main.layout
 
 **2. 封面 `.intro .cover-copy`（从上到下）**：`p.kicker`（MoHeat Evo · Binaural ASMR × Thermal Haptics；信长系列另加 `p.series`）→ `h1`（日文标题，带假名，有冲击力）→ `p.en`（英文标题 — 一句副标题）→ `p.cast` 里 2–3 个 `.chip`（角色 / 冷热来源，每个「日文 English · cool/warm」）→ `.intro-actions`（`#startBtn.btn.primary.big`「▶ はじめる · Start」——**不写时长**（用户 2026-11-08）；直播间可写「▶ 配信を見る · Watch」+ `#lrBtn`「🎧 Left / Right check」）→（subs.js 自动插入语言选择「English · 日本語 · 简体中文」，当前语言高亮，用户 2026-11-08：进入时就能选）→ `p.hint`（耳机 · 麦克风 · 连接设备）→ `p.draft#credits`（配音 / 美术署名）。其他语言的版本全部写在 `l10n.js` 的 `text.ja / en / zh`，标题过长会自动缩小到放得下。
 
+**2b. 封面构图标准**（用户 2026-11-08：「封面的风格，比如人物占画面比例，也要统一」）：由 `demos/shared/cover.js` 负责（`main.js` 前加 `<script src="../../shared/shell.js?v=1"></script>` + `<script src="../../shared/cover.js?v=1"></script>`），检查 `python3 tools/web/check_cover.py <demo>`（check_demo G7 **cover**；`--all --sheet x.jpg` 出全站对照表）。数字 = 16:9 画面的百分比：
+
+| 项目 | 标准 | 检查范围 |
+|---|---|---|
+| 版式 | 所有系列一样：**文字在左，人物在右** | — |
+| 单人眼睛连线中点 | x 72 %、y 30 % | x 64–80、y 25–35 |
+| 单人脸高（发际线 → 下巴 ≈ SCRFD 脸框） | 画面高 27 % | 22–32 %（猫等小脸可 `at: { face: .24 }`） |
+| 两人：眼睛中点 / 每张脸 | (72 %, 30 %) / 21 %；`<img>` 立绘两人眼睛在 x 61 % 和 83 % | x 62–82、y 25–36、脸 16–26 %，两张脸都在右半边 |
+| 场景封面（无主角：列车、洞窟、第一人称） | `data-cover="scene"` 或 `fit(…, { scene: true })` | 只查文字栏 / 压暗 |
+| 文字栏 | 左栏 4–54cqw（中心 x ≈ 29 %），上下居中；h1 5.6cqw，过长自动缩 | 中心 x 28–40、y 42–58；h1 ≥ 3.2cqw；不压任何脸 |
+| 压暗 | 主题色从左到右 84 % → 72 %（32 %）→ 32 %（50 %）→ 0（62 %） | 文字栏下平均亮度 ≤ 95 |
+| 手机竖屏（播放器 ≤ 420 px） | 文字占满宽、从 12cqw 开始（在 🌐 ⛶ 下面）：标题 · ▶ Start + 两个模式按钮一行 · 语言；🎧 左右检查隐藏 | 标题在画面内且不在 🌐 ⛶ 下；按钮 ≥ 44 px |
+
+做法：canvas 封面把原画法包进 `MoHeatCover.fit(ctx, { eye: [x, y], face: h }, () => { 原画法 }, { tone, covers, free, duo, fade, at })`（eye / face = 原画法里脸的位置，`check_cover.py` 的 faces 直接给出；整幅静帧不会缩到露边，左边露出的部分渐隐成主题色；抠图人物用 `free`，下边会露出用 `fade`）；`<img class="hero">` 写 `data-eye=".47 .21" data-face=".165"`（+ 两人 `data-slot`）。原图脸太大（缩到 32 % 会露边）就重出一张更宽的封面图，不改标准。
+
+**2c. 统一外壳 `demos/shared/shell.js`**（用户 2026-11-08 统一 UI，全部在共用代码里，Demo 不写 UI 代码）：
+- **纯聆听（默认）/ 互动**：封面 Start 旁两个按钮（结束回到封面时同一处可切换）。纯聆听不请求麦克风（voice.js 读 `MoHeatPlay.pure`），选项 / 动作 / 长按在 2.2 s 自然停顿后按默认（第一个按钮）自己完成。
+- **章节进度条**：章节 = 该 Demo 的 `setStep()` 写进 `#steps` 的列表（没有 `#steps` 的页面 shell 自动补一个隐藏的），或 `MoHeatShell.chapters / current / seek` 钩子。跳转：往后 = ×16 静音快进（跳过的选项取默认）、往前 = 从头再快进；互动模式只能回到已到过的章节。
+- **暂停**：空格 / 点画面 → Demo 的时钟（`performance.now`、计时器、动画帧）、Web Audio、`<audio>/<video>` 全停，设备收到 stop、暂停期间不再发冷热。
+- **← / → 和左右滑动**只在封面（开始前 / 结束后）切换 Demo，播放中无效；不自动跳下一个。
+- 舞台左下 🌡 冷热开关；强度、模式、字幕（关 / S / M / L）、减少动态（也跟随 `prefers-reduced-motion`）存在 localStorage（try / catch）；加载遮罩；统一的错误提示（设备断开、麦克风被拒、文件加载失败，各写下一步怎么做）；所有控件可用键盘、焦点可见。文字 en / ja / zh（韩语加一列）。
+- 检查：`node tools/web/check_shell.js <demo>`（check_demo G6 **shell**）：纯聆听零输入走到自己的封面、没有请求麦克风、播放中 ← / → 不离开、封面上 → 会切换、空格冻结时钟、章节跳转前后都成功。
+
 **3. 舞台上的元素统一写法**（`subs.js` 才能切换语言、`voice.js` 才能用语音回答）：
 - 字幕：`#subs > .line > .ja + .en`（`.who` 写说话人）；对话气泡：`#bubble > b + span`。
 - 选项：`.choices > button.ch > b(日文) + span(English)`；动作：`.act > button.act-btn`（`<i>图标</i><b>日文</b><span>English</span>`，长按加 `.hold`）；直播的弹幕 / 礼物：`button.chip-c`；说一句：`#micGate button`。
