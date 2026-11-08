@@ -63,7 +63,8 @@
      69,
      47
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "stall": {
    "src": "tsubaki_stall",
@@ -91,7 +92,8 @@
      76,
      52
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "amazake": {
    "src": "tsubaki_amazake",
@@ -119,7 +121,8 @@
      94,
      76
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "fire": {
    "src": "tsubaki_fire",
@@ -155,7 +158,8 @@
      83,
      52
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "close": {
    "src": "tsubaki_close_hair",
@@ -183,7 +187,8 @@
      130,
      90
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "pray": {
    "src": "tsubaki_pray",
@@ -232,7 +237,8 @@
      89,
      57
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "stole": {
    "src": "tsubaki_stole2",
@@ -260,7 +266,8 @@
      128,
      84
     ]
-   ]
+   ],
+   "mouth": "lp"
   }
  },
  "views": {
