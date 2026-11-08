@@ -17,7 +17,7 @@ window.MOHEAT_LAYERS = {
     "h": 1440,
     "x": 0.56,
     "y": 1.02,
-    "height": 0.98,
+    "height": 1.05,
     "box": [
      757,
      0,
@@ -37,12 +37,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/stand_eyes.webp?v=973ceae4",
+     "src": "art/stand_eyes.webp?v=cdb8ebf8",
      "rect": [
-      364,
-      368,
-      398,
-      226
+      383,
+      388,
+      361,
+      185
      ],
      "kind": "eyes"
     }
@@ -59,14 +59,14 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_popsicle.webp?v=a06d8b51",
-    "w": 1343,
+    "src": "art/char_popsicle.webp?v=c9ed89a4",
+    "w": 1335,
     "h": 1440,
     "x": 0.56,
     "y": 1.04,
     "height": 1.05,
     "box": [
-     678,
+     687,
      0,
      2022,
      1440
@@ -76,7 +76,7 @@ window.MOHEAT_LAYERS = {
     {
      "src": "art/popsicle_mouth.webp?v=fc24c690",
      "rect": [
-      574,
+      566,
       555,
       204,
       154
@@ -84,12 +84,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/popsicle_eyes.webp?v=8809827b",
+     "src": "art/popsicle_eyes.webp?v=4d6a9d61",
      "rect": [
-      444,
-      366,
-      398,
-      219
+      454,
+      387,
+      361,
+      179
      ],
      "kind": "eyes"
     }
@@ -106,8 +106,8 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_fan.webp?v=4ffe8b6c",
-    "w": 1227,
+    "src": "art/char_fan.webp?v=463e08e0",
+    "w": 1228,
     "h": 1381,
     "x": 0.42,
     "y": 1.02,
@@ -121,22 +121,22 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/fan_mouth.webp?v=6e837195",
+     "src": "art/fan_mouth.webp?v=078d9218",
      "rect": [
-      672,
-      454,
-      204,
-      154
+      702,
+      482,
+      144,
+      100
      ],
      "kind": "mouth"
     },
     {
-     "src": "art/fan_eyes.webp?v=910840cd",
+     "src": "art/fan_eyes.webp?v=ea2a4723",
      "rect": [
-      589,
-      326,
-      309,
-      160
+      603,
+      341,
+      282,
+      131
      ],
      "kind": "eyes"
     }
@@ -179,12 +179,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/sparkler_eyes.webp?v=e3a759ce",
+     "src": "art/sparkler_eyes.webp?v=5d420e08",
      "rect": [
-      771,
-      371,
-      362,
-      125
+      783,
+      385,
+      337,
+      98
      ],
      "kind": "eyes"
     }
@@ -216,22 +216,22 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/sit_mouth.webp?v=9f252d05",
+     "src": "art/sit_mouth.webp?v=49158d51",
      "rect": [
-      412,
-      454,
-      204,
-      154
+      441,
+      482,
+      144,
+      100
      ],
      "kind": "mouth"
     },
     {
-     "src": "art/sit_eyes.webp?v=dbc96765",
+     "src": "art/sit_eyes.webp?v=43308ca0",
      "rect": [
-      328,
-      326,
-      314,
-      166
+      342,
+      341,
+      286,
+      136
      ],
      "kind": "eyes"
     }
@@ -272,6 +272,16 @@ window.MOHEAT_LAYERS = {
       98
      ],
      "kind": "mouth"
+    },
+    {
+     "src": "art/whisper_mouth_quiet.webp?v=0b4eec06",
+     "rect": [
+      841,
+      515,
+      105,
+      74
+     ],
+     "kind": "mouth_quiet"
     }
    ]
   },
@@ -300,7 +310,28 @@ window.MOHEAT_LAYERS = {
      1440
     ]
    },
-   "patches": []
+   "patches": [
+    {
+     "src": "art/shoulder_mouth.webp?v=81bdf82d",
+     "rect": [
+      799,
+      541,
+      149,
+      102
+     ],
+     "kind": "mouth"
+    },
+    {
+     "src": "art/shoulder_eyes.webp?v=0349e0e1",
+     "rect": [
+      673,
+      375,
+      345,
+      161
+     ],
+     "kind": "eyes"
+    }
+   ]
   },
   "nagisa_laugh": {
    "view": "laugh",
@@ -313,7 +344,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_laugh.webp?v=c6961827",
+    "src": "art/char_laugh.webp?v=781b2fc8",
     "w": 1081,
     "h": 1431,
     "x": 0.6,
@@ -328,7 +359,7 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/laugh_mouth.webp?v=143f7d32",
+     "src": "art/laugh_mouth.webp?v=c5a2ff4b",
      "rect": [
       480,
       490,
@@ -336,6 +367,16 @@ window.MOHEAT_LAYERS = {
       246
      ],
      "kind": "mouth"
+    },
+    {
+     "src": "art/laugh_mouth_quiet.webp?v=1fa501eb",
+     "rect": [
+      485,
+      517,
+      226,
+      174
+     ],
+     "kind": "mouth_quiet"
     }
    ]
   }

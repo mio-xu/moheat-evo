@@ -162,8 +162,9 @@ for p in cfg["patches"]:
         # eyes: a firmer edge — with the soft .3 feather the open eye (iris, upper lashes) sat in the 50–90 % alpha zone and showed
         # through the closed lids as a grey ghost (Demo17 / 25 / 18 / 20, 2026-11-08); the region (+ pad) must hold the open AND the
         # closed eye, the feather only blends the skin around them
-        feather = max(4, round(min(rx, ry) * .12)) if kind == "eyes" else max(5, round(min(rx, ry) * .3))
-        sh = feather * 1.2 if kind == "eyes" else feather * .6
+        firm = kind in ("eyes", "mouth_quiet")   # mouth_quiet: the closed mouth must hide the drawn open one completely, same as eyes
+        feather = max(4, round(min(rx, ry) * .12)) if firm else max(5, round(min(rx, ry) * .3))
+        sh = feather * 1.2 if firm else feather * .6
         m = ImageChops.lighter(m, ellipse(cx, cy, rx - sh, ry - sh, p.get("tilt", 0), feather))
     m = ImageChops.multiply(m, ImageChops.multiply(f.getchannel("A"), base.getchannel("A")))
     patch = f.copy(); patch.putalpha(m)

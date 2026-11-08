@@ -37,9 +37,9 @@
    ],
    "keep": [
     [
-     687,
-     1180,
-     1010,
+     712,
+     1320,
+     870,
      1440
     ]
    ]
@@ -49,12 +49,12 @@
    "talk": "nagisa_sit_talk",
    "blink": "nagisa_sit_blink",
    "centre_mouth": [
-    1105,
-    590
+    1104,
+    591
    ],
    "radius_mouth": [
-    60,
-    40
+    44,
+    26
    ]
   },
   "fan": {
@@ -62,17 +62,26 @@
    "talk": "nagisa_fan_talk",
    "blink": "nagisa_fan_blink",
    "centre_mouth": [
-    1105,
-    590
+    1104,
+    591
    ],
    "radius_mouth": [
-    60,
-    40
+    44,
+    26
    ]
   },
   "laugh": {
    "src": "nagisa_laugh",
-   "talk": "nagisa_laugh_talk"
+   "talk": "nagisa_laugh_talk",
+   "quiet": "nagisa_laugh_quiet",
+   "centre_mouth_quiet": [
+    1617,
+    613
+   ],
+   "radius_mouth_quiet": [
+    80,
+    60
+   ]
   },
   "sparkler": {
    "src": "nagisa_sparkler_flat_ext",
@@ -97,10 +106,43 @@
    "radius_mouth": [
     60,
     40
+   ],
+   "quiet": "nagisa_whisper2_flat_ext_quiet",
+   "centre_mouth_quiet": [
+    1635,
+    865
+   ],
+   "radius_mouth_quiet": [
+    58,
+    40
    ]
   },
   "shoulder": {
-   "src": "nagisa_shoulder2_flat_ext"
+   "src": "nagisa_shoulder2_flat_ext",
+   "talk": "nagisa_shoulder2_flat_ext_talk",
+   "blink": "nagisa_shoulder2_flat_ext_blink",
+   "centre_mouth": [
+    1374,
+    928
+   ],
+   "radius_mouth": [
+    72,
+    42
+   ],
+   "regions_eyes": [
+    [
+     1192,
+     758,
+     95,
+     55
+    ],
+    [
+     1468,
+     668,
+     95,
+     55
+    ]
+   ]
   }
  },
  "views": {
@@ -111,7 +153,7 @@
    "fire": null,
    "x": 0.56,
    "y": 1.02,
-   "height": 0.98
+   "height": 1.05
   },
   "popsicle": {
    "still": "nagisa_popsicle",

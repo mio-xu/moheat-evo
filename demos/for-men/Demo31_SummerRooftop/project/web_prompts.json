@@ -130,5 +130,25 @@
  "fw_kamuro_silver": {
   "ref": null,
   "prompt": "A single large Japanese summer firework (hanabi) bursting in the night sky, seen from far away, perfectly centred, the whole burst inside the frame with a black margin. Anime film background-art style (like a high-quality anime movie), luminous glowing sparks with fine bright trails, rich saturated colours, a soft glow around the burst. PURE BLACK background (#000000) everywhere outside the burst: no sky colour, no stars, no smoke, no clouds, no ground, no buildings, no people, no text.\n\nA kamuro shell: a huge dense crown of silver-white glittering trails, very bright, crackling sparkles."
+ },
+ "nagisa_shoulder2_win_talk": {
+  "ref": "nagisa_shoulder2_win",
+  "mask": "1173,930,72,48",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her lips: slightly parted as if softly speaking, a small natural opening (a hint of the upper teeth at most), same lip colour, skin tone and lighting. Do not move, zoom or crop the picture."
+ },
+ "nagisa_shoulder2_win_blink": {
+  "ref": "nagisa_shoulder2_win",
+  "mask": "995,752,100,64;1270,670,100,64",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY BOTH of her eyes: eyelids fully closed in a natural soft blink, same skin tone, lashes and lighting, no iris visible; her bangs stay exactly as they are. Do not move, zoom or crop the picture."
+ },
+ "nagisa_whisper2_win_quiet": {
+  "ref": "nagisa_whisper2_win",
+  "mask": "1435,865,62,46",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her lips: gently CLOSED (a calm closed mouth, lips just touching, no teeth, no opening), same lip shape width, lip colour, skin tone and lighting. Do not move, zoom or crop the picture."
+ },
+ "nagisa_laugh_quiet": {
+  "ref": "nagisa_laugh",
+  "mask": "1605,632,92,74",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: CLOSED in a small embarrassed pout (lips pressed together, no teeth, no opening, the corners slightly down), same lip colour, skin tone, blush and lighting; jaw and chin line exactly as they are. Do not move, zoom or crop the picture."
  }
 }

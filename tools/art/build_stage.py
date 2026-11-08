@@ -173,9 +173,11 @@ for name, p in cfg["poses"].items():
     cut.save(out(os.path.join(ART, f"char_{name}.webp")), quality=88, method=6)
     poses[name] = {"src": f"art/char_{name}.webp", "w": cut.width, "h": cut.height, "box": box, "f": f, "cut": cut, "patches": []}
     pcfg["size"] = list(size)
-    for kind, key in (("mouth", "talk"), ("eyes", "blink")):
+    # "quiet": a CLOSED-mouth variant of a pose drawn mid-word / mid-laugh → patch kind mouth_quiet (shared/layers.js shows it while
+    # nobody talks; keys near_mouth_quiet / centre_mouth_quiet + radius_mouth_quiet / regions_mouth_quiet like the others)
+    for kind, key in (("mouth", "talk"), ("eyes", "blink"), ("mouth_quiet", "quiet")):
         if p.get(key) and os.path.exists(src(p[key])):
-            e = {"name": f"{name}_{kind}", "base": p["src"], "frame": p[key], "kind": kind, "_size": list(size)}
+            e = {"name": f"{name}_{kind}", "base": p["src"], "frame": p[key], "kind": kind, "_size": list(size), "_pose": name}
             if p.get(f"near_{kind}"): e["near"] = p[f"near_{kind}"]
             if p.get(f"centre_{kind}"): e["centre"], e["radius"] = p[f"centre_{kind}"], p[f"radius_{kind}"]   # fixed ellipse, no search
             if p.get(f"regions_{kind}"): e["regions"] = p[f"regions_{kind}"]   # fixed ellipses (both eyes), e.g. the masks of a masked edit
@@ -192,13 +194,13 @@ if pcfg["patches"]:
     # face_patches works in ONE picture size per run: poses of another size (extended by tools/art/extend_pose.py, wider) get their
     # own run — squeezing them into the last pose's size put Demo24's blanket / left mouth + eye patches in the wrong place
     groups, meta = {}, {}
-    for e in pcfg["patches"]: groups.setdefault(tuple(e["_size"]), []).append({k: v for k, v in e.items() if k != "_size"})
+    for e in pcfg["patches"]: groups.setdefault(tuple(e["_size"]), []).append({k: v for k, v in e.items() if k not in ("_size", "_pose")})
     for sz, es in groups.items():
         json.dump({**pcfg, "size": list(sz), "patches": es}, open(os.path.join(tmp, "project", "patches.json"), "w"))
         subprocess.run([sys.executable, os.path.join(HERE, "face_patches.py"), tmp] + (["--preview"] if a.preview else []), check=True)
         meta.update(json.load(open(os.path.join(pcfg["dst"], "patches.json"))))
     for e in pcfg["patches"]:
-        pn = e["name"]; pose = poses[pn.rsplit("_", 1)[0]]; x, y, w, h = meta[pn]; bx, by = pose["box"][:2]; f = pose["f"]
+        pn = e["name"]; pose = poses[e["_pose"]]; x, y, w, h = meta[pn]; bx, by = pose["box"][:2]; f = pose["f"]
         im = Image.open(os.path.join(pcfg["dst"], pn + ".webp"))
         im = im.resize((max(1, round(w * f)), max(1, round(h * f))), Image.LANCZOS).convert("RGBA")
         # only where the character layer is solid: a patch at the face outline (a profile) must not carry the plain background
@@ -206,7 +208,7 @@ if pcfg["patches"]:
         rx, ry = round((x - bx) * f), round((y - by) * f)
         ca = pose["cut"].getchannel("A").crop((rx, ry, rx + im.width, ry + im.height))
         im.putalpha(Image.fromarray(np.minimum(np.asarray(im.getchannel("A")), np.asarray(ca)).astype(np.uint8)))
-        if cfg["poses"][pn.rsplit("_", 1)[0]].get("matte") == "green":   # same despill as the character layer
+        if cfg["poses"][e["_pose"]].get("matte") == "green":   # same despill as the character layer (magenta: clipped by alpha only)
             a = np.asarray(im).copy(); a[..., 1] = np.minimum(a[..., 1], np.maximum(a[..., 0], a[..., 2]).astype(int) + 6).astype(np.uint8); im = Image.fromarray(a)
         im.save(out(os.path.join(ART, pn + ".webp")), quality=90, method=6)
         pose["patches"].append({"src": f"art/{pn}.webp", "rect": [round((x - bx) * f), round((y - by) * f), im.width, im.height], "kind": e["kind"],

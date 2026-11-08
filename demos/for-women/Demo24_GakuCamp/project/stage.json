@@ -81,17 +81,9 @@
    ]
   },
   "log": {
-   "src": "gaku_log",
+   "src": "gaku_log_clean",
    "talk": "gaku_log_talk",
    "blink": "gaku_log_blink",
-   "erase": [
-    [
-     2240,
-     1240,
-     2560,
-     1440
-    ]
-   ],
    "near_mouth": [
     1175,
     545
@@ -108,6 +100,20 @@
    "near_mouth": [
     1133,
     848
+   ],
+   "regions_eyes": [
+    [
+     876,
+     572,
+     104,
+     54
+    ],
+    [
+     1222,
+     488,
+     82,
+     52
+    ]
    ]
   },
   "whisper": {

@@ -110,7 +110,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_dryer.webp?v=beaabfb7",
+    "src": "art/char_dryer.webp?v=d86fe8d8",
     "w": 1700,
     "h": 954,
     "x": 0.6071,
@@ -243,7 +243,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_window.webp?v=2364aa56",
+    "src": "art/char_window.webp?v=65d9ad91",
     "w": 1700,
     "h": 1150,
     "x": 0.5158,
