@@ -500,11 +500,10 @@
   $('startBtn').addEventListener('click', start);
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
-  function drawCover() {   // the arrive still pushed right (she stands in the middle of it), title on the arcade on the left
-    ctx.fillStyle = '#140c26'; ctx.fillRect(0, 0, W, H);
-    const im = IMG.arrive; if (!im) return;
-    ctx.drawImage(im, 640, 0, W, H);   // far enough right that her waving hand clears the title
-    const g = ctx.createLinearGradient(560, 0, 1180, 0); g.addColorStop(0, 'rgba(20,12,38,1)'); g.addColorStop(1, 'rgba(20,12,38,0)'); ctx.fillStyle = g; ctx.fillRect(560, 0, 620, H);
+  function drawCover() {   // cover standard (shared/cover.js): the still with the face on the standard spot, the title in the shaded left column
+    const im = IMG.arrive, C = window.MoHeatCover; if (!im) { ctx.fillStyle = '#140c26'; ctx.fillRect(0, 0, W, H); return; }
+    const pic = () => ctx.drawImage(im, 640, 0, W, H);
+    if (C) C.fit(ctx, { eye: [.859, .271], face: .233 }, pic, { tone: '#140c26', covers: [.333, 0, 1.333, 1] }); else pic();   // eye / face: where the face is in this drawing (tools/web/check_cover.py)
   }
   window.ARCADE = { get S() { return S; }, get crane() { return CR; }, thermal: () => thermal(.05), both: () => both, log: cmdLog, done: false };
   setStep(0);

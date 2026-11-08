@@ -365,11 +365,10 @@
   $('startBtn').addEventListener('click', start);
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
-  function drawCover() {   // the ending still pushed right (she is on the right of it), the title on the warm shop on the left
-    ctx.fillStyle = '#2a1a16'; ctx.fillRect(0, 0, W, H);
-    const im = IMG.ending || IMG.welcome; if (!im) return;
-    ctx.drawImage(im, 560, 0, W, H);
-    const g = ctx.createLinearGradient(480, 0, 1100, 0); g.addColorStop(0, 'rgba(42,26,22,1)'); g.addColorStop(1, 'rgba(42,26,22,0)'); ctx.fillStyle = g; ctx.fillRect(480, 0, 620, H);
+  function drawCover() {   // cover standard (shared/cover.js): the still with the face on the standard spot, the title in the shaded left column
+    const im = IMG.ending || IMG.welcome, C = window.MoHeatCover; if (!im) { ctx.fillStyle = '#2a1a16'; ctx.fillRect(0, 0, W, H); return; }
+    const pic = () => ctx.drawImage(im, 560, 0, W, H);
+    if (C) C.fit(ctx, { eye: [.86, .305], face: .273 }, pic, { tone: '#2a1a16', covers: [.292, 0, 1.292, 1] }); else pic();   // eye / face: where the face is in this drawing (tools/web/check_cover.py)
   }
   window.COCOA = { get S() { return S; }, thermal: () => thermal(.05), both: () => both, log: cmdLog, done: false };
   setStep(0);

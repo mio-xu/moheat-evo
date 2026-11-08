@@ -14,6 +14,7 @@
 //   The helper scales / moves the drawing (never smaller than the frame it filled, never leaving a gap at the top, bottom or right),
 //   feathers a left edge that comes into view, and records MoHeatCover.placed (tools/web/check_cover.py reads it).
 // No canvas / no lead character (film demos): <div class="intro" data-cover="scene" data-cover-tone="#rrggbb"> on the cover.
+// Layered demos: MoHeatCover.layered(ctx, { bg, char, x, y, height }, { eye, face }, { tone, at, redraw }) — plate + pose cut-out.
 // HTML covers (<img class="hero"> in .intro): give the image where its face is and cover.js places it on the standard spot too —
 //   <img class="hero" data-eye=".47 .21" data-face=".165" [data-slot="0|1" for two people: 0 = the left one] [data-target-face=".24"]>
 //   (data-eye = eye-line centre, data-face = hairline → chin height, both as fractions of the image itself).
@@ -56,17 +57,32 @@
       return { s, tx, ty };
     },
   };
+  // layered demos (media/layers.js + project/stage.json): the cover is composed from the empty plate + the pose cut-out, so the
+  // character can be scaled to the standard without new art. view = { bg, char, x, y, height } (the stage.json view: char anchored at
+  // its bottom centre); from / opt as fit() (from = where the face is when the pose stands at the view's own place).
+  const imgs = {};
+  const img = (src, redraw) => { let i = imgs[src]; if (!i) { i = imgs[src] = new Image(); i.onload = () => redraw && redraw(); i.src = src; } return i.complete && i.naturalWidth ? i : null; };
+  C.layered = (ctx, view, from, o = {}) => {
+    const W = ctx.canvas.width, H = ctx.canvas.height, bg = img(view.bg, o.redraw), ch = img(view.char, o.redraw);
+    if (!bg || !ch) return false;
+    if (o.tone) C.setTone(o.tone);
+    const r = W / H, ir = bg.width / bg.height, bw = ir > r ? H * ir : W, bh = ir > r ? H : W / ir;
+    ctx.drawImage(bg, (W - bw) / 2, (H - bh) / 2, bw, bh);
+    const hh = view.height * H, ww = hh * ch.width / ch.height;
+    C.fit(ctx, from, () => ctx.drawImage(ch, view.x * W - ww / 2, view.y * H - hh, ww, hh), { ...o, free: true });
+    return true;
+  };
   const css = `
   .intro.cv-std { justify-content: flex-start !important; align-items: center !important; }
   .intro.cv-std > .cover-shade { position: absolute; inset: 0; z-index: 4; pointer-events: none;
     background: linear-gradient(90deg, rgb(var(--cover-tone, 8 10 20) / .84) 0%, rgb(var(--cover-tone, 8 10 20) / .72) 32%, rgb(var(--cover-tone, 8 10 20) / .32) 50%, rgb(var(--cover-tone, 8 10 20) / 0) 62%); }
-  .intro.cv-std .cover-copy, .intro.cv-std:has(.hero.a) .cover-copy, body.cover-only .intro.cv-std .cover-copy {
+  html body .intro.cv-std .cover-copy, html body.cover-only .intro.cv-std .cover-copy {   /* html body: beats a demo's own body[data-ch] .intro .cover-copy */
     position: relative; z-index: 5; margin: 0 0 0 4cqw !important; width: 50cqw !important; max-width: 50cqw !important; box-sizing: border-box; }
   @container (max-width: 620px) {
-    .intro.cv-std .cover-copy, .intro.cv-std:has(.hero.a) .cover-copy { margin: 0 0 0 2cqw !important; width: 64cqw !important; max-width: 64cqw !important; } }
+    html body .intro.cv-std .cover-copy { margin: 0 0 0 2cqw !important; width: 64cqw !important; max-width: 64cqw !important; } }
   @container (max-width: 420px) {   /* phone portrait (≈ 374 × 210 player): the copy takes the whole width and starts below the 🌐 ⛶ corner: title · Start + mode · languages */
-    .intro.cv-std { justify-content: center !important; align-items: flex-start !important; }
-    .intro.cv-std .cover-copy, .intro.cv-std:has(.hero.a) .cover-copy { margin: 12cqw auto 0 !important; width: 94cqw !important; max-width: 94cqw !important; gap: 1.6cqw !important; }
+    html body .intro.cv-std { justify-content: center !important; align-items: flex-start !important; padding-top: 12cqw !important; box-sizing: border-box; }
+    html body .intro.cv-std .cover-copy { margin: 0 auto !important; width: 94cqw !important; max-width: 94cqw !important; gap: 1.6cqw !important; }
     .intro.cv-std #lrBtn { display: none !important; }   /* one row: ▶ Start + the two modes (shared/shell.js); the L / R check is on bigger screens */
     .intro.cv-std > .cover-shade { background: linear-gradient(90deg, rgb(var(--cover-tone, 8 10 20) / .7), rgb(var(--cover-tone, 8 10 20) / .45) 70%, rgb(var(--cover-tone, 8 10 20) / .3)); } }`;
   const st = document.createElement('style'); st.id = 'moheat-cover'; st.textContent = css; document.head.appendChild(st);

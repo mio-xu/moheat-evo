@@ -438,10 +438,12 @@
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
 
-  function drawCover() {   // his stream frame, darkened on the right where the title sits
-    const im = IMG.live; ctx.fillStyle = '#121c20'; ctx.fillRect(0, 0, W, H); if (im) ctx.drawImage(im, -150, -45, W * 1.085, H * 1.085);   // shifted left: the title stays clear of his face
-    const g = ctx.createLinearGradient(0, 0, W, 0); g.addColorStop(0, 'rgba(8,14,16,0)'); g.addColorStop(.4, 'rgba(8,14,16,.08)'); g.addColorStop(.58, 'rgba(8,14,16,.62)'); g.addColorStop(1, 'rgba(8,14,16,.82)');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  function drawCover() {   // cover standard (shared/cover.js): the still with the face on the standard spot, the title in the shaded left column
+    const C0 = window.MoHeatCover;   // layered: the empty plate + the pose cut-out, the pose scaled to the cover standard (no new art)
+    if (C0?.layered && C0.layered(ctx, { bg: 'media/art/bg_camp.webp', char: 'media/art/char_sit.webp', x: .43, y: 1.04, height: 1.0 }, { eye: [.424, .359], face: .326 }, { at: { y: .35, face: .311 }, redraw: drawCover, tone: '#121c20' })) return;
+    const im = IMG.live, C = window.MoHeatCover; if (!im) { ctx.fillStyle = '#121c20'; ctx.fillRect(0, 0, W, H); return; }
+    const pic = () => ctx.drawImage(im, 0, 0, W, H);
+    if (C) C.fit(ctx, { eye: [.424, .359], face: .326 }, pic, { tone: '#121c20', covers: [0, 0, 1, 1] }); else pic();   // eye / face: where the face is in this drawing (tools/web/check_cover.py)
   }
 
   let last = performance.now(), hidden = false;
