@@ -236,20 +236,11 @@
     // intensity cap on the page's slider (the shell already restored the visitor's level)
     const inten = document.getElementById('intensity');
     // the caps live in the two scales (scaleLine below); the page slider is a master the visitor may lower
-    autoConnect(); guardDevice();
+    guardDevice();   // the port itself: device.js reconnects silently (MoHeatDevice.state, 'moheat:device') — no Connect click here (it raced → 'error')
     try { navigator.wakeLock?.request('screen').catch(() => {}); } catch {}
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ui); else ui();
   addEventListener('load', () => { document.querySelector('.dnav')?.remove(); });
-
-  // device: the port was authorised once by staff (kiosk staff panel) → open it on every page without a click
-  function autoConnect(tries = 0) {
-    const btn = document.getElementById('connectBtn'), sel = document.getElementById('portSelect');
-    if (!btn || !('serial' in navigator)) return;
-    if (window.MoHeatDevice?.current?.isConnected()) return;
-    if (sel && !sel.disabled && sel.value !== '' && /connect/i.test(btn.textContent) && !/disconnect/i.test(btn.textContent)) { btn.click(); return; }
-    if (tries < 12) setTimeout(() => autoConnect(tries + 1), 500);
-  }
 
   // ---------------------------------------------------------------- started / finished, thermal moments
   const v0 = visit.get(); if (!v0 || v0.dir !== dir) visit.set({ dir, t0: Date.now(), started: false, finished: false, mode: null, moments: [] });
@@ -359,13 +350,14 @@
   }
   let noteEl = null; function note(t) { if (!noteEl) { noteEl = document.createElement('div'); noteEl.className = 'mk-note'; document.body.appendChild(noteEl); } noteEl.textContent = t; noteEl.hidden = !t; }
   const alertShow = (on) => { if (!alertBox) { alertBox = document.createElement('div'); alertBox.className = 'mk-alert'; alertBox.setAttribute('role', 'alert'); document.body.appendChild(alertBox); }
-    alertBox.innerHTML = `<b>🔌 ${tx(TX.lost)}</b><span>${tx(TX.lostS)}</span>`; alertBox.hidden = !on; post({ t: 'alert', on }); };
-  navigator.serial?.addEventListener('disconnect', () => alertShow(true));
-  navigator.serial?.addEventListener('connect', () => { setTimeout(() => { autoConnect(); setTimeout(() => { if (window.MoHeatDevice?.current?.isConnected()) alertShow(false); }, 1500); }, 400); });
+    alertBox.innerHTML = `<b>🔌 ${tx(TX.lost)}</b><span>${tx(TX.lostS)}</span>`; alertBox.hidden = !on; };
+  // ONE source of truth: device.js's state (connected / reconnecting / lost / off / error) → the alert here + the queue screen
+  const devState = () => ({ t: 'device', ...(window.MoHeatDevice?.state || { state: 'off' }) });
+  addEventListener('moheat:device', (e) => { alertShow(e.detail?.state === 'lost'); post({ t: 'device', ...e.detail }); });
   addEventListener('click', (e) => { if (alertBox && !alertBox.hidden && e.target.closest('.mk-alert')) alertBox.hidden = true; });
 
   // ---------------------------------------------------------------- the queue screen (window 2): state, subtitles, a mirror of the picture
-  setInterval(() => post({ t: 'state', view: 'demo', dir }), 2000); post({ t: 'state', view: 'demo', dir });
+  setInterval(() => { post({ t: 'state', view: 'demo', dir, device: window.MoHeatDevice?.state || null }); post(devState()); }, 2000); post({ t: 'state', view: 'demo', dir });
   let lastSub = '';
   setInterval(() => {
     const s = document.querySelector('#subs .one, #subs .line, #bubble')?.textContent?.trim() || ''; if (s !== lastSub) { lastSub = s; post({ t: 'sub', text: s }); }
