@@ -8,10 +8,14 @@ Reads <demo>/project/stage.json:
     "bgs":   { "camp": { "src": "bg_camp", "fire": [0.75, 0.72] } },               fire in the plate (fraction); omit → found automatically
     "poses": { "sit": { "src": "gaku_ref", "talk": "gaku_ref_talk", "blink": "gaku_ref_blink", "near_mouth": [x, y], "near_eyes": [x, y],
                         "centre_mouth": [x, y], "radius_mouth": [rx, ry] (skip the search when it is pulled away by a hand / prop), "regions_eyes": [[cx, cy, rx, ry], …] (fixed ellipses),
-                        "erase": [[x0, y0, x1, y1]], "keep": [[x0, y0, x1, y1]] } },             "mouth": "lp" = the mouth is a LivePortrait set (tools/art/lp_mouths.py, run first; talk / quiet are then not used); erase = source boxes cleared (e.g. a fire drawn in the pose); keep = source boxes never keyed (grey steam, smoke); "matte": "ai" = outline from the isnet-anime model (~/ml/layers venv) for light / pastel figures ; "matte": "green" / "magenta" = chroma key for poses on #00B140 / #FF00FF (green-haired figures)
+                        "erase": [[x0, y0, x1, y1]], "keep": [[x0, y0, x1, y1]] } },             "mouth": "lp" = the mouth is a LivePortrait set (tools/art/lp_mouths.py, run first; talk / quiet are then not used); erase = source boxes cleared (e.g. a fire drawn in the pose); keep = source boxes never keyed (grey steam, smoke); "matte": "ai" = outline from the isnet-anime model (~/ml/layers venv) for light / pastel figures ; "matte": "green" / "magenta" = chroma key for poses on #00B140 / #FF00FF (green-haired figures; + "no_green": true for pink / mauve figures on magenta: no green rim)
     "views": { "live": { "still": "gaku_live", "pose": "sit", "bg": "camp", "fire": [0.9, 0.74], "x": 0.42, "y": 1.06, "height": 1.1 } } }
   several characters in one view: "who": "M" + "more": [{ "pose": "hinata_base", "x": 0.78, "y": 1, "height": 0.86, "who": "H" }, …]
   (drawn back → front; hooks.who = where the page keeps the current speaker's key; "small": true = 960×540 flat still)
+  "shadow": {"color": [r, g, b], "strength": .5, "ao": .3, "dx": 0, "len": .05} on the config (default for every view), a view, or a
+  figure (false = none): a soft CONTACT shadow (the figure's own silhouette squashed flat at its feet) + a wider ambient-occlusion pool,
+  multiplied into a per-view copy of the plate (bg_<bg>__<view>.webp), coloured by the plate's light (warm by day, blue at night), dx =
+  sun-direction offset (frame fraction). Only figures whose bottom is inside the frame (feet / paws visible) get one.
   view: still = the file the page draws (stem, or stem.ext; media/art/<still> is written as the flat fallback), alias = other view names
   that draw the same still (e.g. a mirrored side), fire = where the page expects the
   fire (or null), x / y = the character's bottom centre (frame fraction), height = the character's height as a fraction of the frame
@@ -41,7 +45,7 @@ def out(path):   # never write THROUGH a symlink (a placeholder link to the orig
 MAXDIM = 1700   # character textures are uploaded every frame: keep them modest
 
 
-def chroma_green(path, erase=(), keep=(), magenta=False):
+def chroma_green(path, erase=(), keep=(), magenta=False, no_green=False):
     """"matte": "green" — a pose on chroma green (#00B140; guide §6: light figures with dark lineart, Demo40). Alpha from how much greener
     than red / blue a pixel is (so the gaps between hair strands key out too), green spill removed, edges unmixed.
     "matte": "magenta" — the same on chroma magenta (#FF00FF) for green-haired figures (Demo37 Mint): key = min(r, b) − g."""
@@ -58,6 +62,9 @@ def chroma_green(path, erase=(), keep=(), magenta=False):
         lim = fg[..., 1] + 6 + np.abs(fg[..., 0] - fg[..., 2]); m_ = np.minimum(fg[..., 0], fg[..., 2]) > lim
         fg[..., 0] = np.where(m_, np.minimum(fg[..., 0], lim + np.maximum(0, fg[..., 0] - fg[..., 2])), fg[..., 0])
         fg[..., 2] = np.where(m_, np.minimum(fg[..., 2], lim + np.maximum(0, fg[..., 2] - fg[..., 0])), fg[..., 2])
+        if no_green:   # "matte": "magenta" + "no_green": true — a pinkish / mauve figure (Demo49 Naomi's fur) reads as part-screen, so the
+            # un-mixing above overshoots into GREEN on every soft edge: on the semi-transparent rim, green may not exceed the mean of red and blue
+            rim = alpha < .98; fg[..., 1] = np.where(rim, np.minimum(fg[..., 1], (fg[..., 0] + fg[..., 2]) / 2), fg[..., 1])
     else: fg[..., 1] = np.minimum(fg[..., 1], np.maximum(fg[..., 0], fg[..., 2]) + 6)   # despill: no pixel greener than its red / blue
     alpha = np.asarray(Image.fromarray((alpha * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(.5)), np.float32) / 255
     rgba = np.dstack([fg, alpha * 255]).astype(np.uint8)
@@ -206,7 +213,7 @@ for name, b in cfg["bgs"].items():
 # face patches: run face_patches.py on the full-size sources through a temporary config
 poses, pcfg = {}, {"src": SRC, "dst": os.path.join(D, "assets", "patches"), "size": None, "patches": []}
 for name, p in cfg["poses"].items():
-    cut, box, size = (chroma_green(src(p["src"]), p.get("erase", ()), p.get("keep", ()), p.get("matte") == "magenta") if p.get("matte") in ("green", "magenta") else
+    cut, box, size = (chroma_green(src(p["src"]), p.get("erase", ()), p.get("keep", ()), p.get("matte") == "magenta", p.get("no_green", False)) if p.get("matte") in ("green", "magenta") else
                       cutout(src(p["src"]), p.get("erase", ()), p.get("keep", ()), p.get("matte") == "ai"))
     f = min(1, MAXDIM / max(cut.size)); cut = cut.resize((round(cut.width * f), round(cut.height * f)), Image.LANCZOS)
     cut.save(out(os.path.join(ART, f"char_{name}.webp")), quality=88, method=6)
@@ -275,6 +282,47 @@ def figure(p, v, flat):
     return {"char": {"src": p["src"], "w": p["w"], "h": p["h"], "x": v["x"], "y": v["y"], "height": v["height"], "box": [int(b) for b in p["box"]],   # box = source px (tools/art/extend_pose.py)
                      **({"who": v["who"]} if v.get("who") else {})},
             "patches": [{k: pt[k] for k in ("src", "rect", "kind", "level") if k in pt} for pt in p["patches"]]}
+def shadow_plate(vname, v, b, z, ox, oy):
+    """contact shadow + AO pool under every figure of the view whose feet are in the frame → a per-view plate (None = no shadow)"""
+    figs = [({k: v[k] for k in ("x", "y", "height") if k in v}, v["pose"], v.get("shadow", cfg.get("shadow")))] + \
+           [(m, m["pose"], m.get("shadow", v.get("shadow", cfg.get("shadow")))) for m in v.get("more", [])]
+    dark = np.zeros((FH, FW), np.float32); col = None; any_ = False
+    for fv, pn, sh in figs:
+        if not sh or "height" not in fv: continue
+        p = poses[pn]; hpx = fv["height"] * FH; wpx = hpx * p["w"] / p["h"]; x0 = fv["x"] * FW - wpx / 2; fy = fv["y"] * FH
+        a = np.asarray(p["cut"].getchannel("A").resize((max(1, round(wpx)), max(1, round(hpx))), Image.BILINEAR), np.float32) / 255
+        if fv["y"] > .995:   # feet below the frame (knees-up / bust): no contact line, only the ambient-occlusion pool on the ground at the frame bottom
+            if not sh.get("cut_ao", True): continue
+            r = a[min(a.shape[0] - 1, max(0, int(FH - (fy - hpx))) - 1)] if fy - hpx < FH else np.zeros(1); ext = np.where(r > .3)[0]
+            if not len(ext): continue
+            cw = ext[-1] - ext[0] + 1; cx = x0 + ext[0] + cw / 2 + sh.get("dx", 0) * FW; yy, xx = np.mgrid[0:FH, 0:FW]
+            ao = np.exp(-(((xx - cx) / (cw * .8 + 8)) ** 2 + ((yy - FH) / (FH * .07)) ** 2) * 1.5)
+            dark = np.maximum(dark, np.clip(ao * sh.get("ao", .3), 0, .85)); col = sh.get("color", [40, 30, 25]); any_ = True; continue
+        rows = np.where(a.max(1) > .5)[0]; bot = rows[-1] if len(rows) else a.shape[0] - 1
+        foot = a[max(0, bot - int(hpx * .12)):bot + 1].max(0)                       # what touches the ground: the lowest 12 % of the silhouette
+        L = max(4, int(hpx * sh.get("len", .05))); dx = sh.get("dx", 0) * FW
+        con = Image.fromarray((np.tile(foot, (L, 1)) * 255).astype(np.uint8))        # squashed silhouette, darkest at the contact line
+        prof = np.interp(np.arange(L), [0, L * .72, L - 1], [.15, 1, .35])            # darkest AT the contact line, fading behind (up) and a little in front
+        con = np.asarray(con, np.float32) / 255 * prof[:, None]
+        gy = fy - hpx + bot                                                         # the ground line = the lowest solid row of the figure
+        sx, sy = int(round(x0 + dx)), int(round(gy - L * .72))
+        tmp = np.zeros_like(dark); ys, xs = slice(max(0, sy), min(FH, sy + L)), slice(max(0, sx), min(FW, sx + con.shape[1]))
+        tmp[ys, xs] = con[ys.start - sy:ys.stop - sy, xs.start - sx:xs.stop - sx]
+        tmp = np.asarray(Image.fromarray((tmp * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(max(2, hpx * .016))), np.float32) / 255
+        ext = np.where(foot > .3)[0]; cw = (ext[-1] - ext[0] + 1) if len(ext) else wpx * .5; cx = x0 + (ext[0] + cw / 2 if len(ext) else wpx / 2) + dx
+        yy, xx = np.mgrid[0:FH, 0:FW]
+        ao = np.exp(-(((xx - cx) / (cw * .75 + 8)) ** 2 + ((yy - gy + hpx * .01) / (hpx * .06 + 6)) ** 2) * 1.5)
+        dark = np.maximum(dark, np.clip(tmp * sh.get("strength", .5) + ao * sh.get("ao", .3), 0, .85)); col = sh.get("color", [40, 30, 25]); any_ = True
+    if not any_: return None
+    Wp, Hp = b["im"].size   # frame → plate: plate px (u, v) shows frame px ((u / Wp * z + ox) * FW, (v / Hp * z + oy) * FH)
+    dp = Image.fromarray((dark * 255).astype(np.uint8)).transform((Wp, Hp), Image.AFFINE, (z * FW / Wp, 0, ox * FW, 0, z * FH / Hp, oy * FH), Image.BILINEAR)
+    d = np.asarray(dp, np.float32)[..., None] / 255; im = np.asarray(b["im"], np.float32)
+    im = im * (1 - d) + im * (np.array(col, np.float32) / 255) * d                 # multiply toward the shadow colour
+    out_im = Image.fromarray(im.clip(0, 255).astype(np.uint8)); key = f'{v["bg"]}__{vname}'
+    out_im.save(out(os.path.join(ART, f"bg_{key}.webp")), quality=84, method=6)
+    return {"src": f"art/bg_{key}.webp", "fire": b["fire"], "im": out_im}
+
+
 for vname, v in cfg["views"].items():
     b, p = bgs[v["bg"]], poses[v["pose"]]
     f, bf = v.get("fire"), b["fire"]; z = v.get("zoom", 1)
@@ -282,6 +330,7 @@ for vname, v in cfg["views"].items():
         for k in (0, 1): z = max(z, f[k] / bf[k], (1 - f[k]) / (1 - bf[k]))
         ox, oy = f[0] - bf[0] * z, f[1] - bf[1] * z
     else: ox = oy = (1 - z) / 2
+    b = shadow_plate(vname, v, b, z, ox, oy) or b
     flat = b["im"].resize((round(FW * z), round(FH * z)), Image.LANCZOS).crop((round(-ox * FW), round(-oy * FH), round(-ox * FW) + FW, round(-oy * FH) + FH)).convert("RGBA")
     main = figure(p, {k: v[k] for k in ("x", "y", "height", "who") if k in v}, flat)
     more = [figure(poses[m["pose"]], m, flat) for m in v.get("more", [])]
