@@ -330,6 +330,8 @@ for f in tracked:
 docs = ' '.join(read(p) for p in glob.glob(os.path.join(D, 'README.md')) + glob.glob(os.path.join(D, 'project', '*.md')))
 if not re.search(r'credits|\$\s?\d|USD|美元', docs): hy.append('no budget line (credits / $) in README.md or project/*.md')
 if not os.path.exists(os.path.join(D, 'project', 'CHECKLIST.md')): hy.append('no project/CHECKLIST.md (run with --checklist)')
+if os.path.exists(LJ) and not os.path.exists(os.path.join(D, 'project', 'script.md')):   # G1: script + shot list + thermal table before art
+    hy.append('no project/script.md (G1: world rule card, shot list, thermal table — template tools/qa/SCRIPT_TEMPLATE.md)')
 if os.path.exists(os.path.join(D, 'project', 'openai_log.json')):   # per-demo OpenAI cap $10, ⚠ at 80 % (tools/report/balances.py)
     bq = subprocess.run([sys.executable, os.path.join(REPO, 'tools', 'report', 'balances.py'), '--demo', D], capture_output=True, text=True)
     if bq.returncode: hy.append(bq.stdout.strip())
