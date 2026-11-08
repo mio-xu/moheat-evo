@@ -774,6 +774,8 @@ main.layout
 - **导出脚本把 QA 图和嘴块也转进了 media/art**（Demo04 v2：`export.py` 遍历整个 `assets/**`，`lp_mouths/` 和 `patch_check/` 的图被当成画面素材转成 webp）→ 导出脚本只用白名单文件夹；新增 `assets/` 子目录时检查 `media/art` 里没有多出来的文件。〔check_demo: media（体积）· CHECKLIST〕
 - **自己画角色的页面（不经 `shared/layers.js`）测不了口型 / 眨眼**（Demo04 v2：车厢里的列车长由 main.js 自己画）→ 页面提供同样的测试接口 `window.MoHeatLayers = { state(), motion(), render(stem), debug }`（字段同 `shared/layers.js`），`check_mouth.js` / `check_motion.js` 照常能跑。〔check_demo: mouth〕
 **G6 测试**
+- **一个门禁 7 分钟 / Demo = bug**（UI v2 发布前，2026-11-09）：check_demo 的 cache 行把全是数字的内容哈希（`series.css?v=53962729`）当成版本号，对每个引用做全历史 `git log -S` → 每个 5 分钟以上；同时整机 load average 200（多个会话的浏览器）→ `check_demo.py` / `bump.py`：6 位以上 = 内容哈希（只比内容），数字版本号的 `-S` 只搜本页历史；跑全站门禁前先看 `uptime`，负载高就先请统筹让其他会话的批量任务暂停。〔G5 cache〕
+- **用户否决了"重新设计版式"**（2026-11-09：信息条 / 侧列方案 → 「原来的版式是好的」）：界面修正只在原版式里做最小改动（控制条放画面下方、播放器那一栏居中、侧栏加宽）；要改版式先给用户看方案。check_ui 加了版式回归（桌面有侧栏、页面不滚动、播放器上下空带平衡）。〔G6 ui〕
 - **UI v2 重构（ui3，2026-11-08/09）四条**：
   ① 共用对象上的新 API 和 Demo 钩子同名（`Object.assign(MoHeatShell, { chapters })` 覆盖了 Demo 写的 `MoHeatShell.chapters` 数组，`chapters()` 返回函数 → 新界面第一次 paint 就抛错、状态永远停在 loading）→ 共用对象上：钩子（Demo 写的）和 API（共用代码给的）**不同名**（API 用 `chapterList()`）；新组件的 paint 包 try/catch，一次出错不能让整个界面停住。
   ② 纯聆听"按了没反应就永远不再按"：shell 在 Demo 开始监听之前按了 Demo12 的 `#answerBtn`（`onclick` 还没挂上），记成已按 → 响铃永远停着；另外 shell 只认一张固定的按钮类名表 → 统一规则：任何可见的"门"（标准回答按钮 + `[data-auto]` + `MoHeatShell.AUTO`）都会被按，按过 5 秒还在就再按；`check_shell.js` 75 秒内字幕 / 冷热 / 章节 / 按钮都没变 = **stalled FAIL**（附截图）。

@@ -7,6 +7,16 @@
 
 ---
 
+## 2026-11-09 · 统一界面 UI v2：一个封面格式 + 一条常驻控制条 + ⚙，全站一致（ui3，统筹分派）
+- **做了什么**：`demos/shared/ui2.js` + `ui2.css`（组件只认 adapter）+ `shell.js` 里的 live adapter（开关 `MoHeatShell.UI_V2`）；封面 = 一张成品图：每个 Demo 只有 `cover.json` + `media/cover/art.webp`，`python3 tools/web/covers.py` 用唯一模板 `tools/web/cover_tpl.html` 烤出 `media/cover/<lang>.w1920 / w1280 / c1200.webp`（+ `--publish` 菜单缩略图 / `media/cover.jpg`，`--check` 过期检查，内容戳 `media/cover/stamp.json`）；控制条 ▶/⏸ · 章节 · 模式 · 🔊 · 🌡 · ⚙ · ⛶ 一直显示，**在画面正下方**（用户 2026-11-09：叠在画面上时盖住了 Demo10 / 13 自己的按钮）；页面版式保持原来的（播放器 + 右侧栏，≥ 1300 px 侧栏 380 px、雷达更大；播放器那一栏上下居中；手机竖排不变；用户否决了信息条 / 侧列新版式 → USER_PREFERENCES）；⚙ = 语言 / 字幕 / 大小 / 减少动态 / 隐藏控制条 / 设备 / 左右检查 / 温冷检查 / 头部追踪（Beta）/ 信息面板 / 制作名单；状态 loading → cover → playing ⇄ paused → ended。章节：所有 Demo ≥ 2（对谈 = 问候 / 对谈 / 告别；Demo28 4 段、Demo29 5 段；Demo03 / 04 用 segments，名字在 cover.json）。Demo05–09 各自的封面（现有图层按 2b 合成，`tools/art/cover_duo.py`，0 美元）；Demo22 前景发束切边（gpt-image-2 局部重画 ≈ $0.3）、Demo43 三人同框重排（cover_plate.py ≈ $0.3）、Demo24 眼线微调。
+- **删掉的旧封面**：`demos/shared/cover.js`、`tools/web/cover_shots.js`、`cover_extract.js`（一次性迁移，已完成）；33 个 index.html 的旧封面文字 / hero 图 / cover.js 标签（222 行）；20 个 main.js 的 `drawCover()` 绘制体（留空函数，调用处不变）；series.css 的旧封面版式和 `l10n-ready` 遮挡；`thumbs.py` 改为调用 `covers.py --publish`。#startBtn / #lrBtn / #cleared / #credits / 对谈选项等仍在 HTML 里（Demo 代码在用，看不见，由新界面驱动）。
+- **检查（FAIL 门禁）**：`node tools/web/check_ui.js`（每个 Demo 5 状态 × 2 尺寸和参照 Demo24 逐元素比较；旧界面可见 / 少于 2 章 = FAIL；对比图）；`check_demo.py` G7 **ui** 行（--quick / CI：cover.json、成品封面不过期、shell.js、Demo 不写 .u2 规则）；`check_shell.js`（`--ui2`、75 s 无变化 = stalled FAIL）；`check_cover.py`（有 cover.json 时直接量 art.webp）。
+- **其他（同一发布）**：字幕 S / M / L 对所有家族生效（zoom）；设备状态唯一来源 `device.js`（`MoHeatDevice.state` + `moheat:device`，换 Demo 无提示重连，`tools/web/check_device.js` 模拟串口检查）；提示条移到页面顶部 4.5 s；Demo10 💡 Hint 等 Demo 自己的 HUD 按钮保留（只藏 🔊）；结束封面显示通关时间（#cleared）；根目录 favicon.ico；`?ui=2` 的 localStorage 键在开关打开后自动删除；菜单「★ 推荐」单独一个标签（不混进分类）。
+- **预览 / 样品**：`preview/ui2/specimen.html`、`preview/ui2/covers.html`。
+- **门禁**：check_ui（33 × 1440×900 / 1280×720 / 1920×1080 / 390×844）0 FAIL；check_shell --ui2 33 个走完；check_device 通过；check_demo --quick 33 + --full 8（Demo01 / 10 / 11 / 12 / 13 / 23 / 24 / 43），其余 25 个 --full 在后台补跑（结果看 scratchpad/ui3/cd/）。check_demo 慢的原因之一（纯数字的内容哈希被当成版本号、全历史 git log -S）已修；当时整机 load 200。
+- **提交**：ab7ce4f · 26ab8ef · f551344 · 57a9467 · fe418f2 · 08f3226 · acbb9243（发布：开关打开 + 删除旧封面源）· f1081d7a + 496e4a72（菜单「★ 推荐」单独标签）。
+- **下一步**：结局图鉴（`MoHeatShell.endings / openEndings` 钩子已留，Demo 还没填）；头部追踪；韩语（T 表加一列 + covers.py LANGS）；Demo04 封面升级（现在是场景封面，cover.json `scene: true`）。
+
 ## 2026-11-09（凌晨）· 英 / 中配音样片 + 三语配音上线计划（agent `dub`）
 - **用户**：ElevenLabs 额度够，先出英 / 中配音样片对比；听完决定**全部 Demo 做 ja / en / zh 三语配音**，配音语言是**独立设置**（默认「跟字幕相同」，可单独选，例如中文字幕 + 日语配音；回答判定跟字幕）。
 - **工具**：`tools/eleven/dub.py`（把日语台词的语气标签按句子位置搬进 en / zh 字幕文本；角色名保持日式读法（zh：渚→Nagisa、日向→Hinata、薄荷大夫→Mint大夫、小雪→Koyuki、小焰→Homura）；按 voice/模型/seed/语言/文本缓存；输出 `media/voice/<lang>/<id>.m4a` + `index.json`（文本、时长））；`tools/eleven/tts.py` 的 `speak()` 加 `lang=`。各 Demo 声音脚本加 `--lang en|zh [--count]`：Demo43 `scripts/voice.py`、Demo22 `scripts/voice.py`、Demo01 `tools/build_audio.py --lang ja|en|zh`（逐句干声，电影本身没重混）。模板 = Demo22 的 voice.py。
