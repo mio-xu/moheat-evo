@@ -259,7 +259,7 @@ window.MOHEAT_LAYERS = {
     "src": "art/char_hug.webp?v=c48199be",
     "w": 1700,
     "h": 1012,
-    "x": 0.5541,
+    "x": 0.648,
     "y": 1.02,
     "height": 1.02,
     "box": [

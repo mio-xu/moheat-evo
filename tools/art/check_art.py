@@ -126,8 +126,9 @@ def check(D, verbose=False):
         if src not in done_fringe:   # flat head / straight cut INSIDE the picture (hair or shoulder cut along a ruler line: 平头)
             try:
                 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import check_cut_body
-                for side, f in check_cut_body.straight_cuts(a[10:-10, 10:-10, 3]):   # border rows = the picture edge (check_cut_body)
-                    if all(cut_outside(a[..., 3], side, w['char']) for w in views.values() if (w.get('char') or {}).get('src', '').split('?')[0] == src):
+                hard = np.where(a[..., 3] > 128, 255, 0)   # binarised: a softened / feathered ruler edge must not slip past (Demo12 hug after matting)
+                for side, f in check_cut_body.straight_cuts(hard[10:-10, 10:-10]):   # border rows = the picture edge (check_cut_body)
+                    if all(cut_outside(hard, side, w['char']) for w in views.values() if (w.get('char') or {}).get('src', '').split('?')[0] == src):
                         continue   # the ruler line lies ≥ 1.5 % outside the frame in every view that shows this layer (Demo12 call, moved right)
                     out.append(('FAIL' if side == 'top' else 'WARN', 'edge-margin', f'{src}: straight {side} cut {f:.0%} long inside the picture (flat head / ruler-cut body) → tools/art/complete_cutout.py or extend_pose.py'))
             except Exception: pass
