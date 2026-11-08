@@ -171,6 +171,7 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 无歌词字幕（没有授权的歌词文本），只有段落标题（日/英）和片尾音乐署名。
 
 ### Demo 4 · `demos/all-ages/Demo04_SeasonsExpress/` ✅ 完成 —《四季暴走列車 / The Runaway Seasons Express》
+- **v2（2026-11-09，agent d04，TASKS #49）**：变形魔法车厢 + 季节精灵小列车长「ハルフユ」（ElevenLabs halfy r1_a，三语跟随字幕）+ DUAL 冷热 + 3 个互动 + UI v2 封面；说明见本文件夹 `README.md` 顶部和 `project/script.md`。下面是 v1 的记录（布景、声音、冷热管线仍然有效）。
 - **任务书要点**（用户提供的完整制作指令）：
   - 150 s，1920×1080，30 fps，48 kHz 双耳声。第一人称坐在魔法列车车厢里朝前看，**无角色、无台词、无旁白**。
   - 画风必须和 Demo 1–3 一致：可爱日系 2D、粉彩、赛璐璐。**不要浮世绘或金箔风**（那是 Demo 9 的风格）。

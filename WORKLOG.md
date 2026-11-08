@@ -7,6 +7,12 @@
 
 ---
 
+## 2026-11-09 · Demo04「季節が、暴走する。」v2 全面升级（agent `d04`，统筹分派，TASKS #49）
+- **做了什么**：在临时文件夹 `Demo04_SeasonsExpress_v2` 做完后用 `merge_remake.py` 并回原文件夹（提交 8f99675e，旧版备份 `~/Desktop/MoHeat Evo 备份/all-ages/Demo04_SeasonsExpress_20261109-0523/`）。魔法 × 赛博变形车厢（`scripts/prepare_art.py`：`car_closed` / `car_open` → `car_base` + `car_runes_ice` / `car_runes_fire` + 窗框发光层；木墙板按铰链翻开、冬冰蓝 + 冰晶护盾、夏橙 + 通风口热风、隧道车厢左右分开、失控时符文霓虹、樱花站合上），全息报站屏、车顶弹簧玩具、壁灯、茶、呼气。季节精灵小列车长「ハルフユ」（`docs/characters/halfy.md`，设计 A；`project/stage.json` 3 个姿势 + 闭眼差分 + 嘴套 `warp: false`），全息播报 + 本人出现 5 次（捧茶、暴雨点灯、停电时贴右耳耳语、「下一站春天」、到站告别）。ElevenLabs `halfy` r1_a（3 个试听在 `project/voice_audition/`，可换：`pick.py halfy r1_b` → `scripts/voice.py --langs ja,en,zh`），三语配音跟随字幕语言（`main.js` 的 `voiceLang()`，日语兜底；MP4 用日语）。DUAL 冷热（`scripts/thermal.py` 无仲裁 + 符文开合门控 + 壁灯 / 茶蒸汽设计包络；冬季先左后右慢速示范；100–108 s 每秒冷热切换），三个互动（长按捧茶、选冰窗 / 火窗、喊「春！」）。UI v2 封面（页面渲染 `scripts/render_mp4.py --cover` → `covers.py`）；MP4 重新导出（`video/final/`，本地）。
+- **状态**：merge_remake 门禁 `check_demo --full` 0 FAIL（31 PASS）；check_sync ALL PASS；check_motion OK；drive_story（互动、英文）OK；check_mobile 7/7。菜单标题（nav.js）仍是「季節が暴走する魔法の列車」——改成「季節が、暴走する。」要等 UI 负责人统一 bump nav.js 时一起改（不然所有页面的 ?v 都会过期）。
+- **花费**：OpenAI 约 $2.3（`project/openai_log.json`），ElevenLabs 约 2,050 字符，Seedance 0。
+- **问题**：机器负载 100–350 时导出 / 浏览器测试极慢；一次 export 把 QA 对照图覆盖了眼睛差分（已重建，export 改为白名单）；共用索引在 commit_mine 撞上 index.lock 后把我的脚本记成"已删除"（用 `git restore --staged` 修回，HEAD 没动）。教训已写进 §11.1。
+
 ## 2026-11-09 · 新 Demo 前期制作 ②–⑧（agent `prepro`，统筹分派，用户「其他demo的部分可以先准备剧情设计，素材，配音等本身与引擎无关的准备」）
 - **新文件夹**（都不在菜单里、没有页面）：Demo44_MagicAcademy（for-men ② 魔法学院）· Demo45_CelestialPalace（for-women ③ 月宫天女）· Demo46_DragonContract（for-women ④ 龙与精灵）· Demo47_GhostLantern（all-ages ⑤ 鬼屋提灯）· Demo48_AnimalOnsen（all-ages ⑥ 动物温泉）· Demo49_NaomiSummer（healing ⑦）· Demo50_WatermelonSummer（healing ⑧）。每个都有 `project/PREPRO.md`（做了什么 / 剩什么 / UI v2 搭建说明 / 花费）和 `project/script.md`。
 - **造型全部由用户从方案图选定**（方案图 `project/designs_options.jpg`，索引 scratchpad `prepro/PICKS/PICKS.md`）：44 椿 A / ココア A / ルナ B；45 迅 A / 紫苑 A 去眼镜 / 朔 B；46 陽向 C / 岳 C / 蓮 A；47 ぼんちゃん C / 小鬼 C / ゆらり B；48 ゆずじい A / 企鹅 B / 猴子 C / 狐狸 B（加毛巾 + 蓝花发夹，和コハク区分）；49 道具 B；50 奶奶 C / 爷爷 A。新声音（日语）：ゆずじい / 企鹅 / 狐狸 b、ぼんちゃん c、ゆらり b（按音高、语速、亮度、Scribe 清晰度选）；猴子复用 staff_f（声音名额 30/30 满，API key 没有 voices_write，删不了旧试听）。
