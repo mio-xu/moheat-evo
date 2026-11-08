@@ -33,5 +33,41 @@ def main():
     print(f"retime: {len(pts)} gaps, +{sum(e for _, e in pts):.1f} s → film {WK.DURATION0 + sum(e for _, e in pts):.1f} s")
 
 
+# ---------------------------------------------------------------- dubbed takes (user 2026-11-09: every demo voiced in ja / en / zh)
+# --lang ja|en|zh [--count] → media/voice/<lang>/c<NN>.m4a (NN = cue index in CUES0) + index.json: one dry mono file per spoken line,
+# same ElevenLabs voice / settings / emotion tag as the film (ja = the film's cached takes, 0 credits; en / zh = the subtitles with the ja
+# tag moved in, tools/eleven/dub.py; trimmed + loudnorm like each other). Laughs stay ja (no words). Inputs for the per-language re-mix
+# (one shared timeline = the longest language per line, see the rollout notes); not mixed into the film yet.
+DUB_NAMES = {"zh": [("织田信长", "Oda Nobunaga"), ("信长", "Nobunaga"), ("德川家康", "Tokugawa Ieyasu"), ("家康", "Ieyasu")]}
+DUB_OVERRIDE = {}                                  # (lang, cue id) → hand-tagged text when retag() is not good enough
+
+
+def dub(lang, count_only=False):
+    import importlib.util
+    _V = V
+    sp = importlib.util.spec_from_file_location("dub", os.path.join(ROOT, "..", "..", "..", "tools", "eleven", "dub.py"))
+    D = importlib.util.module_from_spec(sp); sp.loader.exec_module(D)
+    l10 = open(os.path.join(ROOT, "l10n.js"), encoding="utf-8").read(); Z = json.loads(l10[l10.index("= {") + 2:l10.rindex("}") + 1])["text"].get("zh", {})
+    cues = {f"c{i:02d}": c for i, c in enumerate(WK.CUES0) if c["kind"] in ("say", "whisper", "laugh")}
+    out = os.path.join(ROOT, "media", "voice", lang)
+    if lang == "ja":
+        wavs = {}
+        for k, c in cues.items():
+            w = os.path.join(_V.CACHE, f"{c['who']}_el_{_V._key(_V.el_text(c), _V.EL_VOICE[c['who']], _V.E.MODEL, _V.E.SEED)}.wav")
+            if os.path.exists(w): wavs[k] = w
+            else: print("  ! no cached ja take for", k, c["ja"])
+        print(f"[ja] {len(wavs)} / {len(cues)} cached takes")
+        if not count_only: D.export_ja(wavs, out, {k: _V.el_text(c) for k, c in cues.items()}, af=D.FILM_AF)
+        return
+    lines = {}
+    for k, c in cues.items():
+        if c["kind"] == "laugh": continue
+        sub = c["en"] if lang == "en" else Z.get(c["ja"]) or c.get(lang)
+        if not sub: raise SystemExit(f"{k}: no {lang} subtitle for {c['ja']}")
+        lines[k] = (_V.EL_VOICE[c["who"]], DUB_OVERRIDE.get((lang, k)) or D.retag(_V.el_text(c), D.names(sub, lang, DUB_NAMES), lang))
+    D.render(lines, lang, out, os.path.join(ROOT, "audio", f"voice_cache.{lang}.json"), count_only=count_only, af=D.FILM_AF)
+
+
 if __name__ == "__main__":
-    main()
+    if "--lang" in sys.argv: dub(sys.argv[sys.argv.index("--lang") + 1], "--count" in sys.argv)
+    else: main()
