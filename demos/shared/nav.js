@@ -1,41 +1,77 @@
 // Demo switcher for the full demo pages (all MoHeat Evo demos load this). Adds a "Demos" panel and ‹ › buttons to the top bar.
 // Hidden in ?embed=1 (site menu) and ?cover=1 (cover export) — the bar is hidden there anyway. Add new demos to DEMOS.
 (() => {
-  const DEMOS = [   // folders: demos/<cat>/<dir>/ ; groups (in this order): 0 all ages · 1 healing · 2 for him · 3 for her · 4 Nobunaga × Suntory
-    { cat: 'all-ages', dir: 'Demo01_SnowFoxfire', ja: '雪と狐火のひそひそ話', en: 'Whispers of Snow and Flame', zh: '雪与狐火的悄悄话', group: 0 },
-    { cat: 'all-ages', dir: 'Demo28_SnowFoxLullaby', ja: 'ふたりの、こもりうた', en: 'A Lullaby for Two', zh: '两个人的摇篮曲', group: 0 },
-    { cat: 'all-ages', dir: 'Demo02_FanMeeting', ja: 'キミだけのスペシャルファンミーティング', en: 'Your Special Fan Meeting', zh: '只属于你的特别见面会', group: 0 },
-    { cat: 'all-ages', dir: 'Demo03_ShiningSmileConcert', ja: '氷と炎の星光コンサート', en: 'Ice & Fire Concert', zh: '冰与火的星光演唱会', group: 0 },
-    { cat: 'all-ages', dir: 'Demo04_SeasonsExpress', ja: '季節が暴走する魔法の列車', en: 'The Runaway Seasons Express', zh: '四季失控的魔法列车', group: 0 },
-    { cat: 'all-ages', dir: 'Demo10_CaveSpring', ja: '火をともして、ひみつの泉へ', en: 'Kindle the Fire, Find the Hidden Spring', zh: '点燃火光，寻找秘密之泉', group: 0 },
-    { cat: 'healing', dir: 'Demo11_Naomi', ja: 'ナオミと、ふわふわの一日', en: 'A Fluffy Day with Naomi', zh: '和直美的毛茸茸一天', group: 1 },
-    { cat: 'healing', dir: 'Demo13_NaomiCam', ja: 'ナオミ、いまなにしてる？', en: "What's Naomi Up To? · Pet Cam", zh: '直美，你在干嘛呀？', group: 1 },
-    { cat: 'healing', dir: 'Demo26_BecomeNaomi', ja: 'ねこになった日', en: 'The Day I Became Naomi', zh: '变成猫咪的那一天', group: 1 },
-    { cat: 'healing', dir: 'Demo15_FamilyCall', ja: 'もしもし、おばあちゃん？', en: 'Hello, Grandma? · A Call Home, Part 1', zh: '喂，奶奶吗？', group: 1 },
-    { cat: 'healing', dir: 'Demo16_FamilyCall2', ja: 'じいちゃんの、ゆきだるま', en: "Grandpa's Little Snowman · A Call Home, Part 2", zh: '爷爷的小雪人', group: 1 },
-    { cat: 'healing', dir: 'Demo29_FamilyVisit', ja: 'ただいま、じいちゃん・ばあちゃん', en: 'Home for New Year', zh: '爷爷奶奶，我回来了', group: 1 },
-    { cat: 'for-men', dir: 'Demo14_MintStream', ja: 'ミントの、おみみ専門店', en: "Mint's Ear Salon", zh: '薄荷的耳朵专门店', group: 2 },
-    { cat: 'for-men', dir: 'Demo17_CocoaStream', ja: 'ココアの、バレンタイン前夜', en: "Valentine's Eve with Cocoa", zh: '可可的情人节前夜', group: 2 },
-    { cat: 'for-men', dir: 'Demo18_HinataStream', ja: 'ひなたと、ゲーセンデート', en: 'Arcade Date with Hinata', zh: '和日向的游戏厅约会', group: 2 },
-    { cat: 'for-men', dir: 'Demo19_LunaStream', ja: 'ルナの、ひみつのカクテル', en: "Luna's Secret Cocktail", zh: '露娜的秘密鸡尾酒', group: 2 },
-    { cat: 'for-men', dir: 'Demo25_HatsumodeDate', ja: 'はじめての、初詣デート', en: 'My First Hatsumode', zh: '第一次的新年参拜约会', group: 2 },
-    { cat: 'for-men', dir: 'Demo31_SummerRooftop', ja: 'なつの、おくじょうで', en: 'Up on the Summer Roof', zh: '夏日，屋顶上', group: 2 },
-    { cat: 'for-men', dir: 'Demo43_BlizzardInn', ja: '白嶺の峠、ひと晩の宿', en: 'One Night at the White-Ridge Inn', zh: '白岭山口，一夜客栈', group: 2 },
-    { cat: 'for-women', dir: 'Demo12_LateCall', ja: 'もしもし、きこえる？', en: 'Can You Hear Me?', zh: '喂，听得到吗？', group: 3 },
-    { cat: 'for-women', dir: 'Demo20_HinataHandshake', ja: 'あと10秒だけ、ね？', en: 'Just Ten More Seconds?', zh: '再多10秒，好吗？', group: 3 },
-    { cat: 'for-women', dir: 'Demo21_JinLounge', ja: '俺だけ見てろ', en: 'Look Only at Me', zh: '只准看着我', group: 3 },
-    { cat: 'for-women', dir: 'Demo22_ShionRain', ja: '雨が止むまで', en: 'Until the Rain Stops', zh: '直到雨停', group: 3 },
-    { cat: 'for-women', dir: 'Demo24_GakuCamp', ja: 'ガクの、焚き火キャンプ配信', en: "Gaku's Campfire Stream", zh: '岳的篝火露营直播', group: 3 },
-    { cat: 'for-women', dir: 'Demo30_SakuFestival', ja: 'なつまつり、ふたりで', en: 'Summer Festival, Just Us', zh: '夏日祭典，只有我们俩', group: 3 },
-    { cat: 'nobunaga-suntory', dir: 'Demo05_GifuCastle', ja: '信長の岐阜城へようこそ', en: "Welcome to Nobunaga's Gifu Castle", zh: '欢迎来到信长的岐阜城', group: 4, ep: 1 },
-    { cat: 'nobunaga-suntory', dir: 'Demo06_FutureWhisky', ja: '未来の酒と、安土の夜', en: 'Future Whisky at Azuchi', zh: '未来之酒与安土之夜', group: 4, ep: 2 },
-    { cat: 'nobunaga-suntory', dir: 'Demo07_KyotoIzakaya', ja: '信長と家康、京都の居酒屋へ', en: 'Two Warlords in a Kyoto Izakaya', zh: '信长与家康，京都居酒屋之夜', group: 4, ep: 3 },
-    { cat: 'nobunaga-suntory', dir: 'Demo08_YamazakiDistillery', ja: '信長と家康、山崎蒸溜所へ', en: 'Two Warlords at the Yamazaki Distillery', zh: '信长与家康，探访山崎蒸馏所', group: 4, ep: 4 },
-    { cat: 'nobunaga-suntory', dir: 'Demo09_SengokuBanquet', ja: '安土最後の酒宴', en: 'The Last Banquet at Azuchi', zh: '安土最后的酒宴', group: 4, ep: 5 },
-    { cat: 'nobunaga-suntory', dir: 'Demo23_NobunagaTalk', ja: '信長と、語らう', en: 'Talk with Nobunaga', zh: '与信长对谈', group: 4 },
-    { cat: 'nobunaga-suntory', dir: 'Demo41_IeyasuTalk', ja: '家康と、語らう', en: 'Talk with Ieyasu', zh: '与家康对谈', group: 4 },
-    { cat: 'nobunaga-suntory', dir: 'Demo42_SengokuRoundtable', ja: '信長と家康の、座談会', en: 'Round Table with Nobunaga & Ieyasu', zh: '信长与家康的座谈会', group: 4 },
+  // The demo list (data). The DISPLAYED order is automatic (below, guide §7.3 2d) — the order of these lines does not matter.
+  //   cat / dir: demos/<cat>/<dir>/ · group: 0 all ages · 1 healing · 2 for him · 3 for her · 4 Nobunaga × Suntory (= cat)
+  //   series: a key of SERIES (its demos stay together, in `part` order) · part: 1, 2, … inside the series (shown as "Part n / N")
+  //   cast: the main character(s), '+'-joined (same character → shown next to each other) · featured: true → always in "Try these first"
+  //   new: true → a NEW badge. Checked by tools/web/check_nav.py (fields, series / part, folders, thumbnails).
+  const DEMOS = [
+    { cat: 'all-ages', dir: 'Demo01_SnowFoxfire', ja: '雪と狐火のひそひそ話', en: 'Whispers of Snow and Flame', zh: '雪与狐火的悄悄话', series: 'snowfox', part: 1, cast: 'koyuki+homura', group: 0 },
+    { cat: 'all-ages', dir: 'Demo28_SnowFoxLullaby', ja: 'ふたりの、こもりうた', en: 'A Lullaby for Two', zh: '两个人的摇篮曲', series: 'snowfox', part: 2, cast: 'koyuki+homura', group: 0 },
+    { cat: 'all-ages', dir: 'Demo02_FanMeeting', ja: 'キミだけのスペシャルファンミーティング', en: 'Your Special Fan Meeting', zh: '只属于你的特别见面会', series: 'ayane', part: 1, cast: 'ayane', group: 0 },
+    { cat: 'all-ages', dir: 'Demo03_ShiningSmileConcert', ja: '氷と炎の星光コンサート', en: 'Ice & Fire Concert', zh: '冰与火的星光演唱会', series: 'ayane', part: 2, cast: 'ayane', group: 0 },
+    { cat: 'all-ages', dir: 'Demo04_SeasonsExpress', ja: '季節が暴走する魔法の列車', en: 'The Runaway Seasons Express', zh: '四季失控的魔法列车', cast: 'train', group: 0 },
+    { cat: 'all-ages', dir: 'Demo10_CaveSpring', ja: '火をともして、ひみつの泉へ', en: 'Kindle the Fire, Find the Hidden Spring', zh: '点燃火光，寻找秘密之泉', cast: 'kohaku', group: 0 },
+    { cat: 'healing', dir: 'Demo11_Naomi', ja: 'ナオミと、ふわふわの一日', en: 'A Fluffy Day with Naomi', zh: '和直美的毛茸茸一天', series: 'naomi', part: 1, cast: 'naomi', group: 1 },
+    { cat: 'healing', dir: 'Demo13_NaomiCam', ja: 'ナオミ、いまなにしてる？', en: "What's Naomi Up To? · Pet Cam", zh: '直美，你在干嘛呀？', series: 'naomi', part: 2, cast: 'naomi', group: 1 },
+    { cat: 'healing', dir: 'Demo26_BecomeNaomi', ja: 'ねこになった日', en: 'The Day I Became Naomi', zh: '变成猫咪的那一天', series: 'naomi', part: 3, cast: 'naomi', group: 1 },
+    { cat: 'healing', dir: 'Demo15_FamilyCall', ja: 'もしもし、おばあちゃん？', en: 'Hello, Grandma? · A Call Home, Part 1', zh: '喂，奶奶吗？', series: 'family', part: 1, cast: 'hana+gen', group: 1 },
+    { cat: 'healing', dir: 'Demo16_FamilyCall2', ja: 'じいちゃんの、ゆきだるま', en: "Grandpa's Little Snowman · A Call Home, Part 2", zh: '爷爷的小雪人', series: 'family', part: 2, cast: 'hana+gen', group: 1 },
+    { cat: 'healing', dir: 'Demo29_FamilyVisit', ja: 'ただいま、じいちゃん・ばあちゃん', en: 'Home for New Year', zh: '爷爷奶奶，我回来了', series: 'family', part: 3, cast: 'hana+gen', group: 1 },
+    { cat: 'for-men', dir: 'Demo14_MintStream', ja: 'ミントの、おみみ専門店', en: "Mint's Ear Salon", zh: '薄荷的耳朵专门店', series: 'stream', cast: 'mint', group: 2 },
+    { cat: 'for-men', dir: 'Demo17_CocoaStream', ja: 'ココアの、バレンタイン前夜', en: "Valentine's Eve with Cocoa", zh: '可可的情人节前夜', series: 'stream', cast: 'cocoa', group: 2 },
+    { cat: 'for-men', dir: 'Demo18_HinataStream', ja: 'ひなたと、ゲーセンデート', en: 'Arcade Date with Hinata', zh: '和日向的游戏厅约会', series: 'stream', cast: 'hinata', group: 2 },
+    { cat: 'for-men', dir: 'Demo19_LunaStream', ja: 'ルナの、ひみつのカクテル', en: "Luna's Secret Cocktail", zh: '露娜的秘密鸡尾酒', series: 'stream', cast: 'luna', group: 2 },
+    { cat: 'for-men', dir: 'Demo25_HatsumodeDate', ja: 'はじめての、初詣デート', en: 'My First Hatsumode', zh: '第一次的新年参拜约会', cast: 'tsubaki', group: 2 },
+    { cat: 'for-men', dir: 'Demo31_SummerRooftop', ja: 'なつの、おくじょうで', en: 'Up on the Summer Roof', zh: '夏日，屋顶上', cast: 'nagisa', group: 2 },
+    { cat: 'for-men', dir: 'Demo43_BlizzardInn', ja: '白嶺の峠、ひと晩の宿', en: 'One Night at the White-Ridge Inn', zh: '白岭山口，一夜客栈', cast: 'mint+hinata+nagisa', new: true, group: 2 },
+    { cat: 'for-women', dir: 'Demo12_LateCall', ja: 'もしもし、きこえる？', en: 'Can You Hear Me?', zh: '喂，听得到吗？', cast: 'ren', group: 3 },
+    { cat: 'for-women', dir: 'Demo20_HinataHandshake', ja: 'あと10秒だけ、ね？', en: 'Just Ten More Seconds?', zh: '再多10秒，好吗？', cast: 'hinata_m', group: 3 },
+    { cat: 'for-women', dir: 'Demo21_JinLounge', ja: '俺だけ見てろ', en: 'Look Only at Me', zh: '只准看着我', cast: 'jin', group: 3 },
+    { cat: 'for-women', dir: 'Demo22_ShionRain', ja: '雨が止むまで', en: 'Until the Rain Stops', zh: '直到雨停', cast: 'shion', group: 3 },
+    { cat: 'for-women', dir: 'Demo24_GakuCamp', ja: 'ガクの、焚き火キャンプ配信', en: "Gaku's Campfire Stream", zh: '岳的篝火露营直播', cast: 'gaku', group: 3 },
+    { cat: 'for-women', dir: 'Demo30_SakuFestival', ja: 'なつまつり、ふたりで', en: 'Summer Festival, Just Us', zh: '夏日祭典，只有我们俩', cast: 'saku', group: 3 },
+    { cat: 'nobunaga-suntory', dir: 'Demo05_GifuCastle', ja: '信長の岐阜城へようこそ', en: "Welcome to Nobunaga's Gifu Castle", zh: '欢迎来到信长的岐阜城', series: 'nobunaga', part: 1, cast: 'nobunaga+ieyasu', group: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo06_FutureWhisky', ja: '未来の酒と、安土の夜', en: 'Future Whisky at Azuchi', zh: '未来之酒与安土之夜', series: 'nobunaga', part: 2, cast: 'nobunaga+ieyasu', group: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo07_KyotoIzakaya', ja: '信長と家康、京都の居酒屋へ', en: 'Two Warlords in a Kyoto Izakaya', zh: '信长与家康，京都居酒屋之夜', series: 'nobunaga', part: 3, cast: 'nobunaga+ieyasu', group: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo08_YamazakiDistillery', ja: '信長と家康、山崎蒸溜所へ', en: 'Two Warlords at the Yamazaki Distillery', zh: '信长与家康，探访山崎蒸馏所', series: 'nobunaga', part: 4, cast: 'nobunaga+ieyasu', group: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo09_SengokuBanquet', ja: '安土最後の酒宴', en: 'The Last Banquet at Azuchi', zh: '安土最后的酒宴', series: 'nobunaga', part: 5, cast: 'nobunaga+ieyasu', group: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo23_NobunagaTalk', ja: '信長と、語らう', en: 'Talk with Nobunaga', zh: '与信长对谈', series: 'talk', cast: 'nobunaga', group: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo41_IeyasuTalk', ja: '家康と、語らう', en: 'Talk with Ieyasu', zh: '与家康对谈', series: 'talk', cast: 'ieyasu', group: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo42_SengokuRoundtable', ja: '信長と家康の、座談会', en: 'Round Table with Nobunaga & Ieyasu', zh: '信长与家康的座谈会', series: 'talk', cast: 'nobunaga+ieyasu', group: 4 },
   ];
+  // ---------------------------------------------------------------- the displayed order (user 2026-11-08: 菜单按类别 → 系列自动排序; guide §7.3 2d)
+  // category (all ages → healing → for him → for her → Nobunaga) → series stay together, parts in order → series / single demos by the
+  // thermal-use score (推荐度 = how fully the thermal feedback is used: tools/qa/thermal_score.py, best first) → demos with the same main
+  // character next to each other → folder number. "Try these first" = featured + the top 3 by score. ‹ ›, swipes and the "n / N" follow it.
+  const SERIES = {
+    snowfox: { ja: '小雪と焔', en: 'Koyuki & Homura', zh: '小雪与焰' }, ayane: { ja: '星乃綾音', en: 'Hoshino Ayane', zh: '星乃绫音' },
+    naomi: { ja: 'ナオミ', en: 'Naomi', zh: '直美' }, family: { ja: 'じいちゃん・ばあちゃん', en: 'Grandma & Grandpa', zh: '爷爷奶奶' },
+    stream: { ja: '配信ルーム', en: 'Live streams', zh: '直播间' }, nobunaga: { ja: '信長と家康 · 全5話', en: 'Nobunaga & Ieyasu · 5 episodes', zh: '信长与家康 · 共5集' },
+    talk: { ja: '語らう', en: 'Talk with them', zh: '对谈' },
+  };
+  const HEAT = {};   // thermal-use score 0–100 per folder — ONE line, written by tools/qa/thermal_score.py (tools/qa/thermal_scores.json)
+  { const CATS = ['all-ages', 'healing', 'for-men', 'for-women', 'nobunaga-suntory'], num = (d) => +((d.dir.match(/^Demo(\d+)/) || [])[1] || 999), sc = (d) => HEAT[d.dir] || 0;
+    const out = [];
+    for (const cat of CATS) {
+      const units = [], ser = {};
+      for (const d of DEMOS.filter((x) => x.cat === cat)) { if (d.series) { if (!ser[d.series]) units.push(ser[d.series] = []); ser[d.series].push(d); } else units.push([d]); }
+      for (const u of units) {   // inside a series: part order, else best score first; the unit's score / number / characters
+        u.sort((a, b) => (a.part || 99) - (b.part || 99) || sc(b) - sc(a) || num(a) - num(b));
+        u.score = Math.max(...u.map(sc)); u.num = Math.min(...u.map(num)); u.cast = new Set(u.flatMap((d) => (d.cast || d.dir).split('+')));
+      }
+      const rest = units.sort((a, b) => b.score - a.score || a.num - b.num);
+      while (rest.length) {   // same main character next to each other: a unit pulls the next ones that share a character
+        const u = rest.shift(); out.push(...u);
+        for (let k = 0; k < rest.length; k++) if ([...rest[k].cast].some((c) => u.cast.has(c))) { out.push(...rest[k]); rest.splice(k--, 1); }
+      }
+    }
+    for (const d of DEMOS) if (!out.includes(d)) out.push(d);   // an unknown category: at the end
+    DEMOS.splice(0, DEMOS.length, ...out);
+  }
+  window.MoHeatOrder = { SERIES, HEAT };   // for tools / other pages (the sorted list itself is the shared demo list below)
+  const TOP = [...DEMOS.filter((d) => d.featured), ...DEMOS.filter((d) => !d.featured && HEAT[d.dir]).sort((a, b) => HEAT[b.dir] - HEAT[a.dir])].slice(0, Math.max(3, DEMOS.filter((d) => d.featured).length));
   // rights notes shown under each demo's cover credits (full pages only); the full list is the site's credits.html
   const HIST = 'Oda Nobunaga and Tokugawa Ieyasu are portrayed as fictional characters', ADULT = 'お酒は20歳になってから · 20+ only';
   const RIGHTS = {
@@ -135,6 +171,11 @@
   .dn-card b{display:block;margin-top:4px;font:700 14px/1.3 "Noto Sans JP",sans-serif}
   .dn-card small{display:block;margin-top:2px;font:500 12px/1.3 Inter,sans-serif;color:#cbbfb8}
   .dn-card small.dn-now{color:#ffd58a;font-weight:600}   /* under the title, so every card's title lines up */
+  .dn-ser{grid-column:1/-1;margin:6px 4px -2px;font:700 12px/1.2 "Noto Sans JP",Inter,sans-serif;color:#e8d6cc;display:flex;align-items:center;gap:8px}
+  .dn-ser::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.1)}
+  .dn-card em i{font-style:normal;margin-left:6px;padding:1px 6px;border-radius:999px;background:#ff7a59;color:#fff;letter-spacing:.06em}
+  .dn-card em s{text-decoration:none;color:#ffd58a}
+  .dn-top h4{color:#ffd58a}
   @media (max-width:700px){.dnav .dn-label{display:none}.dn-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dn-card b{font-size:12.5px}.dn-card small{display:none}}`;
   document.head.appendChild(css);
 
@@ -145,7 +186,7 @@
   const GZH = ['全年龄', '治愈', '男性向', '女性向', '信长系列'];
   const GT = (gi) => { const [ja, en] = GROUPS[gi].split(' · '); return pickT({ ja, en, zh: GZH[gi] }); };
   const W = { all: { ja: 'すべて', en: 'All', zh: '全部' }, now: { ja: '▶ 再生中', en: '▶ Now playing', zh: '▶ 正在播放' }, ep: { ja: '第', en: 'Ep ', zh: '第' },
-    demos: { ja: 'デモ', en: 'Demos', zh: '演示' }, credits: { ja: '権利表記', en: 'Credits', zh: '版权与署名' },
+    demos: { ja: 'デモ', en: 'Demos', zh: '演示' }, top: { ja: 'まずはこれから · 温冷をいちばん感じられる3本', en: 'Try these first · the most thermal feedback', zh: '推荐先体验 · 冷热反馈最丰富的3个' }, credits: { ja: '権利表記', en: 'Credits', zh: '版权与署名' },
     rights: { ja: '声・イラスト・音楽・商標', en: 'voices, art, music, trademarks', zh: '配音、美术、音乐、商标' }, prev: { ja: '前へ', en: 'Previous', zh: '上一个' }, next: { ja: '次へ', en: 'Next', zh: '下一个' } };
   const nav = document.createElement('nav'); nav.className = 'dnav'; nav.setAttribute('aria-label', 'Choose another demo');
   const prev = DEMOS[cur - 1], next = DEMOS[cur + 1];
@@ -155,17 +196,21 @@
   const panel = document.createElement('div'); panel.className = 'dn-panel'; panel.hidden = true;
   const span = (gi) => { const n = DEMOS.map((d, i) => (d.group === gi ? i + 1 : 0)).filter(Boolean); return gi < 4 ? (n.length > 1 ? ` · ${n[0]}–${n[n.length - 1]}` : ` · ${n[0]}`) : ''; };
   const count = (gi) => DEMOS.filter((d) => d.group === gi).length;   // level 1: category tabs (+ "all"); level 2: that category's demos
+  const card = (d, i, top) => { const of = d.part ? DEMOS.filter((x) => x.series === d.series && x.part).length : 0;   // one menu card
+    return `<a class="dn-card${i === cur ? ' is-cur' : ''}" href="${href(d)}"><img src="${thumb(i)}" data-t="${i}" alt="" loading="lazy"><span><em>${top ? `<s>🌡 ${HEAT[d.dir] || '★'}</s> · ` : ''}Demo ${i + 1}${d.part && of > 1 ? ` · <span data-part="${d.part}/${of}"></span>` : ''}${d.new ? '<i>NEW</i>' : ''}</em><b data-d="${i}"></b>${i === cur ? '<small class="dn-now" data-w="now"></small>' : ''}</span></a>`; };
   panel.innerHTML = `<div class="dn-tabs" role="tablist"><button type="button" role="tab" data-g="all"><span data-w="all"></span><i>${DEMOS.length}</i></button>`
     + GROUPS.map((g, gi) => `<button type="button" role="tab" data-g="${gi}"><span data-gt="${gi}"></span><i>${count(gi)}</i></button>`).join('') + '</div>'
+    + (TOP.length ? `<section class="dn-top" data-g="top"><h4 data-w="top"></h4><div class="dn-grid">${TOP.map((d) => card(d, DEMOS.indexOf(d), true)).join('')}</div></section>` : '')
     + GROUPS.map((g, gi) => `<section data-g="${gi}"><h4><span data-gt="${gi}"></span>${span(gi)}</h4><div class="dn-grid">` + DEMOS.map((d, i) => d.group !== gi ? '' :
-    `<a class="dn-card${i === cur ? ' is-cur' : ''}" href="${href(d)}"><img src="${thumb(i)}" data-t="${i}" alt="" loading="lazy"><span><em>Demo ${i + 1}${d.ep ? ` · <span data-ep="${d.ep}"></span>` : ''}</em><b data-d="${i}"></b>${i === cur ? '<small class="dn-now" data-w="now"></small>' : ''}</span></a>`).join('') + '</div></section>').join('')
+    (d.series && DEMOS[i - 1]?.series !== d.series ? `<h5 class="dn-ser" data-ser="${d.series}"></h5>` : '') + card(d, i)).join('') + '</div></section>').join('')
     + '<p class="dn-foot"><a href="../../../credits.html" data-w="credits"></a> · <span data-w="rights"></span> · © 2026 MoHeat Evo</p>';
   function paint() {   // texts in the display language; again whenever it changes
     for (const r of [nav, panel]) {
       r.querySelectorAll('[data-w]').forEach((e) => { e.textContent = pickT(W[e.dataset.w]); });
       r.querySelectorAll('[data-gt]').forEach((e) => { e.textContent = GT(+e.dataset.gt); });
       r.querySelectorAll('[data-d]').forEach((e) => { e.textContent = TITLE(DEMOS[+e.dataset.d]); });
-      r.querySelectorAll('[data-ep]').forEach((e) => { const l = LG(), n = e.dataset.ep; e.textContent = l === 'en' ? `Ep ${n} / 5` : l === 'ja' ? `第${n}話 / 全5話` : `第${n}集 / 共5集`; });
+      r.querySelectorAll('[data-part]').forEach((e) => { const l = LG(), [n, of] = e.dataset.part.split('/'); e.textContent = l === 'en' ? `Part ${n} / ${of}` : l === 'ja' ? `第${n}話 / 全${of}話` : `第${n}集 / 共${of}集`; });
+      r.querySelectorAll('[data-ser]').forEach((e) => { e.textContent = pickT(SERIES[e.dataset.ser] || { en: e.dataset.ser }); });
     }
     // thumbnails in the display language (assets/images/demos/<dir>.<lang>.jpg from tools/web/thumbs.py; missing → <dir>.jpg)
     panel.querySelectorAll('img[data-t]').forEach((im) => { const i = +im.dataset.t, src = thumb(i, LG()); if (im.dataset.l === LG()) return; im.dataset.l = LG(); im.onerror = () => { im.onerror = null; im.src = thumb(i); }; im.src = src; });
@@ -173,7 +218,7 @@
     if (prev) st[0].title = `${pickT(W.prev)}: ${TITLE(prev)}`; if (next) st[1].title = `${pickT(W.next)}: ${TITLE(next)}`;
   }
   paint(); addEventListener('moheat:sublang', paint);
-  const show = (g) => { panel.querySelectorAll('.dn-tabs button').forEach((b) => b.setAttribute('aria-selected', b.dataset.g === String(g))); panel.querySelectorAll('section').forEach((x) => { x.hidden = g !== 'all' && x.dataset.g !== String(g); }); };
+  const show = (g) => { panel.querySelectorAll('.dn-tabs button').forEach((b) => b.setAttribute('aria-selected', b.dataset.g === String(g))); panel.querySelectorAll('section').forEach((x) => { x.hidden = x.dataset.g !== 'top' && g !== 'all' && x.dataset.g !== String(g); }); };   // "Try these first" heads every view
   panel.querySelector('.dn-tabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { e.stopPropagation(); show(b.dataset.g); } });
   show(cur >= 0 ? DEMOS[cur].group : 'all');
   const brand = bar.querySelector('.brand');
