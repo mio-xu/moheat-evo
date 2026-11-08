@@ -17,7 +17,7 @@
   // ---------------------------------------------------------------- art: one still per view
   const VIEWS = ['torii', 'stall', 'amazake', 'fire', 'close', 'pray', 'omikuji', 'stole'];
   const IMG = {};
-  const artReady = Promise.all(VIEWS.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/tsubaki_${n}.jpg?v=1`; })));
+  const artReady = Promise.all(VIEWS.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/tsubaki_${n}.jpg?v=2`; })));
 
   // ---------------------------------------------------------------- state
   const fresh = () => ({ started: false, t: 0, clock: 0, view: 'torii', cold: 1, fire: 0, cup: 0, near: 0, nearAz: 1.2, stole: 0, gust: null,

@@ -454,14 +454,14 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_omikuji.webp?v=b468e5e2",
-    "w": 1254,
+    "src": "art/char_omikuji.webp?v=73878c21",
+    "w": 1365,
     "h": 1440,
-    "x": 0.5547,
+    "x": 0.533,
     "y": 1.0,
     "height": 1.0,
     "box": [
-     793,
+     682,
      0,
      2047,
      1440
@@ -471,7 +471,7 @@ window.MOHEAT_LAYERS = {
     {
      "src": "art/omikuji_eyes.webp?v=c84b6bdd",
      "rect": [
-      285,
+      396,
       305,
       456,
       209
@@ -481,7 +481,7 @@ window.MOHEAT_LAYERS = {
     {
      "src": "art/omikuji_mouth0.webp?v=079f50f1",
      "rect": [
-      465,
+      576,
       505,
       160,
       137
@@ -492,7 +492,7 @@ window.MOHEAT_LAYERS = {
     {
      "src": "art/omikuji_mouth1.webp?v=17fff08d",
      "rect": [
-      465,
+      576,
       505,
       160,
       137
@@ -503,7 +503,7 @@ window.MOHEAT_LAYERS = {
     {
      "src": "art/omikuji_mouth2.webp?v=10d9e332",
      "rect": [
-      465,
+      576,
       505,
       160,
       137
@@ -514,7 +514,7 @@ window.MOHEAT_LAYERS = {
     {
      "src": "art/omikuji_mouth3.webp?v=7cde4a5a",
      "rect": [
-      465,
+      576,
       505,
       160,
       137

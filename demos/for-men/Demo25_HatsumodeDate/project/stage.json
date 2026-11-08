@@ -208,14 +208,7 @@
    "talk": "tsubaki_omikuji_talk",
    "blink": "tsubaki_omikuji_blink",
    "matte": "green",
-   "erase": [
-    [
-     0,
-     0,
-     800,
-     1440
-    ]
-   ],
+   "erase": [[0, 0, 600, 1440], [0, 0, 800, 260]],
    "centre_mouth": [
     1336,
     567

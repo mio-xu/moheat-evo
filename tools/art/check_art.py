@@ -20,6 +20,7 @@ import numpy as np
 from PIL import Image
 
 FRAME_H = 1080
+CUT_SKIP = 2               # px at the picture border not searched for straight cuts (the border itself is check_cut_body's)
 MARGIN_OK = 0.015          # a top / side cut edge must sit ≥ 1.5 % outside the frame (the bottom is anchored there on purpose)
 KEYS = {'green': (0, 177, 64), 'magenta': (255, 0, 255), 'grey': (200, 200, 200), 'gray': (200, 200, 200), 'midgrey': (112, 112, 112)}
 
@@ -82,13 +83,13 @@ def fringe(a, key):
 
 def cut_outside(al, side, c):
     """where the longest straight cut of a layer lands in the 16:9 frame; True when it is ≥ MARGIN_OK outside the frame there."""
-    o, t = al[10:-10, 10:-10] > 200, al[10:-10, 10:-10] < 30
+    B = CUT_SKIP; o, t = al[B:-B, B:-B] > 200, al[B:-B, B:-B] < 30
     e = {'right': o[:, :-3] & t[:, 3:], 'left': t[:, :-3] & o[:, 3:], 'top': t[:-3] & o[3:], 'bottom': o[:-3] & t[3:]}[side]
     H, W = al.shape; hf = c['height']; wf = hf * (c['w'] / c['h']) * (9 / 16)
     if side in ('right', 'left'):
-        x = (int(np.argmax(e.sum(0))) + 10 + (2 if side == 'right' else 1)) / W; fx = c['x'] - wf / 2 + x * wf
+        x = (int(np.argmax(e.sum(0))) + B + (2 if side == 'right' else 1)) / W; fx = c['x'] - wf / 2 + x * wf
         return fx >= 1 + MARGIN_OK if side == 'right' else fx <= -MARGIN_OK
-    y = (int(np.argmax(e.sum(1))) + 11) / H; fy = c['y'] - hf + y * hf
+    y = (int(np.argmax(e.sum(1))) + B + 1) / H; fy = c['y'] - hf + y * hf
     return fy >= 1 + MARGIN_OK if side == 'bottom' else fy <= -MARGIN_OK
 
 
@@ -127,7 +128,9 @@ def check(D, verbose=False):
             try:
                 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import check_cut_body
                 hard = np.where(a[..., 3] > 128, 255, 0)   # binarised: a softened / feathered ruler edge must not slip past (Demo12 hug after matting)
-                for side, f in check_cut_body.straight_cuts(hard[10:-10, 10:-10]):   # border rows = the picture edge (check_cut_body)
+                # border rows = the picture edge (check_cut_body); only 2 px are skipped — Demo25 omikuji's fur was cut on a ruler line 7 px
+                # inside the picture (an "erase" box), which the old 10 px skip and check_cut_body's 3 px edge band both missed
+                for side, f in check_cut_body.straight_cuts(hard[CUT_SKIP:-CUT_SKIP, CUT_SKIP:-CUT_SKIP]):
                     if all(cut_outside(hard, side, w['char']) for w in views.values() if (w.get('char') or {}).get('src', '').split('?')[0] == src):
                         continue   # the ruler line lies ≥ 1.5 % outside the frame in every view that shows this layer (Demo12 call, moved right)
                     out.append(('FAIL' if side == 'top' else 'WARN', 'edge-margin', f'{src}: straight {side} cut {f:.0%} long inside the picture (flat head / ruler-cut body) → tools/art/complete_cutout.py or extend_pose.py'))
