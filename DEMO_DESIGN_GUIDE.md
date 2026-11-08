@@ -824,6 +824,7 @@ main.layout
 - **只看报告就批准**：agent 的报告可能乐观。→ 关键交付（上线、合并、封面）统筹至少打开一张实图核对，再推送。
 - **展示模式的空闲重置在暂停时不触发**（kiosk，2026-11-08）：shell.js 暂停时冻结 `Date.now` / `setTimeout`（Demo 的时钟），共用代码里用它们计时的"真实时间"功能（空闲、冷热间歇）也一起冻住了。→ 需要真实时间的共用代码用 `+new Date()` 和隐藏 iframe 的 `setTimeout`（`kiosk.js` 的 `RN / RT`）；要跟着故事走的（精华版倒计时）才用页面的计时器。`check_kiosk.js` 测「封面空闲回到欢迎画面」。
 - **CSS `font: 700 20px/1 inherit` 整条无效**（kiosk 页面字体全部掉回默认小字）：`inherit` 不能当 font 简写里的字体名。→ 用 `var(--ff)` 字体变量；截图检查标题字号。另：滚动区域里的 grid（`flex: 1; min-height: 0; overflow: auto`）行会被压扁成几 px → `grid-auto-rows: max-content`。
+- **有接口不等于访客有控件**（kiosk，2026-11-08）：shell 加了 `setVolume` 后，kiosk 判断「外壳有音量控件」就不再放自己的滑块，可是 UI v2 还没上线，访客页面上一个音量控件都没有；我之前为了让测试通过，把检查也放宽成「有 setVolume 就算过」，把问题盖住了。另外 shell 的 `moheat.volume` 是 0–1，kiosk 写的是 0–100，同一个键两种单位。→ 判断 UI 要看控件真的在页面上（可见、≥ 44 px）；检查失败时先查产品，不改检查去迁就；共用 localStorage 键写清单位。
 
 ## 12. 资源清理与文件结构
 

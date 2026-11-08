@@ -7,6 +7,11 @@
 
 ---
 
+## 2026-11-08（深夜 2）· 展示模式：三语速查卡、入耳式耳机 + MoHeat Evo 用词、语音远近音量（agent `kiosk`）
+- **做了什么**：① 三语 A4 速查卡 `kiosk/staff_card.html`（一种语言一页，自动缩到一页内，面板「Staff card (print)」打开），文字只在 `kiosk/staff_card_data.js`，`docs/kiosk_staff_card.md` 由 `node tools/web/staff_card_md.js` 生成。② 硬件用词和图示全改：降噪的是入耳式小耳机，MoHeat Evo 是戴在外面的大头戴设备（引导、结束流程、欢迎图标、断开提示、文档、要求）。③ 引导语音远近音量：远处 −30 dB 到耳边 0 dB（音量那句只差 6 dB，方便调音量），末端加限幅器，冷热跟同一条包络。④ 修 bug：shell 有 `setVolume` 后 kiosk 不再放音量滑块，访客没有音量控件（§11.1）；`moheat.volume` 统一为 0–1。
+- **状态**：`check_kiosk.js` 新增 voiceRange、真实可见的音量控件检查。`kiosk/precache.json` 没有重新生成（其他 agent 的 Demo 改动还没停，见 git status），展示前跑 `python3 tools/web/kiosk_precache.py`。
+- **下一步**：真机试听远近音量是否舒服、入耳式耳机 + 大耳机叠戴时左右方向是否清楚。
+
 ## 2026-11-08（深夜）· 展示模式第 2 轮：引导定稿、自动校准、结束流程、风格 B、宣传视频排队屏（agent `kiosk`）
 - **做了什么**：① 引导按用户定稿重做（`demos/shared/thermintro.js`）：降噪耳机 → 左右测试（焰在左、小雪在右，访客语言，Web Audio HRTF 从远处移到耳边）→ 音量 →「告诉工作人员」+ 工作人员继续 → 工作人员戴 MoHeat Evo（图示）→ 左暖 / 右暖 / 左凉 / 右凉 各 2 秒 →「告诉工作人员」→ 暖 / 凉自动校准（约 7 秒升到上限，点 STOP = 个人上限，用 80 %；没点停在上限）→ 焰 / 小雪耳边试听（冷热 = 音量 × 距离）「自然吗」±15 %。语音 15 段（`kiosk/scripts/voice.py`，ElevenLabs 角色确认声音，三语，共 831 字符，每段 2.6–10.7 秒），图 `kiosk/media/art/*_ear.webp`。② 暖 / 凉两条强度（`moheat.warmScale / coolScale`，面板分开的上限 + 起始，「Calibrate on me」设上限），`kiosk.js` 在 Demo 页按两条比例缩放所有冷热指令；个人上限和「自然吗」计入统计 / CSV。③ 问卷：选中高亮 0.8 秒、每题至少 1.5 秒、‹ 返回。④ 结束：没人排队（左下小点长按 / Q 键，默认有人排队）且未超「最多几个 / 最长分钟」→「再体验一个？」（保留校准）；否则 冷热停 → 摘 MoHeat Evo（工作人员继续）→ 摘耳机 → 体验卡 → 感谢 + 带走二维码 → 重置。⑤ 风格 B「暖冷品牌」：`kiosk/theme.css`（左橙右蓝缓慢流动的背景、标志 / Start 呼吸光、暖步骤偏橙、冷步骤偏蓝；字体 / 按钮和 ui2 一致），用于展示页、排队屏、手机选号页、引导页、带走页、海报。⑥ 排队屏宣传视频模式（默认）：循环、静音可开、二维码角标（大小 / 位置）、「正在体验」标签；来源 = `kiosk/media/promo.mp4` / 网址 / 本机文件（IndexedDB）；没有视频退回实时画面；可每 N 分钟轮换。
 - **测试**：`node tools/web/check_kiosk.js --quick --size 1024x768` 全过（引导约 55 s，含测试里模拟的工作人员停顿）；1440×900 完整一轮（含 Demo28 精华版）。新检查：引导语音每段 ≤ 15 秒、四通道输出确认、校准 ramp + STOP + 到上限、试听冷热跟着声音、排队开关、「再体验一个」保留校准、结束流程。
