@@ -6,6 +6,31 @@
 > 用户偏好在 `USER_PREFERENCES.md`，整体状态在 `HANDOFF_ASMR_DEMOS.md`，用户任务清单在 `TASKS.md`。
 
 ---
+## 2026-11-08 · Demo18 ひなた 抓娃娃机检查 + 修正（moheat-evo-60 交接的验收子任务）
+
+- **问题（v8 实际画面）**：爪子 518 px 高、关在 635 px 的玻璃箱里，停车位置就已经插进玩偶堆里；`grabY()` 比停车位置还高 17 px → 「下降」其实往上走、「提起」往下走，猫根本没被提起；猫底部被玻璃下沿直线切掉；代码画的 3 px 细线接在图里 9 px 粗的吊绳上；两边的爪是横向挤压（铰链离开外壳）。
+- **修正（`main.js` v9，e614bcd，`index.html` 的 `main.js?v=9` 已被 fc6ebd7 一起提交）**：爪子 220 px，外壳停在天花板下（`parkY()`），猫 185 px 坐在玩偶堆上（底 ≈ y 652，阴影）；整个爪子从天花板支点像钟摆一样挂着，摆动由滑轨加速度驱动（固定 10 ms 子步，帧率无关）；图里的吊绳条拉伸到天花板；两边的爪绕铰链旋转 0.17 rad（夹在脸颊下面，在猫前面；中间爪在猫后面）；抓娃娃机图层随画面淡入淡出（v8 切到包厢时瞬间消失）。剧情时间：长按 2.2 s → 稳 0.35 s → 下降 1.5 s → 合拢 0.45 s → 第 1 次提到一半滑落 / 第 2 次提起 1.2 s、移到出口 1.3 s、松开掉落。
+- **检查**：虚拟时钟逐帧渲染整段（30 fps）+ 无头 Chrome 跑完三遍（`?auto=1` en、`&alt=1` ja、zh）：全部走完 6 个画面、0 JS 错误、DUAL 正常；手机 390×844 / 844×390 一屏检查 0 问题。审查图（不进 git）：`demos/for-men/Demo18_HinataStream/assets/review_claw_1_grab_2x.jpg` `_2_lift_2x` `_3_chute_2x` `_4_sequence`。
+- **包厢**：QA 会话 fc6ebd7 重切了 booth 贴片；嘴 2 倍看过（闭 / 开都干净，无双嘴 / 方框）；**眨眼两眼都闭上，但闭眼线下面还透出一点橙色虹膜（约 2 倍时可见）** → 留给 QA 会话（贴片中心 alpha 不够 / 眼睛区域偏）。延长的身体自然。
+- **问题**：`DEMO_DESIGN_GUIDE.md` 在 14:53 被别的会话写成 0 字节（工作区，HEAD 完好），本会话没动它，§11.1 教训见交接报告，等文件恢复后补。
+
+
+## 2026-11-08 · 信长 AI 对话拆成三个 Demo（Demo23 信长 / Demo41 家康 / Demo42 座谈会）
+
+**做了什么**
+- 用户：「Keep the Nobunaga AI demo as THREE separate demos: only Nobunaga, only Ieyasu, and a multi-person round-table」（TASKS #46）。
+- Demo23_NobunagaTalk = 「信長と、語らう」（只和信长，原网址）；新 `demos/nobunaga-suntory/Demo41_IeyasuTalk/` = 「家康と、語らう」；新 `demos/nobunaga-suntory/Demo42_SengokuRoundtable/` = 「信長と家康の、座談会」。
+- 新文件夹只有 `index.html`（`<base href="../Demo23_NobunagaTalk/">`，引擎 / 剧本 / 声音 / l10n 全部按路径复用，没有复制）。对象由 `<body data-cast="N|I|NI">` 固定，`main.js` 读取；封面只剩地点选择（相手一行删掉）。
+- 六个页面（3 公开 + 3 私密实时：`live/index.html` 信长、`live/ieyasu.html`、`live/roundtable.html`）全部由 `node demos/nobunaga-suntory/Demo23_NobunagaTalk/scripts/pages.js` 从两个模板生成。`server.py` 加短网址 `/live/nobunaga` `/live/ieyasu` `/live/roundtable`（同一密码、同一 limits）；`start_demo.command` 打印三个地址；`scripts/prompt_dry.js --all` 也检查三个实时页的 cast。
+- nav.js DEMOS + RIGHTS、官网菜单（index.html）、credits.html、l10n.js（新标题 / 副标题三语；删掉旧的对象按钮词）、三语缩略图（`tools/web/thumbs.py` + 菜单用 `<dir>.jpg`）、README、HANDOFF。
+
+**测试**：自己的标签页 + `python3 -m http.server 8793`：Demo41 京都（EN）开始 → 说「お酒が好きです」→ 过渡句 → 结束回到自己的封面；Demo42 安土（中文）开始 → 三人台词 → 过渡句 → 结束回封面；页面加载的 88 个资源无 404；`tools/web/check_mobile.html?only=Demo23,Demo41,Demo42` 7 种尺寸都是一屏。私密版：临时密码文件 + 端口 8794 跑 server.py，未登录跳登录页，登录后三个入口 303 到对应页面并 200，`server.py` / `local/` 仍 404；只做了 prompt 干跑，没有付费对话。
+
+**下一步 / 注意**
+- nav.js 的 `?v=` 没有在所有页面上提升（nav.js 里还有别的会话没提交的改动，由那个会话 / 统筹一起 bump）。subs.js 加载 `l10n.js?v=3` 是全站固定号，老访客最多缓存 10 分钟。
+- `DEMO_DESIGN_GUIDE.md` 在 14:52 被某个会话写成了 0 字节（工作区，未提交）——不是本会话改的，需要统筹确认后用 `git show HEAD:DEMO_DESIGN_GUIDE.md` 加上那个会话的新内容恢复。
+
+---
 
 ## 2026-11-08 · 女性向重制 莲 / 仁 / 紫苑（Demo33→12、Demo34→21、Demo35→22）· 交接（统筹要求转后台）
 
