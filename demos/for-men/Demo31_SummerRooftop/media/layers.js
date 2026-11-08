@@ -17,7 +17,13 @@ window.MOHEAT_LAYERS = {
     "h": 1440,
     "x": 0.56,
     "y": 1.02,
-    "height": 0.98
+    "height": 0.98,
+    "box": [
+     757,
+     0,
+     1832,
+     1440
+    ]
    },
    "patches": [
     {
@@ -58,7 +64,13 @@ window.MOHEAT_LAYERS = {
     "h": 1440,
     "x": 0.56,
     "y": 1.04,
-    "height": 1.05
+    "height": 1.05,
+    "box": [
+     678,
+     0,
+     2022,
+     1440
+    ]
    },
    "patches": [
     {
@@ -99,7 +111,13 @@ window.MOHEAT_LAYERS = {
     "h": 1381,
     "x": 0.42,
     "y": 1.02,
-    "height": 0.92
+    "height": 0.92,
+    "box": [
+     330,
+     59,
+     1558,
+     1440
+    ]
    },
    "patches": [
     {
@@ -136,31 +154,37 @@ window.MOHEAT_LAYERS = {
     "zoom": 1.25
    },
    "char": {
-    "src": "art/char_sparkler.webp?v=bf04889d",
+    "src": "art/char_sparkler.webp?v=1a217402",
     "w": 1700,
-    "h": 1118,
-    "x": 0.5,
+    "h": 1099,
+    "x": 0.4928,
     "y": 1.0,
-    "height": 1.0
+    "height": 1.0,
+    "box": [
+     363,
+     0,
+     2590,
+     1440
+    ]
    },
    "patches": [
     {
-     "src": "art/sparkler_mouth.webp?v=e2e2e733",
+     "src": "art/sparkler_mouth.webp?v=0766c83d",
      "rect": [
-      843,
-      529,
-      158,
-      120
+      857,
+      520,
+      156,
+      118
      ],
      "kind": "mouth"
     },
     {
-     "src": "art/sparkler_eyes.webp?v=4d684296",
+     "src": "art/sparkler_eyes.webp?v=e3a759ce",
      "rect": [
-      755,
-      377,
-      368,
-      127
+      771,
+      371,
+      362,
+      125
      ],
      "kind": "eyes"
     }
@@ -182,7 +206,13 @@ window.MOHEAT_LAYERS = {
     "h": 1381,
     "x": 0.42,
     "y": 1.02,
-    "height": 0.92
+    "height": 0.92,
+    "box": [
+     591,
+     59,
+     1559,
+     1440
+    ]
    },
    "patches": [
     {
@@ -219,21 +249,27 @@ window.MOHEAT_LAYERS = {
     "zoom": 1.3
    },
    "char": {
-    "src": "art/char_whisper.webp?v=44570679",
+    "src": "art/char_whisper.webp?v=ef694d14",
     "w": 1700,
-    "h": 1053,
-    "x": 0.5,
+    "h": 919,
+    "x": 0.5664,
     "y": 1.0,
-    "height": 1.0
+    "height": 1.0,
+    "box": [
+     235,
+     0,
+     2900,
+     1440
+    ]
    },
    "patches": [
     {
-     "src": "art/whisper_mouth.webp?v=9430ecd1",
+     "src": "art/whisper_mouth.webp?v=83f1e165",
      "rect": [
-      953,
-      567,
-      149,
-      113
+      831,
+      494,
+      130,
+      98
      ],
      "kind": "mouth"
     }
@@ -251,12 +287,18 @@ window.MOHEAT_LAYERS = {
     "zoom": 1.3
    },
    "char": {
-    "src": "art/char_shoulder.webp?v=94cab4e0",
+    "src": "art/char_shoulder.webp?v=1cc2a892",
     "w": 1700,
-    "h": 1061,
-    "x": 0.5,
+    "h": 919,
+    "x": 0.4308,
     "y": 1.0,
-    "height": 1.0
+    "height": 1.0,
+    "box": [
+     5,
+     0,
+     2668,
+     1440
+    ]
    },
    "patches": []
   },
@@ -276,7 +318,13 @@ window.MOHEAT_LAYERS = {
     "h": 1431,
     "x": 0.6,
     "y": 1.02,
-    "height": 0.95
+    "height": 0.95,
+    "box": [
+     1019,
+     9,
+     2100,
+     1440
+    ]
    },
    "patches": [
     {

@@ -522,5 +522,74 @@
    1024,
    1024
   ]
+ },
+ "nagisa_sparkler_flat_ext": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "seconds": 45,
+  "usage": {
+   "input_tokens": 1659,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 151
+   },
+   "output_tokens": 1843,
+   "output_tokens_details": {
+    "image_tokens": 1843,
+    "text_tokens": 0
+   },
+   "total_tokens": 3502
+  },
+  "pad": {
+   "left": 400,
+   "right": 0,
+   "bottom": 0
+  }
+ },
+ "nagisa_whisper2_flat_ext": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "seconds": 47,
+  "usage": {
+   "input_tokens": 1668,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 160
+   },
+   "output_tokens": 1843,
+   "output_tokens_details": {
+    "image_tokens": 1843,
+    "text_tokens": 0
+   },
+   "total_tokens": 3511
+  },
+  "pad": {
+   "left": 0,
+   "right": 340,
+   "bottom": 0
+  }
+ },
+ "nagisa_shoulder2_flat_ext": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "seconds": 34,
+  "usage": {
+   "input_tokens": 1658,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 150
+   },
+   "output_tokens": 1843,
+   "output_tokens_details": {
+    "image_tokens": 1843,
+    "text_tokens": 0
+   },
+   "total_tokens": 3501
+  },
+  "pad": {
+   "left": 360,
+   "right": 0,
+   "bottom": 0
+  }
  }
 }

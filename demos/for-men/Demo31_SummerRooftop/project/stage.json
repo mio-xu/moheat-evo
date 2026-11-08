@@ -75,11 +75,11 @@
    "talk": "nagisa_laugh_talk"
   },
   "sparkler": {
-   "src": "nagisa_sparkler_flat",
-   "talk": "nagisa_sparkler_talk_flat",
-   "blink": "nagisa_sparkler_blink_flat",
+   "src": "nagisa_sparkler_flat_ext",
+   "talk": "nagisa_sparkler_flat_ext_talk",
+   "blink": "nagisa_sparkler_flat_ext_blink",
    "centre_mouth": [
-    1188,
+    1588,
     758
    ],
    "radius_mouth": [
@@ -88,8 +88,8 @@
    ]
   },
   "whisper": {
-   "src": "nagisa_whisper2_flat",
-   "talk": "nagisa_whisper2_talk_flat",
+   "src": "nagisa_whisper2_flat_ext",
+   "talk": "nagisa_whisper2_flat_ext_talk",
    "centre_mouth": [
     1640,
     852
@@ -100,7 +100,7 @@
    ]
   },
   "shoulder": {
-   "src": "nagisa_shoulder2_flat"
+   "src": "nagisa_shoulder2_flat_ext"
   }
  },
  "views": {
@@ -136,7 +136,7 @@
    "pose": "sparkler",
    "bg": "roof",
    "fire": null,
-   "x": 0.5,
+   "x": 0.4928,
    "y": 1.0,
    "height": 1.0,
    "zoom": 1.25
@@ -155,7 +155,7 @@
    "pose": "whisper",
    "bg": "roof",
    "fire": null,
-   "x": 0.5,
+   "x": 0.5664,
    "y": 1.0,
    "height": 1.0,
    "zoom": 1.3
@@ -165,7 +165,7 @@
    "pose": "shoulder",
    "bg": "roof",
    "fire": null,
-   "x": 0.5,
+   "x": 0.4308,
    "y": 1.0,
    "height": 1.0,
    "zoom": 1.3
