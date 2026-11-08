@@ -24,4 +24,4 @@ purr, the window and the rain move around your head, and the thermal output turn
 - `index.html`, `style.css` (+ Demo 10's `demo.css` by path); `?embed=1` site menu, `?cover=1` poster, `?step=find|call|lens|laser|cool|feed|night|home` jump (testing).
 - `main.js` — thermal view (a grey heat map drawn with the same camera transform, coloured in the shader; her temperature on screen), fan and heated blanket; camera (1.5× view into the room picture, pan, auto track), WebGL camera look (barrel lens, colour fringes, grain, vignette, IR, static), OSD (LIVE, time, Wi-Fi, PAN), steps, Naomi, thermal engine, device output.
 - `audio.js` — camera sounds (static, pan motor, talk chime, laser, electric fan (motor at the fan + breeze at the aim), food dispenser, IR click, shutter, front door) on Demo 11's AudioContext.
-- Reused read-only by path: `../Demo11_Naomi/audio.js` (purr, mews, paw steps, rain, birds) and `../Demo11_Naomi/media/art/*.webp` (Seedance art). Nothing in Demo 11 is changed.
+- Reused read-only by path: `../_kit/naomi/audio.js` (purr, mews, paw steps, rain, birds) and `../_kit/naomi/art/*.webp` (Seedance art). Nothing in Demo 11 is changed.

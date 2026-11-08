@@ -11,7 +11,7 @@
 2. **人声永远是暖的**：贴耳最强，越远越弱，跟着响度走。只有设定特殊的角色（如雪精灵）才能是冷声；吹气、薄荷气息不算人声，可以是冷的。
 3. **页面正好一屏，手机也一样**：桌面、平板、手机竖屏和横屏都不出现页面滚动或横向溢出，播放画面尽量大；各 Demo 的版式一致（§7.1）。
 4. **屏幕上的文字只用日语 + 英语**（不出现中文）。日文标题必须带假名，全汉字会被看成中文。
-5. **不改旧 Demo**：复用美术用符号链接，复用代码按路径 import 或 `<base href>`；每次改动都 commit 并 push 到 `origin main`，大文件不进 git。（例外，用户 2026-11-08：**重做版接管原版**——在临时文件夹里做好、测完后，用 `python3 tools/web/merge_remake.py <原文件夹> <临时文件夹>` 并回原文件夹，网址不变，旧版自动备份到仓库外 `~/Desktop/MoHeat Evo 备份/<品类>/<文件夹>_<时间>/`。）
+5. **Demo 之间零依赖**（用户 2026-11-08：「demo 都要起源一个规范模版类似引擎…demo 之间不应该存在依附性」「同一个类别可以共享一个依赖」）：页面、代码、美术、声音只能来自自己的文件夹、`demos/shared/` 和**本品类的** `demos/<品类>/_kit/`（§12.1）；不用 `<base href>` 指向别的文件夹，不用指向文件夹外的符号链接。为了解耦 / 迁移可以改旧 Demo，用 `tools/qa/trace_demo.js` 验证行为不变。每次改动都 commit 并 push 到 `origin main`，大文件不进 git。（例外，用户 2026-11-08：**重做版接管原版**——在临时文件夹里做好、测完后，用 `python3 tools/web/merge_remake.py <原文件夹> <临时文件夹>` 并回原文件夹，网址不变，旧版自动备份到仓库外 `~/Desktop/MoHeat Evo 备份/<品类>/<文件夹>_<时间>/`。）
 
 ---
 
@@ -214,7 +214,7 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 | **G2 声音** | ElevenLabs 试听 3 个 → 用户选 → 合成（交接文档 §4） | 选定的 voice id 记进交接文档 / README | — |
 | **G3 出图** | §5.3 工具顺序，先 `probe`（429 / Retry-After 长 → OpenAI）；提示词：新姿势「full figure inside the frame with margin」、按参考重画「同样取景不拉远」、手上拿什么不拿什么、只画人物；特写给远景 + 近景两张参考；差分一律遮罩编辑；同一底图的差分和同脸姿势当场一起提交 | **只看输出文件**：每个 job 都有新图（`exists` = 错误）、网页端历史多了一张卡片；`assets/poses_preview.jpg` 并排对比同一个人（CHECKLIST） | 没出图却"成功"、重名跳过、共用账号、加道具 / 全身像、近景远景不一致 |
 | **G4 合成** | `build_stage.py <demo> --preview` →（夜景）`clean_cutout.py` → `check_cut_body.py` →（有报告）`extend_pose.py … --auto` / `--place` → `check_patches.py` →（不准）写死 `regions_*` 重跑 | `check_demo.py <demo> --quick` 的 **G4 行全 PASS**：layers（和 stage.json 同步）、cut-body（0 截断）、patches（rim / outer / outside / border）、eyes（两只眼）；人工：`mouths.jpg` 2×、每张 `char_*.webp` 叠深色 2×（CHECKLIST） | 抠图边缘、嘴 / 眼差分、半截身体、写进原 Demo、特效遮罩 |
-| **G5 页面** | §7.3 骨架（复制同类最近的 Demo）、`media/layers.js` + `shared/layers.js`、`hooks`；改 shared 马上 `bump.py --stage`；所有文件放在自己的文件夹 | `check_demo.py <demo> --quick` 的 **G5 行全 PASS**：syntax、refs（无 `<base>`、无别的 Demo 路径）、links（无断链）、files（静态 404）、cache（shared 和 `media/layers.js` 的 `?v=` 最新）、l10n、voice（`shared/voice.js`）、end（回本 Demo 封面「↺ もう一度 · Play again」） | 嘴不动（缓存）、依赖别的 Demo、语法错误、写死路径 |
+| **G5 页面** | §7.3 骨架（复制同类最近的 Demo）、`media/layers.js` + `shared/layers.js`、`hooks`；改 shared 马上 `bump.py --stage`；文件只放自己的文件夹 / 本品类 `_kit/` | `check_demo.py <demo> --quick` 的 **G5 行全 PASS**：syntax、refs（无 `<base>`、无别的 Demo 路径）、links（无断链）、files（静态 404）、cache（shared 和 `media/layers.js` 的 `?v=` 最新）、l10n、voice（`shared/voice.js`）、end（回本 Demo 封面「↺ もう一度 · Play again」） | 嘴不动（缓存）、依赖别的 Demo、语法错误、写死路径 |
 | **G6 测试** | 自动通关（两条分支）、三语、手机 | `check_demo.py <demo>`（默认：自己的 headless Chrome，`?auto=1&nomic&sub=zh` 通关 + 7 种尺寸）：**runtime**（0 异常 / 0 失败请求）、**l10n-live**（无 `[MoHeatSub] no zh`）、**end-live**、**thermal**（`#cmd` 实测：同时冷热、≤ 3 s 冷热切换、左右差、峰值 ≥ 50 %、结束 stop）、**mobile** 全 PASS；上线前 `--full`（加 alt 分支 + `check_mouth.js` 口型）；自己看一段说话和眨眼（CHECKLIST） | 测试通过但嘴不动、手机不好用、测试被干扰 |
 | **G7 上线** | 封面 `?cover=1` → `media/cover.jpg`、`thumbs.py`、`nav.js` DEMOS、官网菜单、`credits.html`；重做版 `merge_remake.py`（**先自动跑 check_demo，FAIL 就拒绝合并**，`--force` 要在提交说明里写理由），合并后对原文件夹再跑一次；**只提交自己的路径、自己提交**（硬规则，2026-11-08 一天出了 3 次事）：整份文件都是自己的用 `git commit -- <路径>`；共用文件里还有别人没提交的改动时，用临时索引（`GIT_INDEX_FILE` + `read-tree HEAD` + 只放自己基于 HEAD 的版本 + `commit-tree` / `update-ref HEAD <新> <旧>`）；**永远不用不带路径的 `git commit`**（会带走别人暂存的东西），**永远不让 HEAD 往回走**（共用的 main 上不 reset / rebase / amend / 强推，出错就再做一个往前的修正提交）；共用文档一律写临时文件再替换（不先清空再写），改之前马上重读；提交后 `git show --stat HEAD` | `check_demo.py` 0 FAIL（**release** 行：封面、三语缩略图不比封面 / `l10n.js` 旧、菜单、credits 写明 layered）；统筹会话 push 后 Pages `built` | 带上别人的改动、只提交版本号、`$F` 路径 |
 | **G8 收尾** | README / 交接文档 / `WORKLOG.md`、预算记账（`tools/report/balances.py`）、`tools/cleanup/audit.py`；新问题 → §11.1 **并变成一个检查** | **hygiene** 行 PASS（assets 不进 git、无大文件、有预算记录、有 CHECKLIST）；CHECKLIST 手动项都打勾 | — |
@@ -227,7 +227,7 @@ python3 tools/qa/check_demo.py <demo> --full             # 再加 alt 分支和�
 python3 tools/qa/check_demo.py <临时文件夹> --remake-of <原文件夹>   # 重做版：允许引用原文件夹，跳过菜单 / 缩略图（merge_remake.py 自动这样跑）
 python3 tools/qa/check_demo.py <demo> --checklist        # 同时写 / 刷新 project/CHECKLIST.md 的自动部分（手动打的勾保留）
 ```
-个别 Demo 的例外写在 `project/qa.json`（`allow_foreign`、`l10n_ignore`、`skip: {检查名: 理由}`），表里显示 SKIP + 理由。WARN 不挡上线，但要看一眼；FAIL 必须修好（或写明理由的 skip）。
+个别 Demo 的例外写在 `project/qa.json`（`l10n_ignore`、`skip: {检查名: 理由}`），表里显示 SKIP + 理由。WARN 不挡上线，但要看一眼；FAIL 必须修好（或写明理由的 skip）。
 
 **怎么让流程继续变好**（用户 2026-11-08：每条教训都要变成检查）：出了问题 → ① 能用脚本发现的，加进 `check_demo.py`（或它调用的 `tools/art/*`、`tools/web/*`），在 §11.1 写〔check_demo: <检查名>〕；② 查不了的，加进 `tools/qa/CHECKLIST_TEMPLATE.md` 的手动项，写〔CHECKLIST〕；③ 改本表的「防住的 §11.1」一列。新工具也要接进 `check_demo.py`，不要再多一个要记住的入口。
 
@@ -568,7 +568,7 @@ main.layout
 
 ## 10. 更新旧 Demo
 
-- 不覆盖旧 Demo 的成品。要换配音、加动画、改冷热的时候，在旧 Demo 自己的脚本里改，并保留可重建的管线；或者另开一个新文件夹，按路径引用旧 Demo。
+- 不覆盖旧 Demo 的成品。要换配音、加动画、改冷热的时候，在旧 Demo 自己的脚本里改，并保留可重建的管线；或者另开一个新文件夹（重做暂存期可以临时按路径引用原版，`merge_remake.py` 合并后变成本地文件）。为解耦 / 迁移可以改旧 Demo 的引用路径（§12.1 依赖规则，trace 验证行为不变）。
 - **重配音**按交接文档里的顺序（女性向 → 男性向 → 信长 → 其他），每个角色都要先试听、等用户选定。
 - 旧的时间轴 Demo（1–9）的 CSV 规则不变（同侧不冲突）；要换成 DUAL 需要用户同意，并重新跑 QA。
 - 美术风格要统一时，先只改一张给用户看，确认后再批量做。（2026-11-08：用户试过"重新打光"后选择保留原图。）
@@ -620,7 +620,9 @@ main.layout
 
 **G5 页面与代码**
 - **说话时嘴完全不动**（陽向分层版）：改了 `demos/shared/layers.js` 没升 `?v=`，浏览器用缓存的旧版；复用的 Demo20 `main.js` 状态在 `window.HINA` 不是 `window.STREAM` → 改完 shared 文件马上 `python3 tools/web/bump.py --stage <文件>`；重跑 `build_stage.py` 改了 `media/layers.js` 也给页面里的 `media/layers.js?v=` 加 1；复用旧 `main.js` 前列出它的全局状态对象，在 `stage.json` 写 `hooks`。`media/layers.js` 里的图片路径带内容指纹 `?v=`，换图不改名也不会读到旧图。〔G5 · check_demo: cache · G6 · check_demo --full: mouth〕
-- **页面依赖别的 Demo 的文件夹**（Demo24 读 Demo14 的 `style.css`，Demo14 被 Mint 新版接管时就会坏；Demo17–19 的 `<base href>` 指向 Demo14）→ 重做会接管原文件夹，所以页面、代码、样式、图、音频都要在自己的文件夹里（复制过来，或合并后变成本地路径）；只有 `project/qa.json` 的 `allow_foreign` 写明理由的才例外。〔G5 · check_demo: refs / links〕
+- **页面依赖别的 Demo 的文件夹**（Demo24 读 Demo14 的 `style.css`，Demo14 被 Mint 新版接管时就会坏；Demo17–19 的 `<base href>` 指向 Demo14）→ 重做会接管原文件夹，所以页面、代码、样式、图、音频都要在自己的文件夹里（或者合并后变成本地路径），同品类共用的放 `demos/<品类>/_kit/`。没有例外（`allow_foreign` 已取消，只有 `--remake-of` 放行暂存文件夹）。〔G5 · check_demo: refs · tools/qa/check_deps.py〕
+- **搬文件时撞上别的会话没提交的改动**（引擎 P1：`Demo15/main.js`、`Demo23/main.js` 上有封面会话未提交的 drawCover 改动）→ 工作区按改名搬，改动跟着文件走；提交用基于 HEAD 的临时索引（只带自己的路径和行），在提交说明里写清新路径，让对方在新路径提交。还原文件做"迁移前"对比会动到共享工作区：用 `trace_demo.js --root <镜像目录>`，或者在改动**之前**录基准。〔G7 · 提交前 `git show --stat HEAD`〕
+- **机器满载时行为对比全部失败**（引擎 P1：多个会话同时跑 Chrome，load 200–550，字幕只采到 0–2 条）→ 对比前看 `uptime`，负载高于约 50 就等；并行不超过 2–4 个；随机分支（Demo28 轮流顺序、对话 Demo 的沉默过渡句）两次运行本来就可能不同，先重跑再判断。〔G6 · docs/engine/MIGRATION.md〕
 - **用脚本改代码改出语法错误**（注释插进表达式中间）→ 自动替换后马上 `python3 -m py_compile` / `node --check`；注释单独写一行。〔G5 · check_demo: syntax〕
 - **数据文件头注释里的示例写法让解析失败**（`lines.js` 注释里有 `line = { … }`，`src.index('= {')` 找到注释；Demo23 又犯一次）→ 从 JS 数据文件取 JSON 时按完整赋值定位（`src.index('window.TALK_SCRIPT = ')`），注释里不写赋值的样子。〔G5〕
 - **共用工具出问题牵连别的 Demo**：`build_stage.py` 开始在路径后加 `?v=<hash>`，`clean_cutout.py` 打开文件失败、页面显示的是没清理的抠图；在 Demo18 运行了写死 Demo31 路径的脚本，把 Demo31 又清理了一遍 → 共用处理脚本放 `tools/`，Demo 文件夹是**必填参数**；读路径一律去掉 `?` 后面；流水线每一步用 `&&` 串起来，失败就停。〔G4 / G5〕
@@ -675,6 +677,7 @@ main.layout
 ```
 仓库根目录            官网（index.html / styles.css / script.js）、设备页（control / test）、device.js、文档（CLAUDE / AGENTS / HANDOFF / DEMO_DESIGN_GUIDE / TASKS）
 demos/shared/         所有 Demo 共用：nav.js、series.css、game.css（游戏类页面的基础样式）、subs.js（显示语言）、voice.js、interact.js、scrub.js
+demos/<品类>/_kit/    本品类多个 Demo 共用的代码、样式、角色 / 场景 / 声音（README.md 列出内容和使用者）；只引用 demos/shared/ 和自己
 demos/<品类>/Demo<NN>_<Name>/
   index.html  style.css  main.js  lines.js  audio.js  l10n.js  README.md     页面（进 git；没有就不建）
   media/      art/*.webp  video/*.mp4  voice/*.m4a  voice.js  cover.jpg  data.js   页面实际加载的压缩成品（进 git）
@@ -688,9 +691,9 @@ tools/cleanup/        清理报告（audit.py）
 assets/images/demos/  官网菜单缩略图（按文件夹名命名）
 ```
 
-- 页面文件名固定：样式 `style.css`、主程序 `main.js`、台词 `lines.js`、声音 `audio.js`、翻译 `l10n.js`；其他模块用说明性的名字（`art.js`、`scenes.js`）。只用另一个 Demo 页面的 Demo（Demo16 → 15、Demo17–19 → 14）只有 `index.html` + `media/`，用 `<base href>` 指过去。
+- 页面文件名固定：样式 `style.css`、主程序 `main.js`、台词 `lines.js`、声音 `audio.js`、翻译 `l10n.js`；其他模块用说明性的名字（`art.js`、`scenes.js`）。同一套代码的兄弟页（Demo15 / 16、Demo23 / 41 / 42）是各自的薄页面（`index.html`、占位 `l10n.js`、封面），代码和素材在本品类 `_kit/`。
 - Demo 1–9 的制作管线目录（`tools/`、`production/`、`analysis/`、`storyboard/`、`thermal/`、`video/`、`art/`、`output/`）保留原名：里面的 Python 互相按路径引用，重命名要重跑整条管线验证；新 Demo 用上面的 `scripts/` + `project/`。
-- 一个文件只放在它所属 Demo 的文件夹里；多个 Demo 共用的放 `demos/shared/` 或 `tools/`，**按路径引用，不复制**。
+- **依赖规则**（`python3 tools/qa/check_deps.py`，`check_demo.py` 的 refs = FAIL）：依赖只能向下 Demo → 本品类 `_kit/` → `demos/shared/`。一个文件只放在它所属 Demo 的文件夹里；**同品类**第二个 Demo 要用 → 搬进 `demos/<品类>/_kit/`（原 Demo 也改从 kit 加载）；**两个品类**要用 → 通用的进 `demos/shared/`，否则各复制一份；制作脚本共用的进 `tools/`。禁止：从别的 Demo 文件夹或别的品类的 `_kit` 加载、`<base href>` 指向别的文件夹、部署文件里指向文件夹外的符号链接、`_kit` 引用 Demo。Demo 之间的跳转只走 `nav.js` 的 `DEMOS` 数据（‹ › 按钮）。
 - 从 Downloads 下载的东西**马上**改名，移进对应 Demo 的 `assets/`，不在 Downloads 或仓库根目录留着。
 - 临时文件放会话的 scratchpad，不放进仓库。
 
@@ -729,13 +732,15 @@ assets/images/demos/  官网菜单缩略图（按文件夹名命名）
 
 目标：任何人（包括之后的 Claude 会话）都能很快看懂、安全地改、一次改动全站生效。
 
-- **共用优先**：界面、显示语言、语音回答、互动卡片、一屏布局都在 `demos/shared/`（series.css · game.css · nav.js · subs.js · l10n_common.js · voice.js · interact.js）。修 bug、改样式先改共用文件，全站一起生效；Demo 自己只放内容（剧情 `main.js`、台词 `lines.js`、翻译 `l10n.js`、美术 / 声音）。同一段代码出现第二次，就搬进 shared 或 tools。
+- **共用优先**：界面、显示语言、语音回答、互动卡片、一屏布局都在 `demos/shared/`（series.css · game.css · nav.js · subs.js · l10n_common.js · voice.js · interact.js）。修 bug、改样式先改共用文件，全站一起生效；Demo 自己只放内容（剧情 `main.js`、台词 `lines.js`、翻译 `l10n.js`、美术 / 声音）。同一段代码出现第二次，就搬进 shared（全站）、本品类 `_kit/`（同一品类，§12.1 依赖规则）或 tools（制作脚本）。所有 Demo 最终来自同一个标准引擎（`docs/engine/2026-11-08_engine_plan.md`，进度 `docs/engine/MIGRATION.md`）。
 - **数据和代码分开**：台词 → `lines.js` / `media/data.js`；翻译 → `l10n.js`（每个 Demo）+ `shared/l10n_common.js`（页面框架）；语言 → `subs.js` 的 `LANGS`；Demo 列表 → `nav.js` 的 `DEMOS`；互动门 → `interact.js` 的 `GATES`。改内容只改数据，不碰逻辑。
 - **固定工具代替临时脚本**（反复要做的事写成 `tools/` 下的脚本，并写进本规范）：
   - `python3 tools/web/bump.py <改过的共用文件…>`：改 `?v=` 版本号（`--stage` 只暂存这次的改动，`--name l10n.js` 按文件名）。
   - `node tools/l10n/check_missing.js <lang> [文件夹]`：列出没有翻译的字符串。
   - `python3 tools/cleanup/audit.py`：清理报告。
   - `python3 tools/qa/check_demo.py <demo> [--quick|--full] [--checklist]`：**一个入口跑完所有自动检查**（§6「制作流程 v2」），PASS / WARN / FAIL 表；`merge_remake.py` 合并前自动跑，FAIL 就拒绝。新检查加进它，不另开入口。
+  - `python3 tools/qa/check_deps.py [--fail] [--scripts]`：全站依赖矩阵（§12.1 依赖规则），refs 检查用同一份扫描。
+  - `node tools/qa/trace_demo.js <demo> --out a.json` + `--diff a.json b.json`：固定随机种子录字幕、`#cmd` 冷热流、答题按钮、加载的文件、截图，证明搬动 / 迁移没有改变行为（页面没有 `?auto` 时加 `--click`）。
 - **安全地改文件**：先读完再写（Python 里不要在同一行 `open(p, 'w').write(f(open(p).read()))`，打开写入时文件已被清空——2026-11-08 因此清空过一次 Demo24 的页面）；批量改动前先 `--dry` 看清单；改完 `node --check` 所有改过的 JS。
 - **多个会话同时工作**：只提交自己改的文件或改动（`git add <具体文件>`，或 `bump.py --stage`），**暂存后立刻 commit + push**（别的会话的 `git commit` 会把你暂存的改动一起提交）；改名、批量移动之前用 ListAgents 看看谁在工作，改完用 SendMessage 告诉它们新路径。
 - **写清楚**：规则写进本规范（是什么、为什么、怎么做）；用户交代的任务记进 `TASKS.md`；每个共用文件开头写用途和用法；文件名按 §12.1。

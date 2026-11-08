@@ -26,7 +26,7 @@ Five interactions: choice · hold · action · choice · action. Each one works 
 | Night air through the open garden doors | both ears, mild; stops when Koyuki closes them | cool |
 
 ## Assets (strict layers, 0 Seedance credits)
-- **Art**: Demo 1's approved ChatGPT sprites and `room_bg`, loaded by path from `../Demo01_SnowFoxfire/media/art/`. Nothing is copied or changed.
+- **Art**: Demo 1's approved ChatGPT sprites and `room_bg`, loaded from the all-ages kit `../_kit/snowfox/art/`. Nothing is copied or changed.
   - Layers: background (zoom, blur and tint per view) → characters (VN frame swaps: blink, mouth from each girl's own voice level, expressions; ear close-ups mirrored for the right ear) → code effects (snow in the doorway, hearth and lantern flicker, foxfire wisps, snow sparkles, breath clouds, closing eyelids, paper doors sliding shut).
 - **Voices**: ElevenLabs, the user's Demo 1 picks (`koyuki` r1_b, `homura` r1_c). `scripts/voice.py` → `media/voice/*.m4a`. Lines said together are voiced once per girl (`kh1_k` / `kh1_h`).
 - **Sound**: Web Audio, HRTF (`audio.js`).

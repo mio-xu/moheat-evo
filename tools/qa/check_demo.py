@@ -19,7 +19,7 @@ What is checked (id → lesson / rule):
   patches    tools/art/check_patches.py (mouth drift / seams / outer ring / patch outside; NO-MOUTH = WARN)
   eyes       every eyes patch covers two eyes (one-eye blinks)
   refs       only own folder + demos/shared + own category _kit (tools/qa/check_deps.py): no <base href>, no other demo folder / other
-             category's kit, no hard link to another demo, no symlink out (engine plan §3.1, guide §12; WARN until P1 is done, then FAIL)
+             category's kit, no hard link to another demo, no symlink out (engine plan §3.1, guide §12.1)
   links      no broken symlinks (Pages build fails), symlinks into other demos listed
   files      every local file the page / its code names exists (static 404 scan)
   cache      ?v= of shared files = the highest on the site and newer than the file's last change; same for the demo's own files
@@ -167,7 +167,7 @@ else:
 # own folder, demos/shared/** and its OWN category kit demos/<cat>/_kit/**; no <base href> to another folder, no hard link to another
 # demo (navigation = nav.js data), no symlink out of the folder. Same scan as the site-wide tools/qa/check_deps.py (one rule, one code).
 # qa.json allow_foreign is gone; only --remake-of <orig> lets a staging folder point at the folder it replaces.
-REFS_LEVEL = 'WARN'   # P0 = WARN; becomes 'FAIL' when P1 of the engine plan is done (check_deps.py = 0 violations)
+REFS_LEVEL = 'FAIL'   # since P1 of the engine plan (check_deps.py = 0 violations)
 r = subprocess.run([sys.executable, os.path.join(REPO, 'tools', 'qa', 'check_deps.py'), '--json', '--demo', NAME], capture_output=True, text=True)
 try:
     dep = next((x for x in json.loads(r.stdout)['rows'] if x['demo'] == f'{CAT}/{NAME}'), {'details': {}})
