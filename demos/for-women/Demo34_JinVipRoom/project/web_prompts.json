@@ -1,0 +1,54 @@
+{
+ "bg_lounge": {
+  "ref": "d21:jin_lounge",
+  "prompt": "Image 1 is the reference picture. Remove the young man completely and fill the space with what is behind him — the dark red velvet sofa, the vanity mirror with warm bulbs, the bar table with water bottles and an ice bucket — the same composition, colours, lighting and art style. No people, no hands.\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI."
+ },
+ "jin_lounge": {
+  "ref": "d21:jin_lounge",
+  "prompt": "Image 1 is the CHARACTER, POSE and STYLE reference: redraw the same young man in the same pose and framing, same art style.\n\nArt style EXACTLY like image 1 (the user's chosen style): soft modern cel animation with a light, airy palette — thin coloured lineart (dark lavender instead of black), flat pastel colours with one soft-edged but still flat shadow tone, simple clean backgrounds with a few round lights, gentle and romantic like an anime film. Hand-drawn feel, NOT glossy: no airbrush gradients, no bloom, no heavy glow, no over-detailed strands. Realistic adult proportions (not chibi).\n\nJin: the exact young man from image 1 — a domineering idol rapper, rich-heir type: messy crimson-red hair, sharp golden eyes, small black ear studs, black sunglasses, a black leather jacket over an open black shirt, a silver chain, silver rings. Extremely handsome, confident, a little dangerous smile.\n\nSame pose as image 1: sitting back on a sofa (draw no sofa — only him, his body as if seated), legs apart, one arm resting along the back, the other hand stretched toward the viewer beckoning 'come here', black sunglasses on his eyes. Mouth CLOSED (lips together) in the same smirk.\n\nPlain flat MID-GREY studio background (#707070), completely empty: no sofa, no lounge, no scenery, no floor line, no shadow on the background. Lighting as in a dim VIP lounge: warm amber light from the vanity bulbs on the LEFT, deep red ambience.\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI."
+ },
+ "jin_gaze": {
+  "ref": "d21:jin_gaze",
+  "prompt": "Image 1 is the CHARACTER, POSE and STYLE reference: redraw the same young man in the same pose and framing, same art style.\n\nArt style EXACTLY like image 1 (the user's chosen style): soft modern cel animation with a light, airy palette — thin coloured lineart (dark lavender instead of black), flat pastel colours with one soft-edged but still flat shadow tone, simple clean backgrounds with a few round lights, gentle and romantic like an anime film. Hand-drawn feel, NOT glossy: no airbrush gradients, no bloom, no heavy glow, no over-detailed strands. Realistic adult proportions (not chibi).\n\nJin: the exact young man from image 1 — a domineering idol rapper, rich-heir type: messy crimson-red hair, sharp golden eyes, small black ear studs, black sunglasses, a black leather jacket over an open black shirt, a silver chain, silver rings. Extremely handsome, confident, a little dangerous smile.\n\nSame pose as image 1: a close-up, leaning toward the viewer, sunglasses pushed up on his head, his golden eyes looking straight into the viewer's, a confident half-smile. Hands not in the picture. Mouth CLOSED (lips together) in the same smirk.\n\nPlain flat MID-GREY studio background (#707070), completely empty: no sofa, no lounge, no scenery, no floor line, no shadow on the background. Lighting as in a dim VIP lounge: warm amber light from the vanity bulbs on the LEFT, deep red ambience.\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI."
+ },
+ "jin_glasses": {
+  "ref": "d21:jin_glasses",
+  "prompt": "Image 1 is the CHARACTER, POSE and STYLE reference: redraw the same young man in the same pose and framing, same art style.\n\nArt style EXACTLY like image 1 (the user's chosen style): soft modern cel animation with a light, airy palette — thin coloured lineart (dark lavender instead of black), flat pastel colours with one soft-edged but still flat shadow tone, simple clean backgrounds with a few round lights, gentle and romantic like an anime film. Hand-drawn feel, NOT glossy: no airbrush gradients, no bloom, no heavy glow, no over-detailed strands. Realistic adult proportions (not chibi).\n\nJin: the exact young man from image 1 — a domineering idol rapper, rich-heir type: messy crimson-red hair, sharp golden eyes, small black ear studs, black sunglasses, a black leather jacket over an open black shirt, a silver chain, silver rings. Extremely handsome, confident, a little dangerous smile.\n\nSame pose as image 1: a close-up, one ringed hand pulling his black sunglasses down his nose, his golden eyes peeking over the lenses at the viewer (the hand beside the glasses, not over his mouth). Mouth CLOSED (lips together) in the same smirk.\n\nPlain flat MID-GREY studio background (#707070), completely empty: no sofa, no lounge, no scenery, no floor line, no shadow on the background. Lighting as in a dim VIP lounge: warm amber light from the vanity bulbs on the LEFT, deep red ambience.\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI."
+ },
+ "jin_whisper": {
+  "ref": "d21:jin_whisper",
+  "prompt": "Image 1 is the CHARACTER, POSE and STYLE reference: redraw the same young man in the same pose and framing, same art style.\n\nArt style EXACTLY like image 1 (the user's chosen style): soft modern cel animation with a light, airy palette — thin coloured lineart (dark lavender instead of black), flat pastel colours with one soft-edged but still flat shadow tone, simple clean backgrounds with a few round lights, gentle and romantic like an anime film. Hand-drawn feel, NOT glossy: no airbrush gradients, no bloom, no heavy glow, no over-detailed strands. Realistic adult proportions (not chibi).\n\nJin: the exact young man from image 1 — a domineering idol rapper, rich-heir type: messy crimson-red hair, sharp golden eyes, small black ear studs, black sunglasses, a black leather jacket over an open black shirt, a silver chain, silver rings. Extremely handsome, confident, a little dangerous smile.\n\nSame pose as image 1: very close, he leans in from the RIGHT toward the viewer's right ear, his face large, three-quarter view, eyes half closed, a low dangerous smile, sunglasses on his head. Mouth CLOSED (lips together) in the same smirk.\n\nPlain flat MID-GREY studio background (#707070), completely empty: no sofa, no lounge, no scenery, no floor line, no shadow on the background. Lighting as in a dim VIP lounge: warm amber light from the vanity bulbs on the LEFT, deep red ambience.\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI."
+ },
+ "jin_can": {
+  "ref": "jin_gaze",
+  "prompt": "Keep his face, head, hair, sunglasses on his head, expression and position EXACTLY as they are (same pixels), the same plain grey background and lighting; do not zoom or crop. Change only his arms / hands and what they hold: his ringed hand now presses an ice-cold silver drink can, beaded with water, toward the viewer's right cheek at the lower RIGHT of the picture (below his chin, never over his face)."
+ },
+ "jin_wrist": {
+  "ref": "jin_gaze",
+  "prompt": "Keep his face, head, hair, sunglasses on his head, expression and position EXACTLY as they are (same pixels), the same plain grey background and lighting; do not zoom or crop. Change only his arms / hands and what they hold: his ringed hand now grips the viewer's wrist (a slim woman's forearm coming in from the lower RIGHT edge), held at chest height below his chin."
+ },
+ "jin_jacket": {
+  "ref": "jin_gaze",
+  "prompt": "Keep his face, head, hair, sunglasses on his head, expression and position EXACTLY as they are (same pixels), the same plain grey background and lighting; do not zoom or crop. Change only his arms / hands and what they hold: his leather jacket is off; he holds it open with both ringed hands at the bottom of the picture, about to wrap it around the viewer's shoulders (an open black shirt and the silver chain on him)."
+ },
+ "jin_lounge_talk": {
+  "ref": "jin_lounge",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY his mouth: slightly open as if talking low, a small natural opening (teeth barely visible). Do not move, zoom or crop the picture."
+ },
+ "jin_gaze_talk": {
+  "ref": "jin_gaze",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY his mouth: slightly open as if talking low, a small natural opening (teeth barely visible). Do not move, zoom or crop the picture."
+ },
+ "jin_gaze_blink": {
+  "ref": "jin_gaze",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY his eyes: closed in a natural blink (eyelids down, lashes visible); his red bangs stay exactly as they are. Do not move, zoom or crop the picture."
+ },
+ "jin_glasses_talk": {
+  "ref": "jin_glasses",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY his mouth: slightly open as if talking low, a small natural opening (teeth barely visible). Do not move, zoom or crop the picture."
+ },
+ "jin_whisper_talk": {
+  "ref": "jin_whisper",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY his lips: parted a little, saying something low at her ear, the same half-closed eyes. Do not move, zoom or crop the picture."
+ }
+}

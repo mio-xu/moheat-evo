@@ -34,6 +34,7 @@ assert mm, "no main.js script tag"
 s = s[:mm.start()] + (f'<!-- {on}\'s story / sound / thermal code by path (unchanged); shared/layers.js draws the layered art in place of its stills -->\n'
                       f'  <script src="media/layers.js?v=1"></script>\n  <script>MOHEAT_LAYERS.skipVideo = {a.skip_video!r};</script>\n'
                       f'  <script src="../../shared/layers.js?v=1"></script>\n  ') + s[mm.start():]
+s = re.sub(r'(art|art and animation|animation) (made )?with Seedance( video)?', lambda m: 'art made with Seedance', s)   # no video in a remake
 s = re.sub(r'(<p class="draft" id="credits">[^<]*?)(</p>)', lambda m: m.group(1) + ("" if "layered stills" in m.group(1) else " · layered stills") + m.group(2), s, 1)
 os.makedirs(os.path.join(N, "media", "art"), exist_ok=True)
 open(os.path.join(N, "index.html"), "w", encoding="utf-8").write(s)

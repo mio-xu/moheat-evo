@@ -451,6 +451,19 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 已测：两条分支自动跑完、0 报错、无 404、三种语言、一屏。**用户 2026-11-08 决定直接替换 Demo24**：nav.js DEMOS、官网菜单、缩略图都换成 Demo27；Demo24 留在仓库作备份（不在菜单里）。
 - 坑：API 输出链接 30–60 分钟失效（第 2 批 7 张因此失败，未扣费），上传又限流 → 第 2 批改用网页端（`scripts/web_take.py`）。
 
+### 女性向重制 Demo32–35（进行中，2026-11-08 起）—— 用户要求：人物、声音、剧情不变，按标准流程（§6）重做画面，不要视频
+
+| 新文件夹 | 原 Demo | 状态 |
+|---|---|---|
+| Demo32_HinataBooth | Demo20 陽向 | 背景 + 3 个姿势已出（100 credits），页面已搭；缺挥手 + 6 张差分（上传限流） |
+| Demo33_RenNightCall | Demo12 蓮 | 提示词 / 分层表 / 页面 / stage.json 已准备，未出图（约 350，8 次上传） |
+| Demo34_JinVipRoom | Demo21 迅 | 同上（约 325，8 次上传） |
+| Demo35_ShionRainyNight | Demo22 紫苑 | 同上（约 425，10 次上传） |
+
+- 出图：每个文件夹 `python3 scripts/seedance.py prompts` → `project/web_prompts.json`（每条写着参考图：`dXX:<原静帧>` = `assets/art/web/dXX_*.jpg`，否则 = 本 Demo 先出的底图）。网页端：`tools/seedance/web_helpers.js` + `tools/seedance/web_take.py`；本地 CORS 服务器（scratchpad 的 `cors_server.py`，端口 8794）让网页直接读提示词。
+- 同一句提示词的差分（例如几个姿势的 talk）在网页上分不清：先下载前一个再提交下一个。
+- 出完：`python3 tools/art/build_stage.py <demo> --preview` → 调 `stage.json` 的摆位 → 两条分支自动测试 → 封面 / 缩略图 → 菜单里替换原 Demo（nav.js + 官网 + `bump.py --stage demos/shared/nav.js`）。全部完成后，旧 Demo 的视频经用户确认后清理。
+
 ### Demo25_HatsumodeDate ✅ 可玩 —《はじめての、初詣デート / My First Hatsumode》（男性向约会，纯交互，2026-11-08）
 - 用户要求：男性向下面做一个和女生约会的 demo，第一人称、有互动、有趣，女生的性格和外表要和四位主播拉开差距。用户从 4 个方案里选了「和风大小姐 · 初詣」。
 - 角色：**白銀椿**，20 岁，老字号旅馆的大小姐，端庄有礼但天然呆，第一次挤人潮的初诣。造型 = 用户选的 **D**（银白长发侧低马尾、红白绳、白→红椿花振袖、毛皮披肩；`project/designs_contact.jpg`）。声音 ElevenLabs **tsubaki r1_b**（`ydtidqvCazlHO8YgKhfx`）。
