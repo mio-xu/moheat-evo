@@ -27,6 +27,7 @@
 | 1 | | | | | default | | | | | |
 
 A look change must be motivated on screen or in a line (scene # and why); continuity: props / headwear follow the look.
+Every pose where someone talks gets a mouth block set with anime teeth (`"mouth": "lp"` in stage.json, guide §6 step 5 ④ / §6.5 S6): draw talking poses with the mouth visible and closed (no fingers over it, not a strong profile, no toothy grin); if the shot needs one, note it here — it then uses `"warp": false` / `"hide"` / `"drawn_open"`.
 
 ## 4. Thermal table (DUAL)
 | Time / line | Source (physical, visible on screen) | Ear L | Ear R | Cool / warm | Peak | Why plausible |

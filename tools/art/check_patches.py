@@ -14,6 +14,10 @@ Writes <demo>/assets/patch_check/<pose>_<kind>.png (+ mouths.jpg: every mouth cl
   BORDER   patch alpha not 0 at its rectangle's edge (a visible patch rectangle)
   BOUNDS   patch rectangle outside the character image (stale rect after the pose was rebuilt / extended)
   NO-MOUTH a view with eyes patches but no mouth patch (check the story: does he / she talk there?)
+  OLD-MOUTH a pose that talks with an old single talk patch ("mouth" / "mouth_quiet") instead of a mouth block set ("mouth_lv",
+           tools/art/lp_mouths.py; user 2026-11-08 "some mouths still haven't been changed" — every pose uses the set)
+  NO-TEETH a mouth block set built without the anime teeth (lp_mouths.py default; user 2026-11-08: a wide open mouth with no teeth
+           looked scary). Both FAIL unless <demo>/project/qa.json "mouth_exceptions": {"<pose>": "reason"} lists the pose.
 Runtime lip-sync (opens only while talking, per view, no flicker): node tools/art/check_mouth.js <demo>.
 """
 import json, os, sys
@@ -25,6 +29,8 @@ t = open(os.path.join(D, "media", "layers.js")).read(); data = json.loads(t[t.in
 out = os.path.join(D, "assets", "patch_check"); os.makedirs(out, exist_ok=True)
 LIM = {"mouth": dict(seam=4.0, outer=6.0), "mouth_lv": dict(seam=4.0, outer=6.0), "mouth_quiet": dict(seam=4.0, outer=6.0), "eyes": dict(seam=8.0, outer=40.0)}
 flags, seen, mouths = [], set(), []
+qf = os.path.join(D, "project", "qa.json"); EXC = (json.load(open(qf, encoding="utf-8")) if os.path.exists(qf) else {}).get("mouth_exceptions", {})
+lf = os.path.join(D, "assets", "lp_mouths", "lp_mouths.json"); LPM = json.load(open(lf)) if os.path.exists(lf) else None   # assets/ is local only
 for stem, v in [(st, f) for st, v_ in data["views"].items() for f in [v_] + v_.get("more", [])]:   # every figure of every view (several in one: "more")
     pose = v["char"]["src"].split("char_")[1].split(".")[0]
     if only and pose not in only: continue
@@ -33,6 +39,11 @@ for stem, v in [(st, f) for st, v_ in data["views"].items() for f in [v_] + v_.g
         flags.append(f"NO-MOUTH {stem}: no mouth patch ({'+'.join(kinds) or 'no patches'}) — fine only if the face is hidden or nobody talks there")
     if pose in seen: continue
     seen.add(pose)
+    if {"mouth", "mouth_quiet"} & set(kinds) and "mouth_lv" not in kinds and pose not in EXC:
+        flags.append(f"OLD-MOUTH {pose}: old single talk patch — make it a block set (\"mouth\": \"lp\", tools/art/lp_mouths.py; "
+                     f"\"warp\": false / \"view\" / \"hide\" for hard faces) or list it in project/qa.json mouth_exceptions with the reason")
+    if "mouth_lv" in kinds and LPM is not None and pose not in EXC and not LPM.get(pose, {}).get("teeth"):
+        flags.append(f"NO-TEETH {pose}: mouth set built without teeth — rerun lp_mouths.py {pose} (teeth are the default) + build_stage --mouths-only")
     try: ch = Image.open(os.path.join(D, "media", v["char"]["src"].split("?")[0])).convert("RGBA")
     except Exception as e: flags.append(f"READ {pose}: {e} (being rebuilt?)"); continue
     ca = np.asarray(ch.getchannel("A"), np.float32) / 255

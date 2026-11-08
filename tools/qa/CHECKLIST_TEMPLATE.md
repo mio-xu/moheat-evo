@@ -28,6 +28,7 @@
 - [ ] `assets/poses_preview.jpg`: same person in every close-up and wide shot — hair, eyes, face, accessories, clothes, line / shading style; story continuity (glasses off stays off)
 - [ ] No extra props / background pieces drawn into a pose (cups, door frames, someone else's hand)
 - [ ] `assets/patch_check/mouths.jpg`: each mouth closed | open at 2× — no double lip, no jump, opens on the closed mouth
+- [ ] Every talking pose is a mouth BLOCK SET (`"mouth": "lp"`, check_patches OLD-MOUTH = 0; hard faces: `"warp": false` / `"view"` / `"hide"`); `assets/lp_mouths/<pose>_sheet.jpg` at 2×: anime teeth band on the mid + wide levels (flat, no tooth lines, inside the lips, same place on both levels), a hint of tongue only on the widest, colours match the character (subtle on realistic faces)
 - [ ] Both eyes close in every eyes patch (`assets/patch_check/*_eyes.png`)
 - [ ] Every `media/art/char_*.webp` on a dark plate, hair / hands / collar at 2×: no grey / green / magenta fringe, no holes
 - [ ] Animation physics: geometry computed first (park / grab heights, travel > 0, nothing clipped); the WHOLE sequence rendered frame by frame with a virtual clock (not one frame); pivots / hinges, never squashed; props in front / behind correctly (claw, fireworks behind buildings), nothing floats
