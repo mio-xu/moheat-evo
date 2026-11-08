@@ -198,3 +198,8 @@ JOBS3.update({
     'nagisa_whisper_talk': (EDIT.format(what="her lips: parted a little more, as in the middle of a whispered word"), 'nagisa_whisper'),
 })
 TEST3 = ['nagisa_ref', 'bg_roof', 'nagisa_ref_talk', 'nagisa_ref_blink']
+# the OpenAI redraws of the same-face edits moved the face a little → popsicle and fan get their own variants
+JOBS3.update({
+    'nagisa_popsicle_talk': (EDIT.format(what=TALK), 'nagisa_popsicle'), 'nagisa_popsicle_blink': (EDIT.format(what=BLINK), 'nagisa_popsicle'),
+    'nagisa_fan_talk': (EDIT.format(what=TALK), 'nagisa_fan'), 'nagisa_fan_blink': (EDIT.format(what=BLINK), 'nagisa_fan'),
+})

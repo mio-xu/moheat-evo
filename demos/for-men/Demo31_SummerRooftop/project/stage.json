@@ -13,7 +13,86 @@
    "near_mouth": [
     1355,
     632
+   ],
+   "keep": [
+    [
+     880,
+     1180,
+     1720,
+     1440
+    ]
    ]
+  },
+  "popsicle": {
+   "src": "nagisa_popsicle",
+   "talk": "nagisa_popsicle_talk",
+   "blink": "nagisa_popsicle_blink",
+   "centre_mouth": [
+    1355,
+    632
+   ],
+   "radius_mouth": [
+    60,
+    40
+   ]
+  },
+  "sit": {
+   "src": "nagisa_sit",
+   "talk": "nagisa_sit_talk",
+   "blink": "nagisa_sit_blink",
+   "centre_mouth": [
+    1105,
+    590
+   ],
+   "radius_mouth": [
+    60,
+    40
+   ]
+  },
+  "fan": {
+   "src": "nagisa_fan",
+   "talk": "nagisa_fan_talk",
+   "blink": "nagisa_fan_blink",
+   "centre_mouth": [
+    1105,
+    590
+   ],
+   "radius_mouth": [
+    60,
+    40
+   ]
+  },
+  "laugh": {
+   "src": "nagisa_laugh",
+   "talk": "nagisa_laugh_talk"
+  },
+  "sparkler": {
+   "src": "nagisa_sparkler_flat",
+   "talk": "nagisa_sparkler_talk_flat",
+   "blink": "nagisa_sparkler_blink_flat",
+   "centre_mouth": [
+    1188,
+    758
+   ],
+   "radius_mouth": [
+    60,
+    40
+   ]
+  },
+  "whisper": {
+   "src": "nagisa_whisper",
+   "talk": "nagisa_whisper_talk",
+   "centre_mouth": [
+    2080,
+    712
+   ],
+   "radius_mouth": [
+    70,
+    45
+   ]
+  },
+  "shoulder": {
+   "src": "nagisa_shoulder"
   }
  },
  "views": {
@@ -25,6 +104,72 @@
    "x": 0.56,
    "y": 1.02,
    "height": 0.98
+  },
+  "popsicle": {
+   "still": "nagisa_popsicle",
+   "pose": "popsicle",
+   "bg": "roof",
+   "fire": null,
+   "x": 0.56,
+   "y": 1.04,
+   "height": 1.05
+  },
+  "fan": {
+   "still": "nagisa_fan",
+   "pose": "fan",
+   "bg": "roof",
+   "fire": null,
+   "x": 0.42,
+   "y": 1.02,
+   "height": 0.92
+  },
+  "sparkler": {
+   "still": "nagisa_sparkler",
+   "pose": "sparkler",
+   "bg": "roof",
+   "fire": null,
+   "x": 0.5,
+   "y": 1.0,
+   "height": 1.0,
+   "zoom": 1.25
+  },
+  "fireworks": {
+   "still": "nagisa_fireworks",
+   "pose": "sit",
+   "bg": "roof",
+   "fire": null,
+   "x": 0.42,
+   "y": 1.02,
+   "height": 0.92
+  },
+  "whisper": {
+   "still": "nagisa_whisper",
+   "pose": "whisper",
+   "bg": "roof",
+   "fire": null,
+   "x": 0.5,
+   "y": 1.0,
+   "height": 1.0,
+   "zoom": 1.3
+  },
+  "shoulder": {
+   "still": "nagisa_shoulder",
+   "pose": "shoulder",
+   "bg": "roof",
+   "fire": null,
+   "x": 0.5,
+   "y": 1.0,
+   "height": 1.0,
+   "zoom": 1.3
+  },
+  "laugh": {
+   "still": "nagisa_laugh",
+   "pose": "laugh",
+   "bg": "roof",
+   "fire": null,
+   "x": 0.6,
+   "y": 1.02,
+   "height": 0.95
   }
  }
 }

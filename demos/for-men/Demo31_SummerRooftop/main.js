@@ -114,11 +114,19 @@
     S.breeze = null; B?.set(.12, .6);
   }
   // far fireworks over the town on your right: a bloom of light now, the boom a little later
-  let fwTimer = 0;
+  let fwTimer = 0, fwCol = '255,196,90';
+  // shared/fireworks.js: shells rise from the horizon and burst, clipped to the part of the sky that is empty in each view
+  // (she sits left in 'fireworks', right in 'laugh', leans on your left shoulder in 'shoulder'; 'whisper' is too close: light only)
+  const SKY = {   // measured on the flat stills (px): clear of her hair, the water tank, the door and the railing
+    fireworks: [[990, 0, 1560, 530], [1560, 0, 1920, 95]], laugh: [[440, 0, 870, 520], [200, 0, 440, 150]], shoulder: [[1200, 0, 1780, 560]] };
+  const FWS = window.MoHeatFireworks.create();
+  FWS.onBurst = (b) => { S.flash = Math.max(S.flash, .7 * b.big); fwCol = b.col.join(','); const my = run;   // the light at once, the boom ~0.6 s later (far away)
+    setTimeout(() => { if (my === run) SND.fx.firework(.9 + Math.random() * .4, .6 + .4 * b.big); }, 550 + Math.random() * 250); };
+  const salvo = (n, big) => FWS.salvo(SKY[S.view] || SKY.fireworks, n, big);
   function fireworks(on) {
     clearTimeout(fwTimer); if (!on) return;
     const my = run;
-    const one = () => { if (my !== run) return; S.flash = 1; setTimeout(() => { if (my === run) SND.fx.firework(.9 + Math.random() * .4, .7 + Math.random() * .3); }, 450); fwTimer = setTimeout(one, 2400 + Math.random() * 2200); };
+    const one = () => { if (my !== run) return; salvo(1 + (Math.random() * 3 | 0), Math.random() < .2 ? 1.3 : 1); fwTimer = setTimeout(one, 2600 + Math.random() * 2400); };
     one();
   }
 
@@ -181,7 +189,7 @@
       await go('t_sparkler_fireworks', 'fireworks', () => { S.near = 0; fireworks(true); night?.set(.25, 2); });
       await sleep(1.5);
       await say('n13', LEFT);
-      S.flash = 1.4; SND.fx.firework(1, 1.4); setTimeout(() => { if (my === run) SND.fx.firework(.8, 1.2); }, 650);
+      salvo(4, 1.5);   // a grand salvo right as she says it
       await say('n14', LEFT, { gain: .7, sub: MUFFLED });
       const c = await choice([['今、なんて？', 'What did you just say?'], ['…もう一回、言って', '…Say it again']]);
       await say(c ? 'n15b' : 'n15a', LEFT);
@@ -300,10 +308,8 @@
     ctx.globalAlpha = 1;
   }
   // sparkler balls in the still (1920×1080): ball 0 = hers, ball 1 = yours
-  const BALL = [[620, 905], [985, 975]];
+  const BALL = [[837, 938], [1187, 1030]];   // the tips of the two strings in the layered sparkler still (no flame drawn in the art)
   const sparks = Array.from({ length: 60 }, () => ({ b: 0, x: 0, y: 0, vx: 0, vy: 0, life: 0 }));
-  const FW = ['255,120,160', '120,200,255', '255,210,110', '190,140,255'];
-  let fwCol = FW[0], lastFlash = 0;
   function draw(t, dt) {
     if (S.view !== viewB) { viewA = viewB; viewB = S.view; mix = 0; }
     clips();
@@ -313,10 +319,9 @@
     const exact = Object.keys(CLIP).length > 0, z = exact ? 1 : 1.02 + .008 * Math.sin(t * 1.1), dy = exact ? 0 : 4 * Math.sin(t * .9);
     const at = ([x, y]) => [W / 2 + (x - W / 2) * z, H / 2 + (y - H / 2) * z + dy];
     if (S.view === 'sparkler' && mix >= 1) {
-      // a dropped ball: cover its painted glow, and let a small orange bead fall
+      // the fireballs are code only (the art has just the strings): a glow + sparks while lit; a dropped one falls as a bead
       for (let i = 0; i < 2; i++) {
         const lit = ballK[i], [x, y] = at(BALL[i]);
-        if (lit < .95) { const g = ctx.createRadialGradient(x, y, 4, x, y, 70); g.addColorStop(0, `rgba(24,30,72,${.95 * (1 - lit)})`); g.addColorStop(1, 'rgba(24,30,72,0)'); ctx.fillStyle = g; ctx.fillRect(x - 70, y - 70, 140, 140); }
         if (lit > .05) {   // living ball: a pulsing glow + matsuba sparks
           const r = 26 + 6 * Math.sin(t * 13 + i), g = ctx.createRadialGradient(x, y, 2, x, y, r * 2.4); g.addColorStop(0, `rgba(255,236,170,${.9 * lit})`); g.addColorStop(.25, `rgba(255,150,60,${.55 * lit})`); g.addColorStop(1, 'rgba(255,120,40,0)');
           ctx.fillStyle = g; ctx.fillRect(x - r * 2.4, y - r * 2.4, r * 4.8, r * 4.8);
@@ -330,11 +335,11 @@
       ctx.stroke();
       if (S.drop && S.drop.k < 1) { const [x, y] = at(BALL[S.drop.i]); ctx.fillStyle = `rgba(255,170,80,${1 - S.drop.k})`; ctx.beginPath(); ctx.arc(x, y + 260 * S.drop.k * S.drop.k, 7, 0, 7); ctx.fill(); }
     }
-    if (S.flash > 0 && ['fireworks', 'whisper', 'shoulder', 'laugh'].includes(S.view)) {   // a firework blooming over the town (the right of the sky)
-      if (S.flash > lastFlash + .3) fwCol = FW[Math.random() * FW.length | 0]; lastFlash = S.flash;
+    if (S.flash > 0 && ['fireworks', 'whisper', 'shoulder', 'laugh'].includes(S.view)) {   // the burst lights up the night (colour of the last shell)
       const a = Math.min(1, S.flash) * .28, g = ctx.createRadialGradient(W * .75, H * .25, 40, W * .75, H * .25, 1100);
       g.addColorStop(0, `rgba(${fwCol},${a})`); g.addColorStop(1, `rgba(${fwCol},0)`); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
     }
+    FWS.update(dt); FWS.draw(ctx, SKY[S.view] || null);
     if (S.fade) { S.fadeA = Math.min(1, (S.fadeA || 0) + dt / 3); ctx.fillStyle = `rgba(8,12,30,${S.fadeA})`; ctx.fillRect(0, 0, W, H); }
   }
 
@@ -403,7 +408,7 @@
   document.addEventListener('visibilitychange', () => { hidden = document.hidden; if (hidden) { stopOutput(); SND.ctx()?.suspend(); } else { last = performance.now(); SND.ctx()?.resume(); } });
   document.addEventListener('keydown', (e) => { if (e.code === 'Escape') emergencyStop(); });
   function finish() {
-    S.started = false; run++; stopOutput(); fireworks(false);
+    S.started = false; run++; stopOutput(); fireworks(false); FWS.clear();
     for (const k of ['night', 'breeze', 'sparkler']) SND.loop(k)?.stop();
     sub('', ''); actEl.classList.remove('show'); choiceEl.classList.remove('show');
     const c = $('cleared'); c.hidden = false;
@@ -426,7 +431,7 @@
     ctx.drawImage(im, 560, 0, W, H);
     const g = ctx.createLinearGradient(480, 0, 1100, 0); g.addColorStop(0, 'rgba(13,22,48,1)'); g.addColorStop(1, 'rgba(13,22,48,0)'); ctx.fillStyle = g; ctx.fillRect(480, 0, 620, H);
   }
-  window.NAGISA = { get S() { return S; }, thermal: () => thermal(.05), both: () => both, log: cmdLog, done: false };
+  window.NAGISA = { get S() { return S; }, thermal: () => thermal(.05), both: () => both, log: cmdLog, done: false, fw: (n = 3, big = 1) => salvo(n, big) };   // fw: testing
   setStep(0);
   if (QS.has('cover')) { document.body.classList.add('cover-only'); artReady.then(drawCover); return; }
   if (QS.has('autoplay') || AUTO) { const ac = SND.init(); if (ac.state === 'running') start(); else ac.resume().then(() => { if (ac.state === 'running' && !S.started) start(); }).catch(() => {}); }
