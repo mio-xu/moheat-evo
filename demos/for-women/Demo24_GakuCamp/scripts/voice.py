@@ -2,7 +2,7 @@
 """Gaku's voice: ElevenLabs gaku r2_a (user's pick 2026-11-08, tools/eleven/cast.json). Standard settings from tools/eleven/tts.py.
 Delivery = audio tags: [softly] for 'n' lines, [whispers] for 'w' lines, OVERRIDE for special lines.
 Reads ../lines.js → media/voice/<id>.m4a + media/voice.js. Only changed lines are re-voiced (audio/voice_cache.json)."""
-import importlib.util, json, os, subprocess, tempfile
+import importlib.util, json, os, subprocess, tempfile, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REPO = os.path.abspath(os.path.join(ROOT, '..', '..', '..'))
@@ -25,6 +25,21 @@ out_dir = os.path.join(ROOT, 'media', 'voice'); os.makedirs(out_dir, exist_ok=Tr
 cache_p = os.path.join(ROOT, 'audio', 'voice_cache.json'); os.makedirs(os.path.dirname(cache_p), exist_ok=True)
 cache = json.load(open(cache_p)) if os.path.exists(cache_p) else {}
 VOICES = {p: E.voice(c) for p, c in CAST.items()}
+# Dubbed takes (user 2026-11-09: every demo voiced in ja / en / zh): python3 scripts/voice.py --lang en|zh [--count]
+#   → media/voice/<lang>/<id>.m4a + index.json (tools/eleven/dub.py: same voice / settings, the ja tags moved into the en / zh text).
+#   Text = the subtitles: en from lines.js, zh from l10n.js. Names stay Japanese-style (DUB_NAMES).
+DUB_NAMES = {"zh": [["岳", "Gaku"]]}
+DUB_OVERRIDE = {}                                                   # (lang, id) → hand-tagged text when retag() is not good enough
+LANG = sys.argv[sys.argv.index('--lang') + 1] if '--lang' in sys.argv else 'ja'
+if LANG != 'ja':
+    sp = importlib.util.spec_from_file_location('dub', os.path.join(REPO, 'tools', 'eleven', 'dub.py')); D = importlib.util.module_from_spec(sp); sp.loader.exec_module(D)
+    l10 = open(os.path.join(ROOT, 'l10n.js'), encoding='utf-8').read(); L10N = json.loads(l10[l10.index('= {') + 2:l10.rindex('}') + 1])
+    lines = {}
+    for lid, v in LINES.items():
+        sub = v[1] if LANG == 'en' else L10N['text'][LANG][v[0]]
+        lines[lid] = (VOICES[lid[0]], DUB_OVERRIDE.get((LANG, lid)) or D.retag(OVERRIDE.get(lid) or ('[whispers] ' if v[2] == 'w' else TALK[lid[0]] + ' ') + v[0], D.names(sub, LANG, DUB_NAMES), LANG))
+    D.render(lines, LANG, os.path.join(out_dir, LANG), os.path.join(ROOT, 'audio', f'voice_cache.{LANG}.json'), count_only='--count' in sys.argv)
+    sys.exit()
 
 
 def dur(p):
