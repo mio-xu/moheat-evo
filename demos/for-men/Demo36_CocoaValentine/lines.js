@@ -1,0 +1,27 @@
+// Cocoa, Valentine's Eve at her patisserie: id → [ja, en]. Voice: ElevenLabs (tools/eleven/cast.json "cocoa", r1_a) — scripts/voice.py holds the tagged text.
+window.COCOA_LINES = {
+  "c01": ["いらっしゃいませ〜…って、あなたか！ ふふ、来てくれたんだ。さむかったでしょ？", "Welcome… oh, it's you! Hehe, you came. Wasn't it cold?"],
+  "c02": ["あしたはバレンタインでしょ？ だから今夜は、チョコ作り、てつだってほしいの。", "Tomorrow's Valentine's, right? So tonight, I want you to help me make chocolates."],
+  "c03a": ["やったぁ！ じゃあエプロン、つけてあげるね。…はい、うしろ向いて。", "Yay! Then I'll put an apron on you. …Okay, turn around."],
+  "c03b": ["えっ…ひ、ひみつ！ …ほら、手伝うの、手伝わないの？", "Huh… th-that's a secret! …Come on, are you helping or not?"],
+  "c04": ["湯せんでね、ゆーっくり溶かすの。…いいにおい。", "In a water bath, you melt it slooowly. …Smells so good."],
+  "c05": ["ちょっと味見してみて？ …ふーっ、ふーっ。…はい、あーん。", "Try a little? …Fuu, fuu. …Here, say \"aah\"."],
+  "c06a": ["でしょ〜？ あなたの好きな甘さ、ちゃんと覚えてるんだから。", "Right? I remember exactly how sweet you like it."],
+  "c06b": ["えへへ、あまえんぼさんだなあ。…じゃあ、お砂糖もうひとさじ。", "Hehe, you big baby. …Then one more spoon of sugar."],
+  "c07": ["さむっ…！ 冷蔵庫、ひんやりだね。…生クリーム、いっしょに泡立てよ？", "Brr…! The fridge is chilly. …Let's whip the cream together?"],
+  "c08": ["うしろから、手、そえるね。…そう、そのまま。止めちゃだめだよ？", "I'll put my hands over yours from behind. …Yes, just like that. Don't stop, okay?"],
+  "c09": ["わぁ、ツノ立った！ 上手〜！ …あ、ほっぺにクリームついてる。…とってあげる。", "Wow, stiff peaks! You're so good! …Oh, there's cream on your cheek. …I'll get it."],
+  "c09x": ["あっ、まだだよ〜。もうちょっとがんばろ？", "Ah, not yet! Just a little more?"],
+  "c10": ["焼けた〜！ ハートのクッキー。…あつあつだから、ふーふーしてあげる。", "They're done! Heart cookies. …They're piping hot, so I'll blow on one."],
+  "c11": ["ふーっ、ふーっ。…はい、あーん。", "Fuu, fuu. …Here, aah."],
+  "c12": ["…おいしい？ よかったぁ。…あのね、これ、ほんとはね…ううん、なんでもない。", "…Is it good? I'm so glad. …You know, this was actually… no, never mind."],
+  "c13": ["最後は、ハートのチョコに、メッセージを書くの。…見ちゃだめ！ 目、つぶってて。", "Last, I write a message on the heart chocolate. …No peeking! Close your eyes."],
+  "c14a": ["…いい子。", "…Good."],
+  "c14b": ["こーら、ずるい！ …もう、見えちゃったでしょ。", "Hey, no fair! …Ugh, you saw it, didn't you."],
+  "c15": ["…さっき、誰にあげるのって聞いたよね。…答え、言うね。", "…Earlier you asked who it's for. …I'll tell you."],
+  "c16": ["…あなた、だよ。 ずっと前から、あなたのために練習してたの。", "…It's you. I've been practising for you all along."],
+  "c17": ["あしたまで待てなかった。…ねえ、なにか言って？", "I couldn't wait until tomorrow. …Hey, say something?"],
+  "c18a": ["…ほんと？ …えへへ。 あしたのチョコ、いちばんおっきいの、あなたのだからね。", "…Really? …Hehe. Tomorrow's biggest chocolate is yours, okay?"],
+  "c18b": ["…うん。 来年も、さらいねんも、ずっと。 …約束だよ？", "…Yeah. Next year, the year after, always. …Promise?"],
+  "c19": ["…あ、12時。 ハッピーバレンタイン。", "…Oh, midnight. Happy Valentine's."]
+};
