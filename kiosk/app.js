@@ -63,18 +63,23 @@
   $('.langs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) setLang(b.dataset.l); });
 
   // ---------------------------------------------------------------- device (authorised once in the staff panel, then auto)
+  // ONE connection state (device.js MoHeatDevice.state + window event 'moheat:device', user 2026-11-09): the staff panel status (#deviceStatus,
+  // painted by device.js), the visitor screen (#devdot, big "disconnected" alert on state 'lost') and the queue screen ({t:'device'} over the
+  // BroadcastChannel) all follow it — no own copy, no own auto-connect (device.js reconnects silently to the port staff connected once).
   const dev = MoHeatDevice.create({ select: $('#portSelect'), addBtn: $('#addPort'), connectBtn: $('#connectBtn'), status: $('#deviceStatus') },
-    { onConnect: () => { $('#devdot').classList.add('ok'); alert_(null); }, onDisconnect: (lost) => { $('#devdot').classList.remove('ok'); if (lost) alert_('lost'); },
-      // firmware replies: a battery report such as "BAT 14" / "battery: 14%" → the big low-battery alert under 15 % (if the firmware sends one)
+    { // firmware replies: a battery report such as "BAT 14" / "battery: 14%" → the big low-battery alert under 15 % (if the firmware sends one)
       log: (l) => { const m = /^← .*\bbat(?:tery)?\D{0,3}(\d{1,3})/i.exec(l); if (m && +m[1] < 15) alert_('bat'); } });
   function alert_(k) { let el = $('#alertBig'); if (!el) { el = document.createElement('div'); el.id = 'alertBig'; el.className = 'alert-big'; el.setAttribute('role', 'alert'); document.body.appendChild(el); el.addEventListener('click', () => { el.hidden = true; }); }
     el.hidden = !k; if (k) el.innerHTML = k === 'lost' ? `<b>🔌 ${t('lost')}</b><span>${t('staffHelp')}</span>` : `<b>🔋 ${t('bat')}</b><span>${t('staffHelp')}</span>`; }
   let thermalOn = true;   // false in the attract loop: nothing goes out
   const send = (line) => { if ((thermalOn && S.attended()) || /^stop$/i.test(line)) dev.send(line); if (view === 'intro') K.post({ t: 'thermal', th: K.thermalOf(/^stop$/i.test(line) ? '' : line) }); };
   setInterval(() => K.post({ t: 'state', view, dir: pending || (view === 'card' ? (K.visit.get() || {}).dir : null) }), 2000);
-  const autoConnect = (n = 0) => { if (dev.isConnected()) return; const s = $('#portSelect');
-    if (s && !s.disabled && s.value !== '') { $('#connectBtn').click(); return; } if (n < 10) setTimeout(() => autoConnect(n + 1), 500); };
-  autoConnect(); navigator.serial?.addEventListener('connect', () => setTimeout(autoConnect, 400));
+  const devPaint = (st = MoHeatDevice.state) => { const d = $('#devdot'); d.className = `devdot ${st.connected ? 'ok' : /connecting|reconnecting/.test(st.state) ? 'busy' : /lost|error/.test(st.state) ? 'err' : ''}`;
+    d.dataset.state = st.state; d.title = `MoHeat Evo: ${st.state}`;
+    if (st.state === 'lost') alert_('lost'); else if (st.connected || st.state === 'off') alert_(null);
+    K.post({ t: 'device', ...st }); };
+  addEventListener('moheat:device', (e) => devPaint(e.detail)); devPaint();
+  setInterval(() => K.post({ t: 'device', ...MoHeatDevice.state }), 2000);   // a queue screen opened later learns the state too
   try { navigator.wakeLock?.request('screen').catch(() => {}); document.addEventListener('visibilitychange', () => { if (!document.hidden) navigator.wakeLock?.request('screen').catch(() => {}); }); } catch {}
 
   // ---------------------------------------------------------------- views

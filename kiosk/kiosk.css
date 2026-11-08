@@ -78,6 +78,7 @@ button.link { background: none; border: 0; color: var(--dim); font: 600 clamp(14
 .corner { position: fixed; left: 0; top: 0; width: 64px; height: 64px; z-index: 50; }
 .devdot { position: fixed; right: 12px; top: 12px; width: 12px; height: 12px; border-radius: 50%; background: #5a4f66; z-index: 50; }
 .devdot.ok { background: #5fd38a; box-shadow: 0 0 8px #5fd38a; }
+.devdot.busy { background: #e0b04a; box-shadow: 0 0 8px #e0b04a; } .devdot.err { background: #ff6b81; box-shadow: 0 0 8px #ff6b81; }   /* MoHeatDevice.state: (re)connecting / lost · error */
 .overlay { position: fixed; inset: 0; z-index: 100; background: rgba(4,3,8,.8); display: flex; align-items: center; justify-content: center; padding: 16px; }
 .overlay[hidden] { display: none; }
 .panel { background: #17121f; border: 1px solid rgba(255,255,255,.15); border-radius: 16px; padding: 18px 20px; color: var(--ink); font-size: 14px; -webkit-user-select: text; user-select: text; }

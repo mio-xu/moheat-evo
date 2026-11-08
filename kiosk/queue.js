@@ -14,16 +14,28 @@
     top: { en: 'Try these first', ja: 'まずはこちら', zh: '推荐先体验' }, now: { en: 'Now playing', ja: '体験中', zh: '正在体验' },
     idle: { en: 'Next visitor: you?', ja: '次はあなたの番かも', zh: '下一位就是你？' }, intro: { en: 'Device intro', ja: 'デバイス案内', zh: '设备引导' },
     card: { en: 'Feedback', ja: 'アンケート', zh: '体验反馈' },
+    // MoHeat Evo connection: the same words as the demos' header status (device.js) + the big alert (REQUIREMENTS §7)
+    d_off: { en: 'Not connected', ja: '未接続', zh: '未连接' }, d_connecting: { en: 'Connecting…', ja: '接続中…', zh: '连接中…' },
+    d_reconnecting: { en: 'Reconnecting…', ja: '再接続中…', zh: '重新连接中…' }, d_connected: { en: 'Connected', ja: '接続済み', zh: '已连接' },
+    d_lost: { en: 'Device disconnected', ja: '接続が切れました', zh: '设备已断开' }, d_error: { en: 'Could not open', ja: '開けませんでした', zh: '无法打开' },
+    lost: { en: 'MoHeat Evo disconnected', ja: 'MoHeat Evo の接続が切れました', zh: 'MoHeat Evo 已断开' },
+    lostS: { en: 'The staff are on it — one moment, please.', ja: 'スタッフが対応します。少々お待ちください。', zh: '工作人员正在处理，请稍等。' },
     ears: { en: 'What the visitor feels now', ja: 'いま体験者が感じている温冷', zh: '体验者此刻感受到的冷热' }, L: { en: 'LEFT', ja: '左', zh: '左' }, R: { en: 'RIGHT', ja: '右', zh: '右' } };
   const t = (k) => T[k][L()] || T[k].en;
-  const st = { view: 'attract', dir: null, sub: '', th: { l: { h: 0, c: 0 }, r: { h: 0, c: 0 } }, frameAt: 0, seen: Date.now() };
+  const st = { view: 'attract', dir: null, sub: '', th: { l: { h: 0, c: 0 }, r: { h: 0, c: 0 } }, frameAt: 0, seen: Date.now(), dev: { state: 'off', error: '' } };
+  function devPaint() { const p = $('#qdev'), a = $('#qalert'), s = st.dev.state; p.dataset.state = s; p.querySelector('b').textContent = `MoHeat Evo · ${T['d_' + s] ? t('d_' + s) : s}`;
+    a.hidden = s !== 'lost'; if (!a.hidden) { a.querySelector('b').textContent = `🔌 ${t('lost')}`; a.querySelector('span').textContent = t('lostS'); } }
   const bc = 'BroadcastChannel' in window ? new BroadcastChannel('moheat-kiosk') : null;
   bc?.addEventListener('message', (e) => { const m = e.data || {}; st.seen = Date.now();
     if (m.t === 'state') { st.view = m.view; st.dir = m.dir || null; if (m.view !== 'demo') st.sub = ''; paint(); }
     if (m.t === 'thermal') st.th = m.th;
     if (m.t === 'sub') { st.sub = m.text || ''; $('#sub').textContent = st.sub; }
     if (m.t === 'frame') { st.frameAt = Date.now(); frame.src = m.url; }
-    if (m.t === 'staff') signs(); });
+    if (m.t === 'staff') signs();
+    // the connection: {t:'device', state…} from the kiosk pages (kiosk/app.js, MoHeatDevice.state); a demo page in kiosk mode only sends
+    // {t:'alert', on} (demos/shared/kiosk.js: on = disconnected, off = connected again)
+    if (m.t === 'device' && m.state) { st.dev = { state: m.state, error: m.error || '' }; devPaint(); }
+    if (m.t === 'alert') { st.dev = { state: m.on ? 'lost' : 'connected', error: '' }; devPaint(); } });
   setInterval(() => bc?.postMessage({ t: 'hello' }), 2000); bc?.postMessage({ t: 'hello' });
   // anything quiet for 10 min (kiosk closed) → attract
   setInterval(() => { if (Date.now() - st.seen > 600000 && st.view !== 'attract') { st.view = 'attract'; paint(); } }, 5000);
@@ -81,7 +93,7 @@
   function slide() { slides.forEach((x, j) => x.classList.toggle('on', j === si % slides.length && Date.now() - st.frameAt > 3000)); si++; }
   setInterval(() => { frame.classList.toggle('on', Date.now() - st.frameAt < 3000); if (slides.length > 1 || Date.now() - st.frameAt > 3000) slide(); }, 6000);
   setInterval(() => { frame.classList.toggle('on', Date.now() - st.frameAt < 3000); if (Date.now() - st.frameAt < 3000) slides.forEach((x) => x.classList.remove('on')); }, 500);
-  setInterval(() => { li = (li + 1) % LANGS.length; paint(); }, 8000);
+  setInterval(() => { li = (li + 1) % LANGS.length; paint(); devPaint(); }, 8000);
 
   // ---------------------------------------------------------------- the big two-ear view: colour + snowflakes / heat waves
   const cv = $('#ears'), cx = cv.getContext('2d'); let parts = [];
@@ -124,6 +136,6 @@
   // EN + 日本語 together (bystanders; REQUIREMENTS §12) — they do not rotate with the other text
   function signs() { const S = window.MoHeatSigns; if (!S) return; S.render($('#signs'), { langs: ['en', 'ja'], place: 'Queue' }); S.render($('#psigns'), { langs: ['en', 'ja'], place: 'Queue' }); }
   addEventListener('storage', signs); setInterval(signs, 5000); signs();
-  paint(); draw();
-  window.MoHeatQueue = { st, get promo() { return showPromo; }, loadPromo };
+  paint(); devPaint(); draw();
+  window.MoHeatQueue = { st, devPaint, get promo() { return showPromo; }, loadPromo };
 })();

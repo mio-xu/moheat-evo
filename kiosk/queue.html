@@ -56,6 +56,15 @@
       font: 800 calc(var(--qs, 24vh) * .066)/1.15 var(--ff); color: #fff; --ms-ic: calc(var(--qs, 24vh) * .22); max-width: calc(var(--qs, 24vh) * 2.3); }
     .p-signs .ms-sign:first-child { flex: 1 1 auto; } .q-signs [data-k=photo] b, .p-signs [data-k=photo] b { white-space: nowrap; } .q-signs [data-k=photo], .p-signs [data-k=photo] { flex-shrink: 0; } .p-signs .ms-tx p + p b { font-size: .86em; }
     .hint { position: fixed; right: 1vw; bottom: .6vh; font-size: 11px; color: #3c3448; }
+    /* MoHeat Evo connection — the same state as the visitor screen / staff panel / demos (device.js MoHeatDevice.state, sent over the
+       BroadcastChannel by kiosk/app.js): a status pill in the header, the big "disconnected" alert on 'lost' (REQUIREMENTS §7) */
+    .qdev { margin-left: auto; align-self: center; display: inline-flex; align-items: center; gap: .6em; padding: .5em 1em; border-radius: 999px; background: rgba(255,255,255,.06); font: 700 2vh/1 var(--ff); color: #cfc3dc; }
+    .qdev i { width: 1.1em; height: 1.1em; border-radius: 50%; background: #5a4f66; } .qdev[data-state="connected"] i { background: #5fd38a; box-shadow: 0 0 .6em #5fd38a; }
+    .qdev[data-state="connecting"] i, .qdev[data-state="reconnecting"] i { background: #e0b04a; } .qdev[data-state="lost"] i, .qdev[data-state="error"] i { background: #ff6b81; box-shadow: 0 0 .6em #ff6b81; }
+    .qdev[data-state="lost"], .qdev[data-state="error"] { color: #ffd0d8; }
+    .qalert { position: fixed; z-index: 40; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(70vw, 120vh); padding: 4vh 3vw; border-radius: 3vh; background: #3a0f1a; border: .5vh solid #ff7a90;
+      text-align: center; display: flex; flex-direction: column; gap: 1.6vh; box-shadow: 0 2vh 10vh rgba(0,0,0,.75); }
+    .qalert[hidden] { display: none; } .qalert b { font: 800 6vh/1.15 var(--ff); } .qalert span { font: 600 3vh/1.3 var(--ff); color: #ffd479; }
   </style>
   <link rel="stylesheet" href="theme.css?v=9ef27d2c" />
   <link rel="stylesheet" href="signs.css?v=824daaf8" />
@@ -63,7 +72,7 @@
 <body>
   <div class="kb-flow" aria-hidden="true"></div>
   <div class="wrap">
-    <header><div class="logo">MoHeat <span>Evo</span></div><p id="tag"></p></header>
+    <header><div class="logo">MoHeat <span>Evo</span></div><p id="tag"></p><span class="qdev" id="qdev" data-state="off"><i></i><b></b></span></header>
     <section class="left"><div class="now" id="now"></div><div class="mirror" id="mirror"><span class="tag" id="mtag"></span><div class="sub" id="sub"></div></div></section>
     <section class="right">
       <div class="ears"><canvas id="ears"></canvas><div class="lab" id="earsLab"></div></div>
@@ -75,6 +84,7 @@
   <section class="promo" id="promo" hidden><video id="pv" muted loop playsinline preload="auto"></video>
     <div class="ptag" id="ptag" hidden></div>
     <div class="qbadge" id="qbadge"><div class="qr" id="pqr"></div><p id="pqT"></p><div class="p-signs ms-row" id="psigns" hidden></div></div></section>
+  <div class="qalert" id="qalert" role="alert" hidden><b></b><span></span></div>
   <p class="hint">F = fullscreen</p>
   <script>window.MOHEAT_NAV_DATA_ONLY = true;</script>
   <script src="../demos/shared/nav.js?v=4d8359f2"></script>
@@ -82,6 +92,6 @@
   <script src="qrcode.min.js"></script>
   <script src="pitches.js?v=640c3555"></script>
   <script src="signs.js?v=0849d559"></script>
-  <script src="queue.js?v=7f4df385"></script>
+  <script src="queue.js?v=555f1b1c"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Exhibition (kiosk) mode, the whole visitor loop in a real browser (DEMO_DESIGN_GUIDE §7.4; TASKS #54). Prints ONE JSON object,
 // exit 1 when a step fails.   node tools/web/check_kiosk.js [--demo all-ages/Demo28_SnowFoxLullaby] [--size 1440x900] [--shots DIR] [--quick]
-// Own http.server + own headless Chrome (fresh profile). Steps:
+// Own test server (tools/qa/serve.py, HTTP Range) + own headless Chrome (fresh profile). Steps:
 //   welcome (?kiosk=1 sets the flag) → Start → intro: sting → left warm → right cool → hot↔cold → DUAL → auto-calibration: WARM ramp tapped after ~2.5 s, COOL ramp left to stop at the cap (separate scales) then
 //   "just right" (the thermal lines the intro sent are checked) → menu → demo page (kiosk.js: switcher gone, ✕ End, guide off) →
 //   Start (interactive, the default) → the show cut ends by itself → card (stars, buy, price, scenes, moment, comment) → Done → welcome with the
@@ -21,7 +21,7 @@ const out = { size: `${W}x${H}`, demo: DEMO, ok: false, steps: {}, errors: [] };
 const step = (k, v, detail) => { out.steps[k] = detail === undefined ? !!v : { ok: !!v, ...detail }; if (!v) out.errors.push(k); };
 (async () => {
   const hp = await freePort(), dp = await freePort();
-  const http = spawn('python3', ['-m', 'http.server', String(hp), '--bind', '127.0.0.1'], { cwd: ROOT, stdio: 'ignore' });
+  const http = spawn('python3', [path.join(ROOT, 'tools', 'qa', 'serve.py'), String(hp), '--bind', '127.0.0.1'], { cwd: ROOT, stdio: 'ignore' });   // HTTP Range (media seek)
   const prof = fs.mkdtempSync(path.join(os.tmpdir(), 'kioskprobe-'));
   const chrome = spawn(CHROME, ['--headless=new', `--remote-debugging-port=${dp}`, `--user-data-dir=${prof}`, '--autoplay-policy=no-user-gesture-required', '--mute-audio',
     '--disable-background-timer-throttling', '--disable-renderer-backgrounding', `--window-size=${W},${H}`, 'about:blank'], { stdio: 'ignore' });
@@ -177,8 +177,20 @@ const step = (k, v, detail) => { out.steps[k] = detail === undefined ? !!v : { o
   }
 
   // 7 staff panel: 5 taps top-left + PIN
-  for (let i = 0; i < 5; i++) { await tap(20, 20); await sleep(120); }
-  step('pin', await ev(`!document.getElementById('pinBox').hidden`));
+  // A person taps 5× in ~1 s (~150 ms apart); the product window is 3 s. On an overloaded machine one CDP tap can take ~1 s, so the
+  // page's own click times are recorded: a span > 3 s = the test was too slow (retry, up to 3 tries), not a product bug; within 3 s and
+  // no PIN box = a real FAIL. The top-left corner must be the #corner hot spot (nothing covering it).
+  { const pinTries = []; let pinOk = false;
+    for (let a = 0; a < 3 && !pinOk; a++) {
+      await ev(`(window.__ct = [], document.getElementById('corner').addEventListener('click', () => window.__ct.push(performance.now()), { capture: true }), 1)`);
+      await sleep(3200);   // a fresh 3 s window (earlier taps forgotten)
+      for (let i = 0; i < 5; i++) { await tap(20, 20); if (i < 4) await sleep(150); }
+      await sleep(200);
+      const r = await ev(`(() => { const t = window.__ct || []; return { taps: t.length, span: t.length ? Math.round(t[t.length - 1] - t[0]) : null, hit: document.elementFromPoint(20, 20)?.id || '', open: !document.getElementById('pinBox').hidden }; })()`) || {};
+      pinTries.push(r); pinOk = !!r.open;
+      if (!pinOk && r.taps === 5 && r.span != null && r.span <= 3000) break;   // the taps were in time and still no PIN box: a real bug
+    }
+    step('pin', pinOk, { tries: pinTries }); }
   await ev(`(document.getElementById('pin').value = '1234', document.getElementById('pinOk').click(), 1)`);
   step('pinWrong', await ev(`document.getElementById('staff').hidden && document.getElementById('pinErr').textContent.length > 0`));
   await ev(`(document.getElementById('pin').value = '0000', document.getElementById('pinOk').click(), 1)`); await sleep(300);

@@ -22,6 +22,7 @@
    `open -a "Google Chrome" --args --kiosk --autoplay-policy=no-user-gesture-required "https://moheat-evo.github.io/kiosk/?kiosk=1"`
    （Windows：`chrome.exe --kiosk --autoplay-policy=no-user-gesture-required https://…/kiosk/?kiosk=1`）。不用命令行也可以：打开网址后按 F11 / ⌃⌘F（面板里的「Fullscreen」按钮一进 Demo 页就会退出全屏，只适合临时用）。
 3. 插上 MoHeat Evo（USB 或蓝牙配对好），在**左上角连点 5 次** → 输入 PIN（第一次是 `0000`，请马上在面板里改成自己的 4–8 位数字）→ 面板「Device」里点 **+ Add** 选择设备 → Connect。授权一次后，每个页面都会自动连接，右上角小圆点变绿。
+   连接状态只有一份（`device.js` 的 `MoHeatDevice.state`，2026-11-09）：面板的 Device 状态、访客屏右上角小圆点（绿 = 已连接，黄 = 连接中，红 = 断开）、排队屏右上角的「MoHeat Evo · …」和各 Demo 页永远一致；设备被拔掉时访客屏和排队屏都出现大字「MoHeat Evo 已断开」，插回后自动重连、提示消失。在面板里手动点 **Disconnect** 后不会再自动连接（换页也不会），要用时再点 Connect。
 4. 面板里设好：默认语言、**暖 / 凉各自的上限**（默认 80 %，也可以点「Calibrate on me」用同样的自动校准在自己身上测一次来设）和起始强度（默认 50 %）、**排队开关**（默认有人排队）、空闲重置时间（默认 60 秒）、完整版 / 精华版（默认完整版：每人一个完整 Demo）、开放哪些 Demo、价格区间和币种、卫生标识、（可选）产品消息表单的网址。设置只保存在这台浏览器里。
 5. （可选）提前缓存：面板「Save all demos for offline」，进度到 100 % 后断网也能跑。
 6. 关掉面板，自己从欢迎画面走一遍：引导 → 选一个 Demo → 体验卡。
