@@ -765,6 +765,11 @@ main.layout
 
 - **实时对话的回复在下一轮又出现一次**（Demo43 私密实时版，抽出共用的 `shared/talk.js` 时发现：ElevenLabs 文字 agent 先流式发 `agent_chat_response_part`（以 `stop` 结束），随后再发一条整段的 `agent_response`；旧代码在 `send()` 时清掉"已流式"标记，晚到的 `agent_response` 被当成下一轮的回答，一轮一轮错位）→ `agent_response` 只在这一轮没有流式片段时才用，标记在它到达时清掉；没有英文那一半的半截行丢掉。实时 Demo 上线前跑不花 TTS 的冒烟测试（Demo43 `scripts/live_smoke.mjs`：登录私密服务器 → 真实 agent 跑 3 轮，只看文字）。〔G6 · 实时版冒烟测试〕
 **G6 测试**
+- **UI v2 重构（ui3，2026-11-08/09）四条**：
+  ① 共用对象上的新 API 和 Demo 钩子同名（`Object.assign(MoHeatShell, { chapters })` 覆盖了 Demo 写的 `MoHeatShell.chapters` 数组，`chapters()` 返回函数 → 新界面第一次 paint 就抛错、状态永远停在 loading）→ 共用对象上：钩子（Demo 写的）和 API（共用代码给的）**不同名**（API 用 `chapterList()`）；新组件的 paint 包 try/catch，一次出错不能让整个界面停住。
+  ② 纯聆听"按了没反应就永远不再按"：shell 在 Demo 开始监听之前按了 Demo12 的 `#answerBtn`（`onclick` 还没挂上），记成已按 → 响铃永远停着；另外 shell 只认一张固定的按钮类名表 → 统一规则：任何可见的"门"（标准回答按钮 + `[data-auto]` + `MoHeatShell.AUTO`）都会被按，按过 5 秒还在就再按；`check_shell.js` 75 秒内字幕 / 冷热 / 章节 / 按钮都没变 = **stalled FAIL**（附截图）。
+  ③ 批量渲染在机器忙时整体超时，缺的图被**静默跳过**、脚本仍报 PASS → `covers.py`：任何一张没渲染出来 = FAIL；每页单独的时间预算；只在完整渲染后写内容戳 `media/cover/stamp.json`（`--check` 查过期）。
+  ④ 合成封面（整张画 / outpaint / 多层合成）里的直线切边，抠图模型不一定把那块（前景发束）算进人物 → 自动检测（`check_cover.py` 的 straight edge，WARN）抓不全；**合成封面一律 3 倍放大人工看一遍边缘**（Demo22 左下发束的竖直切边就是这样漏过的，已用一次 gpt-image-2 局部重画去掉，≈ $0.3）。
 - **自动测试"通过"了，但嘴不动、只眨一只眼** → 测试不能只看画面顺序、报错和 404：`check_demo.py --full` 跑 `tools/art/check_mouth.js`（说话时口型值 > 0、停顿时闭上、没有半透明双唇）；交给用户前自己先看一段说话和眨眼。〔G6 · check_demo --full: mouth · CHECKLIST〕
 - **手机上"能显示"不等于"能用"**（竖屏 ■ STOP 被挤出 3–6 px、窄窗口设备控件把 390 px 页面撑到 637 px、封面按钮 30 px、🌐 / ⛶ 20–26 px、平板横屏侧栏只剩 130 px、引导第 8、9 步在屏幕外；Demo23 地点按钮英文标签比日文长一倍、手机横屏溢出）→ 规则写在共用的 `series.css` / `guide.js`；按钮标签按最长的语言量；`tools/web/check_mobile.html` 做真实点击测试（控件中心 ±21 px）并逐步走一遍引导，44 px 规则同时写 `(max-width: 1100px)`。〔G6 · check_demo: mobile〕
 - **浏览器测试被干扰或测不准**：在用户正在看的标签页里跑测试；共用 Chrome 标签组里自己的标签被别的会话导航走；窗口最大化时 `resize_window` 不生效；javascript 工具 45 s 超时；后台标签计时器被节流 → `check_demo.py` 自己起 http.server + headless Chrome（`tools/qa/page_probe.js`），尺寸用同源 iframe，长循环不 await、结果存 `window.__res`。〔G6 · check_demo〕
