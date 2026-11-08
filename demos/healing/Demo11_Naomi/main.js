@@ -640,6 +640,28 @@
     const cat = () => { ctx.fillStyle = 'rgba(40,20,40,.16)'; ctx.beginPath(); ctx.ellipse(1450, 1035, w * .36, 22, 0, 0, 7); ctx.fill(); ctx.drawImage(im, 1450 - w / 2, 1040 - h, w, h); };
     if (C) C.fit(ctx, { eye: [.78, .33], face: .18 }, cat, { free: true, tone: '#2a1c22', at: { face: .24 } }); else cat();   // a cat's face is smaller than a person's: 24 %, her body still reaches the bottom
   }
+  // pure listening (shared/shell.js hand): the day plays itself with real input — slow strokes over her head (the same pointer path
+  // as a finger), two calls on the Call button, the teaser wand wiggled in front of her by hover, a held "fu-fu" on her food, three
+  // pokes, tummy rubs, and a few slow strokes while she sleeps.
+  if (window.MoHeatShell) {
+    const strokes = (cx, cy, w, h, n = 3) => { const p = []; for (let i = 0; i <= n * 2; i++) p.push([(cx + (i % 2 ? w : -w) / 2) / W, (cy + (i % 4 < 2 ? 0 : h)) / H]); return p; };
+    MoHeatShell.autoplay = (G) => {
+      if (!S.started || S.done || fading) return true;
+      const r = rect();
+      if (S.step === 'pet' && S.rub < 0 && N.show && S.st > 1.2) { const [hx, hy] = headPos(); return G.run(() => G.drag(cv, strokes(hx, Math.max(hy - 60, r.y0 + r.h * .12), 380, 50), 4.2)); }
+      if (S.step === 'call' && S.calls < 2 && S.callCool <= 0 && N.tx === null && S.st > 1.5) return G.run(async () => { await G.tap(ab); await G.wait(2.2); });
+      if (S.step === 'play' && S.catches < 3 && N.pounceT < 0) {
+        const x = clamp(N.x + (N.x > 960 ? -80 : 80), 300, 1600), y = 560, P = [];
+        for (let i = 0; i < 10; i++) P.push([(x + (i % 2 ? 130 : -130)) / W, (y + (i % 3) * 25) / H]);
+        return G.run(() => G.move(cv, P, 2.6));
+      }
+      if (S.step === 'feed' && S.food > 0 && S.st > 1) return G.run(async () => { await G.hold(ab, .5, .5, 2.4); await G.wait(.7); });
+      if (S.step === 'poke' && S.pokes < 3 && S.st > 1) return G.run(async () => { await G.tap(cv, N.x / W, (r.y0 + r.h * .45) / H); await G.wait(1.3); });
+      if (S.step === 'belly' && S.belly < 1 && S.st > 1) return G.run(() => G.drag(cv, strokes(N.x, r.y0 + r.h * .5, 300, 40), 3.8));
+      if (S.step === 'sleep' && S.calm < 1 && S.st > 3 && S.endT < 0) return G.run(async () => { await G.drag(cv, strokes(N.x, r.y0 + r.h * .45, 260, 20, 2), 4); await G.wait(2.5); });
+      return true;
+    };
+  }
   window.NAOMI = { get S() { return S; }, N, thermal: () => thermal(.05), conflicts: () => conflicts, jumpTo, poke };
   renderGoal(); renderSteps(); renderHearts();
   artReady.then(() => document.fonts.ready).then(() => { if (!S.started) drawCover(); });

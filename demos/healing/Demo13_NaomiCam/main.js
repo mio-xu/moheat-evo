@@ -925,6 +925,43 @@
     // cover standard (shared/cover.js): the camera picture is drawn by WebGL, so it is not refitted — where Naomi's face is (check_cover.py)
     if (window.MoHeatCover) { MoHeatCover.setTone('#2a1c22'); MoHeatCover.placed = { eye: [81, 40], face: 18 }; }
   }
+  // pure listening (shared/shell.js hand): the camera app is used for you — 🌡 thermal, pan right, tap the warm cat house, hold 🎤
+  // twice, slow strokes over her face at the lens, the laser dot parked a little away from her (she stalks it, pounces), the fan's
+  // wind aimed at her, 🍚, 🔥 the blanket and a held "good night".
+  if (window.MoHeatShell) {
+    const scr = (wx, wy) => { const [x, y] = toScreen(wx, wy); return [x / W, y / H]; };
+    MoHeatShell.autoplay = (G) => {
+      if (!S.started || S.done || fading || S.st < 1.2) return true;
+      const st = S.step, ok = (b) => !b.hidden && !b.disabled;
+      if (st === 'find' && S.found < 0) {
+        if (!cam.thermTo && ok(btn.therm)) return G.run(() => G.tap(btn.therm));
+        const [hx] = toScreen(P.house[0], P.house[1]);
+        if (hx > W - 260 && ok(btn.panR)) return G.run(() => G.hold(btn.panR, .5, .5, Math.min(2.6, (hx - W * .6) / Z / 520 + .2)));
+        if (cam.therm > .5) return G.run(async () => { await G.wait(.8); await G.tap(cv, ...scr(P.house[0], P.house[1])); await G.wait(1); });
+        return true;
+      }
+      if (st !== 'find' && cam.thermTo && ok(btn.therm) && !S.thermOff) { S.thermOff = 1; return G.run(async () => { await G.wait(.6); await G.tap(btn.therm); }); }   // found her: back to the normal picture
+      if (st === 'call' && S.calls < 2 && ok(btn.talk)) return G.run(async () => { await G.hold(btn.talk, .5, .5, 1.3, () => talk.held > .75); await G.wait(2.6); });
+      if (st === 'lens' && S.lensReady && S.rubs < 3) { const P2 = []; for (let i = 0; i < 7; i++) P2.push([(i % 2 ? 1260 : 660) / W, (420 + (i % 3) * 90) / H]); return G.run(() => G.drag(cv, P2, 5.5)); }
+      if (st === 'laser' && S.catches < 3) {
+        if (!laser.on) return ok(btn.laser) ? G.run(() => G.tap(btn.laser)) : true;
+        if (N.pounce || N.pose === 'walk') return true;
+        const side = N.x > cam.x ? -1 : 1, wx = clamp(N.x + side * 330, cam.x - HALF * .75, cam.x + HALF * .75);
+        const c0 = S.catches; return G.run(async () => { await G.move(cv, [scr(wx, 975)], .9); await G.wait(1.5, () => S.catches > c0 || (!N.pounce && N.pose !== 'walk' && laser.still > 1.5)); await G.wait(.6); });
+      }
+      if (st === 'cool' && !S.cooled) {
+        if (!S.fan) return ok(btn.fan) ? G.run(() => G.tap(btn.fan)) : true;
+        if (Math.abs(S.aim - N.x) > 120) return G.run(async () => { await G.drag(cv, [scr(S.aim, N.y - 160), scr(N.x, N.y - 160)], 1.2); await G.wait(2); });
+        return true;
+      }
+      if (st === 'feed' && S.food < 0 && ok(btn.feed)) return G.run(() => G.tap(btn.feed));
+      if (st === 'night') {
+        if (!S.heater && ok(btn.heat) && S.st > 4) return G.run(() => G.tap(btn.heat));
+        if (S.carpet > .9 && S.said < 0 && ok(btn.talk)) return G.run(async () => { await G.wait(1.5); await G.hold(btn.talk, .5, .5, 1.4, () => talk.held > .75); });
+      }
+      return true;
+    };
+  }
   window.NAOMICAM = { get S() { return S; }, N, cam, laser, thermal: () => thermal(.05), conflicts: () => conflicts, jumpTo, onTalk };
   renderGoal(); renderSteps(); renderHearts(); dockUI();
   artReady.then(() => document.fonts.ready).then(() => { if (!S.started) coverFrame(0); });

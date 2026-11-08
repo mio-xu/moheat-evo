@@ -621,7 +621,7 @@
   function start() {
     SND.init(); ensureMic(); SND.loadVoices(Object.keys(window.KOHAKU_LINES || {}));
     const again = S.done;
-    if (again) { S = fresh(); initGate(); parts = []; pulses = []; $('cleared').hidden = true; }
+    if (again || S.started) { S = fresh(); initGate(); parts = []; pulses = []; busy = false; fadeEl.classList.remove('on'); $('cleared').hidden = true; }   // also a restart mid-game (the shell's chapter seek)
     $('intro').classList.add('hidden'); S.started = true; setLoops(S.scene); renderInv(); renderGoal(); renderSteps();
     fox(again ? ['again', 'intro3'] : ['intro1', 'intro2', 'intro3'], true);
   }
@@ -631,6 +631,47 @@
   // the cover (DEMO_DESIGN_GUIDE §7.3 2b): Kohaku, happy, in front of the glowing spring — plate + his cut-out, on the standard spot
   const coverArt = () => window.MoHeatCover.layered(ctx, { bg: 'media/art/bg_spring_glow.webp', char: 'media/art/kohaku_happy.webp', x: .5, y: 1, height: 1 },
     { eye: [.433, .43], face: .31 }, { tone: '#0c1426', at: { y: .34, face: .29 }, redraw: () => { if (!S.started) coverArt(); } });
+  // ---------------------------------------------------------------- pure listening: the puzzle solves itself, step by step (shared/shell.js hand)
+  // Kohaku speaks first, then the hand acts: straw from the basket, drawers opened one by one until the flint, three strikes at the
+  // hearth, a held breath on the ember, candle → hearth → door; at the gate it "feels" each candle in turn and blows out only the
+  // cold foxfires; in the tunnel it listens, then takes the side with the water; at the spring it blows out the candle and touches the water.
+  if (window.MoHeatShell) {
+    let quietSince = 0;
+    const at = (x, y) => [x / W, y / H], mid = ([x0, y0, x1, y1]) => at((x0 + x1) / 2, (y0 + y1) / 2);
+    MoHeatShell.autoplay = (G) => {
+      if (!S.started || S.done && S.scene !== 'spring' || busy) return true;
+      const n = performance.now(), quiet = !say.length && n > sayUntil;
+      if (!quiet) { quietSince = 0; return true; } if (!quietSince) quietSince = n; if (n - quietSince < 700) return true;   // let Kohaku finish
+      const h = S.hut, g = S.gate, tu = S.tunnel, sp = S.spring, { tried, felt } = S.ap || (S.ap = { tried: new Set(), felt: new Set() });   // per run
+      if (S.step === 'find') {
+        if (!h.tinder) return G.run(() => G.tap(cv, ...at(GEO.hut.basket[0], GEO.hut.basket[1] - 40)));
+        if (h.open[h.flintIn]) return G.run(() => G.tap(cv, ...mid(drawerRect(h.flintIn))));
+        const k = [0, 1, 2].find((i) => !tried.has(i) && i !== h.flintIn && i < h.flintIn) ?? h.flintIn; tried.add(k);
+        return G.run(async () => { await G.tap(cv, ...mid(drawerRect(k))); if (k !== h.flintIn) { await G.wait(1.4); if (h.open[k]) await G.tap(cv, ...mid(drawerRect(k))); } });
+      }
+      if (S.step === 'strike') return G.run(async () => { await G.tap(cv, ...at(GEO.hut.hearth[0], GEO.hut.hearth[1] - 10)); await G.wait(.5); });
+      if (S.step === 'ember') return G.run(() => G.hold(bb, .5, .5, 2.6, () => S.step !== 'ember'));
+      if (S.step === 'candle') {
+        if (!h.candle) return G.run(() => G.tap(cv, ...at(GEO.hut.candle[0], GEO.hut.candle[1] - 60)));
+        if (!h.lit) return G.run(() => G.tap(cv, ...at(GEO.hut.hearth[0], GEO.hut.hearth[1])));
+        return G.run(() => G.tap(cv, ...mid(GEO.hut.door)));
+      }
+      if (S.step === 'gate' && !g.opening && g.wrong <= 0) {
+        const i = g.cands.findIndex((c, k) => c.lit > .5 && !felt.has(k)); if (i < 0) { felt.clear(); return true; }
+        felt.add(i); const c = g.cands[i];
+        return G.run(async () => { await G.tap(cv, ...at(c.x, GEO.gate.ledgeY - 120)); await G.wait(1.3); if (c.fox) await G.hold(bb, .5, .5, 1.1, () => c.lit <= .5); });   // feel it: warm = keep, cold = blow
+      }
+      if (S.step === 'enter' && g.open > .9) return G.run(() => G.tap(cv, ...mid(GEO.gate.door)));
+      if (S.step === 'fork' && tu.dead <= 0) {
+        const [ox, oy] = GEO.tunnel[tu.water[tu.fork] < 0 ? 'left' : 'right'];
+        return G.run(async () => { await G.wait(1.2); await G.tap(cv, ...at(ox, oy)); });
+      }
+      if (S.step === 'spring' && !sp.out) return G.run(() => G.hold(bb, .5, .5, 1.3, () => sp.out));
+      if (S.step === 'end' && sp.glow > .6 && sp.touches < 3) return G.run(async () => { await G.tap(cv, ...at(560 + sp.touches * 380, GEO.spring.lakeY + 160 + (sp.touches % 2) * 90)); await G.wait(1.6); });
+      return true;
+    };
+  }
+
   // ---------------------------------------------------------------- special modes
   // ?scene=gate|tunnel|spring — jump ahead (testing); ?cover=1 — poster; ?shot=<bg> — clean background (Seedance layout reference)
   window.CAVE = { get S() { return S; }, go, hit, thermal: () => thermal(.05), conflicts: () => conflicts };

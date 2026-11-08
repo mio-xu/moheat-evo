@@ -385,6 +385,26 @@
       C.fit(ctx, { eye: [.5, .43], face: .28 }, () => { const n = C.img('../_kit/naomi/art/naomi_close_happy.webp', drawCover); if (n) { const h = H, w = h * n.width / n.height; ctx.drawImage(n, W * .5 - w / 2, 0, w, h); } },
         { free: true, tone: '#1e1625', at: { y: .35, face: .32 } }); }
   }
+  // pure listening (shared/shell.js hand): being Naomi happens by itself — the hand turns the right ear dial round to the kitchen,
+  // hops into each patch of sunlight, presses and holds to burrow into the laundry; the other buttons / answers take the default
+  // after a natural pause (the shell's own default, by the same hand).
+  if (window.MoHeatShell) {
+    let since = 0, what = '';
+    MoHeatShell.autoplay = (G) => {
+      if (!S.started) return true;
+      const el = actEl.classList.contains('show') && actEl.querySelector('.act-btn'), key = el ? el.textContent + (S.spot ? S.spot.x : '') : '';
+      if (key !== what) { what = key; since = performance.now(); }
+      if (!el) return false;
+      if (performance.now() - since < 1600) return true;
+      if (stage.classList.contains('listening')) {   // drag the right ear dial from where it points round to the kitchen
+        const P = []; for (let i = 0; i <= 8; i++) { const a = S.earR + (KITCHEN_AZ - S.earR) * i / 8; P.push([.5 + .42 * Math.sin(a), .5 - .42 * Math.cos(a)]); }
+        return G.run(async () => { await G.drag($('earR'), P, 1.6); await G.wait(1.5); });
+      }
+      if (S.spot) return G.run(() => G.tap(stage, S.spot.x, S.spot.y));
+      if (el.classList.contains('hold')) return G.run(() => G.hold(el, .5, .5, 4.6));
+      return false;
+    };
+  }
   window.NEKO = { get S() { return S; }, thermal: () => thermal(.05), both: () => both, focusOf, setEar };
   setStep(0); setEar('L', S.earL); setEar('R', S.earR);
   if (QS.has('cover')) { document.body.classList.add('cover-only'); artReady.then(drawCover); return; }
