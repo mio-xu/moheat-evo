@@ -34,7 +34,11 @@
    "near_eyes": [
     1238,
     382
-   ]
+   ],
+   "lp": {
+    "drawn_open": true
+   },
+   "mouth": "lp"
   },
   "taiko": {
    "src": "hin_taiko",
@@ -71,7 +75,11 @@
    "near_eyes": [
     1272,
     432
-   ]
+   ],
+   "lp": {
+    "drawn_open": true
+   },
+   "mouth": "lp"
   },
   "crane": {
    "src": "hin_crane",
