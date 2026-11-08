@@ -1,0 +1,127 @@
+{
+ "_doc": "Demo25 (Tsubaki, Hatsumode date) redone the standard layered way (DEMO_DESIGN_GUIDE §6): story unchanged, art = empty plate +\nplain-background pose + drawn mouth / blink variants per view. Writes project/web_prompts.json for tools/openai/images.py\n(refs d25:<view> = Demo25's flat stills, copied to assets/art/web/d25_<view>.jpg). Run: python3 scripts/prompts.py",
+ "bg_torii": {
+  "ref": "d25:torii",
+  "prompt": "Image 1 is the reference picture. Remove the young woman completely (and any hand or cup she holds) and fill the space with what is behind her — the same Japanese shrine on New Year's Eve night: snow, lanterns, navy sky, bokeh lights, distant crowd silhouettes — the same composition, colours, lighting and art style. Empty scene, no people.\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
+ },
+ "tsubaki_torii": {
+  "ref": "d25:torii",
+  "prompt": "Image 1 is the CHARACTER, POSE and STYLE reference: redraw the same young woman in the same pose, size and position in the frame, same art style.\n\nArt style EXACTLY like image 1: soft modern cel animation with a light, airy palette, thin coloured lineart (dark lavender instead of black), flat colours with one soft-edged but still flat shadow tone. Hand-drawn feel, NOT glossy, no bloom. Realistic adult proportions (not chibi).\n\nTsubaki: the exact young woman from image 1 — very long silver-white hair in a loose low side ponytail tied with a red-and-white braided cord, soft pink-red eyes, a small red camellia pin; a white furisode fading to crimson at the sleeves with red camellias, a gold obi, a white fur stole.\n\nSame pose as image 1: She has just hurried up to you in front of a big red torii gate and stands about one metre away, centre-right of the picture, a little out of breath, one hand raised in a small shy wave, cheeks pink from the cold, a bright happy smile. Warm lantern light on her face. Mouth CLOSED (lips together) in the same expression; full figure as framed in image 1, nothing cut off that image 1 shows.\n\nPlain flat DARK-GREY studio background (#404040), completely empty: no scenery, no snow, no floor line, no shadow on the background. Keep the same lighting on her as in image 1 (warm lantern light, cool night fill).\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
+ },
+ "tsubaki_torii_talk": {
+  "ref": "tsubaki_torii",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture."
+ },
+ "tsubaki_torii_blink": {
+  "ref": "tsubaki_torii",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture."
+ },
+ "bg_stall": {
+  "ref": "d25:stall",
+  "prompt": "Image 1 is the reference picture. Remove the young woman completely (and any hand or cup she holds) and fill the space with what is behind her — the same Japanese shrine on New Year's Eve night: snow, lanterns, navy sky, bokeh lights, distant crowd silhouettes — the same composition, colours, lighting and art style. Empty scene, no people.\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
+ },
+ "tsubaki_stall": {
+  "ref": "d25:stall",
+  "prompt": "Image 1 is the CHARACTER, POSE and STYLE reference: redraw the same young woman in the same pose, size and position in the frame, same art style.\n\nArt style EXACTLY like image 1: soft modern cel animation with a light, airy palette, thin coloured lineart (dark lavender instead of black), flat colours with one soft-edged but still flat shadow tone. Hand-drawn feel, NOT glossy, no bloom. Realistic adult proportions (not chibi).\n\nTsubaki: the exact young woman from image 1 — very long silver-white hair in a loose low side ponytail tied with a red-and-white braided cord, soft pink-red eyes, a small red camellia pin; a white furisode fading to crimson at the sleeves with red camellias, a gold obi, a white fur stole.\n\nSame pose as image 1: A street of food stalls (yatai) inside the shrine: glowing stall awnings, steam, hanging lanterns. She stands centre, turned toward you, holding up a small black credit card with an embarrassed, apologetic little smile, the other hand at her cheek. Mouth CLOSED (lips together) in the same expression; full figure as framed in image 1, nothing cut off that image 1 shows.\n\nPlain flat DARK-GREY studio background (#404040), completely empty: no scenery, no snow, no floor line, no shadow on the background. Keep the same lighting on her as in image 1 (warm lantern light, cool night fill).\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
+ },
+ "tsubaki_stall_talk": {
+  "ref": "tsubaki_stall",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture."
+ },
+ "tsubaki_stall_blink": {
+  "ref": "tsubaki_stall",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture."
+ },
+ "bg_amazake": {
+  "ref": "d25:amazake",
+  "prompt": "Image 1 is the reference picture. Remove the young woman completely (and any hand or cup she holds) and fill the space with what is behind her — the same Japanese shrine on New Year's Eve night: snow, lanterns, navy sky, bokeh lights, distant crowd silhouettes — the same composition, colours, lighting and art style. Empty scene, no people.\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
+ },
+ "tsubaki_amazake": {
+  "ref": "d25:amazake",
+  "prompt": "Image 1 is the CHARACTER, POSE and STYLE reference: redraw the same young woman in the same pose, size and position in the frame, same art style.\n\nArt style EXACTLY like image 1: soft modern cel animation with a light, airy palette, thin coloured lineart (dark lavender instead of black), flat colours with one soft-edged but still flat shadow tone. Hand-drawn feel, NOT glossy, no bloom. Realistic adult proportions (not chibi).\n\nTsubaki: the exact young woman from image 1 — very long silver-white hair in a loose low side ponytail tied with a red-and-white braided cord, soft pink-red eyes, a small red camellia pin; a white furisode fading to crimson at the sleeves with red camellias, a gold obi, a white fur stole.\n\nSame pose as image 1: Close-up by the food stalls: she leans in from the RIGHT side of the picture and playfully presses a steaming white paper cup of amazake against the viewer's right cheek (the cup at the right edge, very near the camera, soft steam rising); her own cup in her other hand; a teasing, delighted smile. Mouth CLOSED (lips together) in the same expression; full figure as framed in image 1, nothing cut off that image 1 shows.\n\nPlain flat DARK-GREY studio background (#404040), completely empty: no scenery, no snow, no floor line, no shadow on the background. Keep the same lighting on her as in image 1 (warm lantern light, cool night fill).\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
+ },
+ "tsubaki_amazake_talk": {
+  "ref": "tsubaki_amazake",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture."
+ },
+ "tsubaki_amazake_blink": {
+  "ref": "tsubaki_amazake",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture."
+ },
+ "bg_fire": {
+  "ref": "d25:fire",
+  "prompt": "Image 1 is the reference picture. Remove the young woman completely (and any hand or cup she holds) and fill the space with what is behind her — the same Japanese shrine on New Year's Eve night: snow, lanterns, navy sky, bokeh lights, distant crowd silhouettes — the same composition, colours, lighting and art style. Empty scene, no people.\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
+ },
+ "tsubaki_fire": {
+  "ref": "d25:fire",
+  "prompt": "Image 1 is the CHARACTER, POSE and STYLE reference: redraw the same young woman in the same pose, size and position in the frame, same art style.\n\nArt style EXACTLY like image 1: soft modern cel animation with a light, airy palette, thin coloured lineart (dark lavender instead of black), flat colours with one soft-edged but still flat shadow tone. Hand-drawn feel, NOT glossy, no bloom. Realistic adult proportions (not chibi).\n\nTsubaki: the exact young woman from image 1 — very long silver-white hair in a loose low side ponytail tied with a red-and-white braided cord, soft pink-red eyes, a small red camellia pin; a white furisode fading to crimson at the sleeves with red camellias, a gold obi, a white fur stole.\n\nSame pose as image 1: A large shrine bonfire (takibi) burns on the LEFT side of the picture with orange sparks rising. She stands on the right half, holding both hands out toward the fire, her face lit warm orange on the side facing the fire, the cool blue night on her other side; a soft, content smile. Mouth CLOSED (lips together) in the same expression; full figure as framed in image 1, nothing cut off that image 1 shows.\n\nPlain flat DARK-GREY studio background (#404040), completely empty: no scenery, no snow, no floor line, no shadow on the background. Keep the same lighting on her as in image 1 (warm lantern light, cool night fill).\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
+ },
+ "tsubaki_fire_talk": {
+  "ref": "tsubaki_fire",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture."
+ },
+ "tsubaki_fire_blink": {
+  "ref": "tsubaki_fire",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture."
+ },
+ "bg_close": {
+  "ref": "d25:close",
+  "prompt": "Image 1 is the reference picture. Remove the young woman completely (and any hand or cup she holds) and fill the space with what is behind her — the same Japanese shrine on New Year's Eve night: snow, lanterns, navy sky, bokeh lights, distant crowd silhouettes — the same composition, colours, lighting and art style. Empty scene, no people.\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
+ },
+ "tsubaki_close": {
+  "ref": "d25:close",
+  "prompt": "Image 1 is the CHARACTER, POSE and STYLE reference: redraw the same young woman in the same pose, size and position in the frame, same art style.\n\nArt style EXACTLY like image 1: soft modern cel animation with a light, airy palette, thin coloured lineart (dark lavender instead of black), flat colours with one soft-edged but still flat shadow tone. Hand-drawn feel, NOT glossy, no bloom. Realistic adult proportions (not chibi).\n\nTsubaki: the exact young woman from image 1 — very long silver-white hair in a loose low side ponytail tied with a red-and-white braided cord, soft pink-red eyes, a small red camellia pin; a white furisode fading to crimson at the sleeves with red camellias, a gold obi, a white fur stole.\n\nSame pose as image 1: Extreme close-up: the crowd has pushed her against you. Her face is very close on the RIGHT side of the picture, right beside the viewer's right ear, looking up through her lashes, deeply blushing, lips parted as if whispering; one hand resting on the viewer's chest. Warm bonfire glow from the left, people's shoulders blurred behind. Mouth CLOSED (lips together) in the same expression; full figure as framed in image 1, nothing cut off that image 1 shows.\n\nPlain flat DARK-GREY studio background (#404040), completely empty: no scenery, no snow, no floor line, no shadow on the background. Keep the same lighting on her as in image 1 (warm lantern light, cool night fill).\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
+ },
+ "tsubaki_close_talk": {
+  "ref": "tsubaki_close",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture."
+ },
+ "tsubaki_close_blink": {
+  "ref": "tsubaki_close",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture."
+ },
+ "bg_pray": {
+  "ref": "d25:pray",
+  "prompt": "Image 1 is the reference picture. Remove the young woman completely (and any hand or cup she holds) and fill the space with what is behind her — the same Japanese shrine on New Year's Eve night: snow, lanterns, navy sky, bokeh lights, distant crowd silhouettes — the same composition, colours, lighting and art style. Empty scene, no people.\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
+ },
+ "tsubaki_pray": {
+  "ref": "d25:pray",
+  "prompt": "Image 1 is the CHARACTER, POSE and STYLE reference: redraw the same young woman in the same pose, size and position in the frame, same art style.\n\nArt style EXACTLY like image 1: soft modern cel animation with a light, airy palette, thin coloured lineart (dark lavender instead of black), flat colours with one soft-edged but still flat shadow tone. Hand-drawn feel, NOT glossy, no bloom. Realistic adult proportions (not chibi).\n\nTsubaki: the exact young woman from image 1 — very long silver-white hair in a loose low side ponytail tied with a red-and-white braided cord, soft pink-red eyes, a small red camellia pin; a white furisode fading to crimson at the sleeves with red camellias, a gold obi, a white fur stole.\n\nSame pose as image 1: In front of the main shrine hall: the big thick bell rope with a brass bell, a wooden offering box, white paper streamers. She stands on the LEFT side of the picture beside you, seen in three-quarter profile, eyes closed, both palms pressed together in prayer, serene and earnest. Mouth CLOSED (lips together) in the same expression; full figure as framed in image 1, nothing cut off that image 1 shows.\n\nPlain flat DARK-GREY studio background (#404040), completely empty: no scenery, no snow, no floor line, no shadow on the background. Keep the same lighting on her as in image 1 (warm lantern light, cool night fill).\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
+ },
+ "tsubaki_pray_talk": {
+  "ref": "tsubaki_pray",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture."
+ },
+ "bg_omikuji": {
+  "ref": "d25:omikuji",
+  "prompt": "Image 1 is the reference picture. Remove the young woman completely (and any hand or cup she holds) and fill the space with what is behind her — the same Japanese shrine on New Year's Eve night: snow, lanterns, navy sky, bokeh lights, distant crowd silhouettes — the same composition, colours, lighting and art style. Empty scene, no people.\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
+ },
+ "tsubaki_omikuji": {
+  "ref": "d25:omikuji",
+  "prompt": "Image 1 is the CHARACTER, POSE and STYLE reference: redraw the same young woman in the same pose, size and position in the frame, same art style.\n\nArt style EXACTLY like image 1: soft modern cel animation with a light, airy palette, thin coloured lineart (dark lavender instead of black), flat colours with one soft-edged but still flat shadow tone. Hand-drawn feel, NOT glossy, no bloom. Realistic adult proportions (not chibi).\n\nTsubaki: the exact young woman from image 1 — very long silver-white hair in a loose low side ponytail tied with a red-and-white braided cord, soft pink-red eyes, a small red camellia pin; a white furisode fading to crimson at the sleeves with red camellias, a gold obi, a white fur stole.\n\nSame pose as image 1: By the omikuji racks covered in many tied white paper slips. She stands centre, holding an opened plain paper fortune slip with both hands (no readable writing), a cute shocked and teary face, mouth a small wobbly line, a sweat drop. Mouth CLOSED (lips together) in the same expression; full figure as framed in image 1, nothing cut off that image 1 shows.\n\nPlain flat DARK-GREY studio background (#404040), completely empty: no scenery, no snow, no floor line, no shadow on the background. Keep the same lighting on her as in image 1 (warm lantern light, cool night fill).\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
+ },
+ "tsubaki_omikuji_talk": {
+  "ref": "tsubaki_omikuji",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture."
+ },
+ "tsubaki_omikuji_blink": {
+  "ref": "tsubaki_omikuji",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture."
+ },
+ "bg_stole": {
+  "ref": "d25:stole",
+  "prompt": "Image 1 is the reference picture. Remove the young woman completely (and any hand or cup she holds) and fill the space with what is behind her — the same Japanese shrine on New Year's Eve night: snow, lanterns, navy sky, bokeh lights, distant crowd silhouettes — the same composition, colours, lighting and art style. Empty scene, no people.\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
+ },
+ "tsubaki_stole": {
+  "ref": "d25:stole",
+  "prompt": "Image 1 is the CHARACTER, POSE and STYLE reference: redraw the same young woman in the same pose, size and position in the frame, same art style.\n\nArt style EXACTLY like image 1: soft modern cel animation with a light, airy palette, thin coloured lineart (dark lavender instead of black), flat colours with one soft-edged but still flat shadow tone. Hand-drawn feel, NOT glossy, no bloom. Realistic adult proportions (not chibi).\n\nTsubaki: the exact young woman from image 1 — very long silver-white hair in a loose low side ponytail tied with a red-and-white braided cord, soft pink-red eyes, a small red camellia pin; a white furisode fading to crimson at the sleeves with red camellias, a gold obi, a white fur stole.\n\nSame pose as image 1: Very close from the LEFT side: she wraps her white fur stole around both of your shoulders, her face right beside the viewer's left ear, eyes half closed, a tender shy smile, snowflakes in her hair; lanterns softly blurred behind. Mouth CLOSED (lips together) in the same expression; full figure as framed in image 1, nothing cut off that image 1 shows.\n\nPlain flat DARK-GREY studio background (#404040), completely empty: no scenery, no snow, no floor line, no shadow on the background. Keep the same lighting on her as in image 1 (warm lantern light, cool night fill).\n\nWide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
+ },
+ "tsubaki_stole_talk": {
+  "ref": "tsubaki_stole",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture."
+ },
+ "tsubaki_stole_blink": {
+  "ref": "tsubaki_stole",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture."
+ }
+}
