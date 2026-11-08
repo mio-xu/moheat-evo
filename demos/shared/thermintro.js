@@ -2,10 +2,10 @@
 // (kiosk/index.html, every new visitor) and outside kiosk mode by kiosk/intro.html. Readable WITHOUT sound: big pictograms, the ear diagram
 // lights up on the active side (orange = warm, blue = cool), a step progress bar, one large action, short text in the display language.
 //   0 sting (logo, visual only)
-//   A  1 put on the noise-cancelling HEADPHONES (audio only, L / R marked)
-//      2 L / R check: Homura speaks on the LEFT (Yes / No → "turn the headset around", again), Koyuki on the RIGHT
+//   A  1 put in the noise-cancelling in-ear EARBUDS (audio only, L / R marked)
+//      2 L / R check: Homura speaks on the LEFT (Yes / No → "swap the earbuds", again), Koyuki on the RIGHT
 //      3 volume: Koyuki's line loops while the visitor sets a big slider   4 "Sound OK? Please tell the staff 👋" — staff "Continue"
-//   B  5 the staff fits the MoHeat Evo thermal earpieces (pictogram) — staff "Continue"
+//   B  5 the staff places the big over-ear MoHeat Evo headset over the earbuds (pictogram) — staff "Continue"
 //      6 output check: left warm, right warm, left cool, right cool (~2 s each, the ear lights up)   7 "Felt warm and cool on both sides?
 //        Please tell the staff 👋" — staff "Continue" (device not connected → a big notice)
 //   C  8 WARM · 9 COOL auto-calibration: slow ramp (~7 s) to the staff cap, a huge STOP; any tap / key / Esc stops at once = personal max;
@@ -21,11 +21,11 @@
   if (window.MoHeatIntro) return;
   const T = {
     stingSub: { en: 'Binaural ASMR × thermal haptics', ja: '立体音響 ASMR × 温冷ハプティクス', zh: '立体声 ASMR × 冷热触感' },
-    wear: { en: 'Put on the headphones', ja: 'ヘッドホンをつけてください', zh: '请戴上耳机' },
+    wear: { en: 'Put in the noise-cancelling earbuds (L / R)', ja: 'ノイズキャンセリングイヤホンを装着', zh: '戴上降噪入耳式耳机' },
     vol: { en: 'Set the volume', ja: '音量を合わせてください', zh: '调节音量' },
     volSub: { en: 'Slide until the chime is clearly audible but soft.', ja: 'チャイムが、はっきり・やさしく聞こえるように。', zh: '拖动滑块，让提示音清楚又柔和。' },
-    wearSub: { en: 'L on your left ear, R on your right. Then just relax.', ja: 'L を左耳、R を右耳に。あとはリラックス。', zh: 'L 戴左耳，R 戴右耳，然后放松就好。' },
-    ready: { en: 'It’s on', ja: 'つけました', zh: '戴好了' },
+    wearSub: { en: 'L in your left ear, R in your right. They carry the sound.', ja: 'L を左耳、R を右耳に。音はこのイヤホンから聞こえます。', zh: 'L 戴左耳，R 戴右耳。声音从这副耳机传出。' },
+    ready: { en: 'They’re in', ja: 'つけました', zh: '戴好了' },
     left: { en: 'Left ear · warm', ja: '左耳 · あたたかい', zh: '左耳 · 暖' },
     leftSub: { en: 'A gentle warmth on your LEFT ear.', ja: '左耳に、じんわりとした温かさ。', zh: '左耳会感到一阵温暖。' },
     right: { en: 'Right ear · cool', ja: '右耳 · つめたい', zh: '右耳 · 凉' },
@@ -44,7 +44,7 @@
     lrR: { en: 'And now on the RIGHT?', ja: 'こんどは右から聞こえましたか？', zh: '现在是从右边传来的吗？' },
     lrSub: { en: 'A voice comes close to that ear…', ja: '声が、その耳に近づいてきます…', zh: '声音正靠近那只耳朵…' },
     yes: { en: 'Yes', ja: 'はい', zh: '是' }, no: { en: 'No', ja: 'いいえ', zh: '不是' },
-    turn: { en: 'Turn the headset around: L on your left ear', ja: 'ヘッドホンを反対にしてください（L を左耳に）', zh: '请把耳机转过来戴：L 在左耳' },
+    turn: { en: 'Swap the earbuds: L in your left ear', ja: 'イヤホンを左右入れ替えてください（L を左耳に）', zh: '请把左右耳机换过来：L 戴左耳' },
     stop: { en: 'STOP', ja: 'ストップ', zh: '停' },
     almost: { en: 'Tap STOP when it’s almost uncomfortable', ja: '「少しつらいかも」と思ったら STOP', zh: '快要不舒服时，点「停」' },
     sampleH: { en: '…hey, it’s Homura. Is your left ear getting warm? My foxfire warmth… it comes closer with my voice.', ja: '…ねえ、ほむらだよ。左の耳、ぽかぽかしてきた？ 狐火のぬくもり…わたしの声といっしょに、近づくでしょ。', zh: '…嘿，我是焰。左耳是不是暖起来了？ 狐火的温度…会跟着我的声音靠近哦。' },
@@ -57,11 +57,11 @@
     soundOk: { en: 'Sound OK? Please tell the staff 👋', ja: '音は大丈夫ですか？ スタッフに声をかけてください 👋', zh: '声音没问题吗？请告诉工作人员 👋' },
     feltOk: { en: 'Felt warm and cool on both sides? Please tell the staff 👋', ja: '左右で温かさと冷たさを感じましたか？ スタッフに声をかけてください 👋', zh: '两边都感到暖和凉了吗？请告诉工作人员 👋' },
     staffGo: { en: 'Continue (staff)', ja: '続ける（スタッフ）', zh: '继续（工作人员）' }, wrong: { en: 'Something’s wrong', ja: 'うまくいかない', zh: '有问题' },
-    hintA: { en: 'Staff: check the headphone plug / Bluetooth, the system volume and that L is on the left ear, then repeat the check.', ja: 'スタッフへ：ヘッドホンの接続・システム音量・L が左耳か を確認して、もう一度チェック。', zh: '工作人员：检查耳机连接、系统音量、L 是否在左耳，然后重新检查。' },
-    hintB: { en: 'Staff: check the earpieces sit on the skin, the green device dot (top right) and the intensity cap; repeat the check.', ja: 'スタッフへ：イヤーピースが肌に当たっているか・右上の緑の点・強度上限を確認して、もう一度チェック。', zh: '工作人员：检查耳件是否贴住皮肤、右上角绿点、强度上限，然后重新检查。' },
+    hintA: { en: 'Staff: check the earbuds’ Bluetooth / sound output, the system volume and that L is in the left ear, then repeat the check.', ja: 'スタッフへ：イヤホンの接続とサウンド出力・PC の音量・L が左耳か を確認して、もう一度チェックしてください。', zh: '工作人员：检查入耳式耳机的连接和声音输出、系统音量、L 是否在左耳，然后重新检查。' },
+    hintB: { en: 'Staff: check that the MoHeat Evo headset sits squarely over both ears, the green device dot (top right) and the caps; repeat the check.', ja: 'スタッフへ：MoHeat Evo が両耳にしっかり掛かっているか・右上の緑の丸・上限設定を確認して、もう一度チェックしてください。', zh: '工作人员：检查 MoHeat Evo 是否端正地罩住双耳、右上角绿点、强度上限，然后重新检查。' },
     again: { en: '↺ Check again', ja: '↺ もう一度', zh: '↺ 再检查一次' },
-    fit: { en: 'The staff now puts the MoHeat Evo earpieces on you', ja: 'スタッフが MoHeat Evo のイヤーピースをつけます', zh: '工作人员现在为你戴上 MoHeat Evo 耳件' },
-    fitSub: { en: 'Warm / cool on each ear — a separate device from the headphones.', ja: '左右の耳の温冷用。ヘッドホンとは別のデバイスです。', zh: '用于左右耳的冷热，和耳机是两个设备。' },
+    fit: { en: 'The staff now places the big MoHeat Evo headset over your earbuds', ja: 'スタッフが、イヤホンの上から大きな MoHeat Evo を装着します', zh: '工作人员现在把大的 MoHeat Evo 头戴设备戴在入耳式耳机外面' },
+    fitSub: { en: 'The earbuds carry the sound; MoHeat Evo brings warm and cool to each ear.', ja: '音はイヤホンから、温かさと冷たさは MoHeat Evo から届きます。', zh: '声音来自入耳式耳机，冷和热来自 MoHeat Evo。' },
     check: { en: 'Output check', ja: '出力チェック', zh: '输出检查' },
     chk: { en: ['Left · warm', 'Right · warm', 'Left · cool', 'Right · cool'], ja: ['左 · あたたかい', '右 · あたたかい', '左 · つめたい', '右 · つめたい'], zh: ['左 · 暖', '右 · 暖', '左 · 凉', '右 · 凉'] },
     devMissing: { en: 'MoHeat Evo is not connected — staff: 5 taps top-left → Device → Connect', ja: 'MoHeat Evo が未接続です — スタッフ：左上を 5 回タップ → Device → Connect', zh: 'MoHeat Evo 未连接 — 工作人员：左上角连点 5 次 → Device → Connect' },
@@ -69,7 +69,7 @@
     levelSub: { en: 'You can change it any time during the demo.', ja: 'デモの途中でもいつでも変えられます。', zh: '体验中也可以随时调整。' },
     softer: { en: 'Softer', ja: '弱く', zh: '弱一点' }, ok: { en: 'Just right', ja: 'ちょうどいい', zh: '刚刚好' }, stronger: { en: 'Stronger', ja: '強く', zh: '强一点' },
     skip: { en: 'Skip intro', ja: 'スキップ', zh: '跳过' }, L: { en: 'L', ja: '左', zh: '左' }, R: { en: 'R', ja: '右', zh: '右' },
-    noDev: { en: 'No headset connected: the colours show what you would feel.', ja: 'ヘッドホン未接続：色で温冷を表示しています。', zh: '未连接耳机：用颜色显示你会感受到的冷热。' },
+    noDev: { en: 'MoHeat Evo not connected: the colours show what you would feel.', ja: 'MoHeat Evo 未接続：色で温冷を表示しています。', zh: 'MoHeat Evo 未连接：用颜色显示你会感受到的冷热。' },
   };
   const css = `
   .mi { --ff: Inter, "Noto Sans JP", "PingFang SC", system-ui, sans-serif; position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2.2vmin; text-align: center; color: #f6f0fa;
@@ -117,16 +117,17 @@
   .mi button.picked { box-shadow: 0 0 0 5px rgba(255, 213, 138, .5); transform: scale(1.04); }
   .mi .phones { position: relative; width: min(40vmin, 340px); } .mi .phones svg { width: 100%; display: block; }
   .mi .phones span { position: absolute; top: 52%; width: 24%; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; }
-  .mi .phones .l { left: 18%; } .mi .phones .r { left: 82%; }
+  .mi .phones .l { left: 22%; } .mi .phones .r { left: 78%; }
   .mi .phones span.sound { box-shadow: 0 0 0 0 rgba(255, 255, 255, .6); animation: miRing 1.1s ease-out infinite; }
   @keyframes miRing { to { box-shadow: 0 0 0 4vmin rgba(255, 255, 255, 0); } }
-  .mi .fitpic { width: min(52vmin, 460px); } .mi .fitpic svg { width: 100%; display: block; }
+  .mi .fitpic { width: min(50vmin, 440px); } .mi .fitpic svg { width: 100%; display: block; } .mi .fitpic .lower { animation: miLower 2.2s ease-in-out infinite; }
+  @keyframes miLower { 0%, 100% { transform: translateY(-10px); } 55% { transform: translateY(14px); } }
   .mi .staffq { display: flex; flex-direction: column; align-items: center; gap: 2.4vmin; max-width: 900px; }
   .mi .staffq .wave { font-size: clamp(60px, 14vmin, 150px); animation: miWave 1.6s ease-in-out infinite; transform-origin: 70% 80%; }
   @keyframes miWave { 25% { transform: rotate(16deg); } 50% { transform: rotate(-8deg); } 75% { transform: rotate(12deg); } }
   .mi .hint { color: #ffe1a8; } .mi .devmiss { margin: 0; padding: 1.4vmin 2.4vmin; border-radius: 14px; background: #3a0f1a; border: 2px solid #ff7a90; font: 700 clamp(16px, 2.6vmin, 26px)/1.3 var(--ff); }
   .mi .chk[data-kind=warm] { color: #ffb36b; } .mi .chk[data-kind=cool] { color: #9fd8ff; }
-  @media (prefers-reduced-motion: reduce) { .mi .phones span.sound, .mi .staffq .wave { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { .mi .phones span.sound, .mi .staffq .wave, .mi .fitpic .lower { animation: none; } }
   .mi .bar { width: min(50vmin, 420px); height: 6px; border-radius: 3px; background: rgba(255,255,255,.12); overflow: hidden; }
   .mi .bar i { display: block; height: 100%; width: 0; background: #ffd58a; transition: width linear; }
   @media (prefers-reduced-motion: reduce) { .mi .ear { transition: none; } }`;
@@ -135,15 +136,18 @@
     { id: 'fit', s: 180 }, { id: 'check', s: 10 }, { id: 'staffB', s: 180 },
     { id: 'warm', s: 11 }, { id: 'cool', s: 12 }, { id: 'hsample', s: 30 }, { id: 'ksample', s: 30 },
   ];
-  // pictograms: headphones with L / R cups; the staff fitting the thermal earpieces (orange / blue)
-  const PHONES = `<div class="phones"><svg viewBox="0 0 160 110" aria-hidden="true"><path d="M30 70 Q30 12 80 12 Q130 12 130 70" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
-    <rect x="12" y="58" width="34" height="46" rx="14" fill="#2b2536" stroke="#fff" stroke-width="3"/><rect x="114" y="58" width="34" height="46" rx="14" fill="#2b2536" stroke="#fff" stroke-width="3"/>
-    <text x="29" y="88" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">L</text><text x="131" y="88" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">R</text></svg>
+  // pictograms: small in-ear earbuds (L / R) in the ears; the staff lowering the big MoHeat Evo headset (orange / blue cups) over them
+  const PHONES = `<div class="phones"><svg viewBox="0 0 160 110" aria-hidden="true"><ellipse cx="80" cy="56" rx="40" ry="48" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
+    <path d="M40 46 q-12 2 -10 16 q2 10 10 8" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2.5"/><path d="M120 46 q12 2 10 16 q-2 10 -10 8" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2.5"/>
+    <g fill="#fff"><circle cx="36" cy="58" r="9"/><rect x="12" y="54" width="20" height="8" rx="4"/><circle cx="124" cy="58" r="9"/><rect x="128" y="54" width="20" height="8" rx="4"/></g>
+    <text x="17" y="42" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">L</text><text x="143" y="42" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">R</text></svg>
     <span class="l"></span><span class="r"></span></div>`;
-  const FIT = `<div class="fitpic"><svg viewBox="0 0 220 130" aria-hidden="true"><ellipse cx="110" cy="70" rx="42" ry="52" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
-    <circle cx="62" cy="72" r="13" fill="#ff8a3d"/><circle cx="158" cy="72" r="13" fill="#9fd8ff"/>
-    <path d="M18 40 q16 -6 30 18 l8 10" stroke="#ffd479" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M202 40 q-16 -6 -30 18 l-8 10" stroke="#ffd479" stroke-width="7" fill="none" stroke-linecap="round"/>
-    <text x="110" y="20" text-anchor="middle" font-size="13" fill="#ffd479">MoHeat Evo</text></svg></div>`;
+  const FIT = `<div class="fitpic"><svg viewBox="0 0 220 150" aria-hidden="true"><ellipse cx="110" cy="96" rx="40" ry="48" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+    <circle cx="68" cy="98" r="6" fill="#fff"/><circle cx="152" cy="98" r="6" fill="#fff"/>
+    <g class="lower"><path d="M56 62 Q56 8 110 8 Q164 8 164 62" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round"/>
+    <rect x="38" y="52" width="32" height="56" rx="15" fill="#ff8a3d" stroke="#fff" stroke-width="3"/><rect x="150" y="52" width="32" height="56" rx="15" fill="#9fd8ff" stroke="#fff" stroke-width="3"/></g>
+    <path d="M14 30 v26 M6 48 l8 8 8 -8 M206 30 v26 M198 48 l8 8 8 -8" stroke="#ffd479" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="110" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#ffd479">MoHeat Evo</text></svg></div>`;
   const MEDIA = (() => { try { return new URL('../../kiosk/media/', document.currentScript.src).href; } catch { return '../kiosk/media/'; } })();
 
   function mount(el, o = {}) {
@@ -172,27 +176,34 @@
     const stopTapping = () => { clearTimeout(tapT); tapT = 0; };
     let vEl = null, vRaf = 0;
     const stopVoice = () => { cancelAnimationFrame(vRaf); if (vEl) { try { vEl.pause(); } catch {} vEl = null; } };
+    const near = (t) => t * t * (3 - 2 * t);   // 0 = far … 1 = right at the ear (smoothstep: she stays away, then comes in)
+    let voiceDb = null, voiceRange = [0, -99];
     const voiceAt = (url, path, onEnv, onEnd) => {
       stopVoice(); try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); ac.resume?.(); } catch {}
-      const a = vEl = new Audio(url); a.crossOrigin = 'anonymous'; let an = null, buf = null, pn = null, peak = .02;
-      try { const src = ac.createMediaElementSource(a), g = ac.createGain(); g.gain.value = 1.6 * vol(); an = ac.createAnalyser(); an.fftSize = 1024; buf = new Float32Array(an.fftSize);
-        pn = ac.createPanner(); pn.panningModel = 'HRTF'; pn.distanceModel = 'inverse'; pn.refDistance = .25; pn.rolloffFactor = .7; pn.maxDistance = 20;
-        src.connect(an); an.connect(g); g.connect(pn); pn.connect(ac.destination); } catch {}
-      const place = (t) => { if (!pn) return; const [x0, z0] = path.from, [x1, z1] = path.to, e = 1 - Math.pow(1 - t, 2);   // ease-out: arrives softly
-        const x = x0 + (x1 - x0) * e, z = z0 + (z1 - z0) * e; if (pn.positionX) { pn.positionX.value = x; pn.positionY.value = 0; pn.positionZ.value = z; } else pn.setPosition(x, 0, z); };
+      const a = vEl = new Audio(url); a.crossOrigin = 'anonymous'; let an = null, buf = null, pn = null, dist = null, peak = .02;
+      voiceRange = [0, -99]; const RANGE = path.range ?? 30;   // dB from far to right at the ear (user: clearly quiet → clearly loud and intimate)
+      try { const src = ac.createMediaElementSource(a), g = ac.createGain(); g.gain.value = 2.4 * vol(); an = ac.createAnalyser(); an.fftSize = 1024; buf = new Float32Array(an.fftSize);
+        pn = ac.createPanner(); pn.panningModel = 'HRTF'; pn.distanceModel = 'inverse'; pn.rolloffFactor = 0;   // the panner gives the direction only; loudness = dist below
+        dist = ac.createGain(); const lim = ac.createDynamicsCompressor(); lim.threshold.value = -4; lim.knee.value = 3; lim.ratio.value = 20; lim.attack.value = .003; lim.release.value = .12;   // no clipping right at the ear
+        src.connect(an); an.connect(g); g.connect(dist); dist.connect(pn); pn.connect(lim); lim.connect(ac.destination); } catch {}
+      const place = (t) => { if (!pn) return; const [x0, z0] = path.from, [x1, z1] = path.to, e = near(t);
+        const x = x0 + (x1 - x0) * e, z = z0 + (z1 - z0) * e; if (pn.positionX) { pn.positionX.value = x; pn.positionY.value = 0; pn.positionZ.value = z; } else pn.setPosition(x, 0, z);
+        voiceDb = -RANGE * (1 - e); voiceRange = [Math.min(voiceRange[0], voiceDb), Math.max(voiceRange[1], voiceDb)];
+        if (dist) { const v = Math.pow(10, voiceDb / 20); if (t === 0) dist.gain.value = v; else dist.gain.setTargetAtTime(v, ac.currentTime, .08); } };   // t = 0: already quiet on the first syllable
       place(0);
       let last = 0;
       const loop = () => { if (vEl !== a) return; vRaf = requestAnimationFrame(loop); const now = performance.now(); if (now - last < 100) return; last = now;
         const t = a.duration ? Math.min(1, a.currentTime / (a.duration * (path.arrive || .6))) : 0; place(t);
         let env = 0; if (an) { an.getFloatTimeDomainData(buf); let s2 = 0; for (const v of buf) s2 += v * v; const rms = Math.sqrt(s2 / buf.length); peak = Math.max(peak * .995, rms); env = rms / peak; }
         else env = a.paused ? 0 : .6;
-        onEnv?.(env, t); };
+        onEnv?.(env, near(t)); };   // the thermal follows the same far → near envelope as the sound
       a.addEventListener('ended', () => { if (vEl === a) { stopVoice(); onEnd?.(); } });
       a.play().then(loop).catch(() => { onEnv?.(.6, 1); timers.push(setTimeout(() => { if (vEl === a) { stopVoice(); onEnd?.(); } }, 4000)); });
     };
     const LG = () => (['en', 'ja', 'zh'].includes(lang()) ? lang() : 'en');
     const PATH = { left: { from: [-2.2, -1.6], to: [-.16, 0], arrive: .6 }, right: { from: [2.2, -1.6], to: [.16, 0], arrive: .6 },
-      acrossToRight: { from: [-1.8, -1.6], to: [.16, 0], arrive: .7 } };
+      acrossToRight: { from: [-1.8, -1.6], to: [.16, 0], arrive: .7 },
+      steady: { from: [-1.2, -1], to: [.16, 0], arrive: .6, range: 6 } };   // the volume line: nearly level, so the visitor sets the level they will really hear
     const staffScreen = (title, hint, onRepeat) => {   // big "tell the staff" screen: staff Continue + visitor "Something's wrong" → staff hint
       A.innerHTML = `<div class="staffq"><div class="wave">👋</div><h2>${tx(title)}</h2><div class="row"><button type="button" class="go big1" data-a="go">${tx('staffGo')}</button>
         <button type="button" class="big1" data-a="wrong">${tx('wrong')}</button></div><p class="sub hint" hidden>${tx(hint)}</p><button type="button" class="replay" data-a="again" hidden>${tx('again')}</button></div>`;
@@ -229,7 +240,7 @@
       if (st.id === 'sting') {
         A.innerHTML = `<div class="logo" style="--p:0%">MoHeat <span>Evo</span></div>${head()}<p class="sub">${tx('stingSub')}</p>`;
         const logo = A.querySelector('.logo');
-        ears('cool', 'cool');   // visual only: the thermal earpieces are fitted later (step 5)
+        ears('cool', 'cool');   // visual only: MoHeat Evo is fitted later (step 5)
         let p = 0; const sweep = setInterval(() => { p = Math.min(100, p + 4); logo.style.setProperty('--p', `${p}%`); if (p >= 100) clearInterval(sweep); }, 60); timers.push(sweep);
         at(1000, () => ears('warm', 'cool')); at(1600, () => ears('warm', 'warm'));
         at(st.s * 1000, next);
@@ -243,7 +254,7 @@
           <input type="range" min="0" max="100" value="${Math.round(volume * 100)}" aria-label="${tx('vol')}"></div><p class="sub">${tx('volSub')}</p><div class="row"><button type="button" class="go">✓</button></div>`;
         const r = A.querySelector('input'); r.addEventListener('input', () => { volume = +r.value / 100; o.onVolume?.(volume); clearTimeout(auto); auto = setTimeout(next, st.s * 1000); timers.push(auto); });
         A.querySelector('.go').addEventListener('click', next);
-        const say = () => voiceAt(`${MEDIA}voice/koyuki_vol_${LG()}.m4a`, PATH.acrossToRight, null, () => at(900, say)); say();   // her line loops while the slider moves
+        const say = () => voiceAt(`${MEDIA}voice/koyuki_vol_${LG()}.m4a`, PATH.steady, null, () => at(900, say)); say();   // her line loops while the slider moves
         let auto = setTimeout(next, st.s * 1000); timers.push(auto);
       } else if (st.id === 'lr') {   // L / R check: Homura comes in on the LEFT, Koyuki on the RIGHT (their voices, the visitor's language)
         let side = 'L';
@@ -259,7 +270,7 @@
         ask(false); at(st.s * 1000, next);
       } else if (st.id === 'staffA') {
         staffScreen('soundOk', 'hintA', () => show(STEPS.findIndex((x) => x.id === 'lr')));
-      } else if (st.id === 'fit') {   // the staff fits the separate thermal earpieces
+      } else if (st.id === 'fit') {   // the staff places the MoHeat Evo headset over the earbuds
         A.innerHTML = `<h2>${tx('fit')}</h2>${FIT}<p class="sub">${tx('fitSub')}</p><div class="row"><button type="button" class="go big1">${tx('staffGo')}</button></div>`;
         A.querySelector('.go').addEventListener('click', next);
       } else if (st.id === 'check') {   // left warm, right warm, left cool, right cool, ~2 s each
@@ -276,7 +287,7 @@
           A.innerHTML = `<div class="sample ${H ? 'warm' : 'cool'}"><img src="${MEDIA}art/${who}_ear.webp" alt=""><div><p class="who">${tx(H ? 'whoH' : 'whoK')}</p>
             ${head()}<p class="line">${tx(H ? 'sampleH' : 'sampleK')}</p></div></div>`;
           // she starts away on the left and comes close to the ear; the thermal = her loudness × how close she is (a voice is warm, Koyuki's breath cool)
-          voiceAt(`${MEDIA}voice/${who}_${lg}.m4a`, H ? PATH.left : PATH.acrossToRight, (env, t) => { const near = .3 + .7 * t, e = Math.min(1, env) * near;
+          voiceAt(`${MEDIA}voice/${who}_${lg}.m4a`, H ? PATH.left : PATH.acrossToRight, (env, t) => { const e = Math.min(1, env) * t;
             if (H) { const h = env > .06 ? Math.round(150 * kW * e) : 0; send(`LH${h} RH0`); ears(h ? 'warm' : '', ''); }
             else { const cv = env > .06 ? Math.round(35 + 45 * kC * e) : 0; send(`LH0 RC${cv}`); ears('', cv ? 'cool' : ''); }
           }, ask);
@@ -322,7 +333,7 @@
     }
     const only = o.only || null;   // e.g. ['warm', 'cool']: staff self-calibration runs just those steps
     return { start: () => { over = false; show(only ? STEPS.findIndex((x) => x.id === only[0]) : 0); }, skip: () => finish(true), stop: () => { over = true; clear(); send('stop'); },
-      get step() { return STEPS[i]?.id; }, get level() { return Math.max(kW, kC); }, get warm() { return kW; }, get cool() { return kC; }, log, repaint: () => { if (i >= 0 && !over) show(i); } };
+      get step() { return STEPS[i]?.id; }, get voiceDb() { return voiceDb; }, get voiceRange() { return voiceRange; }, get level() { return Math.max(kW, kC); }, get warm() { return kW; }, get cool() { return kC; }, log, repaint: () => { if (i >= 0 && !over) show(i); } };
   }
   window.MoHeatIntro = { mount, T, STEPS };
 })();

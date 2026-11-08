@@ -15,10 +15,10 @@
     document.documentElement.lang = l; paint(); intro?.repaint(); };
   const T = {
     tag: { en: 'Feel warm and cool on each ear — with sound in 3D.', ja: '立体音響とともに、左右の耳で温かさと冷たさを。', zh: '立体声的同时，左右耳感受冷与热。' },
-    p1: { en: 'Put on the headset', ja: 'ヘッドホンをつける', zh: '戴上耳机' }, p2: { en: 'Feel warm & cool', ja: '温かい・冷たいを感じる', zh: '感受冷与热' },
+    p1: { en: 'Earbuds, then MoHeat Evo', ja: 'イヤホン → MoHeat Evo', zh: '入耳式耳机 → MoHeat Evo' }, p2: { en: 'Feel warm & cool', ja: '温かい・冷たいを感じる', zh: '感受冷与热' },
     p3: { en: 'Pick a story', ja: '物語を選ぶ', zh: '选一个故事' },
     rec: { en: 'Try these first', ja: 'まずはこちら', zh: '推荐先体验' }, more: { en: 'More stories →', ja: 'ほかの物語 →', zh: '更多故事 →' },
-    hygiene: { en: '🧼 Ear pads cleaned for every visitor · disposable covers available', ja: '🧼 イヤーパッドは毎回消毒 · 使い捨てカバーあります', zh: '🧼 耳罩每位访客消毒 · 可提供一次性耳罩套' },
+    hygiene: { en: '🧼 Earbuds and ear pads cleaned for every visitor · disposable covers available', ja: '🧼 イヤホンとイヤーパッドは毎回消毒 · 使い捨てカバーあります', zh: '🧼 耳机和耳罩每位访客消毒 · 可提供一次性耳罩套' },
     numsH: { en: 'Picked a number while waiting? Tap it:', ja: '待っている間に選んだ番号をタップ：', zh: '排队时选好了号码？点这里：' },
     qq: { en: 'Scan to choose while you wait', ja: '待っている間にスキャンして選ぼう', zh: '排队时扫码先选' },
     start: { en: '▶ Start', ja: '▶ はじめる', zh: '▶ 开始' }, skipIntro: { en: 'I know MoHeat Evo — skip the 30-second intro', ja: '使ったことがある — 30 秒の案内をとばす', zh: '我用过 — 跳过 30 秒引导' },
@@ -39,13 +39,13 @@
     scan: { en: 'Scan to take home what you just experienced', ja: 'スキャンして、いまの体験をおみやげに', zh: '扫码带走刚才的体验小结' },
     nodata: { en: 'No personal data is collected.', ja: '個人情報は集めません。', zh: '不收集任何个人信息。' },
     news: { en: 'Product news? (optional, your choice)', ja: '製品ニュース（任意）', zh: '产品消息？（可选）' },
-    lost: { en: 'Headset disconnected', ja: 'ヘッドホンの接続が切れました', zh: '耳机已断开' }, bat: { en: 'Headset battery low', ja: 'ヘッドホンの電池が少なくなっています', zh: '耳机电量低' },
+    lost: { en: 'MoHeat Evo disconnected', ja: 'MoHeat Evo の接続が切れました', zh: 'MoHeat Evo 已断开' }, bat: { en: 'MoHeat Evo battery low', ja: 'MoHeat Evo の電池が少なくなっています', zh: 'MoHeat Evo 电量低' },
     staffHelp: { en: 'Please ask the staff.', ja: 'スタッフにお声がけください。', zh: '请联系工作人员。' },
     moreH: { en: 'Want to try another story?', ja: 'ほかの物語も体験しますか？', zh: '想再体验一个故事吗？' },
     moreAll: { en: 'All stories', ja: 'すべての物語', zh: '全部故事' }, finish: { en: 'Finish', ja: 'おわる', zh: '结束' },
-    endA: { en: 'Please take off the MoHeat Evo first', ja: 'まず MoHeat Evo を外してください', zh: '请先取下 MoHeat Evo' },
+    endA: { en: 'Please take off the MoHeat Evo headset first', ja: 'まず MoHeat Evo を外してください', zh: '请先取下 MoHeat Evo 头戴设备' },
     endASub: { en: 'The warm / cool output is already off. Please tell the staff 👋', ja: '温冷の出力はもう止まっています。スタッフに声をかけてください 👋', zh: '冷热输出已经停止。请告诉工作人员 👋' },
-    endB: { en: 'Now take off the headphones', ja: 'つぎにヘッドホンを外してください', zh: '现在请摘下耳机' },
+    endB: { en: 'Now remove the earbuds', ja: 'つぎにイヤホンを外してください', zh: '现在请取下入耳式耳机' },
     endBSub: { en: 'Then a few quick taps about your experience.', ja: 'そのあと、かんたんなアンケートにタップで答えてください。', zh: '然后点几下，告诉我们你的感受。' },
     staffGo: { en: 'Continue (staff)', ja: '続ける（スタッフ）', zh: '继续（工作人员）' }, done2: { en: 'Done', ja: 'できた', zh: '好了' },
     touch: { en: 'Touch to start · タッチしてスタート · 点击开始', ja: 'Touch to start · タッチしてスタート · 点击开始', zh: 'Touch to start · タッチしてスタート · 点击开始' },
@@ -92,8 +92,8 @@
   function newVisitor() { pending = null; try { sessionStorage.removeItem('moheat.kiosk.session'); } catch {} K.resetVisitor(); cfg = K.cfg(); document.documentElement.lang = lang(); paint(); }
   function reset(toAttract = false) { send('stop'); newVisitor(); go(toAttract ? 'attract' : 'welcome'); }
 
-  const volGet = () => { try { return (+JSON.parse(localStorage.getItem('moheat.volume')) || 70) / 100; } catch { return .7; } };
-  const volSet = (v) => { try { localStorage.setItem('moheat.volume', JSON.stringify(Math.round(v * 100))); } catch {} };
+  const volGet = () => { try { const v = JSON.parse(localStorage.getItem('moheat.volume')); return v == null ? .7 : Math.min(1, v > 1 ? v / 100 : +v); } catch { return .7; } };   // 0–1, shared with shell.js
+  const volSet = (v) => { try { localStorage.setItem('moheat.volume', JSON.stringify(Math.round(v * 100) / 100)); } catch {} };
   // welcome → intro → menu
   let intro = null;
   const calib = () => { const s = K.scales(); return { warm: s.warm, cool: s.cool, capWarm: cfg.capWarm / 100, capCool: cfg.capCool / 100, onLevel: (o) => K.setScales(o) }; };
@@ -180,7 +180,7 @@
   let carded = false;
   // ---------------------------------------------------------------- end of a demo / of the visit (REQUIREMENTS §11)
   // nobody queuing (staff toggle) and within the staff's max demos / minutes → "another story?" keeping the calibration (no intro);
-  // otherwise the ending: (a) take off MoHeat Evo (output already stopped, staff Continue) → (b) take off the headphones → card → thanks + QR
+  // otherwise the ending: (a) take off MoHeat Evo (output already stopped, staff Continue) → (b) remove the earbuds → card → thanks + QR
   const sess = { get: () => { try { return JSON.parse(sessionStorage.getItem('moheat.kiosk.session')) || { n: 0, t0: Date.now() }; } catch { return { n: 0, t0: Date.now() }; } },
     set: (v) => { try { sessionStorage.setItem('moheat.kiosk.session', JSON.stringify(v)); } catch {} } };
   function afterDemo() {
@@ -191,11 +191,12 @@
   $('#v-more').addEventListener('click', (e) => { const b = e.target.closest('.rec-row button'); if (b) openDemo(b.dataset.dir); });
   $('#moreAll').addEventListener('click', () => go('menu'));
   $('#moreFinish').addEventListener('click', () => endSeq());
-  const PIC_EVO = `<svg viewBox="0 0 220 130" aria-hidden="true"><ellipse cx="110" cy="70" rx="42" ry="52" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
-    <g class="lift"><circle cx="40" cy="58" r="14" fill="#ff8a3d"/><circle cx="180" cy="58" r="14" fill="#9fd8ff"/></g><path d="M40 92 v-18 M34 80 l6 -6 6 6 M180 92 v-18 M174 80 l6 -6 6 6" stroke="#ffd479" stroke-width="4" fill="none" stroke-linecap="round"/></svg>`;
-  const PIC_PHONES = `<svg viewBox="0 0 220 130" aria-hidden="true"><g class="lift"><path d="M60 80 Q60 18 110 18 Q160 18 160 80" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
-    <rect x="42" y="68" width="34" height="46" rx="14" fill="#2b2536" stroke="#fff" stroke-width="3"/><rect x="144" y="68" width="34" height="46" rx="14" fill="#2b2536" stroke="#fff" stroke-width="3"/></g>
-    <path d="M110 126 v-20 M102 114 l8 -8 8 8" stroke="#ffd479" stroke-width="4" fill="none" stroke-linecap="round"/></svg>`;
+  const PIC_EVO = `<svg viewBox="0 0 220 150" aria-hidden="true"><ellipse cx="110" cy="96" rx="40" ry="48" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.5)" stroke-width="2"/><circle cx="68" cy="98" r="6" fill="#fff"/><circle cx="152" cy="98" r="6" fill="#fff"/>
+    <g class="lift"><path d="M56 56 Q56 4 110 4 Q164 4 164 56" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round"/><rect x="38" y="46" width="32" height="56" rx="15" fill="#ff8a3d" stroke="#fff" stroke-width="3"/><rect x="150" y="46" width="32" height="56" rx="15" fill="#9fd8ff" stroke="#fff" stroke-width="3"/></g>
+    <path d="M14 58 v-26 M6 40 l8 -8 8 8 M206 58 v-26 M198 40 l8 -8 8 8" stroke="#ffd479" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const PIC_PHONES = `<svg viewBox="0 0 220 130" aria-hidden="true"><ellipse cx="110" cy="70" rx="40" ry="50" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+    <g class="lift" fill="#fff"><circle cx="58" cy="70" r="10"/><rect x="30" y="66" width="24" height="8" rx="4"/><circle cx="162" cy="70" r="10"/><rect x="166" y="66" width="24" height="8" rx="4"/></g>
+    <path d="M34 50 h-22 M20 42 l-8 8 8 8 M186 50 h22 M200 42 l8 8 -8 8" stroke="#ffd479" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
   function endSeq(phase = 'a') {
     send('stop'); go('end'); const a = phase === 'a';
     $('.endpic').innerHTML = a ? PIC_EVO : PIC_PHONES; $('.end-h').textContent = t(a ? 'endA' : 'endB'); $('.end-sub').textContent = t(a ? 'endASub' : 'endBSub');
@@ -324,6 +325,7 @@
   $('#queueBtn').addEventListener('click', () => { window.open('queue.html', 'moheat-queue', 'popup,width=1280,height=720'); });
   $('#posterBtn').addEventListener('click', () => { window.open('poster.html', 'moheat-poster'); });
   $('#reportBtn').addEventListener('click', () => { window.open('report.html', 'moheat-report'); });
+  $('#cardBtn').addEventListener('click', () => { window.open('staff_card.html', 'moheat-staff-card'); });
   $('#offlineBtn').addEventListener('click', () => offline());
   async function offline() {
     const out = $('#offlineOut'); if (!('serviceWorker' in navigator)) { out.textContent = 'This browser has no service worker support.'; return; }

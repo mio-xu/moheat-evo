@@ -82,6 +82,8 @@ const step = (k, v, detail) => { out.steps[k] = detail === undefined ? !!v : { o
   await tap(W / 2, H * .3); await sleep(300); await shot('2_intro_warm_tapped');   // a tap anywhere stops the warm ramp at once
   await until(`MoHeatKioskApp.intro.step === 'cool'`, 4000); await sleep(3000); await shot('2_intro_cool');
   step('hsample', await until(`MoHeatKioskApp.intro.step === 'hsample'`, 12000)); await sleep(2500); await shot('2_intro_homura');   // nobody taps: the cool ramp stopped at the cap
+  await until(`!!document.querySelector('.mi .nat')`, 25000);
+  { const r = await ev('MoHeatKioskApp.intro.voiceRange'); step('voiceRange', r && r[1] > -1 && r[1] - r[0] >= 25, { minDb: r && Math.round(r[0]), maxDb: r && Math.round(r[1]) }); }   // far = clearly quiet → at the ear = clearly loud
   await until(`!!document.querySelector('.mi .nat')`, 25000); await shot('2_intro_homura_ask');
   await click('.mi .nat [data-n=ok]');
   step('ksample', await until(`MoHeatKioskApp.intro.step === 'ksample'`, 4000)); await sleep(2500); await shot('2_intro_koyuki');
@@ -109,9 +111,9 @@ const step = (k, v, detail) => { out.steps[k] = detail === undefined ? !!v : { o
     step('demoScales', await ev(`(() => { const s = MoHeatKiosk.scales(); return MoHeatKiosk.scaleLine('DUAL LC80 LH200 RC0 RH100') === 'DUAL LC' + Math.max(35, Math.round(35 + 45 * s.cool)) + ' LH' + Math.round(200 * s.warm) + ' RC0 RH' + Math.round(100 * s.warm) && +document.getElementById('intensity').value === 100; })()`), { line: await ev(`MoHeatKiosk.scaleLine('DUAL LC80 LH200 RC0 RH100')`) });
     await shot('4_demo_cover');
     await ev(`(document.getElementById('startBtn').click(), 1)`);   // the visitor's default mode (interactive) await sleep(3000);
-    step('volumeSlider', await ev(`(() => { if (typeof window.MoHeatShell?.setVolume === 'function') return true; const r = document.querySelector('.mk-vol input'); return !!r && r.getBoundingClientRect().height >= 44; })()`));   // the shell's own volume control wins when it has one
+    step('volumeSlider', await ev(`(() => { const r = document.querySelector('.mk-vol:not([hidden]) input') || document.querySelector('.u2 [data-k=vol]'); return !!r && r.getBoundingClientRect().height >= 44 && +localStorage.getItem('moheat.volume') <= 1; })()`));   // a control the visitor can really see (the shell having setVolume is not enough); 0–1 scale
     await sleep(6000); await shot('4_demo_play');
-    step('showCut', await ev(`!!document.querySelector('.mk-cut') && document.querySelector('.mk-cut').textContent.includes(':')`), { chip: await ev(`document.querySelector('.mk-cut')?.textContent`) });
+    step('showCut', await until(`!!document.querySelector('.mk-cut') && document.querySelector('.mk-cut').textContent.includes(':')`, 15000), { chip: await ev(`document.querySelector('.mk-cut')?.textContent`) });   // the countdown starts once the seek to the highlight has arrived (≤ 10 s)
     const t1 = Date.now();   // the show cut (kiosk default) ends by itself after ~80 s of story time → the card
     step('demoEndToEnding', await until(`location.pathname.startsWith('/kiosk/') && window.MoHeatKioskApp?.view === 'end'`, 240000), { secs: Math.round((Date.now() - t1) / 1000) });
   } else {

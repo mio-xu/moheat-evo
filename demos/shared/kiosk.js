@@ -131,7 +131,7 @@
   function resetVisitor() {
     const c = cfg(); stopDevice();
     LSs('moheat.mode', 'interactive'); LSs('moheat.heat', true); LSs('moheat.intensity', 100); LSs('moheat.warmScale', c.startWarm / 100); LSs('moheat.coolScale', c.startCool / 100); LSs('moheat.subs', 'm'); LSs('moheat.reduce', false);
-    LSs('moheat.volume', 70);
+    LSs('moheat.volume', .7);   // 0–1, the same scale as shell.js
     try { localStorage.setItem('moheat.guide', 'done'); } catch {}   // the kiosk intro replaces the page tour
     SSs('moheat.kiosk.visit', null); SSs('moheat.kiosk.level', null);
     try { if (c.lang && c.lang !== 'en') sessionStorage.setItem('moheat.sublang', c.lang); else sessionStorage.removeItem('moheat.sublang'); } catch {}
@@ -180,14 +180,16 @@
   const c = cfg();
   const L = () => window.MoHeatSub?.lang || (() => { try { return sessionStorage.getItem('moheat.sublang'); } catch { return null; } })() || 'en';
   const TX = { end: { en: '✕ End', ja: '✕ 終わる', zh: '✕ 结束' }, vol: { en: 'Volume', ja: '音量', zh: '音量' },
-    lost: { en: 'Headset disconnected', ja: 'ヘッドホンの接続が切れました', zh: '耳机已断开' }, lostS: { en: 'Please ask the staff — the story keeps playing.', ja: 'スタッフにお声がけください（物語はそのまま続きます）。', zh: '请联系工作人员（故事会继续播放）。' },
+    lost: { en: 'MoHeat Evo disconnected', ja: 'MoHeat Evo の接続が切れました', zh: 'MoHeat Evo 已断开' }, lostS: { en: 'Please ask the staff — the story keeps playing.', ja: 'スタッフにお声がけください（物語はそのまま続きます）。', zh: '请联系工作人员（故事会继续播放）。' },
     rest: { en: 'A short thermal pause for comfort', ja: '快適さのため、温冷を少しお休み', zh: '为了舒适，冷热短暂休息' },
     cut: { en: 'Highlights', ja: 'ハイライト', zh: '精华' } };
   // ---------------------------------------------------------------- volume for the whole page (media elements + Web Audio): installed
   // before the demo builds its audio graph (graphs are built on Start), every connection to the speakers goes through one gain per context
-  let vol = Math.max(0, Math.min(100, LSg('moheat.volume', 70))) / 100;
+  // 'moheat.volume' is shared with shell.js: 0–1 (older kiosk builds wrote 0–100)
+  const vol0 = +LSg('moheat.volume', .7) || 0; let vol = Math.max(0, Math.min(1, vol0 > 1 ? vol0 / 100 : vol0));
   const vgains = new Map();
-  // the unified shell's own bottom bar (volume, ▶/⏸, 🌡 …) wins when it is there: MoHeatShell.setVolume → kiosk uses it, adds no slider
+  // MoHeatShell.setVolume = the shell applies the level (no second gain stage here). The big slider stays until UI v2's control bar is really on
+  // the page (.u2 volume control): having the API does not mean the visitor has a control (REQUIREMENTS §3)
   const SHELL_VOL = () => typeof window.MoHeatShell?.setVolume === 'function';
   if (window.AudioNode && !SHELL_VOL()) {
     const connect = AudioNode.prototype.connect;
@@ -196,7 +198,7 @@
       return connect.call(this, dst, ...a);
     };
   }
-  const setVol = (v) => { vol = v; if (SHELL_VOL()) { try { window.MoHeatShell.setVolume(v); } catch {} LSs('moheat.volume', Math.round(v * 100)); return; } LSs('moheat.volume', Math.round(v * 100)); vgains.forEach((g) => { try { g.gain.value = v; } catch {} });
+  const setVol = (v) => { vol = v; if (SHELL_VOL()) { try { window.MoHeatShell.setVolume(v); } catch {} LSs('moheat.volume', Math.round(v * 100) / 100); return; } LSs('moheat.volume', Math.round(v * 100) / 100); vgains.forEach((g) => { try { g.gain.value = v; } catch {} });
     document.querySelectorAll('audio, video').forEach((m) => { try { m.volume = v; } catch {} }); };
   setInterval(() => document.querySelectorAll('audio, video').forEach((m) => { if (Math.abs(m.volume - vol) > .01) try { m.volume = vol; } catch {} }), 1000);
   const tx = (o) => o[L()] || o.en;
@@ -206,7 +208,7 @@
   header.bar a.brand, #credits a, .dn-foot a { pointer-events: none; }
   .mk-vol { position: fixed; z-index: 9990; right: 14px; bottom: 14px; display: flex; align-items: center; gap: 10px; padding: 6px 16px 6px 12px; min-height: 56px; border-radius: 999px;
     background: rgba(20,12,24,.9); border: 2px solid rgba(255,255,255,.45); color: #fff; font: 700 16px/1 Inter, "Noto Sans JP", "PingFang SC", sans-serif; box-shadow: 0 6px 24px rgba(0,0,0,.45); }
-  .mk-vol span { font-size: 24px; } .mk-vol input { width: clamp(120px, 14vw, 220px); height: 44px; accent-color: #ffd58a; cursor: pointer; }
+  .mk-vol[hidden] { display: none; } .mk-vol span { font-size: 24px; } .mk-vol input { width: clamp(120px, 14vw, 220px); height: 44px; accent-color: #ffd58a; cursor: pointer; }
   .mk-end { position: fixed; z-index: 9990; right: 14px; bottom: 82px; min-height: 52px; min-width: 52px; padding: 0 20px; border-radius: 999px; border: 2px solid rgba(255,255,255,.5);
     background: rgba(20,12,24,.85); color: #fff; font: 700 17px/1 Inter, "Noto Sans JP", "PingFang SC", sans-serif; cursor: pointer; box-shadow: 0 6px 24px rgba(0,0,0,.45); }
   .mk-cut { position: fixed; z-index: 9990; left: 14px; bottom: 14px; padding: 10px 16px; border-radius: 999px; background: rgba(20,12,24,.85); color: #ffd58a; font: 700 15px/1 Inter, "Noto Sans JP", "PingFang SC", sans-serif; }
@@ -227,7 +229,8 @@
     const lab = () => { b.textContent = tx(TX.end); vb.title = tx(TX.vol); vb.querySelector('input').setAttribute('aria-label', tx(TX.vol)); };
     const vb = document.createElement('label'); vb.className = 'mk-vol'; vb.innerHTML = `<span aria-hidden="true">🔊</span><input type="range" min="0" max="100" step="1" value="${Math.round(vol * 100)}">`;
     vb.querySelector('input').addEventListener('input', (e) => setVol(+e.target.value / 100));
-    lab(); addEventListener('moheat:sublang', lab); document.body.appendChild(b); if (!SHELL_VOL()) document.body.appendChild(vb); setVol(vol);
+    lab(); addEventListener('moheat:sublang', lab); document.body.appendChild(b); document.body.appendChild(vb); setVol(vol);
+    RT.si(() => { vb.hidden = !!document.querySelector('.u2 [data-k=vol]'); }, 1000);
     const corner = document.createElement('div'); corner.className = 'mk-corner'; corner.setAttribute('aria-hidden', 'true'); document.body.appendChild(corner);
     let taps = []; corner.addEventListener('click', () => { const n = Date.now(); taps = taps.filter((t) => n - t < 3000).concat(n); if (taps.length >= 5) leave('staff'); });
     // intensity cap on the page's slider (the shell already restored the visitor's level)
@@ -329,7 +332,7 @@
       const t0 = RN(), go = () => { if (window.MoHeatShell?.chapter && from > 0 && window.MoHeatShell.chapter() < from && RN() - t0 < 10000) return realT(go, 500); cutEnd = Date.now() + CUT_S * 1000; tick(); };   // a seek that never arrives (shell changes) must not stall the cut
       realT(go, 600);
     }, 400);
-    chip = document.createElement('div'); chip.className = 'mk-cut'; document.body.appendChild(chip);
+    chip = document.createElement('div'); chip.className = 'mk-cut'; chip.textContent = tx(TX.cut); document.body.appendChild(chip);
   }
   const realT = (fn, ms) => setTimeout(fn, ms);   // the story's own clock: a paused show cut does not run out
   function tick() {
