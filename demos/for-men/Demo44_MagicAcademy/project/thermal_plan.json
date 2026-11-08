@@ -111,7 +111,8 @@
     90,
     1.6,
     0.6
-   ]
+   ],
+   "secs": 1.8
   },
   "@descend": {
    "why": "slowing down to land: wind drops",
@@ -152,15 +153,21 @@
     0.25,
     1.2,
     1.6
-   ]
+   ],
+   "secs": 2.0
   },
   "@mug_right": {
-   "why": "the hot cocoa mug pressed to your RIGHT cheek",
+   "why": "the hot cocoa mug pressed to your RIGHT cheek; leaning in, she is between you and the furnace (its heat on your right is shaded)",
    "set": {
     "mug": [
      "warm",
      90,
      0.6
+    ],
+    "furnace": [
+     "warm",
+     60,
+     0.05
     ]
    }
   },
@@ -178,9 +185,10 @@
     90,
     0.75,
     0.15,
-    1.4,
+    1.8,
     0.8
-   ]
+   ],
+   "secs": 2.4
   },
   "@sip": {
    "why": "you drink: the mug in front of your face",
@@ -198,6 +206,11 @@
       "warm",
       0,
       0
+     ],
+     "furnace": [
+      "warm",
+      60,
+      0.3
      ]
     }
    }
@@ -236,7 +249,8 @@
     3.0,
     2.0,
     1.5
-   ]
+   ],
+   "secs": 3.5
   },
   "@orbit": {
    "why": "ice crystals circle your head once (360°, real ice); passing the LEFT ear they meet the fireplace = cool + warm on the same ear",

@@ -44,8 +44,8 @@ window.ACAD_LINES = {
    "T"
   ],
   "t06": [
-   "ご安心くださいませ。 お帰りの魔法陣は、天文塔のてっぺんに。 夜明けに、開きますの。",
-   "Please, rest easy. The circle to send you home is at the top of the astronomy tower. It opens at dawn.",
+   "ご安心を。 お帰りの魔法陣は、天文塔の上に。 夜明けに、開きますの。",
+   "Rest easy. The circle home is atop the astronomy tower. It opens at dawn.",
    "T"
   ],
   "t07": [
@@ -113,13 +113,8 @@ window.ACAD_LINES = {
    "Welcome~! …Oh, Tsubaki. Did you summon something again?",
    "C"
   ],
-  "t18": [
-   "ち、違いますの…！ いえ、違わないのですが…。",
-   "I-It's not like that…! Well, it is, but…",
-   "T"
-  ],
   "c02": [
-   "ふふ、かわいいお客さん。 わたし、ココア。 ここの工房長だよ。",
+   "ふふ、かわいいお客さん。 わたし、ココア。 工房長だよ。",
    "Hehe, what a cute guest. I'm Cocoa. I run this workshop.",
    "C"
   ],
@@ -129,8 +124,8 @@ window.ACAD_LINES = {
    "C"
   ],
   "c04": [
-   "冷えてるでしょ？ 今夜のお薬は〜…「なんでも甘くなる薬」！ 火トカゲのうろこを、ひとつまみ…。",
-   "You're chilled, aren't you? Tonight's potion is… the 'makes-everything-sweet potion'! A pinch of fire-salamander scale…",
+   "今夜のお薬は〜…「なんでも甘くなる薬」！ 火トカゲのうろこを、ひとつまみ…。",
+   "Tonight's potion is… the 'makes-everything-sweet potion'! A pinch of fire-salamander scale…",
    "C"
   ],
   "c05": [
@@ -173,19 +168,14 @@ window.ACAD_LINES = {
    "…Hey, tell me about the sweets in your world?",
    "C"
   ],
-  "c13": [
-   "…ルナ先生のところへ、行くんでしょ。 塔の上は冷えるから、気をつけてね。 …いってらっしゃい。",
-   "…You're off to Professor Luna's, right? It's cold up the tower, so take care. …See you.",
-   "C"
-  ],
   "l01": [
    "…いらっしゃい。 ここまで登ってくる人は、めずらしいの。",
    "…Welcome. Not many people climb all the way up here.",
    "L"
   ],
   "l02": [
-   "わたし、ルナ。 氷と夜の魔法を教えてる。 …座って。 暖炉のそばが、あったかいわ。",
-   "I'm Luna. I teach ice and night magic. …Sit. It's warm by the fire.",
+   "わたし、ルナ。 氷と夜の魔法の先生。 …座って。 暖炉のそば。",
+   "I'm Luna. I teach ice and night magic. …Sit. By the fire.",
    "L"
   ],
   "l03": [
@@ -795,10 +785,6 @@ window.ACAD_LINES = {
      "front"
     ],
     [
-     "t05",
-     "near"
-    ],
-    [
      "t06",
      "near"
     ],
@@ -829,6 +815,7 @@ window.ACAD_LINES = {
    "view": [
     "sky_T"
    ],
+   "pos": "behind_front",
    "beats": [
     [
      "@takeoff"
@@ -881,6 +868,9 @@ window.ACAD_LINES = {
      ]
     },
     [
+     "@cruise"
+    ],
+    [
      "t14",
      "behind_front"
     ],
@@ -924,10 +914,6 @@ window.ACAD_LINES = {
     [
      "c01",
      "front"
-    ],
-    [
-     "t18",
-     "left"
     ],
     [
      "c02",
@@ -991,10 +977,6 @@ window.ACAD_LINES = {
      "window",
      "C",
      "c12"
-    ],
-    [
-     "c13",
-     "near"
     ]
    ]
   },
