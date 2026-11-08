@@ -5,7 +5,7 @@
 
 Jobs come from <demo>/project/web_prompts.json ({job: {ref, prompt}}, written by the demo's scripts/seedance.py prompts):
   ref = "dXX:<still>" → <demo>/assets/art/web/dXX_<still>.jpg (an original demo's picture), a job name → <demo>/assets/art/<job>.png,
-        null → text-to-image.
+        null → text-to-image; a LIST of refs sends several reference images (e.g. a wide shot + a close-up to lock the look, Demo31).
 Writes <demo>/assets/art/<job>.png (+ assets/art/web/<job>.jpg) and appends usage to <demo>/project/openai_log.json.
 Key: ~/.openai_key (one line, chmod 600) or OPENAI_API_KEY. Pillow only (multipart built by hand).
 """
@@ -57,10 +57,11 @@ log = json.load(open(LOG)) if os.path.exists(LOG) else {}
 for job in a.jobs:
     dst = os.path.join(ART, job + ".png")
     if os.path.exists(dst) and not a.force: print("exists", job); continue
-    j = P[job]; rp = ref_path(j.get("ref"))
+    j = P[job]; refs = j.get("ref"); refs = refs if isinstance(refs, list) else [refs] if refs else []   # ref may be a list (several references)
+    rps = [ref_path(r) for r in refs]; rp = rps[0] if rps else None
     fields = {"model": a.model, "prompt": j["prompt"], "size": a.size, "quality": a.quality, "n": 1}
     t0 = time.time(); print(f"[{job}] {'edit ← ' + os.path.basename(rp) if rp else 'text-to-image'} {a.size} {a.quality}", flush=True)
-    r = call("edits", {k: str(v) for k, v in fields.items()}, [("image[]", (os.path.basename(rp).rsplit('.', 1)[0] + ".png", png_bytes(rp)))]) if rp \
+    r = call("edits", {k: str(v) for k, v in fields.items()}, [("image[]", (os.path.basename(q).rsplit('.', 1)[0] + ".png", png_bytes(q))) for q in rps]) if rp \
         else call("generations", fields)
     im = Image.open(io.BytesIO(base64.b64decode(r["data"][0]["b64_json"]))).convert("RGB")
     im.save(dst); im.save(os.path.join(ART, "web", job + ".jpg"), quality=92)
