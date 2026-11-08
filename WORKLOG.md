@@ -7,6 +7,13 @@
 
 ---
 
+## 2026-11-08（夜）· 统一外壳第 2 段：游戏自动演示、进度条总开关、菜单排序、封面切边（ui-shell 2，统筹分派）
+- **已提交（未推送，统筹推）**：a8ecf26 进度条总开关 `MoHeatShell.BAR_ENABLED = false`（统一进度条 + 影片自带播放条全站隐藏，`?bar=1` 测试时显示；check_shell 用 `?bar=1`）+ 「手」（`MoHeatShell.hand`：游戏纯聆听时可见的手指，真实 pointer / mouse 事件，`G.tap / hold / drag / move / wait(secs, until)`）；ed830b7 + 0df3c67 六个游戏自动演示（Demo10 / 11 / 13 / 15 / 16 / 26 的 `MoHeatShell.autoplay` 钩子）+ **默认模式改为「互动」**（纯聆听为可选，记住的选择优先）；9562449 + a4c8aaa Demo22 封面（整张画 outpaint，无切边，统筹已认可）；7f4a9a7 菜单自动排序（nav.js `series / part / cast / featured / new` + `tools/qa/thermal_score.py` + `tools/web/check_nav.py`）；9b88584 对谈 kit 纯聆听自动回答（talk 页面还没加载 shell.js，暂不生效）。
+- **测试**：`node tools/web/check_shell.js <demo>`：Demo10 / 15 / 16 / 26 全过（纯聆听零输入走完 101–177 s、无麦克风、暂停、章节前后跳）；Demo11 / 13 走完、无麦克风、暂停 OK，各有一次 seek 腿不稳（Demo11 后退偶尔超过、Demo13 前进 ×16 时 🎤 长按已加 until，未复测）。盘点表 `scratchpad/ui-shell/shell2_invA/B.jsonl` + 截图 `shell2_inv/`（33 个 Demo，开关加入前）。
+- **未提交（等统筹审图）**：Demo12 / Demo20 封面改成整张画（`tools/art/cover_plate.py`，各 ≈ $0.3 已记账），check_cover PASS；`shared/cover.js` layered() 切边检测 + `check_cover.py`「cut edge in frame」FAIL（等另一 agent 的封面共享代码修复合入后再提交，避免冲突）。
+- **没做 / 交接**（用户新定的 UI 标准，见统筹消息与 USER_PREFERENCES：一个数据驱动封面模板、常驻底部控制条、⚙ 设置、播放中切模式、像素级一致性检查）：这是全站重构，建议新 agent 接手。现有可复用件：`shell.js` 的虚拟时钟 / 暂停 / seek / 手 / 模式；影片章节在 `DEMO_DATA.anim.scenes`（Demo03 / 04 用 `anim.segments` 的 t0）；Demo28 / 29 没有 #steps，需要按关卡定义章节；对谈 23 / 41 / 42 + Demo43 还没加载 shell.js；Demo18 index.html 的 shell.js ?v 还是旧的（同一块里有别人的 cover.js ?v 改动）；nav.js ?v 未更新（kiosk agent 有未提交行）；thermal 分数还没跑（`python3 tools/qa/thermal_score.py --all`，约 30–60 分钟，2 个 Chrome）。
+- **问题 / 教训**：① zsh 里 `for g in $G` 不按空格拆分，commit_mine 少带了一半文件（0df3c67 补上）——列表用数组或 Python 生成；② 游戏的帧步长被限制（dt ≤ 0.05），×16 快进时游戏状态比时钟慢，固定时长的长按 / 等待会卡住 → 「手」的 hold / wait 用游戏自身状态 `until` 结束；③ layered() 封面：姿势图上沿切边离眼睛太近时任何缩放都无法同时满足 2b 数值和「切边在画外」→ 用整张画 + outpaint。
+
 ## 2026-11-08（晚）· 素材检查结果修复（fix2，统筹分派）
 - **Demo24 岳（标杆，FAIL → 0 FAIL）**：char_sit / log / coffee / imo / bye 的浅灰幕布毛边（边缘 40–57 %）→ 0 %，用新的 `python3 tools/art/clean_cutout.py <demo> --unmix --only …`（af36a9d）。
 - **Demo12 蓮 / 21 仁 / 22 紫苑**：灰底残边 / 发缝灰块同法清掉（Demo22 毛巾不动：幕布和毛巾阴影同色）；Demo12 call / hug、Demo22 dryer 的直线切口通过移动人物移出画面；Demo25 椿 omikuji 的毛领切口是 stage.json `"erase"` 框太宽 → 只框签架，在临时副本里重建、只取 omikuji 的层（其他视图逐字节相同）。全部 0 美元。
