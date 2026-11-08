@@ -18,7 +18,7 @@
   const IMG = {};
   const PATCH = window.FAMILY_PATCHES || {};
   const BASES = ['bg_room', 'gm_call', 'duo_call', 'gp_snow', 'gm_knit', 'box_open', 'cooler', 'duo_bye'];
-  const artReady = Promise.all([...BASES, ...Object.keys(PATCH)].map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/${n}.webp?v=1`; })));
+  const artReady = Promise.all([...BASES, ...Object.keys(PATCH)].map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `../_kit/familycall/media/art/${n}.webp?v=1`; })));
   const VIEW = { room: 'bg_room', gm: 'gm_call', duo: 'duo_call', snow: 'gp_snow', knit: 'gm_knit', box: 'box_open', cooler: 'cooler', bye: 'duo_bye' };
   const FALLBACK = { room: ['#2c3150', '#f2c38b', '🏠'], gm: ['#f6d9b8', '#e9a87c', '👵'], duo: ['#f6d9b8', '#e9a87c', '👵👴'], snow: ['#dfe9f5', '#9fb7d6', '⛄'],
     knit: ['#f6d9b8', '#d77a6a', '🧶'], box: ['#e8d3b0', '#b98a5a', '📦'], cooler: ['#d8ecf5', '#7fb4d6', '⛄'], bye: ['#f9dcc0', '#f0a07a', '👋'] };
@@ -28,7 +28,7 @@
     doorCold: 0, scarf: 0, scarfOn: false, snowL: 0, snowR: 0, snowOn: '', roomCold: 0, heat: 0, heatOn: false, kairo: 0, kairoOn: false, glow: 0, who: '', step: 0, fade: 0, lv: 0, gift: false });
   let S = fresh(), run = 0;
   // two episodes of the same call: part 1 (call → grandpa → parcel → scarf) and part 2 (snowman → New Year → nobody hangs up).
-  // Part 2's page (demos/healing/Demo16_FamilyCall2/) sets <body data-part="2"> and <base href="./">, so all files are shared.
+  // Part 2's page (demos/healing/Demo16_FamilyCall2/) sets <body data-part="2">; the code, art and voices of both parts live in demos/healing/_kit/familycall/.
   const PART = +(document.body.dataset.part || QS.get('part') || 1);
   const STEPS = PART === 2 ? [
     ['snowman', 'じいちゃんの雪だるま', "Grandpa's snowman"], ['phone', '受話器を耳に', 'Phone back to your ear'],

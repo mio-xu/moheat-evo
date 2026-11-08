@@ -24,9 +24,9 @@ OVERRIDE = {
     'p14': '[shy] …ばあさんから切れ',
     'p17': '[grumbling] なんじゃ、ばあさんばっかり…。[excited] ほれ、雪だるまも左にくっつけてみい！ カイロに負けんぞ！',
 }
-src = open(os.path.join(ROOT, 'lines.js'), encoding='utf-8').read()
+src = open(os.path.join(ROOT, '..', '_kit', 'familycall', 'lines.js'), encoding='utf-8').read()
 LINES = json.loads(src[src.index('= {') + 2:src.rindex('}') + 1])
-out_dir = os.path.join(ROOT, 'media', 'voice'); os.makedirs(out_dir, exist_ok=True)
+out_dir = os.path.join(ROOT, '..', '_kit', 'familycall', 'media', 'voice'); os.makedirs(out_dir, exist_ok=True)
 cache_p = os.path.join(ROOT, 'audio', 'voice_cache.json'); os.makedirs(os.path.dirname(cache_p), exist_ok=True)
 cache = json.load(open(cache_p)) if os.path.exists(cache_p) else {}
 
@@ -53,5 +53,5 @@ for lid, v in LINES.items():
 for f in os.listdir(out_dir):
     if f.endswith('.m4a') and f[:-4] not in LINES: os.remove(os.path.join(out_dir, f))
 json.dump(cache, open(cache_p, 'w'), ensure_ascii=False, indent=1)
-open(os.path.join(ROOT, 'media', 'voice.js'), 'w').write('window.FAMILY_VOICE = ' + json.dumps({'credit': 'ElevenLabs', 'dur': durs}) + ';\n')
+open(os.path.join(ROOT, '..', '_kit', 'familycall', 'media', 'voice.js'), 'w').write('window.FAMILY_VOICE = ' + json.dumps({'credit': 'ElevenLabs', 'dur': durs}) + ';\n')
 print(len(durs), 'lines,', round(sum(durs.values()), 1), 's')

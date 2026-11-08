@@ -12,7 +12,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 spec = importlib.util.spec_from_file_location('d12_prep', os.path.join(os.path.dirname(ROOT), '../for-women/Demo12_LateCall', 'scripts', 'prepare_art.py'))
 P = importlib.util.module_from_spec(spec); spec.loader.exec_module(P)
 from PIL import ImageChops
-SRC, DST = os.path.join(ROOT, 'assets', 'art'), os.path.join(ROOT, 'media', 'art')
+SRC, DST = os.path.join(ROOT, 'assets', 'art'), os.path.join(ROOT, '..', '_kit', 'familycall', 'media', 'art')
 P.SRC, P.DST = SRC, DST
 FULL = ['bg_room', 'gm_call', 'duo_call', 'gp_snow', 'gm_knit', 'box_open', 'cooler', 'duo_bye']
 # patch: (base, source frame, centre x, y, radius x, y, tilt in degrees) — measured on the 1920×1080 base

@@ -64,7 +64,7 @@ window.CallAudio = (() => {
   // ---------------------------------------------------------------- their voices
   function loadVoices(ids) {
     if (!ac) return;
-    for (const id of ids) if (!voices[id]) voices[id] = fetch(`media/voice/${id}.m4a`).then((r) => r.arrayBuffer()).then((b) => ac.decodeAudioData(b)).then((buf) => (voices[id] = buf)).catch(() => (voices[id] = null));
+    for (const id of ids) if (!voices[id]) voices[id] = fetch(`../_kit/familycall/media/voice/${id}.m4a`).then((r) => r.arrayBuffer()).then((b) => ac.decodeAudioData(b)).then((buf) => (voices[id] = buf)).catch(() => (voices[id] = null));
   }
   const ready = (id) => voices[id] && !(voices[id] instanceof Promise);
   // where: 'phone' or { az, dist } for his real voice → Promise that resolves when the line ends
