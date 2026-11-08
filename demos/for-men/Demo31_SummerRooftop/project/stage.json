@@ -21,7 +21,8 @@
      1720,
      1440
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "popsicle": {
    "src": "nagisa_popsicle",
@@ -42,7 +43,8 @@
      870,
      1440
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "sit": {
    "src": "nagisa_sit",
@@ -55,7 +57,8 @@
    "radius_mouth": [
     44,
     26
-   ]
+   ],
+   "mouth": "lp"
   },
   "fan": {
    "src": "nagisa_fan",
@@ -68,7 +71,8 @@
    "radius_mouth": [
     44,
     26
-   ]
+   ],
+   "mouth": "lp"
   },
   "laugh": {
    "src": "nagisa_laugh",
@@ -94,7 +98,8 @@
    "radius_mouth": [
     60,
     40
-   ]
+   ],
+   "mouth": "lp"
   },
   "whisper": {
    "src": "nagisa_whisper2_flat_ext",
@@ -115,7 +120,8 @@
    "radius_mouth_quiet": [
     58,
     40
-   ]
+   ],
+   "mouth": "lp"
   },
   "shoulder": {
    "src": "nagisa_shoulder2_flat_ext",
@@ -142,7 +148,8 @@
      95,
      55
     ]
-   ]
+   ],
+   "mouth": "lp"
   }
  },
  "views": {
