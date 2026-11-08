@@ -1,4 +1,4 @@
-# Demo38 · ひなたと、ゲーセンデート · Arcade Date with Hinata — script draft v1 (2026-11-08)
+# Demo18 (built as Demo38) · ひなたと、ゲーセンデート · Arcade Date with Hinata — script draft v1 (2026-11-08)
 
 User pick (2026-11-08): Hinata story **B — an arcade date** (a gamer girl: you play games together). Replaces Demo18_HinataStream
 (old stream not kept; backup outside the repo).

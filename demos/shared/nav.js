@@ -16,7 +16,7 @@
     { cat: 'healing', dir: 'Demo29_FamilyVisit', ja: 'ただいま、じいちゃん・ばあちゃん', en: 'Home for New Year', zh: '爷爷奶奶，我回来了', group: 1 },
     { cat: 'for-men', dir: 'Demo14_MintStream', ja: 'ミントの、ささやき配信', en: "Mint's Whisper Stream", zh: '薄荷的耳语直播', group: 2 },
     { cat: 'for-men', dir: 'Demo17_CocoaStream', ja: 'ココアの、ほっこりカフェ配信', en: "Cocoa's Cozy Café Stream", zh: '可可的暖心咖啡馆直播', group: 2 },
-    { cat: 'for-men', dir: 'Demo18_HinataStream', ja: 'ひなたの、激辛チャレンジ配信', en: "Hinata's Super-Spicy Challenge", zh: '日向的超辣挑战直播', group: 2 },
+    { cat: 'for-men', dir: 'Demo18_HinataStream', ja: 'ひなたと、ゲーセンデート', en: 'Arcade Date with Hinata', zh: '和日向的游戏厅约会', group: 2 },
     { cat: 'for-men', dir: 'Demo19_LunaStream', ja: 'ルナの、よふかし配信', en: "Luna's Late-Night Stream", zh: '露娜的深夜直播', group: 2 },
     { cat: 'for-men', dir: 'Demo25_HatsumodeDate', ja: 'はじめての、初詣デート', en: 'My First Hatsumode', zh: '第一次的新年参拜约会', group: 2 },
     { cat: 'for-men', dir: 'Demo31_SummerRooftop', ja: 'なつの、おくじょうで', en: 'Up on the Summer Roof', zh: '夏日，屋顶上', group: 2 },

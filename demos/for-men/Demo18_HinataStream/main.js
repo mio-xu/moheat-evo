@@ -403,8 +403,8 @@
   function drawCover() {   // the arrive still pushed right (she stands in the middle of it), title on the arcade on the left
     ctx.fillStyle = '#140c26'; ctx.fillRect(0, 0, W, H);
     const im = IMG.arrive; if (!im) return;
-    ctx.drawImage(im, 460, 0, W, H);
-    const g = ctx.createLinearGradient(380, 0, 1000, 0); g.addColorStop(0, 'rgba(20,12,38,1)'); g.addColorStop(1, 'rgba(20,12,38,0)'); ctx.fillStyle = g; ctx.fillRect(380, 0, 620, H);
+    ctx.drawImage(im, 640, 0, W, H);   // far enough right that her waving hand clears the title
+    const g = ctx.createLinearGradient(560, 0, 1180, 0); g.addColorStop(0, 'rgba(20,12,38,1)'); g.addColorStop(1, 'rgba(20,12,38,0)'); ctx.fillStyle = g; ctx.fillRect(560, 0, 620, H);
   }
   window.ARCADE = { get S() { return S; }, thermal: () => thermal(.05), both: () => both, log: cmdLog, done: false };
   setStep(0);

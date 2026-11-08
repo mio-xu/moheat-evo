@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Art prompts for Demo38 (Hinata's arcade date) → project/web_prompts.json, made with the shared tools (DEMO_DESIGN_GUIDE §6 standard):
+"""Art prompts for Hinata's arcade date (built as Demo38, now in Demo18_HinataStream) → project/web_prompts.json, made with the shared tools (DEMO_DESIGN_GUIDE §6 standard):
   python3 scripts/art.py                                  # (re)write the prompt table
-  python3 tools/openai/images.py demos/for-men/Demo38_HinataArcade <job…>          # OpenAI gpt-image-2 (Seedance API: uploads limited)
+  python3 tools/openai/images.py demos/for-men/Demo18_HinataStream <job…>          # OpenAI gpt-image-2 (Seedance API: uploads limited)
   python3 tools/openai/images.py … <variant job> --mask "cx,cy,rx,ry"              # mouth / blink variants: masked edits only
 Character reference = the current Hinata art (Demo14 assets/art/hinata_live.png → assets/art/ref_hinata.png): same face, hair, hoodie.
 Poses on a chroma-key green background (#00B140, stage.json "matte": "green") — she is light (orange hair, white headset / shirt).

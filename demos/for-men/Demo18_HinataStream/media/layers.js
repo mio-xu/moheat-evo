@@ -17,7 +17,13 @@ window.MOHEAT_LAYERS = {
     "h": 1395,
     "x": 0.5,
     "y": 1.02,
-    "height": 0.98
+    "height": 0.98,
+    "box": [
+     553,
+     45,
+     1809,
+     1440
+    ]
    },
    "patches": [
     {
@@ -58,7 +64,13 @@ window.MOHEAT_LAYERS = {
     "h": 1398,
     "x": 0.55,
     "y": 1.02,
-    "height": 0.98
+    "height": 0.98,
+    "box": [
+     613,
+     42,
+     2009,
+     1440
+    ]
    },
    "patches": [
     {
@@ -100,7 +112,13 @@ window.MOHEAT_LAYERS = {
     "h": 1421,
     "x": 0.6,
     "y": 1.02,
-    "height": 0.96
+    "height": 0.96,
+    "box": [
+     490,
+     19,
+     2006,
+     1440
+    ]
    },
    "patches": [
     {
@@ -141,7 +159,13 @@ window.MOHEAT_LAYERS = {
     "h": 1410,
     "x": 0.66,
     "y": 1.02,
-    "height": 0.98
+    "height": 0.98,
+    "box": [
+     444,
+     30,
+     1818,
+     1440
+    ]
    },
    "patches": [
     {
@@ -182,7 +206,13 @@ window.MOHEAT_LAYERS = {
     "h": 1131,
     "x": 0.56,
     "y": 1.0,
-    "height": 1.0
+    "height": 1.0,
+    "box": [
+     396,
+     0,
+     2560,
+     1440
+    ]
    },
    "patches": [
     {
@@ -223,7 +253,13 @@ window.MOHEAT_LAYERS = {
     "h": 1402,
     "x": 0.52,
     "y": 1.02,
-    "height": 0.98
+    "height": 0.98,
+    "box": [
+     437,
+     38,
+     1974,
+     1440
+    ]
    },
    "patches": [
     {

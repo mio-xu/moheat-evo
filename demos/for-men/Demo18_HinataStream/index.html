@@ -1,19 +1,18 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <base href="../Demo14_MintStream/">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#1c1630" />
+  <meta name="theme-color" content="#140c26" />
   <meta name="robots" content="noindex" />
-  <meta property="og:title" content="Hinata's Super-Spicy Challenge · MoHeat Evo ASMR Demo" />
-  <meta property="og:image" content="../Demo18_HinataStream/media/cover.jpg" />
-  <title>ひなたの、激辛チャレンジ配信 · Hinata's Super-Spicy Challenge · MoHeat Evo ASMR Demo</title>
+  <meta property="og:title" content="Arcade Date with Hinata · MoHeat Evo ASMR Demo" />
+  <meta property="og:image" content="media/cover.jpg" />
+  <title>ひなたと、ゲーセンデート · Arcade Date with Hinata · MoHeat Evo ASMR Demo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Shippori+Mincho+B1:wght@600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../shared/game.css?v=1" />
-  <link rel="stylesheet" href="style.css?v=3" />
+  <link rel="stylesheet" href="style.css?v=1" />
   <link rel="stylesheet" href="../../shared/series.css?v=8" />
   <script>if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add('embed');</script>
   <style>/* ?embed=1 — used by the site's demo menu: stage only */
@@ -24,9 +23,9 @@
     html.embed .intro .hint { display: none; }
   </style>
 </head>
-<body data-ch="hinata">
+<body>
   <header class="bar">
-    <a class="brand" href="../../../">MoHeat <span>Evo</span> <em>ASMR · Live stream</em></a>
+    <a class="brand" href="../../../">MoHeat <span>Evo</span> <em>ASMR · Arcade date</em></a>
     <div class="device">
       <select id="portSelect" aria-label="Serial port"></select>
       <button class="btn sm" id="addPort" type="button" title="Authorize a USB or Bluetooth serial port">+ Add</button>
@@ -41,51 +40,26 @@
       <div class="stage" id="stage">
         <canvas id="scene" width="1920" height="1080"></canvas>
         <i class="glow l" id="glowL"></i><i class="glow r" id="glowR"></i>
-
-        <div class="live-head" id="liveHead">
-          <span class="live">● LIVE</span><span class="viewers" id="viewers">👁 0</span>
-          <b class="ch-name" id="chName"></b><span class="ch-title" id="chTitle"></span>
-        </div>
         <div class="hud-top"><button class="hud-btn" id="soundBtn" type="button">🔊</button></div>
-
-        <aside class="chat" id="chat">
-          <div class="chat-head"><span>チャット · Live chat</span></div>
-          <ol class="chat-list" id="chatList"></ol>
-          <div class="chat-input" id="chatInput">
-            <p class="chat-hint" id="chatHint"></p>
-            <div class="chips" id="chips"></div>
-            <div class="chat-row">
-              <span class="me">YOU</span><span class="fake-input" id="fakeInput">コメントする… · Say something…</span>
-              <button class="gift-btn" id="giftBtn" type="button" title="Super Chat">💝</button>
-            </div>
-          </div>
-        </aside>
-        <div class="hearts" id="hearts"></div>
+        <div class="choices" id="choices"></div>
         <div class="act" id="act"></div>
         <div class="subs" id="subs"><p class="line"><span class="ja" id="subJa"></span><span class="en" id="subEn"></span></p></div>
-        <p class="vv" id="vv"></p>
-
-        <div class="ended" id="ended">
-          <p class="e-title">配信は終了しました · Stream ended</p>
-          <p class="e-sub" id="endedSub"></p>
-          <div class="e-actions">
-            <button class="btn" id="againBtn" type="button">↺ もう一度 · Watch again</button>
-            <a class="btn primary" id="nextBtn" href="../Demo19_LunaStream/">▶ ルナの配信へ · Luna's stream</a>
-          </div>
-        </div>
+        <p class="vv" id="vv">ひなた ElevenLabs</p>
 
         <div class="intro" id="intro">
+          <div class="hero a" aria-hidden="true"></div>
           <div class="cover-copy">
             <p class="kicker">MoHeat Evo · Binaural ASMR × Thermal Haptics</p>
-            <h1><span>ひなたの、</span><span>激辛チャレンジ配信</span></h1>
-            <p class="en">Hinata's Super-Spicy Challenge</p>
-            <p class="cast"><span class="chip p">🏮 festival yatai · Interactive</span><span class="chip h">🍜 激辛ラーメン · steam</span><span class="chip k">🫙 ラムネ・うちわ · cool</span></p>
+            <h1><span>ひなたと、</span><span>ゲーセンデート</span></h1>
+            <p class="en">Arcade Date with Hinata — taiko, racing, a crane game and purikura with the gamer girl in disguise</p>
+            <p class="cast"><span class="chip p">🎮 ゲーマー女子とデート · Interactive</span><span class="chip h">🥫 コーンスープ・耳元の声 · warm</span><span class="chip k">🌀 レースの風・冬の夜風 · cool</span></p>
+            <p class="cleared" id="cleared" hidden></p>
             <div class="intro-actions">
-              <button class="btn primary big" id="startBtn" type="button">▶ 配信を見る · Watch</button>
+              <button class="btn primary big" id="startBtn" type="button">▶ はじめる · Start</button>
               <button class="btn" id="lrBtn" type="button">🎧 Left / Right check</button>
             </div>
-            <p class="hint">Headphones on · a spicy-ramen challenge from her summer-festival stall · rescue her with a Super Chat · connect MoHeat Evo to feel the summer night, the ramune and her uchiwa</p>
-            <p class="draft" id="credits">Hinata is an original character · voice ElevenLabs · art made with Seedance</p>
+            <p class="hint">Headphones on · tap / hold or answer her by voice · connect MoHeat Evo to feel the racing fans, the winter street, a hot can on your cheek and her voice</p>
+            <p class="draft" id="credits">Hinata is an original character · voice ElevenLabs · art made with OpenAI image generation</p>
           </div>
         </div>
       </div>
@@ -101,9 +75,9 @@
           <div class="meter-row"><span>R cool</span><div class="m cool"><i id="mRc"></i></div><b id="vRc">0</b></div>
           <div class="meter-row"><span>R warm</span><div class="m heat"><i id="mRh"></i></div><b id="vRh">0</b></div>
         </div>
-        <p class="note">DUAL, two layers: her secret warms your right ear with her voice; the summer night is mildly warm on both ears and the steaming bowl beside the mic adds a little; the cold ramune bottle, the stall fan and her uchiwa are cool.</p>
+        <p class="note">Live (DUAL): her voice warms the ear she speaks at, with its loudness; the warm arcade, the racing fans, the cold street and the hot can on your left cheek add real cold / warmth — often both at once.</p>
       </div>
-      <div class="card"><div class="card-head"><span>Stream</span><b id="clock" class="mono">0:00</b></div><ol class="steps" id="steps"></ol></div>
+      <div class="card"><div class="card-head"><span>Progress</span><b id="clock" class="mono">0:00</b></div><ol class="steps" id="steps"></ol></div>
       <div class="card">
         <label class="row"><span>Intensity</span><input id="intensity" type="range" min="0" max="100" value="100" /><b id="intensityVal">100%</b></label>
         <label class="row check"><input id="sendOn" type="checkbox" checked /> <span>Send to device</span></label>
@@ -112,11 +86,14 @@
   </main>
 
   <script src="../../../device.js?v=2"></script>
-  <script src="lines.js?v=3"></script>
-  <script src="audio.js?v=3"></script>
-  <script src="media/art/faces.js?v=2"></script>
-  <script src="main.js?v=7"></script>
+  <script src="lines.js?v=1"></script>
+  <script src="audio.js?v=1"></script>
+  <!-- layered art (DEMO_DESIGN_GUIDE §6 standard, as Demo27): shared/layers.js draws the live composite wherever main.js draws a still -->
+  <script>window.MoHeatLayers = { level: () => window.ARCADE?.S?.env || 0, raw: () => window.ARCADE?.S?.lv || 0, current: () => window.ARCADE?.S?.view || 'arrive' };</script>
+  <script src="media/layers.js?v=1"></script>
+  <script src="../../shared/layers.js?v=3"></script>
+  <script src="main.js?v=3"></script>
   <script src="../../shared/voice.js?v=5"></script>
-  <script src="../../shared/nav.js?v=35"></script>
+  <script src="../../shared/nav.js?v=36"></script>
 </body>
 </html>
