@@ -26,9 +26,10 @@ KEEP = "Mouth CLOSED (lips together) in the same soft smile."
 JOBS = {   # name: (reference — 'd22:<still>' = Demo22's picture, else a job of this list —, prompt parts)
     'bg_door': ('d22:shion_door', [EMPTY.format(what="the open front door of his flat, the warm hallway with its wall lamp, the dark rainy night at the door"), d22.WIDE]),
     'bg_room': ('d22:shion_glasses', [EMPTY.format(what="his dim living room at night: the large rainy window with blurred violet city lights, the floor lamp, the sofa"), d22.WIDE]),
-    'shion_door': ('d22:shion_door', [REF, d22.LOOK, d22.SHION, "Same pose as image 1: standing in his doorway, one hand on the door "
-                   "frame, holding a folded white towel against his chest with the other, looking at the viewer with a soft worried smile, "
-                   "from the waist up. " + KEEP, PLAIN, d22.WIDE, d22.AVOID]),
+    'shion_door': ('d22:shion_door', [REF, d22.LOOK, d22.SHION, "Same character and outfit as image 1 (long platinum hair in a low "
+                   "ponytail, glasses, open white silk shirt): he stands in his doorway, holding a folded white towel against his chest with "
+                   "both hands, looking at the viewer with a soft worried smile, from the waist up. Draw ONLY him: NO door, NO door frame, "
+                   "NO wall, NO other person's hands. " + KEEP, PLAIN, d22.WIDE, d22.AVOID]),   # v1 drew the door frame + the viewer's hands into the pose
     'shion_towel': ('d22:shion_towel', [REF, d22.LOOK, d22.SHION, "Same pose as image 1: close, he holds a white towel up over the viewer's "
                     "head with both hands (the towel's edge across the top of the picture), drying her hair, looking down at her with a "
                     "gentle smile. " + KEEP, PLAIN, d22.WIDE, d22.AVOID]),
@@ -41,8 +42,11 @@ JOBS = {   # name: (reference — 'd22:<still>' = Demo22's picture, else a job o
     'shion_whisper': ('d22:shion_whisper', [REF, d22.LOOK, d22.SHION, "Same pose as image 1: an intimate close-up event illustration — he "
                       "leans in to whisper into the viewer's LEFT ear (her long hair at the left edge), his face large, three-quarter view, "
                       "eyes half closed, lips near her ear. " + KEEP, PLAIN, d22.WIDE, d22.AVOID]),
-    'shion_window': ('shion_dryer', [SAME_FACE.format(what="the dryer is gone; he now holds his folded glasses loosely in one hand at chest "
-                     "height, his other arm resting along the back of a sofa (draw no sofa), relaxed.")]),
+    'shion_window': ('shion_dryer', [EDIT.format(what="his glasses and the dryer: he has taken his glasses OFF (none on his face — he took "
+                     "them off in the scene before) and holds them folded loosely in one hand at chest height; the dryer is gone; his other arm "
+                     "rests along the back of a sofa (draw no sofa), relaxed. Everything else — hair, shirt, face, colours, style — unchanged")]),   # v1 kept the glasses on AND in his hand
+    'shion_window_talk': ('shion_window', [EDIT.format(what=MOUTH)]),
+    'shion_window_blink': ('shion_window', [EDIT.format(what="his bare eyes: closed in a natural blink (eyelids down, lashes visible); his bangs stay exactly as they are")]),
     'shion_door_talk': ('shion_door', [EDIT.format(what=MOUTH)]),
     'shion_door_blink': ('shion_door', [EDIT.format(what=BLINK)]),
     'shion_towel_talk': ('shion_towel', [EDIT.format(what=MOUTH)]),
@@ -51,7 +55,7 @@ JOBS = {   # name: (reference — 'd22:<still>' = Demo22's picture, else a job o
     'shion_dryer_blink': ('shion_dryer', [EDIT.format(what=BLINK)]),
     'shion_glasses_talk': ('shion_glasses', [EDIT.format(what=MOUTH)]),
     'shion_glasses_blink': ('shion_glasses', [EDIT.format(what="his bare eyes: closed in a natural blink (eyelids down, lashes visible); his bangs stay exactly as they are")]),
-    'shion_whisper_talk': ('shion_whisper', [EDIT.format(what="his lips: parted a little, whispering into her ear, the same half-closed eyes")]),
+    'shion_whisper_talk': ('shion_whisper', [EDIT.format(what="his mouth: slightly open as if speaking softly, a small natural opening, the same half-closed eyes")]),   # the 'whispering into her ear' wording was refused by the OpenAI safety filter
 }
 ORDER = list(JOBS)
 

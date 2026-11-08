@@ -49,6 +49,10 @@ JOBS = {   # name: (reference — 'd21:<still>' = Demo21's picture, else a job o
     'jin_gaze_talk': ('jin_gaze', [EDIT.format(what=MOUTH)]),
     'jin_gaze_blink': ('jin_gaze', [EDIT.format(what=BLINK)]),
     'jin_glasses_talk': ('jin_glasses', [EDIT.format(what=MOUTH)]),
+    'jin_wrist_talk': ('jin_wrist', [EDIT.format(what=MOUTH)]),      # the 'same-face' edits moved his face too far to share jin_gaze's patches
+    'jin_wrist_blink': ('jin_wrist', [EDIT.format(what=BLINK)]),
+    'jin_jacket_talk': ('jin_jacket', [EDIT.format(what=MOUTH)]),
+    'jin_jacket_blink': ('jin_jacket', [EDIT.format(what=BLINK)]),
     'jin_whisper_talk': ('jin_whisper', [EDIT.format(what="his lips: parted a little, saying something low at her ear, the same half-closed eyes")]),
 }
 ORDER = list(JOBS)

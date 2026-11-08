@@ -6,6 +6,45 @@
 > 用户偏好在 `USER_PREFERENCES.md`，整体状态在 `HANDOFF_ASMR_DEMOS.md`，用户任务清单在 `TASKS.md`。
 
 ---
+
+## 2026-11-08 · 女性向重制 莲 / 仁 / 紫苑（Demo33→12、Demo34→21、Demo35→22）· 交接（统筹要求转后台）
+
+**现在的状态（三个都是暂存文件夹，还没合并上线）**
+- 画面全部用 OpenAI gpt-image-2 做完（空背景、各姿势、张嘴 / 闭眼差分）：`demos/for-women/Demo33_RenNightCall`、`Demo34_JinVipRoom`、`Demo35_ShionRainyNight`。规格：`project/stage.json`；成品：`media/art/*` + `media/layers.js`（build_stage 生成）；原图在 `assets/art/`（不进 git）。
+- 截断的身体已补（extend_pose）：`python3 tools/art/check_cut_body.py` 对三个 Demo 都是 0 报告。
+- 嘴 / 眼补丁：自动找位置在 莲 close/door 和 紫苑 dryer/window 上找错了（补丁贴到头发上 / 两张嘴），已经在 stage.json 里写死 `regions_mouth` / `regions_eyes` 并重建。`check_patches.py` 现在：莲 嘴 0.3–1.2、眼 3.0–3.8；仁 全部 1.4–2.3；紫苑 嘴 0.4–0.5、眼 seam 3.3–4.0，100 % 表（`assets/patch_check/*.png`）目视干净。教训在 `DEMO_DESIGN_GUIDE.md` §11.1（最后一条，**还没提交**：指南里有别的会话未提交的改动，我没有一起提交）。
+- 页面的数据钩子：莲 `CALL.S.view` / `CALL.FW.mouth`；仁 `JIN.S.view` / `JIN.S.lv`；紫苑 `SHION.S.view` / `SHION.S.lv`。
+
+**还要做（按顺序）**
+1. 运行时 2× 检查，在自己新开的标签页（不要用用户的标签页）：本地 `python3 -m http.server` 打开每个暂存页 `?auto=1` 和 `?auto=1&alt=1`；每个画面：张嘴补丁正好在闭嘴上、没有两张嘴 / 方框 / 色缝、只在说话时动、安静时闭上、切画面不闪、两只眼都眨。另外看紫苑 dryer 马尾后面有没有淡光晕。
+2. 完整测试：EN / 日本語 / 中文；无 404；一屏；手机竖 390×844、横 844×390（播放器尽量大、按钮 ≥ 44 px、无横向滚动、触摸长按可用；`tools/web/check_mobile.html` / `tools/art/check_mouth.js` 是我做的辅助，未提交，可用可删）；2× 深色底看抠图；`assets/poses_preview.jpg` 看近远景一致和剧情连贯。
+3. 合并：`python3 tools/web/merge_remake.py demos/for-women/Demo12_LateCall demos/for-women/Demo33_RenNightCall`（以及 Demo21_… ← Demo34、Demo22_… ← Demo35）。合并时不要删掉已有的热感事件。
+4. 每个：封面 headless Chrome `?cover=1` → `media/cover.jpg` + `assets/images/demos/<folder>.jpg`；`python3 tools/web/thumbs.py <folder>`；需要的话 `python3 tools/web/bump.py --stage demos/shared/nav.js`（shared 文件本身要显式提交）；README；本地提交（统筹说不要 push / pull），把 hash 发给统筹。
+
+**未提交、归属不确定的改动**：`tools/art/build_stage.py`、`tools/art/check_patches.py`、`tools/openai/images.py`（`--mask`）有工作区改动，部分是我的、部分可能是别的会话的——提交前先看 `git diff`。
+
+**花费**：OpenAI 约 29 次图像调用（莲 8、仁 11、紫苑 10，详见各自的 `project/openai_log.json`）+ 约 8 次补身体，估计 $6–9（以账单为准，每个 Demo 预算 ≤ $10）。Seedance 只在开头用了少量（见 `project/seedance_log.json`），≤ 1500 credits 的预算远没用完。
+
+**已知问题**：OpenAI 遮罩编辑仍会整图轻微重画，所以补丁位置一定要用 `regions_*` 写死并看 check_patches；build_stage 偶尔在 0 % CPU 卡住（这次 紫苑 卡了 5 分钟，杀掉重跑就好）。
+
+## 2026-11-08 · 补全"半截身体"的画面（Demo24 岳 / Demo20 陽向 / Demo31 渚）· 后台 agent（统筹会话审查）
+
+**做了什么**
+- 用户：「有的画面人物全出现在画面里，但身体只有半截——补完整，可以调用 API 做完整的素材」。
+- 新工具：`tools/art/check_cut_body.py`（列出截断处落在画面里的人物层；不带参数 = 全部 Demo）和 `tools/art/extend_pose.py`（gpt-image-2 补画缺的身体：发送正好 16:9 的窗口、留白透明；回答用 NCC 自动对位回原图，因为模型总会整体缩放 / 平移；沿差异最小的缝拼接；张嘴 / 闭眼差分同样补边；`--place` 恢复旧像素的屏幕位置；`--reraw` 重用存下的回答不花钱）。
+- `tools/art/build_stage.py`（由 moheat-evo-24 提交）里我加了两处：face_patches 按图片尺寸分组运行（补宽的姿势以前差分错位）；"纯色底"的中性判断改成和底色本身比较（Demo20 的底是暖灰 #cec7c4，新规则会在头发旁留灰块）。
+- 修好的画面：Demo24 `left`（右肩 + 皮夹克）、`blanket`（毯子右侧垂下）；Demo20 `wave`（左袖 + 手肘）、`hands`（左臂）；Demo31 `sparkler`（左袖）、`whisper`（"你"的后脑和肩）、`shoulder`（"你"的肩膀和上臂）。其他画面的文件和 layers.js 条目保持 HEAD 原样。每个 Demo 的 `media/layers.js?v=` 已加 1。
+- 文档：`DEMO_DESIGN_GUIDE.md` §6 标准流程第 5 步（check_cut_body + extend_pose）、§11.1 新教训。
+
+**现在的状态**
+- 三个 Demo `check_cut_body.py` 0 报告，`check_patches.py` 补过的姿势 rim diff 都很低；页面在本地自己的标签页里看过 left / blanket / wave / hands / sparkler / whisper / shoulder。
+- `demos/for-men/Demo18_HinataStream hinata_booth` 由 Demo18 会话自己补好了（提交 fab9c00）。Demo33/34/35 的 layers.js 当时是空的（别的会话在建），检查会显示 unreadable。
+- OpenAI 花费：11 次调用（2 次 high 2560×1440 ≈ 7.4k 输出 token，9 次 medium ≈ 1.8k，含 1 次被安全系统拒绝、2 次构图对不上的试验），按用量估计约 1–1.5 美元（以账单为准）。
+
+**下一步**
+- 新 Demo 出姿势图时提示词写 "full figure inside the frame with margin"。
+
+**问题**：gpt-image-2 遮罩编辑不保留构图 / 留灰边时什么都不画；whisper 第一次被安全系统误拒（提示词改成中性描述后通过）；build_stage 的两处问题见上。教训在 §11.1。
 ## 2026-11-08 · Demo18 ひなた抓娃娃机重做 + Demo39 ルナ（会话 moheat-evo-60）· 交接（统筹要求转后台）
 
 **Demo18_HinataStream（ゲーセンデート，已上线 73f870a）· 用户反馈「抓娃娃机动画很奇怪，用高质量生成素材做」**

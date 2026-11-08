@@ -1,0 +1,232 @@
+{
+ "bg_door": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 65,
+  "usage": {
+   "input_tokens": 1629,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 121
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8999
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "shion_whisper": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 66,
+  "usage": {
+   "input_tokens": 1924,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 416
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9294
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "shion_dryer_talk": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 73,
+  "usage": {
+   "input_tokens": 1580,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 72
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8950
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "shion_whisper_talk": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 67,
+  "usage": {
+   "input_tokens": 1582,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 74
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8952
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "shion_door": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 63,
+  "usage": {
+   "input_tokens": 1949,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 441
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9319
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "shion_window": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 66,
+  "usage": {
+   "input_tokens": 1636,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 128
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9006
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "shion_window_blink": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 71,
+  "usage": {
+   "input_tokens": 1586,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 78
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8956
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "shion_glasses_blink": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 69,
+  "usage": {
+   "input_tokens": 1586,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 78
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8956
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "shion_dryer_ext": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "seconds": 67,
+  "usage": {
+   "input_tokens": 1642,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 134
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9012
+  },
+  "pad": {
+   "left": 371,
+   "right": 0,
+   "bottom": 0
+  }
+ },
+ "shion_window_ext": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "seconds": 70,
+  "usage": {
+   "input_tokens": 1643,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 135
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9013
+  },
+  "pad": {
+   "left": 370,
+   "right": 0,
+   "bottom": 0
+  }
+ }
+}

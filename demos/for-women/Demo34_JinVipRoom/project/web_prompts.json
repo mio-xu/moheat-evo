@@ -47,6 +47,22 @@
   "ref": "jin_glasses",
   "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY his mouth: slightly open as if talking low, a small natural opening (teeth barely visible). Do not move, zoom or crop the picture."
  },
+ "jin_wrist_talk": {
+  "ref": "jin_wrist",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY his mouth: slightly open as if talking low, a small natural opening (teeth barely visible). Do not move, zoom or crop the picture."
+ },
+ "jin_wrist_blink": {
+  "ref": "jin_wrist",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY his eyes: closed in a natural blink (eyelids down, lashes visible); his red bangs stay exactly as they are. Do not move, zoom or crop the picture."
+ },
+ "jin_jacket_talk": {
+  "ref": "jin_jacket",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY his mouth: slightly open as if talking low, a small natural opening (teeth barely visible). Do not move, zoom or crop the picture."
+ },
+ "jin_jacket_blink": {
+  "ref": "jin_jacket",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY his eyes: closed in a natural blink (eyelids down, lashes visible); his red bangs stay exactly as they are. Do not move, zoom or crop the picture."
+ },
  "jin_whisper_talk": {
   "ref": "jin_whisper",
   "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY his lips: parted a little, saying something low at her ear, the same half-closed eyes. Do not move, zoom or crop the picture."

@@ -14,7 +14,11 @@
    "src": "shion_door",
    "talk": "shion_door_talk",
    "blink": "shion_door_blink",
-   "matte": "ai"
+   "matte": "ai",
+   "near_mouth": [
+    1310,
+    522
+   ]
   },
   "towel": {
    "src": "shion_towel",
@@ -23,22 +27,70 @@
    "matte": "ai"
   },
   "dryer": {
-   "src": "shion_dryer",
-   "talk": "shion_dryer_talk",
-   "blink": "shion_dryer_blink",
-   "matte": "ai"
+   "src": "shion_dryer_ext",
+   "talk": "shion_dryer_ext_talk",
+   "blink": "shion_dryer_ext_blink",
+   "matte": "ai",
+   "regions_mouth": [
+    [
+     1645,
+     515,
+     95,
+     58
+    ]
+   ],
+   "regions_eyes": [
+    [
+     1460,
+     285,
+     85,
+     48
+    ],
+    [
+     1650,
+     195,
+     90,
+     48
+    ]
+   ]
   },
   "window": {
-   "src": "shion_window",
-   "talk": "shion_dryer_talk",
-   "blink": "shion_dryer_blink",
-   "matte": "ai"
+   "src": "shion_window_ext",
+   "talk": "shion_window_ext_talk",
+   "blink": "shion_window_ext_blink",
+   "matte": "ai",
+   "regions_mouth": [
+    [
+     1650,
+     515,
+     95,
+     58
+    ]
+   ],
+   "regions_eyes": [
+    [
+     1462,
+     385,
+     85,
+     48
+    ],
+    [
+     1650,
+     288,
+     92,
+     48
+    ]
+   ]
   },
   "glasses": {
    "src": "shion_glasses",
    "talk": "shion_glasses_talk",
    "blink": "shion_glasses_blink",
-   "matte": "ai"
+   "matte": "ai",
+   "near_mouth": [
+    1150,
+    640
+   ]
   },
   "whisper": {
    "src": "shion_whisper",
@@ -75,7 +127,7 @@
    "pose": "dryer",
    "bg": "room",
    "fire": null,
-   "x": 0.52,
+   "x": 0.6071,
    "y": 1.02,
    "height": 1.0
   },
@@ -104,7 +156,7 @@
    "pose": "window",
    "bg": "room",
    "fire": null,
-   "x": 0.52,
+   "x": 0.5158,
    "y": 1.02,
    "height": 1.0
   }

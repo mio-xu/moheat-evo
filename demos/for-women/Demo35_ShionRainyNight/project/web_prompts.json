@@ -9,7 +9,7 @@
  },
  "shion_door": {
   "ref": "d22:shion_door",
-  "prompt": "Image 1 is the CHARACTER, POSE and STYLE reference: redraw the same man in the same pose and framing, same art style.\n\nArt style EXACTLY like image 1 (the user's chosen character sheet): soft modern anime illustration, thin coloured lineart, soft cel shading, a muted lavender / violet night palette with warm amber lamp light, gentle round bokeh. Realistic adult proportions (not chibi), a handsome, elegant bishounen face, romantic otome-game card quality.\n\nShion: the exact man from image 1 — long platinum-blonde hair, loose messy bangs, the rest tied in a low ponytail falling over one shoulder, calm grey-violet eyes, a small beauty mark under his right eye, a silver ear cuff, a thin silver chain necklace, a loose white silk shirt open at the chest with the sleeves rolled up. 27, the keyboardist of an idol group: soft-spoken, elegant, with a quiet, knowing, slightly dangerous smile.\n\nSame pose as image 1: standing in his doorway, one hand on the door frame, holding a folded white towel against his chest with the other, looking at the viewer with a soft worried smile, from the waist up. Mouth CLOSED (lips together) in the same soft smile.\n\nPlain flat DARK-GREY studio background (#404040), completely empty: no room, no window, no scenery, no floor line, no shadow on the background. Lighting as in his flat on a rainy night: warm lamp light from the RIGHT, cool violet city light from the LEFT.\n\nWide 16:9 game scene, first-person point of view of the viewer (a woman; only her hands may appear). No text, no letters, no logo, no watermark, no speech bubbles, no UI.\n\nAvoid: chibi, super-deformed, realistic photo, 3D render, extra fingers, deformed hands, extra arms, readable text, glossy airbrush, heavy bloom, nudity."
+  "prompt": "Image 1 is the CHARACTER, POSE and STYLE reference: redraw the same man in the same pose and framing, same art style.\n\nArt style EXACTLY like image 1 (the user's chosen character sheet): soft modern anime illustration, thin coloured lineart, soft cel shading, a muted lavender / violet night palette with warm amber lamp light, gentle round bokeh. Realistic adult proportions (not chibi), a handsome, elegant bishounen face, romantic otome-game card quality.\n\nShion: the exact man from image 1 — long platinum-blonde hair, loose messy bangs, the rest tied in a low ponytail falling over one shoulder, calm grey-violet eyes, a small beauty mark under his right eye, a silver ear cuff, a thin silver chain necklace, a loose white silk shirt open at the chest with the sleeves rolled up. 27, the keyboardist of an idol group: soft-spoken, elegant, with a quiet, knowing, slightly dangerous smile.\n\nSame character and outfit as image 1 (long platinum hair in a low ponytail, glasses, open white silk shirt): he stands in his doorway, holding a folded white towel against his chest with both hands, looking at the viewer with a soft worried smile, from the waist up. Draw ONLY him: NO door, NO door frame, NO wall, NO other person's hands. Mouth CLOSED (lips together) in the same soft smile.\n\nPlain flat DARK-GREY studio background (#404040), completely empty: no room, no window, no scenery, no floor line, no shadow on the background. Lighting as in his flat on a rainy night: warm lamp light from the RIGHT, cool violet city light from the LEFT.\n\nWide 16:9 game scene, first-person point of view of the viewer (a woman; only her hands may appear). No text, no letters, no logo, no watermark, no speech bubbles, no UI.\n\nAvoid: chibi, super-deformed, realistic photo, 3D render, extra fingers, deformed hands, extra arms, readable text, glossy airbrush, heavy bloom, nudity."
  },
  "shion_towel": {
   "ref": "d22:shion_towel",
@@ -29,7 +29,15 @@
  },
  "shion_window": {
   "ref": "shion_dryer",
-  "prompt": "Keep his face, head, hair, glasses, expression and position EXACTLY as they are (same pixels), the same dark grey background and lighting; do not zoom or crop. Change only his arms / hands and what they hold: the dryer is gone; he now holds his folded glasses loosely in one hand at chest height, his other arm resting along the back of a sofa (draw no sofa), relaxed."
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, glasses, clothes, colours, lighting and background — and change ONLY his glasses and the dryer: he has taken his glasses OFF (none on his face — he took them off in the scene before) and holds them folded loosely in one hand at chest height; the dryer is gone; his other arm rests along the back of a sofa (draw no sofa), relaxed. Everything else — hair, shirt, face, colours, style — unchanged. Do not move, zoom or crop the picture."
+ },
+ "shion_window_talk": {
+  "ref": "shion_window",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, glasses, clothes, colours, lighting and background — and change ONLY his mouth: slightly open as if speaking softly, a small natural opening (teeth barely visible). Do not move, zoom or crop the picture."
+ },
+ "shion_window_blink": {
+  "ref": "shion_window",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, glasses, clothes, colours, lighting and background — and change ONLY his bare eyes: closed in a natural blink (eyelids down, lashes visible); his bangs stay exactly as they are. Do not move, zoom or crop the picture."
  },
  "shion_door_talk": {
   "ref": "shion_door",
@@ -65,6 +73,6 @@
  },
  "shion_whisper_talk": {
   "ref": "shion_whisper",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, glasses, clothes, colours, lighting and background — and change ONLY his lips: parted a little, whispering into her ear, the same half-closed eyes. Do not move, zoom or crop the picture."
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, glasses, clothes, colours, lighting and background — and change ONLY his mouth: slightly open as if speaking softly, a small natural opening, the same half-closed eyes. Do not move, zoom or crop the picture."
  }
 }

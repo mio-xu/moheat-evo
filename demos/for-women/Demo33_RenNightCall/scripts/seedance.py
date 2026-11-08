@@ -14,6 +14,9 @@ d12 = importlib.util.module_from_spec(spec); spec.loader.exec_module(d12)
 PLAIN = ("Plain flat MID-GREY studio background (#707070), completely empty: no scenery, no floor line, no shadow on the background. "
          "Night lighting: soft cool blue light from the city, a little warm light on his face.")
 REF = "Image 1 is the CHARACTER, POSE and STYLE reference: redraw the same young man in the same pose and framing, same art style."
+REF2 = ("Image 1 is the CHARACTER and ART-STYLE reference: match its face, hair, outfit, line weight, shading and colours EXACTLY "
+        "(the same drawing as image 1, as if from the same illustrator on the same day). Image 2 is ONLY the pose and framing reference — "
+        "ignore image 2's drawing style, line weight and colouring.")   # user: close-ups and wide shots must match; Demo12's own stills differ in style
 EMPTY = ("Image 1 is the reference picture. Remove the young man completely and fill the space with what is behind him — {what} — the "
          "same composition, colours, lighting and art style. No people, no hands, no phone.")
 EDIT = ("Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, "
@@ -28,11 +31,11 @@ JOBS = {   # name: (reference — 'd12:<still>' = Demo12's picture, else a job o
     'bg_door': ('d12:ren_door', [EMPTY.format(what="the open front door seen from inside, the snowy night corridor with its railing and ceiling light, warm light from inside on the door frame"), d12.WIDE]),
     'ren_call': ('d12:ren_call', [REF, d12.LOOK4, d12.REN4, "Same pose as image 1: medium shot from the chest up, holding a smartphone to "
                  "his ear, talking to the viewer on the phone with a gentle smile, placed in the RIGHT half of the picture. " + KEEP, PLAIN, d12.WIDE]),
-    'ren_close': ('d12:ren_close', [REF, d12.LOOK4, d12.REN4, "Same pose as image 1: an intimate close-up, his face very near the viewer, "
+    'ren_close': (['ren_call', 'd12:ren_close'], [REF2, d12.LOOK4, d12.REN4, "Same pose as image 2: an intimate close-up, his face very near the viewer, "
                   "slightly tilted, the phone against his ear, half-lidded soft eyes, faint pink blush, a little right of centre. " + KEEP, PLAIN, d12.WIDE]),
-    'ren_door': ('d12:ren_door', [REF, d12.LOOK4, d12.REN4, "Same pose as image 1: standing, from the waist up, centred, snow on his silver "
+    'ren_door': (['ren_call', 'd12:ren_door'], [REF2, d12.LOOK4, d12.REN4, "Same pose as image 2: standing, from the waist up, centred, snow on his silver "
                  "hair and on the shoulders of his coat, cheeks pink from the cold, his phone lowered in one hand, a shy happy smile. " + KEEP, PLAIN, d12.WIDE]),
-    'ren_hug': ('d12:ren_hug', [REF, d12.LOOK4, d12.REN4, "Same pose as image 1: a close hug — he holds the viewer (her long brown hair "
+    'ren_hug': (['ren_call', 'd12:ren_hug'], [REF2, d12.LOOK4, d12.REN4, "Same pose as image 2: a close hug — he holds the viewer (her long brown hair "
                 "and shoulder at the right, seen from behind) against him, his cheek near her ear, his face on the LEFT, eyes closed, a "
                 "peaceful happy smile with lips closed, snow on his hair and coat.", PLAIN, d12.WIDE]),
     'ren_call_talk': ('ren_call', [EDIT.format(what=MOUTH)]),

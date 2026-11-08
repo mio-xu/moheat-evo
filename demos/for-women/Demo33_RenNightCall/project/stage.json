@@ -14,26 +14,74 @@
  },
  "poses": {
   "call": {
-   "src": "ren_call",
-   "talk": "ren_call_talk",
-   "blink": "ren_call_blink",
-   "matte": "ai"
+   "src": "ren_call_ext",
+   "talk": "ren_call_ext_talk",
+   "blink": "ren_call_ext_blink",
+   "matte": "ai",
+   "near_mouth": [
+    1710,
+    560
+   ]
   },
   "close": {
    "src": "ren_close",
    "talk": "ren_close_talk",
    "blink": "ren_close_blink",
-   "matte": "ai"
+   "matte": "ai",
+   "regions_mouth": [
+    [
+     1635,
+     745,
+     145,
+     78
+    ]
+   ],
+   "regions_eyes": [
+    [
+     1310,
+     490,
+     135,
+     78
+    ],
+    [
+     1660,
+     318,
+     135,
+     72
+    ]
+   ]
   },
   "door": {
    "src": "ren_door",
    "talk": "ren_door_talk",
    "blink": "ren_door_blink",
-   "matte": "ai"
+   "matte": "ai",
+   "regions_mouth": [
+    [
+     1272,
+     565,
+     85,
+     48
+    ]
+   ],
+   "regions_eyes": [
+    [
+     1110,
+     335,
+     72,
+     42
+    ],
+    [
+     1300,
+     258,
+     78,
+     42
+    ]
+   ]
   },
   "hug": {
-   "src": "ren_hug",
-   "talk": "ren_hug_talk",
+   "src": "ren_hug_ext",
+   "talk": "ren_hug_ext_talk",
    "matte": "ai"
   }
  },
@@ -43,7 +91,7 @@
    "pose": "call",
    "bg": "street",
    "fire": null,
-   "x": 0.62,
+   "x": 0.6694,
    "y": 1.02,
    "height": 1.0
   },
@@ -71,7 +119,7 @@
    "bg": "door",
    "fire": null,
    "zoom": 1.2,
-   "x": 0.5,
+   "x": 0.5541,
    "y": 1.02,
    "height": 1.02
   }
