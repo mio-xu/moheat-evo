@@ -348,7 +348,10 @@
   ],
   "persona": "全年龄 鬼屋提灯：会说话的提灯妖怪（吉祥物），活泼、勇敢、有点爱逞强的小男孩声；灯里的火是暖的",
   "description": "A cute talking paper-lantern mascot in a family adventure game. High, clear, youthful and boyish anime-style cartoon voice, bright, bouncy and cheeky, a bit boastful but warm-hearted, quick and playful. Native Japanese speaker. Clean close-mic recording, no background noise.",
-  "sample": "[excited] やっほー！ ぼく、ちょうちんの ぼんちゃん！ [proud] おばけなんて、ぜーんぜん こわくないもんね！ [whispers] …あ、いま ひだりのほうが ひやっとした？ [shouting] こっちに ぼくを むけて！ あったかい あかりで、おいはらっちゃえ！ [laughs] へへっ、にげてった！ きみ、なかなか やるじゃん！"
+  "sample": "[excited] やっほー！ ぼく、ちょうちんの ぼんちゃん！ [proud] おばけなんて、ぜーんぜん こわくないもんね！ [whispers] …あ、いま ひだりのほうが ひやっとした？ [shouting] こっちに ぼくを むけて！ あったかい あかりで、おいはらっちゃえ！ [laughs] へへっ、にげてった！ きみ、なかなか やるじゃん！",
+  "voice_id": "GLYfbGwoYaS2pYfudyyX",
+  "confirmed": "2026-11-09",
+  "pick": "r1_c"
  },
  "yurari": {
   "name": "ゆらり Yurari",
@@ -357,7 +360,10 @@
   ],
   "persona": "全年龄 鬼屋：害羞、寂寞、想交朋友的小鬼女孩，轻飘飘、气声多的童声；特殊设定：她的气息是凉的",
   "description": "A gentle, shy ghost character in a cute family adventure game, not scary. Soft, airy, breathy young female anime-style voice, quiet and a little lonely, hesitant, dreamy and floating, sweet when she smiles. Native Japanese speaker. Clean close-mic recording, no background noise.",
-  "sample": "[softly] …あの。 …こわがらないで。 わたし、ゆらり。 [whispers] ずっと、ここで ひとりだったの。 …みんな、わたしが つめたいから、にげちゃうの。 [shy] …でも、あなたの ちょうちん、あったかいね。 [whispers] …いっしょに、あそんでくれる？ …はなび、いっしょに みたいな。"
+  "sample": "[softly] …あの。 …こわがらないで。 わたし、ゆらり。 [whispers] ずっと、ここで ひとりだったの。 …みんな、わたしが つめたいから、にげちゃうの。 [shy] …でも、あなたの ちょうちん、あったかいね。 [whispers] …いっしょに、あそんでくれる？ …はなび、いっしょに みたいな。",
+  "voice_id": "E4BdXq2nIPTiYlNx1Yy4",
+  "confirmed": "2026-11-09",
+  "pick": "r1_b"
  },
  "yuzujii": {
   "name": "ゆずじい Yuzu-jii",
@@ -366,7 +372,10 @@
   ],
   "persona": "全年龄 动物温泉：温泉的主人，慢吞吞的水豚爷爷，温和、悠闲、有点爱打瞌睡（不能和 Gen 爷爷像：不大嗓门、不方言）",
   "description": "A slow, mellow, kind old capybara character who runs a small hot spring in a cute family adventure game. Soft, low, warm and slightly sleepy elderly male voice, very slow and relaxed, gentle chuckles, never loud. Native Japanese speaker. Clean close-mic recording, no background noise.",
-  "sample": "[slowly] …ようこそ、ようこそ。 わしは、この ゆけむりおんせんの あるじ、ゆずじい じゃ。 [chuckles] ほっほ…。 [warmly] ひだりの くだからは、あつーい おゆ。 みぎからは、つめたい やまの みず。 …おきゃくさんの すきな おんどに、ゆっくり あわせておくれ。 [sighs contentedly] …ふぅ。 いい ゆじゃのう…。"
+  "sample": "[slowly] …ようこそ、ようこそ。 わしは、この ゆけむりおんせんの あるじ、ゆずじい じゃ。 [chuckles] ほっほ…。 [warmly] ひだりの くだからは、あつーい おゆ。 みぎからは、つめたい やまの みず。 …おきゃくさんの すきな おんどに、ゆっくり あわせておくれ。 [sighs contentedly] …ふぅ。 いい ゆじゃのう…。",
+  "voice_id": "21NjWbS9GwedYgeuMlu8",
+  "confirmed": "2026-11-09",
+  "pick": "r1_b"
  },
  "penguin": {
   "name": "ペンギン Penguin guest",
@@ -375,7 +384,10 @@
   ],
   "persona": "全年龄 动物温泉的客人：小企鹅，喜欢凉凉的水，礼貌、元气的小孩声",
   "description": "A polite little penguin character in a cute family adventure game. Bright, slightly squeaky, cheerful youthful anime-style cartoon voice, quick and polite, easily flustered. Native Japanese speaker. Clean close-mic recording, no background noise.",
-  "sample": "[cheerful] こんにちは！ ペンギンの ペンです！ [polite] おゆは、つめたいぐらいで おねがいします！ [flustered] わわっ、あ、あつい あつい！ とけちゃいますー！ [relieved] …ふう、ひんやり。 ちょうど いいです！ ありがとうございます！ [happy] また きますね！"
+  "sample": "[cheerful] こんにちは！ ペンギンの ペンです！ [polite] おゆは、つめたいぐらいで おねがいします！ [flustered] わわっ、あ、あつい あつい！ とけちゃいますー！ [relieved] …ふう、ひんやり。 ちょうど いいです！ ありがとうございます！ [happy] また きますね！",
+  "voice_id": "xZj5js9Bsfwg0Nz4coHw",
+  "confirmed": "2026-11-09",
+  "pick": "r1_b"
  },
  "monkey": {
   "name": "おさる Monkey guests",
@@ -384,7 +396,8 @@
   ],
   "persona": "全年龄 动物温泉的客人：猴子妈妈（要很烫）和小猴子（要温的），同一个声音用标签区分大人 / 小孩的语气",
   "description": "A lively snow-monkey mother in a cute family game, warm and bossy-funny, loves very hot baths, laughs easily. A bright, mid-pitched, energetic adult woman's voice with a playful edge. Native Japanese speaker. Clean close-mic recording, no background noise.",
-  "sample": "[cheerful] あらあら、いいおんせん！ うちは あつーいのが すきなのよ！ [excited] もっと あつく、もっと あつく！ [laughs] あっはは、さいこう！ [softly] …でもね、この子は ぬるめが すきなの。 ほら、ごあいさつは？ [playful] もう、てれちゃって。 ありがとね、ちいさな おてつだいさん！"
+  "sample": "[cheerful] あらあら、いいおんせん！ うちは あつーいのが すきなのよ！ [excited] もっと あつく、もっと あつく！ [laughs] あっはは、さいこう！ [softly] …でもね、この子は ぬるめが すきなの。 ほら、ごあいさつは？ [playful] もう、てれちゃって。 ありがとね、ちいさな おてつだいさん！",
+  "pick_pending": "r1_c (chosen 2026-11-09; voice slots full 30/30 — saving waits for a freed slot)"
  },
  "fox": {
   "name": "キツネ Fox guest",
@@ -393,6 +406,9 @@
   ],
   "persona": "全年龄 动物温泉的客人：有点自恋（很在意尾巴）的狐狸，优雅、俏皮",
   "description": "An elegant, slightly vain fox guest in a cute family game who is very proud of its fluffy tail. A smooth, playful, youthful voice, a little theatrical and charming, teasing but friendly. Native Japanese speaker. Clean close-mic recording, no background noise.",
-  "sample": "[playful] ごきげんよう。 キツネの コン でございます。 [proud] みて、この しっぽ。 ふわっふわでしょう？ [worried] …あっ、しっぽが ぬれちゃう。 ぬるめで、そーっと おねがいね。 [relieved] ふふ、ちょうど いいわ。 [whispers] …ねえ、あなたも しっぽ、ほしくない？"
+  "sample": "[playful] ごきげんよう。 キツネの コン でございます。 [proud] みて、この しっぽ。 ふわっふわでしょう？ [worried] …あっ、しっぽが ぬれちゃう。 ぬるめで、そーっと おねがいね。 [relieved] ふふ、ちょうど いいわ。 [whispers] …ねえ、あなたも しっぽ、ほしくない？",
+  "voice_id": "m89Jo1xzga8r6745lRLK",
+  "confirmed": "2026-11-09",
+  "pick": "r1_b"
  }
 }
