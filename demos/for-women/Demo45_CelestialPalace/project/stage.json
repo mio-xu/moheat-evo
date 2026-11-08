@@ -331,9 +331,9 @@
     0.74,
     0.62
    ],
-   "x": 0.36,
+   "x": 0.38,
    "y": 1.0,
-   "height": 1.0,
+   "height": 0.88,
    "who": "S"
   },
   "corridor_K": {
@@ -350,7 +350,7 @@
    "fire": null,
    "x": 0.66,
    "y": 1.0,
-   "height": 1.0,
+   "height": 0.95,
    "who": "K"
   },
   "end_J": {
@@ -368,9 +368,9 @@
    "pose": "shion_ear",
    "bg": "dawn",
    "fire": null,
-   "x": 0.36,
+   "x": 0.38,
    "y": 1.0,
-   "height": 1.0,
+   "height": 0.88,
    "who": "S"
   },
   "end_K": {
@@ -380,7 +380,7 @@
    "fire": null,
    "x": 0.66,
    "y": 1.0,
-   "height": 1.0,
+   "height": 0.95,
    "who": "K"
   },
   "t_pond_J": {
@@ -404,9 +404,9 @@
    "pose": "shion_ear",
    "bg": "pond",
    "fire": null,
-   "x": 0.36,
+   "x": 0.38,
    "y": 1.0,
-   "height": 1.0,
+   "height": 0.88,
    "who": "S",
    "small": true
   },
@@ -417,7 +417,7 @@
    "fire": null,
    "x": 0.66,
    "y": 1.0,
-   "height": 1.0,
+   "height": 0.95,
    "who": "K",
    "small": true
   },
@@ -433,16 +433,16 @@
    "more": [
     {
      "pose": "shion_base",
-     "x": 0.2,
+     "x": 0.25,
      "y": 1.0,
-     "height": 0.9,
+     "height": 0.86,
      "who": "S"
     },
     {
      "pose": "saku_base",
-     "x": 0.8,
+     "x": 0.77,
      "y": 1.0,
-     "height": 0.9,
+     "height": 0.88,
      "who": "K"
     }
    ],
@@ -467,9 +467,9 @@
     0.9,
     0.62
    ],
-   "x": 0.36,
+   "x": 0.38,
    "y": 1.0,
-   "height": 1.0,
+   "height": 0.88,
    "who": "S",
    "small": true
   },
@@ -494,7 +494,7 @@
    ],
    "x": 0.66,
    "y": 1.0,
-   "height": 1.0,
+   "height": 0.95,
    "who": "K",
    "small": true
   },
@@ -513,16 +513,16 @@
    "more": [
     {
      "pose": "shion_base",
-     "x": 0.2,
+     "x": 0.25,
      "y": 1.0,
-     "height": 0.9,
+     "height": 0.86,
      "who": "S"
     },
     {
      "pose": "saku_base",
-     "x": 0.8,
+     "x": 0.77,
      "y": 1.0,
-     "height": 0.9,
+     "height": 0.88,
      "who": "K"
     }
    ],
@@ -560,7 +560,7 @@
    ],
    "x": 0.66,
    "y": 1.0,
-   "height": 1.0,
+   "height": 0.95,
    "who": "K",
    "small": true
   },
@@ -579,16 +579,16 @@
    "more": [
     {
      "pose": "shion_base",
-     "x": 0.2,
+     "x": 0.25,
      "y": 1.0,
-     "height": 0.9,
+     "height": 0.86,
      "who": "S"
     },
     {
      "pose": "saku_base",
-     "x": 0.8,
+     "x": 0.77,
      "y": 1.0,
-     "height": 0.9,
+     "height": 0.88,
      "who": "K"
     }
    ],
@@ -615,9 +615,9 @@
    "pose": "shion_ear",
    "bg": "corridor",
    "fire": null,
-   "x": 0.36,
+   "x": 0.38,
    "y": 1.0,
-   "height": 1.0,
+   "height": 0.88,
    "who": "S",
    "small": true
   },
@@ -633,16 +633,16 @@
    "more": [
     {
      "pose": "shion_base",
-     "x": 0.2,
+     "x": 0.25,
      "y": 1.0,
-     "height": 0.9,
+     "height": 0.86,
      "who": "S"
     },
     {
      "pose": "saku_base",
-     "x": 0.8,
+     "x": 0.77,
      "y": 1.0,
-     "height": 0.9,
+     "height": 0.88,
      "who": "K"
     }
    ],
@@ -684,16 +684,16 @@
    "more": [
     {
      "pose": "shion_base",
-     "x": 0.2,
+     "x": 0.25,
      "y": 1.0,
-     "height": 0.9,
+     "height": 0.86,
      "who": "S"
     },
     {
      "pose": "saku_base",
-     "x": 0.8,
+     "x": 0.77,
      "y": 1.0,
-     "height": 0.9,
+     "height": 0.88,
      "who": "K"
     }
    ]
