@@ -234,6 +234,8 @@ for name, v in views.items():
     elif 'height' not in v: print(f'  view {name}: no explicit placement (auto from the figure) — check it after build_stage')
 json.dump(cfg, open(SJ, 'w'), indent=1, ensure_ascii=False)
 log = os.path.join(D, 'project', 'openai_log.json'); lg = json.load(open(log)) if os.path.exists(log) else {}
-lg[P['src']] = {'model': a.model, 'size': f'{TW}x{TH}', 'seconds': round(time.time() - t0), 'usage': r.get('usage'), 'pad': pad}
-json.dump(lg, open(log, 'w'), indent=1)
+key = P['src'] + ':extend'; prev = lg.get(key) or {}   # own key (not the base image's job) + earlier spend kept (balances.py budget)
+lg[key] = {'model': a.model, 'size': f'{TW}x{TH}', 'seconds': round(time.time() - t0), 'usage': r.get('usage'), 'pad': pad,
+           **({'prior_usage': (prev.get('prior_usage') or []) + [prev.get('usage')]} if prev else {})}
+json.dump(lg, open(log + '.tmp', 'w'), indent=1); os.replace(log + '.tmp', log)
 print(f'  saved {P["src"]}.png {NW}x{NH} in {time.time() - t0:.0f}s; stage.json updated → run build_stage.py + check_cut_body.py')

@@ -316,6 +316,9 @@ for f in tracked:
 docs = ' '.join(read(p) for p in glob.glob(os.path.join(D, 'README.md')) + glob.glob(os.path.join(D, 'project', '*.md')))
 if not re.search(r'credits|\$\s?\d|USD|美元', docs): hy.append('no budget line (credits / $) in README.md or project/*.md')
 if not os.path.exists(os.path.join(D, 'project', 'CHECKLIST.md')): hy.append('no project/CHECKLIST.md (run with --checklist)')
+if os.path.exists(os.path.join(D, 'project', 'openai_log.json')):   # per-demo OpenAI cap $10, ⚠ at 80 % (tools/report/balances.py)
+    bq = subprocess.run([sys.executable, os.path.join(REPO, 'tools', 'report', 'balances.py'), '--demo', D], capture_output=True, text=True)
+    if bq.returncode: hy.append(bq.stdout.strip())
 row('G8', 'hygiene', 'WARN' if hy else 'PASS', f'{len(hy)} note(s)' if hy else 'assets ignored, no big files, budget logged, checklist present', hy)
 
 # ---------------------------------------------------------------- G6 browser results
