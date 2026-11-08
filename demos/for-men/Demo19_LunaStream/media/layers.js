@@ -48,7 +48,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/counter_mouth1.webp?v=d1935331",
+     "src": "art/counter_mouth1.webp?v=65aaec52",
      "rect": [
       465,
       395,
@@ -59,7 +59,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/counter_mouth2.webp?v=382e3efc",
+     "src": "art/counter_mouth2.webp?v=d9ace689",
      "rect": [
       465,
       395,
@@ -70,7 +70,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/counter_mouth3.webp?v=bb120212",
+     "src": "art/counter_mouth3.webp?v=48109267",
      "rect": [
       465,
       395,
@@ -129,7 +129,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/shake_mouth1.webp?v=45d5b222",
+     "src": "art/shake_mouth1.webp?v=49be3be5",
      "rect": [
       628,
       378,
@@ -140,7 +140,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/shake_mouth2.webp?v=8141e449",
+     "src": "art/shake_mouth2.webp?v=36196ca3",
      "rect": [
       628,
       378,
@@ -151,7 +151,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/shake_mouth3.webp?v=952f783d",
+     "src": "art/shake_mouth3.webp?v=bc5bbeba",
      "rect": [
       628,
       378,
@@ -210,7 +210,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/lean_mouth1.webp?v=d10509ac",
+     "src": "art/lean_mouth1.webp?v=80fff62b",
      "rect": [
       574,
       473,
@@ -221,7 +221,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/lean_mouth2.webp?v=bafba87c",
+     "src": "art/lean_mouth2.webp?v=51561806",
      "rect": [
       574,
       473,
@@ -232,7 +232,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/lean_mouth3.webp?v=79352375",
+     "src": "art/lean_mouth3.webp?v=bf4b893a",
      "rect": [
       574,
       473,
@@ -291,7 +291,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/flame_mouth1.webp?v=25197b18",
+     "src": "art/flame_mouth1.webp?v=61b1166e",
      "rect": [
       451,
       383,
@@ -302,7 +302,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/flame_mouth2.webp?v=5b6fcdce",
+     "src": "art/flame_mouth2.webp?v=7d11baa8",
      "rect": [
       451,
       383,
@@ -313,7 +313,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/flame_mouth3.webp?v=9b1bbd5a",
+     "src": "art/flame_mouth3.webp?v=fa0e814f",
      "rect": [
       451,
       383,
@@ -372,7 +372,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/sit_mouth1.webp?v=b1f0f24b",
+     "src": "art/sit_mouth1.webp?v=5a1578ea",
      "rect": [
       443,
       406,
@@ -383,7 +383,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/sit_mouth2.webp?v=9a4d2489",
+     "src": "art/sit_mouth2.webp?v=1d7082d8",
      "rect": [
       443,
       406,
@@ -394,7 +394,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/sit_mouth3.webp?v=1b75a8f2",
+     "src": "art/sit_mouth3.webp?v=6179fe5f",
      "rect": [
       443,
       406,
@@ -453,7 +453,7 @@ window.MOHEAT_LAYERS = {
      "level": 0
     },
     {
-     "src": "art/whisper_mouth1.webp?v=6c772ead",
+     "src": "art/whisper_mouth1.webp?v=caee1bc1",
      "rect": [
       730,
       546,
@@ -464,7 +464,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/whisper_mouth2.webp?v=d21f673e",
+     "src": "art/whisper_mouth2.webp?v=ce8a8e73",
      "rect": [
       730,
       546,
@@ -475,7 +475,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/whisper_mouth3.webp?v=cc234ba4",
+     "src": "art/whisper_mouth3.webp?v=abf42578",
      "rect": [
       730,
       546,
