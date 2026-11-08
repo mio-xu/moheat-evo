@@ -181,7 +181,7 @@ window.MOHEAT_LAYERS = {
     "src": "art/char_dryer.webp?v=c60bfc15",
     "w": 1700,
     "h": 954,
-    "x": 0.6071,
+    "x": 0.502,
     "y": 1.02,
     "height": 1.04,
     "box": [

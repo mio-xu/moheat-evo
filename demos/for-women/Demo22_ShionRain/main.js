@@ -14,7 +14,7 @@
   // ---------------------------------------------------------------- art: one still per view ('dryerR' = the dryer still mirrored)
   const VIEWS = ['door', 'towel', 'dryer', 'glasses', 'whisper', 'window'];
   const IMG = {};
-  const artReady = Promise.all(VIEWS.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/shion_${n}.jpg?v=3`; })));
+  const artReady = Promise.all(VIEWS.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/shion_${n}.jpg?v=4`; })));
 
   // ---------------------------------------------------------------- state
   const fresh = () => ({ started: false, t: 0, clock: 0, view: 'door', wet: 1, rub: 0, dryer: null, near: 0, ear: 0, fade: 0, lv: 0, pos: { az: 0, dist: .8 } });
