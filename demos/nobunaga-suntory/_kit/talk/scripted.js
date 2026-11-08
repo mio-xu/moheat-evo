@@ -74,6 +74,13 @@ window.TALK_BRAIN = (() => {
       if (k) { const b = bridge(firstWho(beat), k); if (b) E.push({ who: firstWho(beat), ja: b.ja, en: b.en, id: b.id }); }
       i = beats.indexOf(beat); play(beat);
     },
+    // pure listening: what "you" say on your turn (display language) — yes on a yes / no question, else a short nudge to go on
+    pureReply() {
+      const b = beats[i], L = window.MoHeatSub?.lang || 'en', k = L === 'ja' ? 0 : L === 'zh' ? 2 : 1;
+      if (b && b.ask === 'yn') return ['はい、もちろん', 'Yes, of course', '嗯，当然'][k];
+      const R = [['なるほど…', 'I see…', '原来如此…'], ['もっと聞かせてください', 'Please, tell me more', '再多讲一点吧'], ['ええ、いい話ですね', 'What a lovely story', '真是个好故事'], ['ふふ、それで？', 'Heh, and then?', '呵呵，然后呢？']];
+      return R[i % R.length][k];
+    },
     voice: (it) => (it.id ? fetchVoice(it.id) : Promise.resolve(null)),
     end() {},
     _cut: (id, cast) => cut(D.scenes[id], cast),   // testing

@@ -196,6 +196,13 @@
     const left = LIMITS().session_seconds - S.clock;
     if (left <= 0 && !S.closing) { S.closing = true; return ask('close', ''); }
     setPhase('listen'); heard = ''; interim = '';
+    if (window.MoHeatPlay?.pure) {   // pure listening (shared/shell.js): your turn passes by itself — a short scripted reply of yours (in the
+      const r = B.pureReply?.() || null, my = S;   // display language) is "typed" into the turn panel, then said; no mic, no recognition
+      const t = $('turnText'); let k = 0;
+      const type = () => { if (S !== my || S.phase !== 'listen') return; if (!r) return submit(null);
+        t.textContent = r.slice(0, ++k) + (k < r.length ? '▍' : ''); t.className = k < r.length ? 'interim' : ''; if (k < r.length) setTimeout(type, 55); else setTimeout(() => submit(r), 700); };
+      setTimeout(type, 1400); return;
+    }
     clearTimeout(silentT); silentT = setTimeout(() => { if (S && S.phase === 'listen' && !heard && !interim && !$('typeIn').value) { if (S.silent < (B.maxSilent ?? 2)) { S.silent++; log('sys', '', '…'); submit(null); } } }, (B.silenceSec || 14) * 1000);
     if (SR && !S.noMic) startRec();
   }
@@ -245,7 +252,7 @@
     for (const c of cast) { SND.char(c); const ch = S.ch[c]; SND.move(c, ch.az, ch.dist, .01); }
     SND.ambience(sc.sound);
     $('intro').classList.add('hidden'); $('endBtn').hidden = false; setPhase('connect'); log('sys', '', shown(sc.ja, sc.en));
-    if (!micStream && !QS.has('nomic')) mic();
+    if (!micStream && !QS.has('nomic') && !window.MoHeatPlay?.pure) mic();
     B.open();
   }
   function finish(why = 'bye') {
