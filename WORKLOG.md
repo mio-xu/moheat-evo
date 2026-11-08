@@ -7,6 +7,29 @@
 
 ---
 
+## 2026-11-08（晚）· 统一外壳 + 封面标准：第 2–4 批 + 菜单缩略图（ui-shell）
+- **完成**：直播间 14 / 17 / 18 / 24（2d40842）、影片 01–09（119a6c0：章节标记合进时间轴、影片结束回封面、纯聆听不开麦）、故事封面 Demo10 狐狸 / Demo26 直美（164860f，现有抠图合成，OpenAI 0 美元）、Demo28 / 29 接入外壳；Ren / Hinata / Shion / Gaku 的封面用 `MoHeatCover.layered()`（空场景 + 姿势抠图）达标；全站菜单缩略图 + media/cover.jpg 重新生成（`tools/web/thumbs.py --base`，Demo04 除外）；check_cover：没有角色 / 生物脸的封面 = FAIL；check_demo release：缩略图比封面旧 = FAIL。
+- **没做 / 下一步**：① 游戏 Demo10 / 11 / 13 / 15 / 16 / 26 的纯聆听会卡住（抚摸、吹气、找东西这类玩法要每个游戏写一个 `MoHeatShell.autoplay` 钩子），所以这几个暂时**没有**加载 shell.js（仍是旧封面按钮）；② 对谈 23 / 41 / 42（听众回合自动跳过）和 Demo43；③ 菜单顺序（nav.js 加 series / cast / part + 自动排序，"推荐先体验"用 check_demo --full 写的 tools/qa/thermal_scores.json）；④ 结局图鉴、音量记忆、`_kit/style.js` 接进外壳和封面配色；⑤ Demo13 封面（WebGL 摄像头画面：要在摄像头启动前画一张直美贴近镜头的合成封面）；⑥ check_mobile.html 测新按钮。
+- **测试**：`node tools/web/check_shell.js <demo>`（纯聆听零输入走完、不请求麦克风、← / → 只在封面、空格暂停、章节跳转）；`python3 tools/web/check_cover.py --all --sheet x.jpg`。
+
+## 2026-11-08 · Demo43 白嶺の峠：もっと話す = 地点 × 对象 + 多人同框口型 · 后台 agent "d43b"（统筹分派）
+
+**做了什么**
+- もっと話す 从「选人」扩成**地点 × 对象**（同 Demo23）：吹雪の峠 / 宿・火鍋 / 女医の部屋 / 夜の戸口 / 夜明けの峠 × ミント / ひなた / 渚 / 三人 = 20 种。
+  数据在 `demos/for-men/Demo43_BlizzardInn/scripts/script_data.py` `PLACES`（每个对象的 beats、`'@事件'`、场地话题 + 每人一句场地过渡句）；故事台词复用（tm / th / tn / tt），新台词 59 句、ElevenLabs 2,241 字（确认过的声音）。
+  冷热按场地（`main.js` `PLACE_AMB` + `EVENTS`：渚挡左边的风、ミント双手捂右耳、温石贴右脸、汤碗、加炭、艾灸 → 薄荷膏、门被风撞开 / 披外褂 / 顶门、太阳出山）。
+  纯聆听模式（`MoHeatPlay.pure`，测试 `?sample`）：结局后自动放一段三人示范（信物主人的场地：开场 → 一次沉默 → 告别），再回封面。
+- 私密实时版：`live/live.js` `begin({ place, cast })`，prompt 只写这个场地、只放选中的人、这个场地能触发的冷热事件 `@|key`；`node demos/for-men/Demo43_BlizzardInn/scripts/live_prompt.mjs all` 免费检查 20 种 prompt（没有跑付费长对话）。
+- 多人同框（共用）：`tools/art/build_stage.py` 视图 `"who"` + `"more"`（+ `"small"` 小平面图）、`demos/shared/layers.js` 每人一层（各自 LivePortrait 嘴型组、眨眼、呼吸相位），`hooks.who` 让只有说话的人动嘴（单人视图也一样，画外的人说话时画面里的人不动嘴）；一张背景板一个纹理。旧 Demo 不变（Demo31 check_mouth / check_motion 回归通过）。
+  `tools/art/check_mouth.js` 新增 WRONG-MOUTH / FIG-NO-MOVE 和 `--query=`，`check_patches.py` 检查每个角色。Demo43 新增 21 个地点 × 对象视图（0 美元，用已有图层拼）。黎明三人 h09 / m11 / n17 现在三人各自动嘴。
+- `shared/layers.js?v=` 改成内容指纹 f71de857（14 个分层页面，只改那一行）。README、`docs/engine/crossover_standard_draft.md`（§1、§4、§4.1、§8、§10）、指南 §11.1 一条。
+
+**状态**：check_mouth 故事 / 对话（hall、pass × 三人）/ 纯聆听示范都 ✓；check_demo --full 结果见 README QA 段。预算：OpenAI 0 美元新增（Demo43 仍约 $7.3），ElevenLabs +2,241 字。
+
+**下一步**：UI 外壳 agent 给 Demo43 接 `shared/shell.js` 后，跑 `node tools/web/check_shell.js demos/for-men/Demo43_BlizzardInn`，确认纯聆听示范和章节条兼容；实时版有密码时可用 `scripts/live_smoke.mjs` 跑一次地点 × 对象（花 credits，需批准）。
+
+**问题**：`commit_mine.py --hunks` 会把同一个 diff hunk 里别人相邻的改动一起带走（898e5bd 带上了另一会话在指南 ひなた刘海条目上的一处改动）——工作区没受影响，但以后改共用文档要离别人的改动远一点，或先 `--dry` 看清。
+
 ## 2026-11-08 · 流程标准 → 门禁和工具（素材标准 14 条、提效标准 13 条、成品要求、造型、类别风格卡）· 后台 agent "workflow"（统筹分派）
 
 **做了什么**（每项一个提交，`git log --oneline` 搜 "commit_mine" 之后）：
