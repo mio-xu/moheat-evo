@@ -11,10 +11,15 @@
 //   · Settings remembered (try / catch): mode, thermal on / off, intensity, subtitles on / off + size S / M / L, reduced motion.
 //   · Loading veil until the page's art / voices / fonts are in; unified error toasts (device lost, mic denied, load failure).
 //   · Subtitles on / off + size, reduced motion (also prefers-reduced-motion: html.reduce-motion, MoHeatPlay.reduced), visible focus.
+// Games with their own HUD at the bottom: <html data-shbar="top"> puts the chapter bar at the top centre and 🌡 under the top-right buttons.
 // Per-demo hooks are optional: window.MoHeatShell.chapters = [{ t: seconds | step index, ja, en, zh }] + .seek(i) for the seek bar.
 (() => {
   if (window.MoHeatShell) return;
   const SH = window.MoHeatShell = { chapters: null, current: null, seek: null };   // optional demo hooks (set before Start)
+  // ONE switch for the progress / chapter bar on every demo (user 2026-11-08: all demos have it or none). false = the unified bar AND the
+  // films' own play bar (.transport / .legend) are hidden everywhere; the chapter data, seek API, keys and pause keep working.
+  // ?bar=1 shows it for testing. Flip to true in ONE release once every demo in nav.js DEMOS shows the same bar (tools/web/check_shell.js).
+  SH.BAR_ENABLED = false;
   const QS = new URLSearchParams(location.search), EXPORT = QS.has('cover') || QS.has('render') || QS.has('embed');
   const LS = { get(k, d) { try { const v = localStorage.getItem('moheat.' + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
     set(k, v) { try { localStorage.setItem('moheat.' + k, JSON.stringify(v)); } catch {} } };
@@ -107,16 +112,77 @@
   const playing = () => { const i = document.getElementById('intro'); return !!i && i.classList.contains('hidden'); };
   if (!EXPORT) setInterval(() => {
     if (!Play.pure || !playing()) return;
+    if (SH.autoplay) { if (!G.busy) { let r; try { r = SH.autoplay(G); } catch (e) { real.st(() => { throw e; }); } if (r) return; } else return; }   // the game plays itself (below)
     const els = [...document.querySelectorAll(SEL)].filter(vis); if (!els.length) return;
     const e = els[0], n = vnow(); if (!seen.has(e)) { seen.set(e, n); return; }
     if (seen.get(e) < 0 || n - seen.get(e) < 2200) return;
     seen.set(e, -1);
+    if (SH.autoplay) { G.run(async () => { e.classList.contains('hold') ? await G.hold(e, .5, .5, 3.4) : await G.tap(e); }); return; }   // games: the same default answer, by the visible hand
     if (e.classList.contains('hold')) {
       const r = e.getBoundingClientRect(), o = { bubbles: true, pointerId: 7, pointerType: 'mouse', isPrimary: true, clientX: r.left + r.width / 2, clientY: r.top + r.height / 2, button: 0, buttons: 1 };
       e.dispatchEvent(new PointerEvent('pointerdown', o)); e.dispatchEvent(new MouseEvent('mousedown', o));
       setTimeout(() => { e.dispatchEvent(new PointerEvent('pointerup', { ...o, buttons: 0 })); e.dispatchEvent(new MouseEvent('mouseup', { ...o, buttons: 0 })); }, 3200);
     } else e.click();
   }, 300);
+
+  // ---------------------------------------------------------------- games: the visible hand (pure mode plays the game by itself)
+  // A game sets   MoHeatShell.autoplay = (G) => { … }   (in its main.js, guarded by `if (window.MoHeatShell)`). In pure mode, while the
+  // story plays, the shell calls it every 0.4 s whenever the hand is idle; it looks at the game's own state and starts ONE action
+  // (returns truthy), or returns falsy to let the shell press the default button (by the same hand). The hand is a soft cursor on
+  // the picture that really moves and sends real pointer / mouse events, so every step is visible and the game's own input code runs
+  // (strokes through shared/gesture.js or the demo's pointer handlers, taps, holds, wand / laser aiming by hover). Virtual time:
+  // pause freezes it, a chapter seek fast-forwards it. Coordinates: x, y = 0–1 of the element (canvas: canvas px ÷ W / H).
+  //   G.tap(el, x, y) · G.hold(el, x, y, secs) · G.drag(el, [[x, y], …], secs) (pressed) · G.move(el, [[x, y], …], secs) (hover)
+  //   G.wait(secs, until?) · G.hold(…, secs, until?) — until = () => <game state reached> · G.run(async () => { … }) (several steps
+  //   as one action) · G.busy · G.hide()
+  // A restart / mode change / the end cancels a running action (its promise rejects quietly inside G.run).
+  const GID = 77, caps = new Map();
+  for (const [k, fn] of [['setPointerCapture', (el, id) => caps.set(id, el)], ['releasePointerCapture', (el, id) => caps.delete(id)]]) {
+    const o = Element.prototype[k]; Element.prototype[k] = function (id) { if (id === GID) return fn(this, id); return o.call(this, id); };
+  }
+  const hasCap = Element.prototype.hasPointerCapture; Element.prototype.hasPointerCapture = function (id) { return id === GID ? caps.get(id) === this : hasCap.call(this, id); };
+  const G = { busy: false, gen: 0, x: -1, y: -1, down: false };
+  const vwait = (s) => new Promise((r) => window.setTimeout(r, s * 1000));
+  let hand = null;
+  const handEl = () => { if (hand?.isConnected) return hand; const st = document.querySelector('.stage-col .stage') || document.querySelector('.stage'); if (!st) return null;
+    hand = document.createElement('div'); hand.className = 'sh-hand'; hand.setAttribute('aria-hidden', 'true'); st.appendChild(hand); return hand; };
+  const place = (cx, cy) => { const h = handEl(); if (!h) return; const r = h.parentElement.getBoundingClientRect(); h.style.left = `${cx - r.left}px`; h.style.top = `${cy - r.top}px`; h.classList.add('on'); G.x = cx; G.y = cy; };
+  G.hide = () => { hand?.classList.remove('on', 'down'); };
+  const pt = (el, x = .5, y = .5) => { const r = el.getBoundingClientRect(); return [r.left + r.width * x, r.top + r.height * y]; };
+  const under = (el, cx, cy) => { const h = document.elementFromPoint(cx, cy); return h && el.contains(h) ? h : el; };   // the element under the hand inside el (overlays on top do not swallow it)
+  const fire = (el, type, cx, cy, buttons) => {
+    const o = { bubbles: true, cancelable: true, composed: true, clientX: cx, clientY: cy, button: 0, buttons, pointerId: GID, pointerType: 'mouse', isPrimary: true, view: window };
+    if (type.startsWith('pointer')) el.dispatchEvent(new PointerEvent(type, o)); else el.dispatchEvent(new MouseEvent(type, o));
+  };
+  const live = (my) => { if (my !== G.gen || !Play.pure || !playing()) throw new Error('ghost-cancel'); };
+  const glide = async (el, cx, cy, secs, pressed, my) => {   // move the hand from where it is to (cx, cy), sending moves
+    const x0 = G.x < 0 ? cx + 80 : G.x, y0 = G.y < 0 ? cy + 60 : G.y, n = Math.max(1, Math.round(secs * 30));
+    for (let i = 1; i <= n; i++) { live(my); const k = i / n, e = k < .5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2, x = x0 + (cx - x0) * e, y = y0 + (cy - y0) * e;
+      place(x, y); fire(caps.get(GID) || under(el, x, y), 'pointermove', x, y, pressed ? 1 : 0); if (!pressed) fire(under(el, x, y), 'mousemove', x, y, 0); await vwait(secs / n); }
+  };
+  const press = (el, cx, cy, on) => { const t = on ? under(el, cx, cy) : (caps.get(GID) || G.downEl || el); G.down = on; hand?.classList.toggle('down', on);
+    fire(t, on ? 'pointerdown' : 'pointerup', cx, cy, on ? 1 : 0); fire(t, on ? 'mousedown' : 'mouseup', cx, cy, on ? 1 : 0); if (on) G.downEl = t; else { caps.delete(GID); G.downEl = null; } return t; };
+  // until: a check of the game's own state — hold / wait at least `secs`, then on until it is true (games clamp their frame step, so
+  // while a seek fast-forwards ×16 their state moves slower than the clock: a fixed duration would not be enough), at most 15 s real
+  const hang = async (my, secs, until) => { await vwait(secs); live(my); const r0 = real.now(); while (until && !until() && real.now() - r0 < 15000) { await vwait(.1); live(my); } };
+  G.wait = async (s, until) => { const my = G.gen; await hang(my, s, until); };
+  G.tap = async (el, x, y) => { const my = G.gen, [cx, cy] = pt(el, x, y); await glide(el, cx, cy, .55, false, my); await vwait(.12); live(my);
+    const t = press(el, cx, cy, true); await vwait(.09); press(el, cx, cy, false); fire(t, 'click', cx, cy, 0); ripple(cx, cy); await vwait(.25); };
+  G.hold = async (el, x, y, secs = 2, until) => { const my = G.gen, [cx, cy] = pt(el, x, y); await glide(el, cx, cy, .55, false, my); await vwait(.1); live(my);
+    const t = press(el, cx, cy, true); try { await hang(my, secs, until); } finally { press(el, cx, cy, false); } if (t.closest?.('button')) fire(t, 'click', cx, cy, 0); await vwait(.2); };
+  G.drag = async (el, pts, secs = 1.5) => { const my = G.gen, P = pts.map(([x, y]) => pt(el, x, y)); await glide(el, P[0][0], P[0][1], .5, false, my); await vwait(.08); live(my);
+    press(el, P[0][0], P[0][1], true); try { const seg = secs / Math.max(1, P.length - 1); for (const [cx, cy] of P.slice(1)) await glide(el, cx, cy, seg, true, my); }
+    finally { press(el, G.x, G.y, false); } await vwait(.15); };
+  G.move = async (el, pts, secs = 1) => { const my = G.gen, seg = secs / pts.length; for (const [x, y] of pts) { const [cx, cy] = pt(el, x, y); await glide(el, cx, cy, seg, false, my); } };
+  G.run = (fn) => { if (G.busy) return false; G.busy = true; const my = G.gen;
+    Promise.resolve().then(fn).catch((e) => { if (e?.message !== 'ghost-cancel') real.st(() => { throw e; }); }).finally(() => { if (G.down && my === G.gen) press(document.body, G.x, G.y, false); if (my === G.gen) G.busy = false; }); return true; };
+  const ripple = (cx, cy) => { const h = handEl(); if (!h) return; const r = h.parentElement.getBoundingClientRect(), d = document.createElement('i'); d.className = 'sh-tap';
+    d.style.left = `${cx - r.left}px`; d.style.top = `${cy - r.top}px`; h.parentElement.appendChild(d); real.st(() => d.remove(), 700); };
+  const cancelHand = () => { G.gen++; G.busy = false; if (G.down) { G.down = false; caps.delete(GID); } G.hide(); };
+  addEventListener('moheat:playmode', cancelHand);
+  document.addEventListener('click', (e) => { if (e.target.closest?.('#startBtn')) cancelHand(); }, true);
+  if (!EXPORT) setInterval(() => { if (hand && (!Play.pure || !playing())) { if (G.busy || hand.classList.contains('on')) cancelHand(); } }, 500);
+  SH.hand = G;
 
   // pure mode never opens the microphone, also for games that read the mic level themselves (blowing, calling): they get the
   // same answer as a denied mic and fall back to taps / their own timers
@@ -140,7 +206,7 @@
   // chapters: the demo's MoHeatShell.chapters (labels) + chapter() (current index), or — no code needed — its progress list #steps
   // (li.now = current; series.css hides the card). Seek: forward = fast-forward ×16 muted (choices take the default), back = restart + forward.
   // Pure mode: any chapter; interactive mode: back, or chapters already reached.
-  let reached = 0, target = null, since = 0;
+  let reached = 0, target = null, since = 0, back = false;
   const stepsLis = () => [...document.querySelectorAll('#steps li')];
   const chapters = () => SH.chapters || stepsLis().map((li) => ({ label: li.textContent.split(' · ')[0] }));
   const chapter = () => (SH.current ? SH.current() : stepsLis().findIndex((li) => li.classList.contains('now')));
@@ -150,13 +216,14 @@
     if (paused) pause(false);
     if (SH.seek) return SH.seek(i);
     since = real.now();
-    if (i <= cur) { target = i; document.getElementById('startBtn')?.click(); if (i > 0) setWarp(16); else target = null; return; }   // back: from the top, then forward
-    target = i; setWarp(16);
+    if (i <= cur) { target = i; back = true; document.getElementById('startBtn')?.click(); if (i > 0) setWarp(16); else target = null; return; }   // back: from the top, then forward
+    target = i; back = false; setWarp(16);
   };
   if (!EXPORT) setInterval(() => {   // follow the story: reached chapters, end of a seek, the bar
     if (!ui.bar) return;
     const cs = chapters(), cur = chapter(); if (playing() && cur > reached) reached = cur;
-    if (target != null && real.now() - since > 700 && (cur >= target || !playing())) { target = null; setWarp(1); }
+    if (back && cur < target) back = false;   // the restart has registered (a game's steps can be short: stop at once, no overshoot)
+    if (target != null && real.now() - since > (back ? 1500 : 100) && (cur >= target || !playing())) { target = null; back = false; setWarp(1); }
     if (ui.bar.dataset.n !== String(cs.length) || ui.bar.dataset.l !== String(L())) {
       ui.bar.dataset.n = cs.length; ui.bar.dataset.l = L();
       ui.bar.innerHTML = cs.map((c, k) => `<button type="button" data-i="${k}" title="${c.label}"><i>${'①②③④⑤⑥⑦⑧⑨⑩'[k] || k + 1}</i><span>${c.label}</span></button>`).join('');
@@ -194,6 +261,9 @@
   .sh-bar button:disabled { opacity: .45; cursor: not-allowed; }
   @container (max-width: 620px) { .sh-bar { left: 2cqw; right: 2cqw; } .sh-bar button span { display: none; } .sh-bar button { justify-content: center; height: 5cqw; } }
   .stage:has(.intro:not(.hidden)) .sh-heat { display: none; }
+  html[data-shbar=top] .sh-bar { top: 1.2cqw; bottom: auto; left: 28cqw; right: 28cqw; }   /* games whose own HUD (inventory, dock, hearts) is at the bottom */
+  html[data-shbar=top] .sh-heat { left: auto; right: 1cqw; top: 5.4cqw; bottom: auto; }
+  @container (max-width: 620px) { html[data-shbar=top] .sh-bar { top: 12cqw; left: 22cqw; right: 22cqw; } html[data-shbar=top] .sh-heat { top: 12cqw; } }
   .sh-veil { position: absolute; inset: 0; z-index: 40; display: flex; align-items: center; justify-content: center; background: #0b0a12; color: #d8d0e4;
     font: 500 clamp(11px, 1.3cqw, 22px)/1 inherit; transition: opacity .35s; }
   .sh-veil.gone { opacity: 0; pointer-events: none; }
@@ -204,6 +274,14 @@
   .sh-set { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin-top: 8px; font-size: 12px; }
   .sh-set button { font: inherit; padding: 4px 9px; border-radius: 8px; border: 1px solid rgba(255,255,255,.25); background: transparent; color: inherit; cursor: pointer; min-height: 30px; }
   .sh-set button[aria-pressed=true] { background: rgba(255,255,255,.85); color: #17121f; }
+  .sh-hand { position: absolute; z-index: 28; left: 0; top: 0; width: clamp(22px, 2.6cqw, 44px); height: clamp(22px, 2.6cqw, 44px); margin: calc(clamp(22px, 2.6cqw, 44px) / -2) 0 0 calc(clamp(22px, 2.6cqw, 44px) / -2);
+    border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity .3s, transform .12s; background: radial-gradient(circle, rgba(255,255,255,.95) 0 22%, rgba(255,255,255,.35) 26% 60%, rgba(255,255,255,0) 64%);
+    box-shadow: 0 0 0 2px rgba(255,255,255,.75), 0 2px 10px rgba(0,0,0,.45); }
+  .sh-hand.on { opacity: .9; } .sh-hand.down { transform: scale(.78); background: radial-gradient(circle, rgba(255,236,170,1) 0 30%, rgba(255,214,120,.5) 34% 62%, rgba(255,214,120,0) 66%); }
+  .sh-tap { position: absolute; z-index: 27; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; pointer-events: none; border: 2px solid rgba(255,255,255,.9); animation: shtap .6s ease-out forwards; }
+  @keyframes shtap { to { transform: scale(7); opacity: 0; } }
+  html.shell-paused .sh-hand { opacity: .5; }
+  html.sh-nobar .sh-bar, html.sh-nobar .stage-col > .transport, html.sh-nobar .stage-col > .legend, html.sh-nobar .sh-marks { display: none !important; }
   html[data-subs=off] .stage .subs { visibility: hidden !important; }
   html[data-subs=s] .stage .subs { font-size: 82%; } html[data-subs=l] .stage .subs { font-size: 125%; }
   html[data-subs=s] .stage .subs :is(.ja, .en) { transform-origin: bottom center; }
@@ -230,6 +308,7 @@
   const setMotion = (v) => { Play.reduced = v; LS.set('reduce', v); document.documentElement.classList.toggle('reduce-motion', v); paint(); dispatchEvent(new CustomEvent('moheat:motion', { detail: v })); };
 
   const init = () => {
+    if (!(SH.BAR_ENABLED || QS.has('bar'))) document.documentElement.classList.add('sh-nobar');
     const stage = document.querySelector('.stage-col .stage') || document.querySelector('.stage'), intro = document.getElementById('intro');
     if (!stage) return;
     const st = document.createElement('style'); st.id = 'moheat-shell'; st.textContent = css; document.head.appendChild(st);
@@ -251,7 +330,7 @@
     ui.pause = document.createElement('div'); ui.pause.className = 'sh-pause'; ui.pause.setAttribute('role', 'button'); ui.pause.tabIndex = -1; stage.appendChild(ui.pause);
     ui.pause.addEventListener('click', () => pause(false));
     const canvas = stage.querySelector('canvas, video');
-    if (!FILM()) canvas?.addEventListener('click', () => { if (playing() && !QS.has('auto')) pause(true); });
+    if (!FILM()) canvas?.addEventListener('click', (e) => { if (e.isTrusted && playing() && !QS.has('auto') && (Play.pure || !SH.autoplay)) pause(true); });   // games in interactive mode: a tap is a move, not a pause
     film(stage);
     // the demo's progress list (#steps, written by its setStep()) is the chapter list; demos without one still get it
     if (!document.getElementById('steps')) { const ol = document.createElement('ol'); ol.id = 'steps'; ol.hidden = true; ol.className = 'sh-steps'; document.body.appendChild(ol); }
@@ -310,7 +389,8 @@
   addEventListener('keydown', (e) => {
     if (EXPORT || e.metaKey || e.ctrlKey || e.altKey || /input|textarea|select/i.test(e.target.tagName) || e.target.isContentEditable) return;
     if (e.code === 'Space' && FILM()) return;   // films: their own Space = play / pause (time comes from the media element)
-    if (e.code === 'Space' && playing()) { e.preventDefault(); e.stopImmediatePropagation(); pause(!paused); return; }
+    if (e.code === 'Space' && SH.autoplay && !Play.pure) return;   // games, interactive: Space is the game's key (blow / talk); P pauses
+    if ((e.code === 'Space' || (e.code === 'KeyP' && !e.repeat)) && playing()) { e.preventDefault(); e.stopImmediatePropagation(); pause(!paused); return; }
     if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && !playing() && !e.repeat) { e.preventDefault(); step(e.key === 'ArrowRight' ? 1 : -1); }
   }, true);
   let sx = null, sy = 0;
@@ -324,6 +404,6 @@
   navigator.permissions?.query({ name: 'microphone' }).then((p) => { p.onchange = () => { if (p.state === 'denied' && !Play.pure) toast('micDenied'); }; }).catch(() => {});
   addEventListener('moheat:micdenied', () => toast('micDenied'));
 
-  Object.assign(SH, { pause, setMode, toast, LS, seekTo: seek, chapter }); Object.defineProperty(SH, 'paused', { get: () => paused });
+  Object.assign(SH, { pause, setMode, toast, LS, seekTo: seek, chapter }); Object.defineProperty(SH, 'paused', { get: () => paused }); Object.defineProperty(SH, 'warp', { get: () => warp });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

@@ -7,6 +7,8 @@
 //   · Space pauses: performance.now() and the #cmd thermal text freeze for 2 s, then resume;
 //   · if the demo registered chapters (MoHeatShell.chapters + seek), seeking to the last chapter must move the story there.
 // --shots DIR saves cover / playing / end screenshots (for reviews).
+// --record: none of the tests above — one plain pure-mode run from Start to the end, the #cmd thermal text sampled every 100 ms
+//   → { cmds: [[secs, cmd], …], ended, secs } (tools/qa/thermal_score.py: the thermal-use score behind the menu's "Try these first").
 const { spawn } = require('child_process');
 const path = require('path'), fs = require('fs'), net = require('net'), os = require('os');
 const ROOT = path.resolve(__dirname, '..', '..');
@@ -32,10 +34,11 @@ const out = { demo: REL, shell: false, pureEnded: false, secs: 0, mic: [], navDu
   let id = 0; const wait = {}; const hand = [];
   sock.addEventListener('message', (e) => { const m = JSON.parse(e.data); if (m.id && wait[m.id]) { wait[m.id](m); delete wait[m.id]; } else hand.forEach((h) => h(m)); });
   const cdp = (method, params = {}) => new Promise((r) => { const i = ++id; wait[i] = r; sock.send(JSON.stringify({ id: i, method, params })); });
-  const ev = async (x) => (await cdp('Runtime.evaluate', { expression: x, awaitPromise: true, returnByValue: true })).result?.result?.value;
+  const ev = async (x) => { const r = (await cdp('Runtime.evaluate', { expression: x, awaitPromise: true, returnByValue: true })).result;
+    if (r?.exceptionDetails && out.errors.length < 8) out.errors.push(`eval: ${(r.exceptionDetails.exception?.description || r.exceptionDetails.text || '').slice(0, 160)}`); return r?.result?.value; };
   const shot = async (n) => { if (!SHOTS) return; fs.mkdirSync(SHOTS, { recursive: true }); const r = await cdp('Page.captureScreenshot', { format: 'jpeg', quality: 80 }); fs.writeFileSync(path.join(SHOTS, `${path.basename(DEMO)}.${n}.jpg`), Buffer.from(r.result.data, 'base64')); };
   const key = async (k, code) => { for (const type of ['keyDown', 'keyUp']) await cdp('Input.dispatchKeyEvent', { type, key: k, code, windowsVirtualKeyCode: { ArrowRight: 39, ArrowLeft: 37, ' ': 32 }[k] }); };
-  const base = `http://127.0.0.1:${hp}`, url = `${base}/${REL}/?sub=en`;
+  const base = `http://127.0.0.1:${hp}`, url = `${base}/${REL}/?sub=en&bar=1`;   // bar=1: the chapter bar even while MoHeatShell.BAR_ENABLED is off
   await cdp('Page.enable'); await cdp('Runtime.enable');
   await cdp('Page.navigate', { url: `${base}/tools/web/check_shell.js` }); await sleep(300);
   await ev(`(localStorage.setItem('moheat.guide', 'done'), localStorage.setItem('moheat.mode', '"pure"'), 1)`);
@@ -46,6 +49,18 @@ const out = { demo: REL, shell: false, pureEnded: false, secs: 0, mic: [], navDu
   const load = async () => { await cdp('Page.navigate', { url }); for (let i = 0; i < 80; i++) { await sleep(250); if (await ev('document.readyState') === 'complete') break; } await sleep(2500); };
   await load();
   out.shell = !!(await ev('!!window.MoHeatShell && !!document.querySelector(".sh-mode")'));
+  if (argv.includes('--record')) {   // the thermal stream of one pure run (no seek / pause, real speed)
+    await ev(`(document.querySelector('.sh-mode [data-m=pure]')?.click(), document.getElementById('startBtn').click(), 1)`);
+    const cmds = [], r0 = Date.now(); let last = null, gone = 0;
+    while ((Date.now() - r0) / 1000 < SECS) {
+      await sleep(100); const t = (Date.now() - r0) / 1000;
+      const [c, cover] = (await ev(`[document.getElementById('cmd')?.textContent || '', !document.getElementById('intro').classList.contains('hidden')]`)) || ['', false];
+      if (c !== last) { cmds.push([+t.toFixed(1), c]); last = c; }
+      if (cover && t > 5) { if (++gone > 5) { out.pureEnded = true; break; } } else gone = 0;
+    }
+    out.cmds = cmds; out.secs = Math.round((Date.now() - r0) / 1000); out.mic = (await ev('window.__mic')) || [];
+    return done();
+  }
   await shot('cover');
   // ← / → on the cover switch demos (go back right after)
   await key('ArrowRight', 'ArrowRight'); await sleep(1500);
@@ -64,7 +79,7 @@ const out = { demo: REL, shell: false, pureEnded: false, secs: 0, mic: [], navDu
   const c = await ev(`[performance.now(), MoHeatShell.paused]`);
   const film = await ev('!!document.getElementById("timelineWrap")');   // films: Space is their own play / pause (the media element is the clock)
   out.pause = film ? { frozen: !!(await ev('(() => { const m = ["mix", "film"].map((k) => document.getElementById(k)).find((e) => e instanceof HTMLMediaElement); return m && !m.paused; })()')), resumed: true, film: true }
-    : { frozen: b[2] === true && b[0] - a[0] < 400, resumed: c[1] === false && c[0] > b[0] };
+    : !a || !b || !c ? { frozen: false, resumed: false } : { frozen: b[2] === true && b[0] - a[0] < 400, resumed: c[1] === false && c[0] > b[0] };
   await shot('playing');
   const t0 = Date.now();
   const nch = await ev('document.querySelectorAll(".sh-bar button").length');
