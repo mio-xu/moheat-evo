@@ -1,0 +1,7 @@
+# Empty background plate (one per place; guide §6 标准制作流程 3: "empty scene, no people")
+# fields: {place} {light} {style} {camera} {thermal_sources}
+# refs: optional [<the scene from the old demo / a still to remove the people from>]
+An empty scene, NO people, no characters, no animals: {place}.
+Light: {light}. The light sources stay at fixed, clearly visible places: {thermal_sources} (they are the warm / cool sources of the thermal track and will be animated in code).
+Camera: {camera}; leave the area where the character will stand / sit clear and readable (no object in front of it).
+Art style: {style}. Background-art quality, no text, no frames, no UI. 16:9, 2K.

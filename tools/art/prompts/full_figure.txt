@@ -1,0 +1,9 @@
+# Re-draw an existing pose as a FULL figure with margin (the old one touched / was cut by the picture edge: 平头, half body)
+# fields: {look} {backdrop_colour} {backdrop_name} {what_missing}
+# refs: [<the cut pose>, <lock_face>]
+Image 1 is this exact picture of the character; image 2 is the face reference. Keep the character EXACTLY as in image 1: same pose, same face and expression, same clothes, same colours, same art style and line weight, same scale.
+
+Redraw the picture so the whole figure fits inside the frame with margin: {what_missing}. Clear {backdrop_name} {backdrop_colour} backdrop above the top of the hair and on both sides; nothing touches the picture edge.
+Do not zoom out more than needed, do not move the face, do not add anything (no props, no scenery, no text).
+
+{look}

@@ -1,0 +1,5 @@
+# Closed-eye variant, MASKED edit over BOTH eyes (guide §6 G4: "no iris visible", both eyes, same lashes / light)
+# fields: {eyes_note}
+# refs: [<pose>]; run: python3 tools/openai/images.py <demo> <job> --mask "cx,cy,rx,ry;cx,cy,rx,ry" (one ellipse per eye, measured into stage.json)
+Edit image 1: only BOTH eyes change — they are fully, gently closed (a relaxed blink), no iris, no pupil, no white of the eye visible at all: the upper lid comes all the way down, the closed lid is a soft curved lash line with the same lash colour and thickness as the open eye.
+The eyelid skin has exactly the same skin colour, light and shading as the face around it (no grey patch, no ghost of the iris). Eyebrows, hair over the eyes ({eyes_note}), glasses and everything else stay pixel-identical. Do not move, scale or redraw anything outside the eyes.

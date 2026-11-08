@@ -1,0 +1,7 @@
+# New pose that keeps the face (edit of the base: shares its mouth / eye patches) — guide §6 标准制作流程 3
+# fields: {change} {hold} {not_hold}
+# refs: [<base pose>]
+Edit image 1. Keep the FACE, head, hair, expression, position and scale EXACTLY the same, pixel for pixel where possible: same eyes, eyebrows, mouth, face shape, same framing — do not zoom out, do not move the head.
+Only change: {change}.
+In the hands: {hold}. NOT holding / not in the picture: {not_hold}.
+Keep the same flat backdrop colour, the same art style, line weight and colouring. Nothing else changes; no new props, no scenery, no text, no other people.
