@@ -25,13 +25,15 @@
      56,
      32
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "gaze": {
    "src": "jin_gaze_ext",
    "talk": "jin_gaze_ext_talk",
    "blink": "jin_gaze_ext_blink",
-   "matte": "ai"
+   "matte": "ai",
+   "mouth": "lp"
   },
   "can": {
    "src": "jin_can_ext",
@@ -55,7 +57,8 @@
      128,
      62
     ]
-   ]
+   ],
+   "mouth": "lp"
   },
   "wrist": {
    "src": "jin_wrist_ext",
@@ -67,12 +70,14 @@
    "src": "jin_jacket",
    "talk": "jin_jacket_talk",
    "blink": "jin_jacket_blink",
-   "matte": "ai"
+   "matte": "ai",
+   "mouth": "lp"
   },
   "glasses": {
    "src": "jin_glasses_ext",
    "talk": "jin_glasses_ext_talk",
-   "matte": "ai"
+   "matte": "ai",
+   "mouth": "lp"
   },
   "whisper": {
    "src": "jin_whisper_ext",
@@ -92,7 +97,8 @@
      105,
      50
     ]
-   ]
+   ],
+   "mouth": "lp"
   }
  },
  "views": {
