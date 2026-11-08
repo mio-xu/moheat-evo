@@ -64,7 +64,7 @@ Energetic, genki gamer streamer; loud, bouncy, full of laughter and reactions, c
   "cast.json key is hinata_s (streamer) — not the for-women 陽向 (hinata_m)",
   "Age: cast ~19, Demo18 prompts 21",
   "Demo43 special version: young inn landlady / dice dealer (design A)",
-  "Demo18 assets/art/ref_hinata.png is a broken symlink (points at the replaced Demo14 hinata_live.png) — use hin_ref.png"
+  "Demo18 assets/art/ref_hinata.png = a real copy of the old Demo14 hinata_live.png (the symlink broke when Demo14 was remade; fixed 2026-11-08) — lock_face is still hin_ref.png"
  ]
 }
 ```
