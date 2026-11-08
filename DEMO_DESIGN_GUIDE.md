@@ -153,7 +153,7 @@
 
 ### 5.3 提示词模板（照这个顺序拼）
 
-**出图工具的顺序**（用户 2026-11-08）：① **OpenAI API** `gpt-image-2`（`~/.openai_key`；`/v1/images/edits` 直接带参考图文件，不占 Seedance 上传额度；模板 `demos/for-men/Demo31_SummerRooftop/scripts/gpt_image.py`，2560×1440、quality high，约 55 s / 张，可并行）→ 没余额 / 出错时 ② **Seedance API** → 上传被限流时 ③ **Seedance 网页**。三处提示词通用（"Image 1" = 参考图）。视频仍用 Seedance。ChatGPT 网页也能出同样的图，但 Chrome 会拦截连续的自动下载，不作为常规路线。
+**出图工具的顺序**（用户 2026-11-08）：① **OpenAI API** `gpt-image-2`（`~/.openai_key`；`/v1/images/edits` 直接带参考图文件，不占 Seedance 上传额度；共用工具 `python3 tools/openai/images.py <demo> <job…>`（提示词读 `project/web_prompts.json`），2560×1440、quality high，约 55 s / 张，可并行）→ 没余额 / 出错时 ② **Seedance API** → 上传被限流时 ③ **Seedance 网页**。三处提示词通用（"Image 1" = 参考图）。视频仍用 Seedance。ChatGPT 网页也能出同样的图，但 Chrome 会拦截连续的自动下载，不作为常规路线。
 
 ```
 Image 1 is the STYLE and CHARACTER reference.

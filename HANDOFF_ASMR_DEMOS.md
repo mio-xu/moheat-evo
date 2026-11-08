@@ -13,7 +13,7 @@
 | **用中文和用户沟通** | 代码、commit message、站点英文文案可以用英文 |
 | **字幕语言可选：English（默认）/ 日本語 / 中文**（用户 2026-11-08，取代“只用日语 + 英文”） | 一次只显示一种语言，三种字号一样；选项按钮、互动卡片、封面也跟着切换；语音回答按所选语言识别，意思相近就算通过。全部由 `demos/shared/subs.js` 统一处理，每个 Demo 只加一个 `l10n.js`（见 DEMO_DESIGN_GUIDE §2.2）。剧本仍写日 + 英；场景标题、MP4 内嵌字幕不变；直播间弹幕另有多国观众（不是界面语言） |
 | **Seedance 只在用户要求时用** | Demo 1–3 和 Demo 9：浏览器动画渲染出的 MP4 就是正式成品。Demo 4（四季列车）：用户（2026-11-07）想要更精致、有穿梭感的画面，要求给 Seedance 提示词；clip 到位之前浏览器 MP4 仍是现行成品 |
-| **图片：OpenAI API 优先 → Seedance API → Seedance 网页；视频：Seedance（API 优先，不行用网页）**（2026-11-08 用户） | 图片先用 OpenAI `gpt-image-2`（`~/.openai_key`，`/v1/images/edits` 直接带参考图文件，不受上传额度限制；模板 `demos/for-men/Demo31_SummerRooftop/scripts/gpt_image.py`，2560×1440、quality high，一张约 55 s，可并行）；没有余额 / 401 / 出错时用 Seedance API（`~/.seedance_key`）；Seedance 上传 429 或 401 时用 seedance2-5.com 网页端（Chrome 扩展，用户本人登录）。提示词三处通用。视频省 credits / token 的细节见 `DEMO_DESIGN_GUIDE.md` §6.1。差分图必须"编辑上一张图"生成，保证构图一致。 |
+| **图片：OpenAI API 优先 → Seedance API → Seedance 网页；视频：Seedance（API 优先，不行用网页）**（2026-11-08 用户） | 图片先用 OpenAI `gpt-image-2`（`~/.openai_key`，`/v1/images/edits` 直接带参考图文件，不受上传额度限制；共用工具 `python3 tools/openai/images.py <demo> <job…>`（提示词读 `project/web_prompts.json`），2560×1440、quality high，一张约 55 s，可并行）；没有余额 / 401 / 出错时用 Seedance API（`~/.seedance_key`）；Seedance 上传 429 或 401 时用 seedance2-5.com 网页端（Chrome 扩展，用户本人登录）。提示词三处通用。视频省 credits / token 的细节见 `DEMO_DESIGN_GUIDE.md` §6.1。差分图必须"编辑上一张图"生成，保证构图一致。 |
 | **不修改、不覆盖之前的 Demo** | 新 Demo 复用旧素材用**符号链接/只读引用**，复用旧代码用**按路径 import**（见各 Demo 的 `demo1.py`）|
 | **每次改动自动 commit 并 push 到 `origin main`** | 这是 GitHub Pages 站点仓库（`moheat-evo.github.io`），push 即公开。大文件（WAV/MP4/原始音乐）已在 `.gitignore` 中排除 |
 | ~~Demo 1 的配音保持不变~~ | 2026-11-08 用户改为：Demo 1 也换成 ElevenLabs（见 §4 配音标准）|
