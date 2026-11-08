@@ -95,6 +95,8 @@ def judge(name, dom, art):
     add(E.get('std'), 'shared cover', 'shared/cover.js' if E.get('std') else 'own layout', 'demos/shared/cover.js (.intro.cv-std)')
     faces = [f for f in (art.get('faces') or []) if f['h'] > 8]
     pl = E.get('placed') or {}
+    if pl.get('cut'):   # MoHeatCover.layered(): a cut-out's cut border (opaque pixels on its edge) inside the frame = a hard straight cut
+        rows.append(('FAIL', 'cut edge in frame', ', '.join(pl['cut']), "every cut edge of the pose outside the frame (scale / move it, or another pose / a whole painting)"))
     scene = pl.get('scene')
     if scene: rows.append(('PASS', 'character', 'scene cover (no lead)', 'declared {scene: true}'))
     elif pl.get('eye') or faces:
@@ -155,6 +157,33 @@ def sheet(shots, out, names):   # contact sheet: the 1920×1080 export | the 390
     S.save(out, quality=82); return out
 
 
+def v2_prepare(names_only, shots):
+    """UI v2 (the demo has cover.json): the picture is media/cover/art.webp, no page to shoot — art-only shots + an empty dom.json"""
+    from PIL import Image
+    dom = {}
+    for n in names_only:
+        d = os.path.basename(os.path.normpath(n)); Image.open(os.path.join(n, 'media', 'cover', 'art.webp')).convert('RGB').save(os.path.join(shots, f'{d}.art.png')); dom[d] = {}
+    json.dump({'demos': dom}, open(os.path.join(shots, 'dom.json'), 'w'))
+
+
+def judge_v2(n_path, art):
+    """the 2b picture numbers on media/cover/art.webp (the title, controls and shade come from the one template)"""
+    rows = []; add = lambda ok, chk, val, exp, warn=False: rows.append(('PASS' if ok else 'WARN' if warn else 'FAIL', chk, val, exp))
+    try: cj = json.load(open(os.path.join(n_path, 'cover.json'), encoding='utf-8'))
+    except (OSError, ValueError) as e: return [('FAIL', 'cover.json', str(e), 'valid cover.json')]
+    if cj.get('scene'): return [('PASS', 'character', 'scene cover (no lead)', 'cover.json "scene": true')]
+    faces = [f for f in (art.get('faces') or []) if f['h'] > 8]
+    if not faces: return [('FAIL', 'character', 'no character / creature face found', 'a story cover with its character (§7.3 2b); a place-only cover needs the user\'s OK + cover.json "scene": true')]
+    duo = len(faces) >= 2 and abs(faces[0]['h'] - faces[1]['h']) < 12; S = STANDARD['duo' if duo else 'solo']; m = faces[:2] if duo else faces[:1]
+    ex = sum(f['x'] for f in m) / len(m); ey = sum((f['eye_y'] or f['top'] + f['h'] * .5) for f in m) / len(m); fh = sum(f['h'] for f in m) / len(m)
+    add(S['eye_x'][0] <= ex <= S['eye_x'][1], 'eye x' + (' (duo)' if duo else ''), f'{ex:.0f} %', fmt(S['eye_x']) + ' %')
+    add(S['eye_y'][0] - 1.5 <= ey <= S['eye_y'][1] + 1.5, 'eye line', f'{ey:.0f} %', fmt(S['eye_y']) + ' % (detector ± 1.5)')
+    add(S['face_h'][0] - 1.5 <= fh <= S['face_h'][1] + 1.5, 'face size', f'{fh:.0f} % of H', fmt(S['face_h']) + ' % (detector ± 1.5)')
+    if duo: add(min(f['x'] for f in m) >= S['each_x_min'], 'both on the right', f"{min(f['x'] for f in m):.0f} %", f"each face x ≥ {S['each_x_min']} %")
+    for f in faces: add(f['box'][0] >= 52 or f['box'][1] >= 56, 'title clear of face', f"face from x {f['box'][0]:.0f} %", 'no face under the copy column (x < 52 %, y < 56 %)', warn=f is not faces[0])
+    return rows
+
+
 def main():
     a = sys.argv[1:]
     if a[:1] == ['--analyze']: return analyze(a[1])
@@ -167,7 +196,9 @@ def main():
     names_only = [os.path.abspath(n) if os.path.isdir(n) else os.path.join(REPO, n) for n in names_only]
     shots = opt('--shots') or tempfile.mkdtemp(prefix='cover-')
     os.makedirs(shots, exist_ok=True)
-    if '--reuse' not in a: shoot(names_only, shots)
+    v2 = all(os.path.exists(os.path.join(n, 'cover.json')) and os.path.exists(os.path.join(n, 'media', 'cover', 'art.webp')) for n in names_only) and '--old' not in a
+    if v2: v2_prepare(names_only, shots)
+    elif '--reuse' not in a: shoot(names_only, shots)
     dom = json.load(open(os.path.join(shots, 'dom.json')))['demos']
     art = {}
     if os.path.exists(ML_PY):
@@ -176,8 +207,9 @@ def main():
         except Exception: print('art analysis failed (WARN):', p.stderr[-600:], file=sys.stderr)
     else: print(f'no {ML_PY}: character / face checks skipped', file=sys.stderr)
     names = [os.path.basename(os.path.normpath(n)) for n in names_only]
-    report = {n: {'rows': judge(n, dom.get(n, {}), art.get(n, {})), 'art': art.get(n, {}), 'dom': dom.get(n, {})} for n in names}
-    if opt('--sheet'): print('sheet:', sheet(shots, os.path.expanduser(opt('--sheet')), names), file=sys.stderr)
+    paths = {os.path.basename(os.path.normpath(n)): n for n in names_only}
+    report = {n: {'rows': judge_v2(paths[n], art.get(n, {})) if v2 else judge(n, dom.get(n, {}), art.get(n, {})), 'art': art.get(n, {}), 'dom': dom.get(n, {})} for n in names}
+    if opt('--sheet') and not v2: print('sheet:', sheet(shots, os.path.expanduser(opt('--sheet')), names), file=sys.stderr)
     if '--json' in a: print(json.dumps({n: {'rows': r['rows'], 'art': r['art']} for n, r in report.items()}));
     else:
         for n, r in report.items():

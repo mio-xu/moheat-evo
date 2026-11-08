@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo21_JinLounge",
+ "title": {
+  "en": "Look Only at Me",
+  "ja": "俺だけ見てろ",
+  "zh": "只准看着我"
+ },
+ "tagline": {
+  "en": "After the show, in his VIP lounge",
+  "ja": "ライブのあと、彼のVIPラウンジで",
+  "zh": "演出结束后，在他的VIP休息室"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "🖤 Jin backstage",
+    "ja": "🖤 楽屋の迅",
+    "zh": "🖤 后台的迅"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "💬 his voice at your ear · jacket",
+    "ja": "💬 耳元の声・ジャケット",
+    "zh": "💬 耳边的声音・外套"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "🥫 cold can",
+    "ja": "🥫 冷たい缶",
+    "zh": "🥫 冰凉的易拉罐"
+   }
+  }
+ ],
+ "tone": "26 15 20"
+}

@@ -409,7 +409,7 @@
   const step = (dir) => { const a = document.querySelectorAll('.dnav .dn-step')[dir > 0 ? 1 : 0]; if (a && a.getAttribute('aria-disabled') !== 'true' && a.href && !a.href.endsWith('#')) location.href = a.href; };
   addEventListener('keydown', (e) => {
     if (EXPORT || e.metaKey || e.ctrlKey || e.altKey || /input|textarea|select/i.test(e.target.tagName) || e.target.isContentEditable) return;
-    if (e.code === 'Space' && FILM()) return;   // films: their own Space = play / pause (time comes from the media element)
+    if (e.code === 'Space' && FILM() && !V2) return;   // old UI, films: their own Space = play / pause (time comes from the media element); UI v2: the one pause below
     if (e.code === 'Space' && SH.autoplay && !Play.pure) return;   // games, interactive: Space is the game's key (blow / talk); P pauses
     if ((e.code === 'Space' || (e.code === 'KeyP' && !e.repeat)) && playing()) { e.preventDefault(); e.stopImmediatePropagation(); pause(!paused); return; }
     if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && !playing() && !e.repeat) { e.preventDefault(); step(e.key === 'ArrowRight' ? 1 : -1); }
@@ -464,7 +464,7 @@
       lang: () => window.MoHeatSub?.lang || 'en', setLang: (l) => window.MoHeatSub?.set?.(l),
       mode: () => mode, setMode: (m) => setMode(m),
       start: () => { if (!ready) return; document.getElementById('startBtn')?.click(); },
-      togglePause: () => { const f = film(); if (FILM() && f) { f.paused ? f.play().catch(() => {}) : f.pause(); return; } pause(!paused); },
+      togglePause: () => pause(!paused),
       // chapter labels: cover.json "chapters" (per language) > the demo's own { ja, en, zh } > its label text
       chapters: () => chapters().map((c, i) => ({ label: cover?.chapters?.[i] || (c.ja || c.zh ? { en: c.en || c.label, ja: c.ja, zh: c.zh || (c.ja && window.MoHeatSub?.tr?.(c.ja, 'zh', false)) || c.en || c.label } : c.label) })), chapter: () => chapter(), reached: () => reached,
       progress: () => { const f = film(), sc = SH.chapters; if (!f || !sc?.[0] || sc[0].t == null) return .5; const k = chapter(), t0 = sc[k]?.t ?? 0, t1 = sc[k + 1]?.t ?? DEMO_DATA.anim.duration; return Math.max(0, Math.min(1, (f.currentTime - t0) / Math.max(1, t1 - t0))); },
@@ -476,8 +476,13 @@
       subs: () => LS.get('subs', 'm'), setSubs: (v) => setSubs(v),
       reduced: () => Play.reduced, setReduced: (v) => setMotion(v),
       autohide: () => LS.get('autohide', false), setAutohide: (v) => LS.set('autohide', !!v),
+      // the side panel (sound map, thermal meters) is secondary: ⚙ switch, default on for desktop, off for phone / tablet
+      side: () => !document.documentElement.classList.contains('u2-noside'),
+      setSide: (v) => { LS.set('side', !!v); document.documentElement.classList.toggle('u2-noside', !v); real.st(() => dispatchEvent(new Event('resize')), 30); },
+      creditsUrl: new URL('../../../credits.html', PAGE).href,
       device: () => { const d = window.MoHeatDevice?.current; return { serial: 'serial' in navigator, connected: !!(d && (d.connected || d.port)), name: d?.name || '' }; },
       connect: () => document.getElementById('connectBtn')?.click(),
+      lrCheck: () => document.getElementById('lrBtn')?.click(), thermoCheck: () => window.MoHeatThermoCheck?.start?.(),
       fullscreen: () => !!window.MoHeatFullscreen?.on, toggleFullscreen: () => window.MoHeatFullscreen?.toggle?.(),
       endings: () => SH.endings?.() || null, openEndings: () => SH.openEndings?.(),
       options: () => (cover?.options || []).filter((o) => !o.when || o.when === A.state()).map((o) => ({ key: o.key, label: o.label,
@@ -486,6 +491,11 @@
       loaded: () => (ready ? 1 : loadedFrac()), ready: () => ready,
     };
     SH.ui2 = A;
+    // films: a tap on the picture is the same one pause (not the film's own media.pause, which the bar would not know about)
+    const filmTap = () => { const st = document.querySelector('.stage-col .stage') || document.querySelector('.stage'); if (!st || !FILM()) return;
+      st.addEventListener('click', (e) => { if (e.target.closest('.u2, button, a, input') || !playing()) return; e.stopImmediatePropagation(); e.preventDefault(); pause(!paused); }, true); };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', filmTap); else filmTap();
+    document.documentElement.classList.toggle('u2-noside', !LS.get('side', innerWidth > 1100));
     function mount() {
       if (ui || !cover || !window.MoHeatUI2) return;
       const go = () => { const stage = document.querySelector('.stage-col .stage') || document.querySelector('.stage'); if (!stage) return;

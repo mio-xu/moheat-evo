@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo31_SummerRooftop",
+ "title": {
+  "en": "Up on the Summer Roof",
+  "ja": "なつの、\nおくじょうで",
+  "zh": "夏日，\n屋顶上"
+ },
+ "tagline": {
+  "en": "Sparklers and fireworks with your childhood friend Nagisa",
+  "ja": "幼なじみの渚と、線香花火と花火の夜",
+  "zh": "和青梅竹马渚一起，线香花火与烟花"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "🎆 A summer night with your childhood friend",
+    "ja": "🎆 幼なじみと夏の夜",
+    "zh": "🎆 和青梅竹马的夏夜"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🎇 sparklers · her voice at your ear",
+    "ja": "🎇 線香花火・耳元の声",
+    "zh": "🎇 线香花火・耳边的声音"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "🍦 soda popsicle · paper fan · night breeze",
+    "ja": "🍦 ソーダアイス・うちわ・夜風",
+    "zh": "🍦 苏打冰棒・团扇・夜风"
+   }
+  }
+ ],
+ "tone": "13 22 48"
+}

@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo06_FutureWhisky",
+ "series": {
+  "en": "Nobunaga Series Ep. 2 / 5",
+  "ja": "信長シリーズ 第二話 · 全5話",
+  "zh": "信长系列 第二集 · 共5集"
+ },
+ "title": {
+  "en": "Future Whisky at Azuchi",
+  "ja": "未来の酒と、\n安土の夜",
+  "zh": "未来之酒与安土之夜"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 Nobunaga · left",
+    "ja": "🔥 信長 · 左",
+    "zh": "🔥 信长 · 左"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 Ieyasu · right",
+    "ja": "🔥 家康 · 右",
+    "zh": "🔥 家康 · 右"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "❄ ice · highball",
+    "ja": "❄ 氷・ハイボール",
+    "zh": "❄ 冰块・嗨棒"
+   }
+  }
+ ],
+ "tone": "8 10 20"
+}

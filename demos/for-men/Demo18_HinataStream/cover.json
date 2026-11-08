@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo18_HinataStream",
+ "title": {
+  "en": "Arcade Date with Hinata",
+  "ja": "ひなたと、\nゲーセンデート",
+  "zh": "和日向的游戏厅约会"
+ },
+ "tagline": {
+  "en": "Taiko, racing, a crane game and purikura with the gamer girl in disguise",
+  "ja": "変装したゲーマー女子と、太鼓・レース・クレーン・プリクラ",
+  "zh": "和变装的游戏少女一起：太鼓、赛车、抓娃娃、拍大头贴"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "🎮 A date with a gamer girl",
+    "ja": "🎮 ゲーマー女子とデート",
+    "zh": "🎮 和游戏少女约会"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🥫 hot corn soup · her voice at your ear",
+    "ja": "🥫 コーンスープ・耳元の声",
+    "zh": "🥫 玉米浓汤・耳边的声音"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "🌀 racing fans · winter night wind",
+    "ja": "🌀 レースの風・冬の夜風",
+    "zh": "🌀 赛车的风・冬夜寒风"
+   }
+  }
+ ],
+ "tone": "20 12 38"
+}

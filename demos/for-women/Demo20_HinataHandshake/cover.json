@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo20_HinataHandshake",
+ "title": {
+  "en": "Just Ten More Seconds?",
+  "ja": "あと10秒だけ、\nね？",
+  "zh": "再多10秒，\n好吗？"
+ },
+ "tagline": {
+  "en": "Hinata's handshake event",
+  "ja": "ひなたの握手会",
+  "zh": "日向的握手会"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "🤝 handshake event",
+    "ja": "🤝 握手会",
+    "zh": "🤝 握手会"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "💬 whispers at your ear",
+    "ja": "💬 耳元のささやき",
+    "zh": "💬 耳边低语"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "❄ draft from the entrance",
+    "ja": "❄ 入口のすきま風",
+    "zh": "❄ 门口的穿堂风"
+   }
+  }
+ ],
+ "tone": "42 33 64"
+}

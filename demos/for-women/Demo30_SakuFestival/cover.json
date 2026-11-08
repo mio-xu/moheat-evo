@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo30_SakuFestival",
+ "title": {
+  "en": "Summer Festival, Just Us",
+  "ja": "なつまつり、\nふたりで",
+  "zh": "夏日祭典，\n只有我们俩"
+ },
+ "tagline": {
+  "en": "A summer night, the shrine steps and your childhood friend",
+  "ja": "夏の夜、神社の石段で、幼なじみと",
+  "zh": "夏夜，神社的石阶上，和青梅竹马一起"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "🏮 Saku at the summer festival",
+    "ja": "🏮 夏祭りの朔",
+    "zh": "🏮 夏日祭典的朔"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 festival heat · his voice at your ear",
+    "ja": "🔥 屋台の熱気・耳元の声",
+    "zh": "🔥 小摊的热气・耳边的声音"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "🎐 uchiwa breeze · a breath after shaved ice",
+    "ja": "🎐 うちわの風・かき氷の息",
+    "zh": "🎐 团扇的风・刨冰后的气息"
+   }
+  }
+ ],
+ "tone": "16 13 28"
+}

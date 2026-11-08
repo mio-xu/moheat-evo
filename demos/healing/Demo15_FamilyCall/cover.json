@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo15_FamilyCall",
+ "title": {
+  "en": "Hello, Grandma?",
+  "ja": "もしもし、\nおばあちゃん？",
+  "zh": "喂，\n奶奶吗？"
+ },
+ "tagline": {
+  "en": "A call home · Part 1 of 2",
+  "ja": "実家への電話 · 前編（全2話）",
+  "zh": "打给家里的电话 · 上篇（共2集）"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "☎️ the home phone",
+    "ja": "☎️ おうちの電話",
+    "zh": "☎️ 家里的电话"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🧣 hand-knitted scarf",
+    "ja": "🧣 手編みのマフラー",
+    "zh": "🧣 手织围巾"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "🚪 cold wind at the front door",
+    "ja": "🚪 玄関の冷たい風",
+    "zh": "🚪 玄关的冷风"
+   }
+  }
+ ],
+ "tone": "42 26 18"
+}

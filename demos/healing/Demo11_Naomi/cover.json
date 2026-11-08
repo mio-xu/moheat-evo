@@ -1,0 +1,35 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo11_Naomi",
+ "title": {
+  "en": "A Fluffy Day with Naomi",
+  "ja": "ナオミと、\nふわふわの一日",
+  "zh": "和直美的毛茸茸一天"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "🐾 play with a cat",
+    "ja": "🐾 ねこと遊ぶ",
+    "zh": "🐾 和猫咪玩"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🐈 warmth · purring",
+    "ja": "🐈 ぬくもり・ごろごろ",
+    "zh": "🐈 体温・呼噜呼噜"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "👃 cold little nose · rain",
+    "ja": "👃 つめたいお鼻・雨",
+    "zh": "👃 冰凉的小鼻子・雨"
+   }
+  }
+ ],
+ "tone": "42 28 34"
+}

@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo12_LateCall",
+ "title": {
+  "en": "Can You Hear Me?",
+  "ja": "もしもし、\nきこえる？",
+  "zh": "喂，\n听得到吗？"
+ },
+ "tagline": {
+  "en": "A late-night call",
+  "ja": "深夜の電話",
+  "zh": "一通深夜来电"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "📞 late-night call",
+    "ja": "📞 深夜の電話",
+    "zh": "📞 深夜来电"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "📱 phone at your ear",
+    "ja": "📱 スマホの耳・ぬくもり",
+    "zh": "📱 贴耳的手机"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "❄ snow outside the window",
+    "ja": "❄ 窓の外の雪",
+    "zh": "❄ 窗外的雪"
+   }
+  }
+ ],
+ "tone": "27 29 54"
+}

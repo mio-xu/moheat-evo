@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo13_NaomiCam",
+ "title": {
+  "en": "What's Naomi Up To?",
+  "ja": "ナオミ、\nいまなにしてる？",
+  "zh": "直美，\n你在干嘛呀？"
+ },
+ "tagline": {
+  "en": "Pet Cam",
+  "ja": "見守りカメラ",
+  "zh": "宠物监控"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "📹 Pet cam",
+    "ja": "📹 見守りカメラ",
+    "zh": "📹 宠物监控"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🌡 thermal view · heated carpet",
+    "ja": "🌡 サーモ・ホットカーペット",
+    "zh": "🌡 热成像・电热地毯"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "🌀 fan · nose · rain",
+    "ja": "🌀 扇風機・お鼻・雨",
+    "zh": "🌀 电风扇・小鼻子・雨"
+   }
+  }
+ ],
+ "tone": "42 28 34"
+}

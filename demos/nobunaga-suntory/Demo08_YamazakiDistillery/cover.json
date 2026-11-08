@@ -1,0 +1,48 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo08_YamazakiDistillery",
+ "series": {
+  "en": "Nobunaga Series Ep. 4 / 5",
+  "ja": "信長シリーズ 第四話 · 全5話",
+  "zh": "信长系列 第四集 · 共5集"
+ },
+ "title": {
+  "en": "Two Warlords at the\nYamazaki Distillery",
+  "ja": "信長と家康、\n山崎蒸溜所へ",
+  "zh": "信长与家康，\n探访山崎蒸馏所"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 Nobunaga · left",
+    "ja": "🔥 信長 · 左",
+    "zh": "🔥 信长 · 左"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 Ieyasu · right",
+    "ja": "🔥 家康 · 右",
+    "zh": "🔥 家康 · 右"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "❄ mist · cask warehouse · spring water",
+    "ja": "❄ 霧・熟成庫・名水",
+    "zh": "❄ 雾・熟成库・名水"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 copper stills",
+    "ja": "🔥 蒸留釜",
+    "zh": "🔥 蒸馏釜"
+   }
+  }
+ ],
+ "tone": "8 10 20"
+}

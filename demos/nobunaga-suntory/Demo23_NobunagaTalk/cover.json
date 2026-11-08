@@ -1,0 +1,97 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo23_NobunagaTalk",
+ "series": {
+  "en": "Nobunaga Series · Special",
+  "ja": "信長シリーズ 特別編",
+  "zh": "信长系列 特别篇"
+ },
+ "title": {
+  "en": "Talk with Nobunaga",
+  "ja": "信長と、\n語らう",
+  "zh": "与信长对谈"
+ },
+ "tagline": {
+  "en": "Pick a place, just you and him",
+  "ja": "場所を選んで、信長とふたりで語らう",
+  "zh": "选个地点，和信长单独对谈"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 hearth",
+    "ja": "🔥 囲炉裏",
+    "zh": "🔥 地炉"
+   }
+  },
+  {
+   "kind": "tag",
+   "text": {
+    "en": "🍵 tea",
+    "ja": "🍵 茶",
+    "zh": "🍵 茶"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "🌬 draught",
+    "ja": "🌬 すきま風",
+    "zh": "🌬 漏风"
+   }
+  }
+ ],
+ "tone": "26 16 8",
+ "options": [
+  {
+   "key": "scene",
+   "label": {
+    "en": "Where",
+    "ja": "場所",
+    "zh": "地点"
+   },
+   "items": [
+    {
+     "v": "gifu",
+     "label": {
+      "en": "🌇 Keep",
+      "ja": "🌇 天守",
+      "zh": "🌇 天守"
+     }
+    },
+    {
+     "v": "tea",
+     "label": {
+      "en": "🍵 Tea",
+      "ja": "🍵 茶室",
+      "zh": "🍵 茶室"
+     }
+    },
+    {
+     "v": "kyoto",
+     "label": {
+      "en": "🍶 Izakaya",
+      "ja": "🍶 先斗町",
+      "zh": "🍶 居酒屋"
+     }
+    },
+    {
+     "v": "yamazaki",
+     "label": {
+      "en": "🥃 Whisky",
+      "ja": "🥃 山崎",
+      "zh": "🥃 山崎"
+     }
+    },
+    {
+     "v": "azuchi",
+     "label": {
+      "en": "🌕 Banquet",
+      "ja": "🌕 安土",
+      "zh": "🌕 安土"
+     }
+    }
+   ]
+  }
+ ]
+}

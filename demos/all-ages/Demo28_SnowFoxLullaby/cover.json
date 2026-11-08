@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo28_SnowFoxLullaby",
+ "title": {
+  "en": "A Lullaby for Two",
+  "ja": "ふたりの、\nこもりうた",
+  "zh": "两个人的摇篮曲"
+ },
+ "tagline": {
+  "en": "Koyuki and Homura put you to sleep on a snowy night",
+  "ja": "雪の夜、小雪と焔があなたを寝かしつけ",
+  "zh": "雪夜里，小雪和小焰来哄你入睡"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "🌙 The bedtime contest",
+    "ja": "🌙 寝かしつけ勝負",
+    "zh": "🌙 哄睡大比拼"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "❄️ Koyuki's voice and breath",
+    "ja": "❄️ 小雪の声と吐息",
+    "zh": "❄️ 小雪的声音与气息"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 Homura's voice and the hearth",
+    "ja": "🔥 焔の声と囲炉裏",
+    "zh": "🔥 小焰的声音与地炉"
+   }
+  }
+ ],
+ "tone": "11 15 30"
+}

@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo29_FamilyVisit",
+ "title": {
+  "en": "Home for New Year",
+  "ja": "ただいま、\nじいちゃん・ばあちゃん",
+  "zh": "爷爷奶奶，\n我回来了"
+ },
+ "tagline": {
+  "en": "Two snowy days at Grandma and Grandpa's",
+  "ja": "雪の田舎で、じいちゃん・ばあちゃんと過ごす二日間",
+  "zh": "回乡下的爷爷奶奶家，过两天下雪的新年"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "🏡 To Grandma and Grandpa's",
+    "ja": "🏡 おじいちゃん家へ",
+    "zh": "🏡 回爷爷奶奶家"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 kotatsu · stove · a voice at your ear",
+    "ja": "🔥 こたつ・ストーブ・耳元の声",
+    "zh": "🔥 被炉・暖炉・耳边的声音"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "❄️ station wind · snowball",
+    "ja": "❄️ 駅の風・雪玉",
+    "zh": "❄️ 车站的风・雪球"
+   }
+  }
+ ],
+ "tone": "32 22 15"
+}

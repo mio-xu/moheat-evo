@@ -1,0 +1,137 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo43_BlizzardInn",
+ "title": {
+  "en": "One Night at the\nWhite-Ridge Inn",
+  "ja": "白嶺の峠、\nひと晩の宿",
+  "zh": "白岭山口，\n一夜客栈"
+ },
+ "tagline": {
+  "en": "One night in a snowbound inn — a guard, an innkeeper and a sleepy doctor",
+  "ja": "用心棒と、宿の看板娘と、ねむたがりのお医者さん",
+  "zh": "女镖师、客栈小老板娘和爱犯困的女大夫"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "🏮 A mountain inn in a blizzard",
+    "ja": "🏮 吹雪の山の宿",
+    "zh": "🏮 暴风雪中的山间客栈"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 moxa · hotpot · voices at your ear",
+    "ja": "🔥 お灸・火鍋・耳元の声",
+    "zh": "🔥 艾灸・火锅・耳边的声音"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "🌿 mint balm · blizzard · night wind",
+    "ja": "🌿 薄荷の軟膏・吹雪・夜風",
+    "zh": "🌿 薄荷膏・暴风雪・夜风"
+   }
+  }
+ ],
+ "tone": "13 16 24",
+ "options": [
+  {
+   "key": "place",
+   "when": "ended",
+   "label": {
+    "en": "Where",
+    "ja": "場所",
+    "zh": "地点"
+   },
+   "items": [
+    {
+     "v": "pass",
+     "label": {
+      "en": "❄️ Pass",
+      "ja": "❄️ 峠",
+      "zh": "❄️ 山口"
+     }
+    },
+    {
+     "v": "hall",
+     "label": {
+      "en": "🍲 Hotpot",
+      "ja": "🍲 火鍋",
+      "zh": "🍲 火锅"
+     }
+    },
+    {
+     "v": "room",
+     "label": {
+      "en": "🌿 Clinic",
+      "ja": "🌿 薬部屋",
+      "zh": "🌿 药房"
+     }
+    },
+    {
+     "v": "door",
+     "label": {
+      "en": "🚪 Door",
+      "ja": "🚪 戸口",
+      "zh": "🚪 门口"
+     }
+    },
+    {
+     "v": "dawn",
+     "label": {
+      "en": "🌅 Dawn",
+      "ja": "🌅 夜明け",
+      "zh": "🌅 黎明"
+     }
+    }
+   ]
+  },
+  {
+   "key": "who",
+   "when": "ended",
+   "label": {
+    "en": "With",
+    "ja": "だれと",
+    "zh": "和谁"
+   },
+   "items": [
+    {
+     "v": "M",
+     "label": {
+      "en": "Mint",
+      "ja": "ミント",
+      "zh": "薄荷"
+     }
+    },
+    {
+     "v": "H",
+     "label": {
+      "en": "Hinata",
+      "ja": "ひなた",
+      "zh": "日向"
+     }
+    },
+    {
+     "v": "N",
+     "label": {
+      "en": "Nagisa",
+      "ja": "渚",
+      "zh": "渚"
+     }
+    },
+    {
+     "v": "MHN",
+     "label": {
+      "en": "All three",
+      "ja": "三人",
+      "zh": "三个人"
+     }
+    }
+   ]
+  }
+ ],
+ "options_note": "“Keep talking” after the story: drives #talkPick .tpl / .tp"
+}

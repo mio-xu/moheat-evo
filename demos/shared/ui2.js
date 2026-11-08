@@ -33,6 +33,9 @@
     noSerial: { en: 'Connect from Chrome or Edge on a computer', ja: 'パソコンの Chrome / Edge から接続できます', zh: '请在电脑的 Chrome / Edge 中连接' },
     notConn: { en: 'Not connected', ja: '未接続', zh: '未连接' },
     head: { en: 'Head tracking', ja: 'ヘッドトラッキング', zh: '头部追踪' }, beta: { en: 'Beta', ja: 'ベータ', zh: '测试' }, soon: { en: 'Coming soon', ja: '近日公開', zh: '即将推出' },
+    side: { en: 'Info panel', ja: '情報パネル', zh: '信息面板' }, sideHint: { en: 'Sound map and thermal meters', ja: '音の位置と温冷メーター', zh: '声音方位与温冷表' },
+    lr: { en: 'Left / right check', ja: '左右チェック', zh: '左右声道检查' }, thermo: { en: 'Thermal check', ja: '温冷チェック', zh: '温冷检查' }, run: { en: 'Test', ja: 'テスト', zh: '测试' },
+    credits: { en: 'Credits', ja: 'クレジット', zh: '制作名单' },
     endings: { en: 'Endings', ja: 'エンディング', zh: '结局' }, chapter: { en: 'Chapter', ja: 'チャプター', zh: '章节' },
     locked: { en: 'Not reached yet', ja: 'まだ到達していません', zh: '尚未到达' }, resume: { en: 'Resume', ja: '再開', zh: '继续' },
     interHint: { en: 'Answer, tap and hold — by voice too', ja: '答える・タップ・長押し — 声でも', zh: '回答、点按、长按 — 也可用声音' },
@@ -131,7 +134,11 @@
           <div class="u2-line"><span>${t('hide')}<small>${t('hideHint')}</small></span>${sw(A.autohide?.(), 'hide')}</div>
           <div class="u2-line"><span>${t('device')}<small>${d.serial === false ? t('noSerial') : `<i class="u2-dot ${d.connected ? 'ok' : ''}"></i>${d.connected ? `${t('connected')}${d.name ? ' · ' + esc(d.name) : ''}` : t('notConn')}`}</small></span>
             ${d.serial === false ? '' : `<button type="button" class="u2-btn2" data-k="connect">${t('connect')}</button>`}</div>
-          <div class="u2-line"><span>${t('head')}<span class="u2-beta">${t('beta')}</span><small>${t('soon')}</small></span>${sw(false, 'head', true)}</div>`;
+          <div class="u2-line"><span>${t('lr')}</span><button type="button" class="u2-btn2" data-k="lr">${t('run')}</button></div>
+          <div class="u2-line"><span>${t('thermo')}</span><button type="button" class="u2-btn2" data-k="thermo" ${d.connected ? '' : 'disabled'}>${t('run')}</button></div>
+          <div class="u2-line"><span>${t('head')}<span class="u2-beta">${t('beta')}</span><small>${t('soon')}</small></span>${sw(false, 'head', true)}</div>
+          <div class="u2-line"><span>${t('side')}<small>${t('sideHint')}</small></span>${sw(A.side?.(), 'side')}</div>
+          ${A.creditsUrl ? `<div class="u2-line"><span>${t('credits')}</span><a class="u2-btn2" href="${esc(A.creditsUrl)}" target="_blank" rel="noopener">↗</a></div>` : ''}`;
       }
       if (k === 'opt') { const o = (A.options?.() || []).find((x) => x.key === optKey); if (!o) return;
         pops.opt.innerHTML = `<h3>${esc(pickL(o.label))}</h3><div class="u2-chips u2-wrap">${o.items.map((it) =>
@@ -146,11 +153,13 @@
       const b = e.target.closest('button'); if (!b || b.disabled) return;
       const k = b.dataset.k;
       if (b.classList.contains('u2-sw')) { const on = b.getAttribute('aria-checked') !== 'true';
-        if (k === 'heat') A.setHeat?.(on); if (k === 'subs') A.setSubs?.(on ? 'm' : 'off'); if (k === 'motion') A.setReduced?.(on); if (k === 'hide') A.setAutohide?.(on);
+        if (k === 'heat') A.setHeat?.(on); if (k === 'subs') A.setSubs?.(on ? 'm' : 'off'); if (k === 'motion') A.setReduced?.(on); if (k === 'hide') A.setAutohide?.(on); if (k === 'side') A.setSide?.(on);
         const owner = Object.keys(pops).find((p) => pops[p].contains(b)); renderPop(owner); paint(); return; }
       if (b.dataset.lang) { A.setLang?.(b.dataset.lang); renderPop('set'); paint(); return; }
       if (b.dataset.size) { A.setSubs?.(b.dataset.size); renderPop('set'); return; }
       if (k === 'connect') { A.connect?.(); return; }
+      if (k === 'lr') { A.lrCheck?.(); return; }
+      if (k === 'thermo') { A.thermoCheck?.(); return; }
       if (b.dataset.mode) { A.setMode?.(b.dataset.mode); paint(); return; }
       if (b.dataset.opt) { A.pick?.(b.dataset.opt, b.dataset.v); close(); paint(); return; }
       if (b.dataset.pick) return open('opt', b);

@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo17_CocoaStream",
+ "title": {
+  "en": "Valentine's Eve with Cocoa",
+  "ja": "ココアの、\nバレンタイン前夜",
+  "zh": "可可的情人节前夜"
+ },
+ "tagline": {
+  "en": "Making chocolates after closing in her little sweets shop",
+  "ja": "閉店後の小さなお菓子屋さんで、ふたりでチョコ作り",
+  "zh": "打烊后，在她的小甜品店里一起做巧克力"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "🍫 Baking after closing",
+    "ja": "🍫 閉店後のお菓子作り",
+    "zh": "🍫 打烊后的点心时间"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "♨️ oven · steam · her voice at your ear",
+    "ja": "♨️ オーブン・湯気・耳元の声",
+    "zh": "♨️ 烤箱・热气・耳边的声音"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "🧊 fridge · her fu-fu · snowy night",
+    "ja": "🧊 冷蔵庫・ふーふー・雪の夜",
+    "zh": "🧊 冰箱・呼呼吹气・雪夜"
+   }
+  }
+ ],
+ "tone": "42 26 22"
+}

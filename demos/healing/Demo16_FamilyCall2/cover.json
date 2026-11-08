@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo16_FamilyCall2",
+ "title": {
+  "en": "Grandpa's Little Snowman",
+  "ja": "じいちゃんの、\nゆきだるま",
+  "zh": "爷爷的小雪人"
+ },
+ "tagline": {
+  "en": "A call home · Part 2 of 2",
+  "ja": "実家への電話 · 後編（全2話）",
+  "zh": "打给家里的电话 · 下篇（共2集）"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "☎️ the home phone",
+    "ja": "☎️ おうちの電話",
+    "zh": "☎️ 家里的电话"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "⛄ Grandpa's snowman",
+    "ja": "⛄ じいちゃんの雪だるま",
+    "zh": "⛄ 爷爷的雪人"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🧣 Grandma's scarf",
+    "ja": "🧣 ばあばのマフラー",
+    "zh": "🧣 奶奶的围巾"
+   }
+  }
+ ],
+ "tone": "42 26 18"
+}

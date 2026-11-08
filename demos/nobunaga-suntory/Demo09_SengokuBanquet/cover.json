@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo09_SengokuBanquet",
+ "series": {
+  "en": "Nobunaga Series Ep. 5 / 5",
+  "ja": "信長シリーズ 第五話 · 全5話",
+  "zh": "信长系列 第五集 · 共5集"
+ },
+ "title": {
+  "en": "The Last Banquet at Azuchi",
+  "ja": "安土最後の酒宴",
+  "zh": "安土最后的酒宴"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 Nobunaga · left",
+    "ja": "🔥 信長 · 左",
+    "zh": "🔥 信长 · 左"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 Ieyasu · right",
+    "ja": "🔥 家康 · 右",
+    "zh": "🔥 家康 · 右"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "❄ wind · rain · ice",
+    "ja": "❄ 風・雨・氷",
+    "zh": "❄ 风・雨・冰"
+   }
+  }
+ ],
+ "tone": "8 10 20"
+}

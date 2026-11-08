@@ -43,6 +43,8 @@ What is checked (id → lesson / rule):
              copy column, dark under the copy, phone title / Start / languages (per-demo exception: qa.json skip.cover)
   release    cover.jpg, menu thumbnail + en / ja / zh thumbs (rendered from the CURRENT cover.js / l10n.js / cover.jpg: content stamp
              assets/images/demos/<dir>.thumbs.json from tools/web/thumbs.py), nav.js DEMOS, site menu, credits.html
+  ui         the ONE interface (§7.3 UI v2): cover.json + current finished covers (tools/web/covers.py stamp), shell.js, no own .u2
+             rules (static, also --quick / CI); browser: tools/web/check_ui.js = identical to the reference demo in 5 states × 2 sizes
   hygiene    assets/ git-ignored, no big tracked files, budget logged, project/CHECKLIST.md present
 """
 import argparse, datetime, glob, json, os, re, subprocess, sys
@@ -361,6 +363,30 @@ else:
             rel.append(f'menu thumbnails committed before the last shared/cover.js / media/cover.jpg change and no content stamp — python3 tools/web/thumbs.py --base {NAME} '
                        f'(writes assets/images/demos/{NAME}.thumbs.json; byte-identical thumbnails then pass)')
     row('G7', 'release', 'FAIL' if rel else 'WARN' if warn else 'PASS', f'{len(rel)} release item(s) missing' if rel else f'{len(warn)} note(s)' if warn else 'cover, thumbs, menu, credits', rel + warn)
+# ---------------------------------------------------------------- G7 ui: the ONE interface (DEMO_DESIGN_GUIDE §7.3 UI v2; user 2026-11-08 "every demo's UI exactly the same")
+# static (also in --quick / CI): finished covers present + current (tools/web/covers.py stamp), shell.js loaded, no per-demo .u2 rules;
+# browser (not --quick): tools/web/check_ui.js — every .u2 element in 5 states × 2 sizes identical to the reference demo, old UI gone, ≥ 2 chapters
+ub = []
+try:
+    sys.path.insert(0, os.path.join(REPO, 'tools', 'web')); import covers as _cv
+    if not os.path.exists(os.path.join(D, 'cover.json')): ub.append('no cover.json (UI v2 cover data) — DEMO_DESIGN_GUIDE §7.3 UI v2')
+    else:
+        try:
+            cj = json.load(open(os.path.join(D, 'cover.json'), encoding='utf-8'))
+            for k in ('title',): ub += [f'cover.json {k}.{l} missing' for l in ('en', 'ja', 'zh') if not (cj.get(k) or {}).get(l)]
+        except ValueError as e: ub.append(f'cover.json is not valid JSON: {e}')
+        ub += _cv.stale(CAT, NAME)
+except Exception as e: ub.append(f'tools/web/covers.py: {e}')
+if 'shared/shell.js' not in read(os.path.join(D, 'index.html')): ub.append('index.html does not load ../../shared/shell.js (the UI v2 adapter)')
+for f in glob.glob(os.path.join(D, '*.css')) + glob.glob(os.path.join(D, '*.js')):
+    if re.search(r'\.u2[-\s.{:\[]|\bu2-[a-z]', read(f)): ub.append(f'{os.path.basename(f)} styles / touches the shared interface (.u2…) — the UI is shared code only')
+if not A.quick and not ub:
+    cu = subprocess.run(['node', os.path.join(REPO, 'tools', 'web', 'check_ui.js'), D, '--sizes', '1440x900,390x844t'], capture_output=True, text=True)
+    try:
+        r = json.loads(cu.stdout.strip().splitlines()[-1]); ub += [f for f in r.get('fails', []) if f.startswith(NAME + ' ')] + r.get('errors', [])
+    except Exception: ub.append('check_ui.js gave no result: ' + cu.stderr.strip()[-200:])
+row('G7', 'ui', 'FAIL' if ub else 'PASS', f'{len(ub)} difference(s) from the one interface' if ub else
+    ('finished covers current, shell.js, no own UI rules' + ('' if A.quick else '; identical to the reference in 5 states × 2 sizes')), ub)
 # ---------------------------------------------------------------- G7 category style (tools/art/style_card.py, demos/<cat>/_kit/style.json)
 try:
     import style_card
@@ -487,13 +513,14 @@ if not A.quick and 'shared/shell.js' in read(os.path.join(D, 'index.html')):
     sh = subprocess.run(['node', os.path.join(REPO, 'tools', 'web', 'check_shell.js'), D, '--secs', str(A.secs)], capture_output=True, text=True)
     try:
         r = json.loads(sh.stdout.strip().splitlines()[-1]); bad = []
-        if not r.get('pureEnded'): bad.append(f'pure mode did not reach its own cover in {r.get("secs")} s with zero input')
+        if r.get('stalled'): bad.append(f'pure mode stalled at {r["stalled"]["secs"]} s (nothing changed for 75 s): {r["stalled"]["state"][:160]} — mark the waiting control data-auto or add it to MoHeatShell.AUTO')
+        elif not r.get('pureEnded'): bad.append(f'pure mode did not reach its own cover in {r.get("secs")} s with zero input')
         if r.get('mic'): bad.append('pure mode asked for the microphone: ' + ', '.join(r['mic']))
         if r.get('navDuringPlay'): bad.append('← / → left the page during playback')
         if not r.get('navOnCover'): bad.append('→ on the cover did not switch demos')
         if not (r.get('pause') or {}).get('frozen'): bad.append('Space did not freeze the clock')
         sk = r.get('seek')
-        if sk and not (sk.get('forward') and sk.get('back')): bad.append(f'seek failed: {sk}')
+        if sk and not (sk.get('forward') and (sk.get('back') or sk.get('endedAtLast'))): bad.append(f'seek failed: {sk}')
         row('G6', 'shell', 'FAIL' if bad else 'PASS', f'{len(bad)} shell problem(s)' if bad else f'pure run ends in {r.get("secs")} s, no mic, ←/→ gated, pause, seek {"ok" if sk else "n/a (no chapters)"}', bad + r.get('errors', []))
     except Exception: row('G6', 'shell', 'WARN', 'check_shell.js gave no result', [sh.stderr.strip()[-300:]])
 elif not A.quick: row('G6', 'shell', 'WARN', 'page does not load demos/shared/shell.js yet (pure / interactive mode, pause, seek, ← / →)')

@@ -1,0 +1,64 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo03_ShiningSmileConcert",
+ "title": {
+  "en": "Ice & Fire Concert",
+  "ja": "氷と炎の星光コンサート",
+  "zh": "冰与火的星光演唱会"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 vocal · bass · drums",
+    "ja": "🔥 ボーカル・ベース・ドラム",
+    "zh": "🔥 人声・贝斯・鼓"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "❄ bright highs · ice FX",
+    "ja": "❄ きらめく高音・氷のエフェクト",
+    "zh": "❄ 明亮高音・冰霜音效"
+   }
+  }
+ ],
+ "tone": "8 10 20",
+ "chapters": [
+  {
+   "ja": "オープニング",
+   "en": "Opening",
+   "zh": "开场"
+  },
+  {
+   "ja": "ファーストステージ",
+   "en": "First stage",
+   "zh": "第一幕"
+  },
+  {
+   "ja": "氷のステージ",
+   "en": "The ice stage",
+   "zh": "冰之舞台"
+  },
+  {
+   "ja": "氷と炎",
+   "en": "Ice and fire",
+   "zh": "冰与火"
+  },
+  {
+   "ja": "氷と炎 — 入れ替わり",
+   "en": "Ice and fire — the swap",
+   "zh": "冰与火 — 交换"
+  },
+  {
+   "ja": "クライマックス",
+   "en": "Climax",
+   "zh": "高潮"
+  },
+  {
+   "ja": "カーテンコール",
+   "en": "Curtain call",
+   "zh": "谢幕"
+  }
+ ]
+}

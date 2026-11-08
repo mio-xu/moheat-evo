@@ -1,0 +1,60 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo04_SeasonsExpress",
+ "title": {
+  "en": "The Runaway Seasons Express",
+  "ja": "季節が暴走する魔法の列車",
+  "zh": "四季失控的魔法列车"
+ },
+ "chips": [
+  {
+   "kind": "cool",
+   "text": {
+    "en": "❄ wind · snow · ice · rain",
+    "ja": "❄ 風・雪・氷・雨",
+    "zh": "❄ 风・雪・冰・雨"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 summer breeze · fire · lava · steam",
+    "ja": "🔥 夏風・炎・溶岩・蒸気",
+    "zh": "🔥 夏风・火焰・熔岩・蒸汽"
+   }
+  }
+ ],
+ "tone": "12 16 32",
+ "chapters": [
+  {
+   "ja": "冬の雪林",
+   "en": "Winter snow forest",
+   "zh": "冬日雪林"
+  },
+  {
+   "ja": "真夏の海岸",
+   "en": "Midsummer coast",
+   "zh": "盛夏海岸"
+  },
+  {
+   "ja": "熱帯のスコール",
+   "en": "Tropical squall",
+   "zh": "热带暴雨"
+  },
+  {
+   "ja": "氷と炎のトンネル",
+   "en": "The ice-and-fire tunnel",
+   "zh": "冰火隧道"
+  },
+  {
+   "ja": "季節の暴走",
+   "en": "Seasons out of control",
+   "zh": "四季失控"
+  },
+  {
+   "ja": "春のさくら駅",
+   "en": "Spring cherry station",
+   "zh": "春日樱花站"
+  }
+ ],
+ "scene": true
+}

@@ -1,0 +1,27 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo02_FanMeeting",
+ "title": {
+  "en": "Your Special Fan Meeting",
+  "ja": "キミだけの\nスペシャル\nファンミーティング",
+  "zh": "只属于你的特别见面会"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 Ayane's voice",
+    "ja": "🔥 綾音の声",
+    "zh": "🔥 绫音的声音"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "❄ fan · ice · magic",
+    "ja": "❄ 扇子・氷・魔法",
+    "zh": "❄ 折扇・冰块・魔法"
+   }
+  }
+ ],
+ "tone": "8 10 20"
+}

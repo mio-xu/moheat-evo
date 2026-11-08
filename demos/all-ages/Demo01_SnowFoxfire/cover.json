@@ -1,0 +1,27 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo01_SnowFoxfire",
+ "title": {
+  "en": "Whispers of Snow and Flame",
+  "ja": "雪と狐火のひそひそ話",
+  "zh": "雪与狐火的悄悄话"
+ },
+ "chips": [
+  {
+   "kind": "cool",
+   "text": {
+    "en": "❄ Koyuki",
+    "ja": "❄ 小雪",
+    "zh": "❄ 小雪"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 Homura",
+    "ja": "🔥 焔",
+    "zh": "🔥 焰"
+   }
+  }
+ ],
+ "tone": "8 10 20"
+}

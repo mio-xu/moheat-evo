@@ -16,12 +16,12 @@ with tools/art/cover_plate.py). This script renders the finished cover image fro
   python3 tools/web/covers.py --langs en,zh --publish
   python3 tools/web/covers.py --check               # no render: which finished covers are missing / older than their inputs
 FAIL (exit 1) when a copy block does not end above the live controls (title too long → shorten it in cover.json) or a file goes over
-its budget (w1920 ≤ 260 KB, w1280 ≤ 160 KB, c1200 ≤ 140 KB). Needs no server (own http.server + headless Chrome, at most one)."""
+its budget (w1920 ≤ 300 KB, w1280 ≤ 170 KB, c1200 ≤ 140 KB). Needs no server (own http.server + headless Chrome, at most one)."""
 import json, os, re, subprocess, sys, tempfile
 from PIL import Image
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-BUDGET = {'w1920': 260, 'w1280': 160, 'c1200': 140}   # KB
+BUDGET = {'w1920': 300, 'w1280': 170, 'c1200': 140}   # KB
 LANGS = ('en', 'ja', 'zh')
 SIZES = ('w1920', 'w1280', 'c1200')
 

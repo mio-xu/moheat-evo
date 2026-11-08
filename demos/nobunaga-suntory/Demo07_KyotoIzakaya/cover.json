@@ -1,0 +1,48 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo07_KyotoIzakaya",
+ "series": {
+  "en": "Nobunaga Series Ep. 3 / 5",
+  "ja": "信長シリーズ 第三話 · 全5話",
+  "zh": "信长系列 第三集 · 共5集"
+ },
+ "title": {
+  "en": "Two Warlords in\na Kyoto Izakaya",
+  "ja": "信長と家康、\n京都の居酒屋へ",
+  "zh": "信长与家康，\n京都居酒屋之夜"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 Nobunaga · left",
+    "ja": "🔥 信長 · 左",
+    "zh": "🔥 信长 · 左"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 Ieyasu · right",
+    "ja": "🔥 家康 · 右",
+    "zh": "🔥 家康 · 右"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "❄ snow · beer · ice",
+    "ja": "❄ 雪・ビール・氷",
+    "zh": "❄ 雪・啤酒・冰"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 charcoal grill · hot sake",
+    "ja": "🔥 炭火・あつかん",
+    "zh": "🔥 炭火・热清酒"
+   }
+  }
+ ],
+ "tone": "8 10 20"
+}

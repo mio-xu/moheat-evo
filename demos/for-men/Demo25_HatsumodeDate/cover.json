@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo25_HatsumodeDate",
+ "title": {
+  "en": "My First Hatsumode",
+  "ja": "はじめての、\n初詣デート",
+  "zh": "第一次的新年参拜约会"
+ },
+ "tagline": {
+  "en": "New Year's Eve at the shrine with Tsubaki",
+  "ja": "椿と過ごす、神社の大晦日",
+  "zh": "和椿一起在神社度过除夕夜"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "🎍 Hatsumode with the young lady",
+    "ja": "🎍 お嬢様と初詣",
+    "zh": "🎍 与大小姐新年参拜"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 bonfire · amazake · her voice at your ear",
+    "ja": "🔥 焚き火・甘酒・耳元の声",
+    "zh": "🔥 篝火・甜酒・耳边的声音"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "🌬 winter night wind",
+    "ja": "🌬 冬の夜風",
+    "zh": "🌬 冬夜寒风"
+   }
+  }
+ ],
+ "tone": "20 13 20"
+}

@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo26_BecomeNaomi",
+ "title": {
+  "en": "The Day I Became Naomi",
+  "ja": "ねこになった日",
+  "zh": "变成猫咪的那一天"
+ },
+ "tagline": {
+  "en": "A winter Saturday through a cat's ears",
+  "ja": "ねこの耳で過ごす、冬の土曜日",
+  "zh": "用猫的耳朵度过冬日的周六"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "🐈 Become Naomi",
+    "ja": "🐈 ナオミになる",
+    "zh": "🐈 变成直美"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "☀ sunny spot · laundry",
+    "ja": "☀ ひだまり・洗濯もの",
+    "zh": "☀ 阳光・晾晒的衣物"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "❄️ window glass · fridge",
+    "ja": "❄️ 窓ガラス・冷蔵庫",
+    "zh": "❄️ 窗玻璃・冰箱"
+   }
+  }
+ ],
+ "tone": "30 22 37"
+}

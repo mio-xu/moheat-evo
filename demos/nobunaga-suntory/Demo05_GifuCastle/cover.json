@@ -1,0 +1,48 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo05_GifuCastle",
+ "series": {
+  "en": "Nobunaga Series Ep. 1 / 5",
+  "ja": "信長シリーズ 第一話 · 全5話",
+  "zh": "信长系列 第一集 · 共5集"
+ },
+ "title": {
+  "en": "Welcome to Nobunaga's\nGifu Castle",
+  "ja": "信長の岐阜城へようこそ",
+  "zh": "欢迎来到信长的岐阜城"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 Nobunaga · left",
+    "ja": "🔥 信長 · 左",
+    "zh": "🔥 信长 · 左"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 Ieyasu · right",
+    "ja": "🔥 家康 · 右",
+    "zh": "🔥 家康 · 右"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "❄ waterfall · mountain wind · ice house",
+    "ja": "❄ 滝・山風・氷室",
+    "zh": "❄ 瀑布・山风・冰室"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 tea · cormorant-fishing fires",
+    "ja": "🔥 茶・鵜飼の篝火",
+    "zh": "🔥 茶・鹈饲篝火"
+   }
+  }
+ ],
+ "tone": "8 10 20"
+}

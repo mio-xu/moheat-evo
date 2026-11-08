@@ -1,0 +1,35 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo10_CaveSpring",
+ "title": {
+  "en": "Kindle the Fire, Find\nthe Hidden Spring",
+  "ja": "火をともして、\nひみつの泉へ",
+  "zh": "点燃火光，\n寻找秘密之泉"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "🧩 Interactive puzzle",
+    "ja": "🧩 なぞ解き",
+    "zh": "🧩 互动解谜"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 hearth · candles",
+    "ja": "🔥 囲炉裏・ろうそく",
+    "zh": "🔥 地炉・蜡烛"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "💧 drafts · fox-fire · underground water",
+    "ja": "💧 すきま風・きつね火・地底の水",
+    "zh": "💧 穿堂风・狐火・地下水"
+   }
+  }
+ ],
+ "tone": "12 20 38"
+}

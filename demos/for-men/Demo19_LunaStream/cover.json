@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo19_LunaStream",
+ "title": {
+  "en": "Luna's Secret Cocktail",
+  "ja": "ルナの、\nひみつのカクテル",
+  "zh": "露娜的秘密鸡尾酒"
+ },
+ "tagline": {
+  "en": "After last orders in a basement bar, the late-night streamer mixes a drink just for you",
+  "ja": "ラストオーダーのあとの地下のバー。深夜の配信者が、あなただけに一杯つくる",
+  "zh": "最后点单之后的地下酒吧，深夜主播只为你调一杯酒"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "🍸 A bar after closing",
+    "ja": "🍸 閉店後のバー",
+    "zh": "🍸 打烊后的酒吧"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "🔥 blue flame · Irish coffee · her voice at your ear",
+    "ja": "🔥 青い炎・コーヒー・耳元の声",
+    "zh": "🔥 蓝色火焰・咖啡・耳边的声音"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "🧊 iced shaker · rainy night draft",
+    "ja": "🧊 冷えたシェイカー・雨の夜風",
+    "zh": "🧊 冰镇雪克杯・雨夜的风"
+   }
+  }
+ ],
+ "tone": "14 17 34"
+}

@@ -180,6 +180,9 @@ html.reduce-motion .u2 * { transition: none !important; }
    Hidden here while both exist; the release deletes the old sources (cover HTML, drawCover, stage chips). */
 html.ui2 .stage .intro { opacity: 0 !important; pointer-events: none !important; }
 html.ui2 :is(.sh-mode, .sh-heat, .sh-bar, .sh-pause, .sh-veil, .sh-marks, .hud-top, .msub-hud, .ix-chip, .ix-hud, .mfs-exit, .stage .fs-btn, .stage .msub-btn) { display: none !important; }
-html.ui2 .stage-col > :is(.transport, .legend) { display: none !important; }
+html.ui2 .stage-col > .legend { display: none !important; }
+html.ui2 .stage-col > .transport { position: fixed !important; left: 0; top: 100vh; width: 1000px; height: 40px; margin: 0 !important; visibility: hidden !important; }   /* kept in layout, off screen: the film's seek handler reads its width */
 html.ui2 .sh-set { display: none !important; }
 html.ui2 .stage { background: #0b0a12; border: 0 !important; border-radius: 10px !important; box-shadow: 0 10px 40px rgba(0, 0, 0, .45) !important; outline: 0 !important; }   /* one frame for every player */
+html.ui2.u2-noside aside.side, html.ui2.u2-noside .mside-btn { display: none !important; }
+html.ui2.u2-noside .layout { grid-template-columns: minmax(0, 1fr) !important; }

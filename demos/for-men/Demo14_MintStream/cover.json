@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo14_MintStream",
+ "title": {
+  "en": "Mint's Ear Salon",
+  "ja": "ミントの、\nおみみ専門店",
+  "zh": "薄荷的耳朵专门店"
+ },
+ "tagline": {
+  "en": "A sleepy role-play stream: the chat orders, your ears get pampered",
+  "ja": "眠たいロールプレイ配信：コメントで注文、あなたの耳をとろとろに",
+  "zh": "困困的角色扮演直播：弹幕点单，宠爱你的耳朵"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "🌿 An ear-salon stream",
+    "ja": "🌿 おみみ専門店の配信",
+    "zh": "🌿 耳朵专门店直播"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "♨️ steamed towel · warm stone · whisper",
+    "ja": "♨️ 蒸しタオル・温石・ささやき",
+    "zh": "♨️ 热毛巾・温石・耳语"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "🥄 chilled spoon · mint breath · mist",
+    "ja": "🥄 ひんやりスプーン・ミントの吐息・ミスト",
+    "zh": "🥄 冰勺子・薄荷气息・喷雾"
+   }
+  }
+ ],
+ "tone": "15 34 38"
+}

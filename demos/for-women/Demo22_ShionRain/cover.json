@@ -1,0 +1,40 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo22_ShionRain",
+ "title": {
+  "en": "Until the Rain Stops",
+  "ja": "雨が止むまで",
+  "zh": "直到雨停"
+ },
+ "tagline": {
+  "en": "A rainy night at his flat, he dries your hair",
+  "ja": "雨の夜、彼の部屋で髪を乾かしてもらう",
+  "zh": "雨夜，在他家里，他为你吹干头发"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "🤍 Shion on a rainy night",
+    "ja": "🤍 雨の夜の紫苑",
+    "zh": "🤍 雨夜的紫苑"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "💨 hair dryer · his voice at your ear",
+    "ja": "💨 ドライヤー・耳元の声",
+    "zh": "💨 吹风机・耳边的声音"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "💧 wet hair · cool air",
+    "ja": "💧 濡れた髪・冷風",
+    "zh": "💧 湿发・冷风"
+   }
+  }
+ ],
+ "tone": "16 12 24"
+}
