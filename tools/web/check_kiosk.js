@@ -2,7 +2,7 @@
 // Exhibition (kiosk) mode, the whole visitor loop in a real browser (DEMO_DESIGN_GUIDE §7.4; TASKS #54). Prints ONE JSON object,
 // exit 1 when a step fails.   node tools/web/check_kiosk.js [--demo all-ages/Demo28_SnowFoxLullaby] [--size 1440x900] [--shots DIR] [--quick]
 // Own http.server + own headless Chrome (fresh profile). Steps:
-//   welcome (?kiosk=1 sets the flag) → Start → intro: sting → left warm → right cool → hot↔cold → DUAL → intensity "stronger" then
+//   welcome (?kiosk=1 sets the flag) → Start → intro: sting → left warm → right cool → hot↔cold → DUAL → auto-calibration: WARM ramp tapped after ~2.5 s, COOL ramp left to stop at the cap (separate scales) then
 //   "just right" (the thermal lines the intro sent are checked) → menu → demo page (kiosk.js: switcher gone, ✕ End, guide off) →
 //   Start (interactive, the default) → the show cut ends by itself → card (stars, buy, price, scenes, moment, comment) → Done → welcome with the
 //   visitor's settings reset → stats (visitor, started / finished, rating, buy × price, scene × buy, CSV) → idle → attract
@@ -49,7 +49,7 @@ const step = (k, v, detail) => { out.steps[k] = detail === undefined ? !!v : { o
   await ev(`(localStorage.setItem('moheat.kiosk.cfg', JSON.stringify({ idle: 45 })), localStorage.setItem('moheat.intensity', '95'), localStorage.setItem('moheat.mode', '"pure"'), 1)`);
   await nav('/kiosk/');
   step('welcome', await ev(`localStorage.getItem('moheat.kiosk') === '1' && MoHeatKioskApp.view === 'welcome' && document.querySelectorAll('.picto li').length === 3`));
-  step('resetOnLoad', await ev(`localStorage.getItem('moheat.intensity') === '50' && localStorage.getItem('moheat.mode') === '"interactive"'`));
+  step('resetOnLoad', await ev(`localStorage.getItem('moheat.intensity') === '100' && localStorage.getItem('moheat.warmScale') === '0.5' && localStorage.getItem('moheat.coolScale') === '0.5' && localStorage.getItem('moheat.mode') === '"interactive"'`));
   const fits = () => ev(`document.documentElement.scrollHeight <= innerHeight + 1 && document.documentElement.scrollWidth <= innerWidth + 1 && [...document.querySelectorAll('.view:not([hidden]) button')].every((b) => { const r = b.getBoundingClientRect(); return r.width === 0 || (r.bottom <= innerHeight + 1 && r.right <= innerWidth + 1 && r.top >= -1); })`);
   step('welcomeFits', await fits());
   await click('.langs [data-l=ja]'); step('langJa', await ev(`document.getElementById('startVisit').textContent.includes('はじめる')`)); await shot('1_welcome_ja');
@@ -62,12 +62,18 @@ const step = (k, v, detail) => { out.steps[k] = detail === undefined ? !!v : { o
   step('introVolume', await ev(`!!document.querySelector('.mi .vol input')`));
   await click('.mi .go'); await until(`MoHeatKioskApp.intro.step === 'left'`, 6000); await sleep(800); await shot('2_intro_left');
   await until(`MoHeatKioskApp.intro.step === 'dual'`, 20000); await sleep(600); await shot('2_intro_dual');
-  await until(`MoHeatKioskApp.intro.step === 'level'`, 10000); await sleep(400);
-  await click('.mi [data-d="1"]'); await sleep(300); await shot('2_intro_level');
-  await click('.mi [data-d="0"]'); await sleep(200);
+  await until(`MoHeatKioskApp.intro.step === 'warm'`, 10000); await sleep(2500); await shot('2_intro_warm');
+  await tap(W / 2, H * .3); await sleep(300); await shot('2_intro_warm_tapped');   // a tap anywhere stops the warm ramp at once
+  await until(`MoHeatKioskApp.intro.step === 'cool'`, 4000); await sleep(3000); await shot('2_intro_cool');
+  await until(`MoHeatKioskApp.view === 'menu'`, 12000); await sleep(200);   // nobody taps: the cool ramp stops at the staff cap
   const log = await ev('MoHeatKioskApp.intro.log');
-  step('introThermal', log && log.some((l) => /^LC\d+ RC\d+$/.test(l)) && log.some((l) => /^LH\d+ RH0$/.test(l)) && log.some((l) => /^LH0 RC\d+$/.test(l)) && log.some((l) => /^DUAL LC\d+ LH\d+ RC\d+ RH\d+$/.test(l)) && log.at(-1) === 'stop', { log: log });
-  step('introLevel', await ev(`localStorage.getItem('moheat.intensity') === '65'`), { intensity: await ev(`localStorage.getItem('moheat.intensity')`) });
+  step('introThermal', log && log.some((l) => /^LC\d+ RC\d+$/.test(l)) && log.some((l) => /^LH\d+ RH0$/.test(l)) && log.some((l) => /^LH0 RC\d+$/.test(l)) && log.some((l) => /^DUAL LC\d+ LH\d+ RC\d+ RH\d+$/.test(l)) && log.at(-1) === 'stop', { n: log && log.length });
+  const sc = { warm: +(await ev(`localStorage.getItem('moheat.warmScale')`)), cool: +(await ev(`localStorage.getItem('moheat.coolScale')`)) };
+  step('introLevel', sc.warm > .1 && sc.warm < .5 && Math.abs(sc.cool - .64) < .011, sc);   // warm: 80 % of the tapped level · cool: 80 % of the 80 % cap
+  const warmRamp = log ? log.map((l) => (/^LH(\d+) RH0$/.exec(l) || [])[1]).filter(Boolean).map(Number) : [];
+  const iw = log ? log.lastIndexOf('LH' + warmRamp.at(-1) + ' RH0') : -1;
+  step('introRamp', warmRamp.length > 5 && warmRamp.at(-1) > warmRamp[warmRamp.length - 6] && log[iw + 1] === 'stop' && log.some((l) => l === 'LH0 RC71'), { warmTail: warmRamp.slice(-4), afterTap: log && log[iw + 1] });
+  const cal = await ev(`MoHeatKiosk.stats.table('today').calib`); step('calibStats', cal && cal.n === 1 && cal.coolCapHits === 1 && cal.warmCapHits === 0, cal);
   step('menu', await until(`MoHeatKioskApp.view === 'menu' && document.querySelectorAll('.menu-grid button').length > 5`, 3000)); await shot('3_menu');
   step('menuFits', await ev(`document.documentElement.scrollHeight <= innerHeight + 1`));
 
@@ -76,7 +82,7 @@ const step = (k, v, detail) => { out.steps[k] = detail === undefined ? !!v : { o
     await click(`.menu-grid [data-dir="${DEMO.split('/')[1]}"]`);
     await until(`location.pathname.includes('${DEMO}') && document.readyState === 'complete'`, 20000); await sleep(3500);
     step('demoKiosk', await ev(`!!window.MoHeatKiosk && !document.querySelector('.dnav') && !!document.querySelector('.mk-end') && localStorage.getItem('moheat.guide') === 'done' && !document.querySelector('.mg-tip:not([hidden])')`));
-    step('demoIntensity', await ev(`(() => { const i = document.getElementById('intensity'); return !i || (+i.value === 65 && +i.max === 80); })()`), { value: await ev(`document.getElementById('intensity')?.value`) });
+    step('demoScales', await ev(`(() => { const s = MoHeatKiosk.scales(); return MoHeatKiosk.scaleLine('DUAL LC80 LH200 RC0 RH100') === 'DUAL LC' + Math.max(35, Math.round(35 + 45 * s.cool)) + ' LH' + Math.round(200 * s.warm) + ' RC0 RH' + Math.round(100 * s.warm) && +document.getElementById('intensity').value === 100; })()`), { line: await ev(`MoHeatKiosk.scaleLine('DUAL LC80 LH200 RC0 RH100')`) });
     await shot('4_demo_cover');
     await ev(`(document.getElementById('startBtn').click(), 1)`);   // the visitor's default mode (interactive) await sleep(3000);
     step('volumeSlider', await ev(`(() => { const r = document.querySelector('.mk-vol input'); return !!r && r.getBoundingClientRect().height >= 44; })()`));
@@ -95,18 +101,23 @@ const step = (k, v, detail) => { out.steps[k] = detail === undefined ? !!v : { o
   // one question per screen: a tap answers and moves on (time it: a first-time visitor must be done in < 10 s)
   const t0 = Date.now(), q = () => ev(`document.querySelector('#v-card .q').dataset.q`);
   await shot('5_card_rate'); step('cardFits', await fits());
-  await click('#v-card .q [data-v="4"]'); await until(`document.querySelector('#v-card .q').dataset.q === 'buy'`, 2000);
-  await click('#v-card .q [data-v=yes]'); step('priceShown', await until(`document.querySelector('#v-card .q').dataset.q === 'price' && document.querySelectorAll('#v-card .q button').length >= 4`, 2000));
+  await sleep(300); const tClick = Date.now(); await click('#v-card .q [data-v="4"]'); await sleep(250);
+  step('confirmHold', await ev(`document.querySelector('#v-card .q').dataset.q === 'rate' && !!document.querySelector('#v-card .q .stars .sel')`)); await shot('5_card_rate_picked');   // the pick stays lit, no instant jump
+  step('dwell', await until(`document.querySelector('#v-card .q').dataset.q === 'buy'`, 4000) && Date.now() - tClick >= 700, { msAfterTap: Date.now() - tClick });
+  await click('#v-card .q [data-v=no]'); await sleep(150); await click('#cardBack');   // back one question before the "no" moves on
+  await sleep(200); step('back', await ev(`document.querySelector('#v-card .q').dataset.q === 'rate'`));
+  await sleep(1500); await click('#v-card .q [data-v="4"]'); await until(`document.querySelector('#v-card .q').dataset.q === 'buy'`, 4000);
+  await sleep(1500); await click('#v-card .q [data-v=yes]'); step('priceShown', await until(`document.querySelector('#v-card .q').dataset.q === 'price' && document.querySelectorAll('#v-card .q button').length >= 4`, 4000));
   await shot('5_card_price');
-  await click('#v-card .q button:nth-child(2)'); await until(`document.querySelector('#v-card .q').dataset.q === 'scenes'`, 2000); await shot('5_card_scenes');
+  await click('#v-card .q button:nth-child(2)'); await until(`document.querySelector('#v-card .q').dataset.q === 'scenes'`, 4000); await shot('5_card_scenes');
   await click('#v-card .q [data-v=games]'); await click('#v-card .q [data-v=travel]');
-  step('scenesMax2', await until(`document.querySelector('#v-card .q').dataset.q === 'fav' || !document.querySelector('.q-thanks').hidden`, 2000));
+  step('scenesMax2', await until(`document.querySelector('#v-card .q').dataset.q === 'fav' || !document.querySelector('.q-thanks').hidden`, 4000));
   step('favMoments', await ev(`document.querySelector('#v-card .q').dataset.q === 'fav' && document.querySelectorAll('#v-card .q button').length > 0`)); await shot('5_card_fav');
-  await click('#v-card .q button'); await sleep(400);
+  await click('#v-card .q button'); await until(`!document.querySelector('.q-thanks').hidden`, 4000);
   step('thanks', await ev(`!document.querySelector('.q-thanks').hidden`)); await shot('5_card_thanks');
   out.steps.cardSecs = Math.round((Date.now() - t0) / 100) / 10;
   await sleep(2000);
-  step('cardToWelcome', await ev(`MoHeatKioskApp.view === 'welcome' && localStorage.getItem('moheat.intensity') === '50' && !sessionStorage.getItem('moheat.sublang') && !sessionStorage.getItem('moheat.kiosk.visit')`));
+  step('cardToWelcome', await ev(`MoHeatKioskApp.view === 'welcome' && localStorage.getItem('moheat.warmScale') === '0.5' && !sessionStorage.getItem('moheat.sublang') && !sessionStorage.getItem('moheat.kiosk.visit')`));
   const st = await ev(`MoHeatKiosk.stats.table('today')`), row = st?.rows?.find((r) => r.dir === DEMO.split('/')[1]);
   step('stats', st && st.visitors >= 1 && row && row.started >= 1 && row.finished >= 1 && row.interactive >= 1 && row.avg === 4 && row.buy.yes === 1 && Object.keys(st.cross).length === 1 && st.scenes.travel === 1 && st.scenes.games === 1 && !!row.top,
     { visitors: st?.visitors, row: row && { started: row.started, finished: row.finished, pure: row.pure, avg: row.avg, buy: row.buy, price: row.price, scenes: row.scenes, top: row.top }, cross: st?.cross, sceneBuy: st?.sceneBuy });
@@ -132,11 +143,11 @@ const step = (k, v, detail) => { out.steps[k] = detail === undefined ? !!v : { o
   await ev(`(document.getElementById('pin').value = '0000', document.getElementById('pinOk').click(), 1)`); await sleep(300);
   step('staff', await ev(`!document.getElementById('staff').hidden && document.querySelectorAll('#statBody tr').length >= 1 && /visitors/.test(document.getElementById('statSum').textContent)`));
   await shot('7_staff');
-  await ev(`(document.getElementById('sCap').value = 60, document.getElementById('sCap').dispatchEvent(new Event('change', { bubbles: true })), 1)`);
-  step('staffCap', await ev(`MoHeatKiosk.cfg().cap === 60 && MoHeatKiosk.cfg().start <= 60`));
+  await ev(`(document.getElementById('sCapW').value = 60, document.getElementById('sCapW').dispatchEvent(new Event('change', { bubbles: true })), 1)`);
+  step('staffCap', await ev(`MoHeatKiosk.cfg().capWarm === 60 && MoHeatKiosk.cfg().startWarm <= 60 && MoHeatKiosk.cfg().capCool === 80`));
   await ev(`(window.confirm = () => true, document.getElementById('exitKiosk').click(), 1)`); await sleep(1500);
   step('exit', await ev(`localStorage.getItem('moheat.kiosk') === null`));
   await nav(`/demos/${DEMO}/`); await sleep(1500);
-  step('exitDemoNormal', await ev(`!document.querySelector('.mk-end') && !!document.querySelector('.dnav')`), { state: await ev(`JSON.stringify({ flag: localStorage.getItem('moheat.kiosk'), end: !!document.querySelector('.mk-end'), dnav: !!document.querySelector('.dnav'), path: location.pathname, k: !!window.MoHeatKiosk })`) });
+  step('exitDemoNormal', await ev(`!document.querySelector('.mk-end') && !window.MoHeatKiosk && !!document.getElementById('startBtn')`), { state: await ev(`JSON.stringify({ flag: localStorage.getItem('moheat.kiosk'), end: !!document.querySelector('.mk-end'), dnav: !!document.querySelector('.dnav'), path: location.pathname, k: !!window.MoHeatKiosk })`) });
   done();
 })();

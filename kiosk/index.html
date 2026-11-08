@@ -46,7 +46,7 @@
           <div class="q-dots" aria-hidden="true"></div>
           <div class="q" aria-live="polite"></div>
           <div class="q-more"><button type="button" class="link" id="addComment" data-t="addComment"></button><input type="text" id="comment" maxlength="80" autocomplete="off" hidden /></div>
-          <div class="card-btns"><button type="button" class="big" id="cardSkip" data-t="skip"></button><button type="button" class="link" id="cardSkipAll" data-t="skipAll"></button></div>
+          <div class="card-btns"><button type="button" class="link" id="cardBack" hidden></button><button type="button" class="big" id="cardSkip" data-t="skip"></button><button type="button" class="link" id="cardSkipAll" data-t="skipAll"></button></div>
         </div>
         <aside class="card-qr"><div class="qr"></div><p data-t="scan"></p><p class="small" data-t="nodata"></p></aside>
       </div>
@@ -72,8 +72,11 @@
           <p class="hint">Authorise the headset once with “+ Add”: every page then connects by itself.</p>
           <h4>Settings</h4>
           <label>Default language <select id="sLang"></select></label>
-          <label>Intensity cap <input type="range" id="sCap" min="30" max="100" step="5" /><b id="sCapV"></b></label>
-          <label>New visitor starts at <input type="range" id="sStart" min="20" max="100" step="5" /><b id="sStartV"></b></label>
+          <div class="row"><button type="button" id="selfCal">Calibrate on me → set warm / cool caps</button></div>
+          <label>Warm cap <input type="range" id="sCapW" min="30" max="100" step="5" /><b id="sCapWV"></b></label>
+          <label>Warm start <input type="range" id="sStartW" min="20" max="100" step="5" /><b id="sStartWV"></b></label>
+          <label>Cool cap <input type="range" id="sCapC" min="30" max="100" step="5" /><b id="sCapCV"></b></label>
+          <label>Cool start <input type="range" id="sStartC" min="20" max="100" step="5" /><b id="sStartCV"></b></label>
           <label>Idle reset after <input type="number" id="sIdle" min="20" max="600" step="5" /> s</label>
           <label>Site link (QR) <input type="url" id="sSite" /></label>
           <label>Price currency <select id="sCur"><option value="auto">auto (from language)</option><option>JPY</option><option>USD</option><option>CNY</option><option>EUR</option><option>KRW</option></select></label>
@@ -104,9 +107,9 @@
 
   <script src="../device.js?v=2"></script>
   <script>window.MOHEAT_NAV_DATA_ONLY = true;</script>
-  <script src="../demos/shared/nav.js?v=8fa268d8"></script>
-  <script src="../demos/shared/kiosk.js?v=9a1dcc94"></script>
-  <script src="../demos/shared/thermintro.js?v=efc6816b"></script>
+  <script src="../demos/shared/nav.js?v=5b886c58"></script>
+  <script src="../demos/shared/kiosk.js?v=a088684b"></script>
+  <script src="../demos/shared/thermintro.js?v=eb5f2929"></script>
   <script src="qrcode.min.js"></script>
   <script src="pitches.js?v=1"></script>
   <script src="app.js?v=1"></script>

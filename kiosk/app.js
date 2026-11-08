@@ -26,6 +26,7 @@
     thanks: { en: 'Thank you!', ja: 'ありがとうございました！', zh: '谢谢体验！' },
     quick: { en: 'a few quick taps — thank you!', ja: 'かんたんな質問にタップで — ありがとう！', zh: '点几下就好 — 谢谢！' },
     thanksBig: { en: 'Thank you — enjoy the show!', ja: 'ありがとうございました！', zh: '谢谢你的体验！' },
+    back: { en: '‹ back', ja: '‹ もどる', zh: '‹ 上一题' },
     addComment: { en: '+ add a comment', ja: '+ ひとこと書く', zh: '+ 写一句话' }, skipAll: { en: 'Skip all', ja: 'すべてスキップ', zh: '全部跳过' },
     rate: { en: 'How was the warm / cool?', ja: '温かさ・冷たさは、どうでしたか？', zh: '冷热的感觉怎么样？' },
     buy: { en: 'Would you want MoHeat Evo as a product?', ja: 'MoHeat Evo が製品になったら、ほしいですか？', zh: '如果 MoHeat Evo 成为产品，你会想要吗？' },
@@ -88,20 +89,19 @@
   const volSet = (v) => { try { localStorage.setItem('moheat.volume', JSON.stringify(Math.round(v * 100))); } catch {} };
   // welcome → intro → menu
   let intro = null;
-  const level = () => Math.min(cfg.cap, +(localStorage.getItem('moheat.intensity') || cfg.start)) / 100;
+  const calib = () => { const s = K.scales(); return { warm: s.warm, cool: s.cool, capWarm: cfg.capWarm / 100, capCool: cfg.capCool / 100, onLevel: (o) => K.setScales(o) }; };
   function begin(withIntro) {
     K.stats.visitor(); sessionStorage.setItem('moheat.kiosk.counted', '1');
     if (!withIntro) return go('menu');
     go('intro');
-    intro = MoHeatIntro.mount($('.intro-host'), { send, volume: volGet, onVolume: volSet, level: Math.min(cfg.start, cfg.cap) / 100, cap: cfg.cap / 100, lang, connected: () => dev.isConnected(),
-      onLevel: (k) => { try { localStorage.setItem('moheat.intensity', JSON.stringify(Math.round(k * 100))); } catch {} },
-      onDone: ({ level: k }) => { try { localStorage.setItem('moheat.intensity', JSON.stringify(Math.round(Math.min(k, cfg.cap / 100) * 100))); } catch {} if (pending) openDemo(pending); else go('menu'); } });
+    intro = MoHeatIntro.mount($('.intro-host'), { send, volume: volGet, onVolume: volSet, ...calib(), lang, connected: () => dev.isConnected(),
+      onDone: (r) => { K.setScales(r); if (!r.skipped) K.stats.calib(r); if (pending) openDemo(pending); else go('menu'); } });
     intro.start();
   }
   $('#startVisit').addEventListener('click', () => begin(true));
   $('#skipIntro').addEventListener('click', () => begin(false));
-  $('#replayIntro').addEventListener('click', () => { go('intro'); intro = MoHeatIntro.mount($('.intro-host'), { send, volume: volGet, onVolume: volSet, level: level(), cap: cfg.cap / 100, lang, connected: () => dev.isConnected(),
-    onDone: ({ level: k }) => { try { localStorage.setItem('moheat.intensity', JSON.stringify(Math.round(k * 100))); } catch {} go('menu'); } }); intro.start(); });
+  $('#replayIntro').addEventListener('click', () => { go('intro'); intro = MoHeatIntro.mount($('.intro-host'), { send, volume: volGet, onVolume: volSet, ...calib(), lang, connected: () => dev.isConnected(),
+    onDone: (r) => { K.setScales(r); go('menu'); } }); intro.start(); });
 
   // menu: the demos staff offer (default all), thumbnails in the display language
   // numbers = position in the offered list (the same numbers on the phone pick page, its QR carries the list: no server)
@@ -133,35 +133,40 @@
   // closes the card (answers so far are kept, none = skipped); thank-you ≤ 2 s; the comment hides behind a small link.
   const answer = { stars: 0, buy: null, price: null, moment: null, scenes: [] };
   const ICON = { warm: '🔥', cool: '❄️', dual: '🔥❄️' };
-  let qi = 0, sceneT = 0;
+  // pacing (user 2026-11-08, REQUIREMENTS §10): the picked option stays lit ~0.8 s with a soft confirm pulse, a question stays at least
+  // 1.5 s before an answer can move on (no accidental double taps), "‹ back" goes one question back; 15 s idle still closes the card
+  const CONFIRM = 800, DWELL = 1500;
+  let qi = 0, sceneT = 0, shownAt = 0;
+  const schedule = (ms) => { clearTimeout(sceneT); sceneT = setTimeout(nextQ, Math.max(ms, DWELL - (Date.now() - shownAt))); };
   const qs = () => { const v = K.visit.get() || {}; const q = ['rate', 'buy'];
     if (answer.buy === 'yes' || answer.buy === 'maybe') q.push('price'); q.push('scenes'); if ((v.moments || []).length) q.push('fav'); return q; };
   function renderCard(fresh = true) {
     const v = K.visit.get() || {}, d = D.DEMOS.find((x) => x.dir === v.dir);
-    if (fresh) { Object.assign(answer, { stars: 0, buy: null, price: null, moment: null, scenes: [] }); qi = 0; $('#comment').value = ''; $('#comment').hidden = true; $('#addComment').hidden = false; $('.q-thanks').hidden = true; $('.card-wrap').hidden = false; }
+    if (fresh) { Object.assign(answer, { stars: 0, buy: null, price: null, moment: null, scenes: [] }); qi = 0; shownAt = Date.now(); $('#comment').value = ''; $('#comment').hidden = true; $('#addComment').hidden = false; $('.q-thanks').hidden = true; $('.card-wrap').hidden = false; }
     $('.card-title').textContent = d ? title(d) : 'MoHeat Evo';
     const list = qs(), k = list[qi];
     $('.q-dots').innerHTML = list.map((_, j) => `<i class="${j < qi ? 'done' : j === qi ? 'now' : ''}"></i>`).join('');
     const opts = (items, sel) => `<div class="chips big-chips">${items.map(([val, label]) => `<button type="button" data-v="${String(val).replace(/"/g, '&quot;')}" aria-pressed="${sel(val)}">${label}</button>`).join('')}</div>`;
     let html = `<h2>${t(k)}</h2>`;
-    if (k === 'rate') html += `<div class="stars">${[1, 2, 3, 4, 5].map((n) => `<button type="button" data-v="${n}" aria-label="${n}" class="${n <= answer.stars ? 'on' : ''}">★</button>`).join('')}</div>`;
+    if (k === 'rate') html += `<div class="stars">${[1, 2, 3, 4, 5].map((n) => `<button type="button" data-v="${n}" aria-label="${n}" class="${n === answer.stars ? 'sel ' : ''}${n <= answer.stars ? 'on' : ''}">★</button>`).join('')}</div>`;
     if (k === 'buy') html += opts(['yes', 'maybe', 'no'].map((x) => [x, t(x)]), (x) => answer.buy === x);
     if (k === 'price') { const cur = K.currency(lang()); html += opts(K.bands(cur).map((b) => [`${cur} ${b}`, b]), (x) => answer.price === x); }
     if (k === 'scenes') html += opts(K.SCENES.map((s) => [s.id, s[lang()] || s.en]), (x) => answer.scenes.includes(x));
     if (k === 'fav') html += opts((v.moments || []).slice(0, 6).map((m) => [m.label, `<i>${ICON[m.kind] || ''}</i>${m.label}`]), (x) => answer.moment === x);
     $('.q').innerHTML = html; $('.q').dataset.q = k;
-    $('#cardSkip').textContent = t('skip');
+    $('#cardSkip').textContent = t('skip'); $('#cardBack').textContent = t('back'); $('#cardBack').hidden = qi === 0;
     qr($('.card-qr .qr'), summaryUrl(v));
     let news = $('.card-qr .news'); if (cfg.newsUrl) { if (!news) { news = document.createElement('div'); news.className = 'news'; news.innerHTML = '<div class="qr"></div><p></p>'; $('.card-qr').appendChild(news); }
       qr($('.qr', news), cfg.newsUrl); $('p', news).textContent = t('news'); } else news?.remove();
   }
-  const nextQ = () => { clearTimeout(sceneT); qi++; if (qi >= qs().length) return closeCard(true); renderCard(false); };
+  const nextQ = () => { clearTimeout(sceneT); qi++; if (qi >= qs().length) return closeCard(true); shownAt = Date.now(); renderCard(false); };
+  const prevQ = () => { clearTimeout(sceneT); if (qi > 0) { qi--; shownAt = Date.now(); renderCard(false); } };
   $('.q').addEventListener('click', (e) => {
     const b = e.target.closest('button'); if (!b) return; const k = $('.q').dataset.q, v = b.dataset.v;
     if (k === 'rate') answer.stars = +v; if (k === 'buy') { answer.buy = v; if (v === 'no') answer.price = null; } if (k === 'price') answer.price = v; if (k === 'fav') answer.moment = v;
     if (k === 'scenes') { const a = answer.scenes; if (a.includes(v)) a.splice(a.indexOf(v), 1); else a.push(v); renderCard(false); clearTimeout(sceneT);
-      if (a.length >= 2) sceneT = setTimeout(nextQ, 350); else if (a.length) sceneT = setTimeout(nextQ, 1600); return; }
-    renderCard(false); setTimeout(nextQ, 280);   // a short beat so the tap is seen
+      if (a.length >= 2) schedule(CONFIRM); else if (a.length) schedule(2400); return; }   // up to 2: a second pick moves on, one pick waits a little
+    renderCard(false); schedule(CONFIRM);   // the pick stays lit, then the next question
   });
   $('#addComment').addEventListener('click', () => { $('#addComment').hidden = true; $('#comment').hidden = false; $('#comment').focus(); });
   $('#comment').addEventListener('keydown', (e) => { if (e.key === 'Enter') nextQ(); });
@@ -173,6 +178,7 @@
     $('.card-wrap').hidden = true; $('.q-thanks').hidden = false;
     setTimeout(() => reset(), 1600);
   }
+  $('#cardBack').addEventListener('click', prevQ);
   $('#cardSkip').addEventListener('click', () => nextQ());
   $('#cardSkipAll').addEventListener('click', () => closeCard(true));   // keeps what was already tapped (nothing = skipped)
   function summaryUrl(v) {
@@ -220,18 +226,18 @@
   function openStaff() {
     send('stop'); cfg = K.cfg(); $('#staff').hidden = false;
     $('#sLang').innerHTML = (cfg.langs || ['en', 'ja', 'zh']).map((l) => `<option value="${l}"${l === cfg.lang ? ' selected' : ''}>${LANG_NAMES[l] || l}</option>`).join('');
-    $('#sCap').value = cfg.cap; $('#sStart').value = cfg.start; $('#sIdle').value = cfg.idle; $('#sSite').value = cfg.site; $('#sNews').value = cfg.newsUrl || '';
+    $('#sCapW').value = cfg.capWarm; $('#sStartW').value = cfg.startWarm; $('#sCapC').value = cfg.capCool; $('#sStartC').value = cfg.startCool; $('#sIdle').value = cfg.idle; $('#sSite').value = cfg.site; $('#sNews').value = cfg.newsUrl || '';
     $('#sCur').value = cfg.currency || 'auto'; bandsField(); $('#sCut').value = cfg.cut || 'show'; $('#sHyg').checked = !!cfg.hygiene; $('#sPick').value = cfg.pickUrl || '';
     $('#sDemos').innerHTML = D.DEMOS.map((d, i) => `<label><input type="checkbox" value="${d.dir}"${!cfg.demos || cfg.demos.includes(d.dir) ? ' checked' : ''}> ${i + 1} · ${d.en}</label>`).join('');
     capLabels(); renderStats();
   }
   const bandsField = () => { const cur = K.currency(cfg.lang); $('#sCurNow').textContent = cur; $('#sBands').value = K.bands(cur).join(', '); $('#sBands').dataset.cur = cur; };
-  const capLabels = () => { $('#sCapV').textContent = `${$('#sCap').value}%`; $('#sStartV').textContent = `${Math.min(+$('#sStart').value, +$('#sCap').value)}%`; };
+  const capLabels = () => { for (const k of ['W', 'C']) { $(`#sCap${k}V`).textContent = `${$(`#sCap${k}`).value}%`; $(`#sStart${k}V`).textContent = `${Math.min(+$(`#sStart${k}`).value, +$(`#sCap${k}`).value)}%`; } };
   function saveStaff() {
     const demos = $$('#sDemos input').filter((x) => x.checked).map((x) => x.value), pin = $('#sPin').value.trim();
     const cur = $('#sBands').dataset.cur, list = $('#sBands').value.split(',').map((x) => x.trim()).filter(Boolean);
     const bands = { ...(K.cfg().bands || {}) }; if (cur && list.length >= 2) bands[cur] = list.slice(0, 6);
-    K.setCfg({ lang: $('#sLang').value, cap: +$('#sCap').value, start: Math.min(+$('#sStart').value, +$('#sCap').value), idle: Math.max(20, +$('#sIdle').value || 60),
+    K.setCfg({ lang: $('#sLang').value, capWarm: +$('#sCapW').value, startWarm: Math.min(+$('#sStartW').value, +$('#sCapW').value), capCool: +$('#sCapC').value, startCool: Math.min(+$('#sStartC').value, +$('#sCapC').value), idle: Math.max(20, +$('#sIdle').value || 60),
       site: $('#sSite').value.trim() || K.DEF.site, cut: $('#sCut').value, hygiene: $('#sHyg').checked, pickUrl: $('#sPick').value.trim(), newsUrl: $('#sNews').value.trim(), currency: $('#sCur').value, bands,
       demos: demos.length === D.DEMOS.length ? null : demos, ...(/^\d{4,8}$/.test(pin) ? { pin } : {}) });
     cfg = K.cfg(); capLabels();
@@ -249,6 +255,7 @@
     const topPrice = Object.entries(s.cross).sort((a, c) => c[1] - a[1])[0];
     $('#statSum').innerHTML = `<div><b>${s.visitors}</b>visitors</div><div><b>${s.rows.reduce((a, r) => a + r.started, 0)}</b>plays</div><div><b>${s.cards}</b>cards (${s.skipped} skipped)</div>`
       + `<div><b>${pct(b.yes)} / ${pct(b.maybe)} / ${pct(b.no)}</b>buy: yes / maybe / no (${nb})</div><div><b>${topPrice ? esc(topPrice[0].split('|')[1]) : '–'}</b>top price band</div>`
+      + `<div><b>${s.calib.n ? `${Math.round(s.calib.warm * 100)}% / ${Math.round(s.calib.cool * 100)}%` : '–'}</b>avg personal max warm / cool (${s.calib.n}; hit cap ${s.calib.warmCapHits} / ${s.calib.coolCapHits})</div>`
       + `<div><b>${esc(Object.entries(s.scenes).sort((a, c) => c[1] - a[1]).slice(0, 2).map(([k, n]) => `${(K.SCENES.find((x) => x.id === k) || { en: k }).en} ${n}`).join(' · ') || '–')}</b>top use scenes</div>`;
     $('#statBody').innerHTML = s.rows.map((r, i) => `<tr><td class="n">${i + 1}</td><td>${esc(name(r.dir))}</td><td class="n">${r.started}</td><td class="n">${r.finished}</td><td class="n">${r.pure} / ${r.interactive}</td><td class="n">${r.avg ?? '–'}${r.rated ? ` (${r.rated})` : ''}</td><td>${esc(r.top)}</td></tr>`).join('')
       || '<tr><td colspan="7">No plays yet</td></tr>';
@@ -263,6 +270,12 @@
   $('#exClear').addEventListener('click', () => { if (confirm('Delete all kiosk statistics in this browser? Export them first.')) { K.stats.clear(); renderStats(); } });
   $('#fsBtn').addEventListener('click', () => { (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()).catch?.(() => {}); });
   $('#attractBtn').addEventListener('click', () => { saveStaff(); $('#staff').hidden = true; go('attract'); });
+  // staff self-calibration: the same ramp on a staff member, up to the full device scale → the warm / cool caps (rounded to 5 %)
+  $('#selfCal').addEventListener('click', () => { saveStaff(); $('#staff').hidden = true; go('intro');
+    intro = MoHeatIntro.mount($('.intro-host'), { send, only: ['warm', 'cool'], capWarm: 1, capCool: 1, lang, connected: () => dev.isConnected(),
+      onDone: (r) => { const r5 = (x) => Math.max(30, Math.min(100, Math.round(x * 20) * 5));
+        if (!r.skipped) K.setCfg({ ...(r.maxWarm != null ? { capWarm: r5(r.maxWarm) } : {}), ...(r.maxCool != null ? { capCool: r5(r.maxCool) } : {}) });
+        cfg = K.cfg(); go('welcome'); openStaff(); } }); intro.start(); });
   $('#queueBtn').addEventListener('click', () => { window.open('queue.html', 'moheat-queue', 'popup,width=1280,height=720'); });
   $('#posterBtn').addEventListener('click', () => { window.open('poster.html', 'moheat-poster'); });
   $('#reportBtn').addEventListener('click', () => { window.open('report.html', 'moheat-report'); });

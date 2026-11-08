@@ -40,7 +40,16 @@
   const CUR_OF = { ja: 'JPY', zh: 'CNY', 'zh-Hant': 'CNY', ko: 'KRW', en: 'USD' };
   const currency = (lang) => { const c = { ...DEF, ...LSg('moheat.kiosk.cfg', {}) }; return c.currency && c.currency !== 'auto' ? c.currency : CUR_OF[lang] || 'USD'; };
   const bands = (cur) => { const c = { ...DEF, ...LSg('moheat.kiosk.cfg', {}) }; return (c.bands && c.bands[cur]?.length ? c.bands[cur] : BANDS[cur]) || BANDS.USD; };
-  const cfg = () => ({ ...DEF, ...LSg('moheat.kiosk.cfg', {}) });
+  // warm and cool have their own cap + start (REQUIREMENTS §10); older settings with one cap / start fill both
+  const cfg = () => { const c = { ...DEF, ...LSg('moheat.kiosk.cfg', {}) };
+    c.capWarm ??= c.cap; c.capCool ??= c.cap; c.startWarm = Math.min(c.startWarm ?? c.start, c.capWarm); c.startCool = Math.min(c.startCool ?? c.start, c.capCool); return c; };
+  // the visitor's two scales (0–1) from the intro, applied to every heat / cool value sent on the demo pages (the page's own intensity
+  // slider stays a master on top); always within the staff caps
+  const scales = () => { const c = cfg(); return { warm: Math.min(c.capWarm / 100, LSg('moheat.warmScale', c.startWarm / 100)), cool: Math.min(c.capCool / 100, LSg('moheat.coolScale', c.startCool / 100)) }; };
+  const setScales = (o) => { const c = cfg(); if (o.warm != null) LSs('moheat.warmScale', Math.round(Math.min(c.capWarm / 100, o.warm) * 100) / 100); if (o.cool != null) LSs('moheat.coolScale', Math.round(Math.min(c.capCool / 100, o.cool) * 100) / 100); };
+  // "LH120 RC60" / "DUAL LC.. LH.. RC.. RH.." → heat × warm, cool 35 + (n − 35) × cool (35 = the coolest-off threshold, 0 stays 0)
+  const scaleLine = (line, s = scales()) => String(line).replace(/\b([LR])([HC])(\s*)(\d+)/g, (m, e, k, sp, n) => { n = +n; if (!n) return m;
+    return `${e}${k}${sp}${k === 'H' ? Math.round(n * s.warm) : Math.max(35, Math.round(35 + (n - 35) * s.cool))}`; });
   const setCfg = (patch) => LSs('moheat.kiosk.cfg', { ...LSg('moheat.kiosk.cfg', {}), ...patch });
 
   // ---------------------------------------------------------------- local anonymous stats (per day)
@@ -63,6 +72,9 @@
       if (r.moment) p.moments[r.moment] = (p.moments[r.moment] || 0) + 1;
       if (r.comment) { d.comments.push({ t: new Date().toISOString().slice(11, 16), dir, stars: r.stars || null, text: String(r.comment).slice(0, 120) }); if (d.comments.length > 500) d.comments.shift(); }
     }),
+    // the visitor's auto-calibration (personal max, 0–1 of the full device scale; 'tap' or 'cap' = nobody tapped before the staff cap)
+    calib: (r) => edit((d) => { if (r?.maxWarm == null && r?.maxCool == null) return; (d.calib ||= []).push({ w: r.maxWarm ?? null, c: r.maxCool ?? null, hw: r.hit?.warm || null, hc: r.hit?.cool || null });
+      if (d.calib.length > 3000) d.calib.shift(); }),
     // rows per demo: { dir, started, finished, pure, interactive, avg, rated, top } for today ('today') or all days ('all')
     table(which = 'today') {
       const s = load(), days = which === 'all' ? Object.values(s.days) : [s.days[which === 'today' ? day() : which]].filter(Boolean), m = {};
@@ -78,7 +90,9 @@
           for (const [k, n] of Object.entries(p.moments)) r.moments[k] = (r.moments[k] || 0) + n; } }
       const rows = Object.values(m).map((r) => ({ ...r, avg: r.rated ? Math.round(r.stars / r.rated * 10) / 10 : null,
         top: Object.entries(r.moments).sort((a, b) => b[1] - a[1])[0]?.[0] || '' })).sort((a, b) => b.started - a.started || b.finished - a.finished);
-      return { visitors, cards, skipped, rows, buy, cross, scenes, sceneBuy };
+      const cal = days.flatMap((d) => d.calib || []), avg = (k) => { const v = cal.map((x) => x[k]).filter((x) => x != null); return v.length ? Math.round(100 * v.reduce((a, b) => a + b, 0) / v.length) / 100 : null; };
+      const calib = { n: cal.length, warm: avg('w'), cool: avg('c'), warmCapHits: cal.filter((x) => x.hw === 'cap').length, coolCapHits: cal.filter((x) => x.hc === 'cap').length };
+      return { visitors, cards, skipped, rows, buy, cross, scenes, sceneBuy, calib };
     },
     json: () => JSON.stringify({ exported: new Date().toISOString(), note: 'MoHeat Evo kiosk · anonymous local counts (this browser only)', ...load() }, null, 1),
     csv() {
@@ -93,6 +107,8 @@
       }
       out.push('', 'purchase intent x price band (all days)', 'date,intent,price_band,count');
       for (const [date, d] of days) for (const [k, n] of Object.entries(d.cross || {})) { const [b, pr] = k.split('|'); out.push([date, b, pr, n].map(q).join(',')); }
+      out.push('', 'auto-calibration: personal max per visitor (0-1 of the full device scale; cap = no tap before the staff cap)', 'date,max_warm,max_cool,warm_stop,cool_stop');
+      for (const [date, d] of days) for (const c of d.calib || []) out.push([date, c.w ?? '', c.c ?? '', c.hw ?? '', c.hc ?? ''].map(q).join(','));
       out.push('', 'scene x purchase intent (all days)', 'date,scene,intent,count');
       for (const [date, d] of days) for (const [k, n] of Object.entries(d.sceneBuy || {})) { const [sc, b] = k.split('|'); out.push([date, sc, b, n].map(q).join(',')); }
       return out.join('\n') + '\n';
@@ -110,7 +126,7 @@
   // mode: interactive is the default (user 2026-11-08; pure = the option, taps always work)
   function resetVisitor() {
     const c = cfg(); stopDevice();
-    LSs('moheat.mode', 'interactive'); LSs('moheat.heat', true); LSs('moheat.intensity', Math.min(c.start, c.cap)); LSs('moheat.subs', 'm'); LSs('moheat.reduce', false);
+    LSs('moheat.mode', 'interactive'); LSs('moheat.heat', true); LSs('moheat.intensity', 100); LSs('moheat.warmScale', c.startWarm / 100); LSs('moheat.coolScale', c.startCool / 100); LSs('moheat.subs', 'm'); LSs('moheat.reduce', false);
     LSs('moheat.volume', 70);
     try { localStorage.setItem('moheat.guide', 'done'); } catch {}   // the kiosk intro replaces the page tour
     SSs('moheat.kiosk.visit', null); SSs('moheat.kiosk.level', null);
@@ -140,7 +156,7 @@
   const thermalOf = (s) => { const th = { l: { h: 0, c: 0 }, r: { h: 0, c: 0 } };   // device text → 0–1 per ear (heat 0–200, cool 35–80)
     for (const m of String(s).matchAll(/\b([LR])([HC])\s*(\d+)/g)) { const n = +m[3], e = th[m[1].toLowerCase()]; if (m[2] === 'H') e.h = Math.min(1, n / 200); else e.c = n ? Math.max(0, Math.min(1, (n - 35) / 45)) : 0; } return th; };
   const K = window.MoHeatKiosk = { currency, bands, BANDS, SCENES, on: flag, cfg, setCfg, stats, resetVisitor, enter, exit, visit, day, DEF, stopDevice,
-    offered, num, top3, pickUrl, dnum, post, thermalOf, get queueOn() { return Date.now() - queueSeen < 6000; } };
+    offered, num, top3, pickUrl, dnum, post, thermalOf, scales, setScales, scaleLine, get queueOn() { return Date.now() - queueSeen < 6000; } };
 
   // ================================================================ demo pages (kiosk mode on)
   const kioskApp = /\/kiosk\/(index\.html)?$/.test(location.pathname) || document.documentElement.dataset.kioskApp != null;
@@ -208,7 +224,7 @@
     let taps = []; corner.addEventListener('click', () => { const n = Date.now(); taps = taps.filter((t) => n - t < 3000).concat(n); if (taps.length >= 5) leave('staff'); });
     // intensity cap on the page's slider (the shell already restored the visitor's level)
     const inten = document.getElementById('intensity');
-    if (inten) { inten.max = String(c.cap); if (+inten.value > c.cap) { inten.value = c.cap; inten.dispatchEvent(new Event('input', { bubbles: true })); } }
+    // the caps live in the two scales (scaleLine below); the page slider is a master the visitor may lower
     autoConnect(); guardDevice();
     try { navigator.wakeLock?.request('screen').catch(() => {}); } catch {}
   };
@@ -250,7 +266,7 @@
     wasPlaying = p;
     if (p) {
       const cmd = document.getElementById('cmd')?.textContent || '', { w, cl } = parse(cmd), k = chapterNow();
-      post({ t: 'thermal', th: thermalOf(rest ? '' : cmd) });
+      post({ t: 'thermal', th: thermalOf(rest ? '' : scaleLine(cmd)) });
       if (k >= 0 && (w || cl)) learn(k, w / 200 + Math.max(0, cl - 35) / 45);
       // a moment = a chapter; demos without chapters: the scene name in the sound-map card (#posInfo, §7.3)
       const key = k >= 0 ? k : (document.getElementById('posInfo')?.textContent || '').trim().slice(0, 40);
@@ -327,7 +343,7 @@
       if (rest) return undefined;
       const active = /\b[LR][HC]\s*[1-9]/.test(line); if (!active) onSince = 0; else if (!onSince) onSince = RN();
       if (onSince && RN() - onSince > DUTY_ON * 1000) { rest = true; onSince = 0; send('stop'); note(tx(TX.rest)); RT.st(() => { rest = false; note(''); }, DUTY_OFF * 1000); return undefined; }
-      return send(line);
+      return send(scaleLine(line));   // the visitor's warm / cool scales (intro), within the staff caps
     };
   }
   let noteEl = null; function note(t) { if (!noteEl) { noteEl = document.createElement('div'); noteEl.className = 'mk-note'; document.body.appendChild(noteEl); } noteEl.textContent = t; noteEl.hidden = !t; }

@@ -3,11 +3,16 @@
 //   0 opening sting (2.4 s): MoHeat Evo logo, a cold → warm sweep across both ears (also confirms the device works)
 //   1 put the headset on (L on the left ear)          2 left · warm            3 right · cool
 //   4 fast hot ↔ cold switch (both ears)               5 cool + warm on the SAME ear (DUAL)
-//   6 "is the intensity comfortable?" softer / just right / stronger (warm sample at the chosen level) → done
+//   6 WARM auto-calibration   7 COOL auto-calibration → done (user 2026-11-08, REQUIREMENTS §10: separately, no buttons to judge):
+//     the left ear (warm) / right ear (cool) ramps slowly from very weak up to the staff cap (~7 s); big text "Tap when it's ALMOST too
+//     strong". Any tap / key / Esc stops the output AT ONCE and records that level as the visitor's personal max; no tap → stops at the
+//     cap. The visitor's 100 % = 80 % of the personal max (headroom). A short pause between warm and cool.
 // Skip is always there. Text: en / ja / zh (+ ko falls back to en until a column is added). Thermal: old per-ear commands
 // (LH / RH / LC / RC, one mode per ear) except step 5 (DUAL LC.. LH.. RC.. RH..). Levels scale with the visitor's intensity k:
 // heat PWM = 150·k, cool PWM = 35 + 45·k (35–80, never colder than the device's own range).
-//   const intro = MoHeatIntro.mount(el, { send(line), level: .5, cap: .8, lang: () => 'en', onDone({ level, skipped }) });
+//   const intro = MoHeatIntro.mount(el, { send(line), warm: .5, cool: .5, capWarm: .8, capCool: .8, lang: () => 'en', onLevel({ warm, cool }),
+//     onDone({ warm, cool, maxWarm, maxCool, hit: { warm: 'tap' | 'cap', cool }, skipped }), only: ['warm', 'cool'] (staff self-calibration) });
+//   (old options level / cap still work: they set both)
 //   intro.start(); intro.skip(); intro.stop();  — everything stops (device "stop") on done, skip and stop.
 (() => {
   if (window.MoHeatIntro) return;
@@ -27,6 +32,12 @@
     dual: { en: 'Cool + warm on the same ear', ja: '同じ耳に、冷たいと温かいを同時に', zh: '同一只耳朵，冷和热同时' },
     dualSub: { en: 'Like a warm voice in cool night air: MoHeat Evo can do both at once.', ja: '夜の冷たい空気の中の、温かい声。MoHeat Evo は両方を同時に出せます。', zh: '就像凉夜里耳边温暖的声音：MoHeat Evo 能同时做到。' },
     level: { en: 'Is the intensity comfortable?', ja: '強さはちょうどいいですか？', zh: '强度舒服吗？' },
+    warmQ: { en: 'Warm on your LEFT ear is rising…', ja: '左耳の温かさが、だんだん強くなります…', zh: '左耳的暖意正在慢慢变强…' },
+    coolQ: { en: 'Cool on your RIGHT ear is rising…', ja: '右耳の冷たさが、だんだん強くなります…', zh: '右耳的凉意正在慢慢变强…' },
+    tapNow: { en: 'Tap when it’s ALMOST too strong', ja: '「ちょっと強すぎるかも」と思ったらタップ', zh: '快要太强的时候，点一下' },
+    tapBtn: { en: 'Now!', ja: 'いま！', zh: '就是现在！' },
+    gotIt: { en: '✓ Got it — your level is set', ja: '✓ OK — あなたの強さを記録しました', zh: '✓ 好的 — 已记下你的强度' },
+    nextCool: { en: 'Next: cool', ja: 'つぎは冷たさ', zh: '接下来：凉' },
     levelSub: { en: 'You can change it any time during the demo.', ja: 'デモの途中でもいつでも変えられます。', zh: '体验中也可以随时调整。' },
     softer: { en: 'Softer', ja: '弱く', zh: '弱一点' }, ok: { en: 'Just right', ja: 'ちょうどいい', zh: '刚刚好' }, stronger: { en: 'Stronger', ja: '強く', zh: '强一点' },
     skip: { en: 'Skip intro', ja: 'スキップ', zh: '跳过' }, L: { en: 'L', ja: '左', zh: '左' }, R: { en: 'R', ja: '右', zh: '右' },
@@ -53,18 +64,25 @@
   .mi button.go { background: linear-gradient(135deg, #ffd58a, #ff9f6e); color: #2a1606; border-color: transparent; }
   .mi .lvl { font: 700 clamp(13px, 2vmin, 20px)/1 var(--ff); color: #ffd58a; letter-spacing: .1em; }
   .mi .lvl i { display: inline-block; width: 1.6em; height: .55em; margin: 0 .12em; border-radius: 3px; background: rgba(255,255,255,.18); vertical-align: middle; }
-  .mi .lvl i.on { background: linear-gradient(90deg, #ffb070, #ff7a3a); }
+  .mi .lvl i.on { background: linear-gradient(90deg, #ffb070, #ff7a3a); } .mi .lvl.cool i.on { background: linear-gradient(90deg, #bfe9ff, #5cb8ff); }
   .mi .dots { position: absolute; bottom: 3.2vmin; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
   .mi .dots b { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.22); } .mi .dots b.on { background: #ffd58a; }
   .mi .skip { position: absolute; right: 3vmin; bottom: 2.2vmin; font-size: clamp(14px, 2vmin, 20px); min-height: 48px; border-color: rgba(255,255,255,.2); color: #cfc3dc; }
   .mi .nodev { position: absolute; left: 3vmin; bottom: 3vmin; max-width: 40%; text-align: left; font: 500 clamp(11px, 1.6vmin, 15px)/1.35 var(--ff); color: #a99ab8; }
   .mi .vol { display: flex; align-items: center; gap: 3vmin; } .mi .vol svg { width: clamp(64px, 12vmin, 120px); }
   .mi .vol input { width: min(56vmin, 520px); height: 56px; accent-color: #ffd58a; cursor: pointer; }
+  .mi .ramp { width: min(56vmin, 520px); height: 22px; border-radius: 11px; background: rgba(255,255,255,.12); overflow: hidden; }
+  .mi .ramp i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ffd0a0, #ff7a3a); transition: width .25s linear; }
+  .mi .ramp.cool i { background: linear-gradient(90deg, #dff4ff, #3e9bf0); }
+  .mi .tapnow { margin: 0; font: 800 clamp(22px, 4.6vmin, 50px)/1.2 var(--ff); color: #ffd58a; animation: miTap 1.2s ease-in-out infinite; }
+  @keyframes miTap { 50% { transform: scale(1.06); opacity: .8; } }
+  .mi button.now { min-height: 84px; min-width: 260px; font-size: clamp(22px, 4vmin, 40px); }
+  .mi .got { color: #a6f0c0; font-weight: 700; }
   .mi .bar { width: min(50vmin, 420px); height: 6px; border-radius: 3px; background: rgba(255,255,255,.12); overflow: hidden; }
   .mi .bar i { display: block; height: 100%; width: 0; background: #ffd58a; transition: width linear; }
   @media (prefers-reduced-motion: reduce) { .mi .ear { transition: none; } }`;
   const STEPS = [
-    { id: 'sting', s: 2.4 }, { id: 'wear', s: 6 }, { id: 'volume', s: 9 }, { id: 'left', s: 4 }, { id: 'right', s: 4 }, { id: 'swap', s: 6 }, { id: 'dual', s: 5 }, { id: 'level', s: 12 },
+    { id: 'sting', s: 2.4 }, { id: 'wear', s: 6 }, { id: 'volume', s: 9 }, { id: 'left', s: 4 }, { id: 'right', s: 4 }, { id: 'swap', s: 6 }, { id: 'dual', s: 5 }, { id: 'warm', s: 11 }, { id: 'cool', s: 12 },
   ];
 
   function mount(el, o = {}) {
@@ -74,11 +92,12 @@
     const lang = () => (o.lang ? o.lang() : 'en');
     const tx = (k) => T[k][lang()] || T[k].en;
     let volume = Math.max(0, Math.min(1, o.volume ? o.volume() : .7)); const vol = () => volume;
-    const cap = Math.max(.2, Math.min(1, o.cap ?? 1));
-    let k = Math.min(cap, Math.max(.2, o.level ?? .5)), i = -1, timers = [], over = false, ac = null;
-    const H = () => Math.round(150 * k), C = () => Math.round(35 + 45 * k);
+    const capW = Math.max(.2, Math.min(1, o.capWarm ?? o.cap ?? 1)), capC = Math.max(.2, Math.min(1, o.capCool ?? o.cap ?? 1));
+    let kW = Math.min(capW, Math.max(.2, o.warm ?? o.level ?? .5)), kC = Math.min(capC, Math.max(.2, o.cool ?? o.level ?? .5)), i = -1, timers = [], over = false, ac = null;
+    const H = () => Math.round(150 * kW), C = () => Math.round(35 + 45 * kC);
+    const HEADROOM = .8, RAMP_S = 7, FLOOR = .08; let maxW = null, maxC = null; const hit = {};
     const at = (ms, fn) => timers.push(setTimeout(fn, ms));
-    const clear = () => { timers.forEach((x) => { clearTimeout(x); clearInterval(x); }); timers = []; };
+    const clear = () => { timers.forEach((x) => { if (x && x.clear) x.clear(); else { clearTimeout(x); clearInterval(x); } }); timers = []; };
     // a soft panned tone confirms left / right by ear too (no tone in the sting: the logo is enough)
     const tone = (pan, f = 523) => {
       try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); ac.resume?.();
@@ -96,7 +115,7 @@
     const ears = (l, r) => { const [a, b] = A.querySelectorAll('.ear'); if (a) a.className = `ear l ${l || ''}`; if (b) b.className = `ear r ${r || ''}`; };
     const bar = (s) => `<div class="bar"><i style="transition-duration:${s}s"></i></div>`;
     const runBar = () => requestAnimationFrame(() => requestAnimationFrame(() => { const b = A.querySelector('.bar i'); if (b) b.style.width = '100%'; }));
-    const lvl = () => { const n = Math.round(k * 10); return `<div class="lvl">${Array.from({ length: 10 }, (_, j) => `<i class="${j < n ? 'on' : ''}"></i>`).join('')}</div>`; };
+    const lvl = (k, cool) => { const n = Math.round(k * 10); return `<div class="lvl${cool ? ' cool' : ''}">${Array.from({ length: 10 }, (_, j) => `<i class="${j < n ? 'on' : ''}"></i>`).join('')}</div>`; };
     const paintChrome = () => {
       root.querySelector('.skip').textContent = tx('skip');
       root.querySelectorAll('.dots b').forEach((b, j) => b.classList.toggle('on', j <= i));
@@ -139,23 +158,37 @@
         A.innerHTML = `<h2>${tx('dual')}</h2>${head()}<p class="sub">${tx('dualSub')}</p>${bar(st.s)}`; runBar();
         send(`DUAL LC${C()} LH${H()} RC${C()} RH${H()}`); ears('dual', 'dual');
         at(st.s * 1000, () => { send('stop'); next(); });
-      } else if (st.id === 'level') {
-        const paint = () => {
-          A.innerHTML = `<h2>${tx('level')}</h2>${head()}${lvl()}<div class="row"><button type="button" data-d="-1">${tx('softer')}</button><button type="button" class="go" data-d="0">${tx('ok')}</button><button type="button" data-d="1">${tx('stronger')}</button></div><p class="sub">${tx('levelSub')}</p>`;
-          ears('warm', 'warm'); send(`LH${H()} RH${H()}`);
-          A.querySelector('.row').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; const d = +b.dataset.d;
-            if (!d) return finish(false);
-            k = Math.round(Math.min(cap, Math.max(.2, k + d * .15)) * 100) / 100; o.onLevel?.(k); clear(); paint(); at(st.s * 1000, () => finish(false)); });
+      } else if (st.id === 'warm' || st.id === 'cool') {   // auto-calibration: slow ramp, the visitor taps at "almost too strong"
+        const W = st.id === 'warm', cap = W ? capW : capC;
+        let k = FLOOR, ramp = 0, stopped = false;
+        const out = () => send(W ? `LH${Math.round(150 * k)} RH0` : `LH0 RC${Math.round(35 + 45 * k)}`);
+        const meter = () => { const m = A.querySelector('.ramp i'); if (m) m.style.width = `${Math.round(100 * k / cap)}%`; };
+        const stop = (how) => {   // a tap / key / Esc, or the cap: output off at once, then record
+          if (stopped) return; stopped = true; clearInterval(ramp); send('stop'); ears('', '');
+          if (W) { maxW = k; kW = Math.max(FLOOR, Math.round(k * HEADROOM * 100) / 100); } else { maxC = k; kC = Math.max(FLOOR, Math.round(k * HEADROOM * 100) / 100); }
+          hit[st.id] = how; o.onLevel?.({ warm: kW, cool: kC, maxWarm: maxW, maxCool: maxC });
+          root.removeEventListener('pointerdown', onTap, true); removeEventListener('keydown', onKey, true);
+          A.querySelector('.tapzone')?.remove(); const g = document.createElement('p'); g.className = 'sub got'; g.textContent = tx('gotIt') + (W && !only ? ` · ${tx('nextCool')}` : ''); A.appendChild(g);
+          at(1600, () => (W && !(only && !only.includes('cool')) ? next() : finish(false)));   // the short pause between warm and cool
         };
-        paint(); at(st.s * 1000, () => finish(false));
+        const onTap = (e) => { if (e.target.closest?.('.skip')) return; e.preventDefault(); e.stopPropagation(); stop('tap'); };
+        const onKey = (e) => { e.preventDefault(); stop('tap'); };
+        A.innerHTML = `<h2>${tx(W ? 'warmQ' : 'coolQ')}</h2>${head()}<div class="ramp${W ? '' : ' cool'}"><i></i></div><p class="tapnow">${tx('tapNow')}</p>
+          <div class="row tapzone"><button type="button" class="go now">👆 ${tx('tapBtn')}</button></div>`;
+        ears(W ? 'warm' : '', W ? '' : 'cool');
+        root.addEventListener('pointerdown', onTap, true); addEventListener('keydown', onKey, true);
+        timers.push({ clear: () => { clearInterval(ramp); root.removeEventListener('pointerdown', onTap, true); removeEventListener('keydown', onKey, true); } });
+        const t0 = Date.now(); out(); meter();
+        ramp = setInterval(() => { if (stopped) return; k = Math.min(cap, FLOOR + (cap - FLOOR) * (Date.now() - t0) / (RAMP_S * 1000)); out(); meter(); if (k >= cap) stop('cap'); }, 250);
       }
     }
     function finish(skipped) {
       if (over) return; over = true; clear(); send('stop');
-      o.onDone?.({ level: k, skipped, step: STEPS[i]?.id || 'end' });
+      o.onDone?.({ warm: kW, cool: kC, maxWarm: maxW, maxCool: maxC, hit, level: Math.max(kW, kC), skipped, step: STEPS[i]?.id || 'end' });
     }
-    return { start: () => { over = false; show(0); }, skip: () => finish(true), stop: () => { over = true; clear(); send('stop'); },
-      get step() { return STEPS[i]?.id; }, get level() { return k; }, log, repaint: () => { if (i >= 0 && !over) show(i); } };
+    const only = o.only || null;   // e.g. ['warm', 'cool']: staff self-calibration runs just those steps
+    return { start: () => { over = false; show(only ? STEPS.findIndex((x) => x.id === only[0]) : 0); }, skip: () => finish(true), stop: () => { over = true; clear(); send('stop'); },
+      get step() { return STEPS[i]?.id; }, get level() { return Math.max(kW, kC); }, get warm() { return kW; }, get cool() { return kC; }, log, repaint: () => { if (i >= 0 && !over) show(i); } };
   }
   window.MoHeatIntro = { mount, T, STEPS };
 })();

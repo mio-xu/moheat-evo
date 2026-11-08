@@ -158,3 +158,9 @@ table.stat th { color: var(--dim); font-weight: 600; } table.stat td.n { text-al
   .langs button { min-height: 48px; } .picto svg { max-height: 6.5vmin; } button.big { min-height: 56px; }
   .rec-row small { display: none; } .rec-row img { height: 9vmin; } .rec h3 { margin-bottom: .6vmin; } .nums { margin-top: .8vmin; } #skipIntro { min-height: 40px; }
 }
+
+/* survey pacing: the picked option glows ~0.8 s before the next question */
+.q [aria-pressed=true], .q .stars button.sel { animation: picked .8s ease-out; box-shadow: 0 0 0 4px rgba(255,213,138,.45); }
+@keyframes picked { 0% { transform: scale(1); } 30% { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(255,213,138,.25); } 100% { transform: scale(1); } }
+#cardBack[hidden] { display: none; }
+@media (prefers-reduced-motion: reduce) { .q [aria-pressed=true], .q .stars button.sel { animation: none; } }

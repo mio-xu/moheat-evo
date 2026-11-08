@@ -26,7 +26,7 @@
   <div id="host"></div>
   <div class="start" id="start"><h1 data-t="h"></h1><p data-t="p"></p><button type="button" id="go" data-t="go"></button></div>
   <script src="../device.js?v=2"></script>
-  <script src="../demos/shared/thermintro.js?v=efc6816b"></script>
+  <script src="../demos/shared/thermintro.js?v=eb5f2929"></script>
   <script>
     (() => {
       const T = { h: { en: '30-second thermal intro', ja: '30 秒の温冷入門', zh: '30 秒冷热入门' },
@@ -41,8 +41,12 @@
       const lvl = (() => { try { return (+JSON.parse(localStorage.getItem('moheat.intensity')) || 50) / 100; } catch { return .5; } })();
       let fin = false;
       $('#go').addEventListener('click', () => { if (fin) { location.href = '../#demos'; return; } $('#start').hidden = true;
-        MoHeatIntro.mount($('#host'), { send: dev.send, level: Math.min(lvl, .8), cap: 1, lang: () => l, connected: () => dev.isConnected(),
-          onDone: ({ level }) => { try { localStorage.setItem('moheat.intensity', JSON.stringify(Math.round(level * 100))); } catch {}   // the demos' intensity slider starts here (shell.js)
+        const get = (k) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? null : +v; } catch { return null; } };
+        MoHeatIntro.mount($('#host'), { send: dev.send, warm: get('moheat.warmScale') ?? Math.min(lvl, .8), cool: get('moheat.coolScale') ?? Math.min(lvl, .8), lang: () => l, connected: () => dev.isConnected(),
+          onDone: ({ warm, cool }) => { try { localStorage.setItem('moheat.warmScale', JSON.stringify(warm)); localStorage.setItem('moheat.coolScale', JSON.stringify(cool));
+            // the shell has one intensity control for now: the stronger of the two is its starting value; the two scales are kept for a
+            // two-value control (ui2 adapter) to read: localStorage moheat.warmScale / moheat.coolScale (0–1)
+            localStorage.setItem('moheat.intensity', JSON.stringify(Math.round(Math.max(warm, cool) * 100))); } catch {}
             $('#host').innerHTML = ''; $('#start').hidden = false; $('#go').textContent = T.done[l]; fin = true; } }).start(); });
       paint();
     })();
