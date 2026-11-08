@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Shippori+Mincho+B1:wght@600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../shared/game.css?v=1" />
-  <link rel="stylesheet" href="style.css?v=1" />
+  <link rel="stylesheet" href="style.css?v=9de2d6c9" />
   <link rel="stylesheet" href="../../shared/series.css?v=9" />
   <script>if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add('embed');</script>
   <style>/* ?embed=1 — used by the site's demo menu: stage only */
@@ -61,10 +61,17 @@
               <button class="btn" id="lrBtn" type="button">🎧 Left / Right check</button>
             </div>
             <div class="talk-pick" id="talkPick" hidden><small>💬 もっと話す · Keep talking</small>
+              <span class="tp-row" role="group" aria-label="Place">
+              <button class="tpl" type="button" data-place="pass" aria-pressed="false">❄️ 峠 · Pass</button>
+              <button class="tpl" type="button" data-place="hall" aria-pressed="true">🍲 火鍋 · Hotpot</button>
+              <button class="tpl" type="button" data-place="room" aria-pressed="false">🌿 薬部屋 · Clinic</button>
+              <button class="tpl" type="button" data-place="door" aria-pressed="false">🚪 戸口 · Door</button>
+              <button class="tpl" type="button" data-place="dawn" aria-pressed="false">🌅 夜明け · Dawn</button></span>
+              <span class="tp-row" role="group" aria-label="Who">
               <button class="tp" type="button" data-who="M" data-voice="ミント|みんと|mint|薄荷">ミント · Mint</button>
               <button class="tp" type="button" data-who="H" data-voice="ひなた|日向|hinata">ひなた · Hinata</button>
               <button class="tp" type="button" data-who="N" data-voice="なぎさ|渚|nagisa">渚 · Nagisa</button>
-              <button class="tp" type="button" data-who="MHN" data-voice="三人|さんにん|みんな|all|everyone|三个人">三人 · All three</button>
+              <button class="tp" type="button" data-who="MHN" data-voice="三人|さんにん|みんな|all|everyone|三个人">三人 · All three</button></span>
             </div>
             <p class="hint">Headphones on · tap / hold or answer by voice, and talk with them freely · connect MoHeat Evo to feel the blizzard, a hotpot, moxa and mint balm on the same ear, and their voices</p>
             <p class="draft" id="credits">Original characters in a special version · everyone speaks Japanese there · voices ElevenLabs · art OpenAI gpt-image · layered stills · free talk = live AI (private)</p>
@@ -94,16 +101,16 @@
   </main>
 
   <script src="../../../device.js?v=2"></script>
-  <script src="lines.js?v=1"></script>
+  <script src="lines.js?v=5a2c4406"></script>
   <script src="audio.js?v=1"></script>
   <script src="../../shared/talk.js?v=1"></script>
   <!-- layered art (DEMO_DESIGN_GUIDE §6 standard): shared/layers.js draws the live composite wherever main.js draws a still -->
   <script>window.MoHeatLayers = { level: () => window.INN?.S?.env || 0, raw: () => window.INN?.S?.lv || 0, current: () => window.INN?.S?.view || 'pass' };</script>
-  <script src="media/layers.js?v=2"></script>
-  <script src="../../shared/layers.js?v=7"></script>
+  <script src="media/layers.js?v=50e14526"></script>
+  <script src="../../shared/layers.js?v=f71de857"></script>
   <script src="../../shared/cover.js?v=1"></script>
-  <script src="live/live.js?v=1"></script>
-  <script src="main.js?v=1"></script>
+  <script src="live/live.js?v=157256b9"></script>
+  <script src="main.js?v=3043fd31"></script>
   <script src="../../shared/voice.js?v=6"></script>
   <script src="../../shared/nav.js?v=44"></script>
 </body>

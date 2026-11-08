@@ -125,6 +125,72 @@ L = {
     'tt4': ('H', '[laughs] 未来に帰っても、雪見亭のこと、忘れないでね！', "Even back in the future, don't forget Yukimi Inn!", '回到未来以后，也别忘了雪见亭哦！'),
     'tt5': ('N', '[whispers] …またな。', '…See you.', '…再见。'),
     'tt6': ('M', '[whispers] …またね…。', '…Bye for now…', '…下次见…。'),
+    # ---- もっと話す · place × cast (2026-11-08): new lines only where the story's lines do not cover a place / person
+    # 吹雪の峠 (her fur cape on you; the blizzard + gusts left → right)
+    'pm1': ('M', '[sleepy] …さむい…。 こんなところまで、ついてきちゃった…。 耳、また冷えちゃうよ…？', "…So cold… I followed you all the way up here… Your ears will freeze again…?", '…好冷…。一路跟到这种地方来了…。耳朵，又要冻着了哦…？'),
+    'pm2': ('M', '[softly] …雪の日はね、耳から先に冷えるの。 風下を向いて、手でこう、かこうの…。', '…On snowy days the ears go cold first. Turn away from the wind and cup them with your hands, like this…', '…下雪天，耳朵最先冷。背对着风，用手这样，捂住…。'),
+    'pm3': ('M', '[whispers] …わたしの手、あったかいでしょ…。 さっきまで、お灸、持ってたから…。', "…My hands are warm, aren't they… I was holding the moxa until a moment ago…", '…我的手，很暖和吧…。刚才一直拿着艾条呢…。'),
+    'pm4': ('M', '[sleepy] …ん。 もう、宿に戻ろ…？ 吹雪の中で寝たら、だめだからね…。', "…Mm. Let's go back to the inn…? You mustn't fall asleep in a blizzard…", '…嗯。回客栈吧…？在暴风雪里睡着可不行哦…。'),
+    'ph1': ('H', '[shouting] おーい！ こんな吹雪の日に、峠に出ちゃだめだってば！', "Hey! You can't go out on the pass in a blizzard like this!", '喂——！这种暴风雪天，不许跑到山口来啦！'),
+    'ph2': ('H', '[playful] はい、温石！ 鍋の火で温めてきたの。 ほっぺに、ぴたっ！', "Here — a warming stone! I heated it on the hotpot fire. On your cheek — there!", '给，暖石！在火锅的火上烤热的。贴到脸上——啪！'),
+    'ph3': ('H', '[laughs] あっはは、雪合戦なら負けないよ！ …って、この風じゃ無理か。', "Ahaha, I'd never lose a snowball fight! …Not in this wind, though.", '啊哈哈，打雪仗我可不会输！…不过这么大的风，打不了吧。'),
+    'ph4': ('H', '[cheerful] よし、帰ったら熱々の鍋ね！ 勝負は、そのあと！', "Right, back to a scalding hotpot! The bet comes after!", '好，回去吃热腾腾的火锅！赌局，吃完再说！'),
+    'pn1': ('N', '[gruff] …またここに来たのか。 吹雪の峠は、遊び場じゃねえぞ。', "…You came up here again? The pass in a blizzard isn't a playground.", '…你又跑来这里了？暴风雪的山口可不是玩的地方。'),
+    'pn2': ('N', '[gruff] あたしが左に立つ。 …風よけくらいには、なる。', "I'll stand on your left. …I'm good for blocking the wind, at least.", '我站你左边。…至少能帮你挡挡风。'),
+    'pn3': ('N', '[softly] …ここで、あんたを拾ったんだよな。 雪に埋もれて、真っ白で。 …ほんと、焦った。', '…This is where I found you. Buried in snow, all white. …I really panicked.', '…就是在这里捡到你的。埋在雪里，浑身雪白。…真的吓坏我了。'),
+    'pn4': ('N', '[whispers] …もう、勝手にいなくなるなよ。 …帰るぞ。', "…Don't wander off on your own again. …We're going back.", '…以后别再自己乱跑了。…回去了。'),
+    # 宿・火鍋 (hotpot steam in front, the brazier on the right)
+    'hm1': ('M', '[sleepy] …ん…。 ひなたちゃんのお鍋の匂いで、起きちゃった…。', "…Mm… The smell of Hinata's hotpot woke me up…", '…嗯…。被日向火锅的香味弄醒了…。'),
+    'hm2': ('M', '[softly] …この湯気ね、のどにいいの。 生姜と、なつめと、くこの実…。 ゆっくり吸って…。', '…This steam is good for your throat. Ginger, jujube, goji berries… Breathe it in slowly…', '…这热气对嗓子好。生姜、红枣、枸杞…。慢慢吸…。'),
+    'hm3': ('M', '[softly] …火鉢のそば、あったかいね…。 …まぶた、重くなってきた…。', "…It's warm by the brazier… My eyelids are getting heavy…", '…火盆旁边好暖和…。…眼皮越来越重了…。'),
+    'hm4': ('M', '[whispers] …食べたら、ちゃんと寝るんだよ…。 おやすみ前の、お薬だから…。', "…After you eat, go straight to sleep… It's your medicine before bed…", '…吃完了，要好好睡觉哦…。这是睡前的药…。'),
+    'hn1': ('N', '[gruff] …なんだ、腹減ったのか。 …ほら、座れ。 よそってやる。', "…What, hungry? …Sit. I'll serve you.", '…怎么，饿了？…坐下。我给你盛。'),
+    'hn2': ('N', '[softly] …峠を越える奴らは、みんなこの鍋で生き返るんだ。 あたしも、そうだった。', '…Everyone who crosses the pass comes back to life with this hotpot. I did too.', '…翻山口的人，都是靠这锅火锅活过来的。我也是。'),
+    'hn3': ('N', '[embarrassed] …ふーふーしてやろうか、とか、言わねえからな。 …自分で冷ませ。', "…Don't expect me to blow on it for you. …Cool it yourself.", '…别指望我帮你吹凉。…自己吹。'),
+    'hn4': ('N', '[whispers] …食ったら、寝ろ。 戸口は、あたしが見てる。', "…Eat, then sleep. I'll watch the door.", '…吃完就睡。门口有我看着。'),
+    'ht6': ('H', '[laughs] よーし、みんなでおかわり！ 今夜は、ひと晩じゅう鍋だよ！', "Alright, seconds for everyone! Tonight it's hotpot all night long!", '好——，大家一起添！今晚，火锅吃一整晚！'),
+    # 女医の部屋 (paper lamp on the left, moxa + mint balm at the right ear)
+    'hr1': ('H', '[whispers] …しーっ。 ミント先生、また寝ちゃった。 …静かにね？', '…Shh. Doctor Mint fell asleep again. …Quietly, okay?', '…嘘——。薄荷大夫又睡着了。…小声点哦？'),
+    'hr2': ('H', '[playful] ねえ、先生の薬箱、ひとつだけ開けてみない？ …うそうそ、怒られるって！', "Hey, shall we open just one drawer of her medicine box? …Kidding, kidding — she'd scold us!", '呐，要不要偷偷打开大夫药箱的一个抽屉？…骗你的啦，会挨骂的！'),
+    'hr3': ('H', '[softly] …先生ね、ほんとは夜通し、あんたの耳、診てたんだよ。 …ないしょね。', '…You know, the doctor actually watched over your ears all night. …Keep it secret.', '…其实啊，大夫守着你的耳朵看了一整夜。…要保密哦。'),
+    'hr4': ('H', '[whispers] …あたしも、そろそろ寝よっかな。 …おやすみ、また明日！', "…Guess I'll go to bed too. …Good night, see you tomorrow!", '…我也差不多该睡了。…晚安，明天见！'),
+    'nr1': ('N', '[gruff] …先生なら、寝てる。 …耳、まだ痛むのか？', "…The doctor's asleep. …Do your ears still hurt?", '…大夫睡着了。…耳朵还疼吗？'),
+    'nr2': ('N', '[softly] あたしも昔、峠で指を凍らせてさ。 先生に、ひと晩じゅう、手当てしてもらった。', "I froze my fingers on the pass once, too. She treated them all night.", '我以前也在山口冻伤过手指。大夫给我治了一整夜。'),
+    'nr3': ('N', '[embarrassed] …薄荷の匂い、あんたからもする。 …べ、別に、嗅いでねえし。', "…You smell of mint too. …N-not that I was sniffing you.", '…你身上也有薄荷的味道。…我、我可没去闻。'),
+    'nr4': ('N', '[whispers] …寝ろ。 先生が起きたら、あたしが言っといてやる。', "…Sleep. When she wakes up, I'll tell her.", '…睡吧。大夫醒了，我会跟她说的。'),
+    # 夜の戸口 (the door on the left lets the blizzard in, the brazier on the right)
+    'dm1': ('M', '[sleepy] …ふぁ…。 夜風の音で、目がさめちゃった…。', '…Haah… The night wind woke me up…', '…呼啊…。被夜风的声音吵醒了…。'),
+    'dm2': ('M', '[softly] …すきま風、左の耳に当たってるね…。 わたしの羽織、かけてあげる…。', "…The draught is hitting your left ear… Here, take my coat…", '…漏进来的风，吹到你左耳了吧…。我的外褂，给你披上…。'),
+    'dm3': ('M', '[softly] …夜の雪って、音を吸うの…。 だから、こんなに静か…。', "…Snow at night swallows sound… That's why it's so quiet…", '…夜里的雪，会把声音吸走…。所以才这么安静…。'),
+    'dm4': ('M', '[whispers] …ほら、もう一回、寝よ…？ となりで、見てるから…。', "…Come on, let's sleep again…? I'll watch over you, right here…", '…来，再睡一会儿吧…？我在旁边看着你…。'),
+    'dh1': ('H', '[surprised] わっ、さむっ！ …戸、また開いちゃってる！', "Whoa, cold! …The door's blown open again!", '哇，好冷！…门又开了！'),
+    'dh2': ('H', '[cheerful] よいしょっ…と！ つっかい棒、しといたから、もう大丈夫！', "Hup…! I've wedged it shut — all good now!", '嘿咻…！我把门顶住了，没事了！'),
+    'dh3': ('H', '[playful] ねえ、眠れないなら、サイコロ一回だけ、どう？ …小声でね。', "Hey, if you can't sleep, how about one roll of the dice? …Quietly.", '呐，睡不着的话，掷一次骰子怎么样？…小声点。'),
+    'dh4': ('H', '[whispers] …なーんてね。 ほら、火鉢のそばで寝な？ …おやすみ。', "…Just kidding. Go sleep by the brazier, okay? …Good night.", '…开玩笑的啦。去火盆旁边睡吧？…晚安。'),
+    # 夜明けの峠 (the sun over the ridge, snow)
+    'wm2': ('M', '[softly] …雪、きらきらしてる…。 目、まぶしくない…？', "…The snow is sparkling… Isn't it too bright for your eyes…?", '…雪闪闪发亮…。眼睛，不刺眼吗…？'),
+    'wm3': ('M', '[whispers] …あっちに帰っても、耳、冷やさないでね…。 約束…。', "…Even back there, don't let your ears get cold… Promise…", '…回到那边以后，也别让耳朵着凉哦…。约好了…。'),
+    'wh1': ('H', '[excited] 見て見て、朝日！ 峠がまっ金色！', 'Look, look, the sunrise! The pass is all gold!', '快看快看，朝阳！山口一片金色！'),
+    'wh3': ('H', '[playful] …ねえ、最後に一回だけ、勝負しよ？ あんたが勝ったら、また来ること！', "…Hey, one last bet? If you win, you have to come back!", '…呐，最后再赌一次吧？你赢了的话，就要再来！'),
+    'wh4': ('H', '[whispers] …あたしが勝っても、また来ること。 …ずるい？ へへ。', '…And if I win, you come back too. …Unfair? Hehe.', '…我赢了的话，你也要再来。…很狡猾？嘿嘿。'),
+    'wn2': ('N', '[softly] …夜明けの峠は、こんなに静かなんだ。 …あんたと見られて、よかった。', "…The pass at dawn is this quiet. …I'm glad I got to see it with you.", '…黎明的山口，原来这么安静。…能和你一起看，真好。'),
+    'wn3': ('N', '[gruff] …あの門をくぐれば、あんたの国だろ。 …迷うなよ。', "…Through that gate is your country, right? …Don't get lost.", '…穿过那道门，就是你的国家了吧。…别迷路。'),
+    # place bridges: what you said was about the place itself (its wind, fire, cures, door, sunrise)
+    'bm_p_wind': ('M', '[softly] …風、つよいね…。 耳、手でかくしてて…。', '…The wind is strong… Keep your ears covered with your hands…', '…风好大…。用手捂住耳朵…。'),
+    'bh_p_wind': ('H', '[laughs] あはは、髪がぐしゃぐしゃ！ 風なんかに負けるかー！', "Ahaha, my hair's a mess! I won't lose to some wind!", '啊哈哈，头发全乱了！才不会输给风呢——！'),
+    'bn_p_wind': ('N', '[gruff] この風は、まだ優しいほうだ。 …あたしの陰にいろ。', '…This wind is a gentle one. …Stay in my shelter.', '这风还算温柔的。…待在我身后。'),
+    'bm_p_pot': ('M', '[softly] …火鉢の炭、ぱちぱち言ってる…。 いい音…。', "…The brazier's charcoal is crackling… Nice sound…", '…火盆里的炭噼啪作响…。真好听…。'),
+    'bh_p_pot': ('H', '[cheerful] 鍋の火は、ひと晩じゅう、あたしが番してるの！ えっへん！', "I keep the hotpot fire going all night! Ahem!", '火锅的火，一整晚都是我在看着！嘿嘿！'),
+    'bn_p_pot': ('N', '[gruff] …火のそばにいろ。 あんた、まだ顔が白い。', "…Stay by the fire. You're still pale.", '…待在火旁边。你脸色还发白。'),
+    'bm_p_cure': ('M', '[whispers] …お灸と薄荷はね、あったかいのと、すーっとするのを、交互にするの…。', '…Moxa and mint: warm, then cool, taking turns…', '…艾灸和薄荷呀，暖的和凉的，要轮流来…。'),
+    'bh_p_cure': ('H', '[curious] あのお灸、熱くないの？ あたし、こわくて、一回もやってもらったことない！', "Isn't the moxa hot? I've always been too scared to try it!", '那个艾灸不烫吗？我太害怕了，一次都没做过！'),
+    'bn_p_cure': ('N', '[softly] …先生の手当ては、効く。 あたしが保証する。', '…Her treatment works. I can vouch for it.', '…大夫的治疗很有效。我可以担保。'),
+    'bm_p_door': ('M', '[sleepy] …夜番、おつかれさま…。 渚ちゃん、ずっと起きてるの…。', "…Night watch is hard work… Nagisa stays up all night…", '…守夜辛苦了…。渚一直都醒着…。'),
+    'bh_p_door': ('H', '[playful] 夜の戸口って、ちょっとこわいよね。 …でも渚がいるから平気！', "The door at night is a bit scary, right? …But Nagisa's here, so it's fine!", '夜里的门口，有点吓人吧。…不过有渚在，没事！'),
+    'bn_p_door': ('N', '[gruff] 戸は、あたしが押さえてる。 …あんたは、火のほうにいろ。', "I've got the door. …You stay by the fire.", '门我顶着。…你待在火那边。'),
+    'bm_p_sun': ('M', '[softly] …朝日、まぶしいね…。 夜、ちゃんと眠れた…？', '…The morning sun is bright… Did you sleep well last night…?', '…朝阳好刺眼…。昨晚，睡好了吗…？'),
+    'bh_p_sun': ('H', '[excited] 朝日が出たら、峠は越えられる！ 雪見亭の言い伝えだよ！', "When the sun's up, the pass can be crossed! That's the Yukimi Inn saying!", '太阳出来了，就能翻过山口！这是雪见亭的老话！'),
+    'bn_p_sun': ('N', '[softly] …夜明けは、何度見てもいい。 …今日のは、特に。', "…Dawn never gets old. …Today's especially.", '…黎明，看多少次都好看。…今天的，尤其好看。'),
 }
 
 # free-talk topics (checked in this order; "yes" / "no" only after a yes-no question) — regexes over ja / en / zh
@@ -152,14 +218,65 @@ TALK = {
     'N': [[['tn1', 'left']], [['tn2', 'left']], [['tn3', 'left']], [['tn4', 'left']], [['tn5', 'left_ear']]],
     'MHN': [[['tt1', 'front'], ['tt2', 'right']], [['tt3', 'left']], [['tt4', 'front']], [['tt5', 'left'], ['tt6', 'right']]],
 }
+# もっと話す · place × cast (user 2026-11-08, like Demo23): 5 places from the story × ミント / ひなた / 渚 / 三人. Per place: the beats for each
+# cast (a beat = lines [id, position] + '@event' = a real warm / cool thing happening there, main.js EVENTS), its own topic (what you
+# said was about the place → that place's bridge line of whoever speaks next; the shared topics + bridges as before otherwise).
+# Story lines reused where they fit (tm*, th*, tn*, tt*); the new ones are above. Positions in 三人 = the speaker's spot in the group
+# (left N / middle M / right H) unless at an ear. Thermal per place: main.js PLACE_AMB.
+PLACES = {
+    'pass': {'ja': '吹雪の峠', 'en': 'The blizzard pass', 'zh': '暴风雪山口', 'icon': '❄️',
+             'topic': ['wind', r'風|かぜ|吹雪|ふぶき|マント|毛皮|wind|blizzard|gust|cape|风|暴风雪|披风'],
+             'cast': {'M': [[['pm1', 'near']], [['pm2', 'near']], [['@hands'], ['pm3', 'right_ear']], [['pm4', 'near']]],
+                      'H': [[['ph1', 'front']], [['@stone'], ['ph2', 'near']], [['ph3', 'front']], [['ph4', 'near']]],
+                      'N': [[['pn1', 'left']], [['@guard'], ['pn2', 'left']], [['pn3', 'left']], [['pn4', 'left_ear']]],
+                      'MHN': [[['ph1', 'front'], ['pn1', 'left']], [['pm1', 'near']], [['@guard'], ['pn2', 'left']], [['@stone'], ['ph2', 'near']], [['pm4', 'near'], ['pn4', 'left_ear']]]}},
+    'hall': {'ja': '宿・火鍋', 'en': 'Hotpot at the inn', 'zh': '客栈·火锅', 'icon': '🍲',
+             'topic': ['pot', r'湯気|ゆげ|火鉢|ひばち|炭|火|steam|fire|brazier|charcoal|热气|火盆|炭|火'],
+             'cast': {'H': [[['th1', 'front']], [['th2', 'front']], [['@stoke'], ['th3', 'front']], [['th4', 'near']], [['th5', 'right_ear']]],
+                      'M': [[['hm1', 'front']], [['@bowl'], ['hm2', 'near']], [['hm3', 'near']], [['hm4', 'right_ear']]],
+                      'N': [[['hn1', 'left']], [['hn2', 'left']], [['@bowl'], ['hn3', 'left']], [['hn4', 'left_ear']]],
+                      'MHN': [[['th1', 'front'], ['hn1', 'left']], [['@bowl'], ['hm2', 'near']], [['@stoke'], ['th3', 'front']], [['hn2', 'left']], [['ht6', 'front'], ['th5', 'right_ear']]]}},
+    'room': {'ja': '女医の部屋', 'en': "The doctor's room", 'zh': '女医的房间', 'icon': '🌿',
+             'topic': ['cure', r'お灸|おきゅう|灸|薄荷|はっか|軟膏|薬|くすり|耳|みみ|moxa|mint|balm|medicine|ear|艾|薄荷|药|耳'],
+             'cast': {'M': [[['@moxa'], ['tm1', 'near']], [['tm2', 'near']], [['@balm'], ['tm3', 'right_ear']], [['tm4', 'near']], [['tm5', 'right_ear']]],
+                      'H': [[['hr1', 'front']], [['hr2', 'near']], [['hr3', 'near']], [['hr4', 'right_ear']]],
+                      'N': [[['nr1', 'left']], [['nr2', 'left']], [['nr3', 'left']], [['nr4', 'left_ear']]],
+                      'MHN': [[['@moxa'], ['tm1', 'near']], [['hr1', 'front']], [['nr2', 'left']], [['@balm'], ['tm3', 'right_ear']], [['tm5', 'right_ear']]]}},
+    'door': {'ja': '夜の戸口', 'en': 'The doorway at night', 'zh': '夜里的门口', 'icon': '🚪',
+             'topic': ['door', r'戸|と|扉|ドア|見張り|夜番|夜|door|watch|guard|night|门|守夜|夜'],
+             'cast': {'N': [[['tn1', 'left']], [['tn2', 'left']], [['@gust'], ['tn3', 'left']], [['tn4', 'left']], [['tn5', 'left_ear']]],
+                      'M': [[['dm1', 'front']], [['@coat'], ['dm2', 'near']], [['dm3', 'near']], [['dm4', 'left_ear']]],
+                      'H': [[['@gust'], ['dh1', 'front']], [['@shut'], ['dh2', 'near']], [['dh3', 'near']], [['dh4', 'right_ear']]],
+                      'MHN': [[['tn1', 'left']], [['@gust'], ['dh1', 'front']], [['@coat'], ['dm2', 'near']], [['tn3', 'left']], [['tn5', 'left_ear']]]}},
+    'dawn': {'ja': '夜明けの峠', 'en': 'Dawn on the pass', 'zh': '黎明的山口', 'icon': '🌅',
+             'topic': ['sun', r'朝日|あさひ|朝|日の出|太陽|まぶし|門|もん|sun|sunrise|dawn|morning|gate|bright|太阳|日出|朝阳|早上|门'],
+             'cast': {'MHN': [[['tt1', 'front'], ['@sun'], ['tt2', 'right']], [['tt3', 'left']], [['tt4', 'front']], [['tt5', 'left'], ['tt6', 'right']]],
+                      'M': [[['@sun'], ['tt2', 'near']], [['wm2', 'near']], [['wm3', 'right_ear']], [['tt6', 'right_ear']]],
+                      'H': [[['@sun'], ['wh1', 'front']], [['tt4', 'front']], [['wh3', 'near']], [['wh4', 'right_ear']]],
+                      'N': [[['tt3', 'left']], [['@sun'], ['wn2', 'left']], [['wn3', 'left']], [['tt5', 'left_ear']]]}},
+}
+for pl, P in PLACES.items():
+    k = P['topic'][0]; P['bridges'] = {c: {k: [f'b{c.lower()}_p_{k}']} for c in 'MHN' if f'b{c.lower()}_p_{k}' in L}
+# place × cast → view (scripts/make_stage.py writes project/talk_views.json after each stage build)
+_tv = json.load(open(os.path.join(ROOT, 'project', 'talk_views.json'))) if os.path.exists(os.path.join(ROOT, 'project', 'talk_views.json')) else {'views': {}, 'reuse': {}}
+def _view(pl, key):
+    r = _tv['reuse'].get(f'{pl}|{key}'); v = f't_{pl}_{key}'
+    return r or (v if v in _tv['views'] else None)
+TALK_VIEWS = {'still': _tv['views'], 'place': {pl: {'base': {c: _view(pl, c) for c in 'MHN'}, 'ear': {c: _view(pl, c + 'e') for c in 'MHN'}, 'trio': _view(pl, '3')} for pl in PLACES}}
 strip = lambda s: re.sub(r'\s+', ' ', re.sub(r'\[[^\]]*\]', '', s)).strip()
 TAGGED = {k: v[1] for k, v in L.items()}
 
 if __name__ == '__main__':
     lines = {k: [strip(v[1]), v[2], v[0]] for k, v in L.items()}
-    data = {'lines': lines, 'topics': TOPICS, 'yn_only': YN_ONLY, 'bridges': BRIDGES, 'talk': TALK}
+    data = {'lines': lines, 'topics': TOPICS, 'yn_only': YN_ONLY, 'bridges': BRIDGES, 'talk': TALK,
+            'places': {k: {x: P[x] for x in ('en', 'icon', 'topic', 'cast', 'bridges')} for k, P in PLACES.items()}, 'views': TALK_VIEWS}
+    for P in PLACES.values():   # every id used exists
+        for beats in P['cast'].values():
+            for b in beats:
+                for it in b: assert it[0].startswith('@') or it[0] in L, it
     head = ("// 『白嶺の峠、ひと晩の宿』 lines: id → [ja, en, who]  (M ミント · H ひなた · N 渚). GENERATED by scripts/script_data.py — edit there.\n"
-            "// bridges: who → topic → id (the free-talk windows), topics: [key, regex] in order, talk: keep-talking beats per who ([id, position]).\n")
+            "// bridges: who → topic → id (the free-talk windows), topics: [key, regex] in order, talk: (old) keep-talking beats per who,\n"
+            "// places: もっと話す place × cast (beats per cast, '@event', own topic + bridges), views: place × cast → view / still.\n")
     open(os.path.join(ROOT, 'lines.js'), 'w', encoding='utf-8').write(head + 'window.INN_LINES = ' + json.dumps(data, ensure_ascii=False, indent=1) + ';\n')
     json.dump({strip(v[1]): v[3] for v in L.values()}, open(os.path.join(ROOT, 'project', 'zh_lines.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     print(len(L), 'lines,', sum(len(strip(v[1])) for v in L.values()), 'ja chars')

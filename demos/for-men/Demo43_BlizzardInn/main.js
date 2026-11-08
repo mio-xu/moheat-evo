@@ -26,10 +26,16 @@
   const IMG = {};
   const artReady = Promise.all(Object.entries(STILL).map(([v, n]) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[v] = im; res(); }; im.onerror = () => res(); im.src = `media/art/${n}.jpg?v=1`; })));
   const LIVEL = () => !!(window.MoHeatLayers && window.MoHeatLayers.live);
+  // もっと話す views (place × cast, lines.js views): loaded only when a talk starts there
+  const TV = D.views, need = (v) => { if (IMG[v] || !TV.still[v]) return; const im = new Image(); im.onload = () => { IMG[v] = im; }; im.src = `media/art/${TV.still[v]}.jpg?v=1`; };
+  // the place a view shows (story views + t_<place>_* talk views): snow, steam, wind and the ambient warm / cool follow it
+  const PLACE_OF = { white: 'pass', pass: 'pass', hall: 'hall', dice: 'hall', hear: 'hall', room: 'room', mear: 'room', door: 'door', trio: 'dawn', end_m: 'dawn', end_h: 'dawn', end_n: 'dawn' };
+  const placeOf = (v) => PLACE_OF[v] || (/^t_([a-z]+)_/.exec(v) || [])[1] || '';
+  const PURE = () => !!(window.MoHeatPlay && window.MoHeatPlay.pure) || QS.has('sample');   // the shell's "just listen" mode (?sample = test it)
 
   // ---------------------------------------------------------------- state
   const fresh = () => ({ started: false, t: 0, clock: 0, view: 'white', white: 1, dark: 0, snow: 1, gust: 0, cape: 0, pot: 0, brazier: 0, bowl: 0,
-    moxa: 0, balm: 0, blow: 0, lamp: 0, door: 0, guard: 0, sun: 0, fade: 0, lv: 0, env: 0, pos: { az: 0, dist: 1 }, who: '', end: -1, mode: 'story' });
+    moxa: 0, balm: 0, blow: 0, lamp: 0, door: 0, guard: 0, sun: 0, hands: 0, stone: 0, coat: 0, place: '', cast: '', fade: 0, lv: 0, env: 0, pos: { az: 0, dist: 1 }, who: '', end: -1, mode: 'story' });
   let S = fresh(), run = 0;
   const STEPS = [['pass', '吹雪の峠', 'The blizzard pass'], ['hall', '宿・火鍋', 'Hotpot at the inn'], ['room', '女医の手当て', "The doctor's care"],
     ['door', '夜番', 'Night watch'], ['trio', '夜明けの峠', 'Dawn on the pass']];
@@ -50,7 +56,8 @@
     await sleep(.3); sub('', '', '');
   }
   async function sayLive(it) {   // a line written by the live AI (private page): voiced by the server, same placement / thermal
-    const my = run; S.pos = POS[it.pos] || POS.front; S.who = it.who; viewFor(it.who, it.pos);
+    if (it.ev) { event(it.ev); return; }   // "@|moxa" … a warm / cool thing of this place (EVENTS)
+    const my = run; S.pos = S.mode === 'talk' ? posFor(it.who, it.pos) : POS[it.pos] || POS.front; S.who = it.who; viewFor(it.who, it.pos);
     const buf = await it.audio; if (my !== run) throw new Error('stopped');
     sub(it.who, it.ja, it.en); talking++;
     await SND.play(buf, S.pos, S.pos.dist < .2 ? 1.8 : 1.45);
@@ -105,7 +112,7 @@
   const BR = window.MoHeatTalk.bridges(D.bridges);
   async function talkWindow(who, at, yn, prompt) {
     const my = run;
-    const said = await window.MoHeatTalk.listen({ host: stage, prompt, silenceSec: 10 }); alive(my);
+    const said = await listenTurn({ host: stage, prompt, silenceSec: 10 }); alive(my);
     if (said) { sub('あなた', said, said); await sleep(.9); }
     if (LIVE) { for (const it of await LIVE.turn({ mode: 'window', who, place: S.view, said, kind: said ? 'user' : 'silent' })) await sayLive(it); return; }
     const id = BR.pick(who, window.MoHeatTalk.topic(said, D.topics, { yn, yn_only: D.yn_only }));
@@ -223,60 +230,110 @@
       await say(END[1], END[2]);
       await sleep(1.2); S.white = 1; SND.fx.wake(); wind?.set(.4, .8); await sleep(2.4); wind?.set(0, 1.2); SND.fx.chime(); await sleep(1.6); alive(my);
       try { sessionStorage.setItem('moheat.inn.cleared', '1'); } catch {}
+      // just-listen mode (shared/shell.js): one short もっと話す sample plays by itself — all three in the place of the token you took
+      if (PURE() && !LIVE) { S.white = 0; return keepTalking(['room', 'hall', 'door'][S.end] || 'dawn', 'MHN', true); }
       finish();
     } catch (e) { if (e.message !== 'stopped') console.error(e); }
   }
 
-  // ---------------------------------------------------------------- もっと話す · keep talking (after the story; scripted here, live on the private page)
-  const TALK_VIEW = { M: 'room', H: 'hall', N: 'door', MHN: 'trio' };
-  function viewFor(who, pos) {
-    if (S.mode !== 'talk' || S.talkWho === 'MHN') return;
-    S.view = who === 'M' ? (pos === 'right_ear' ? 'mear' : 'room') : who === 'H' ? (pos === 'right_ear' ? 'hear' : 'hall') : 'door';
+  // ---------------------------------------------------------------- もっと話す · keep talking: place × cast (user 2026-11-08, like Demo23)
+  // 5 places from the story × ミント / ひなた / 渚 / 三人 (lines.js places: beats per cast, '@events', the place's own topic + bridges).
+  // Scripted here (pre-rendered voices, 0 cost); the private live page sends the same place + cast to the AI (live/live.js).
+  async function listenTurn(opt) {   // one turn of yours; in just-listen mode a short natural pause instead (no microphone)
+    if (PURE()) { await sleep(2.2); return null; }
+    return window.MoHeatTalk.listen(opt);
   }
-  async function keepTalking(who) {
-    const my = ++run; S.mode = 'talk'; S.talkWho = who;
-    const amb = { M: () => { S.lamp = 1; }, H: () => { S.pot = 1; S.brazier = 1; SND.loop('hotpot')?.set(.4, 1); SND.loop('brazier')?.set(.3, 1); }, N: () => { S.brazier = .6; S.door = .25; SND.loop('blizzard')?.set(.15, 1); SND.loop('brazier')?.set(.2, 1); }, MHN: () => { S.sun = 1; S.snow = .35; SND.loop('blizzard')?.set(.15, 1); } };
+  function viewFor(who, pos) {   // the picture for this line: her close pose at an ear (where one exists there), else her / the group's view
+    if (S.mode !== 'talk') return;
+    const P = TV.place[S.place], ear = /_ear$/.test(pos || '');
+    S.view = (ear && P.ear[who]) || (S.cast === 'MHN' ? P.trio : P.base[who] || P.base[S.cast]);
+  }
+  const TRIO_POS = { M: POS.trio_m, H: POS.trio_h, N: POS.trio_n };
+  const posFor = (who, pos) => (S.cast === 'MHN' && !/_ear$/.test(pos || '') ? TRIO_POS[who] : POS[pos] || POS.front);
+  // the place around you: what is really warm / cool there (DUAL; same sources as in the story)
+  const PLACE_AMB = {
+    pass: () => { S.snow = 1; S.cape = 1; SND.loop('blizzard')?.set(.45, 1); },                       // blizzard + gusts left → right, her fur cape on you
+    hall: () => { S.pot = 1; S.brazier = 1; SND.loop('room')?.set(.3, 1); SND.loop('hotpot')?.set(.4, 1); SND.loop('brazier')?.at(1.1, 1.6); SND.loop('brazier')?.set(.3, 1); },
+    room: () => { S.lamp = 1; SND.loop('room')?.set(.25, 1); SND.loop('brazier')?.set(.1, 1); },     // the paper lamp on the left
+    door: () => { S.door = .25; S.brazier = .6; S.guard = S.cast.includes('N') ? 1 : 0; SND.loop('room')?.set(.2, 1); SND.loop('blizzard')?.at(-1.25, 2.5); SND.loop('blizzard')?.set(.18, 1); SND.loop('brazier')?.at(1.2, 2.2); SND.loop('brazier')?.set(.2, 1); },
+    dawn: () => { S.sun = 1; S.snow = .35; SND.loop('blizzard')?.at(-.6, 2); SND.loop('blizzard')?.set(.15, 1); },
+  };
+  // '@events' in the beats (and '@|event' lines of the live AI): a real thing near your ears, for a few seconds
+  const EVENTS = {
+    hands: [5, () => { S.hands = 1; SND.fx.rustle(1.3, .2); }, () => { S.hands = 0; }],                // Mint cups your right ear (warm, in the cold wind)
+    stone: [5, () => { S.stone = 1; SND.fx.rustle(.9, .3); }, () => { S.stone = 0; }],                 // Hinata's warming stone on your right cheek
+    guard: [0, () => { S.guard = 1; SND.fx.rustle(-.9, .4); }],                                       // Nagisa steps to your left: blocks the wind
+    stoke: [6, () => { S.brazier = 1.6; SND.fx.boards(1.1, 1.1, 2, 1.2); }, () => { S.brazier = 1; }],   // more charcoal on the brazier (right)
+    bowl: [5, () => { S.bowl = 1; SND.fx.bowl(); }, () => { S.bowl = 0; }],                            // a steaming bowl at your face
+    moxa: [6, () => { S.moxa = 1; SND.loop('moxa')?.set(.5, .3); }, () => { S.moxa = 0; SND.loop('moxa')?.set(0, .3); }],   // circling your right ear
+    balm: [6, () => { S.balm = 1; SND.fx.tin(1.2); }, () => { S.balm = .4; }],                        // mint balm on the same ear (cool)
+    gust: [3, () => { S.door = 1; SND.fx.bang(-1.25); SND.loop('blizzard')?.set(.6, .2); }, () => { S.door = .25; SND.loop('blizzard')?.set(.18, 1); }],   // the door rattles open (left)
+    coat: [0, () => { S.coat = 1; SND.fx.cape(); }],                                                  // Mint's coat over your shoulders
+    shut: [0, () => { S.door = .05; SND.fx.slide(-1.2, false); SND.loop('blizzard')?.set(.06, 1); }],  // Hinata wedges the door shut
+    sun: [6, () => { S.sun = 1.8; }, () => { S.sun = 1; }],                                            // the sun clears the ridge in front
+  };
+  function event(name) {
+    const e = EVENTS[name]; if (!e) return; const my = run; e[1]();
+    if (e[2]) setTimeout(() => { if (my === run) e[2](); }, e[0] * 1000);
+  }
+  async function playBeat(beat) {
+    for (const it of beat) {
+      if (it[0][0] === '@') { event(it[0].slice(1)); continue; }
+      const [id, pos] = it; viewFor(LINES[id][2], pos); await say(id, posFor(LINES[id][2], pos));
+    }
+  }
+  async function keepTalking(place, cast, sample = false) {
+    const my = ++run; S.mode = 'talk'; S.place = place; S.cast = cast;
+    const P = D.places[place], T = TV.place[place];
+    for (const v of [...Object.values(T.base), ...Object.values(T.ear), T.trio]) if (v) need(v);
+    // topics: leave → the place's own → the shared ones; bridges: the place's pool for its topic, else the shared ones
+    const topics = [D.topics[0], P.topic, ...D.topics.slice(1)];
+    const pick = (who, said, yn) => { const k = window.MoHeatTalk.topic(said, topics, { yn, yn_only: D.yn_only }); return BRP.pick(who, k); };
+    const BRP = window.MoHeatTalk.bridges(Object.fromEntries(['M', 'H', 'N'].map((c) => [c, { ...D.bridges[c], ...(P.bridges[c] || {}) }])));
     try {
-      S.view = TALK_VIEW[who]; SND.loop('room')?.set(who === 'MHN' ? 0 : .3, 1); amb[who](); await sleep(1); alive(my);
+      for (const k of ['snow', 'cape', 'pot', 'brazier', 'bowl', 'moxa', 'balm', 'blow', 'lamp', 'door', 'guard', 'sun', 'hands', 'stone', 'coat']) S[k] = 0;   // only this place's things
+      for (const l of ['room', 'hotpot', 'brazier', 'blizzard', 'moxa']) SND.loop(l)?.set(0, .5);
+      PLACE_AMB[place](); S.view = cast === 'MHN' ? T.trio : T.base[cast]; S.white = 0; await sleep(1); alive(my);
       if (LIVE) {
         let kind = 'open', said = null;
         for (let turn = 0; turn < 6; turn++) {
-          const lines = await LIVE.turn({ mode: 'talk', who, place: TALK_VIEW[who], said, kind: turn === 5 ? 'close' : kind });
+          const lines = await LIVE.turn({ mode: 'talk', who: cast, place, said, kind: turn === 5 ? 'close' : kind });
           for (const it of lines) await sayLive(it);
           if (turn === 5 || LIVE.ended()) break;
-          said = await window.MoHeatTalk.listen({ host: stage, silenceSec: 12 }); alive(my); kind = said ? 'user' : 'silent';
+          said = await listenTurn({ host: stage, silenceSec: 12 }); alive(my); kind = said ? 'user' : 'silent';
           if (said) { sub('あなた', said, said); await sleep(.6); }
         }
       } else {
-        const beats = D.talk[who];
+        let beats = P.cast[cast];
+        if (sample) beats = [beats[0], beats[1], beats[beats.length - 1]];   // the just-listen sample: opening, one exchange, the goodbye
         for (let i = 0; i < beats.length; i++) {
-          for (const [id, pos] of beats[i]) { viewFor(LINES[id][2], pos); await say(id, who === 'MHN' ? { M: POS.trio_m, H: POS.trio_h, N: POS.trio_n }[LINES[id][2]] : POS[pos]); }
+          await playBeat(beats[i]);
           if (i === beats.length - 1) break;
-          const said = await window.MoHeatTalk.listen({ host: stage, silenceSec: 10 }); alive(my);
+          const said = await listenTurn({ host: stage, silenceSec: 10 }); alive(my);
           if (said) { sub('あなた', said, said); await sleep(.8); }
-          const nx = LINES[beats[i + 1][0][0]][2], id = BR.pick(nx, window.MoHeatTalk.topic(said, D.topics, { yn_only: D.yn_only }));
-          if (id) { const p = who === 'MHN' ? { M: POS.trio_m, H: POS.trio_h, N: POS.trio_n }[nx] : POS[beats[i + 1][0][1]] || POS.front; viewFor(nx, beats[i + 1][0][1]); await say(id, p); }
+          const first = beats[i + 1].find((x) => x[0][0] !== '@'), nx = LINES[first[0]][2], id = pick(nx, said, false);
+          if (id) { viewFor(nx, first[1]); await say(id, posFor(nx, first[1])); }
         }
       }
-      await sleep(1.2); S.fade = 1; await sleep(2); alive(my); finish(true);
+      await sleep(1.2); S.fade = 1; await sleep(2); alive(my); finish(!sample);
     } catch (e) { if (e.message !== 'stopped') console.error(e); }
   }
 
   // ---------------------------------------------------------------- per-frame state + thermal
-  const K = {}; for (const k of ['cape', 'pot', 'brazier', 'bowl', 'moxa', 'balm', 'blow', 'lamp', 'door', 'guard', 'sun', 'snow']) K[k] = 0;
+  const K = {}; for (const k of ['cape', 'pot', 'brazier', 'bowl', 'moxa', 'balm', 'blow', 'lamp', 'door', 'guard', 'sun', 'snow', 'hands', 'stone', 'coat']) K[k] = 0;
   let gustT = 0, gustAz = -1.4, gustS = 0;
   function update(dt) {
     S.t += dt; if (!S.started) return;
     S.clock += dt; S.lv = SND.voiceLevel();
     { const vt = talking ? 1 : 0; S.env += (vt - S.env) * (1 - Math.exp(-dt / (vt > S.env ? .06 : .3))); }   // talking envelope (layers.js mouth)
     const ease = (cur, tgt, up, down) => cur + (tgt - cur) * (1 - Math.exp(-dt / (tgt > cur ? up : down)));
-    const tau = { cape: [.6, .6], pot: [.8, 1], brazier: [1, 1], bowl: [.3, .8], moxa: [.25, .3], balm: [.2, .9], blow: [.12, .5], lamp: [1, 1], door: [.15, .6], guard: [.5, .8], sun: [2, 1], snow: [1, 1] };
+    const tau = { cape: [.6, .6], pot: [.8, 1], brazier: [1, 1], bowl: [.3, .8], moxa: [.25, .3], balm: [.2, .9], blow: [.12, .5], lamp: [1, 1], door: [.15, .6], guard: [.5, .8], sun: [2, 1], snow: [1, 1], hands: [.4, .8], stone: [.25, .9], coat: [.6, .6] };
     for (const k in K) K[k] = ease(K[k], S[k] || 0, ...tau[k]);
     // blizzard gusts on the pass / through the door: a gust sweeps from your left to your right in ~2.5 s, every 4–6 s
     gustT -= dt;
     if (gustT <= 0) { gustT = 4 + Math.random() * 2; gustAz = -1.45; gustS = 1; }
     gustAz = Math.min(1.45, gustAz + dt * 1.15); gustS = Math.max(0, gustS - dt * .3);
-    const w = SND.loop('blizzard'); if (w && (S.view === 'pass' || S.view === 'white') && S.mode === 'story') w.at(gustAz * .8, 2, .3);
+    const w = SND.loop('blizzard'); if (w && placeOf(S.view) === 'pass') w.at(gustAz * .8, 2, .3);
   }
   // Thermal, two layers (firmware DUAL: cool and heat independent on each ear).
   //  · VOICE: warm. (0.1 + 0.8 × loudness) at the ear the speaker is at — × 1 at the ear, × 0.6 within 50 cm, × 0.28 further; halved in front.
@@ -292,8 +349,8 @@
     const P = S.pos;
     if (talking) add(P.az, 'h', (.1 + .8 * clamp(S.lv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
     const capeCut = 1 - .65 * K.cape;
-    if (S.view === 'pass' || S.view === 'white') {
-      if (S.mode === 'story' && K.snow > .02) { add(0, 'c', .3 * K.snow * capeCut, '❄️'); add(gustAz, 'c', .45 * gustS * K.snow * capeCut, '🌬'); }
+    if (placeOf(S.view) === 'pass') {   // the blizzard; Nagisa on your left (talk) takes the gust's left half
+      if (K.snow > .02) { add(0, 'c', .3 * K.snow * capeCut, '❄️'); add(gustAz, 'c', .45 * gustS * K.snow * capeCut * (gustAz < 0 ? 1 - .6 * K.guard : 1), '🌬'); }
     } else if (K.snow > .02) add(0, 'c', .12 * K.snow, '❄️');
     if (K.pot > .02) add(0, 'h', .3 * K.pot, '🍲');
     if (K.brazier > .02) add(1.15, 'h', .18 * K.brazier, '🔥');
@@ -302,9 +359,11 @@
     if (K.balm > .02) add(1.4, 'c', .45 * K.balm, '🌿');
     if (K.blow > .02) add(1.35, 'c', .85 * K.blow, '💨');
     if (K.lamp > .02) add(-1.1, 'h', .1 * K.lamp, '🏮');
-    if (K.door > .02) add(-1.25, 'c', (.65 - .5 * K.guard) * K.door * (.85 + .15 * gustS), '🌬');
+    if (K.door > .02) add(-1.25, 'c', (.65 - .5 * K.guard) * K.door * (.85 + .15 * gustS) * (1 - .5 * K.coat), '🌬');
     if (K.guard > .02) add(-1.3, 'h', .18 * K.guard, '🧡');
     if (K.sun > .02) add(0, 'h', .15 * K.sun, '🌅');
+    if (K.hands > .02) add(1.35, 'h', .3 * K.hands, '🤲');     // talk: Mint's warm hands round your right ear
+    if (K.stone > .02) add(1.0, 'h', .45 * K.stone, '🪨');     // talk: a warming stone on your right cheek
     return out;
   }
   const ear = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
@@ -325,7 +384,7 @@
     const im = IMG[view === 'white' ? 'pass' : view];
     ctx.globalAlpha = alpha;
     if (!im) { ctx.fillStyle = '#0d1018'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
-    if (LIVEL() || view === 'trio') ctx.drawImage(im, 0, 0, W, H);   // layered: shared/layers.js animates it (no page drift, §6.4)
+    if (LIVEL()) ctx.drawImage(im, 0, 0, W, H);   // layered: shared/layers.js animates it (no page drift, §6.4)
     else { const z = 1.02 + .006 * Math.sin(t * 1.1); ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -H / 2, W, H); ctx.restore(); }
     ctx.globalAlpha = 1;
   }
@@ -365,7 +424,8 @@
     drawView(viewB, mix < 1 ? mix : 1, t);
     const v = S.view;
     // steam from the hotpot (just below the frame, in front of you) and the soup bowl; the moxa ember's smoke follows her hand
-    if (K.pot > .05 && /^(hall|dice|hear)$/.test(v)) emitSteam(dt, W * .5, H * 1.02, 6 * K.pot, 500);
+    const pl = placeOf(v);
+    if (K.pot > .05 && pl === 'hall') emitSteam(dt, W * .5, H * 1.02, 6 * K.pot, 500);
     if (K.bowl > .05) emitSteam(dt, W * .5, H * .98, 10 * K.bowl, 200);
     if (K.moxa > .1 && v === 'mear') {
       const [x, y] = window.MoHeatLayers?.toFrame ? window.MoHeatLayers.toFrame('mint_mear', EMBER[0], EMBER[1]) : EMBER;   // follows her hand (parallax / breathing, guide §6.4)
@@ -373,10 +433,10 @@
       const g = ctx.createRadialGradient(x, y, 0, x, y, 40); g.addColorStop(0, `rgba(255,150,60,${.55 * K.moxa})`); g.addColorStop(1, 'rgba(255,120,40,0)'); ctx.fillStyle = g; ctx.fillRect(x - 40, y - 40, 80, 80);
     }
     drawPuffs(dt);
-    const wind = (v === 'pass' || v === 'white') ? .35 + .5 * gustS : v === 'door' ? .25 + .55 * K.door * (1 - .4 * K.guard) : .05;
-    drawSnow(dt, t, (v === 'pass' || v === 'white' || v === 'trio' || /^end_/.test(v)) ? K.snow : v === 'door' ? .7 * K.door : 0, wind);
-    if (K.door > .02 && v === 'door') { const g = ctx.createLinearGradient(0, 0, W * .4, 0); g.addColorStop(0, `rgba(90,140,230,${.25 * K.door})`); g.addColorStop(1, 'rgba(90,140,230,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W * .4, H); }
-    if (K.sun > .02 && (v === 'trio' || /^end_/.test(v))) { const g = ctx.createRadialGradient(W * .62, H * .3, 0, W * .62, H * .3, W * .5); g.addColorStop(0, `rgba(255,200,130,${.16 * K.sun})`); g.addColorStop(1, 'rgba(255,200,130,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+    const wind = pl === 'pass' ? .35 + .5 * gustS : pl === 'door' ? .25 + .55 * K.door * (1 - .4 * K.guard) : .05;
+    drawSnow(dt, t, (pl === 'pass' || pl === 'dawn') ? K.snow : pl === 'door' ? .7 * K.door : 0, wind);
+    if (K.door > .02 && pl === 'door') { const g = ctx.createLinearGradient(0, 0, W * .4, 0); g.addColorStop(0, `rgba(90,140,230,${.25 * K.door})`); g.addColorStop(1, 'rgba(90,140,230,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W * .4, H); }
+    if (K.sun > .02 && pl === 'dawn') { const g = ctx.createRadialGradient(W * .62, H * .3, 0, W * .62, H * .3, W * .5); g.addColorStop(0, `rgba(255,200,130,${.16 * K.sun})`); g.addColorStop(1, 'rgba(255,200,130,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
     S.whiteA = (S.whiteA || 0) + ((S.white ? 1 : 0) - (S.whiteA || 0)) * Math.min(1, dt * 1.6);
     if (S.whiteA > .01) { ctx.fillStyle = `rgba(232,238,246,${.92 * S.whiteA})`; ctx.fillRect(0, 0, W, H); }
     S.darkA = (S.darkA || 0) + ((S.dark ? 1 : 0) - (S.darkA || 0)) * Math.min(1, dt * 2);
@@ -443,7 +503,7 @@
       if (S.started || S.fade) draw(S.t, dt); else drawCover();
       const { th, src } = thermal(dt); output(th, S.started); radar(S.started ? src : [], th);
       $('clock').textContent = fmt(S.clock);
-      $('posInfo').textContent = S.started ? PLACE[S.view] || '' : '';
+      $('posInfo').textContent = S.started ? PLACE[S.view] || (S.place ? D.places[S.place].en : '') : '';
     }
     requestAnimationFrame(loop);
   }
@@ -461,13 +521,17 @@
   }
   function begin(mode) {
     SND.init(); SND.loadVoices(Object.keys(LINES));
-    S = fresh(); S.started = true; S.mode = mode; viewA = viewB = mode === 'story' ? 'white' : 'room'; mix = 1; puffs.length = 0;
+    S = fresh(); S.started = true; S.mode = mode; viewA = viewB = 'white'; mix = 1; puffs.length = 0; if (mode === 'talk') S.white = 0;
     for (const k in K) K[k] = 0; BR.reset(); $('cleared').hidden = true;
     $('intro').classList.add('hidden'); window.INN.done = false;
   }
   async function start() { if (LIVE && !(await LIVE.begin())) return; begin('story'); story(); }
-  async function startTalk(who) { if (LIVE && !(await LIVE.begin())) return; begin('talk'); keepTalking(who); }
-  // もっと話す: after the story (or always on the private live page) — who you talk with (each in her own place, or all three at dawn)
+  async function startTalk(cast, place = talkPlace) { if (LIVE && !(await LIVE.begin({ place, cast }))) return; begin('talk'); keepTalking(place, cast); }
+  // もっと話す: after the story (or always on the private live page) — where (a place from the story) × who (one of them, or all three)
+  let talkPlace = QS.get('place') || 'hall';
+  const paintPlaces = () => document.querySelectorAll('#talkPick .tpl').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.place === talkPlace)));
+  document.querySelectorAll('#talkPick .tpl').forEach((b) => b.addEventListener('click', () => { talkPlace = b.dataset.place; paintPlaces(); }));
+  paintPlaces();
   function talkUI() {
     let cleared = false; try { cleared = sessionStorage.getItem('moheat.inn.cleared') === '1'; } catch {}
     const box = $('talkPick'); box.hidden = !(cleared || LIVE || QS.has('talk'));
@@ -483,11 +547,11 @@
     if (C) C.fit(ctx, { eye: [.72, .30], face: .19 }, () => ctx.drawImage(im, 0, 0, W, H), { duo: true, tone: '#0d1018' });
     else ctx.drawImage(im, 0, 0, W, H);
   }
-  window.INN = { get S() { return S; }, thermal: () => thermal(.05), both: () => both, log: cmdLog, done: false, startTalk };
+  window.INN = { get S() { return S; }, thermal: () => thermal(.05), both: () => both, log: cmdLog, done: false, startTalk, event };
   setStep(0); talkUI();
   if (QS.has('cover')) { document.body.classList.add('cover-only'); artReady.then(drawCover); return; }
   if (QS.has('autoplay') || AUTO) {
-    const go = () => (QS.has('talk') ? startTalk(QS.get('talk') || 'M') : start());
+    const go = () => (QS.has('talk') ? startTalk(QS.get('talk') || 'MHN') : start());
     const ac = SND.init(); if (ac.state === 'running') go(); else ac.resume().then(() => { if (ac.state === 'running' && !S.started) go(); }).catch(() => {});
   }
   requestAnimationFrame(loop);

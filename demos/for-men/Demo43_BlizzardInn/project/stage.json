@@ -2,7 +2,8 @@
  "src": "assets/art",
  "hooks": {
   "view": "INN.S.view",
-  "lv": "INN.S.lv"
+  "lv": "INN.S.lv",
+  "who": "INN.S.who"
  },
  "bgs": {
   "pass": {
@@ -265,7 +266,8 @@
    "fire": null,
    "alias": [
     "white"
-   ]
+   ],
+   "who": "N"
   },
   "hall": {
    "still": "hinata_hall",
@@ -274,7 +276,8 @@
    "fire": [
     0.725,
     0.64
-   ]
+   ],
+   "who": "H"
   },
   "dice": {
    "still": "hinata_dice",
@@ -283,7 +286,8 @@
    "fire": [
     0.725,
     0.64
-   ]
+   ],
+   "who": "H"
   },
   "hear": {
    "still": "hinata_hear",
@@ -292,13 +296,15 @@
    "fire": [
     0.725,
     0.64
-   ]
+   ],
+   "who": "H"
   },
   "room": {
    "still": "mint_room",
    "pose": "mint_base",
    "bg": "room",
-   "fire": null
+   "fire": null,
+   "who": "M"
   },
   "mear": {
    "still": "mint_mear",
@@ -307,7 +313,8 @@
    "fire": null,
    "x": 0.66,
    "y": 1.0,
-   "height": 1.0
+   "height": 1.0,
+   "who": "M"
   },
   "door": {
    "still": "nagisa_door",
@@ -319,7 +326,8 @@
    ],
    "x": 0.4,
    "y": 1.0,
-   "height": 1.0
+   "height": 1.0,
+   "who": "N"
   },
   "end_m": {
    "still": "mint_dawn",
@@ -328,13 +336,15 @@
    "fire": null,
    "x": 0.66,
    "y": 1.0,
-   "height": 1.0
+   "height": 1.0,
+   "who": "M"
   },
   "end_h": {
    "still": "hinata_dawn",
    "pose": "hinata_ear",
    "bg": "dawn",
-   "fire": null
+   "fire": null,
+   "who": "H"
   },
   "end_n": {
    "still": "nagisa_dawn",
@@ -343,7 +353,311 @@
    "fire": null,
    "x": 0.4,
    "y": 1.0,
-   "height": 1.0
+   "height": 1.0,
+   "who": "N"
+  },
+  "t_pass_M": {
+   "still": "t_pass_M",
+   "pose": "mint_base",
+   "bg": "pass",
+   "fire": null,
+   "who": "M",
+   "small": true
+  },
+  "t_pass_H": {
+   "still": "t_pass_H",
+   "pose": "hinata_base",
+   "bg": "pass",
+   "fire": null,
+   "who": "H",
+   "small": true
+  },
+  "t_pass_He": {
+   "still": "t_pass_He",
+   "pose": "hinata_ear",
+   "bg": "pass",
+   "fire": null,
+   "who": "H",
+   "small": true
+  },
+  "t_pass_Ne": {
+   "still": "t_pass_Ne",
+   "pose": "nagisa_guard",
+   "bg": "pass",
+   "fire": null,
+   "x": 0.4,
+   "y": 1.0,
+   "height": 1.0,
+   "who": "N",
+   "small": true
+  },
+  "t_pass_3": {
+   "still": "t_pass_3",
+   "pose": "mint_base",
+   "bg": "pass",
+   "fire": null,
+   "who": "M",
+   "x": 0.5,
+   "y": 1.0,
+   "height": 0.8,
+   "more": [
+    {
+     "pose": "nagisa_base",
+     "x": 0.22,
+     "y": 1.0,
+     "height": 1.0,
+     "who": "N"
+    },
+    {
+     "pose": "hinata_base",
+     "x": 0.78,
+     "y": 1.0,
+     "height": 0.86,
+     "who": "H"
+    }
+   ],
+   "small": true
+  },
+  "t_hall_M": {
+   "still": "t_hall_M",
+   "pose": "mint_base",
+   "bg": "hall",
+   "fire": [
+    0.725,
+    0.64
+   ],
+   "who": "M",
+   "small": true
+  },
+  "t_hall_N": {
+   "still": "t_hall_N",
+   "pose": "nagisa_base",
+   "bg": "hall",
+   "fire": [
+    0.725,
+    0.64
+   ],
+   "who": "N",
+   "small": true
+  },
+  "t_hall_Ne": {
+   "still": "t_hall_Ne",
+   "pose": "nagisa_guard",
+   "bg": "hall",
+   "fire": [
+    0.725,
+    0.64
+   ],
+   "x": 0.4,
+   "y": 1.0,
+   "height": 1.0,
+   "who": "N",
+   "small": true
+  },
+  "t_hall_3": {
+   "still": "t_hall_3",
+   "pose": "mint_base",
+   "bg": "hall",
+   "fire": [
+    0.725,
+    0.64
+   ],
+   "who": "M",
+   "x": 0.5,
+   "y": 1.0,
+   "height": 0.8,
+   "more": [
+    {
+     "pose": "nagisa_base",
+     "x": 0.22,
+     "y": 1.0,
+     "height": 1.0,
+     "who": "N"
+    },
+    {
+     "pose": "hinata_base",
+     "x": 0.78,
+     "y": 1.0,
+     "height": 0.86,
+     "who": "H"
+    }
+   ],
+   "small": true
+  },
+  "t_room_H": {
+   "still": "t_room_H",
+   "pose": "hinata_base",
+   "bg": "room",
+   "fire": null,
+   "who": "H",
+   "small": true
+  },
+  "t_room_He": {
+   "still": "t_room_He",
+   "pose": "hinata_ear",
+   "bg": "room",
+   "fire": null,
+   "who": "H",
+   "small": true
+  },
+  "t_room_N": {
+   "still": "t_room_N",
+   "pose": "nagisa_base",
+   "bg": "room",
+   "fire": null,
+   "who": "N",
+   "small": true
+  },
+  "t_room_Ne": {
+   "still": "t_room_Ne",
+   "pose": "nagisa_guard",
+   "bg": "room",
+   "fire": null,
+   "x": 0.4,
+   "y": 1.0,
+   "height": 1.0,
+   "who": "N",
+   "small": true
+  },
+  "t_room_3": {
+   "still": "t_room_3",
+   "pose": "mint_base",
+   "bg": "room",
+   "fire": null,
+   "who": "M",
+   "x": 0.5,
+   "y": 1.0,
+   "height": 0.8,
+   "more": [
+    {
+     "pose": "nagisa_base",
+     "x": 0.22,
+     "y": 1.0,
+     "height": 1.0,
+     "who": "N"
+    },
+    {
+     "pose": "hinata_base",
+     "x": 0.78,
+     "y": 1.0,
+     "height": 0.86,
+     "who": "H"
+    }
+   ],
+   "small": true
+  },
+  "t_door_M": {
+   "still": "t_door_M",
+   "pose": "mint_base",
+   "bg": "door",
+   "fire": [
+    0.81,
+    0.62
+   ],
+   "who": "M",
+   "small": true
+  },
+  "t_door_H": {
+   "still": "t_door_H",
+   "pose": "hinata_base",
+   "bg": "door",
+   "fire": [
+    0.81,
+    0.62
+   ],
+   "who": "H",
+   "small": true
+  },
+  "t_door_He": {
+   "still": "t_door_He",
+   "pose": "hinata_ear",
+   "bg": "door",
+   "fire": [
+    0.81,
+    0.62
+   ],
+   "who": "H",
+   "small": true
+  },
+  "t_door_3": {
+   "still": "t_door_3",
+   "pose": "mint_base",
+   "bg": "door",
+   "fire": [
+    0.81,
+    0.62
+   ],
+   "who": "M",
+   "x": 0.5,
+   "y": 1.0,
+   "height": 0.8,
+   "more": [
+    {
+     "pose": "nagisa_base",
+     "x": 0.22,
+     "y": 1.0,
+     "height": 1.0,
+     "who": "N"
+    },
+    {
+     "pose": "hinata_base",
+     "x": 0.78,
+     "y": 1.0,
+     "height": 0.86,
+     "who": "H"
+    }
+   ],
+   "small": true
+  },
+  "t_dawn_M": {
+   "still": "t_dawn_M",
+   "pose": "mint_base",
+   "bg": "dawn",
+   "fire": null,
+   "who": "M",
+   "small": true
+  },
+  "t_dawn_H": {
+   "still": "t_dawn_H",
+   "pose": "hinata_base",
+   "bg": "dawn",
+   "fire": null,
+   "who": "H",
+   "small": true
+  },
+  "t_dawn_N": {
+   "still": "t_dawn_N",
+   "pose": "nagisa_base",
+   "bg": "dawn",
+   "fire": null,
+   "who": "N",
+   "small": true
+  },
+  "trio": {
+   "still": "trio_dawn",
+   "pose": "mint_base",
+   "bg": "dawn",
+   "fire": null,
+   "who": "M",
+   "x": 0.5,
+   "y": 1.0,
+   "height": 0.8,
+   "more": [
+    {
+     "pose": "nagisa_base",
+     "x": 0.22,
+     "y": 1.0,
+     "height": 1.0,
+     "who": "N"
+    },
+    {
+     "pose": "hinata_base",
+     "x": 0.78,
+     "y": 1.0,
+     "height": 0.86,
+     "who": "H"
+    }
+   ]
   }
  }
 }

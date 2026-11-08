@@ -55,3 +55,7 @@ body.cover-only .cover-copy { margin-top: 0 !important; }
 .intro .talk-pick .tp { min-height: 44px; min-width: 44px; padding: 0 1.2cqw; border-radius: 99px; border: 1px solid rgba(255, 194, 122, .6); background: rgba(22, 20, 26, .7); color: #fff;
   font: 700 clamp(11px, 1.15cqw, 17px) "Zen Maru Gothic", "Noto Sans JP", sans-serif; cursor: pointer; }
 .intro .talk-pick .tp:hover { background: rgba(217, 84, 43, .55); }
+.intro .talk-pick .tp-row { display: flex; flex-wrap: wrap; gap: .5cqw; flex-basis: 100%; }
+.intro .talk-pick .tpl { min-height: 44px; padding: 0 1cqw; border-radius: .8cqw; border: 1px solid rgba(255, 255, 255, .28); background: rgba(22, 20, 26, .55); color: #dfe6ff;
+  font: 600 clamp(10px, 1.05cqw, 15px) "Zen Maru Gothic", "Noto Sans JP", sans-serif; cursor: pointer; }
+.intro .talk-pick .tpl[aria-pressed="true"] { background: rgba(255, 194, 122, .85); color: #1a1208; border-color: #ffc27a; }
