@@ -73,6 +73,16 @@ if os.path.exists(rs):
     t = re.sub(rf"os\.path\.join\(ROOT, '\.\.', '{re.escape(on)}', 'scripts', 'seedance\.py'\)", "os.path.join(ROOT, 'scripts', 'seedance.py')", t)
     t = t.replace("'seedance_log.json'", "'seedance_log_layers.json'")
     do("add scripts/seedance_layers.py (imports the folder's own scripts/seedance.py)", lambda: open(os.path.join(O, "scripts", "seedance_layers.py"), "w", encoding="utf-8").write(t))
+# the remake's other scripts (prompt builders, clean-up helpers…): kept, renamed *_layers.py if the original has one of that name
+for f in sorted(os.listdir(os.path.join(R, "scripts"))) if os.path.isdir(os.path.join(R, "scripts")) else []:
+    if f == "seedance.py" or not f.endswith(".py"): continue
+    dst = f if not os.path.exists(os.path.join(O, "scripts", f)) else f[:-3] + "_layers.py"
+    do(f"add scripts/{dst}", lambda f=f, dst=dst: shutil.copy2(os.path.join(R, "scripts", f), os.path.join(O, "scripts", dst)))
+# a project file of the same name would overwrite the original's (e.g. web_prompts.json: the first version's prompts) → keep it as *_v1
+for f in sorted(os.listdir(os.path.join(R, "project"))):
+    o_ = os.path.join(O, "project", f)
+    if os.path.isfile(o_) and f.endswith(".json") and f != "seedance_log.json" and not os.path.exists(o_[:-5] + "_v1.json"):
+        do(f"keep the original's project/{f} as project/{f[:-5]}_v1.json", lambda o_=o_: shutil.copy2(o_, o_[:-5] + "_v1.json"))
 for f in sorted(os.listdir(os.path.join(R, "project"))):
     s_ = os.path.join(R, "project", f); dst = "seedance_log_layers.json" if f == "seedance_log.json" else f
     do(f"add project/{dst}", lambda s_=s_, dst=dst: (shutil.copytree(s_, os.path.join(O, "project", dst), dirs_exist_ok=True) if os.path.isdir(s_) else shutil.copy2(s_, os.path.join(O, "project", dst))))
