@@ -225,7 +225,9 @@ def main():
     dom = json.load(open(os.path.join(shots, 'dom.json')))['demos']
     art = {}
     if os.path.exists(ML_PY):
-        p = subprocess.run([ML_PY, os.path.abspath(__file__), '--analyze', shots], capture_output=True, text=True)
+        for k in range(2):   # it takes ~10 s; once (2026-11-09, Demo03 under check_demo) it hung for 20 min: time out + one retry
+            try: p = subprocess.run([ML_PY, os.path.abspath(__file__), '--analyze', shots], capture_output=True, text=True, timeout=240); break
+            except subprocess.TimeoutExpired: p = subprocess.CompletedProcess([], 1, '', 'art analysis timed out after 240 s')
         try: art = json.loads(p.stdout.strip().splitlines()[-1])
         except Exception: print('art analysis failed (WARN):', p.stderr[-600:], file=sys.stderr)
     else: print(f'no {ML_PY}: character / face checks skipped', file=sys.stderr)
