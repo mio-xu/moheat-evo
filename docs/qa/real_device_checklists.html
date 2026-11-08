@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>真机检查表 · MoHeat Evo</title>
+<style>
+  @page { size: A4; margin: 11mm 11mm 10mm; }
+  :root { --ink: #1d1d1f; --muted: #5f6368; --line: #c9ccd1; --warm: #d9622b; --cool: #2b7bd9; --bg: #fff; --head: #f3f4f6; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #e9eaec; color: var(--ink);
+         font: 9.6pt/1.38 -apple-system, "PingFang SC", "Hiragino Sans", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+  .page { background: var(--bg); width: 210mm; min-height: 297mm; margin: 10mm auto; padding: 11mm; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
+  h1 { font-size: 15pt; margin: 0 0 1.5mm; }
+  h1 small { font-size: 9pt; color: var(--muted); font-weight: 500; }
+  h2 { font-size: 11pt; margin: 3.5mm 0 1.5mm; border-left: 3px solid var(--warm); padding-left: 2mm; }
+  .meta { color: var(--muted); margin: 0 0 1.5mm; }
+  .prep { margin: 0 0 1mm; }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  th, td { border: 1px solid var(--line); padding: 1.2mm 1.4mm; vertical-align: top; }
+  th { background: var(--head); font-weight: 600; text-align: left; font-size: 8.8pt; }
+  td.n { text-align: center; font-weight: 600; width: 7mm; }
+  td.c { text-align: center; white-space: nowrap; font-size: 11pt; }
+  .box { font-size: 8.8pt; white-space: nowrap; }
+  .warm { color: var(--warm); font-weight: 600; } .cool { color: var(--cool); font-weight: 600; }
+  .fill { border-bottom: 1px solid var(--ink); display: inline-block; min-width: 40mm; }
+  .lines { border-bottom: 1px solid var(--line); height: 6.5mm; }
+  .end { margin-top: 2.5mm; }
+  code { font-size: 8.5pt; background: #f1f1f3; padding: 0 .8mm; border-radius: 2px; }
+  @media print {
+    body { background: #fff; }
+    .page { margin: 0; padding: 0; width: auto; min-height: 0; box-shadow: none; page-break-after: always; break-after: page; }
+    .page:last-child { page-break-after: auto; break-after: auto; }
+    tr { break-inside: avoid; }
+  }
+  @media (max-width: 820px) { .page { width: auto; min-height: 0; margin: 0; padding: 16px; box-shadow: none; } table { font-size: 8.5pt; } }
+</style>
+</head>
+<body>
+
+<!-- ===================== 1. 冷热 ===================== -->
+<section class="page">
+  <h1>真机冷热检查 <small>実機テスト（温冷）· Real-device thermal check · 约 15 分钟</small></h1>
+  <p class="meta">日期 <span class="fill" style="min-width:24mm"></span> 测试人 <span class="fill" style="min-width:24mm"></span> 设备 / 固件 <span class="fill" style="min-width:30mm"></span> 浏览器 <span class="fill" style="min-width:22mm"></span></p>
+  <p class="prep"><b>准备</b>：电脑 Chrome / Edge 打开 <code>moheat-evo.github.io/kiosk/?kiosk=1</code>（或 <code>kiosk/intro.html</code>），面板里连上 MoHeat Evo（右上角圆点变绿），暖 / 凉上限先用默认 80 %。先戴<b>降噪入耳式耳机</b>，到提示时再戴<b>大的 MoHeat Evo 头戴</b>。手边放着 ■ STOP。<br>
+  <b>每项打一个勾</b>：OK · 弱（弱い / weak）· 强（強い / strong）· 逆 = 方向错（wrong side）；不对劲就写一句备注。</p>
+
+  <h2>A. 展示模式引导（kiosk intro，约 5 分钟）</h2>
+  <table>
+    <colgroup><col style="width:7mm"><col style="width:38%"><col><col style="width:9mm"><col style="width:9mm"><col style="width:9mm"><col style="width:9mm"></colgroup>
+    <tr><th>#</th><th>做什么</th><th>应该感觉到</th><th>OK</th><th>弱</th><th>强</th><th>逆</th></tr>
+    <tr><td class="n">A1</td><td>左右测试：焰从左、小雪从右说话</td><td>声音真的从左 / 右，从远处慢慢到耳边</td><td class="c">☐</td><td class="c">☐</td><td class="c">☐</td><td class="c">☐</td></tr>
+    <tr><td class="n">A2</td><td>音量滑块调到「舒服又清楚」</td><td>远处明显轻、耳边明显响，不破音</td><td class="c">☐</td><td class="c">☐</td><td class="c">☐</td><td class="c">☐</td></tr>
+    <tr><td class="n">A3</td><td>两次「告诉工作人员」→ 工作人员点继续</td><td>按钮好找，工作人员知道该做什么</td><td class="c">☐</td><td class="c">☐</td><td class="c">☐</td><td class="c">☐</td></tr>
+    <tr><td class="n">A4</td><td>输出确认：<span class="warm">左暖</span> → <span class="warm">右暖</span> → <span class="cool">左凉</span> → <span class="cool">右凉</span>（各约 2 秒）</td><td>和画面亮起的耳朵一致，每段都清楚</td><td class="c">☐</td><td class="c">☐</td><td class="c">☐</td><td class="c">☐</td></tr>
+    <tr><td class="n">A5</td><td><span class="warm">暖</span>自动校准（左耳约 7 秒升到上限），快不舒服时点 STOP</td><td>升温速度 <span class="box">☐ 太快 ☐ 刚好 ☐ 太慢</span>；点下立刻停</td><td class="c">☐</td><td class="c">☐</td><td class="c">☐</td><td class="c">☐</td></tr>
+    <tr><td class="n">A6</td><td><span class="cool">凉</span>自动校准（右耳），同上</td><td>降温速度 <span class="box">☐ 太快 ☐ 刚好 ☐ 太慢</span>；点下立刻停</td><td class="c">☐</td><td class="c">☐</td><td class="c">☐</td><td class="c">☐</td></tr>
+    <tr><td class="n">A7</td><td>焰（<span class="warm">暖</span>）耳边试听</td><td>暖意跟着她的声音起落、自然；延迟 <span class="box">☐ 无 ☐ 有点慢</span></td><td class="c">☐</td><td class="c">☐</td><td class="c">☐</td><td class="c">☐</td></tr>
+    <tr><td class="n">A8</td><td>小雪（<span class="cool">凉</span>）耳边试听</td><td>凉意跟着她的气息、自然；延迟 <span class="box">☐ 无 ☐ 有点慢</span></td><td class="c">☐</td><td class="c">☐</td><td class="c">☐</td><td class="c">☐</td></tr>
+  </table>
+  <p class="end">备注：</p><div class="lines"></div>
+
+  <h2>B. 3 个 Demo（各约 3 分钟，互动模式）</h2>
+  <table>
+    <colgroup><col style="width:7mm"><col style="width:34%"><col><col><col></colgroup>
+    <tr><th>#</th><th>检查什么</th><th>Demo31 夏の屋上</th><th>Demo14 Mint 耳かき</th><th>Demo23 信長と話す</th></tr>
+    <tr><td class="n">B1</td><td><b>冷热快速切换</b>：暖 ↔ 凉 跟得上画面</td><td class="box">☐OK ☐弱 ☐强 ☐逆</td><td class="box">☐OK ☐弱 ☐强 ☐逆</td><td class="box">☐OK ☐弱 ☐强 ☐逆</td></tr>
+    <tr><td class="n">B2</td><td><b>同一只耳朵冷热同时</b>：分辨得出又凉又暖</td><td class="box">☐OK ☐弱 ☐强 ☐逆</td><td class="box">☐OK ☐弱 ☐强 ☐逆</td><td class="box">☐OK ☐弱 ☐强 ☐逆</td></tr>
+    <tr><td class="n">B3</td><td><b>方向</b>：冷热在哪边 = 画面 / 声音在哪边</td><td class="box">☐OK ☐弱 ☐强 ☐逆</td><td class="box">☐OK ☐弱 ☐强 ☐逆</td><td class="box">☐OK ☐弱 ☐强 ☐逆</td></tr>
+    <tr><td class="n">B4</td><td><b>长场景结尾</b>：仍然舒服，没有越来越烫 / 冰</td><td class="box">☐OK ☐弱 ☐强 ☐逆</td><td class="box">☐OK ☐弱 ☐强 ☐逆</td><td class="box">☐OK ☐弱 ☐强 ☐逆</td></tr>
+    <tr><td class="n">B5</td><td><b>人声是暖的</b>：靠近说话暖，离远变弱</td><td class="box">☐OK ☐弱 ☐强 ☐逆</td><td class="box">☐OK ☐弱 ☐强 ☐逆</td><td class="box">☐OK ☐弱 ☐强 ☐逆</td></tr>
+    <tr><td class="n">B6</td><td>冷热最强时点 <b>■ STOP</b></td><td class="box">☐ 立刻停 ☐ 慢 ___ 秒</td><td class="box">☐ 立刻停 ☐ 慢 ___ 秒</td><td class="box">☐ 立刻停 ☐ 慢 ___ 秒</td></tr>
+    <tr><td class="n">B7</td><td><b>安全</b>：任何时候都没有太烫 / 刺痛</td><td class="box">☐ 没有 ☐ 有 ____</td><td class="box">☐ 没有 ☐ 有 ____</td><td class="box">☐ 没有 ☐ 有 ____</td></tr>
+  </table>
+  <p class="end">最强 / 最弱的瞬间（Demo · 大约几秒 · 什么情况）：</p><div class="lines"></div>
+  <p class="end">整体：☐ 可以上展会　☐ 要改：<span class="fill" style="min-width:120mm"></span></p>
+</section>
+
+<!-- ===================== 2. 手机 ===================== -->
+<section class="page">
+  <h1>手机真机检查 <small>スマホ実機テスト · Real-device phone check · 约 10–15 分钟</small></h1>
+  <p class="meta">日期 <span class="fill" style="min-width:24mm"></span> 测试人 <span class="fill" style="min-width:24mm"></span><br>
+  ☐ iPhone <span class="fill" style="min-width:26mm"></span>（iOS ____，Safari）　☐ Android <span class="fill" style="min-width:26mm"></span>（Android ____，Chrome）</p>
+  <p class="prep"><b>准备</b>：手机打开 <code>moheat-evo.github.io</code>，从菜单进 Demo。测 <b>Demo11 Naomi</b>（撸猫）、<b>Demo31 夏の屋上</b>、<b>Demo14 Mint</b>（长按），以及 <code>…/kiosk/intro.html</code>。先关掉手机的「旋转锁定」。手机没有 Web Serial，不出冷热是正常的（只有 ■ STOP）。</p>
+
+  <table>
+    <colgroup><col style="width:7mm"><col style="width:33%"><col><col style="width:21mm"><col style="width:21mm"></colgroup>
+    <tr><th>#</th><th>做什么</th><th>应该看到</th><th>iPhone</th><th>Android</th></tr>
+    <tr><td class="n">1</td><td>每个页面<b>竖屏</b>打开，拖一拖空白处</td><td>正好一屏，不滚动、不左右晃；播放器尽量大</td><td class="box">☐OK ☐NG</td><td class="box">☐OK ☐NG</td></tr>
+    <tr><td class="n">2</td><td>转成<b>横屏</b></td><td>仍是一屏；画面撑满高度，侧栏收成 🎛 抽屉</td><td class="box">☐OK ☐NG</td><td class="box">☐OK ☐NG</td></tr>
+    <tr><td class="n">3</td><td>竖屏点 ⛶ 全屏</td><td>出现「请把手机横过来」卡片，横过来自动消失；「继续竖屏观看」能关掉；⤡ 能退出</td><td class="box">☐OK ☐NG</td><td class="box">☐OK ☐NG</td></tr>
+    <tr><td class="n">4</td><td>Demo11：手指在 Naomi 身上来回<b>抚摸</b>（撫でる / stroke）</td><td>Naomi 有反应；页面不跟着动、不回弹、不下拉刷新、不触发返回</td><td class="box">☐OK ☐NG</td><td class="box">☐OK ☐NG</td></tr>
+    <tr><td class="n">5</td><td>Demo14：耳かき<b>长按</b>（長押し / long-press）</td><td>按住时一直有效；不弹系统菜单 / 放大镜 / 选字</td><td class="box">☐OK ☐NG</td><td class="box">☐OK ☐NG</td></tr>
+    <tr><td class="n">6</td><td>回答时点 🎤 <b>语音回答</b>，第一次允许麦克风</td><td>有权限弹窗；意思接近就判对，说错有提示；拒绝后还能点按钮回答</td><td class="box">☐OK ☐NG</td><td class="box">☐OK ☐NG</td></tr>
+    <tr><td class="n">7</td><td>⚙ 里换成 日本語 / 中文 → 回菜单进另一个 Demo → 刷新</td><td><b>语言被记住</b>；字幕、按钮都是这个语言</td><td class="box">☐OK ☐NG</td><td class="box">☐OK ☐NG</td></tr>
+    <tr><td class="n">8</td><td>封面上点 ‹ › / 左右<b>滑动</b></td><td>能切换 Demo，而且很快</td><td class="box">☐OK ☐NG</td><td class="box">☐OK ☐NG</td></tr>
+    <tr><td class="n">9</td><td>开始播放后左右滑动；播完回到封面再滑</td><td>播放中<b>不切换</b>；结束回本 Demo 封面后又能切换</td><td class="box">☐OK ☐NG</td><td class="box">☐OK ☐NG</td></tr>
+    <tr><td class="n">10</td><td>所有按钮用拇指点</td><td>都点得到（≥ 44 px），不被刘海 / 底部横条挡住</td><td class="box">☐OK ☐NG</td><td class="box">☐OK ☐NG</td></tr>
+    <tr><td class="n">11</td><td><code>kiosk/intro.html</code>：戴降噪入耳式耳机（蓝牙）走左右测试</td><td>焰在<b>左</b>、小雪在<b>右</b>，方向不反；音量滑块有效</td><td class="box">☐OK ☐NG</td><td class="box">☐OK ☐NG</td></tr>
+    <tr><td class="n">12</td><td>播放中切到别的 App 再回来 / 锁屏再解锁</td><td>声音和画面不乱；能继续或暂停</td><td class="box">☐OK ☐NG</td><td class="box">☐OK ☐NG</td></tr>
+  </table>
+  <p class="end">NG 的情况（哪一项 · 哪台手机 · 竖 / 横 · 哪个 Demo · 截图文件名）：</p>
+  <div class="lines"></div><div class="lines"></div><div class="lines"></div>
+  <p class="end">整体：☐ 手机上可以用　☐ 要改：<span class="fill" style="min-width:120mm"></span></p>
+</section>
+
+</body>
+</html>

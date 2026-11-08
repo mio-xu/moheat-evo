@@ -2,6 +2,8 @@
 
 一台电脑、一副 MoHeat Evo，在展会 / 店面里一位接一位地给访客体验。全部要求和验收清单：[`docs/kiosk/REQUIREMENTS.md`](kiosk/REQUIREMENTS.md)；A4 速查卡：[`docs/kiosk_staff_card.md`](kiosk_staff_card.md)；设计规则：`DEMO_DESIGN_GUIDE.md` §7.4「展示模式」。
 
+**真机检查（自己戴上设备 / 拿手机走一遍，可打印）**：[冷热（约 15 分钟）](qa/real_device_thermal.md) · [手机（约 10–15 分钟）](qa/real_device_phone.md) · [A4 打印版](qa/real_device_checklists.html)。
+
 ## 1. 网址
 
 | 用途 | 网址 |
