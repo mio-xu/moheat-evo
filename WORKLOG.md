@@ -7,6 +7,29 @@
 
 ---
 
+## 2026-11-08 · 嘴型统一改用 LivePortrait 嘴套组（12 个分层 Demo）· 后台 agent（统筹分派）
+
+**问题**（用户）：很多 Demo 说话时，闭嘴的线到张嘴永远对不上——闭嘴和张嘴是两张分别画的图，嘴角和形状不同，换贴片时会跳；遮罩、对位只能减轻。
+
+**做了什么**
+- 新工具 `tools/art/lp_mouths.py`（用 `~/ml/LivePortrait/.venv/bin/python` 运行，每个姿势约 10 秒，不花钱）：从姿势自己的图变形出 3 档张嘴，只取几何；没变的地方还原底图像素，口腔平涂并按皮肤受光调色；闭嘴 = 底图原像素；所有档一个矩形一个羽化（统筹 / 用户的「嘴部模块整块替换」）。`--sheet` 出 2 倍对照图 `assets/lp_mouths/<pose>_sheet.jpg`。选项：`"lp": {"lips", "minh", "light", "pad", "centre"/"radius"}`。
+- `tools/art/build_stage.py`：`"mouth": "lp"` → `mouth_lv` 贴片（level 0..3）；新 `--mouths-only`（只换嘴套，其他层不动）；源图改过就拒绝旧嘴套。`tools/animate/lp_pose.py`：`Puppet(share=…)` 共用模型、`frame(raw=True)`。
+- `demos/shared/layers.js`（?v=8）：每次只画套组里的一块；档位按「当前音量 ÷ 说话时平均音量」选（> 1.1 第 2 档，> 2.1 第 3 档）。`check_patches.py` / `check_mouth.js` 认识 `mouth_lv`，`check_mouth` 打印各档比例。
+- 逐个上线（每个 Demo 单独提交）：Demo17 4fa757e、Demo18 e1bbce8、Demo19 27a296d、Demo14 81d3f75、Demo12 b09bfed、Demo24 df3e9c2、Demo20 14bd50c、Demo30 a1b8388、Demo25 ab80c80、Demo21 9fff061、Demo22 66d3acd、Demo31 71509fb。全部 check_patches 0 报告；check_mouth（有 ?auto）或 tools/qa/drive_story.js（Demo12/20/21/22）0 问题、结束回到自己的封面。
+- 保留旧差分的姿势：Demo18 wave / race（露齿咧嘴）、Demo25 pray（近侧脸低头）、Demo21 wrist（开口落在鼻影）、Demo20 hands（手指挡嘴）、Demo30 breath（侧脸）、Demo31 laugh（大笑本身是看点）。
+- Demo18：`tools/art/clean_cutout.py --bg 6,162,73`；新工具 `tools/art/recolor_rim.py` 把原图里画好的青色霓虹边缘光在 booth（白色环形灯）/ street（自动售货机冷白光）改成该场景的光，其他画面保留（统筹决定），d8551c9。
+
+**现在的状态**：以上都已本地提交，统筹负责 push。
+
+**下一步 / 遗留**
+- Demo17 是第一个做的，用的是较早的参数（没有 `minh` / 口腔调色）；想统一可以重跑 `lp_mouths.py demos/for-men/Demo17_CocoaStream --sheet` + `build_stage.py --mouths-only`。
+- 新 Demo 合成时直接给姿势写 `"mouth": "lp"`（guide §6 第 5 步 ④）。
+- 3d3e602 的提交说明写错了（实际是 Demo43 的内容，原因见 guide §11.1），09ba937 是更正说明。
+
+**遇到的问题**（详见 `DEMO_DESIGN_GUIDE.md` §11.1）：LivePortrait 渲染偏软、画照片牙齿；某些动画脸只张开一条缝；口腔颜色在男性脸上像口红；最宽档用得太多；完整重建冲掉精修过的层；scratchpad 脚本被另一个 agent 覆盖导致错误提交。
+
+---
+
 ## 2026-11-08 · 封面构图标准 + 统一外壳（shell）第 1 批
 - **做了什么**：① 封面标准 `demos/shared/cover.js`（文字左 / 人物右、脸高 27 %、眼睛 (72 %, 30 %)、压暗、手机竖屏版）+ 检查 `tools/web/check_cover.py`（SCRFD + isnet-anime 量脸，`--all --sheet` 对照表）+ check_demo G7 `cover`；30 个 Demo 已上标准（提交 d914e15、832f5b2）。② 统一外壳 `demos/shared/shell.js`：纯聆听（默认）/ 互动、章节进度条可跳转（×16 静音快进）、空格 / 点画面暂停（冻结时钟 + 音频 + 设备）、冷热开关、设置记忆、字幕大小、减少动态、加载遮罩、错误提示、← / → 只在封面；`tools/web/check_shell.js` + check_demo G6 `shell`。第 1 批（分层剧情）：Demo12 / 20 / 21 / 22 / 25 / 31 / 19 / 30 已加 shell。实测 Demo30、Demo31：纯聆听零输入约 2 分钟走完、无麦克风、暂停冻结、章节前后跳转都成功。规则写进指南 §7.3「2b / 2c」。
 - **状态 / 下一步**：等统筹看过第 1 批截图后继续：直播间（14 / 17 / 18 / 24）→ 影片 1–9（已有 transport，章节进度条要和 scrub 合并）→ 游戏（11 / 13 / 26 / 10 / 28 / 15 / 16 / 29：纯聆听要能自动演示）→ 对谈（23 / 41 / 42）→ Demo43。之后：菜单顺序（nav.js DEMOS 加 series / cast / part + 自动排序、"推荐先体验" 按 check_demo --full 的冷热得分自动选）、结局图鉴（1/2）、结束画面切换模式。

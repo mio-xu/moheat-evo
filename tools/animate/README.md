@@ -12,6 +12,7 @@ Two free, local, automatic methods; no rig, no Seedance credits.
 3. **Layers from a finished still** (`split_layers.py`, venv `~/ml/layers`): isnet-anime cut-out (character + chair, RGBA) and a LaMa-inpainted empty background. Better for new demos: generate the empty background once per location (guide §6.2).
 4. **Character clip with alpha** (`pack_alpha.py`): mats every frame of a LivePortrait clip (only the moving head is re-matted, the rest uses the still's mask), crops to the character box and packs colour on top / alpha below in one H.264 MP4; the page's WebGL shader rebuilds RGBA, so it plays in every browser incl. Safari.
 
+5. **Mouth sets for layered demos** (`tools/art/lp_mouths.py`, 2026-11-08): LivePortrait opens the mouth of a pose's own picture in 3 levels; only its geometry is kept (the drawing's own pixels elsewhere, a flat anime opening), closed = the original pixels, all levels one block → `build_stage.py <demo> --mouths-only` (`"mouth": "lp"` in stage.json). Guide §6 step 5 ④.
 The page stacks: background (depth parallax + fire shimmer / flicker in the shader) → character (idle loop ↔ talk clip, 0.1 s dissolve, both sit on the still; warm rim light from the fire side) → code particles (embers, snow, `mix-blend-mode: screen`).
 
 Setup (outside the repo, ~2 GB weights):
