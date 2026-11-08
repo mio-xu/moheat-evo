@@ -22,7 +22,8 @@
     if (m.t === 'state') { st.view = m.view; st.dir = m.dir || null; if (m.view !== 'demo') st.sub = ''; paint(); }
     if (m.t === 'thermal') st.th = m.th;
     if (m.t === 'sub') { st.sub = m.text || ''; $('#sub').textContent = st.sub; }
-    if (m.t === 'frame') { st.frameAt = Date.now(); frame.src = m.url; } });
+    if (m.t === 'frame') { st.frameAt = Date.now(); frame.src = m.url; }
+    if (m.t === 'staff') signs(); });
   setInterval(() => bc?.postMessage({ t: 'hello' }), 2000); bc?.postMessage({ t: 'hello' });
   // anything quiet for 10 min (kiosk closed) → attract
   setInterval(() => { if (Date.now() - st.seen > 600000 && st.view !== 'attract') { st.view = 'attract'; paint(); } }, 5000);
@@ -119,6 +120,10 @@
   addEventListener('keydown', (e) => { if (e.key === 'f' || e.key === 'F') (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()).catch?.(() => {}); });
   addEventListener('dblclick', () => document.documentElement.requestFullscreen?.().catch?.(() => {}));
   addEventListener('storage', paint);   // staff changed the offered demos / settings in window 1
+  // signs next to the QR (live view) and in the QR badge (promo video): touch OK / do not touch (staff toggle in window 1) + photos,
+  // EN + 日本語 together (bystanders; REQUIREMENTS §12) — they do not rotate with the other text
+  function signs() { const S = window.MoHeatSigns; if (!S) return; S.render($('#signs'), { langs: ['en', 'ja'], place: 'Queue' }); S.render($('#psigns'), { langs: ['en', 'ja'], place: 'Queue' }); }
+  addEventListener('storage', signs); setInterval(signs, 5000); signs();
   paint(); draw();
   window.MoHeatQueue = { st, get promo() { return showPromo; }, loadPromo };
 })();

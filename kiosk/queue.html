@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-kiosk-app>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -43,9 +43,22 @@
     .qbadge[data-c="br"] { right: 2.4vw; bottom: 3vh; } .qbadge[data-c="bl"] { left: 2.4vw; bottom: 3vh; } .qbadge[data-c="tr"] { right: 2.4vw; top: 3vh; } .qbadge[data-c="tl"] { left: 2.4vw; top: 3vh; }
     .ptag { position: absolute; left: 2.4vw; top: 3vh; padding: .7vh 1.4vw; border-radius: 999px; background: rgba(12, 10, 20, .7); font: 700 2.6vh/1.2 var(--ff); color: #ffd479; }
     .ptag[hidden] { display: none; }
+    /* signs (kiosk/signs.js, REQUIREMENTS §12): touch OK / do not touch + photos, EN + 日本語 for the people in line, readable from 2–3 m.
+       Titles only (the "staff will be back soon" line too when unattended); the two-ear view keeps at least 24 vh */
+    .ears { min-height: 18vh; }
+    .q-signs { display: flex; gap: 1.6vw; align-items: center; padding: 1.2vh 1.2vw; border-radius: 2vh; background: rgba(255,255,255,.06); font: 800 2.1vh/1.15 var(--ff); --ms-ic: 6.5vh; }
+    .q-signs .ms-sign { flex: 0 1 auto; } .q-signs .ms-sign:first-child { flex: 1 1 auto; } .q-signs .ms-tx p + p b { font-size: .86em; }
+    .q-signs .ms-tx small, .p-signs .ms-tx small { display: none; }
+    .q-signs[data-state="off"] { background: rgba(215, 38, 61, .18); box-shadow: inset 0 0 0 3px rgba(255, 110, 130, .7); }
+    .q-signs[data-state="off"] [data-k="notouch"] .ms-tx small, .p-signs[data-state="off"] [data-k="notouch"] .ms-tx small { display: block; color: #ffd479; opacity: 1; }
+    .qbadge { display: grid; grid-template-columns: auto auto; }
+    .p-signs { grid-column: 1 / -1; display: flex; gap: calc(var(--qs, 24vh) * .1); align-items: center; padding-top: 1vh; border-top: 1px solid rgba(255,255,255,.18);
+      font: 800 calc(var(--qs, 24vh) * .066)/1.15 var(--ff); color: #fff; --ms-ic: calc(var(--qs, 24vh) * .22); max-width: calc(var(--qs, 24vh) * 2.3); }
+    .p-signs .ms-sign:first-child { flex: 1 1 auto; } .q-signs [data-k=photo] b, .p-signs [data-k=photo] b { white-space: nowrap; } .q-signs [data-k=photo], .p-signs [data-k=photo] { flex-shrink: 0; } .p-signs .ms-tx p + p b { font-size: .86em; }
     .hint { position: fixed; right: 1vw; bottom: .6vh; font-size: 11px; color: #3c3448; }
   </style>
   <link rel="stylesheet" href="theme.css?v=9ef27d2c" />
+  <link rel="stylesheet" href="signs.css?v=824daaf8" />
 </head>
 <body>
   <div class="kb-flow" aria-hidden="true"></div>
@@ -55,18 +68,20 @@
     <section class="right">
       <div class="ears"><canvas id="ears"></canvas><div class="lab" id="earsLab"></div></div>
       <div class="qrbox"><div class="qr" id="qr"></div><p><span id="qrT"></span><small id="qrS"></small></p></div>
+      <div class="q-signs ms-row" id="signs" hidden></div>
       <div class="top"><h3 id="topH"></h3><ol id="top"></ol></div>
     </section>
   </div>
   <section class="promo" id="promo" hidden><video id="pv" muted loop playsinline preload="auto"></video>
     <div class="ptag" id="ptag" hidden></div>
-    <div class="qbadge" id="qbadge"><div class="qr" id="pqr"></div><p id="pqT"></p></div></section>
+    <div class="qbadge" id="qbadge"><div class="qr" id="pqr"></div><p id="pqT"></p><div class="p-signs ms-row" id="psigns" hidden></div></div></section>
   <p class="hint">F = fullscreen</p>
   <script>window.MOHEAT_NAV_DATA_ONLY = true;</script>
   <script src="../demos/shared/nav.js?v=4d8359f2"></script>
   <script src="../demos/shared/kiosk.js?v=f5d647ad"></script>
   <script src="qrcode.min.js"></script>
   <script src="pitches.js?v=640c3555"></script>
-  <script src="queue.js?v=8d1bf616"></script>
+  <script src="signs.js?v=0849d559"></script>
+  <script src="queue.js?v=7f4df385"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 // → #card (rating, buy?, price band, favourite moment, comment, QR) → reset → welcome. Staff: 5 taps top-left + PIN.
 // Routes (hash): #welcome (default) · #attract · #card · #staff · #reset. Storage + stats: shared/kiosk.js (MoHeatKiosk).
 (() => {
-  const K = window.MoHeatKiosk, D = window.MoHeatDemos || { DEMOS: [] };
+  const K = window.MoHeatKiosk, D = window.MoHeatDemos || { DEMOS: [] }, S = window.MoHeatSigns;
   const QS = new URLSearchParams(location.search);
   if (QS.get('kiosk') === '0') { K.exit(); location.replace('../'); return; }
   K.enter();
@@ -55,7 +55,7 @@
     $$('[data-t]').forEach((e) => { e.textContent = t(e.dataset.t); });
     $('#startVisit').textContent = t('start'); $('#skipIntro').textContent = t('skipIntro');
     $$('.langs button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.l === lang())));
-    renderRec(); $('#hygiene').hidden = !cfg.hygiene;
+    renderRec(); $('#hygiene').hidden = !cfg.hygiene; signs();
     if (!$('#v-menu').hidden) renderMenu();
     if (!$('#v-card').hidden) renderCard(false);
   }
@@ -70,7 +70,7 @@
   function alert_(k) { let el = $('#alertBig'); if (!el) { el = document.createElement('div'); el.id = 'alertBig'; el.className = 'alert-big'; el.setAttribute('role', 'alert'); document.body.appendChild(el); el.addEventListener('click', () => { el.hidden = true; }); }
     el.hidden = !k; if (k) el.innerHTML = k === 'lost' ? `<b>🔌 ${t('lost')}</b><span>${t('staffHelp')}</span>` : `<b>🔋 ${t('bat')}</b><span>${t('staffHelp')}</span>`; }
   let thermalOn = true;   // false in the attract loop: nothing goes out
-  const send = (line) => { if (thermalOn || /^stop$/i.test(line)) dev.send(line); if (view === 'intro') K.post({ t: 'thermal', th: K.thermalOf(/^stop$/i.test(line) ? '' : line) }); };
+  const send = (line) => { if ((thermalOn && S.attended()) || /^stop$/i.test(line)) dev.send(line); if (view === 'intro') K.post({ t: 'thermal', th: K.thermalOf(/^stop$/i.test(line) ? '' : line) }); };
   setInterval(() => K.post({ t: 'state', view, dir: pending || (view === 'card' ? (K.visit.get() || {}).dir : null) }), 2000);
   const autoConnect = (n = 0) => { if (dev.isConnected()) return; const s = $('#portSelect');
     if (s && !s.disabled && s.value !== '') { $('#connectBtn').click(); return; } if (n < 10) setTimeout(() => autoConnect(n + 1), 500); };
@@ -87,7 +87,7 @@
     if (v !== 'intro') intro?.stop();
     if (v === 'attract') { send('stop'); startAttract(); } else stopAttract();
     if (v === 'menu') renderMenu();
-    document.documentElement.dataset.view = v; last = Date.now();
+    document.documentElement.dataset.view = v; last = Date.now(); signs();
   }
   function newVisitor() { pending = null; try { sessionStorage.removeItem('moheat.kiosk.session'); } catch {} K.resetVisitor(); cfg = K.cfg(); document.documentElement.lang = lang(); paint(); }
   function reset(toAttract = false) { send('stop'); newVisitor(); go(toAttract ? 'attract' : 'welcome'); }
@@ -239,6 +239,7 @@
   for (const e of ['pointerdown', 'keydown', 'touchstart', 'input']) addEventListener(e, () => { last = Date.now(); }, { capture: true, passive: true });
   setInterval(() => {
     if (!$('#staff').hidden || !$('#pinBox').hidden) return;
+    if (!S.attended()) { if (view !== 'attract') reset(true); return; }   // unattended: carousel under the do-not-touch screen
     const idle = (Date.now() - last) / 1000;
     if (view === 'intro') return;   // the intro runs by itself and ends on the menu
     if (view === 'card' && idle > 15) return closeCard(true);   // never block the next visitor
@@ -254,6 +255,30 @@
   let qT = 0; $('#qdot').addEventListener('pointerdown', () => { qT = setTimeout(qtoggle, 800); }); for (const e of ['pointerup', 'pointerleave', 'pointercancel']) $('#qdot').addEventListener(e, () => clearTimeout(qT));
   addEventListener('keydown', (e) => { if ((e.key === 'q' || e.key === 'Q') && !/input|textarea|select/i.test(e.target.tagName) && view !== 'intro') qtoggle(); });
   qpaint();
+  // ---------------------------------------------------------------- signs + staff "attended / unattended" (REQUIREMENTS §12; kiosk/signs.js)
+  // attended (default) = touch-OK badge; unattended = the full "staff will be back soon · please do not touch" screen, warm / cool off,
+  // taps and keys ignored except the staff ways back: long-press the second dot (or key S), the 5-tap corner + PIN. Synced to the queue
+  // screen through the settings (storage event) + BroadcastChannel; periods logged per day (S.ensure / S.summary / S.csv).
+  function signs() {
+    const b = $('#msBadge'), on = S.attended();
+    if (on && view === 'welcome') { b.classList.remove('big'); S.render(b, { langs: [lang()], sub: false, place: 'Welcome' }); }
+    else if (on && view === 'attract') { b.classList.add('big'); S.render(b, { langs: ['en', 'ja'], sub: false, place: 'Attract' }); }
+    else b.hidden = true;
+    const a = $('#msAway'); a.hidden = on; if (!on) S.away(a, cfg.langs || ['en', 'ja', 'zh']);
+    $('#sdot').classList.toggle('off', !on);
+  }
+  function applyStaff(was) {
+    const on = S.attended(); cfg = K.cfg(); signs();
+    if (!on) { send('stop'); intro?.stop(); if (view !== 'attract' && $('#staff').hidden) reset(true); }
+    else if (was === false && view === 'attract' && $('#staff').hidden) reset(false);   // staff back → welcome for the next visitor
+  }
+  const stoggle = () => { const was = S.attended(); S.setAttended(!was); applyStaff(was); const d = $('#sdot'); d.classList.add('flash'); setTimeout(() => d.classList.remove('flash'), 900); };
+  let sT = 0; $('#sdot').addEventListener('pointerdown', () => { sT = setTimeout(stoggle, 800); }); for (const e of ['pointerup', 'pointerleave', 'pointercancel']) $('#sdot').addEventListener(e, () => clearTimeout(sT));
+  addEventListener('keydown', (e) => { if ((e.key === 's' || e.key === 'S') && !e.metaKey && !e.ctrlKey && !/input|textarea|select/i.test(e.target.tagName) && view !== 'intro' && $('#staff').hidden && $('#pinBox').hidden) stoggle(); });
+  // unattended: every other key is swallowed (capture phase, before the page's own key handlers); the PIN box / staff panel still type
+  addEventListener('keydown', (e) => { if (S.attended() || e.key === 's' || e.key === 'S' || !$('#staff').hidden || !$('#pinBox').hidden) return; e.stopImmediatePropagation(); e.preventDefault(); }, true);
+  addEventListener('storage', (e) => { if (e.key === 'moheat.kiosk.cfg') { const was = $('#msAway').hidden; applyStaff(was); } });
+  S.ensure(); setInterval(() => S.ensure(), 60000);
   // ---------------------------------------------------------------- staff: 5 taps top-left + PIN
   let taps = [];
   $('#corner').addEventListener('click', () => { const n = Date.now(); taps = taps.filter((x) => n - x < 3000).concat(n); if (taps.length >= 5) { taps = []; askPin(); } });
@@ -266,7 +291,8 @@
     send('stop'); cfg = K.cfg(); $('#staff').hidden = false;
     $('#sLang').innerHTML = (cfg.langs || ['en', 'ja', 'zh']).map((l) => `<option value="${l}"${l === cfg.lang ? ' selected' : ''}>${LANG_NAMES[l] || l}</option>`).join('');
     $('#sCapW').value = cfg.capWarm; $('#sStartW').value = cfg.startWarm; $('#sCapC').value = cfg.capCool; $('#sStartC').value = cfg.startCool; $('#sIdle').value = cfg.idle; $('#sSite').value = cfg.site; $('#sNews').value = cfg.newsUrl || '';
-    $('#sCur').value = cfg.currency || 'auto'; bandsField(); $('#sCut').value = cfg.cut || 'full'; $('#sHyg').checked = !!cfg.hygiene; $('#sPick').value = cfg.pickUrl || ''; $('#sQueue').checked = !!cfg.queue; $('#sMaxD').value = cfg.maxDemos || 0; $('#sMaxM').value = cfg.maxMin || 0;
+    $('#sCur').value = cfg.currency || 'auto'; bandsField(); $('#sCut').value = cfg.cut || 'full'; $('#sHyg').checked = !!cfg.hygiene; $('#sPick').value = cfg.pickUrl || ''; $('#sQueue').checked = !!cfg.queue; $('#sMaxD').value = cfg.maxDemos || 0; $('#sAttended').checked = S.attended();
+    { const g = S.cfg(); $('#sSignTouch').checked = g.signTouch; $('#sSignPhoto').value = g.signPhoto; $('#sSignWelcome').checked = g.signWelcome; $('#sSignAttract').checked = g.signAttract; $('#sSignQueue').checked = g.signQueue; $('#sSignPos').value = g.signPos; } $('#sMaxM').value = cfg.maxMin || 0;
     $('#sQMode').value = cfg.queueMode; $('#sAlt').value = cfg.altMin; $('#sPromo').value = cfg.promoSrc === 'idb' ? '' : cfg.promoSrc || ''; $('#sPromo').placeholder = cfg.promoSrc === 'idb' ? 'local file in use (pick another or type a URL)' : 'empty = kiosk/media/promo.mp4 · or a URL';
     $('#sPromoSound').checked = !!cfg.promoSound; $('#sPromoNow').checked = !!cfg.promoNow; $('#sQrSize').value = cfg.qrSize; $('#sQrCorner').value = cfg.qrCorner;
     $('#sDemos').innerHTML = D.DEMOS.map((d, i) => `<label><input type="checkbox" value="${d.dir}"${!cfg.demos || cfg.demos.includes(d.dir) ? ' checked' : ''}> ${i + 1} · ${d.en}</label>`).join('');
@@ -282,14 +308,16 @@
       site: $('#sSite').value.trim() || K.DEF.site, cut: $('#sCut').value, hygiene: $('#sHyg').checked, pickUrl: $('#sPick').value.trim(), queue: $('#sQueue').checked, maxDemos: Math.max(0, +$('#sMaxD').value || 0), maxMin: Math.max(0, +$('#sMaxM').value || 0),
       queueMode: $('#sQMode').value, altMin: Math.max(1, +$('#sAlt').value || 3), promoSrc: $('#sPromo').value.trim() || (K.cfg().promoSrc === 'idb' ? 'idb' : ''),
       promoSound: $('#sPromoSound').checked, promoNow: $('#sPromoNow').checked, qrSize: $('#sQrSize').value, qrCorner: $('#sQrCorner').value, newsUrl: $('#sNews').value.trim(), currency: $('#sCur').value, bands,
-      demos: demos.length === D.DEMOS.length ? null : demos, ...(/^\d{4,8}$/.test(pin) ? { pin } : {}) });
-    cfg = K.cfg(); capLabels();
+      demos: demos.length === D.DEMOS.length ? null : demos, ...(/^\d{4,8}$/.test(pin) ? { pin } : {}),
+      signTouch: $('#sSignTouch').checked, signPhoto: $('#sSignPhoto').value, signWelcome: $('#sSignWelcome').checked, signAttract: $('#sSignAttract').checked, signQueue: $('#sSignQueue').checked, signPos: $('#sSignPos').value });
+    if ($('#sAttended').checked !== S.attended()) S.setAttended($('#sAttended').checked);
+    cfg = K.cfg(); capLabels(); K.post({ t: 'staff', attended: S.attended() });
   }
   $('#staff').addEventListener('change', (e) => { if (e.target.id === 'sCur') { K.setCfg({ currency: e.target.value }); cfg = K.cfg(); bandsField(); } saveStaff(); });
   $('#staff').addEventListener('input', (e) => { if (e.target.type === 'range') capLabels(); });
   $('#dAll').addEventListener('click', () => { $$('#sDemos input').forEach((x) => { x.checked = true; }); saveStaff(); });
   $('#dNone').addEventListener('click', () => { $$('#sDemos input').forEach((x) => { x.checked = false; }); saveStaff(); });
-  $('#staffClose').addEventListener('click', () => { saveStaff(); $('#staff').hidden = true; reset(); });
+  $('#staffClose').addEventListener('click', () => { saveStaff(); $('#staff').hidden = true; reset(!S.attended()); signs(); });
   $$('#staff [data-w]').forEach((b) => b.addEventListener('click', () => { statWhich = b.dataset.w; $$('#staff [data-w]').forEach((x) => x.classList.toggle('on', x === b)); renderStats(); }));
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   function renderStats() {
@@ -299,6 +327,7 @@
     $('#statSum').innerHTML = `<div><b>${s.visitors}</b>visitors</div><div><b>${s.rows.reduce((a, r) => a + r.started, 0)}</b>plays</div><div><b>${s.cards}</b>cards (${s.skipped} skipped)</div>`
       + `<div><b>${pct(b.yes)} / ${pct(b.maybe)} / ${pct(b.no)}</b>buy: yes / maybe / no (${nb})</div><div><b>${topPrice ? esc(topPrice[0].split('|')[1]) : '–'}</b>top price band</div>`
       + `<div><b>${s.calib.n ? `${Math.round(s.calib.warm * 100)}% / ${Math.round(s.calib.cool * 100)}%` : '–'}</b>avg personal max warm / cool (${s.calib.n}; hit cap ${s.calib.warmCapHits} / ${s.calib.coolCapHits})</div>`
+      + (() => { const p = S.summary(statWhich); return `<div><b>${S.dur(p.attended)} / ${S.dur(p.unattended)}</b>staffed / unattended (h:mm)</div>`; })()
       + `<div><b>${esc(Object.entries(s.scenes).sort((a, c) => c[1] - a[1]).slice(0, 2).map(([k, n]) => `${(K.SCENES.find((x) => x.id === k) || { en: k }).en} ${n}`).join(' · ') || '–')}</b>top use scenes</div>`;
     $('#statBody').innerHTML = s.rows.map((r, i) => `<tr><td class="n">${i + 1}</td><td>${esc(name(r.dir))}</td><td class="n">${r.started}</td><td class="n">${r.finished}</td><td class="n">${r.pure} / ${r.interactive}</td><td class="n">${r.avg ?? '–'}${r.rated ? ` (${r.rated})` : ''}</td><td>${esc(r.top)}</td></tr>`).join('')
       || '<tr><td colspan="7">No plays yet</td></tr>';
@@ -307,12 +336,13 @@
     $('#statComments').innerHTML = cs.length ? cs.slice(-30).reverse().map((c) => `<div>${esc(c)}</div>`).join('') : '';
   }
   const download = (name, text, type) => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); };
-  $('#exCsv').addEventListener('click', () => download(`moheat-kiosk-${K.day()}.csv`, '﻿' + K.stats.csv(), 'text/csv'));
+  $('#exCsv').addEventListener('click', () => download(`moheat-kiosk-${K.day()}.csv`, '﻿' + K.stats.csv() + S.csv(), 'text/csv'));
   $('#exCom').addEventListener('click', () => download(`moheat-kiosk-comments-${K.day()}.csv`, '﻿' + K.stats.commentsCsv(), 'text/csv'));
-  $('#exJson').addEventListener('click', () => download(`moheat-kiosk-${K.day()}.json`, K.stats.json(), 'application/json'));
+  $('#exJson').addEventListener('click', () => download(`moheat-kiosk-${K.day()}.json`, JSON.stringify({ ...JSON.parse(K.stats.json()), presence: S.log() }, null, 1), 'application/json'));
   $('#exClear').addEventListener('click', () => { if (confirm('Delete all kiosk statistics in this browser? Export them first.')) { K.stats.clear(); renderStats(); } });
   $('#fsBtn').addEventListener('click', () => { (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()).catch?.(() => {}); });
   $('#attractBtn').addEventListener('click', () => { saveStaff(); $('#staff').hidden = true; go('attract'); });
+  $('#signBtn').addEventListener('click', () => { saveStaff(); window.open('sign.html', 'moheat-sign'); });
   // staff self-calibration: the same ramp on a staff member, up to the full device scale → the warm / cool caps (rounded to 5 %)
   $('#selfCal').addEventListener('click', () => { saveStaff(); $('#staff').hidden = true; go('intro');
     intro = MoHeatIntro.mount($('.intro-host'), { send, only: ['warm', 'cool'], capWarm: 1, capCool: 1, lang, connected: () => dev.isConnected(),
@@ -349,6 +379,6 @@
     else if (h === 'attract') reset(true);
     else reset();
   };
-  window.MoHeatKioskApp = { go, reset, get view() { return view; }, get intro() { return intro; }, answer, closeCard, openStaff, dev };
-  route();
+  window.MoHeatKioskApp = { go, reset, stoggle, signs, get view() { return view; }, get intro() { return intro; }, answer, closeCard, openStaff, dev };
+  route(); applyStaff();
 })();

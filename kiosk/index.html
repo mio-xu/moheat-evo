@@ -7,6 +7,7 @@
   <meta name="robots" content="noindex" />
   <link rel="stylesheet" href="kiosk.css?v=3e4f3fd6" />
   <link rel="stylesheet" href="theme.css?v=9ef27d2c" />
+  <link rel="stylesheet" href="signs.css?v=824daaf8" />
 </head>
 <body>
   <div class="kb-flow" aria-hidden="true"></div>
@@ -73,6 +74,10 @@
   <div class="corner" id="corner" aria-hidden="true"></div>
   <div class="devdot" id="devdot" aria-hidden="true"></div>
   <div class="qdot" id="qdot" title="Queue (staff: long-press or Q)"></div>
+  <!-- signs (REQUIREMENTS §12): corner badge (welcome: visitor's language · carousel: EN + 日本語), the unattended overlay, the staff toggle dot -->
+  <div class="ms-badge" id="msBadge" hidden></div>
+  <div class="ms-away" id="msAway" role="alert" hidden></div>
+  <div class="sdot" id="sdot" title="Staff at the booth (staff: long-press or S)"></div>
 
   <div class="overlay" id="pinBox" hidden>
     <div class="panel pin"><h3>Staff · PIN</h3><input type="password" inputmode="numeric" id="pin" maxlength="8" autocomplete="off" /><p class="err" id="pinErr"></p>
@@ -95,6 +100,7 @@
           <label>Cool cap <input type="range" id="sCapC" min="30" max="100" step="5" /><b id="sCapCV"></b></label>
           <label>Cool start <input type="range" id="sStartC" min="20" max="100" step="5" /><b id="sStartCV"></b></label>
           <label><input type="checkbox" id="sQueue" /> People are queuing (the visit ends after one demo) — also: long-press the tiny dot bottom-left, or key Q</label>
+          <label><input type="checkbox" id="sAttended" /> Staff at the booth (touch OK) — off = unattended: "please do not touch" screen, warm / cool off. Also: long-press the second tiny dot bottom-left, or key S</label>
           <label>When nobody queues: max demos <input type="number" id="sMaxD" min="0" max="20" style="width:4em" /> · max minutes <input type="number" id="sMaxM" min="0" max="60" style="width:4em" /> (0 = no limit)</label>
           <label>Idle reset after <input type="number" id="sIdle" min="20" max="600" step="5" /> s</label>
           <label>Site link (QR) <input type="url" id="sSite" /></label>
@@ -102,6 +108,12 @@
           <label>Price bands (<span id="sCurNow"></span>) <input type="text" id="sBands" placeholder="comma-separated, 4–5 bands" style="flex:1" /></label>
           <label>Experience <select id="sCut"><option value="full">Full demo (default: one complete demo per visitor)</option><option value="show">Show cut (60–90 s highlights)</option></select></label>
           <label><input type="checkbox" id="sHyg" /> Hygiene badge on the welcome screen</label>
+          <h4>Signs (touch OK / do not touch / photos)</h4>
+          <label><input type="checkbox" id="sSignTouch" /> Touch sign (touch OK while staff are here · do not touch when unattended)</label>
+          <label>Photo sign <select id="sSignPhoto"><option value="ok">Photos OK</option><option value="no">No photos (venue rule)</option><option value="off">Hidden</option></select></label>
+          <label>Show on <input type="checkbox" id="sSignWelcome" /> welcome <input type="checkbox" id="sSignAttract" /> idle carousel <input type="checkbox" id="sSignQueue" /> queue screen</label>
+          <label>Badge corner (visitor screen) <select id="sSignPos"><option value="tr">top right</option><option value="tl">top left</option><option value="bl">bottom left</option><option value="br">bottom right</option></select></label>
+          <div class="row"><button type="button" id="signBtn">Print signs (A4 / A5)</button></div>
           <label>Queue pick page (QR) <input type="url" id="sPick" placeholder="default: site link + kiosk/pick.html" /></label>
           <h4>Queue screen (window 2)</h4>
           <label>Mode <select id="sQMode"><option value="promo">Promo video (fallback: live view)</option><option value="live">Live view (attract + thermal)</option><option value="alt">Alternate</option></select> every <input type="number" id="sAlt" min="1" max="30" style="width:4em" /> min</label>
@@ -137,6 +149,7 @@
   <script src="../demos/shared/thermintro.js?v=3fe97d6a"></script>
   <script src="qrcode.min.js"></script>
   <script src="pitches.js?v=640c3555"></script>
-  <script src="app.js?v=a93e4415"></script>
+  <script src="signs.js?v=0849d559"></script>
+  <script src="app.js?v=7978fe43"></script>
 </body>
 </html>

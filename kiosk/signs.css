@@ -1,0 +1,38 @@
+/* Kiosk signs (kiosk/signs.js; REQUIREMENTS §12): touch OK (staff present) / please do not touch (unattended) / photos OK or no photos.
+   Visitor screen: a small corner badge on the welcome screen, a bigger EN · 日本語 one on the idle carousel, the unattended overlay.
+   Queue screen + print page size their own .ms-sign (font-size / --ms-ic). Load after kiosk.css / theme.css. */
+.ms-sign { display: flex; align-items: center; gap: .55em; min-width: 0; }
+.ms-ic { width: var(--ms-ic, 2.3em); height: var(--ms-ic, 2.3em); flex: none; display: block; }
+.ms-tx { min-width: 0; display: flex; flex-direction: column; gap: .15em; }
+.ms-tx p { margin: 0; line-height: 1.15; }
+.ms-tx b { display: block; font-weight: 800; text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
+.ms-tx small { display: block; font-size: .7em; font-weight: 500; opacity: .82; margin-top: .1em; }
+[hidden].ms-badge, [hidden].ms-away, .ms-row[hidden] { display: none !important; }
+
+/* visitor screen corner badge (welcome = the visitor's language; never shown during the intro, a demo or the card) */
+.ms-badge { position: fixed; z-index: 40; display: flex; gap: 14px; align-items: center; padding: 7px 14px 7px 8px; border-radius: 999px; pointer-events: none;
+  background: rgba(14, 12, 22, .8); border: 1px solid rgba(255, 255, 255, .16);   /* no backdrop-filter: a blur over the animated background cost ~0.5 s per frame on a software-rendered screen (QA 2026-11-09) */
+  color: #fff; font: 700 clamp(12px, 1.55vmin, 16px)/1.2 var(--ff); --ms-ic: 2.2em; max-width: calc(50vw - 40px); }
+.ms-badge .ms-tx small { display: none; }
+.ms-badge[data-pos="tr"] { right: 32px; top: 12px; } .ms-badge[data-pos="tl"] { left: 72px; top: 12px; }
+.ms-badge[data-pos="bl"] { left: 28px; bottom: 44px; } .ms-badge[data-pos="br"] { right: 16px; bottom: calc(clamp(96px, 13vmin, 150px) + 70px); }
+/* the idle carousel: bystanders → EN + 日本語, bigger */
+.ms-badge.big { font-size: clamp(15px, 2.3vmin, 26px); gap: 22px; padding: 10px 22px 10px 12px; border-radius: 24px; --ms-ic: 2.6em; max-width: calc(100vw - 100px); }
+.ms-badge.big .ms-tx p + p b { font-size: .86em; font-weight: 700; opacity: .92; }
+/* portrait / narrow screens: pictograms only (the welcome logo needs the width) */
+@media (max-aspect-ratio: 1/1), (max-width: 720px) { .ms-badge:not(.big) { padding: 5px; gap: 6px; } .ms-badge:not(.big) .ms-tx { display: none; } .ms-badge:not(.big) { --ms-ic: 34px; } }
+
+/* unattended: the whole visitor screen (below the staff corner / dots / panel, z 50+) */
+.ms-away { position: fixed; inset: 0; z-index: 45; display: grid; place-items: center; padding: 4vmin; background: rgba(8, 6, 14, .9);
+  color: #fff; font-family: var(--ff); text-align: center; cursor: default; }
+.ms-away-in { display: flex; flex-direction: column; align-items: center; gap: 3.2vmin; max-width: 92vw; }
+.ms-away-in > .ms-ic { width: min(30vmin, 300px); height: min(30vmin, 300px); }
+.ms-away-tx { display: flex; flex-direction: column; gap: 2vmin; }
+.ms-away-tx p { margin: 0; } .ms-away-tx b { display: block; font: 800 clamp(24px, 5vmin, 56px)/1.15 var(--ff); }
+.ms-away-tx small { display: block; margin-top: .4vmin; font: 600 clamp(15px, 2.7vmin, 30px)/1.25 var(--ff); color: #ffd479; }
+.ms-away-ph { font: 700 clamp(13px, 2vmin, 22px)/1.2 var(--ff); --ms-ic: 2.4em; opacity: .9; } .ms-away-ph .ms-tx { flex-direction: row; gap: 1em; }
+@media (max-height: 560px) { .ms-away-tx small { display: none; } }
+
+/* staff toggle "attended / unattended": the second tiny dot bottom left (long-press ~1 s, or key S; no PIN) — green = staff here, red = unattended */
+.sdot { position: fixed; left: 28px; bottom: 6px; width: 14px; height: 14px; border-radius: 50%; background: #2f9e5f; z-index: 50; touch-action: none; }
+.sdot.off { background: #d7263d; } .sdot.flash { box-shadow: 0 0 0 10px rgba(120, 230, 160, .4); } .sdot.off.flash { box-shadow: 0 0 0 10px rgba(255, 120, 140, .45); }

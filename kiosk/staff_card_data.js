@@ -23,9 +23,10 @@
           '访客自己完成：暖、凉校准（快要不舒服时按 STOP）→ 焰、小雪试听（太弱 / 刚好 / 太强）→ **一个完整的 Demo**（从头到尾）。',
           '结束：冷热自动停止 →「请先摘下 MoHeat Evo」→ **帮访客取下，点继续** → 访客取下入耳式耳机 → 体验卡 → 感谢 + 二维码 → 自动回到欢迎画面。',
         ] },
-        { h: '排队开关', items: [
+        { h: '排队开关 · 在场开关', items: [
           '**长按左下角小圆点约 1 秒**，或按键盘 `Q`（欢迎、选 Demo 等画面可用；引导中和 Demo 播放中不能切换）。不用 PIN，一直保持到下次切换。',
           '**橙色 = 有人排队**：每人 1 个 Demo（展会默认）。**灰色 = 没人排队**：可以继续体验别的 Demo，不用重新引导。',
+          '**离开展台时**：长按左下角**第二个小圆点**，或按 `S` → 红色 = 无人：整屏「请勿触摸」、冷热停止、点按无效，排队屏同步。回来后再按一次（绿色 = 在场，回到欢迎画面）。立牌：面板 **Print signs**。',
         ] },
         { h: '常见问题', faq: [
           ['没有声音', '系统输出是不是降噪入耳式耳机 → 系统音量 → 页面右下的音量滑块'],
@@ -58,9 +59,10 @@
           'ここからはお客様ご自身で：温・冷の強さ調整（少しつらいと感じたら STOP）→ 焰と小雪の試聴（弱すぎる／ちょうどいい／強すぎる）→ **デモを 1 本、最後まで**。',
           '終了時：温冷は自動で停止 →「まず MoHeat Evo を外してください」→ **外すのを手伝い、続けるをタップ** → お客様がイヤホンを外す → アンケート → お礼と QR コード → 自動で最初の画面に戻ります。',
         ] },
-        { h: '待機列スイッチ', items: [
+        { h: '待機列・スタッフ在席スイッチ', items: [
           '**画面左下の小さな丸を約 1 秒長押し**、またはキーボードの `Q`（最初の画面やデモ選択の画面で使えます。案内の途中とデモ再生中は切り替えられません）。PIN は不要で、次に切り替えるまで保持されます。',
           '**オレンジ＝待ちの列あり**：お一人様 1 デモ（展示会の初期設定）。**グレー＝列なし**：案内なしで別のデモも続けて体験できます。',
+          '**ブースを離れるとき**：左下の **2 つ目の小さな丸**を長押し、または `S` → 赤＝無人：全画面に「お手を触れないでください」、温冷は停止、タップは無効、待機列画面も連動。戻ったらもう一度（緑＝スタッフあり、最初の画面へ）。立て札：パネルの **Print signs**。',
         ] },
         { h: 'よくあるトラブル', faq: [
           ['音が出ない', 'サウンド出力がイヤホンになっているか → PC の音量 → 画面右下の音量スライダー'],
@@ -93,9 +95,10 @@
           'The visitor does the rest: warm and cool calibration (STOP when almost uncomfortable) → Homura and Koyuki samples (too weak / just right / too strong) → **one complete demo**, start to end.',
           'At the end: warm / cool stops by itself → “Please take off the MoHeat Evo headset first” → **help remove it, tap Continue** → the visitor removes the earbuds → experience card → thank-you + QR → back to the welcome screen by itself.',
         ] },
-        { h: 'Queue switch', items: [
+        { h: 'Queue switch · staff switch', items: [
           '**Long-press the tiny dot bottom left for about 1 s**, or press `Q` (on the welcome, menu and end screens; not during the intro or while a demo plays). No PIN; it stays until changed.',
           '**Orange = people are queuing**: one demo each (the show default). **Grey = nobody queuing**: the visitor may try another demo without repeating the intro.',
+          '**Leaving the booth**: long-press the **second tiny dot** bottom left, or press `S` → red = unattended: a full “please do not touch” screen, warm / cool off, taps ignored, the queue screen follows. Back: the same again (green = staff here, back to the welcome screen). Stand-up signs: panel **Print signs**.',
         ] },
         { h: 'Troubleshooting', faq: [
           ['No sound', 'Is the output the earbuds? → system volume → the volume slider bottom right'],

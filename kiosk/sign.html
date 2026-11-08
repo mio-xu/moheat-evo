@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en" data-kiosk-app>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MoHeat Evo · Booth signs</title>
+  <meta name="robots" content="noindex" />
+  <style id="pageSize">@page { size: A4 portrait; margin: 0; }</style>
+  <style>
+    /* Printable stand-up signs for the booth (REQUIREMENTS §12; opened from the kiosk staff panel → "Print signs"): one page "please try it
+       (staff here) + photos" and one page "please do not touch (staff will be back soon) + photos", EN + 日本語 + 中文. A4 or A5 portrait.
+       Pictograms + text come from signs.js (the same as on the screens); the photo sign follows the staff panel (Photos OK / No photos / hidden). */
+    :root { --s: 1; --w: 210mm; --h: 297mm; --ink: #17121f; --dim: #5d5468;
+      --ff: "Inter", "Noto Sans JP", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif; }
+    html.a5 { --s: .7071; --w: 148mm; --h: 210mm; }
+    * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    html, body { margin: 0; background: #e9e5ee; color: var(--ink); font-family: var(--ff); }
+    .page { width: var(--w); height: var(--h); margin: 8mm auto; background: #fff; overflow: hidden; display: flex; flex-direction: column; align-items: center; text-align: center;
+      box-shadow: 0 2mm 8mm rgba(0, 0, 0, .18); padding: 0 calc(12mm * var(--s)) calc(10mm * var(--s)); }
+    .band { align-self: stretch; margin: 0 calc(-12mm * var(--s)); padding: calc(6mm * var(--s)) calc(12mm * var(--s)); display: flex; justify-content: center; align-items: baseline;
+      color: #fff; background: linear-gradient(100deg, #e8681f 0%, #f39a52 30%, #a79bb0 52%, #5aa6e6 72%, #2a78c9 100%); font: 800 calc(14mm * var(--s))/1 var(--ff); letter-spacing: -.02em; }
+    .band span { font-weight: 300; }
+    .main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(7mm * var(--s)); width: 100%; }
+    .main > .ms-ic { width: calc(118mm * var(--s)); height: calc(118mm * var(--s)); display: block; }
+    .t p { margin: 0 0 calc(3.5mm * var(--s)); } .t b { display: block; line-height: 1.12; font-weight: 900; }
+    .t p:nth-child(1) b { font-size: calc(17mm * var(--s)); } .t p:nth-child(2) b { font-size: calc(12.5mm * var(--s)); } .t p:nth-child(3) b { font-size: calc(12.5mm * var(--s)); }
+    .t small { display: block; margin-top: calc(1mm * var(--s)); font-size: calc(7mm * var(--s)); font-weight: 600; color: var(--dim); }
+    .off .t b { color: #b5162c; } .on .t b { color: #12753e; }
+    .photo { align-self: stretch; display: flex; align-items: center; justify-content: center; gap: calc(6mm * var(--s)); padding-top: calc(6mm * var(--s)); border-top: calc(.6mm * var(--s)) solid #ddd6e3; }
+    .photo .ms-ic { width: calc(30mm * var(--s)); height: calc(30mm * var(--s)); flex: none; }
+    .photo .tx { text-align: left; } .photo .tx { display: flex; flex-wrap: wrap; gap: 0 calc(6mm * var(--s)); align-items: baseline; } .photo b { font-size: calc(9mm * var(--s)); font-weight: 800; line-height: 1.25; }
+    .photo b + b { font-size: calc(8mm * var(--s)); }
+    .noprint { position: fixed; right: 12px; top: 12px; z-index: 5; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; max-width: calc(100vw - 24px); }
+    .noprint button, .noprint select { font: 600 15px/1 var(--ff); min-height: 44px; padding: 0 16px; border-radius: 999px; border: 0; background: var(--ink); color: #fff; cursor: pointer; }
+    .noprint button[aria-pressed=false] { background: #fff; color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink); }
+    @media print { html, body { background: #fff; } .page { margin: 0; box-shadow: none; break-after: page; } .page:last-of-type { break-after: auto; } .noprint { display: none; } }
+    @media screen and (max-width: 640px) { .page { zoom: .45; margin: 4mm auto; } .noprint { position: static; padding: 8px; justify-content: center; } }
+  </style>
+</head>
+<body>
+  <div class="noprint"><button type="button" data-size="a4" aria-pressed="true">A4</button><button type="button" data-size="a5" aria-pressed="false">A5</button>
+    <select id="which" aria-label="Pages"><option value="both">Both signs</option><option value="on">Staff here: please try it</option><option value="off">Unattended: do not touch</option></select>
+    <button type="button" onclick="print()">Print / Save as PDF</button></div>
+  <main id="pages"></main>
+  <script>window.MOHEAT_NAV_DATA_ONLY = true;</script>
+  <script src="../demos/shared/nav.js?v=4d8359f2"></script>
+  <script src="../demos/shared/kiosk.js?v=f5d647ad"></script>
+  <script src="signs.js?v=0849d559"></script>
+  <script>
+    (() => {
+      const S = window.MoHeatSigns, LANGS = ['en', 'ja', 'zh'], QS = new URLSearchParams(location.search);
+      const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+      const photoKind = () => { const p = QS.get('photo') || S.cfg().signPhoto; return p === 'ok' ? 'photo' : p === 'no' ? 'nophoto' : null; };
+      const page = (on) => { const k = on ? 'touch' : 'notouch', ph = photoKind();
+        return `<article class="page ${on ? 'on' : 'off'}" data-state="${on ? 'on' : 'off'}"><header class="band">MoHeat&nbsp;<span>Evo</span></header>
+          <div class="main">${S.icon(k)}<div class="t">${LANGS.map((l) => `<p lang="${l}"><b>${esc(S.tx(k, l))}</b><small>${esc(S.tx(k + 'S', l))}</small></p>`).join('')}</div></div>
+          ${ph ? `<div class="photo">${S.icon(ph)}<div class="tx">${LANGS.map((l, i) => `<b lang="${l}">${esc(S.tx(ph, l))}</b>`).join('')}</div></div>` : ''}</article>`; };
+      const draw = () => { const w = document.getElementById('which').value; document.getElementById('pages').innerHTML = [w !== 'off' && page(true), w !== 'on' && page(false)].filter(Boolean).join(''); };
+      const size = (s) => { document.documentElement.classList.toggle('a5', s === 'a5'); document.getElementById('pageSize').textContent = `@page { size: ${s === 'a5' ? 'A5' : 'A4'} portrait; margin: 0; }`;
+        document.querySelectorAll('[data-size]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.size === s))); };
+      document.querySelectorAll('[data-size]').forEach((b) => b.addEventListener('click', () => size(b.dataset.size)));
+      document.getElementById('which').addEventListener('change', draw);
+      if (QS.get('which')) document.getElementById('which').value = QS.get('which');
+      size(QS.get('size') === 'a5' ? 'a5' : 'a4'); draw();
+    })();
+  </script>
+</body>
+</html>
