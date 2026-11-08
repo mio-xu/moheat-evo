@@ -7,7 +7,7 @@ project/web_prompts.json; helpers tools/seedance/web_helpers.js; downloads → `
 import importlib.util, json, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-spec = importlib.util.spec_from_file_location('d22', os.path.join(ROOT, '..', 'Demo22_ShionRain', 'scripts', 'seedance.py'))
+spec = importlib.util.spec_from_file_location('d22', os.path.join(ROOT, 'scripts', 'seedance.py'))
 d22 = importlib.util.module_from_spec(spec); spec.loader.exec_module(d22)
 
 PLAIN = ("Plain flat DARK-GREY studio background (#404040), completely empty: no room, no window, no scenery, no floor line, no shadow "

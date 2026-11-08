@@ -17,7 +17,7 @@ window.MOHEAT_LAYERS = {
     "h": 1347,
     "x": 0.45,
     "y": 1.02,
-    "height": 1.0,
+    "height": 1.12,
     "box": [
      375,
      0,
@@ -37,12 +37,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/door_eyes.webp?v=977b737b",
+     "src": "art/door_eyes.webp?v=57a131e1",
      "rect": [
-      613,
-      205,
-      376,
-      221
+      632,
+      220,
+      342,
+      183
      ],
      "kind": "eyes"
     }
@@ -85,12 +85,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/towel_eyes.webp?v=e0d38bf4",
+     "src": "art/towel_eyes.webp?v=58b9ad84",
      "rect": [
-      665,
-      192,
-      335,
-      188
+      680,
+      207,
+      307,
+      156
      ],
      "kind": "eyes"
     }
@@ -110,12 +110,12 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_dryer.webp?v=e597856c",
+    "src": "art/char_dryer.webp?v=beaabfb7",
     "w": 1700,
     "h": 954,
     "x": 0.6071,
     "y": 1.02,
-    "height": 1.0,
+    "height": 1.04,
     "box": [
      364,
      0,
@@ -135,12 +135,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/dryer_eyes.webp?v=1f0b9678",
+     "src": "art/dryer_eyes.webp?v=732f18a1",
      "rect": [
-      634,
-      68,
-      313,
-      183
+      653,
+      148,
+      291,
+      150
      ],
      "kind": "eyes"
     }
@@ -183,12 +183,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/glasses_eyes.webp?v=d5154ea0",
+     "src": "art/glasses_eyes.webp?v=74eb92e8",
      "rect": [
-      471,
-      197,
-      389,
-      225
+      487,
+      212,
+      359,
+      192
      ],
      "kind": "eyes"
     }
@@ -243,12 +243,12 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_window.webp?v=0e8a34ef",
+    "src": "art/char_window.webp?v=2364aa56",
     "w": 1700,
     "h": 1150,
     "x": 0.5158,
     "y": 1.02,
-    "height": 1.0,
+    "height": 1.04,
     "box": [
      348,
      0,
@@ -268,12 +268,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/window_eyes.webp?v=8cfb8bfb",
+     "src": "art/window_eyes.webp?v=a5aad4bf",
      "rect": [
-      779,
-      156,
-      378,
-      226
+      795,
+      174,
+      346,
+      189
      ],
      "kind": "eyes"
     }

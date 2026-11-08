@@ -59,7 +59,7 @@
               <button class="btn" id="lrBtn" type="button">🎧 Left / Right check</button>
             </div>
             <p class="hint">Headphones on · drag to aim the dryer, tap / hold to answer him · connect MoHeat Evo to feel the wet hair, the warm air circling your head and his voice</p>
-            <p class="draft" id="credits">Shion is an original character · voice ElevenLabs · art made with Seedance</p>
+            <p class="draft" id="credits">Shion is an original character · voice ElevenLabs · art made with Seedance and gpt-image-2 · layered stills</p>
           </div>
         </div>
       </div>
@@ -88,7 +88,11 @@
   <script src="../../../device.js?v=2"></script>
   <script src="lines.js?v=1"></script>
   <script src="audio.js?v=1"></script>
-  <script src="main.js?v=3"></script>
+  <!-- story / sound / thermal code (unchanged since the first version); shared/layers.js draws the layered art in place of its stills -->
+  <script src="media/layers.js?v=1"></script>
+  <script>MOHEAT_LAYERS.skipVideo = 'media/video/';</script>
+  <script src="../../shared/layers.js?v=6"></script>
+  <script src="main.js?v=4"></script>
   <script src="../../shared/voice.js?v=5"></script>
   <script src="../../shared/nav.js?v=41"></script>
 </body>

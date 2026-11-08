@@ -41,16 +41,16 @@
    ],
    "regions_eyes": [
     [
-     1460,
-     285,
+     1468,
+     382,
      85,
-     48
+     46
     ],
     [
-     1650,
-     195,
-     90,
-     48
+     1662,
+     290,
+     92,
+     46
     ]
    ]
   },
@@ -106,7 +106,7 @@
    "fire": null,
    "x": 0.45,
    "y": 1.02,
-   "height": 1.0
+   "height": 1.12
   },
   "towel": {
    "still": "shion_towel",
@@ -129,7 +129,7 @@
    "fire": null,
    "x": 0.6071,
    "y": 1.02,
-   "height": 1.0
+   "height": 1.04
   },
   "glasses": {
    "still": "shion_glasses",
@@ -158,7 +158,7 @@
    "fire": null,
    "x": 0.5158,
    "y": 1.02,
-   "height": 1.0
+   "height": 1.04
   }
  },
  "hooks": {
