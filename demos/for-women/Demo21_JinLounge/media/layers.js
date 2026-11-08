@@ -37,44 +37,44 @@ window.MOHEAT_LAYERS = {
      "kind": "eyes"
     },
     {
-     "src": "art/lounge_mouth0.webp?v=5d2117f0",
+     "src": "art/lounge_mouth0.webp?v=ffb2f0a1",
      "rect": [
-      761,
-      276,
-      148,
+      762,
+      277,
+      146,
       125
      ],
      "kind": "mouth_lv",
      "level": 0
     },
     {
-     "src": "art/lounge_mouth1.webp?v=9ee5c56e",
+     "src": "art/lounge_mouth1.webp?v=0040d112",
      "rect": [
-      761,
-      276,
-      148,
+      762,
+      277,
+      146,
       125
      ],
      "kind": "mouth_lv",
      "level": 1
     },
     {
-     "src": "art/lounge_mouth2.webp?v=6cb6b4b8",
+     "src": "art/lounge_mouth2.webp?v=72d4ab3d",
      "rect": [
-      761,
-      276,
-      148,
+      762,
+      277,
+      146,
       125
      ],
      "kind": "mouth_lv",
      "level": 2
     },
     {
-     "src": "art/lounge_mouth3.webp?v=feff46d1",
+     "src": "art/lounge_mouth3.webp?v=04120530",
      "rect": [
-      761,
-      276,
-      148,
+      762,
+      277,
+      146,
       125
      ],
      "kind": "mouth_lv",
@@ -119,45 +119,45 @@ window.MOHEAT_LAYERS = {
      "kind": "eyes"
     },
     {
-     "src": "art/can_mouth0.webp?v=beda7d15",
+     "src": "art/can_mouth0.webp?v=58931631",
      "rect": [
-      634,
-      526,
-      338,
-      283
+      612,
+      513,
+      375,
+      314
      ],
      "kind": "mouth_lv",
      "level": 0
     },
     {
-     "src": "art/can_mouth1.webp?v=7f69202f",
+     "src": "art/can_mouth1.webp?v=cad76ce9",
      "rect": [
-      634,
-      526,
-      338,
-      283
+      612,
+      513,
+      375,
+      314
      ],
      "kind": "mouth_lv",
      "level": 1
     },
     {
-     "src": "art/can_mouth2.webp?v=3307c7d0",
+     "src": "art/can_mouth2.webp?v=a83f402b",
      "rect": [
-      634,
-      526,
-      338,
-      283
+      612,
+      513,
+      375,
+      314
      ],
      "kind": "mouth_lv",
      "level": 2
     },
     {
-     "src": "art/can_mouth3.webp?v=298e30f5",
+     "src": "art/can_mouth3.webp?v=a62e7706",
      "rect": [
-      634,
-      526,
-      338,
-      283
+      612,
+      513,
+      375,
+      314
      ],
      "kind": "mouth_lv",
      "level": 3
@@ -179,7 +179,7 @@ window.MOHEAT_LAYERS = {
     "src": "art/char_wrist.webp?v=c0acfbba",
     "w": 1700,
     "h": 1007,
-    "x": 0.5523,
+    "x": 0.5223,
     "y": 1.02,
     "height": 1.02,
     "box": [
@@ -191,16 +191,6 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/wrist_mouth.webp?v=0319d8ff",
-     "rect": [
-      596,
-      448,
-      183,
-      117
-     ],
-     "kind": "mouth"
-    },
-    {
      "src": "art/wrist_eyes.webp?v=ada500dc",
      "rect": [
       397,
@@ -209,6 +199,50 @@ window.MOHEAT_LAYERS = {
       229
      ],
      "kind": "eyes"
+    },
+    {
+     "src": "art/wrist_mouth0.webp?v=2d89fe35",
+     "rect": [
+      552,
+      383,
+      277,
+      233
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/wrist_mouth1.webp?v=b6195f51",
+     "rect": [
+      552,
+      383,
+      277,
+      233
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/wrist_mouth2.webp?v=c58c2fd2",
+     "rect": [
+      552,
+      383,
+      277,
+      233
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/wrist_mouth3.webp?v=2aebd109",
+     "rect": [
+      552,
+      383,
+      277,
+      233
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -239,45 +273,45 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/glasses_mouth0.webp?v=87010b6f",
+     "src": "art/glasses_mouth0.webp?v=15a01587",
      "rect": [
-      694,
-      492,
-      302,
-      253
+      693,
+      494,
+      310,
+      260
      ],
      "kind": "mouth_lv",
      "level": 0
     },
     {
-     "src": "art/glasses_mouth1.webp?v=8c589aeb",
+     "src": "art/glasses_mouth1.webp?v=32b00405",
      "rect": [
-      694,
-      492,
-      302,
-      253
+      693,
+      494,
+      310,
+      260
      ],
      "kind": "mouth_lv",
      "level": 1
     },
     {
-     "src": "art/glasses_mouth2.webp?v=4c96a34e",
+     "src": "art/glasses_mouth2.webp?v=fd7c9462",
      "rect": [
-      694,
-      492,
-      302,
-      253
+      693,
+      494,
+      310,
+      260
      ],
      "kind": "mouth_lv",
      "level": 2
     },
     {
-     "src": "art/glasses_mouth3.webp?v=4524ea91",
+     "src": "art/glasses_mouth3.webp?v=21361b3e",
      "rect": [
-      694,
-      492,
-      302,
-      253
+      693,
+      494,
+      310,
+      260
      ],
      "kind": "mouth_lv",
      "level": 3
@@ -321,45 +355,45 @@ window.MOHEAT_LAYERS = {
      "kind": "eyes"
     },
     {
-     "src": "art/gaze_mouth0.webp?v=414e3511",
+     "src": "art/gaze_mouth0.webp?v=41ba91e5",
      "rect": [
-      604,
-      509,
-      320,
-      269
+      588,
+      490,
+      351,
+      294
      ],
      "kind": "mouth_lv",
      "level": 0
     },
     {
-     "src": "art/gaze_mouth1.webp?v=3fc5357d",
+     "src": "art/gaze_mouth1.webp?v=7697c80c",
      "rect": [
-      604,
-      509,
-      320,
-      269
+      588,
+      490,
+      351,
+      294
      ],
      "kind": "mouth_lv",
      "level": 1
     },
     {
-     "src": "art/gaze_mouth2.webp?v=1aaa9797",
+     "src": "art/gaze_mouth2.webp?v=32d42b2b",
      "rect": [
-      604,
-      509,
-      320,
-      269
+      588,
+      490,
+      351,
+      294
      ],
      "kind": "mouth_lv",
      "level": 2
     },
     {
-     "src": "art/gaze_mouth3.webp?v=f369de3c",
+     "src": "art/gaze_mouth3.webp?v=9ae8a18b",
      "rect": [
-      604,
-      509,
-      320,
-      269
+      588,
+      490,
+      351,
+      294
      ],
      "kind": "mouth_lv",
      "level": 3
@@ -403,45 +437,45 @@ window.MOHEAT_LAYERS = {
      "kind": "eyes"
     },
     {
-     "src": "art/whisper_mouth0.webp?v=a05ee318",
+     "src": "art/whisper_mouth0.webp?v=65432885",
      "rect": [
-      727,
-      494,
-      396,
-      332
+      712,
+      485,
+      417,
+      349
      ],
      "kind": "mouth_lv",
      "level": 0
     },
     {
-     "src": "art/whisper_mouth1.webp?v=4b69f7ce",
+     "src": "art/whisper_mouth1.webp?v=3816ebdb",
      "rect": [
-      727,
-      494,
-      396,
-      332
+      712,
+      485,
+      417,
+      349
      ],
      "kind": "mouth_lv",
      "level": 1
     },
     {
-     "src": "art/whisper_mouth2.webp?v=cc9b4f02",
+     "src": "art/whisper_mouth2.webp?v=8403af62",
      "rect": [
-      727,
-      494,
-      396,
-      332
+      712,
+      485,
+      417,
+      349
      ],
      "kind": "mouth_lv",
      "level": 2
     },
     {
-     "src": "art/whisper_mouth3.webp?v=1bf00b05",
+     "src": "art/whisper_mouth3.webp?v=b5d9e162",
      "rect": [
-      727,
-      494,
-      396,
-      332
+      712,
+      485,
+      417,
+      349
      ],
      "kind": "mouth_lv",
      "level": 3
@@ -485,45 +519,45 @@ window.MOHEAT_LAYERS = {
      "kind": "eyes"
     },
     {
-     "src": "art/jacket_mouth0.webp?v=b15bcb45",
+     "src": "art/jacket_mouth0.webp?v=1a3b8563",
      "rect": [
-      785,
-      405,
-      250,
-      209
+      782,
+      409,
+      252,
+      211
      ],
      "kind": "mouth_lv",
      "level": 0
     },
     {
-     "src": "art/jacket_mouth1.webp?v=5388e36d",
+     "src": "art/jacket_mouth1.webp?v=ae3f5214",
      "rect": [
-      785,
-      405,
-      250,
-      209
+      782,
+      409,
+      252,
+      211
      ],
      "kind": "mouth_lv",
      "level": 1
     },
     {
-     "src": "art/jacket_mouth2.webp?v=4496d8a7",
+     "src": "art/jacket_mouth2.webp?v=70a9e5d7",
      "rect": [
-      785,
-      405,
-      250,
-      209
+      782,
+      409,
+      252,
+      211
      ],
      "kind": "mouth_lv",
      "level": 2
     },
     {
-     "src": "art/jacket_mouth3.webp?v=8394f20a",
+     "src": "art/jacket_mouth3.webp?v=dc8f92c4",
      "rect": [
-      785,
-      405,
-      250,
-      209
+      782,
+      409,
+      252,
+      211
      ],
      "kind": "mouth_lv",
      "level": 3
