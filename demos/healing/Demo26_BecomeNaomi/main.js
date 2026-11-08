@@ -378,10 +378,12 @@
   $('meowBtn').addEventListener('click', () => { if (!S.started) return; const k = ['mew', 'tiny', 'ask', 'trill'][Math.floor(Math.random() * 4)]; NA.meow(k, 0, .3); });
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
   $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
-  function drawCover() {   // the windowsill mirrored: Naomi's reflection on the right (you ARE Naomi: a POV scene, no character facing you — cover.js "scene")
+  function drawCover() {   // the story cover (§7.3 2b): Naomi herself, happy, on the sunny windowsill in front of the frosted window
     const im = IMG.sill, C = window.MoHeatCover; if (!im) { ctx.fillStyle = '#1e1625'; ctx.fillRect(0, 0, W, H); return; }
-    const pic = () => { ctx.save(); ctx.translate(W, 0); ctx.scale(-1, 1); ctx.drawImage(im, -120, 0, W + 120, H); ctx.restore(); };
-    if (C) C.fit(ctx, null, pic, { scene: true, tone: '#1e1625' }); else pic();
+    ctx.save(); ctx.translate(W, 0); ctx.scale(-1, 1); ctx.drawImage(im, -120, 0, W + 120, H); ctx.restore();
+    if (C?.img) {   // the sill is already drawn: only the cut-out goes on top
+      C.fit(ctx, { eye: [.5, .43], face: .28 }, () => { const n = C.img('../_kit/naomi/art/naomi_close_happy.webp', drawCover); if (n) { const h = H, w = h * n.width / n.height; ctx.drawImage(n, W * .5 - w / 2, 0, w, h); } },
+        { free: true, tone: '#1e1625', at: { y: .35, face: .32 } }); }
   }
   window.NEKO = { get S() { return S; }, thermal: () => thermal(.05), both: () => both, focusOf, setEar };
   setStep(0); setEar('L', S.earL); setEar('R', S.earR);

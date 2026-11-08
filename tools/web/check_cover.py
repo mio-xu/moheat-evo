@@ -111,7 +111,7 @@ def judge(name, dom, art):
         if pl.get('eye') and faces:   # the declared spot must match what the detector sees (wrong config numbers)
             f = min(faces, key=lambda f: abs(f['x'] - ex)); d = abs(f['eye_y'] - ey) if f.get('eye_y') else 0
             add(d <= 6 or duo, 'declared = seen', f'eye line {ey:.0f} vs seen {f["eye_y"]}', '≤ 6 % apart', warn=True)
-    else: rows.append(('WARN', 'character', 'no face found / declared', 'MoHeatCover.fit(…) config, or {scene: true}'))
+    else: rows.append(('FAIL', 'character', 'no character / creature face found or declared', 'a story cover with its character (§7.3 2b); a place-only cover needs the user\'s OK + {scene: true}'))
     c = E.get('copy')
     if c:
         for f in faces:

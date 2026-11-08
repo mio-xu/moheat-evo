@@ -62,6 +62,7 @@
   // its bottom centre); from / opt as fit() (from = where the face is when the pose stands at the view's own place).
   const imgs = {};
   const img = (src, redraw) => { let i = imgs[src]; if (!i) { i = imgs[src] = new Image(); i.onload = () => redraw && redraw(); i.src = src; } return i.complete && i.naturalWidth ? i : null; };
+  C.img = img;   // a cached image for covers (null until loaded; redraw is called once it is)
   C.layered = (ctx, view, from, o = {}) => {
     const W = ctx.canvas.width, H = ctx.canvas.height, bg = img(view.bg, o.redraw), ch = img(view.char, o.redraw);
     if (!bg || !ch) return false;

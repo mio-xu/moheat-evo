@@ -586,7 +586,7 @@
     const n = performance.now(), dt = clamp((n - last) / 1000, 0, .05); last = n;
     if (!hidden) {
       update(dt); tickBubble(n); if (talking > 0) talking -= dt;
-      draw(S.t);
+      if (!S.started && window.MoHeatCover && coverArt()) {} else draw(S.t);   // before Start: the story cover (Kohaku at the spring)
       const { th, src } = thermal(dt);
       output(th, S.started); radar(S.started ? src : [], th);
       $('clock').textContent = fmt(S.clock);
@@ -628,6 +628,9 @@
   $('startBtn').addEventListener('click', start);
   $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
 
+  // the cover (DEMO_DESIGN_GUIDE §7.3 2b): Kohaku, happy, in front of the glowing spring — plate + his cut-out, on the standard spot
+  const coverArt = () => window.MoHeatCover.layered(ctx, { bg: 'media/art/bg_spring_glow.webp', char: 'media/art/kohaku_happy.webp', x: .5, y: 1, height: 1 },
+    { eye: [.433, .43], face: .31 }, { tone: '#0c1426', at: { y: .34, face: .29 }, redraw: () => { if (!S.started) coverArt(); } });
   // ---------------------------------------------------------------- special modes
   // ?scene=gate|tunnel|spring — jump ahead (testing); ?cover=1 — poster; ?shot=<bg> — clean background (Seedance layout reference)
   window.CAVE = { get S() { return S; }, go, hit, thermal: () => thermal(.05), conflicts: () => conflicts };
@@ -639,6 +642,7 @@
     S.gate.cands.forEach((c, i) => { c.fox = i >= 2; });
     S.hint.gate = 2;
     const poster = () => {
+      if (window.MoHeatCover && coverArt()) return;
       ART.drawBg(ctx, 'gate'); drawGate(ctx, 1.3); lighting(ctx, 1.3);
       S.gate.cands.forEach((cd, i) => ART.flame(ctx, cd.x, GEO.gate.ledgeY - 128, 1.5, 1.3, cd.fox ? 'fox' : 'warm', 1, i * 1.7));   // poster: bright flames, warm left / foxfire right
       drawFox(ctx, 235, 1040, .95, .3, false);
