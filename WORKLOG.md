@@ -7,6 +7,30 @@
 
 ---
 
+## 2026-11-08 · 细节修正：闭眼重影 / 抠图缺口 / 嘴 / Demo18 页面动画 / 仁"不动" / 椿 close + stole · 后台 agent（统筹会话审查，本地提交未推送）
+
+**做了什么（提交 40faf50、805bb72、c4c6002、af73c6e、f051f4c）**
+- **闭眼发灰 / 透出瞳孔**（Demo17 全部、Demo25、Demo18 booth、Demo20 lean）：差分图本身是干净的，原因是 `tools/art/face_patches.py` 眼睛贴片羽化太软（0.3），睁眼的瞳孔在半透明那圈透出来；`regions_eyes` 又比实际眼睛小 / 偏。→ 眼睛（和新的 `mouth_quiet`）贴片改硬边（0.12），`regions_eyes` 按原图和闭眼图的差异范围重新量。没花钱。
+- **结束后封面全黑**（Demo17 / 18 / 25 / 31）：`finish()` 里补 `S.fade = 0; S.fadeA = 0;`，`?auto=1` 跑完封面亮度 52–95。
+- **Demo18**：drawView 用 `LIVE()` 去掉分层画面上的页面漂移；抓娃娃机的爪子 / 玩偶经 `bgToCanvas()`（`MoHeatLayers.toFrame('hinata_crane', …, 'bg')` × 页面缩放）画，视差时贴住机台；罐子热气减速、扩散、随风、渐隐。爪子 v9 行为不变。`main.js?v=10`。
+- **Demo24 log**：矩形 `erase` 切掉手和木柴的一角 → `scripts/clean_log.py` 沿轮廓把火涂成底色（`gaku_log_clean.png`）；left 眼睛区域写死。
+- **Demo31**：popsicle 的 `keep` 框缩到"你"的手里（灰色底板消失）；`clean_cutout` 重跑（毛边）；shoulder 加张嘴 + 闭眼差分；laugh / whisper（画成张嘴）加闭嘴差分 → `build_stage.py` 新的 `"quiet"` → 贴片 `mouth_quiet`；fan / sit 嘴椭圆缩小（OUTSIDE 1.3 % → 0）；arrive 高度 1.05（头顶平切）。`scripts/face_variants.py`（宽于 16:9 的姿势用 2560 窗口编辑再贴回）。
+- **Demo20** booth / wave 高度 1.05（头顶平切）。**Demo22** dryer / window：`scripts/fill_hair_pockets.py` 填"你的头发"之间的暗洞、清掉眼镜片里剩下的灰；towel：抠图把盖在画面上沿的毛巾丢了（手臂在半空断开）→ 同一脚本从原图把毛巾放回。
+- **Demo21 仁"不动"**：在线上网址用无头 Chrome 查过，分层画面每帧都在画、嘴跟声音、呼吸 15 / 分——不是坏了，是太安静：原来 16 段 Seedance 视频换成静帧后，开场 lounge（远景）只有很小的嘴和 6 px 呼吸，lounge / whisper / glasses 也没有眨眼。→ lounge、whisper 加闭眼差分（`scripts/blink_variants.py`），glasses 眼睛在墨镜后不加。drive_story en 0 问题。
+- **Demo25 椿**：close——为去掉"你"的头用的矩形 erase 连外套肩膀也切掉一块 → `scripts/clean_close.py` 只沿轮廓去掉头和脖子 + 遮罩编辑补发梢（`tsubaki_close_hair`）；stole——她抱着的是一团看不出是人的白毛 → 遮罩重画成"你"的深色外套肩膀（与 close 同一件）、围巾搭在你肩上、她的手放在外套上；新张嘴 / 闭眼差分。
+- 指南 §11.1：闭眼发灰的真正原因、矩形 erase 的坑、mouth_quiet。
+
+**检查**：check_patches / check_cut_body 全部通过；check_motion（17 / 18 / 20 / 24 / 25 / 31）眨眼 0.11–0.15 s、呼吸 15 / 分；drive_story Demo21（zh + en）、Demo31（en，含 whisper 的 mouth_quiet）跑完 0 问题；check_demo --quick：17 / 18 / 20 / 22 / 24 / 25 / 31 都是 0 FAIL。
+
+**花费（OpenAI gpt-image-2）**：Demo31 3 张 high + 1 张 medium；Demo21 3 张 high（lounge 第一次眼睛位置量错，重画 1 次）；Demo25 4 张 high。约 $2–3。
+
+**没做 / 下一步**
+- **Demo18 头发边缘的青色描边**（绿幕溢色）：LivePortrait 嘴部会话正在改 Demo18 的 `media/layers.js` / `stage.json`（未提交的 `*_mouth0-3.webp`），我没动。做法：那个会话提交后跑 `python3 tools/art/clean_cutout.py demos/for-men/Demo18_HinataStream --bg 6,162,73`（边缘像素从里面的颜色重新上色），再 2 倍看切镜头时她的左边缘。
+- Demo24 gaku_coffee、Demo20 hina_hands 还有极限视差时的 EDGE-GAP（小，之前就有）。
+- Demo25 OpenAI 总用量接近 $10 上限（`project/openai_log.json` 36 次）。
+
+---
+
 ## 2026-11-08 · 手机全屏 → 提示横屏 · 后台 agent（统筹会话安排）
 
 **做了什么**（用户：「手机上点全屏时自动提示横屏，让用户把手机横过来」；iPhone 上也显示转动动画 +「请把手机横过来，体验更好」）
