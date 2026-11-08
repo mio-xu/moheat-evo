@@ -7,6 +7,14 @@
 
 ---
 
+## 2026-11-09（凌晨）· 英 / 中配音样片 + 三语配音上线计划（agent `dub`）
+- **用户**：ElevenLabs 额度够，先出英 / 中配音样片对比；听完决定**全部 Demo 做 ja / en / zh 三语配音**，配音语言是**独立设置**（默认「跟字幕相同」，可单独选，例如中文字幕 + 日语配音；回答判定跟字幕）。
+- **工具**：`tools/eleven/dub.py`（把日语台词的语气标签按句子位置搬进 en / zh 字幕文本；角色名保持日式读法（zh：渚→Nagisa、日向→Hinata、薄荷大夫→Mint大夫、小雪→Koyuki、小焰→Homura）；按 voice/模型/seed/语言/文本缓存；输出 `media/voice/<lang>/<id>.m4a` + `index.json`（文本、时长））；`tools/eleven/tts.py` 的 `speak()` 加 `lang=`。各 Demo 声音脚本加 `--lang en|zh [--count]`：Demo43 `scripts/voice.py`、Demo22 `scripts/voice.py`、Demo01 `tools/build_audio.py --lang ja|en|zh`（逐句干声，电影本身没重混）。模板 = Demo22 的 voice.py。
+- **样片**：Demo22（en/zh 已入库）、Demo43（en/zh 各 11–12 MB，.gitignore，`python3 scripts/voice.py --lang en|zh` 可重出）、Demo01（逐句 ja/en/zh，.gitignore）、Demo04 v2（它自己的 `--langs`）。共约 20,100 字符；账户剩 75,260（2026-12-08 重置）。英语整体比日语短（Demo43 757 s vs 883 s），只有 Demo01 几句短感叹变长（c14「きゃっ！？」0.75 s → en 1.8 / zh 2.2 s）。
+- **对比页**（本地，不在仓库）：会话临时目录 `scratchpad/dub/compare.html`（`gen.py` 生成）。上线计划 `scratchpad/dub/ROLLOUT.md`：按热度分排序的字符估算（#1–22 ≈ 48k 在预算内，信长对话 kit ≈ 18k 超出预留）、电影类需要按语言重混 / 热同步、共享代码设计（`MoHeatVoice.fetch(id)` 按配音语言取 `media/voice/<lang>/`，缺失回退日语；⚙ 面板字幕语言下面加「配音」一行）。
+- **下一步**：统筹审 ROLLOUT.md 后按顺序批量渲染（到 10k 预留就停）；UI v2 发布推送后再改 `demos/shared/**` 接线。
+- **问题**：Scribe 语音转写抽查也扣额度，只抽查人名句；没有在 `demos/shared` 动任何东西。
+
 ## 2026-11-09（凌晨）· 嘴套加动画风牙齿 + 最后 8 个旧差分姿势全部改成嘴套 + 统筹 QA 第 3 轮嘴部问题（agent `mouth2`）
 - **用户反馈**：①「张大嘴没有牙齿有点吓人，但不要写实」②「只准看着我（Demo21 Jin）有些嘴还没改」。
 - **工具** `tools/art/lp_mouths.py`：默认第 2、3 档一条平涂上排牙（不画单颗牙、裁在开口里、两档同厚同位置），最宽档一点舌头，颜色取自角色皮肤（含场景光）；`"teeth": false` / `--no-teeth` 关闭，`"teeth": {alpha, band, …}` 收淡（岳 Demo24、朔 Demo30：alpha .75）。难的脸：`"view"`（裁 / 转正 / 缩小；`rotate: "auto"` 按嘴角自动转正）、`"warp": false`（不用 LP，开口沿画好的闭嘴线，端点就是画好的嘴角；`lift` / `drop` / `dark` / `search`）、`"hide"`（手指多边形）、`"drawn_open"`（露齿笑作起始形状）、`"fang"`（虎牙每档贴回上唇）、`"feather"`（硬边块）。`check_patches.py` 新增 OLD-MOUTH / NO-TEETH（FAIL，例外写 `project/qa.json` `mouth_exceptions`）；check_demo G4 提示、CHECKLIST / SCRIPT 模板、指南 §6 第 5 步 ④、§6.5 S6 / S9、§11.1（2 条）已更新。
