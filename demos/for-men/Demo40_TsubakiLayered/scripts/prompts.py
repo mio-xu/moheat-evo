@@ -32,8 +32,9 @@ for v in VIEWS:
         "bokeh lights, distant crowd silhouettes — the same composition, colours, lighting and art style. Empty scene, no people.\n\n" + END}
     out[f"tsubaki_{v}"] = {"ref": f"d25:{v}", "prompt": "Image 1 is the CHARACTER, POSE and STYLE reference: redraw the same young woman in "
         "the same pose, size and position in the frame, same art style.\n\n" + STYLE + "\n\n" + LOOK + "\n\nSame pose as image 1: "
-        + pose_text(v) + " Mouth CLOSED (lips together) in the same expression; full figure as framed in image 1, nothing cut off "
-        "that image 1 shows.\n\n" + PLAIN + "\n\n" + END}
+        + pose_text(v) + " Mouth CLOSED (lips together) in the same expression.\n\nSAME FRAMING AND SCALE as image 1: do NOT zoom out and do NOT "
+        "draw more of her body than image 1 shows — her head, shoulders and hands are exactly where and as big as in image 1, cut by the "
+        "picture edges in the same places. Leave out the viewer's hand / arm if image 1 has one.\n\n" + PLAIN + "\n\n" + END}
     out[f"tsubaki_{v}_talk"] = {"ref": f"tsubaki_{v}", "prompt": EDIT.format(what=MOUTH)}
     if v != "pray":   # she prays with her eyes already closed
         out[f"tsubaki_{v}_blink"] = {"ref": f"tsubaki_{v}", "prompt": EDIT.format(what=BLINK)}
