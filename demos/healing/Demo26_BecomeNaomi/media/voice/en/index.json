@@ -1,0 +1,37 @@
+{
+ "lang": "en",
+ "text": {
+  "k01": "[warmly] Naomi~? Good morning.",
+  "k02": "[warmly] Breakfast time~. Come on, come here.",
+  "k03": "[softly] Nice and warm, huh, Nao-chan? Sunbathing?",
+  "k04": "[softly] Oh, the sun moved away, didn't it.",
+  "k05": "[laughs] Ah, no no~. It's cold, isn't it?",
+  "k06a": "[chuckles softly] Hehe, there's nothing in there for you. Closing it~.",
+  "k06b": "[laughs softly] Hey, that tickles. [softly] …Later, okay?",
+  "k07": "[sighs softly] There we go. …Let me grab the hangers.",
+  "k08": "[curious] Huh? Naomi? Where did you go?",
+  "k09": "[whispers] …Found you.",
+  "k10": "[laughs softly] Honestly, you always know where the warm spot is.",
+  "k11": "[softly] We played so much today.",
+  "k12a": "[chuckles softly] Hehe, you're kneading. That tickles.",
+  "k12b": "[softly] …Going to sleep already? [whispers] Then me too.",
+  "k13": "[whispers] Good night, Naomi."
+ },
+ "dur": {
+  "k01": 2.32,
+  "k02": 2.96,
+  "k03": 4.0,
+  "k04": 3.3,
+  "k05": 4.4,
+  "k06a": 4.5,
+  "k06b": 4.4,
+  "k07": 4.0,
+  "k08": 3.1,
+  "k09": 1.36,
+  "k10": 4.7,
+  "k11": 2.24,
+  "k12a": 4.0,
+  "k12b": 3.4,
+  "k13": 1.84
+ }
+}
