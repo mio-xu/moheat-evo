@@ -88,17 +88,23 @@
    ],
    "lp": {
     "warp": false,
+    "src": "nagisa_laugh_quiet",
     "centre": [
      1617,
-     610
+     613
     ],
     "radius": [
-     62,
-     48
+     124,
+     104
+    ],
+    "search": [
+     70,
+     40
     ],
     "lift": 0.1,
     "drop": 0.42,
-    "dark": 12
+    "dark": 12,
+    "feather": 7
    },
    "mouth": "lp",
    "blink": "nagisa_laugh_blink",
@@ -129,7 +135,15 @@
     60,
     40
    ],
-   "mouth": "lp"
+   "mouth": "lp",
+   "lp": {
+    "lips": [
+     0.08,
+     0.15,
+     0.22
+    ],
+    "minh": 0.16
+   }
   },
   "whisper": {
    "src": "nagisa_whisper2_flat_ext",
@@ -151,7 +165,21 @@
     58,
     40
    ],
-   "mouth": "lp"
+   "mouth": "lp",
+   "lp": {
+    "warp": false,
+    "centre": [
+     1630,
+     841
+    ],
+    "radius": [
+     75,
+     60
+    ],
+    "lift": 0.1,
+    "drop": 0.3,
+    "dark": 20
+   }
   },
   "shoulder": {
    "src": "nagisa_shoulder2_flat_ext",
