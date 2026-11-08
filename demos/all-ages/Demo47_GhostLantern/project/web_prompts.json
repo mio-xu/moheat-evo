@@ -102,5 +102,53 @@
  "bonchan_scared": {
   "ref": "bonchan_base",
   "prompt": "Image 1 is the CHARACTER and STYLE reference: the same character, same design, same art style.\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi (2–3 heads), friendly and adorable, not scary, clear silhouettes.\n\nThe same lantern Bon-chan with a startled face: wide eyes, small open 'o' mouth, its candle flickering, slightly tilted.\n\nPlain flat CHROMA-KEY GREEN background (#00B140), one even colour, no shadow, nothing green on the character. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "bonchan_base_blink": {
+  "ref": "bonchan_base",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, outline, colours, lighting and background — and change ONLY BOTH of the lantern's eyes: closed in a soft happy blink (a curved closed eyelid line with lashes on each eye, no iris, no white of the eye visible), same orange paper around them. Do not move, zoom or crop the picture.",
+  "mask": "1095,705,88,82;1435,670,88,82",
+  "composite": true
+ },
+ "bonchan_base_quiet": {
+  "ref": "bonchan_base",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, outline, colours, lighting and background — and change ONLY the lantern's mouth only: CLOSED, a small cute closed cat smile (a little 'ω' line under the nose), no open mouth, no tongue, the same orange-cream paper where the open mouth was. Do not move, zoom or crop the picture.",
+  "mask": "1268,805,84,66",
+  "composite": true
+ },
+ "bonchan_scared_blink": {
+  "ref": "bonchan_scared",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, outline, colours, lighting and background — and change ONLY BOTH of the lantern's eyes: closed tight in a soft blink (a curved closed eyelid line with lashes on each eye, no iris, no white visible). Do not move, zoom or crop the picture.",
+  "mask": "1095,725,94,94;1419,664,90,94",
+  "composite": true
+ },
+ "bonchan_scared_quiet": {
+  "ref": "bonchan_scared",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, outline, colours, lighting and background — and change ONLY the lantern's mouth only: CLOSED, a small worried closed mouth (a short wavy line), no open mouth, the same paper colour where the open mouth was. Do not move, zoom or crop the picture.",
+  "mask": "1275,820,41,46",
+  "composite": true
+ },
+ "ghosts_base_blink": {
+  "ref": "ghosts_base",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, outline, colours, lighting and background — and change ONLY ALL FIVE eyes of the three little ghosts (the umbrella yokai's one big eye, the white ghost's two eyes, the blue wisp's two eyes): closed in a soft blink (a curved closed eyelid line with lashes, no iris, no white of the eye visible), each in its own place and size. Do not move, zoom or crop the picture.",
+  "mask": "595,448,88,98;1307,600,52,64;1503,623,56,64;1920,797,48,58;2097,830,54,58",
+  "composite": true
+ },
+ "yurari_base_blink": {
+  "ref": "yurari_base",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, outline, colours, lighting and background — and change ONLY BOTH of her eyes: FULLY closed in a natural soft blink (upper eyelids all the way down, lashes visible, no iris visible, same skin); her white bangs stay exactly as they are. Do not move, zoom or crop the picture.",
+  "mask": "1220,416,54,50;1393,382,54,52",
+  "composite": true
+ },
+ "yurari_ear_blink": {
+  "ref": "yurari_ear",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, outline, colours, lighting and background — and change ONLY BOTH of her eyes: FULLY closed in a natural soft blink (upper eyelids all the way down, lashes visible, no iris visible, same skin); her white bangs stay exactly as they are. Do not move, zoom or crop the picture.",
+  "mask": "682,485,66,58;875,412,58,62",
+  "composite": true
+ },
+ "yurari_happy_blink": {
+  "ref": "yurari_happy",
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, framing, size, position, outline, colours, lighting and background — and change ONLY BOTH of her eyes: FULLY closed in a natural soft blink (upper eyelids all the way down, lashes visible, no iris visible, same skin); her white bangs stay exactly as they are. Do not move, zoom or crop the picture.",
+  "mask": "1215,425,55,48;1385,385,55,55",
+  "composite": true
  }
 }
