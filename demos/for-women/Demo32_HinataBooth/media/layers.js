@@ -19,7 +19,28 @@ window.MOHEAT_LAYERS = {
     "y": 1.02,
     "height": 1.0
    },
-   "patches": []
+   "patches": [
+    {
+     "src": "art/booth_mouth.webp",
+     "rect": [
+      1098,
+      329,
+      148,
+      101
+     ],
+     "kind": "mouth"
+    },
+    {
+     "src": "art/booth_eyes.webp",
+     "rect": [
+      1003,
+      193,
+      264,
+      149
+     ],
+     "kind": "eyes"
+    }
+   ]
   },
   "hina_hands": {
    "view": "hands",
@@ -40,7 +61,28 @@ window.MOHEAT_LAYERS = {
     "y": 1.02,
     "height": 1.02
    },
-   "patches": []
+   "patches": [
+    {
+     "src": "art/hands_mouth.webp",
+     "rect": [
+      914,
+      406,
+      125,
+      102
+     ],
+     "kind": "mouth"
+    },
+    {
+     "src": "art/hands_eyes.webp",
+     "rect": [
+      726,
+      202,
+      331,
+      210
+     ],
+     "kind": "eyes"
+    }
+   ]
   },
   "hina_lean": {
    "view": "leanL",
@@ -64,8 +106,74 @@ window.MOHEAT_LAYERS = {
     "y": 1.02,
     "height": 1.02
    },
-   "patches": []
+   "patches": [
+    {
+     "src": "art/lean_mouth.webp",
+     "rect": [
+      372,
+      525,
+      243,
+      147
+     ],
+     "kind": "mouth"
+    },
+    {
+     "src": "art/lean_eyes.webp",
+     "rect": [
+      186,
+      240,
+      418,
+      277
+     ],
+     "kind": "eyes"
+    }
+   ]
+  },
+  "hina_wave": {
+   "view": "wave",
+   "fire": null,
+   "bg": {
+    "src": "art/bg_booth.webp",
+    "fire": [
+     0.521,
+     0.376
+    ]
+   },
+   "char": {
+    "src": "art/char_wave.webp",
+    "w": 1700,
+    "h": 987,
+    "x": 0.5,
+    "y": 1.02,
+    "height": 0.95
+   },
+   "patches": [
+    {
+     "src": "art/wave_mouth.webp",
+     "rect": [
+      1099,
+      333,
+      145,
+      96
+     ],
+     "kind": "mouth"
+    },
+    {
+     "src": "art/wave_eyes.webp",
+     "rect": [
+      1003,
+      193,
+      264,
+      149
+     ],
+     "kind": "eyes"
+    }
+   ]
   }
  },
- "skipVideo": "media/video/v_"
+ "skipVideo": "media/video/v_",
+ "hooks": {
+  "view": "HINA.S.view",
+  "mouth": "HINA.FW.mouth"
+ }
 };

@@ -104,6 +104,7 @@ def find_fire(path):
 
 data = {"views": {}}
 if cfg.get("skipVideo"): data["skipVideo"] = cfg["skipVideo"]
+if cfg.get("hooks"): data["hooks"] = cfg["hooks"]   # where the base demo keeps its state (view, mouth) — see shared/layers.js
 bgs = {}
 for name, b in cfg["bgs"].items():
     im = Image.open(src(b["src"])).convert("RGB")

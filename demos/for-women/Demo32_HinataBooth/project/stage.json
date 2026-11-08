@@ -24,6 +24,20 @@
    "talk": "hina_lean_talk",
    "blink": "hina_lean_blink",
    "matte": "ai"
+  },
+  "wave": {
+   "src": "hina_wave",
+   "talk": "hina_ref_talk",
+   "blink": "hina_ref_blink",
+   "matte": "ai",
+   "near_mouth": [
+    1790,
+    548
+   ],
+   "near_eyes": [
+    1740,
+    392
+   ]
   }
  },
  "views": {
@@ -58,6 +72,19 @@
    "x": 0.45,
    "y": 1.02,
    "height": 1.02
+  },
+  "wave": {
+   "still": "hina_wave.webp",
+   "pose": "wave",
+   "bg": "booth",
+   "fire": null,
+   "x": 0.5,
+   "y": 1.02,
+   "height": 0.95
   }
+ },
+ "hooks": {
+  "view": "HINA.S.view",
+  "mouth": "HINA.FW.mouth"
  }
 }

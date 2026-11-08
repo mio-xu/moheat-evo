@@ -17,6 +17,7 @@
 //            bg: { src, depth?, fire: [x, y] (fire in the plate, fraction), zoom? },
 //            char: { src, w, h, x, y, height } (anchored at its bottom centre: x, y = frame fraction, height = fraction of the frame),
 //            patches: [ { src, rect: [x, y, w, h] in char pixels, kind: "mouth" | "eyes" } ] } }
+// Data hooks (optional): hooks: { view: "HINA.S.view", mouth: "HINA.FW.mouth" (0..1), level / raw: paths } — where the base demo keeps its state.
 // Hooks (optional): MoHeatLayers.level() → 0..1 talking envelope (default window.STREAM.S.env), MoHeatLayers.raw() → raw voice level
 // (default window.STREAM.S.lv), MoHeatLayers.current() → the view on screen (default window.STREAM.S.view).
 // ?flat (or ?cover / ?stills / ?render) = the page's own stills. No WebGL or a layer still loading = the page's own still too.
@@ -25,9 +26,12 @@
   const qs = new URLSearchParams(location.search);
   if (qs.has('flat') || qs.has('cover') || qs.has('stills') || qs.has('render')) return;
   const API = window.MoHeatLayers = window.MoHeatLayers || {};
-  API.level = API.level || (() => window.STREAM?.S?.env || 0);
-  API.raw = API.raw || (() => window.STREAM?.S?.lv || 0);
-  API.current = API.current || (() => window.STREAM?.S?.view || Object.values(D.views)[0].view);
+  const get = (path) => String(path).split('.').reduce((o, k) => (o == null ? o : o[k]), window);   // "HINA.FW.mouth" → its value
+  const H = D.hooks || {};   // per page: where the base demo keeps its state (default: Demo24-style window.STREAM)
+  API.level = API.level || (() => +(H.level ? get(H.level) : window.STREAM?.S?.env) || 0);
+  API.raw = API.raw || (() => +(H.raw ? get(H.raw) : window.STREAM?.S?.lv) || 0);
+  API.mouth = API.mouth || (H.mouth ? () => +get(H.mouth) || 0 : null);   // a ready 0..1 mouth opening (e.g. Demo20's FW.mouth)
+  API.current = API.current || (() => (H.view ? get(H.view) : window.STREAM?.S?.view) || Object.values(D.views)[0].view);
 
   if (D.skipVideo) {   // the base demo's own clips are not part of this page: no requests, an 'error' instead
     const re = new RegExp(D.skipVideo), desc = Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype, 'src');
@@ -117,7 +121,7 @@ void main(){
     flick = 1 + .10 * Math.sin(t * 7.3) + .07 * Math.sin(t * 13.1 + 1.7) + .05 * Math.sin(t * 23.7 + .4);
     px += (tx - px) * .06; py += (ty - py) * .06;
     env = Math.max(0, Math.min(1, +API.level() || 0));
-    const tgt = env > .05 ? Math.max(0, Math.min(1, ((+API.raw() || 0) - .005) / .05)) : 0;   // the mouth fades in fast, out fast
+    const tgt = API.mouth ? Math.max(0, Math.min(1, API.mouth())) : env > .05 ? Math.max(0, Math.min(1, ((+API.raw() || 0) - .005) / .05)) : 0;   // the mouth fades in fast, out fast
     mouth += (tgt - mouth) * (1 - Math.exp(-dt / (tgt > mouth ? .03 : .06)));
     if (t > nextBlink) { blinkUntil = t + .13; nextBlink = t + 2.6 + Math.random() * 3.2; }
   }

@@ -120,10 +120,13 @@ def changed_regions(base, frame, kind="mouth", near=None):
     areas = sorted(blobs(dens > dens.max() * .35), key=lambda b: -dens[b[:, 0], b[:, 1]].sum())
     pick = areas[:1]
     if kind == "eyes" and len(areas) > 1:
-        a0, a1 = areas[0], areas[1]
-        c0, c1 = a0.mean(0), a1.mean(0)
-        if dens[a1[:, 0], a1[:, 1]].sum() > .3 * dens[a0[:, 0], a0[:, 1]].sum() and abs(c0[0] - c1[0]) * k < 120 and abs(c0[1] - c1[1]) * k < 420:
-            pick = [a0, a1]
+        a0 = areas[0]; c0 = a0.mean(0)
+        # the second eye: the strongest other area at about the same height and an eye's distance away (it may change less —
+        # half hidden by the fringe — so a low share of the first one's change is enough)
+        for a1 in areas[1:6]:
+            c1 = a1.mean(0); dy, dx = abs(c0[0] - c1[0]) * k, abs(c0[1] - c1[1]) * k
+            if dens[a1[:, 0], a1[:, 1]].sum() > .1 * dens[a0[:, 0], a0[:, 1]].sum() and dy < max(160, .8 * dx) and 60 < dx < 600:   # a tilted head: the eyes can sit at very different heights
+                pick = [a0, a1]; break
     out = []
     for b in pick:
         ys, xs = b[:, 0], b[:, 1]
