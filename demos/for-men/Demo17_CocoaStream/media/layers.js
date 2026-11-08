@@ -59,7 +59,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/welcome_mouth2.webp?v=61142ecd",
+     "src": "art/welcome_mouth2.webp?v=4fe77224",
      "rect": [
       646,
       473,
@@ -70,7 +70,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/welcome_mouth3.webp?v=483de892",
+     "src": "art/welcome_mouth3.webp?v=d1e310c5",
      "rect": [
       646,
       473,
@@ -140,7 +140,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/melt_mouth2.webp?v=d7afedf1",
+     "src": "art/melt_mouth2.webp?v=a3b870e8",
      "rect": [
       734,
       473,
@@ -151,7 +151,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/melt_mouth3.webp?v=fe14100e",
+     "src": "art/melt_mouth3.webp?v=0840b889",
      "rect": [
       734,
       473,
@@ -221,7 +221,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/whisk_mouth2.webp?v=5050283d",
+     "src": "art/whisk_mouth2.webp?v=e9670889",
      "rect": [
       818,
       444,
@@ -232,7 +232,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/whisk_mouth3.webp?v=4bf1a72b",
+     "src": "art/whisk_mouth3.webp?v=7cdbefe1",
      "rect": [
       818,
       444,
@@ -302,7 +302,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/cookie_mouth2.webp?v=75e8501e",
+     "src": "art/cookie_mouth2.webp?v=26420101",
      "rect": [
       517,
       475,
@@ -313,7 +313,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/cookie_mouth3.webp?v=569c517f",
+     "src": "art/cookie_mouth3.webp?v=aed09995",
      "rect": [
       517,
       475,
@@ -383,7 +383,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/piping_mouth2.webp?v=855eb722",
+     "src": "art/piping_mouth2.webp?v=a465717c",
      "rect": [
       623,
       448,
@@ -394,7 +394,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/piping_mouth3.webp?v=e9a087dc",
+     "src": "art/piping_mouth3.webp?v=06b606de",
      "rect": [
       623,
       448,
@@ -464,7 +464,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/whisper_mouth2.webp?v=8b6d6db7",
+     "src": "art/whisper_mouth2.webp?v=54f54fbe",
      "rect": [
       593,
       607,
@@ -475,7 +475,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/whisper_mouth3.webp?v=f2f57872",
+     "src": "art/whisper_mouth3.webp?v=9f469d9a",
      "rect": [
       593,
       607,
@@ -545,7 +545,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/ending_mouth2.webp?v=97d26d61",
+     "src": "art/ending_mouth2.webp?v=bc854032",
      "rect": [
       550,
       471,
@@ -556,7 +556,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/ending_mouth3.webp?v=854041cd",
+     "src": "art/ending_mouth3.webp?v=257fe7d6",
      "rect": [
       550,
       471,
