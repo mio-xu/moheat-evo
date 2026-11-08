@@ -201,14 +201,42 @@
    "radius_mouth": [
     52,
     36
-   ]
+   ],
+   "lp": {
+    "warp": false,
+    "centre": [
+     1000,
+     507
+    ],
+    "radius": [
+     38,
+     26
+    ],
+    "lift": 0.12,
+    "drop": 0.32,
+    "dark": 20
+   },
+   "mouth": "lp"
   },
   "omikuji": {
    "src": "tsubaki_omikuji",
    "talk": "tsubaki_omikuji_talk",
    "blink": "tsubaki_omikuji_blink",
    "matte": "green",
-   "erase": [[0, 0, 600, 1440], [0, 0, 800, 260]],
+   "erase": [
+    [
+     0,
+     0,
+     600,
+     1440
+    ],
+    [
+     0,
+     0,
+     800,
+     260
+    ]
+   ],
    "centre_mouth": [
     1336,
     567

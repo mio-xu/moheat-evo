@@ -59,7 +59,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/torii_mouth2.webp?v=c8e8e7c0",
+     "src": "art/torii_mouth2.webp?v=8c32513f",
      "rect": [
       528,
       421,
@@ -70,7 +70,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/torii_mouth3.webp?v=b7d9d4bf",
+     "src": "art/torii_mouth3.webp?v=efce1182",
      "rect": [
       528,
       421,
@@ -140,7 +140,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/stall_mouth2.webp?v=6e4e0c39",
+     "src": "art/stall_mouth2.webp?v=b0c54111",
      "rect": [
       578,
       390,
@@ -151,7 +151,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/stall_mouth3.webp?v=725d2751",
+     "src": "art/stall_mouth3.webp?v=230b10f5",
      "rect": [
       578,
       390,
@@ -221,7 +221,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/amazake_mouth2.webp?v=31ace7e0",
+     "src": "art/amazake_mouth2.webp?v=1f988e9a",
      "rect": [
       450,
       387,
@@ -232,7 +232,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/amazake_mouth3.webp?v=805a6a8c",
+     "src": "art/amazake_mouth3.webp?v=934b141d",
      "rect": [
       450,
       387,
@@ -302,7 +302,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/fire_mouth2.webp?v=3068270b",
+     "src": "art/fire_mouth2.webp?v=c8a29c05",
      "rect": [
       904,
       416,
@@ -313,7 +313,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/fire_mouth3.webp?v=9301a91e",
+     "src": "art/fire_mouth3.webp?v=0f1a2282",
      "rect": [
       904,
       416,
@@ -383,7 +383,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/close_mouth2.webp?v=e4c6c190",
+     "src": "art/close_mouth2.webp?v=05cdbf2c",
      "rect": [
       1073,
       458,
@@ -394,7 +394,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/close_mouth3.webp?v=0dd6b8a6",
+     "src": "art/close_mouth3.webp?v=128671fa",
      "rect": [
       1073,
       458,
@@ -432,14 +432,48 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/pray_mouth.webp?v=8e2e4b8a",
+     "src": "art/pray_mouth0.webp?v=6cc1e80f",
      "rect": [
-      490,
-      321,
-      130,
-      101
+      520,
+      342,
+      77,
+      59
      ],
-     "kind": "mouth"
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/pray_mouth1.webp?v=a5d5f2d1",
+     "rect": [
+      520,
+      342,
+      77,
+      59
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/pray_mouth2.webp?v=a59a418f",
+     "rect": [
+      520,
+      342,
+      77,
+      59
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/pray_mouth3.webp?v=da83e132",
+     "rect": [
+      520,
+      342,
+      77,
+      59
+     ],
+     "kind": "mouth_lv",
+     "level": 3
     }
    ]
   },
@@ -501,7 +535,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/omikuji_mouth2.webp?v=10d9e332",
+     "src": "art/omikuji_mouth2.webp?v=fb964089",
      "rect": [
       576,
       505,
@@ -512,7 +546,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/omikuji_mouth3.webp?v=7cde4a5a",
+     "src": "art/omikuji_mouth3.webp?v=b7b114d8",
      "rect": [
       576,
       505,
@@ -582,7 +616,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/stole_mouth2.webp?v=c3b5d226",
+     "src": "art/stole_mouth2.webp?v=af42457b",
      "rect": [
       699,
       420,
@@ -593,7 +627,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/stole_mouth3.webp?v=31adbc9c",
+     "src": "art/stole_mouth3.webp?v=b68946cc",
      "rect": [
       699,
       420,
