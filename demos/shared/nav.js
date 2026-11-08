@@ -13,6 +13,7 @@
     { cat: 'healing', dir: 'Demo26_BecomeNaomi', ja: 'ねこになった日', en: 'The Day I Became Naomi', zh: '变成猫咪的那一天', group: 1 },
     { cat: 'healing', dir: 'Demo15_FamilyCall', ja: 'もしもし、おばあちゃん？', en: 'Hello, Grandma? · A Call Home, Part 1', zh: '喂，奶奶吗？', group: 1 },
     { cat: 'healing', dir: 'Demo16_FamilyCall2', ja: 'じいちゃんの、ゆきだるま', en: "Grandpa's Little Snowman · A Call Home, Part 2", zh: '爷爷的小雪人', group: 1 },
+    { cat: 'healing', dir: 'Demo29_FamilyVisit', ja: 'ただいま、じいちゃん・ばあちゃん', en: 'Home for New Year', zh: '爷爷奶奶，我回来了', group: 1 },
     { cat: 'for-men', dir: 'Demo14_MintStream', ja: 'ミントの、ささやき配信', en: "Mint's Whisper Stream", zh: '薄荷的耳语直播', group: 2 },
     { cat: 'for-men', dir: 'Demo17_CocoaStream', ja: 'ココアの、ほっこりカフェ配信', en: "Cocoa's Cozy Café Stream", zh: '可可的暖心咖啡馆直播', group: 2 },
     { cat: 'for-men', dir: 'Demo18_HinataStream', ja: 'ひなたの、激辛チャレンジ配信', en: "Hinata's Super-Spicy Challenge", zh: '日向的超辣挑战直播', group: 2 },

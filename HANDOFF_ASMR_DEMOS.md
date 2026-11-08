@@ -369,17 +369,15 @@ AGENTS.md / CLAUDE.md                    给 agent 的入口（指向本文件�
 - 素材：Demo 1 的立绘和房间背景**按路径**引用（`../Demo01_SnowFoxfire/media/art/`），在 canvas 里分层叠加，表情和口型按各自的声音电平切帧。0 Seedance。配音用 koyuki r1_b + homura r1_c 合成 22 句（两人同时说的句子各配一份）。
 - 测试：`?auto&pick=0|1`；`LULLABY.peek(view)`。
 
-### Demo29_FamilyVisit 🟡 进行中（只差美术）——《ただいま、じいちゃん・ばあちゃん / Home for New Year》（爷爷奶奶第 3 集，2026-11-08）
-- 用户从 3 个剧情方案里选了"回老家过年"，并确认了分镜和预算（约 125 credits）。
-- 五个场景：雪中小车站（外公；左侧寒风）→ 玄关（外婆拥抱，左耳）→ 被炉（右边暖炉 + 红豆汤热气）→ 第二天院子（雪球擦过右耳）→ 夜里被窝（外婆在左边讲求婚故事，被子盖到耳朵，外公在右边打鼾）。
-- **已完成（本地，未提交）**：`lines.js`；配音 26 句（ElevenLabs hana r1_c / gen r1_a，`scripts/voice.py`）；`main.js` / `audio.js` / `index.html` / `style.css`；`l10n.js`（`scripts/make_l10n.py`）；README。两条分支用占位画面自动通关，0 报错，约 2:25。
-- **还差**：
-  1. 5 张静帧：`python3 scripts/seedance.py`，提示词也在 `project/web_prompts.json`；参考图是第 1 集的 `assets/art/ref_duo_call.jpg` 和 `ref_gp_snow.jpg`。
-  2. `python3 scripts/prepare_art.py` → `media/art/visit_*.jpg`。
-  3. 对照画面调 `main.js` 的 `FACE` 坐标。
-  4. 封面：`scripts/make_cover.py`。
-  5. 加入 `nav.js` 的 `DEMOS`（healing 组，Demo16 之后）、官网菜单和 credits，跑 `tools/web/thumbs.py Demo29_FamilyVisit`，然后 commit + push。
-- **卡住的原因**：2026-11-08 上传接口每日额度用完（API 429 Retry-After 约 84,730 s；网页端提示 "Daily upload limit reached"，网页的 Edit 按钮也要重新上传）。用户决定等额度恢复再出图，不用文字生图。
+### Demo29_FamilyVisit ✅ 可玩 —《ただいま、じいちゃん・ばあちゃん / Home for New Year》（爷爷奶奶第 3 集，2026-11-08/09）
+- 用户从 3 个剧情方案里选了"回老家过年"，并确认了分镜。这一次你本人回到外公外婆家。
+- 五个场景：雪中小车站（外公；左侧寒风；第 1 集的红围巾）→ 玄关（外婆拥抱，左耳）→ 被炉（右边暖炉 + 红豆汤热气）→ 第二天院子（雪球擦过右耳，你扔回去）→ 夜里被窝（外婆在左边讲求婚故事，被子盖到耳朵，外公在右边打鼾）。两个二选一，各有不同回应；两条结局。
+- 配音：ElevenLabs hana r1_c / gen r1_a，26 句（`scripts/voice.py`）。
+- 美术：Seedance 网页端 5 张静帧（GPT Image 2，16:9，2K，共 125 credits）。参考图是第 1 集的 `duo_call` 和 `gp_snow`。提示词在 `scripts/seedance.py` / `project/web_prompts.json`。
+- 演出：缓慢漂移，说话的人那边镜头推近；代码画雪、热气、暖炉光、雪球、行灯和被子。
+- 冷热（DUAL）：人声按音量和距离暖；环境层是寒风、围巾、门里的暖气、拥抱、暖炉、汤碗热气、雪球、被子。被炉不加热（只暖腿）。
+- 测试：两条分支自动通关约 2:25，0 报错；中文语音判定通过；1280×720 / 1920×1080 / 手机横屏都正好一屏。
+- 坑：2026-11-08 上传接口每日额度用完（API 和网页端共用），第二天网页端先恢复，API 还在限流。网页点 "Download all" 后页面会跳到 My Creations，要回来再逐张下载，并看过图片内容再改名。
 
 ### Demo20_HinataHandshake ✅ 可玩 —《あと10秒だけ、ね？ / Just Ten More Seconds?》（纯交互握手会，2026-11-08）
 - 女性向男偶像系列第一位：**陽向**（19 岁，年下・腹黑：人前甜、耳边黑）。造型 = 用户定的粉毛设定图（`Demo16_HandshakeEvent/assets/art/hinata_pink_sheet.png`，复制为 `assets/art/ref_hinata.png`）。`Demo16_HandshakeEvent/`（三位男偶像的设计 / 试听工作区，未进 git）在三位都做完后，于 2026-11-08 经用户同意移到了废纸篓。

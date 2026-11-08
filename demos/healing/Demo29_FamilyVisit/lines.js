@@ -1,0 +1,30 @@
+// 『ただいま、じいちゃん・ばあちゃん』 lines: id → [who, ja, en]. who: gm = grandma Hana, gp = grandpa Gen (Demo15/16's couple).
+// Voices: ElevenLabs, the user's picks hana r1_c / gen r1_a (tools/eleven/cast.json) — tags in scripts/voice.py. Soft countryside dialect.
+window.VISIT_LINES = {
+  "p01": ["gp", "おーい！ こっちじゃ、こっちー！", "Hey! Over here, over here!"],
+  "p02": ["gp", "よう来たのう！ …ん？ そのマフラー、ばあさんが編んだやつじゃな", "Glad you made it! …Hm? That scarf — Grandma knitted it, didn't she?"],
+  "p03a": ["gp", "おう、おかえり！ …わっはっは、照れくさいのう", "Yep, welcome home! …Ha ha, that makes me bashful."],
+  "p03b": ["gp", "当たり前じゃ！ 一時間前から待っとったわい", "Of course! I've been waiting here for an hour."],
+  "p04": ["gp", "ほれ、寒いけえ、早う帰るぞ。 ばあさんが待ちくたびれとる", "Come on, it's cold, let's get home. Grandma's tired of waiting."],
+  "g01": ["gm", "はいはいはい…！ まあまあまあ！", "Coming, coming…! Oh my, oh my!"],
+  "g02": ["gm", "おかえり…。 まあ、大きゅうなって…", "Welcome home… My, how you've grown…"],
+  "g03": ["gm", "ふふ、よう帰ってきたねえ。 ほら、早う上がりんさい。 こたつ、ぬくめといたけんね", "Hehe, you made it home. Come in, come in. I've warmed up the kotatsu."],
+  "g04": ["gm", "はい、おしるこ。 熱いけん、ふーふーしてから食べんさいよ", "Here, oshiruko. It's hot, so blow on it first."],
+  "p05": ["gp", "ばあさんのおしるこは日本一じゃ。 …わしのみかんも、食うか？", "Grandma's oshiruko is the best in Japan. …Want one of my mandarins too?"],
+  "p06a": ["gp", "よしよし、じいちゃんがむいちゃる。 …ほれ、白いすじまで取ったぞ", "Good, Grandpa'll peel it for you. …There, I even took off the white strings."],
+  "g05b": ["gm", "まあ、うれしいねえ！ たーんと食べんさい", "Oh, that makes me happy! Eat as much as you like."],
+  "g06": ["gm", "ストーブの前、ぬくいじゃろ？ 右のほっぺ、まっかよ", "Warm in front of the stove, isn't it? Your right cheek's all red."],
+  "p07": ["gp", "おはようさん！ ほれ、雪だるま、つくるぞ！ じいちゃんのは、でかいぞー！", "Morning! Come on, let's make a snowman! Grandpa's is gonna be huge!"],
+  "p08": ["gp", "…すきありっ！", "…Gotcha!"],
+  "p09": ["gp", "わっはっは！ 当たらんかったか！", "Ha ha ha! Missed, did I?"],
+  "p10": ["gp", "うおっ！？ つ、冷たっ！ …やるのう、さすがわしの孫じゃ", "Whoa!? C-cold! …Not bad. That's my grandkid."],
+  "g07": ["gm", "ふたりとも、風邪ひくよー！ 甘酒、できたけんねー！", "You two'll catch a cold! The amazake's ready!"],
+  "g08": ["gm", "…まだ起きとる？ ふふ、ばあちゃんもよ", "…Still awake? Hehe, me too."],
+  "g09": ["gm", "…おじいさんね、若いころ、雪の日に「うちに来てくれ」って、それだけ言うて、真っ赤になっとったんよ", "…When Grandpa was young, one snowy day he said just \"Come and live with me\" — and turned bright red."],
+  "g10": ["gm", "ふふ…。 ほら、耳まで、ふとん、かけちゃろうね", "Hehe… Here, let me tuck the blanket up to your ears."],
+  "g11": ["gm", "…あした、帰るんじゃろ？", "…You're going back tomorrow, aren't you?"],
+  "g12a": ["gm", "…うん。 待っとるけんね。 じいちゃんも、ばあちゃんも", "…Mm. We'll be waiting. Grandpa and Grandma both."],
+  "g12b": ["gm", "…ふふ、うれしいこと言うてくれるねえ。 いつでも帰っておいで。 ここは、あんたの家じゃけん", "Hehe… what a lovely thing to say. Come home any time. This is your home."],
+  "p11": ["gp", "…むにゃ…孫は…日本一じゃ…", "…mumble… my grandkid's… the best in Japan…"],
+  "g13": ["gm", "ふふ…。 おやすみ", "Hehe… Good night."]
+};
