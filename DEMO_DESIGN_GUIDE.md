@@ -153,7 +153,7 @@
 
 ### 5.3 提示词模板（照这个顺序拼）
 
-**出图工具的顺序**（用户 2026-11-08）：① **OpenAI API** `gpt-image-2`（`~/.openai_key`；`/v1/images/edits` 直接带参考图文件，不占 Seedance 上传额度；共用工具 `python3 tools/openai/images.py <demo> <job…>`（提示词读 `project/web_prompts.json`），2560×1440、quality high，约 55 s / 张，可并行）→ 没余额 / 出错时 ② **Seedance API** → 上传被限流时 ③ **Seedance 网页**。三处提示词通用（"Image 1" = 参考图）。视频仍用 Seedance。ChatGPT 网页也能出同样的图，但 Chrome 会拦截连续的自动下载，不作为常规路线。
+**出图工具的顺序**（用户 2026-11-08，以这条为准）：① **Seedance API**（`~/.seedance_key`，各 Demo 的 `scripts/seedance.py`）；② Seedance 不能上传（429、很长的 Retry-After）或报错（401、余额不足）→ **OpenAI API** `gpt-image-2`（`~/.openai_key`；`python3 tools/openai/images.py <demo> <job…>`，提示词读 `project/web_prompts.json`，参考图文件直接发送，不占上传额度；2560×1440 高质量约 1–3 分钟一张，可并行）；③ 两者都不行 → **Seedance 网页端**（Chrome，`tools/seedance/web_helpers.js` + `web_take.py`，需要用户已登录）。视频：Seedance API → Seedance 网页端。
 
 ```
 Image 1 is the STYLE and CHARACTER reference.
@@ -166,7 +166,7 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 ```
 
 - 全部提示词存进 `project/web_prompts.json`（或 `scripts/seedance.py`），便于重做和给下一个角色复用。
-- **出图（图片和视频都一样）：Seedance 优先用 API，API 用不了时才用网页端**（用户 2026-11-08 定的默认做法）。
+- **出图顺序见上一条**（图片：Seedance API → OpenAI API → Seedance 网页端；视频：Seedance API → 网页端）。
   - **API**（`~/.seedance_key`，客户端 `demos/all-ages/Demo10_CaveSpring/scripts/seedance_images.py`，每个 Demo 的写法参考 `Demo20 / Demo22 scripts/seedance.py`）：
     - 开始前先查余额 `GET /credits/balance`。
     - 参考图上传一次、缓存 URL，一次最多 5 个文件。
@@ -209,14 +209,14 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 
 1. **设定图**：用户选定造型（人物设计方案 → 设定图）。保留角色的辨识度（Demo27 保留了遮眼刘海）。
 2. **分层计划**：先写 `project/layers.md`，列出每个画面用哪个姿势、哪些姿势可以共用一张脸、哪些是事件 CG、一共多少 credits，发给用户确认。Demo27 一共 8 个画面，约 425 credits。
-3. **出图**（按 §5.3 的工具顺序：OpenAI API → Seedance API → Seedance 网页；16:9 2K）：
+3. **出图**（按 §5.3 的工具顺序：Seedance API → OpenAI API → Seedance 网页端；16:9 2K）：
    - 每个场地出一张**空场景背景**（"empty scene, no people"），火、灯这类光源放在固定的位置。
    - **立绘基准**：纯色底，颜色按角色的主色选，要拉开反差：深色角色（黑发、黑衣）用浅灰 #c8c8c8，浅色角色（银发、白金发、白衣、粉彩）用深灰 #404040，深浅混合的用中灰 #707070。正面、眼睛高度的机位，光线方向和背景一致。浅色角色在 `stage.json` 里加 `"matte": "ai"` 作保险。
    - **重做旧 Demo 时**：以原 Demo 的静帧作为姿势参考，空场景背景用"把人物从原图里去掉"的编辑得到；新页面用 `python3 tools/web/remake_page.py <原文件夹> <新文件夹>` 生成（原 Demo 的文件按路径引用，旧的差分和视频都不加载）。
    - **只换动作和道具的姿势**（拿杯子、挥手、举毯子）：在立绘基准上编辑，提示词写"脸、头、头发、表情、位置保持不变，只改手和手上的东西"。这样可以直接共用基准的脸部差分，每个姿势只花 1 张。
    - **脸的位置会变的姿势**（身体侧倾、特写、事件 CG）：参考基准单独出图，再出它自己的差分。
    - **差分**：在每张底图上编辑出"嘴微张（不露牙）"和"闭眼（刘海保持不变）"，提示词写明"只改嘴 / 眼，不移动、不缩放"。
-   - **OpenAI API（gpt-image-2）也可以出图**（2026-11-08 配好，key 在 `~/.openai_key`）：`python3 tools/openai/images.py <demo> <job…>`，直接用 `project/web_prompts.json` 里的提示词和参考图（本地文件上传，不受 Seedance 上传额度限制），2560×1440 高质量约 3 分钟一张、约 0.2 美元（按返回用量估算，以 OpenAI 账单为准），可以几张同时跑。Seedance 上传被限流时优先用它；ChatGPT 网页版（`web_take.py --chatgpt`）也能出差分，但输出只有 1672×941。
+   - **OpenAI API（gpt-image-2）也可以出图**（2026-11-08 配好，key 在 `~/.openai_key`）：`python3 tools/openai/images.py <demo> <job…>`，直接用 `project/web_prompts.json` 里的提示词和参考图（本地文件上传，不受 Seedance 上传额度限制），2560×1440 高质量约 3 分钟一张、约 0.2 美元（按返回用量估算，以 OpenAI 账单为准），可以几张同时跑。Seedance API 上传被限流时用它（顺序见 §5.3）；ChatGPT 网页版（`web_take.py --chatgpt`）也能出差分，但输出只有 1672×941。
    - 底图出来后，同一批差分和姿势**马上一起提交**：API 输出链接 30–60 分钟就失效（§11）。API 不能上传时改用网页端，提示词完全一样（`project/web_prompts.json`），下载后用 `python3 tools/seedance/web_take.py <demo> <name>` 改名；网页操作用 `tools/seedance/web_helpers.js`（填提示词、选 16:9 + 2K、只在显示 25 credits 时提交、按提示词找卡片下载）。
 4. **检查每张图**：长相是否一致、有没有多出来的道具（Demo27 "坐到左边" 被加了一个杯子，重出了）、画里有没有画进背景层的东西（火、桌子）。
 5. **合成**：写 `project/stage.json`（姿势、`near_mouth` / `near_eyes` 位置提示、`erase` / `keep` 区域、每个画面的摆位和火的位置），然后运行 `python3 tools/art/build_stage.py <demo> --preview`。这一步用 Pillow + numpy，约 1 分钟，不占 GPU。每次都要看截取预览和备用静帧拼图。
