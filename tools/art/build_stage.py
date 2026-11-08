@@ -6,7 +6,7 @@ Reads <demo>/project/stage.json:
   { "src": "assets/art", "skipVideo": "media/video/[vt]_",
     "bgs":   { "camp": { "src": "bg_camp", "fire": [0.75, 0.72] } },               fire in the plate (fraction); omit → found automatically
     "poses": { "sit": { "src": "gaku_ref", "talk": "gaku_ref_talk", "blink": "gaku_ref_blink", "near_mouth": [x, y], "near_eyes": [x, y],
-                        "centre_mouth": [x, y], "radius_mouth": [rx, ry] (skip the search when it is pulled away by a hand / prop),
+                        "centre_mouth": [x, y], "radius_mouth": [rx, ry] (skip the search when it is pulled away by a hand / prop), "regions_eyes": [[cx, cy, rx, ry], …] (fixed ellipses),
                         "erase": [[x0, y0, x1, y1]], "keep": [[x0, y0, x1, y1]] } },             erase = source boxes cleared (e.g. a fire drawn in the pose); keep = source boxes never keyed (grey steam, smoke); "matte": "ai" = outline from the isnet-anime model (~/ml/layers venv) for light / pastel figures; "matte": "green" = chroma key for poses on #00B140
     "views": { "live": { "still": "gaku_live", "pose": "sit", "bg": "camp", "fire": [0.9, 0.74], "x": 0.42, "y": 1.06, "height": 1.1 } } }
   view: still = the file the page draws (stem, or stem.ext; media/art/<still> is written as the flat fallback), alias = other view names
@@ -61,8 +61,14 @@ def cutout(path, erase=(), keep=(), ai=False):
     """plain-background pose → RGBA, cropped. Background colour = median of the border; background = connected to the border."""
     im = np.asarray(Image.open(path).convert("RGB"), np.float32); H, W, _ = im.shape
     border = np.concatenate([im[0], im[-1], im[:, 0], im[:, -1]])
-    light = border[(border.max(1) - border.min(1) < 18) & (border.mean(1) > 120)]   # the plain background on the border, not the figure
-    bgc = np.median(light if len(light) > 50 else border, 0)
+    # the plain background = the most common pure-grey colour on the border (any brightness: light, mid or dark grey —
+    # a brightness filter once made a dark #404040 plate fall back to the lilac hair on the border, Demo22 Shion)
+    grey = border[(border.max(1) - border.min(1)) < 12]
+    if len(grey) > 50:
+        q = (grey // 8).astype(int); keys, cnt = np.unique(q, axis=0, return_counts=True); top = keys[cnt.argmax()]
+        bgc = np.median(grey[(q == top).all(1)], 0)
+    else:
+        bgc = np.median(border, 0)
     diff = np.abs(im - bgc).max(2)
     # background = grown from the border over smooth, background-like pixels; the lineart (a sharp edge) stops it, so light clothes
     # close to the background colour stay solid (Demo20 Hinata's cream cardigan). Plus large enclosed patches of the plain colour (chair gaps).
@@ -71,6 +77,7 @@ def cutout(path, erase=(), keep=(), ai=False):
     k = 2; Hs, Ws = H // k, W // k
     gk = grad[:Hs * k, :Ws * k].reshape(Hs, k, Ws, k).max((1, 3))           # max-pool: a thin line still blocks
     dk = diff[:Hs * k, :Ws * k].reshape(Hs, k, Ws, k).max((1, 3))
+    satk = (im.max(2) - im.min(2))[:Hs * k, :Ws * k].reshape(Hs, k, Ws, k).mean((1, 3))   # colourfulness: the plain bg is a pure grey
     cand = (dk < 40) & (gk < 9)
     seen = np.zeros_like(cand); pocket = np.zeros_like(cand); lab = np.zeros(cand.shape, np.int32); n = 0
     for y0, x0 in zip(*np.where(cand)):
@@ -85,7 +92,7 @@ def cutout(path, erase=(), keep=(), ai=False):
         ys_, xs_ = zip(*pts)
         if edge or (len(pts) > 120 and dk[list(ys_), list(xs_)].mean() < 10):   # enclosed gaps only if really the plain bg colour
             seen[list(ys_), list(xs_)] = True
-        elif len(pts) >= 6 and dk[list(ys_), list(xs_)].mean() < 12:   # a small pocket of the plain background (between hair and body)
+        elif len(pts) >= 6 and dk[list(ys_), list(xs_)].mean() < 12 and satk[list(ys_), list(xs_)].mean() < 7:   # a small pocket of the plain (pure grey) background between hair and body — not lavender / silver hair shadow
             pocket[list(ys_), list(xs_)] = True
     for x0, y0, x1, y1 in keep: seen[y0 // k:y1 // k + 1, x0 // k:x1 // k + 1] = False   # grey things that belong to the figure (steam)
     bgm = np.zeros((H, W), np.float32)
@@ -112,14 +119,16 @@ def cutout(path, erase=(), keep=(), ai=False):
             for yy, xx in ((y + 1, x), (y - 1, x), (y, x + 1), (y, x - 1)):
                 if 0 <= yy < Hs and 0 <= xx < Ws and low[yy, xx] and not out[yy, xx]: out[yy, xx] = True; stack.append((yy, xx))
         outside = np.zeros((H, W), bool); outside[:Hs * k, :Ws * k] = np.repeat(np.repeat(out, k, 0), k, 1)
-        alpha = np.where(outside, np.minimum(m, alpha), 1.0)      # outside the outline: the model's soft edge; inside: solid
+        soft_out = np.clip((diff - 18) / 30, 0, 1)   # outside the outline the model sometimes paints a faint shadow / glow on the plain bg: treat near-bg as bg
+        alpha = np.where(outside, np.minimum(m, soft_out), 1.0)      # outside the outline: the model's soft edge, but never more than the colour says (no dark / grey halo round hair); inside: solid
         pk = np.zeros((H, W), bool); pk[:Hs * k, :Ws * k] = np.repeat(np.repeat(pocket, k, 0), k, 1)
         alpha[pk] = np.minimum(alpha[pk], soft[pk])   # …but pockets of the plain background inside it are cut out (user: grey left between hair and body)
         # near the outline (hair strands, the hair / shoulder junction) and where the model itself is unsure, pixels of the plain
         # background colour are background too — the clothes' grey shading deep inside the figure is left alone
         small_out = Image.fromarray(outside[::4, ::4].astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(31))   # ±60 px
         near = np.asarray(small_out.resize((W, H), Image.NEAREST), bool) | (m < .98)
-        bgish = near & (diff < 14)
+        neutral = (im.max(2) - im.min(2)) < 8          # the plain background is a pure grey; silver / lavender hair shading is not
+        bgish = near & (diff < 12) & neutral
         alpha[bgish] = np.minimum(alpha[bgish], soft[bgish])
     for x0, y0, x1, y1 in erase: alpha[y0:y1, x0:x1] = 0   # things drawn that belong to another layer (a fire, a table)
     # unmix the grey fringe: C = a·F + (1−a)·BG  →  F = (C − (1−a)·BG) / a
@@ -163,6 +172,7 @@ for name, p in cfg["poses"].items():
             e = {"name": f"{name}_{kind}", "base": p["src"], "frame": p[key], "kind": kind}
             if p.get(f"near_{kind}"): e["near"] = p[f"near_{kind}"]
             if p.get(f"centre_{kind}"): e["centre"], e["radius"] = p[f"centre_{kind}"], p[f"radius_{kind}"]   # fixed ellipse, no search
+            if p.get(f"regions_{kind}"): e["regions"] = p[f"regions_{kind}"]   # fixed ellipses (both eyes), e.g. the masks of a masked edit
             pcfg["patches"].append(e)
     print(f"pose {name}: cut {cut.size} from box {box}")
 # all poses side by side (user: close-ups and wide shots must match — face, art style, clothes): check this sheet every build
@@ -179,7 +189,15 @@ if pcfg["patches"]:
     for e in pcfg["patches"]:
         pn = e["name"]; pose = poses[pn.rsplit("_", 1)[0]]; x, y, w, h = meta[pn]; bx, by = pose["box"][:2]; f = pose["f"]
         im = Image.open(os.path.join(pcfg["dst"], pn + ".webp"))
-        im = im.resize((max(1, round(w * f)), max(1, round(h * f))), Image.LANCZOS); im.save(out(os.path.join(ART, pn + ".webp")), quality=90, method=6)
+        im = im.resize((max(1, round(w * f)), max(1, round(h * f))), Image.LANCZOS).convert("RGBA")
+        # only where the character layer is solid: a patch at the face outline (a profile) must not carry the plain background
+        # (green / grey) of its variant into the picture (Demo40 pray mouth)
+        rx, ry = round((x - bx) * f), round((y - by) * f)
+        ca = pose["cut"].getchannel("A").crop((rx, ry, rx + im.width, ry + im.height))
+        im.putalpha(Image.fromarray(np.minimum(np.asarray(im.getchannel("A")), np.asarray(ca)).astype(np.uint8)))
+        if cfg["poses"][pn.rsplit("_", 1)[0]].get("matte") == "green":   # same despill as the character layer
+            a = np.asarray(im).copy(); a[..., 1] = np.minimum(a[..., 1], np.maximum(a[..., 0], a[..., 2]).astype(int) + 6).astype(np.uint8); im = Image.fromarray(a)
+        im.save(out(os.path.join(ART, pn + ".webp")), quality=90, method=6)
         pose["patches"].append({"src": f"art/{pn}.webp", "rect": [round((x - bx) * f), round((y - by) * f), im.width, im.height], "kind": e["kind"],
                                 "im": im})
 
@@ -205,7 +223,7 @@ for vname, v in cfg["views"].items():
     flat.convert("RGB").save(out(os.path.join(ART, stem + ext)), quality=88)
     data["views"][stem] = {"view": vname, **({"alias": v["alias"]} if v.get("alias") else {}), "fire": f,
                                 "bg": {"src": b["src"], "fire": bf, **({"zoom": v["zoom"]} if v.get("zoom") else {})},
-                                "char": {"src": p["src"], "w": p["w"], "h": p["h"], "x": v["x"], "y": v["y"], "height": v["height"]},
+                                "char": {"src": p["src"], "w": p["w"], "h": p["h"], "x": v["x"], "y": v["y"], "height": v["height"], "box": [int(b) for b in p["box"]]},   # box = source px (tools/art/extend_pose.py)
                                 "patches": [{k: pt[k] for k in ("src", "rect", "kind")} for pt in p["patches"]]}
     print(f"view {vname}: bg zoom {z:.2f}, still media/art/{stem}{ext}")
 import hashlib

@@ -578,6 +578,7 @@ main.layout
 - **本地服务器把整个仓库（含 `.env.local` 里的 API key）都当静态文件提供**（Demo23 的 `server.py`：`SimpleHTTPRequestHandler(directory=REPO)`；只绑 127.0.0.1 时没事，一旦开隧道给手机用就等于公开 key）→ 任何持有 key 的服务器：所有路径都要登录 cookie，dot 文件、`local/`、`*.py`、`*.command`、`*.log` 一律 404，关目录列表；上线前用 curl 逐个试 `/.env.local`、`/.git/config`、`/api/*`（无 cookie 应 401）。
 - **数据文件头注释里的示例写法让 Python 解析失败**（`lines.js` 注释里有 `line = { … }`，`src.index('= {')` 找到的是注释）→ 从 JS 数据文件里取 JSON 时按唯一的变量名定位（`src.index('TALK_SCRIPT = ')`）。
 - **Chrome 测试时改窗口大小不生效**（窗口已最大化，`resize_window` 返回成功但 `innerWidth` 不变）→ 一屏检查改用同源 iframe（390×844 等尺寸）测量 `scrollHeight / scrollWidth`；桌面 Chrome 的 iframe 里设备连接栏会横向溢出（真机没有 Web Serial、`no-serial` 会隐藏它），不算页面问题。
+- **深灰底的人物抠完带一圈暗边、银发里出现小洞**（紫苑、蓮）：①底色是从画面边缘里"偏亮的灰"估算的，深灰底 #404040 不够亮，被排除，结果把边缘的紫色头发当成底色；②"颜色接近底色就抠掉"的规则没限制色彩，蓮偏紫的银发阴影被当成底色 → 底色改为取边缘纯灰像素里最多的那种颜色（任何亮度）；空隙 / 轮廓附近的抠除只针对纯灰像素；轮廓外侧和底色差 18 以内的当作背景（模型会在底色上画淡淡的阴影）。改阈值后必须用浅、中、深三种底色的角色各检查一张（陽向、蓮、紫苑），只修一个角色容易把另一个改坏。
 
 ## 12. 资源清理与文件结构
 

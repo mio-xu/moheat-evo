@@ -13,7 +13,7 @@ project/patches.json:
     "patches": [ { "name": "gaku_live_mouth", "base": "gaku_live", "frame": "gaku_live_talk" },
                  { "name": "gaku_live_eyes",  "base": "gaku_live", "frame": "gaku_live_blink", "centre": [960, 300] } ] }
   optional per patch: "kind": "mouth" | "eyes" (default from the name: eye / blink → eyes; eyes = the two strongest areas),
-                      "near": [x, y] (search only ±260 px around it), "centre": [x, y] + "radius": [rx, ry] (skip the search), "tilt": deg, "pad": 1.3 (ellipse margin)
+                      "near": [x, y] (search only ±260 px around it), "centre": [x, y] + "radius": [rx, ry] (skip the search), "regions": [[cx, cy, rx, ry], …] (several fixed ellipses, e.g. both eyes), "tilt": deg, "pad": 1.3 (ellipse margin)
   Source images: <src>/<name>.png (any size, resized to "size"; bases may be RGBA — the patch keeps the base's alpha).
 Writes <dst>/<patch name>.webp and <dst>/patches.js: window.<var> = { name: [x, y, w, h] } (top-left + size in "size" pixels).
 Needs only Pillow + numpy (system python3).
@@ -147,7 +147,8 @@ meta, prev = {}, []
 for p in cfg["patches"]:
     name, base, frame = p["name"], load(p["base"]), load(p["frame"])
     kind = p.get("kind", "eyes" if any(w in name for w in ("eye", "blink")) else "mouth")
-    if "centre" in p and "radius" in p: regs = [(*p["centre"], *p["radius"])]
+    if p.get("regions"): regs = [tuple(r) for r in p["regions"]]   # fixed ellipses [cx, cy, rx, ry] (e.g. the masks of a masked edit)
+    elif "centre" in p and "radius" in p: regs = [(*p["centre"], *p["radius"])]
     else: regs = changed_regions(base, frame, kind, p.get("near"))
     pad = p.get("pad", 1.3); regs = [(cx, cy, rx * pad, ry * pad) for cx, cy, rx, ry in regs]
     x0 = min(cx - rx for cx, cy, rx, ry in regs); x1 = max(cx + rx for cx, cy, rx, ry in regs)
