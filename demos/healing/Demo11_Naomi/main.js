@@ -157,7 +157,7 @@
   function walkTo(x, spd = 300) { N.tx = x; N.walkSpd = spd; N.pose = 'walk'; N.flip = x > N.x; }
 
   // ---------------------------------------------------------------- scene changes (fade to black, swap, fade in)
-  let fading = 0;
+  let fading = 0, strokeHint = null;
   function go(bg, after) {
     fading = 1; $('fade').classList.add('on');
     setTimeout(() => { S.bg = bg; after(); setLoops(); setTimeout(() => { $('fade').classList.remove('on'); fading = 0; }, 150); }, 750);
@@ -238,8 +238,16 @@
     N.cool = Math.max(0, N.cool - dt);
 
     // stroking
-    const stroking = ptr.down && petZone(ptr.x, ptr.y) && ptr.strokeV > .02;
+    // a still finger held on her for 0.8 s also counts (slowly): the fallback when a stroke is hard on a phone (shared/gesture.js, guide §7.1)
+    const stroking = ptr.down && petZone(ptr.x, ptr.y) && (ptr.strokeV > .02 || performance.now() - ptr.st > 800);
     ptr.strokeV *= Math.exp(-dt * 6);
+    { // 👆 ↔ on her head / tummy until the first stroke lands (shared/gesture.js)
+      const G = window.MoHeatGesture, want = N.show && !S.done && ((S.step === 'pet' && S.rub < 0 && S.pet < .08) || (S.step === 'belly' && S.belly < .08));
+      if (G && want && !strokeHint) {
+        const r = rect(), [hx, hy] = S.step === 'belly' ? [N.x, r.y0 + r.h * .55] : headPos();
+        strokeHint = G.hint(stage, { x: hx / W, y: Math.min(.8, hy / H), text: S.step === 'belly' ? { ja: 'おなかを なでなで', en: 'Stroke her tummy', zh: '摸摸她的肚子' } : { ja: '頭を なでなで', en: 'Stroke her head', zh: '摸摸她的头' } });
+      } else if (strokeHint && !want) { strokeHint.hide(); strokeHint = null; }
+    }
     if (stroking && Math.random() < dt * 5) { const [hx] = headPos(); hearts(ptr.x, ptr.y - 30); }
 
     // walking

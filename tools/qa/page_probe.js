@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Browser half of tools/qa/check_demo.py (DEMO_DESIGN_GUIDE §6 制作流程 v2, gate G6 / G7). Prints ONE JSON object on stdout.
 //
-//   node tools/qa/page_probe.js <demo folder> [--secs 300] [--alt] [--no-play] [--no-mobile]
+//   node tools/qa/page_probe.js <demo folder> [--secs 300] [--alt] [--no-play] [--no-mobile] [--no-drag] [--block-gesture]
 //
 // Own python http.server + own headless Chrome (never a tab someone is looking at, §11.1), so it can run next to other sessions.
 //  play    <demo>/?auto=1&nomic&sub=zh (&alt=1): clicks Start, lets the story answer itself until it ends (or --secs), and records
@@ -11,13 +11,14 @@
 //          · the end: the page is still this demo, the cover (#intro) is back and Start says Play again (§7.3 ends on own cover).
 //  mobile  tools/web/check_mobile.html for this one folder at its 7 sizes (scroll / overflow / 44 px / guide / drawer), with
 //          nav.js's DEMOS list replaced by this folder for that page only (so a staging folder that is not in the menu is checked too).
+//  drag    touch emulation at 390×844 / 844×390: CDP finger strokes on the picture → no page scroll / zoom / pointercancel (shared/gesture.js).
 const { spawn } = require('child_process');
 const path = require('path'), fs = require('fs'), net = require('net'), os = require('os');
 const ROOT = path.resolve(__dirname, '..', '..');
 const argv = process.argv.slice(2), flag = (f) => argv.includes(f);
 const opt = (f, d) => { const i = argv.indexOf(f); return i >= 0 ? argv[i + 1] : d; };
 const pos = argv.filter((a, i) => !a.startsWith('--') && !(i && argv[i - 1] === '--secs'));
-if (!pos[0]) { console.error('usage: node tools/qa/page_probe.js <demo folder> [--secs N] [--alt] [--no-play] [--no-mobile]'); process.exit(2); }
+if (!pos[0]) { console.error('usage: node tools/qa/page_probe.js <demo folder> [--secs N] [--alt] [--no-play] [--no-mobile] [--no-drag] [--block-gesture]'); process.exit(2); }
 const DEMO = path.resolve(pos[0]), REL = path.relative(ROOT, DEMO).split(path.sep).join('/');
 const [, CAT, DIR] = REL.split('/');
 const SECS = +opt('--secs', 300);
@@ -37,7 +38,7 @@ const out = { demo: REL, play: null, mobile: null, errors: [] };
     process.stdout.write(JSON.stringify(out) + '\n'); process.exit(0); };
   setTimeout(() => { out.errors.push('probe timeout'); done(); }, (SECS + 900) * 1000);
   let ws;
-  for (let i = 0; i < 60 && !ws; i++) {
+  for (let i = 0; i < 160 && !ws; i++) {   // up to 40 s: Chrome starts slowly while other sessions run theirs
     await sleep(250);
     try { const l = await (await fetch(`http://127.0.0.1:${dp}/json/list`)).json(); const pg = l.find((x) => x.type === 'page'); if (pg) ws = pg.webSocketDebuggerUrl; } catch {}
   }
@@ -116,6 +117,57 @@ const out = { demo: REL, play: null, mobile: null, errors: [] };
       return { size: r.size, layout: r.layout, problems: p };
     });
     if (!rows.length) out.errors.push('check_mobile.html returned no rows (not finished in 600 s?)');
+    handlers.length = 0; await cdp('Fetch.disable');
+  }
+
+  if (!flag('--no-drag')) {
+    // drag doesn't scroll (guide §7.1, shared/gesture.js): a phone-sized page with touch emulation; real CDP touch strokes on the picture
+    // (vertical zigzag, horizontal back-and-forth, a swipe from the left screen edge, a double tap) must reach the page as pointer events
+    // without pointercancel, and the page scroll / visualViewport (offset + zoom) must not move. --block-gesture = the page without gesture.js.
+    if (flag('--block-gesture')) {
+      await cdp('Fetch.enable', { patterns: [{ urlPattern: '*/demos/shared/gesture.js*', requestStage: 'Request' }] });
+      handlers.push((m) => { if (m.method === 'Fetch.requestPaused') cdp('Fetch.failRequest', { requestId: m.params.requestId, errorReason: 'BlockedByClient' }); });
+    }
+    const D = out.drag = [];
+    const touch = (type, pts) => cdp('Input.dispatchTouchEvent', { type, touchPoints: pts.map(([x, y]) => ({ x, y, radiusX: 6, radiusY: 6, force: 1 })) });
+    const swipe = async (path) => { await touch('touchStart', [path[0]]); for (const p of path.slice(1)) { await sleep(16); await touch('touchMove', [p]); } await sleep(16); await touch('touchEnd', []); await sleep(250); };
+    const SNAP = `({ sx: scrollX, sy: scrollY, se: (document.scrollingElement || document.documentElement).scrollTop, vx: visualViewport.offsetLeft, vy: visualViewport.offsetTop, vs: visualViewport.scale })`;
+    for (const [w, h] of [[390, 844], [844, 390]]) {
+      await cdp('Emulation.setDeviceMetricsOverride', { width: w, height: h, deviceScaleFactor: 3, mobile: true });
+      await cdp('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 });
+      await cdp('Page.navigate', { url: `${base}/${REL}/?nomic&sub=en` });
+      for (let i = 0; i < 80; i++) { await sleep(250); if (await ev(`!!document.querySelector('.stage') && document.readyState === 'complete'`)) break; }
+      await sleep(1200);
+      await ev(`(() => { const g = window.__dg = { down: 0, move: 0, up: 0, cancel: 0, ctx: 0 };
+        for (const [k, n] of [['down', 'pointerdown'], ['move', 'pointermove'], ['up', 'pointerup'], ['cancel', 'pointercancel']]) addEventListener(n, (e) => { if (e.pointerType === 'touch') g[k]++; }, true);
+        addEventListener('contextmenu', (e) => { if (!e.defaultPrevented) g.ctx++; });
+        const b = document.getElementById('startBtn'); g.tap = 0; b?.addEventListener('click', () => g.tap++); return 1; })()`);
+      const sb = await ev(`(() => { const b = document.getElementById('startBtn'); if (!b) return null; const r = b.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; })()`);
+      if (sb) { await touch('touchStart', [sb]); await sleep(40); await touch('touchEnd', []); await sleep(400); }   // a REAL tap: buttons on the guarded stage must still click
+      await ev(`(() => { if (!window.__dg.tap) { document.getElementById('startBtn')?.click(); } return 1; })()`);
+      await sleep(2500);
+      const g = await ev(`(() => { const s = document.querySelector('.stage-col .stage') || document.querySelector('.stage'); const r = s.getBoundingClientRect();
+        return { l: r.left, t: r.top, w: r.width, h: r.height, gesture: !!window.MoHeatGesture, ta: getComputedStyle(s).touchAction, before: ${SNAP} }; })()`);
+      const R = { size: `${w}x${h}`, gesture: g.gesture, touchAction: g.ta, problems: [] };
+      const cx = g.l + g.w / 2, cy = g.t + g.h / 2, ax = g.w * .3, ay = g.h * .3;
+      const zig = [], hor = [], edge = [];
+      for (let i = 0; i <= 24; i++) { zig.push([cx + ax * .3 * Math.sin(i / 5), cy + ay * Math.sin(i / 2)]); hor.push([cx + ax * Math.sin(i / 2), cy + 3 * Math.sin(i)]); }
+      for (let i = 0; i <= 12; i++) edge.push([Math.max(2, g.l + 2) + i * 14, cy]);
+      await swipe(zig); await swipe(hor); await swipe(edge);
+      await touch('touchStart', [[cx, cy]]); await touch('touchEnd', []); await sleep(80); await touch('touchStart', [[cx, cy]]); await touch('touchEnd', []); await sleep(500);   // double tap
+      const a = await ev(`({ after: ${SNAP}, c: window.__dg })`);
+      Object.assign(R, { counts: a.c, before: g.before, after: a.after });
+      const b = g.before, f = a.after;
+      if (f.sx !== b.sx || f.sy !== b.sy || f.se !== b.se) R.problems.push(`page scrolled (${b.sx},${b.sy}) → (${f.sx},${f.sy})`);
+      if (Math.abs(f.vx - b.vx) > .5 || Math.abs(f.vy - b.vy) > .5) R.problems.push(`visual viewport moved (${b.vx},${b.vy}) → (${f.vx},${f.vy})`);
+      if (Math.abs(f.vs - b.vs) > .001) R.problems.push(`zoomed ×${b.vs} → ×${f.vs}`);
+      if (a.c.cancel) R.problems.push(`${a.c.cancel} pointercancel (the browser took the gesture)`);
+      if (a.c.move < 40) R.problems.push(`only ${a.c.move} touch pointermove reached the page`);
+      if (a.c.ctx) R.problems.push(`${a.c.ctx} context menu(s)`);
+      if (sb && !a.c.tap) R.problems.push('a real tap on Start produced no click');
+      D.push(R);
+    }
+    await cdp('Emulation.setTouchEmulationEnabled', { enabled: false }); await cdp('Emulation.clearDeviceMetricsOverride');
   }
   done();
 })().catch((e) => { out.errors.push(String(e && e.stack || e)); process.stdout.write(JSON.stringify(out) + '\n'); process.exit(0); });

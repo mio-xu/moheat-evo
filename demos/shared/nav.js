@@ -54,6 +54,8 @@
     if (me && !window.MoHeatSub && (shot || (!qs.has('cover') && !qs.has('render')))) for (const f of shot ? ['subs.js?v=14'] : ['subs.js?v=14', 'fullscreen.js?v=3', 'guide.js?v=5', 'thermocheck.js?v=2']) {   // display language + ⛶ fullscreen + first-visit guide + 🌡 thermal check (tools/web/bump.py updates these numbers)
       const s = document.createElement('script'); s.src = me.replace(/nav\.js(\?.*)?$/, f); s.async = false; document.head.appendChild(s); } }
   if (qs.has('embed') || qs.has('cover') || qs.has('render')) return;
+  { const me = document.currentScript?.src;   // drag gestures on phones (stroke / pet / rub / aim): no page scroll, zoom, swipe-back (shared/gesture.js, guide §7.1)
+    if (me && !window.MoHeatGesture) { const s = document.createElement('script'); s.src = me.replace(/nav\.js(\?.*)?$/, 'gesture.js?v=1'); s.async = false; document.head.appendChild(s); } }
   // one screen: measure the bar and what sits below the stage, series.css sizes the stage and the side panel from these
   if (!('serial' in navigator)) document.documentElement.classList.add('no-serial');   // phones: no Web Serial → series.css hides the device controls
   const root = document.documentElement, fit = () => {

@@ -85,3 +85,5 @@ body.cover-only .cover-copy { margin-top: 0 !important; }
 .coach span { display: block; font: 600 clamp(8px, .95cqw, 15px)/1.25 Inter, sans-serif; opacity: .8; }
 @keyframes coach { 50% { margin-top: -.7cqw; } }
 .stage:has(.intro:not(.hidden)) .coach { display: none !important; }
+/* touch (guide §7.1 拖动手势): on a phone the dock wraps to two rows and covers the lower half of the picture — while you stroke her through the lens it steps aside, so a stroke can start anywhere on her face */
+@media (pointer: coarse), (max-width: 1100px) { .stage.stroke .dock { opacity: 0; pointer-events: none; transition: opacity .25s; } }

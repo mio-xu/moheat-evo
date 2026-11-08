@@ -30,6 +30,7 @@ What is checked (id → lesson / rule):
   thermal    DUAL used; showcase from the real #cmd stream: simultaneous cool + heat, fast hot↔cold, both directions, peak, ends on stop
   runtime    0 exceptions / console errors / failed requests during the playthrough
   mobile     tools/web/check_mobile.html at 7 sizes (one screen, no overflow, ≥ 44 px, guide on screen, drawer)
+  drag       CDP touch strokes on the picture at 390×844 / 844×390: no page scroll / zoom / pointercancel (§7.1 拖动手势, shared/gesture.js)
   mouth      (--full) tools/art/check_mouth.js: opens only while talking, no stuck / half / flicker
   release    cover.jpg, menu thumbnail + en / ja / zh thumbs (not older than cover / l10n.js), nav.js DEMOS, site menu, credits.html
   hygiene    assets/ git-ignored, no big tracked files, budget logged, project/CHECKLIST.md present
@@ -381,6 +382,11 @@ if probe:
             badm = [f'{m["size"]} ({m["layout"]}): ' + '; '.join(m['problems']) for m in M if m['problems']]
             row('G6', 'mobile', 'FAIL' if badm or not M else 'PASS', f'{len(badm)} of {len(M)} sizes with problems' if badm else
                 f'{len(M)} sizes: one screen, ≥ 44 px, guide on screen' if M else 'no result from check_mobile.html', badm)
+        DG = res.get('drag')   # drag doesn't scroll (§7.1 拖动手势, shared/gesture.js): CDP touch strokes at 390×844 / 844×390
+        if DG is not None:
+            badd = [f'{d["size"]}: ' + '; '.join(d['problems']) for d in DG if d['problems']]
+            row('G6', 'drag', 'FAIL' if badd or not DG else 'PASS', f'{len(badd)} of {len(DG)} sizes: the browser takes the finger' if badd else
+                f'{len(DG)} sizes: strokes reach the page, no scroll / zoom / pointercancel' if DG else 'no result', badd)
 if mouth:
     try: out, _ = mouth.communicate(timeout=A.secs + 300)
     except subprocess.TimeoutExpired: mouth.kill(); out = 'timeout'

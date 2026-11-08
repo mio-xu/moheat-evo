@@ -7,6 +7,20 @@
 
 ---
 
+## 2026-11-08 · 手机上的拖动 / 抚摸手势修复（shared/gesture.js）· 后台 agent
+
+**用户原话**：手机 / 触屏上很难做抚摸动作，网页会跟着手指移动。
+**原因**：`demos/shared/game.css` 的 `.stage` 是 `touch-action: manipulation`（允许平移），手指一拖，浏览器把手势当滚动接管，发 `pointercancel`，Demo 只收到开头几个 pointermove。
+**做了什么**：
+- 新文件 `demos/shared/gesture.js`（`window.MoHeatGesture`，nav.js 自动加载，`?embed` / `?cover` / `?render` 不生效）：每个 `.stage` + `#timelineWrap` 自动 `touch-action: none`、禁选字 / 长按菜单 / 拖图，`html, body` `overscroll-behavior: none`，非 passive `touchmove` 拦截，iOS `gesturestart` 拦截，手指按下时锁页面，屏幕左右 20 px 边缘起手的触摸在 touchstart 取消。API：`guard` / `drag`（Pointer Events + capture）/ `stroke`（距离 + 来回累加）/ `hint`（👆↔ 三语提示）。规则见 `DEMO_DESIGN_GUIDE.md` §7.1「拖动手势」，教训见 §11.1 G5。
+- Demo11：头 / 肚子上显示 👆↔ 提示（第一下抚摸后消失），手指按住不动 0.8 s 也慢慢算（备用）。Demo13：抚摸那一步手机上隐藏 dock（两行按钮盖住了下半画面）。
+- QA：`tools/qa/page_probe.js` 加 drag 探测（`--no-drag` 跳过，`--block-gesture` 看修复前），`tools/qa/check_demo.py` 加 `drag` 行。
+**状态**：33 个 Demo 的 drag 探测全过（390×844 / 844×390：0 pointercancel、60 个 pointermove、不滚动 / 不缩放、真实点按 Start 有效）；修复前 Demo11 同样的手势是 3 次 pointercancel、4 个 move。Demo11 / 13 的 check_mobile 7 种尺寸通过。提交在本地，未 push（统筹会话负责）。
+**下一步**：真机确认 iOS 边缘右滑返回（系统手势，网页只能尽量拦）、iOS 回弹、Android 下拉刷新、长按放大镜；Demo12/22 这类只点 / 瞄准的不用改。
+**问题**：`/usr/bin/git`、`python3` 因 Xcode 许可失败时用 `/Library/Developer/CommandLineTools/usr/bin/` 下的；多会话时 headless Chrome 启动慢，page_probe 等待改成 40 s。
+
+---
+
 ## 2026-11-08 · 女性向重制收尾：莲 / 仁 / 紫苑 合并上线（Demo33→12、Demo34→21、Demo35→22）· 后台 agent（接 moheat-evo-24 的交接）
 
 **做了什么**
