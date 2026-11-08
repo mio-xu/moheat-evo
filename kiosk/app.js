@@ -19,7 +19,7 @@
     p3: { en: 'Pick a story', ja: '物語を選ぶ', zh: '选一个故事' },
     rec: { en: 'Try these first', ja: 'まずはこちら', zh: '推荐先体验' }, more: { en: 'More stories →', ja: 'ほかの物語 →', zh: '更多故事 →' },
     hygiene: { en: '🧼 Ear pads cleaned for every visitor · disposable covers available', ja: '🧼 イヤーパッドは毎回消毒 · 使い捨てカバーあります', zh: '🧼 耳罩每位访客消毒 · 可提供一次性耳罩套' },
-    numsH: { en: 'Chose a number while waiting? Tap it:', ja: '待っている間に選んだ番号をタップ：', zh: '排队时选好了号码？点这里：' },
+    numsH: { en: 'Picked a number while waiting? Tap it:', ja: '待っている間に選んだ番号をタップ：', zh: '排队时选好了号码？点这里：' },
     qq: { en: 'Scan to choose while you wait', ja: '待っている間にスキャンして選ぼう', zh: '排队时扫码先选' },
     start: { en: '▶ Start', ja: '▶ はじめる', zh: '▶ 开始' }, skipIntro: { en: 'I know MoHeat Evo — skip the 30-second intro', ja: '使ったことがある — 30 秒の案内をとばす', zh: '我用过 — 跳过 30 秒引导' },
     pick: { en: 'Pick a story', ja: '物語を選んでください', zh: '选择一个故事' }, replay: { en: '↺ Intro again', ja: '↺ 案内をもう一度', zh: '↺ 再看一次引导' },
