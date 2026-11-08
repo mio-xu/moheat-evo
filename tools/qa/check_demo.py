@@ -321,6 +321,12 @@ else:
     th = min([ct(os.path.join('assets', 'images', 'demos', f'{NAME}.{l}.jpg')) for l in ('en', 'ja', 'zh')] or [0])
     for src in ('media/cover.jpg', 'l10n.js'):
         if th and ct(os.path.join(REL, src)) > th: warn.append(f'{src} committed after the en/ja/zh thumbnails — rerun tools/web/thumbs.py {NAME}')
+    # the menu thumbnails must show the CURRENT cover (user 2026-11-08: the menu still showed the old covers): the cover standard
+    # (shared/cover.js) or the cover art changed after the thumbnails → FAIL until tools/web/thumbs.py --base <demo> is rerun
+    cvt = max(ct(os.path.join('demos', 'shared', 'cover.js')), ct(os.path.join(REL, 'media', 'cover.jpg')))
+    base = ct(os.path.join('assets', 'images', 'demos', f'{NAME}.jpg'))
+    if th and 'shared/cover.js' in read(os.path.join(D, 'index.html')) and min(th, base or th) < cvt:
+        rel.append(f'menu thumbnails older than the cover (shared/cover.js / media/cover.jpg) — python3 tools/web/thumbs.py --base {NAME}')
     row('G7', 'release', 'FAIL' if rel else 'WARN' if warn else 'PASS', f'{len(rel)} release item(s) missing' if rel else f'{len(warn)} note(s)' if warn else 'cover, thumbs, menu, credits', rel + warn)
 # ---------------------------------------------------------------- G7 category style (tools/art/style_card.py, demos/<cat>/_kit/style.json)
 try:
