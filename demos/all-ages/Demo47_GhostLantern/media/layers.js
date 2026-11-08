@@ -204,15 +204,12 @@ window.MOHEAT_LAYERS = {
   },
   "lantern_hall": {
    "view": "hall_B",
-   "fire": [
-    0.5,
-    0.45
-   ],
+   "fire": null,
    "bg": {
     "src": "art/bg_corridor_b50h62.webp?v=7689e924",
     "fire": [
-     0.5,
-     0.45
+     0.289,
+     0.606
     ]
    },
    "char": {
@@ -289,15 +286,12 @@ window.MOHEAT_LAYERS = {
   },
   "lantern_hall_ghosts": {
    "view": "hall_ghosts",
-   "fire": [
-    0.5,
-    0.45
-   ],
+   "fire": null,
    "bg": {
     "src": "art/bg_corridor_b50h50.webp?v=46d0c3bc",
     "fire": [
-     0.5,
-     0.45
+     0.286,
+     0.604
     ]
    },
    "char": {
@@ -434,15 +428,12 @@ window.MOHEAT_LAYERS = {
   },
   "lantern_hall_hit": {
    "view": "hall_hit",
-   "fire": [
-    0.5,
-    0.45
-   ],
+   "fire": null,
    "bg": {
     "src": "art/bg_corridor_b50h62.webp?v=7689e924",
     "fire": [
-     0.5,
-     0.45
+     0.289,
+     0.606
     ]
    },
    "char": {

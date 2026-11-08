@@ -8,7 +8,7 @@ Chibi faces → mouths "warp": false (guide §11.1: LivePortrait twists chibi ey
 import json, os
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FP = json.load(open(os.path.join(ROOT, 'project', 'face_points.json')))
-BGS = {'gate': [.5, .55], 'corridor': [.5, .45], 'tatami': [.86, .7], 'kura': [.5, .8]}
+BGS = {'gate': [.5, .55], 'corridor': None, 'tatami': [.86, .7], 'kura': [.5, .8]}
 EYE = 1.05
 EYE_POSE = {'yurari_ear': 1.2}   # check_patches OUTER 40.8 at 1.05: the blink redrew hair strands inside its mask → the patch covers the whole mask (§11.1)
 

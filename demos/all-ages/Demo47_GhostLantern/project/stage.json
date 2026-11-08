@@ -35,17 +35,11 @@
   },
   "corridor_b50h62": {
    "src": "bg_corridor_b50h62",
-   "fire": [
-    0.5,
-    0.45
-   ]
+   "fire": null
   },
   "corridor_b50h50": {
    "src": "bg_corridor_b50h50",
-   "fire": [
-    0.5,
-    0.45
-   ]
+   "fire": null
   },
   "tatami_b50h62": {
    "src": "bg_tatami_b50h62",
@@ -377,10 +371,7 @@
   "hall_B": {
    "still": "lantern_hall",
    "bg": "corridor_b50h62",
-   "fire": [
-    0.5,
-    0.45
-   ],
+   "fire": null,
    "pose": "bonchan_base",
    "x": 0.5,
    "y": 0.96,
@@ -390,10 +381,7 @@
   "hall_ghosts": {
    "still": "lantern_hall_ghosts",
    "bg": "corridor_b50h50",
-   "fire": [
-    0.5,
-    0.45
-   ],
+   "fire": null,
    "pose": "bonchan_scared",
    "x": 0.5,
    "y": 0.96,
@@ -419,10 +407,7 @@
   "hall_hit": {
    "still": "lantern_hall_hit",
    "bg": "corridor_b50h62",
-   "fire": [
-    0.5,
-    0.45
-   ],
+   "fire": null,
    "pose": "bonchan_scared",
    "x": 0.5,
    "y": 0.96,
