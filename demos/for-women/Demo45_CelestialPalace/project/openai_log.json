@@ -256,19 +256,19 @@
   "model": "gpt-image-2",
   "size": "2560x1440",
   "quality": "high",
-  "seconds": 67,
+  "seconds": 86,
   "usage": {
-   "input_tokens": 3469,
+   "input_tokens": 3472,
    "input_tokens_details": {
-    "image_tokens": 2960,
-    "text_tokens": 509
+    "image_tokens": 2952,
+    "text_tokens": 520
    },
    "output_tokens": 7370,
    "output_tokens_details": {
     "image_tokens": 7370,
     "text_tokens": 0
    },
-   "total_tokens": 10839
+   "total_tokens": 10842
   },
   "out": [
    2560,
@@ -287,6 +287,19 @@
      "text_tokens": 0
     },
     "total_tokens": 10804
+   },
+   {
+    "input_tokens": 3469,
+    "input_tokens_details": {
+     "image_tokens": 2960,
+     "text_tokens": 509
+    },
+    "output_tokens": 7370,
+    "output_tokens_details": {
+     "image_tokens": 7370,
+     "text_tokens": 0
+    },
+    "total_tokens": 10839
    }
   ]
  },

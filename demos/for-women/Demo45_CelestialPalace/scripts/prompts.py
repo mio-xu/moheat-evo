@@ -56,6 +56,7 @@ DESIGNS = {
                "nape with a dark red cord, fluffy bangs, the mole visible."),
 }
 REFS = {'jin': ['ref_jin', 'ref_jin_close'], 'shion': ['ref_shion', 'ref_shion_close'], 'saku': ['ref_saku', 'ref_saku_close']}
+POSE_FACE = {'jin': 'ref_jin_close', 'shion': 'shion_base_face', 'saku': 'ref_saku_close'}   # Shion's originals wear glasses → his close poses use a crop of the no-glasses base
 SCREEN = {'jin': ('LIGHT GREY', '#c8c8c8', 'no grey haze around him'), 'shion': ('GREEN', '#00B140', 'no green anywhere on him'),
           'saku': ('GREEN', '#00B140', 'no green anywhere on him')}
 LIGHT = {'jin': "Lighting on him: warm orange brazier light from the RIGHT of the picture, cool blue snowy window light from the LEFT.",
@@ -139,7 +140,7 @@ for c in CHAR: out[f"{c}_base_blink"] = {"ref": f"{c}_base", "prompt": EDIT.form
 for n, (c, pose, light) in POSES.items():
     lead = ("Image 1 is the CHARACTER and STYLE reference: draw this exact young man (face, eyes, hair, hairstyle, outfit, lineart and "
             "colouring) — the same man, the same art style, not more realistic, same hair colour. Image 2 is an extra face reference.")
-    out[n] = {"ref": [f"{c}_base", REFS[c][1]], "prompt": "\n\n".join([lead, STYLE, CHAR[c], pose, light or LIGHT[c], plain(c), END])}
+    out[n] = {"ref": [f"{c}_base", POSE_FACE[c]], "prompt": "\n\n".join([lead, STYLE, CHAR[c], pose, light or LIGHT[c], plain(c), END])}
     out[f"{n}_blink"] = {"ref": n, "prompt": EDIT.format(what=BLINK)}
 out["cover_art"] = {"ref": ["jin_base", "shion_base", "saku_base"], "prompt": "\n\n".join([
     "Images 1, 2 and 3 are the CHARACTER and STYLE references: draw these exact three young men (Image 1 Jin, wine-red hair; Image 2 Shion, "

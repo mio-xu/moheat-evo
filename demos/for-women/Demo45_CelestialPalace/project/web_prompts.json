@@ -70,12 +70,12 @@
  "shion_base_blink": {
   "ref": "shion_base",
   "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY BOTH of his eyes: FULLY closed in a natural soft blink (upper eyelids all the way down on both eyes, lashes visible, no iris visible, same skin tone and lighting); his bangs stay exactly as they are. Do not move, zoom or crop the picture.",
-  "mask": "1160,342,38,28;1252,307,38,28"
+  "mask": "1175,250,36,26;1270,212,36,26"
  },
  "saku_base_blink": {
   "ref": "saku_base",
   "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY BOTH of his eyes: FULLY closed in a natural soft blink (upper eyelids all the way down on both eyes, lashes visible, no iris visible, same skin tone and lighting); his bangs stay exactly as they are. Do not move, zoom or crop the picture.",
-  "mask": "1216,327,40,28;1322,311,40,28"
+  "mask": "1202,262,40,28;1307,247,40,28"
  },
  "jin_ear": {
   "ref": [
@@ -92,14 +92,13 @@
  "shion_ear": {
   "ref": [
    "shion_base",
-   "ref_shion_close"
+   "shion_base_face"
   ],
   "prompt": "Image 1 is the CHARACTER and STYLE reference: draw this exact young man (face, eyes, hair, hairstyle, outfit, lineart and colouring) — the same man, the same art style, not more realistic, same hair colour. Image 2 is an extra face reference.\n\nArt style EXACTLY like image 1: soft modern anime illustration, thin coloured lineart, soft cel shading with one soft-edged shadow layer, romantic otome-game card quality, clean and calm, not glossy, no bloom, not realistic, not 3D. Realistic adult proportions (7.5 heads, not chibi). He is EXTREMELY handsome: an idol-level beautiful face, a clear jawline, long lashes, smooth fair skin, slim and tall with broad shoulders, no stubble.\n\nShion: the exact young man from images 1-2 — long platinum-blonde hair, calm grey-violet eyes, a small BEAUTY MARK under his RIGHT eye, an elegant gentle face with a mysterious smile, fair skin. NO glasses, NO monocle (an ancient setting). Identity: the realm's imperial astrologer and strategist — polite, soft-spoken, dangerous under the courtesy.\n\nAn intimate close-up: he leans in very near the viewer from the viewer's LEFT: his face is in the LEFT THIRD of the picture (left of centre), his head and shoulders tilted toward the picture's centre as he brings his lips to the viewer's left ear, face in three-quarter view turned toward the right of the picture, half-lidded calm eyes looking sideways at the viewer, a soft dangerous smile; the feather fan held low near the bottom edge. Nothing across his face, the beauty mark under his right eye visible. Mouth CLOSED.\n\nLighting on him: cool silver moonlight from the LEFT, a little warm amber from the RIGHT.\n\nPlain flat GREEN background (#00B140), one even colour, completely empty: no scenery, no floor line, no shadow and no gradient on the background, no green anywhere on him. His whole head and hair inside the frame with space above; his shoulders, arms and elbows not cut by the left or right picture edge (full figure inside the frame with margin at the sides). ONLY the character: no furniture, no brazier, no railing, no pillar, no other people, no other hands.\n\nWide 16:9 game art. No text, no letters, no captions, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
  },
  "shion_ear_blink": {
   "ref": "shion_ear",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY BOTH of his eyes: FULLY closed in a natural soft blink (upper eyelids all the way down on both eyes, lashes visible, no iris visible, same skin tone and lighting); his bangs stay exactly as they are. Do not move, zoom or crop the picture.",
-  "mask": "688,479,52,36;855,412,52,36"
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY BOTH of his eyes: FULLY closed in a natural soft blink (upper eyelids all the way down on both eyes, lashes visible, no iris visible, same skin tone and lighting); his bangs stay exactly as they are. Do not move, zoom or crop the picture."
  },
  "saku_ear": {
   "ref": [
@@ -110,8 +109,7 @@
  },
  "saku_ear_blink": {
   "ref": "saku_ear",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY BOTH of his eyes: FULLY closed in a natural soft blink (upper eyelids all the way down on both eyes, lashes visible, no iris visible, same skin tone and lighting); his bangs stay exactly as they are. Do not move, zoom or crop the picture.",
-  "mask": "1545,480,52,36;1720,510,50,36"
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY BOTH of his eyes: FULLY closed in a natural soft blink (upper eyelids all the way down on both eyes, lashes visible, no iris visible, same skin tone and lighting); his bangs stay exactly as they are. Do not move, zoom or crop the picture."
  },
  "cover_art": {
   "ref": [
