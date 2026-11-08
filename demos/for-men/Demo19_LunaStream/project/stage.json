@@ -113,7 +113,12 @@
      37
     ]
    ],
-   "mouth": "lp"
+   "mouth": "lp",
+   "lp": {
+    "view": {
+     "rotate": "auto"
+    }
+   }
   },
   "flame": {
    "src": "luna_flame",
@@ -200,7 +205,12 @@
      50
     ]
    ],
-   "mouth": "lp"
+   "mouth": "lp",
+   "lp": {
+    "view": {
+     "rotate": "auto"
+    }
+   }
   }
  },
  "views": {

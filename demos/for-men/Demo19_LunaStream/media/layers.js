@@ -199,45 +199,45 @@ window.MOHEAT_LAYERS = {
      "kind": "eyes"
     },
     {
-     "src": "art/lean_mouth0.webp?v=8916ec7b",
+     "src": "art/lean_mouth0.webp?v=587e0aea",
      "rect": [
-      574,
-      473,
-      198,
-      168
+      576,
+      474,
+      196,
+      167
      ],
      "kind": "mouth_lv",
      "level": 0
     },
     {
-     "src": "art/lean_mouth1.webp?v=80fff62b",
+     "src": "art/lean_mouth1.webp?v=f9e9289d",
      "rect": [
-      574,
-      473,
-      198,
-      168
+      576,
+      474,
+      196,
+      167
      ],
      "kind": "mouth_lv",
      "level": 1
     },
     {
-     "src": "art/lean_mouth2.webp?v=51561806",
+     "src": "art/lean_mouth2.webp?v=2100dc1d",
      "rect": [
-      574,
-      473,
-      198,
-      168
+      576,
+      474,
+      196,
+      167
      ],
      "kind": "mouth_lv",
      "level": 2
     },
     {
-     "src": "art/lean_mouth3.webp?v=bf4b893a",
+     "src": "art/lean_mouth3.webp?v=a1309df7",
      "rect": [
-      574,
-      473,
-      198,
-      168
+      576,
+      474,
+      196,
+      167
      ],
      "kind": "mouth_lv",
      "level": 3
@@ -442,45 +442,45 @@ window.MOHEAT_LAYERS = {
      "kind": "eyes"
     },
     {
-     "src": "art/whisper_mouth0.webp?v=1a4caeda",
+     "src": "art/whisper_mouth0.webp?v=b40cbdec",
      "rect": [
       730,
       546,
-      248,
-      209
+      246,
+      208
      ],
      "kind": "mouth_lv",
      "level": 0
     },
     {
-     "src": "art/whisper_mouth1.webp?v=caee1bc1",
+     "src": "art/whisper_mouth1.webp?v=a19d6a25",
      "rect": [
       730,
       546,
-      248,
-      209
+      246,
+      208
      ],
      "kind": "mouth_lv",
      "level": 1
     },
     {
-     "src": "art/whisper_mouth2.webp?v=ce8a8e73",
+     "src": "art/whisper_mouth2.webp?v=f491f3d5",
      "rect": [
       730,
       546,
-      248,
-      209
+      246,
+      208
      ],
      "kind": "mouth_lv",
      "level": 2
     },
     {
-     "src": "art/whisper_mouth3.webp?v=abf42578",
+     "src": "art/whisper_mouth3.webp?v=209558a9",
      "rect": [
       730,
       546,
-      248,
-      209
+      246,
+      208
      ],
      "kind": "mouth_lv",
      "level": 3
