@@ -250,7 +250,9 @@
     if (cur && clipOK(cur) && (view === curView || (view === S.view && ONCE.has(cur)))) { ctx.globalAlpha = alpha; ctx.drawImage(CLIP[cur], 0, 0, W, H); ctx.globalAlpha = 1; return; }
     const name = BASE[view], im = IMG[name] || IMG.bg_room;
     const exact = !QS.has('stills') && Object.keys(CLIP).length > 0;   // with video the still must match the clips' frames exactly
-    const z = exact ? 1 : view === 'close' ? 1.02 + .01 * Math.sin(t * .5) : 1.0 + .004 * Math.sin(t * .4);
+    // never below 1: a smaller picture left the canvas edge undrawn, and the hug view's pink glow piled up there (solid frame); layered: no drift (§6.4)
+    const lv = !!(window.MoHeatLayers && window.MoHeatLayers.live) && !/^bg_/.test(name);
+    const z = exact ? 1 : view === 'close' ? 1.02 + (lv ? 0 : .01 * Math.sin(t * .5)) : lv ? 1 : 1.004 + .004 * Math.sin(t * .4);
     const ox = W / 2 - W * z / 2, oy = H / 2 - H * z / 2;
     ctx.globalAlpha = alpha;
     if (!im) { ctx.fillStyle = '#1b1d36'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
