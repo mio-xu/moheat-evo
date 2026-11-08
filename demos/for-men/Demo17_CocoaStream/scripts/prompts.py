@@ -19,7 +19,7 @@ END = "Wide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, 
 EDIT = ("Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, "
         "lighting and background — and change ONLY {what}. Do not move, zoom or crop the picture.")
 MOUTH = "her mouth: slightly open as if talking softly, a small natural opening, no teeth showing"
-BLINK = "her eyes: closed in a natural soft blink (eyelids down, lashes visible); her bangs stay exactly as they are"
+BLINK = "BOTH of her eyes: FULLY closed in a natural soft blink (upper eyelids all the way down on both eyes, lashes visible, no iris showing); her bangs stay exactly as they are"
 SHOP = ("A small cosy patisserie at night after closing, seen from a stool at its marble work counter (first person, eye level of a seated "
         "person). The counter top runs across the bottom of the picture. On the RIGHT: a stainless built-in oven in a brick wall, its window "
         "glowing orange. On the LEFT: the tall stainless door of a walk-in fridge. Behind, in the middle: glass shelves of jars and a wall "
@@ -31,9 +31,12 @@ POSES = {   # name: (bg, pose text)
     'melt': ('shop', "She leans over the counter toward the viewer, centre, from the chest up and bigger in the frame, holding a small silver spoon "
                      "of melted chocolate out toward the viewer's mouth with her right hand, her left hand cupped under it, a sweet teasing smile. "
                      "A small steel bowl over a pot (bain-marie) on the counter in front of her, faint steam. Mouth CLOSED."),
-    'whisk': ('shop', "Very close: she stands just behind the viewer's RIGHT shoulder and leans in, so her face is large at the RIGHT side of the "
-                      "picture, cheek almost at the viewer's ear, looking down at a steel mixing bowl of cream held low in front (bottom centre), "
-                      "her hands reaching forward round the whisk, a soft focused smile, a light blush. Mouth CLOSED."),
+    'whisk': ('shop', "First-person, very close: she stands right beside and slightly behind the viewer on the viewer's RIGHT, leaning in over the "
+                      "viewer's right shoulder, so only her head and shoulder are in the picture, LARGE, at the RIGHT edge (cut by the right edge "
+                      "of the frame), her face in three-quarter view turned toward the viewer's right ear and looking DOWN-LEFT at the bowl; a "
+                      "lock of her wavy hair falling forward; her right hand and arm reach in from the right toward the bottom centre, where "
+                      "a steel bowl of whipped cream and a whisk are (her hand over the viewer's hand on the whisk). Soft focused smile, light blush. "
+                      "The left two-thirds of the picture stay empty green. Mouth CLOSED."),
     'cookie': ('shop', "She stands close across the counter, centre, from the chest up, holding a heart-shaped cookie between two fingers out toward "
                        "the viewer's mouth, her other hand under it, a playful 'say aah' smile, eyes bright. Mouth CLOSED."),
     'piping': ('shop', "Behind the counter, centre-left, from the waist up, she holds a pink piping bag over a big heart-shaped chocolate on a plate, "

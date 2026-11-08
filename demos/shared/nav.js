@@ -15,7 +15,7 @@
     { cat: 'healing', dir: 'Demo16_FamilyCall2', ja: 'じいちゃんの、ゆきだるま', en: "Grandpa's Little Snowman · A Call Home, Part 2", zh: '爷爷的小雪人', group: 1 },
     { cat: 'healing', dir: 'Demo29_FamilyVisit', ja: 'ただいま、じいちゃん・ばあちゃん', en: 'Home for New Year', zh: '爷爷奶奶，我回来了', group: 1 },
     { cat: 'for-men', dir: 'Demo14_MintStream', ja: 'ミントの、ささやき配信', en: "Mint's Whisper Stream", zh: '薄荷的耳语直播', group: 2 },
-    { cat: 'for-men', dir: 'Demo17_CocoaStream', ja: 'ココアの、ほっこりカフェ配信', en: "Cocoa's Cozy Café Stream", zh: '可可的暖心咖啡馆直播', group: 2 },
+    { cat: 'for-men', dir: 'Demo17_CocoaStream', ja: 'ココアの、バレンタイン前夜', en: "Valentine's Eve with Cocoa", zh: '可可的情人节前夜', group: 2 },
     { cat: 'for-men', dir: 'Demo18_HinataStream', ja: 'ひなたと、ゲーセンデート', en: 'Arcade Date with Hinata', zh: '和日向的游戏厅约会', group: 2 },
     { cat: 'for-men', dir: 'Demo19_LunaStream', ja: 'ルナの、よふかし配信', en: "Luna's Late-Night Stream", zh: '露娜的深夜直播', group: 2 },
     { cat: 'for-men', dir: 'Demo25_HatsumodeDate', ja: 'はじめての、初詣デート', en: 'My First Hatsumode', zh: '第一次的新年参拜约会', group: 2 },

@@ -1,0 +1,265 @@
+{
+ "src": "assets/art",
+ "hooks": {
+  "view": "COCOA.S.view",
+  "lv": "COCOA.S.lv"
+ },
+ "bgs": {
+  "shop": {
+   "src": "bg_shop",
+   "fire": [
+    0.9,
+    0.6
+   ]
+  },
+  "window": {
+   "src": "bg_window",
+   "fire": [
+    0.5,
+    0.5
+   ]
+  }
+ },
+ "poses": {
+  "welcome": {
+   "src": "cocoa_welcome",
+   "talk": "cocoa_welcome_talk",
+   "blink": "cocoa_welcome_blink",
+   "matte": "green",
+   "centre_mouth": [
+    1453,
+    568
+   ],
+   "radius_mouth": [
+    52,
+    32
+   ],
+   "regions_eyes": [
+    [
+     1334,
+     484,
+     56,
+     40
+    ],
+    [
+     1516,
+     449,
+     56,
+     40
+    ]
+   ]
+  },
+  "melt": {
+   "src": "cocoa_melt",
+   "talk": "cocoa_melt_talk",
+   "blink": "cocoa_melt_blink",
+   "matte": "green",
+   "centre_mouth": [
+    1320,
+    539
+   ],
+   "radius_mouth": [
+    52,
+    32
+   ],
+   "regions_eyes": [
+    [
+     1187,
+     455,
+     60,
+     44
+    ],
+    [
+     1369,
+     382,
+     60,
+     44
+    ]
+   ]
+  },
+  "whisk": {
+   "src": "cocoa_whisk",
+   "talk": "cocoa_whisk_talk",
+   "blink": "cocoa_whisk_blink",
+   "matte": "green",
+   "centre_mouth": [
+    1647,
+    575
+   ],
+   "radius_mouth": [
+    52,
+    32
+   ],
+   "regions_eyes": [
+    [
+     1507,
+     463,
+     60,
+     44
+    ],
+    [
+     1689,
+     428,
+     60,
+     44
+    ]
+   ]
+  },
+  "cookie": {
+   "src": "cocoa_cookie",
+   "talk": "cocoa_cookie_talk",
+   "blink": "cocoa_cookie_blink",
+   "matte": "green",
+   "centre_mouth": [
+    1318,
+    556
+   ],
+   "radius_mouth": [
+    52,
+    32
+   ],
+   "regions_eyes": [
+    [
+     1192,
+     465,
+     56,
+     40
+    ],
+    [
+     1360,
+     451,
+     56,
+     40
+    ]
+   ]
+  },
+  "piping": {
+   "src": "cocoa_piping",
+   "talk": "cocoa_piping_talk",
+   "blink": "cocoa_piping_blink",
+   "matte": "green",
+   "centre_mouth": [
+    1225,
+    537
+   ],
+   "radius_mouth": [
+    52,
+    32
+   ],
+   "regions_eyes": [
+    [
+     1113,
+     453,
+     56,
+     40
+    ],
+    [
+     1274,
+     397,
+     56,
+     40
+    ]
+   ]
+  },
+  "whisper": {
+   "src": "cocoa_whisper",
+   "talk": "cocoa_whisper_talk",
+   "blink": "cocoa_whisper_blink",
+   "matte": "green",
+   "centre_mouth": [
+    718,
+    740
+   ],
+   "radius_mouth": [
+    72,
+    44
+   ],
+   "regions_eyes": [
+    [
+     494,
+     600,
+     84,
+     60
+    ],
+    [
+     809,
+     481,
+     84,
+     60
+    ]
+   ]
+  },
+  "ending": {
+   "src": "cocoa_ending",
+   "talk": "cocoa_ending_talk",
+   "blink": "cocoa_ending_blink",
+   "matte": "green",
+   "centre_mouth": [
+    1473,
+    554
+   ],
+   "radius_mouth": [
+    52,
+    32
+   ],
+   "regions_eyes": [
+    [
+     1354,
+     470,
+     56,
+     40
+    ],
+    [
+     1522,
+     414,
+     56,
+     40
+    ]
+   ]
+  }
+ },
+ "views": {
+  "welcome": {
+   "still": "cocoa_welcome",
+   "pose": "welcome",
+   "bg": "shop",
+   "fire": null
+  },
+  "melt": {
+   "still": "cocoa_melt",
+   "pose": "melt",
+   "bg": "shop",
+   "fire": null
+  },
+  "whisk": {
+   "still": "cocoa_whisk",
+   "pose": "whisk",
+   "bg": "shop",
+   "fire": null
+  },
+  "cookie": {
+   "still": "cocoa_cookie",
+   "pose": "cookie",
+   "bg": "shop",
+   "fire": null
+  },
+  "piping": {
+   "still": "cocoa_piping",
+   "pose": "piping",
+   "bg": "shop",
+   "fire": null
+  },
+  "whisper": {
+   "still": "cocoa_whisper",
+   "pose": "whisper",
+   "bg": "window",
+   "fire": null
+  },
+  "ending": {
+   "still": "cocoa_ending",
+   "pose": "ending",
+   "bg": "window",
+   "fire": null
+  }
+ }
+}
