@@ -59,7 +59,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/call_mouth2.webp?v=e5c58aa4",
+     "src": "art/call_mouth2.webp?v=d902250a",
      "rect": [
       645,
       402,
@@ -70,7 +70,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/call_mouth3.webp?v=4be7fb3a",
+     "src": "art/call_mouth3.webp?v=25f08d5e",
      "rect": [
       645,
       402,
@@ -140,7 +140,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/close_mouth2.webp?v=ad78d637",
+     "src": "art/close_mouth2.webp?v=e76af187",
      "rect": [
       829,
       399,
@@ -151,7 +151,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/close_mouth3.webp?v=141837b0",
+     "src": "art/close_mouth3.webp?v=1decdab6",
      "rect": [
       829,
       399,
@@ -221,7 +221,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/door_mouth2.webp?v=a7464afd",
+     "src": "art/door_mouth2.webp?v=fab9cdd4",
      "rect": [
       565,
       465,
@@ -232,7 +232,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/door_mouth3.webp?v=41ef680b",
+     "src": "art/door_mouth3.webp?v=084533ed",
      "rect": [
       565,
       465,
@@ -293,7 +293,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/hug_mouth2.webp?v=c09a07de",
+     "src": "art/hug_mouth2.webp?v=036f0b0d",
      "rect": [
       926,
       506,
@@ -304,7 +304,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/hug_mouth3.webp?v=990a83eb",
+     "src": "art/hug_mouth3.webp?v=b1155127",
      "rect": [
       926,
       506,
