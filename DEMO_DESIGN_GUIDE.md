@@ -549,6 +549,7 @@ main.layout
 - **Seedance 整个 API 被限流时脚本会一直等**（Demo31 烟花：`call()` 按 Retry-After 等了约 20 小时，没有任何输出）→ 每次先 `probe`；看到 429 且 Retry-After 很长，立刻按顺序换 OpenAI API，不要提交到 Seedance。
 - **夜景按颜色找天空找不准**（整张图都偏蓝，墙、水塔和天空一样平滑）→ 固定的背景直接手描遮挡物多边形（`demos/for-men/Demo31_SummerRooftop/scripts/make_sky_mask.py`）。
 - **遮罩图存成灰度 PNG，裁剪不起作用**（Demo31 烟花中间层：烟花画到了门、水塔和地面上）→ canvas 的 `destination-in` 用的是**透明度**，灰度图到处都是不透明的；遮罩一律存成 RGBA，形状放在 alpha 里，存完打印 `mode` 和 alpha 范围确认。
+- **遮罩的下边是一条直线，烟花在空中被"看不见的线"切掉**（Demo31，协调者验收指出：地平线定在 y 342，比真实山脊高约 40 px）→ 遮挡边界一律沿真实轮廓描（山脊、海平线、建筑剪影），羽化 6–10 px；自动找边会被更强的栏杆边缘带偏，固定背景就手描折线。贴图类特效（黑底烟花）先把接近黑的噪点压成纯黑、边缘做圆形渐隐，叠加时才不会露出方框。
 - **共用工具的输出格式被别的会话改了，我的脚本出错后画面没清理**（`build_stage.py` 开始在路径后面加 `?v=<hash>`，`clean_cutout.py` 打开文件失败，页面上显示的是没清理的抠图）→ 读路径时一律去掉 `?` 后面的部分；流水线里每一步失败都要让整条命令停下（`&&`），看到报错先修，不要直接看结果图。
 - **头发边缘按阈值清理总会留一圈亮边**（用户连续三次指出头发抠图）→ 用抠图公式算：已知灰底颜色和旁边的头发颜色，每个边缘像素 C = α·F + (1−α)·BG，投影求出真正的 α，颜色改成 F（`clean_cutout.py` v3）。验收：每张人物层叠在夜景色上、头发放大 2 倍看，没有亮边、没有灰块。
 - **说话时嘴完全不动**（Demo20 陽向的分层版，用户指出）：改了 `demos/shared/layers.js` 没升 `?v=`，浏览器用的是缓存里的旧版；而且复用的 Demo20 `main.js` 把状态放在 `window.HINA`（口型 `HINA.FW.mouth`），不是 Demo24 那样的 `window.STREAM` → 改完任何 `demos/shared/` 文件**马上** `python3 tools/web/bump.py --stage <文件>`，再确认浏览器加载的是新版本号；重新跑 `build_stage.py` 改了某个 Demo 的 `media/layers.js` 时，也要把那个页面里 `media/layers.js?v=` 加 1（页面已经上线时）；复用旧 `main.js` 前先在控制台列出它的全局状态对象，在 `stage.json` 里写明 `hooks`（`layers.js` 已支持 `hooks.view / mouth / level`）。

@@ -11,16 +11,18 @@ from PIL import Image, ImageDraw, ImageFilter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 W, H = 1280, 720
-HORIZON = 342   # the mountain ridge / sea line: fireworks stay above it
+RIDGE = [(0, 349), (300, 349), (318, 346), (340, 348), (370, 356), (400, 364), (430, 368), (460, 372), (490, 377), (520, 380),
+         (880, 380), (910, 377), (950, 373), (990, 370), (1040, 368), (1280, 368)]   # mountain ridge + sea horizon, traced (1280×720)
+# v1 used one straight line at y 342 — up to 40 px above the real ridge, so bursts were cut along an invisible line in open sky
 OCCLUDERS = {   # polygons over the sky (1280×720)
     'building':   [(0, 36), (236, 146), (236, 188), (300, 186), (300, 720), (0, 720)],
     'water_tank': [(1040, 268), (1048, 255), (1068, 250), (1068, 112), (1090, 88), (1112, 74), (1140, 64), (1172, 64), (1200, 74),
                    (1214, 80), (1246, 80), (1256, 96), (1256, 208), (1280, 206), (1280, 720), (1040, 720)],
 }
 m = Image.new('L', (W, H), 0); d = ImageDraw.Draw(m)
-d.rectangle((0, 0, W, HORIZON), fill=255)
+d.polygon([(0, 0), (W, 0)] + RIDGE[::-1], fill=255)
 for poly in OCCLUDERS.values(): d.polygon(poly, fill=0)
-m = m.filter(ImageFilter.MinFilter(5)).filter(ImageFilter.GaussianBlur(2.5))   # a few px off every edge, soft
+m = m.filter(ImageFilter.MinFilter(3)).filter(ImageFilter.GaussianBlur(4))   # feathered ~8 px: bursts sink softly behind the ridge / tank
 rgba = Image.new('RGBA', (W, H), (255, 255, 255, 0)); rgba.putalpha(m)   # the page clips with ALPHA (destination-in): a greyscale PNG is opaque everywhere (v1 showed fireworks over the door / tank)
 rgba.save(os.path.join(ROOT, 'media', 'art', 'sky_roof.png'), optimize=True)
 print('wrote media/art/sky_roof.png')

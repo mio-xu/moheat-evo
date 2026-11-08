@@ -120,9 +120,20 @@
   // close-ups) cut out — built per view from the layer data (background zoom, character placement), so she always stays on top.
   const FW_SPRITES = ['fw_kiku_gold', 'fw_botan_pink', 'fw_yanagi_gold', 'fw_yae_blue', 'fw_senrin', 'fw_ring_purple', 'fw_heart_pink', 'fw_kamuro_silver'];
   const FWS = window.MoHeatFireworks.create();
-  for (const n of FW_SPRITES) { const im = new Image(); im.onload = () => FWS.sprites.push(im); im.src = `media/art/${n}.jpg?v=1`; }
-  const FW_VIEWS = ['fireworks', 'whisper', 'shoulder', 'laugh'], HORIZON = 342 / 720;
-  const skyImg = new Image(); skyImg.src = 'media/art/sky_roof.png?v=2';
+  // each painted burst is cleaned before use so additive blending can never show its square: the JPEG's near-black noise is crushed
+  // to pure black and a round falloff takes everything to 0 well inside the image edges (coordinator review: no box edge may show)
+  function prepSprite(im) {
+    const S = 512, c = document.createElement('canvas'); c.width = c.height = S; const g = c.getContext('2d');
+    g.drawImage(im, 0, 0, S, S); const d = g.getImageData(0, 0, S, S), p = d.data;
+    for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+      const i = (y * S + x) * 4, r = Math.hypot(x - S / 2, y - S / 2) / (S / 2), fall = Math.max(0, Math.min(1, (0.97 - r) / 0.12));
+      for (let k = 0; k < 3; k++) p[i + k] = Math.max(0, (p[i + k] - 14) * 1.06) * fall;
+    }
+    g.putImageData(d, 0, 0); return c;
+  }
+  for (const n of FW_SPRITES) { const im = new Image(); im.onload = () => FWS.sprites.push(prepSprite(im)); im.src = `media/art/${n}.jpg?v=1`; }
+  const FW_VIEWS = ['fireworks', 'whisper', 'shoulder', 'laugh'], HORIZON = 378 / 720;   // where shells start: the sea horizon (scripts/make_sky_mask.py RIDGE)
+  const skyImg = new Image(); skyImg.src = 'media/art/sky_roof.png?v=3';
   const FWM = {};   // view → { mask: canvas, area: { pick, bottom } }
   function fwMask(view) {
     if (FWM[view] !== undefined) return FWM[view];
