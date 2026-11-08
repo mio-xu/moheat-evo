@@ -67,6 +67,17 @@ same ear (right cool 0.45) + her breath on it (right cool 0.85) · paper lamp (l
   ≈ **$7.3** at list price (`project/openai_log.json`). Seedance: **0** credits (no video: nothing passed §6.3). ElevenLabs: **3,814 characters** (script
   lines) + **2,241** (place × cast talk, 59 lines). Place × cast views: **$0** (the 21 extra views are composed from the existing layers). Live talk: only on the private server, ≈ 600–700 credits per conversation.
 
+## QA (2026-11-08 evening, place × cast + multi-character views)
+`check_demo.py --full`: every static / art row PASS (layers 32 views, cut-body, patches, eyes, edges, fringe, blink, far-motion, syntax,
+refs, links, files, cache, l10n, voice, end, style, cover) + mouth PASS. `check_mouth.js`: story ✓ (dawn trio: N / H / M each open only
+while speaking), `--query=talk=MHN&place=hall` ✓, `place=pass` ✓ (shot: assets/mouth_check/t_pass_3_open.png), `--query=sample=1&end=1`
+✓ (story + the just-listen sample). Browser probes run on their own (in check_demo's three parallel browsers the runtime probe timed
+out under load): main `?auto=1&sub=zh` 0 errors / 0 failed requests / no missing zh, 7 phone–desktop sizes clean, drag clean; alt
+`--alt` 0 errors, ends on its own cover at 272 s, last command `stop`. Demo31 regression (old single-character page on the new
+layers.js): check_mouth ✓, check_motion ✓. Open: G7 release FAIL is time-based (shared/cover.js changed in 164860f after the
+thumbnails; `thumbs.py --base` / `thumbs.py` regenerate byte-identical files, so nothing newer can be committed); looks WARN
+(hinata_ear outfit shade, as before); shell WARN (wired later by the UI shell agent); no project/script.md (new G1 rule).
+
 ## QA (2026-11-08, after the LivePortrait mouth switch)
 `python3 tools/qa/check_demo.py demos/for-men/Demo43_BlizzardInn --full`: every static / art / release row PASS (layers, cut-body, patches,
 eyes, syntax, refs, links, files, cache, l10n, voice, end, release, cover, hygiene) and mouth PASS; earlier full run: runtime, l10n-live,
