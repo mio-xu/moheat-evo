@@ -62,5 +62,45 @@
    "style_snowfox"
   ],
   "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi proportions (2–3 heads tall), friendly and adorable for children — NOT scary, no blood, no sharp teeth, rounded shapes, a clear silhouette that reads at small size. Night-festival / onsen storybook mood.\n\nYurari: a shy little ghost GIRL who just wants a friend (a child, cute, floating, translucent at the bottom, no feet; her touch is cool — a snow-spirit-like special setting). Gentle and lonely, not scary.\n\nDesign C: a pastel summer dress with a straw hat and a ribbon, long white hair, her legs fading into a soft mist.\n\nWide 16:9 character design sheet image, ONE character (or the named group) standing in the centre, full figure from head to toe inside the frame with margin, plain flat light-grey background (#d8d8d8), nothing else. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "bg_gate": {
+  "ref": "style_snowfox",
+  "prompt": "Background plate only, NO people, NO animals, empty scene, same art style as image 1. The front gate of an old wooden Japanese house next to a summer festival at night, seen at a child's eye level: a creaky wooden gate and stone path, festival lanterns and a yagura drum tower glowing warm in the distance behind, fireflies, a big summer moon. Cute, mysterious, not scary.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "bg_corridor": {
+  "ref": "style_snowfox",
+  "prompt": "Background plate only, NO people, NO animals, empty scene, same art style as image 1. A long old wooden corridor inside the house at night, sliding paper doors on both sides, moonlight stripes, a few hanging wind chimes, cosy-spooky but cute, centre open.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "bg_tatami": {
+  "ref": "style_snowfox",
+  "prompt": "Background plate only, NO people, NO animals, empty scene, same art style as image 1. An old tatami room at night with sliding fusuma doors (plain pattern, no writing) behind and at both sides, a glass wind chime at the open veranda, a low table, summer night outside.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "bg_kura": {
+  "ref": "style_snowfox",
+  "prompt": "Background plate only, NO people, NO animals, empty scene, same art style as image 1. Inside an old earthen storehouse (kura) at night: thick wooden beams, chests and jars, almost dark, a soft circle of warm light in the centre where a lantern would be, the rest deep blue-black.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "bonchan_base": {
+  "ref": "opt_bonchan_c",
+  "prompt": "Image 1 is the exact design to keep (same character, face, colours, outfit). Redraw it at full quality on a new plain background.\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi (2–3 heads), friendly and adorable, not scary, clear silhouettes.\n\nBon-chan, the yellow cat-faced paper lantern with a red ribbon on the handle, glowing warm inside; same design as image 1, facing the viewer, cheerful.\n\nPlain flat CHROMA-KEY GREEN background (#00B140), one even colour, no shadow, nothing green on the character. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "ghosts_base": {
+  "ref": "opt_ghosts_c",
+  "prompt": "Image 1 is the exact design to keep (same character, face, colours, outfit). Redraw it at full quality on a new plain background.\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi (2–3 heads), friendly and adorable, not scary, clear silhouettes.\n\nThe three little ghosts of image 1 side by side with space between them (karakasa umbrella yokai, round white ghost, small blue will-o'-wisp), same designs, giggling.\n\nPlain flat CHROMA-KEY GREEN background (#00B140), one even colour, no shadow, nothing green on the character. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "yurari_base": {
+  "ref": "opt_yurari_b",
+  "prompt": "Image 1 is the exact design to keep (same character, face, colours, outfit). Redraw it at full quality on a new plain background.\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi (2–3 heads), friendly and adorable, not scary, clear silhouettes.\n\nYurari, the shy ghost girl of image 1 (white bob, goldfish-pattern lavender yukata, translucent sleeves fading into mist, no feet), same design, floating, shy smile, mouth closed.\n\nPlain flat CHROMA-KEY GREEN background (#00B140), one even colour, no shadow, nothing green on the character. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "yurari_ear": {
+  "ref": "yurari_base",
+  "prompt": "Image 1 is the CHARACTER and STYLE reference: the same character, same design, same art style.\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi (2–3 heads), friendly and adorable, not scary, clear silhouettes.\n\nYurari floats very close at the LEFT side of the picture, her face in the LEFT THIRD, leaning toward the centre as she whispers at the viewer's left ear, shy hopeful eyes, mouth closed, hands together low.\n\nPlain flat CHROMA-KEY GREEN background (#00B140), one even colour, no shadow, nothing green on the character. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "yurari_happy": {
+  "ref": "yurari_base",
+  "prompt": "Image 1 is the CHARACTER and STYLE reference: the same character, same design, same art style.\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi (2–3 heads), friendly and adorable, not scary, clear silhouettes.\n\nYurari floating in the centre, a bright happy smile (mouth closed), hands clasped at her chest, a faint pink blush.\n\nPlain flat CHROMA-KEY GREEN background (#00B140), one even colour, no shadow, nothing green on the character. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "bonchan_scared": {
+  "ref": "bonchan_base",
+  "prompt": "Image 1 is the CHARACTER and STYLE reference: the same character, same design, same art style.\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi (2–3 heads), friendly and adorable, not scary, clear silhouettes.\n\nThe same lantern Bon-chan with a startled face: wide eyes, small open 'o' mouth, its candle flickering, slightly tilted.\n\nPlain flat CHROMA-KEY GREEN background (#00B140), one even colour, no shadow, nothing green on the character. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
  }
 }

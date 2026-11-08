@@ -205,5 +205,235 @@
    2560,
    1440
   ]
+ },
+ "bg_gate": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 85,
+  "usage": {
+   "input_tokens": 1623,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 115
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8993
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "bg_corridor": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 81,
+  "usage": {
+   "input_tokens": 1597,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 89
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8967
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "bg_tatami": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 75,
+  "usage": {
+   "input_tokens": 1602,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 94
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8972
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "bg_kura": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 76,
+  "usage": {
+   "input_tokens": 1606,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 98
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8976
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "bonchan_base": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 78,
+  "usage": {
+   "input_tokens": 1686,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 178
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9056
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "ghosts_base": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 70,
+  "usage": {
+   "input_tokens": 1692,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 184
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9062
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "yurari_base": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 65,
+  "usage": {
+   "input_tokens": 1694,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 186
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9064
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "yurari_ear": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 61,
+  "usage": {
+   "input_tokens": 1687,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 179
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9057
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "yurari_happy": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 65,
+  "usage": {
+   "input_tokens": 1669,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 161
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9039
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "bonchan_scared": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 60,
+  "usage": {
+   "input_tokens": 1670,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 162
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9040
+  },
+  "out": [
+   2560,
+   1440
+  ]
  }
 }

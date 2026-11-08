@@ -88,5 +88,29 @@
   "ref": "opt_fox_b",
   "mask": "1150,220,360,200",
   "prompt": "Edit this exact image. Keep EVERYTHING identical — the fox, its face, eyes, fur colour, light-blue yukata, pose, tail, framing and background — and ONLY add a small neatly folded white onsen towel resting on top of its head between the ears, and a tiny light-blue flower clip on its left ear. No red rope, no bell, no collar. Do not move, zoom or crop the picture."
+ },
+ "bg_onsen": {
+  "ref": "style_snowfox",
+  "prompt": "Background plate only, NO people, NO animals, empty scene, same art style as image 1. A small open-air rock hot spring in the autumn mountains by day, seen from the edge of the bath at a child's eye level: on the LEFT a wooden hot-water pipe pouring steaming water with thick steam, on the RIGHT a bamboo pipe pouring cold mountain water with splashes, red and yellow maple trees, a little wooden sign without writing, the bath in front with gentle steam. Two small round wooden tubs side by side at the front edge (left and right).\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "bg_onsen_rain": {
+  "ref": "bg_onsen",
+  "prompt": "Edit this exact image: the same hot spring and camera, now in cold autumn rain in the late afternoon: rain streaks, ripples on the water, steam rising more strongly, darker sky, everything else identical.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "yuzujii_base": {
+  "ref": "opt_yuzujii_a",
+  "prompt": "Image 1 is the exact design to keep (same character, face, colours, outfit). Redraw it at full quality on a new plain background.\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi (2–3 heads), friendly and adorable, not scary, clear silhouettes.\n\nYuzu-jii, the old capybara of image 1 with a small yuzu on his head and a folded towel, the yuzu-pattern robe and apron, same design, half-closed contented eyes, mouth closed, facing the viewer.\n\nPlain flat CHROMA-KEY GREEN background (#00B140), one even colour, no shadow, nothing green on the character. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "penguin_base": {
+  "ref": "opt_penguin_b",
+  "prompt": "Image 1 is the exact design to keep (same character, face, colours, outfit). Redraw it at full quality on a new plain background.\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi (2–3 heads), friendly and adorable, not scary, clear silhouettes.\n\nThe fluffy grey emperor-penguin chick of image 1 with a tiny towel on its head, same design, facing the viewer, beak closed.\n\nPlain flat CHROMA-KEY GREEN background (#00B140), one even colour, no shadow, nothing green on the character. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "monkeys_base": {
+  "ref": "opt_monkeys_c",
+  "prompt": "Image 1 is the exact design to keep (same character, face, colours, outfit). Redraw it at full quality on a new plain background.\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi (2–3 heads), friendly and adorable, not scary, clear silhouettes.\n\nThe snow-monkey mother and child of image 1 (round chibi, autumn maple leaves in their fur), same designs, side by side with a little space, smiling, mouths closed.\n\nPlain flat CHROMA-KEY GREEN background (#00B140), one even colour, no shadow, nothing green on the character. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "fox_base2": {
+  "ref": "fox_base",
+  "prompt": "Image 1 is the exact design to keep (same character, face, colours, outfit). Redraw it at full quality on a new plain background.\n\nArt style EXACTLY like image 1: cute Japanese 2D anime, pastel cel shading, soft clean lineart, big expressive eyes, chibi (2–3 heads), friendly and adorable, not scary, clear silhouettes.\n\nThe fox of image 1 (light-blue yukata, folded onsen towel on its head, light-blue flower clip, no red rope, no bell), same design, facing the viewer, mouth closed.\n\nPlain flat CHROMA-KEY GREEN background (#00B140), one even colour, no shadow, nothing green on the character. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
  }
 }

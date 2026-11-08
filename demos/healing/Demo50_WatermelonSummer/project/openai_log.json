@@ -136,5 +136,189 @@
    2560,
    1440
   ]
+ },
+ "bg_busstop": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 83,
+  "usage": {
+   "input_tokens": 1615,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 107
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8985
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "bg_stream": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 95,
+  "usage": {
+   "input_tokens": 1599,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 91
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8969
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "bg_yard": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 94,
+  "usage": {
+   "input_tokens": 1601,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 93
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8971
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "bg_field_night": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 96,
+  "usage": {
+   "input_tokens": 1595,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 87
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 8965
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "grandma_base": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 56,
+  "usage": {
+   "input_tokens": 1721,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 213
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9091
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "grandpa_base": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 57,
+  "usage": {
+   "input_tokens": 1714,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 206
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9084
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "grandma_fan": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 64,
+  "usage": {
+   "input_tokens": 1724,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 216
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9094
+  },
+  "out": [
+   2560,
+   1440
+  ]
+ },
+ "grandpa_melon": {
+  "model": "gpt-image-2",
+  "size": "2560x1440",
+  "quality": "high",
+  "seconds": 60,
+  "usage": {
+   "input_tokens": 1693,
+   "input_tokens_details": {
+    "image_tokens": 1508,
+    "text_tokens": 185
+   },
+   "output_tokens": 7370,
+   "output_tokens_details": {
+    "image_tokens": 7370,
+    "text_tokens": 0
+   },
+   "total_tokens": 9063
+  },
+  "out": [
+   2560,
+   1440
+  ]
  }
 }

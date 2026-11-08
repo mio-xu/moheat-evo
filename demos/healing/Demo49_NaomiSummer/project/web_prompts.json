@@ -13,5 +13,37 @@
    "ref_naomi_sit"
   ],
   "prompt": "Image 1 is the STYLE and CHARACTER reference (image 2: closer face reference).\n\nImage 1 and 2 are the user's REAL cat Naomi: draw exactly this cat — a long-haired blue-grey and white bicolour cat, white inverted-V blaze on the forehead, white ruff, chest, belly and mittens, darker grey plush tail, big round olive / yellow-green eyes, small pink nose, no collar, no clothes. A realistic cat on four legs (not anthropomorphic), high-finish healing visual-novel illustration, warm afternoon summer light.\n\nNaomi on a hot summer afternoon in a Japanese tatami room (she stays exactly herself — only the summer props around her differ).\n\nOption B (props set B): Naomi sitting beside a towel-wrapped cold water bottle, her cheek close to it, a round paper uchiwa fan and a slice of watermelon on a plate nearby, a mosquito-coil pig on the windowsill.\n\nWide 16:9 illustration of the whole little scene in a sunny Japanese tatami room (Naomi with ALL the props named above clearly visible around her). No text, no letters, no logo, no watermark, no UI."
+ },
+ "bg_room_day": {
+  "ref": "naomi_props_pick",
+  "prompt": "Background plate only, NO people, NO animals, empty scene, same art style as image 1. The same sunny Japanese tatami room as image 1 on a hot summer afternoon, WITHOUT the cat: the towel-wrapped cold water bottle, a slice of watermelon on a plate and a round paper uchiwa on the tatami, a ceramic mosquito-coil pig on the windowsill with a thin wisp of smoke, a glass wind chime at the open window on the LEFT, a small white electric fan with a mesh guard and a paper streamer on the RIGHT, green garden outside. Empty space in the centre for the cat.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "bg_room_rain": {
+  "ref": "bg_room_day",
+  "prompt": "Edit this exact image: the same room at dusk during a sudden summer shower: dark grey sky, rain blowing in at the LEFT window, everything else identical.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "bg_room_night": {
+  "ref": "bg_room_day",
+  "prompt": "Edit this exact image: the same room at night after the rain: dark blue night outside, a warm small lamp on, the fan still there, everything else identical.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "naomi_pancake": {
+  "ref": "ref_naomi_close",
+  "prompt": "Image 1 is the CHARACTER and STYLE reference: the same character, same design, same art style.\n\nImage 1 is Naomi, the user's real cat: draw exactly this cat (long-haired blue-grey and white bicolour, white inverted-V blaze, white ruff, chest, belly and mittens, darker grey plush tail, big round olive / yellow-green eyes, small pink nose, no collar). Realistic cat on four legs (not anthropomorphic), high-finish healing visual-novel illustration, warm summer light.\n\nNaomi lying flat on her belly like a cat pancake, legs stretched out, looking a little hot and lazy at the viewer, eyes open.\n\nPlain flat CHROMA-KEY MAGENTA background (#FF00FF), one even colour, no shadow, nothing magenta or pink-purple on the cat. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "naomi_bat": {
+  "ref": "ref_naomi_close",
+  "prompt": "Image 1 is the CHARACTER and STYLE reference: the same character, same design, same art style.\n\nImage 1 is Naomi, the user's real cat: draw exactly this cat (long-haired blue-grey and white bicolour, white inverted-V blaze, white ruff, chest, belly and mittens, darker grey plush tail, big round olive / yellow-green eyes, small pink nose, no collar). Realistic cat on four legs (not anthropomorphic), high-finish healing visual-novel illustration, warm summer light.\n\nNaomi sitting up and reaching one white-mittened paw up to bat at something just above her (a paper streamer, not drawn), playful eyes.\n\nPlain flat CHROMA-KEY MAGENTA background (#FF00FF), one even colour, no shadow, nothing magenta or pink-purple on the cat. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "naomi_bottle": {
+  "ref": "ref_naomi_close",
+  "prompt": "Image 1 is the CHARACTER and STYLE reference: the same character, same design, same art style.\n\nImage 1 is Naomi, the user's real cat: draw exactly this cat (long-haired blue-grey and white bicolour, white inverted-V blaze, white ruff, chest, belly and mittens, darker grey plush tail, big round olive / yellow-green eyes, small pink nose, no collar). Realistic cat on four legs (not anthropomorphic), high-finish healing visual-novel illustration, warm summer light.\n\nNaomi lying on her belly with her head turned and her cheek resting against something cool on her LEFT side (that object is NOT drawn — empty space there), eyes half closed, blissful. Only the cat.\n\nPlain flat CHROMA-KEY MAGENTA background (#FF00FF), one even colour, no shadow, nothing magenta or pink-purple on the cat. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "naomi_startle": {
+  "ref": "ref_naomi_close",
+  "prompt": "Image 1 is the CHARACTER and STYLE reference: the same character, same design, same art style.\n\nImage 1 is Naomi, the user's real cat: draw exactly this cat (long-haired blue-grey and white bicolour, white inverted-V blaze, white ruff, chest, belly and mittens, darker grey plush tail, big round olive / yellow-green eyes, small pink nose, no collar). Realistic cat on four legs (not anthropomorphic), high-finish healing visual-novel illustration, warm summer light.\n\nNaomi startled by thunder: fur slightly puffed, ears back a little, big round eyes, crouching low as if about to squeeze against someone on her right.\n\nPlain flat CHROMA-KEY MAGENTA background (#FF00FF), one even colour, no shadow, nothing magenta or pink-purple on the cat. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
+ },
+ "naomi_shoulder": {
+  "ref": "ref_naomi_close",
+  "prompt": "Image 1 is the CHARACTER and STYLE reference: the same character, same design, same art style.\n\nImage 1 is Naomi, the user's real cat: draw exactly this cat (long-haired blue-grey and white bicolour, white inverted-V blaze, white ruff, chest, belly and mittens, darker grey plush tail, big round olive / yellow-green eyes, small pink nose, no collar). Realistic cat on four legs (not anthropomorphic), high-finish healing visual-novel illustration, warm summer light.\n\nA close-up: Naomi resting her chin on the viewer's shoulder at the LEFT side of the picture (her head in the left third, the shoulder not drawn), eyes half closed, content, purring.\n\nPlain flat CHROMA-KEY MAGENTA background (#FF00FF), one even colour, no shadow, nothing magenta or pink-purple on the cat. Whole figure inside the frame with margin.\n\nWide 16:9. No text, no letters, no captions, no logo, no watermark, no UI."
  }
 }
