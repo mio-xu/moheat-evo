@@ -10,9 +10,9 @@
   if (['embed', 'cover', 'render', 'auto', 'autoplay'].some((k) => QS.has(k))) return;
   const KEY = 'moheat.guide';
   const STEPS = [
-    { sel: null, en: 'Welcome! Put on headphones: you will hear the story in 3D and, with MoHeat Evo, feel warmth and coolness on each ear. Choose your language, then a 30-second tour.',
-      ja: 'ようこそ！ヘッドホンをつけてください。立体音響で物語を聴き、MoHeat Evo をつなぐと左右の耳で温かさ・冷たさを感じられます。言語を選んだら、30 秒で画面の使い方をご紹介します。',
-      zh: '欢迎！请戴上耳机：你会听到立体声的故事，连接 MoHeat Evo 后还能在左右耳感受到冷和热。先选择语言，再用 30 秒介绍一下界面。' },
+    { sel: null, en: 'Welcome! Put on headphones: you will hear the story in 3D and, with MoHeat Evo, feel warmth and coolness on each ear. Choose your language (it is remembered on every demo), then a 30-second tour.',
+      ja: 'ようこそ！ヘッドホンをつけてください。立体音響で物語を聴き、MoHeat Evo をつなぐと左右の耳で温かさ・冷たさを感じられます。言語を選ぶと全デモで記憶されます。そのあと 30 秒で画面の使い方をご紹介します。',
+      zh: '欢迎！请戴上耳机：你会听到立体声的故事，连接 MoHeat Evo 后还能在左右耳感受到冷和热。先选择语言（所有 Demo 都会记住），再用 30 秒介绍一下界面。' },
     { sel: 'header .device, #connectBtn, .mdev-btn', en: 'Connect MoHeat Evo here (desktop Chrome / Edge, USB or Bluetooth). Without it you can still watch and listen.',
       ja: 'ここで MoHeat Evo をつなぎます（パソコンの Chrome / Edge、USB または Bluetooth）。つながなくても、見る・聴くことはできます。',
       zh: '在这里连接 MoHeat Evo（电脑上的 Chrome / Edge，USB 或蓝牙）。不连接也可以观看和收听。' },

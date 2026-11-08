@@ -37,6 +37,7 @@
 - [ ] Watched one talking stretch and blinks myself (mouth follows syllables, closes in pauses; both eyes blink)
 - [ ] Played on a phone-size view: answer buttons, long-press and mic usable; guide never off-screen
 - [ ] EN / 日本語 / 中文 each seen once on the cover and in play (room for 한국어: strings in `l10n.js`, language in `shared/subs.js` LANGS)
+- [ ] switch to this demo in EN and 中文 (desktop + phone): the cover shows the chosen language from its first frame, no Japanese / old cover flash (automatic: check_demo G6 l10n-flash)
 - [ ] Felt the thermal moments with the device (or read the #cmd stream) — plausible, strong, fast
 
 ## Manual — G7 / G8 release
