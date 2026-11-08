@@ -269,7 +269,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_booth.webp?v=a9e7bd20",
+    "src": "art/char_booth.webp?v=20881328",
     "w": 1700,
     "h": 1108,
     "x": 0.5865,
@@ -350,7 +350,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_can.webp?v=6d8fef95",
+    "src": "art/char_can.webp?v=2ba2a76a",
     "w": 1537,
     "h": 1402,
     "x": 0.52,
