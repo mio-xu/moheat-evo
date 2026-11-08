@@ -7,6 +7,12 @@
 
 ---
 
+## 2026-11-09（凌晨）· QA 第 3 轮画面修复（agent `fix4`）
+- **做了什么**：Demo19 / Demo22 分层画面不再被页面缩放漂移（LIVE 守卫）；Demo20 握手、Demo22 耳语（Demo21 手腕已随嘴型提交 7d84c1eb）改位置 / 放大，最大视差不再露背景；Demo22 右耳吹风改用不翻转的剧照；Demo20 右耳贴近做成独立镜头 `hina_lean_r`（只翻人物、背景不翻、去掉星形耳钉，自己的 LivePortrait 嘴套 `lean_r` + 眨眼）；Demo24 热气按镜头淡出、软圆；Demo12 拥抱粉框（缩放 < 1 留边）修好；Demo31 冰棍 / 手 / 袖口描边清掉；Demo18 race 青色边光改为场景紫色并变薄、booth 手和玩偶的灰绿边清掉；Demo22 whisper / Demo30 whisper_R / Demo31 laugh 加遮罩眨眼（OpenAI 3 张，约 $0.6）。提交：e4dd6a0c、bc848e4d、927ec7ae、Demo30 眨眼、b58b0509、df08b219、5ce30258、bf270eeb、edfd0834（§11.1）。
+- **状态**：各 Demo `node tools/art/check_motion.js` 全部 motion OK（无 FRAME-DRIFT / EDGE-GAP）；Demo20 check_patches OK。Demo20 queue 画面不改：剧本里排队画面本来就没有陽向（`project/layers.md`），柜台前的黑发男子是排在你前面的人。
+- **下一步 / 注意**：Demo20 `lean` 的嘴套重做时，`lean_r` 也要跟着重跑（`~/ml/LivePortrait/.venv/bin/python tools/art/lp_mouths.py demos/for-women/Demo20_HinataHandshake lean_r --sheet`，再按 build_stage 的嘴套步骤写入；`stage.json` 的 `lean_r` 是 `lean` 的镜像配置）。建议把「main.js 里不许 `scale(-1, 1)` 翻剧照」加进 check_demo（check_demo 当时被 ui3 认领，没加）。Demo12 拥抱粉框只按原因修了，没在浏览器里录到拥抱后段确认。
+- **问题**：commit_mine 的 `--patch` 用 `--recount`，多个文件的 difflib 补丁必须每个文件前加 `diff --git` 行，否则下一个文件的 `---` 行被算进上一个 hunk。
+
 ## 2026-11-08（深夜 2）· 展示模式：三语速查卡、入耳式耳机 + MoHeat Evo 用词、语音远近音量（agent `kiosk`）
 - **做了什么**：① 三语 A4 速查卡 `kiosk/staff_card.html`（一种语言一页，自动缩到一页内，面板「Staff card (print)」打开），文字只在 `kiosk/staff_card_data.js`，`docs/kiosk_staff_card.md` 由 `node tools/web/staff_card_md.js` 生成。② 硬件用词和图示全改：降噪的是入耳式小耳机，MoHeat Evo 是戴在外面的大头戴设备（引导、结束流程、欢迎图标、断开提示、文档、要求）。③ 引导语音远近音量：远处 −30 dB 到耳边 0 dB（音量那句只差 6 dB，方便调音量），末端加限幅器，冷热跟同一条包络。④ 修 bug：shell 有 `setVolume` 后 kiosk 不再放音量滑块，访客没有音量控件（§11.1）；`moheat.volume` 统一为 0–1。
 - **状态**：`check_kiosk.js` 新增 voiceRange、真实可见的音量控件检查。`kiosk/precache.json` 没有重新生成（其他 agent 的 Demo 改动还没停，见 git status），展示前跑 `python3 tools/web/kiosk_precache.py`。
