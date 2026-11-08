@@ -19,7 +19,26 @@
   // films' own play bar (.transport / .legend) are hidden everywhere; the chapter data, seek API, keys and pause keep working.
   // ?bar=1 shows it for testing. Flip to true in ONE release once every demo in nav.js DEMOS shows the same bar (tools/web/check_shell.js).
   SH.BAR_ENABLED = false;
+  // UI v2 (DEMO_DESIGN_GUIDE §7.3 "UI v2", user 2026-11-08): the finished-cover image + the one control bar + ⚙ (demos/shared/ui2.js).
+  // ONE switch for every demo; until the release flips it, ?ui=2 turns it on for this browser (remembered, so ‹ › keeps it) and ?ui=1 off.
+  SH.UI_V2 = false;
   const QS = new URLSearchParams(location.search), EXPORT = QS.has('cover') || QS.has('render') || QS.has('embed');
+  try { if (QS.get('ui') === '2') localStorage.setItem('moheat.ui', '2'); else if (QS.get('ui') === '1') localStorage.removeItem('moheat.ui'); } catch {}
+  const V2 = !EXPORT && (SH.UI_V2 || (() => { try { return localStorage.getItem('moheat.ui') === '2'; } catch { return false; } })());
+  SH.v2 = V2;
+  // the finished cover is the first thing this page fetches (cover first, everything else after — fix2's speed plan)
+  const PAGE = new URL('.', location.href).href, COVER_BASE = PAGE + 'media/cover/';
+  if (V2) {
+    document.documentElement.classList.add('ui2');
+    const lang0 = (() => { try { return QS.get('sub') || localStorage.getItem('moheat.sublang') || 'en'; } catch { return 'en'; } })();
+    const w = Math.min(innerWidth, 1920), sz = w < 820 ? 'c1200' : w * (devicePixelRatio || 1) > 1500 ? 'w1920' : 'w1280';
+    const pl = document.createElement('link'); pl.rel = 'preload'; pl.as = 'image'; pl.href = `${COVER_BASE}${['en', 'ja', 'zh'].includes(lang0) ? lang0 : 'en'}.${sz}.webp`; pl.fetchPriority = 'high';
+    document.head.appendChild(pl);
+    const hide = document.createElement('style'); hide.id = 'moheat-ui2-early';   // nothing old shows, not even for one frame (the old cover HTML, the 🌐 ⛶ corner…)
+    hide.textContent = `html.ui2 .stage .intro { opacity: 0 !important; pointer-events: none !important; }
+      html.ui2 .stage { background: #0b0a12; }`;
+    document.head.appendChild(hide);
+  }
   const LS = { get(k, d) { try { const v = localStorage.getItem('moheat.' + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
     set(k, v) { try { localStorage.setItem('moheat.' + k, JSON.stringify(v)); } catch {} } };
   const T = {   // shell texts: en / ja / zh (ko: add a column — subs.js LANGS decides which ones are offered)
@@ -74,7 +93,7 @@
   if (window.AudioNode && !EXPORT) {
     const connect = AudioNode.prototype.connect;
     AudioNode.prototype.connect = function (dst, ...a) {
-      if (dst instanceof AudioDestinationNode) { let m = masters.get(dst.context); if (!m) { m = dst.context.createGain(); connect.call(m, dst); masters.set(dst.context, m); m.gain.value = warp > 1 ? 0 : 1; } return connect.call(this, m, ...a); }
+      if (dst instanceof AudioDestinationNode) { let m = masters.get(dst.context); if (!m) { m = dst.context.createGain(); connect.call(m, dst); masters.set(dst.context, m); m.gain.value = warp > 1 ? 0 : (SH.volume ?? 1); } return connect.call(this, m, ...a); }
       return connect.call(this, dst, ...a);
     };
     const start = AudioBufferSourceNode.prototype.start;
@@ -82,7 +101,7 @@
   }
   const setWarp = (w) => rebase(() => {
     warp = w; arm();
-    ctxs.forEach((c) => { const m = masters.get(c); if (m) m.gain.value = w > 1 ? 0 : 1; });
+    ctxs.forEach((c) => { const m = masters.get(c); if (m) m.gain.value = w > 1 ? 0 : (SH.volume ?? 1); });
     sources.forEach((n) => { try { n.playbackRate.value = w; } catch {} });
     document.querySelectorAll('audio, video').forEach((m) => { try { m.playbackRate = Math.min(w, 16); m.muted = w > 1 ? true : m.dataset.shMuted === '1'; } catch {} });
     if (w > 1) stopDevice();
@@ -207,7 +226,7 @@
   // Pure mode: any chapter; interactive mode: back, or chapters already reached.
   let reached = 0, target = null, since = 0, back = false;
   const stepsLis = () => [...document.querySelectorAll('#steps li')];
-  const chapters = () => SH.chapters || stepsLis().map((li) => ({ label: li.textContent.split(' · ')[0] }));
+  const chapters = () => SH.chapters || stepsLis().map((li) => { const [ja, en] = (li.dataset.morig || li.textContent).split(' · '); return { label: ja, ja, en: (en || ja).trim() }; });
   const chapter = () => (SH.current ? SH.current() : stepsLis().findIndex((li) => li.classList.contains('now')));
   const seek = (i) => {
     if (!playing()) return; const cur = chapter();
@@ -355,7 +374,8 @@
   const FILM = () => !!(window.DEMO_DATA?.anim && document.getElementById('timelineWrap'));
   const film = (stage) => {
     if (!FILM()) return;
-    const A = DEMO_DATA.anim, wrap = document.getElementById('timelineWrap'), media = ['mix', 'film'].map((k) => document.getElementById(k)).find((e) => e instanceof HTMLMediaElement);   // the soundtrack is the clock
+    const A = DEMO_DATA.anim, wrap = document.getElementById('timelineWrap'),
+      SC = A.scenes || (A.segments || []).map((g) => ({ t: g.t0, ja: g.name, en: g.en || g.name, zh: g.zh })),   /* Demo03 / 04: their segments are the chapters */ media = ['mix', 'film'].map((k) => document.getElementById(k)).find((e) => e instanceof HTMLMediaElement);   // the soundtrack is the clock
     const st = document.createElement('style'); st.textContent = `.intro .ix-toggle, .stage .ix-chip { display: none !important; }
       .sh-marks { position: absolute; inset: 0; pointer-events: none; z-index: 2; } .sh-marks i { position: absolute; top: 0; bottom: 0; width: 2px; background: #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.5); }
       .sh-marks b { position: absolute; top: 1px; transform: translateX(3px); text-shadow: 0 0 3px #000; font: 700 11px/1 system-ui, sans-serif; color: #ffd679; pointer-events: auto; cursor: pointer; }`;
@@ -364,7 +384,7 @@
     addEventListener('moheat:playmode', sync); addEventListener('load', sync); real.st(sync, 800);
     if (getComputedStyle(wrap).position === 'static') wrap.style.position = 'relative';
     const marks = document.createElement('div'); marks.className = 'sh-marks';
-    marks.innerHTML = (A.scenes || []).map((c, k) => `<i style="left:${100 * c.t / A.duration}%"></i><b data-t="${c.t}" style="left:${100 * c.t / A.duration}%" title="${c.en}">${'①②③④⑤⑥⑦⑧⑨⑩'[k] || k + 1}</b>`).join('');
+    marks.innerHTML = SC.map((c, k) => `<i style="left:${100 * c.t / A.duration}%"></i><b data-t="${c.t}" style="left:${100 * c.t / A.duration}%" title="${c.en}">${'①②③④⑤⑥⑦⑧⑨⑩'[k] || k + 1}</b>`).join('');
     wrap.appendChild(marks);
     let far = 0; real.st(function track() { if (media && !media.paused) far = Math.max(far, media.currentTime); real.st(track, 500); }, 500);
     const jump = (t) => { const r = wrap.getBoundingClientRect(), x = r.left + r.width * (t + .05) / A.duration, y = r.top + r.height / 2;
@@ -376,8 +396,8 @@
     marks.addEventListener('click', (e) => { const b = e.target.closest('b'); if (b) { e.stopPropagation(); if (Play.mode === 'interactive' && +b.dataset.t > far + 1) return; jump(+b.dataset.t); } });
     wrap.addEventListener('click', (e) => { if (Play.mode !== 'interactive' || !e.isTrusted) return; const r = wrap.getBoundingClientRect(), t = (e.clientX - r.left) / r.width * A.duration;
       if (t > far + 1) { e.stopImmediatePropagation(); e.preventDefault(); } }, true);   // interactive: back, or up to where you have been
-    SH.chapters = (A.scenes || []).map((c) => ({ label: c.en, t: c.t })); SH.current = () => { const t = media?.currentTime || 0; let k = 0; (A.scenes || []).forEach((c, i) => { if (t >= c.t) k = i; }); return k; };
-    SH.seek = (i) => jump(A.scenes[i].t);
+    SH.chapters = SC.map((c) => ({ label: c.en, t: c.t, ja: c.ja, en: c.en, zh: c.zh })); SH.current = () => { const t = media?.currentTime || 0; let k = 0; SC.forEach((c, i) => { if (t >= c.t) k = i; }); return k; };
+    SH.seek = (i) => jump(SC[i].t);
   };
 
   // ---------------------------------------------------------------- keys / swipes
@@ -400,6 +420,74 @@
   navigator.permissions?.query({ name: 'microphone' }).then((p) => { p.onchange = () => { if (p.state === 'denied' && !Play.pure) toast('micDenied'); }; }).catch(() => {});
   addEventListener('moheat:micdenied', () => toast('micDenied'));
 
-  Object.assign(SH, { pause, setMode, toast, LS, seekTo: seek, chapter }); Object.defineProperty(SH, 'paused', { get: () => paused }); Object.defineProperty(SH, 'warp', { get: () => warp });
+  // ---------------------------------------------------------------- volume (one master for Web Audio + <audio>/<video>; ⚙ / bar slider, kiosk)
+  // the demo's own levels stay as they are: a media element's volume becomes (what the demo set) × master; Web Audio gets one master gain
+  let vol = LS.get('volume', 1);
+  const vdesc = Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype, 'volume'), want = new WeakMap(), clamp01 = (x) => Math.max(0, Math.min(1, x));
+  if (vdesc && !EXPORT) Object.defineProperty(HTMLMediaElement.prototype, 'volume', { configurable: true,
+    get() { return want.has(this) ? want.get(this) : vdesc.get.call(this); }, set(v) { want.set(this, +v); vdesc.set.call(this, clamp01(+v * vol)); } });
+  const applyVol = () => { ctxs.forEach((c) => { const m = masters.get(c); if (m) m.gain.value = warp > 1 ? 0 : vol; });
+    if (vdesc) document.querySelectorAll('audio, video').forEach((m) => { try { vdesc.set.call(m, clamp01((want.has(m) ? want.get(m) : 1) * vol)); } catch {} }); };
+  const setVolume = (v) => { vol = clamp01(+v || 0); LS.set('volume', vol); applyVol(); };
+  if (!EXPORT) document.addEventListener('play', (e) => { if (vol !== 1 && vdesc && e.target instanceof HTMLMediaElement) vdesc.set.call(e.target, clamp01((want.has(e.target) ? want.get(e.target) : 1) * vol)); }, true);
+
+  Object.assign(SH, { pause, setMode, toast, LS, seekTo: seek, chapter, setVolume, chapterList: chapters, setSubs, setMotion,
+    reached: () => reached, setHeat: (on) => { heat = !!on; LS.set('heat', heat); if (!heat) stopDevice(); paint(); } });
+  Object.defineProperty(SH, 'paused', { get: () => paused }); Object.defineProperty(SH, 'warp', { get: () => warp });
+  Object.defineProperty(SH, 'volume', { get: () => vol }); Object.defineProperty(SH, 'heat', { get: () => heat });
+
+  // ---------------------------------------------------------------- UI v2: the live adapter for demos/shared/ui2.js
+  if (V2) {
+    const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = new URL('ui2.css', document.currentScript?.src || PAGE).href; document.head.appendChild(css);
+    const js = document.createElement('script'); js.src = new URL('ui2.js', document.currentScript?.src || PAGE).href; document.head.appendChild(js);
+    let started = false, cover = null, ui = null;
+    document.addEventListener('click', (e) => { if (e.target.closest?.('#startBtn')) started = true; }, true);
+    fetch(PAGE + 'cover.json').then((r) => (r.ok ? r.json() : null)).catch(() => null).then((c) => { cover = c || {}; mount(); });
+    js.addEventListener('load', () => mount());
+    const loadedFrac = () => { if (document.readyState === 'complete') return 1; const im = [...document.images]; return im.length ? Math.min(.99, im.filter((i) => i.complete).length / im.length) : .5; };
+    const intro = () => document.getElementById('intro') || document.querySelector('.stage .intro');
+    const film = () => FILM() && ['mix', 'film'].map((k) => document.getElementById(k)).find((e) => e instanceof HTMLMediaElement);
+    const optEl = (k, v) => { const i = intro(); if (!i) return null; return i.querySelector(`button[data-k="${k}"][data-v="${v}"]`) || i.querySelector(`button[data-${k}="${v}"]`); };
+    // Start is offered when the page has loaded — or 5 s after its HTML at the latest (the demo streams the rest; nothing waits for every voice file)
+    let ready = false; const isReady = () => { ready = true; ui?.paint(); };
+    Promise.all([new Promise((r) => (document.readyState === 'complete' ? r() : addEventListener('load', r))), document.fonts?.ready]).then(isReady);
+    const late = () => real.st(isReady, 5000); if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', late); else late();
+    const A = {
+      get cat() { return location.pathname.split('/demos/')[1]?.split('/')[0]; },
+      get cover() { return { base: COVER_BASE, langs: window.MoHeatSub?.langs || ['en', 'ja', 'zh'] }; },
+      state: () => (playing() ? (paused ? 'paused' : 'playing') : !ready ? 'loading' : started ? 'ended' : 'cover'),
+      lang: () => window.MoHeatSub?.lang || 'en', setLang: (l) => window.MoHeatSub?.set?.(l),
+      mode: () => mode, setMode: (m) => setMode(m),
+      start: () => { if (!ready) return; document.getElementById('startBtn')?.click(); },
+      togglePause: () => { const f = film(); if (FILM() && f) { f.paused ? f.play().catch(() => {}) : f.pause(); return; } pause(!paused); },
+      // chapter labels: cover.json "chapters" (per language) > the demo's own { ja, en, zh } > its label text
+      chapters: () => chapters().map((c, i) => ({ label: cover?.chapters?.[i] || (c.ja || c.zh ? { en: c.en || c.label, ja: c.ja, zh: c.zh || (c.ja && window.MoHeatSub?.tr?.(c.ja, 'zh', false)) || c.en || c.label } : c.label) })), chapter: () => chapter(), reached: () => reached,
+      progress: () => { const f = film(), sc = SH.chapters; if (!f || !sc?.[0] || sc[0].t == null) return .5; const k = chapter(), t0 = sc[k]?.t ?? 0, t1 = sc[k + 1]?.t ?? DEMO_DATA.anim.duration; return Math.max(0, Math.min(1, (f.currentTime - t0) / Math.max(1, t1 - t0))); },
+      seek: (i) => seek(i),
+      volume: () => vol, setVolume,
+      heat: () => heat, setHeat: SH.setHeat,
+      intensity: () => { const i = document.getElementById('intensity'); return i ? (+i.value - +i.min) / ((+i.max || 100) - +i.min) : LS.get('intensity', 100) / 100; },
+      setIntensity: (v) => { const i = document.getElementById('intensity'); if (i) { i.value = Math.round(+i.min + v * ((+i.max || 100) - +i.min)); i.dispatchEvent(new Event('input', { bubbles: true })); } },
+      subs: () => LS.get('subs', 'm'), setSubs: (v) => setSubs(v),
+      reduced: () => Play.reduced, setReduced: (v) => setMotion(v),
+      autohide: () => LS.get('autohide', false), setAutohide: (v) => LS.set('autohide', !!v),
+      device: () => { const d = window.MoHeatDevice?.current; return { serial: 'serial' in navigator, connected: !!(d && (d.connected || d.port)), name: d?.name || '' }; },
+      connect: () => document.getElementById('connectBtn')?.click(),
+      fullscreen: () => !!window.MoHeatFullscreen?.on, toggleFullscreen: () => window.MoHeatFullscreen?.toggle?.(),
+      endings: () => SH.endings?.() || null, openEndings: () => SH.openEndings?.(),
+      options: () => (cover?.options || []).filter((o) => !o.when || o.when === A.state()).map((o) => ({ key: o.key, label: o.label,
+        items: o.items.map((it) => { const el = optEl(o.key, it.v); return { v: it.v, label: it.label, on: !!el && (el.getAttribute('aria-pressed') === 'true' || el.classList.contains('on')) }; }) })),
+      pick: (k, v) => optEl(k, v)?.click(),
+      loaded: () => (ready ? 1 : loadedFrac()), ready: () => ready,
+    };
+    SH.ui2 = A;
+    function mount() {
+      if (ui || !cover || !window.MoHeatUI2) return;
+      const go = () => { const stage = document.querySelector('.stage-col .stage') || document.querySelector('.stage'); if (!stage) return;
+        ui = SH.ui2view = MoHeatUI2.mount(stage, A); real.st(function tick() { try { ui.paint(); } catch (e) { real.st(() => { throw e; }); } real.st(tick, 250); }, 250);
+        addEventListener('moheat:sublang', () => ui.paint()); addEventListener('moheat:playmode', () => ui.paint()); };
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
+    }
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

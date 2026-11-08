@@ -33,7 +33,7 @@
 .u2[data-state="loading"] .u2-cover, .u2[data-state="cover"] .u2-cover, .u2[data-state="ended"] .u2-cover { opacity: 1; pointer-events: auto; }
 .u2-pic { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; background: #0b0a12; }
 .u2-ctl { position: absolute; left: var(--u2-x); width: 50cqw; display: flex; align-items: center; gap: var(--u2-gap); }
-/* rows are stacked from the bar up (their sizes have touch minimums); the baked copy is anchored at the top and ends by 30cqw, so the
+/* rows are stacked from the bar up (their sizes have touch minimums); the baked copy is anchored at the top and ends by 31cqw, so the
    two never meet down to the 760 px player (below that: the compact layout) — tools/web/cover_tpl.html holds the matching numbers */
 .u2-row-lang { bottom: calc(var(--u2-bar) + 1.6cqw); height: var(--u2-chip); }
 .u2-row-opt { bottom: calc(var(--u2-bar) + 3cqw + var(--u2-chip)); height: var(--u2-chip); }
@@ -73,7 +73,7 @@
 .u2-ib.off { color: var(--u2-dim); }
 .u2-ib.off::after { content: ""; position: absolute; left: 28%; right: 28%; top: 50%; height: 2px; background: currentColor; transform: rotate(-45deg); border-radius: 2px; }
 .u2-prog { flex: 1 1 auto; min-width: 0; height: var(--u2-bar); display: flex; align-items: center; gap: .8cqw; padding: 0 .4cqw; }
-.u2-now { font-size: var(--u2-fs); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 16cqw; min-width: 0; }
+.u2-now { flex: none !important; width: 15cqw; font-size: var(--u2-fs); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }   /* fixed width: the track never moves with the chapter title */
 .u2-now b { color: var(--u2-accent); margin-right: .4em; font-variant-numeric: tabular-nums; }
 .u2-track { flex: 1 1 auto; min-width: 40px; display: flex; gap: 3px; height: 100%; align-items: center; }
 .u2-seg-c { flex: 1 1 0; min-width: 6px; height: 100%; border: 0; padding: 0; background: transparent; display: flex; align-items: center; position: relative; }
@@ -117,6 +117,11 @@
 .u2-dot { width: 9px; height: 9px; border-radius: 50%; background: #8a8496; display: inline-block; margin-right: .45em; }
 .u2-dot.ok { background: #6fe39a; }
 .u2-set { width: clamp(280px, 28cqw, 400px); max-height: calc(100cqw * 9 / 16 - var(--u2-bar) - 4cqw); overflow-y: auto; scrollbar-width: thin; }
+
+/* ⚙ on small players: a bottom sheet over the whole page */
+.u2.u2-sheet { position: fixed; inset: 0; z-index: 1000; pointer-events: auto; background: rgba(4, 3, 8, .5); --u2-fs: 14px; --u2-fs-s: 12.5px; }
+.u2.u2-sheet .u2-set { position: absolute; left: 0; right: 0; bottom: 0; top: auto; width: auto; max-height: 78vh; max-height: 78dvh; border-radius: 16px 16px 0 0;
+  padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); }
 
 /* ---------------------------------------------------------------- states */
 .u2-paused { position: absolute; inset: 0 0 calc(var(--u2-bar) + 1.2cqw); display: none; align-items: center; justify-content: center; pointer-events: auto; background: rgba(6, 5, 10, .38); border: 0; padding: 0; }
@@ -170,3 +175,11 @@
 html.reduce-motion .u2 * { transition: none !important; }
 .u2-set .u2-vol-line { display: none; }
 @container (max-width: 420px) { .u2-set .u2-vol-line { display: flex; } }
+
+/* ---------------------------------------------------------------- the old per-demo interface, replaced by UI v2 (html.ui2 = shell.js switch).
+   Hidden here while both exist; the release deletes the old sources (cover HTML, drawCover, stage chips). */
+html.ui2 .stage .intro { opacity: 0 !important; pointer-events: none !important; }
+html.ui2 :is(.sh-mode, .sh-heat, .sh-bar, .sh-pause, .sh-veil, .sh-marks, .hud-top, .msub-hud, .ix-chip, .ix-hud, .mfs-exit, .stage .fs-btn, .stage .msub-btn) { display: none !important; }
+html.ui2 .stage-col > :is(.transport, .legend) { display: none !important; }
+html.ui2 .sh-set { display: none !important; }
+html.ui2 .stage { background: #0b0a12; border: 0 !important; border-radius: 10px !important; box-shadow: 0 10px 40px rgba(0, 0, 0, .45) !important; outline: 0 !important; }   /* one frame for every player */

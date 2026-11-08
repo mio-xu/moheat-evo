@@ -25,6 +25,7 @@
 <script>
 const CAT = { 'all-ages': 'All ages', healing: 'Healing', 'for-men': 'For men', 'for-women': 'For women', 'nobunaga-suntory': 'Nobunaga series' };
 let lang = 'en', view = 'w1280'; try { lang = localStorage.getItem('moheat.sublang') || 'en'; } catch {}
+const QS = new URLSearchParams(location.search); if (QS.get('l')) lang = QS.get('l'); if (QS.get('v')) view = QS.get('v');
 (async () => {
   const src = await (await fetch('../../demos/shared/nav.js')).text();
   const demos = [...src.matchAll(/\{ cat: '([^']+)', dir: '([^']+)', ja: '([^']*)', en: ("[^"]*"|'[^']*'), zh: '([^']*)'/g)].map((m) => ({ cat: m[1], dir: m[2], ja: m[3], en: m[4].slice(1, -1), zh: m[5] }));
@@ -35,7 +36,7 @@ let lang = 'en', view = 'w1280'; try { lang = localStorage.getItem('moheat.subla
     let last = '';
     document.getElementById('wall').innerHTML = demos.map((d) => { const head = d.cat !== last ? `<h2>${CAT[d.cat]}</h2>` : ''; last = d.cat;
       const f = view === 'thumb' ? 'w1280' : view;
-      return `${head}<figure><img loading="lazy" ${view === 'thumb' ? 'style="width:240px;height:135px"' : ''} src="../../demos/${d.cat}/${d.dir}/media/cover/${lang}.${f}.webp" alt=""><figcaption><span>${d[lang]}</span><span>${d.dir.split('_')[0]}</span></figcaption></figure>`; }).join('');
+      return `${head}<figure><img ${view === 'thumb' ? 'style="width:240px;height:135px"' : ''} src="../../demos/${d.cat}/${d.dir}/media/cover/${lang}.${f}.webp" alt=""><figcaption><span>${d[lang]}</span><span>${d.dir.split('_')[0]}</span></figcaption></figure>`; }).join('');
   };
   document.getElementById('nav').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.l) { lang = b.dataset.l; try { localStorage.setItem('moheat.sublang', lang); } catch {} } if (b.dataset.v) view = b.dataset.v; paint(); });
   paint();

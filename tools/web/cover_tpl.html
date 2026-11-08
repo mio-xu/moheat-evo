@@ -4,7 +4,7 @@
        cover_tpl.html?demo=demos/<cat>/<dir>&lang=en|ja|zh&layout=wide|compact
      Inputs: <demo>/cover.json (texts per language, tone, chips) + <demo>/media/cover/art.webp (the picture: background + character
      composed once to the 2b numbers). Wide = 1280×720 CSS px (rendered ×1.5 → 1920×1080), compact = 400×225 (×3 → 1200×675).
-     The live controls (demos/shared/ui2.css .u2-row-*) sit BELOW the copy block: the copy must end by 30cqw (wide) / 50 % of the
+     The live controls (demos/shared/ui2.css .u2-row-*) sit BELOW the copy block: the copy must end by 31cqw (wide) / 50 % of the
      height (compact) — window.TPL.fit reports it, covers.py FAILs a cover that does not fit. -->
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+JP:wght@500;700&family=Zen+Maru+Gothic:wght@500;700;900&family=Shippori+Mincho+B1:wght@600;800&display=block" rel="stylesheet">
@@ -19,13 +19,14 @@
   .art { position: absolute; inset: 0; background: center / cover no-repeat; }
   .shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(var(--tone) / .86) 0%, rgb(var(--tone) / .74) 30%, rgb(var(--tone) / .34) 50%, rgb(var(--tone) / 0) 62%); }
   .shade2 { position: absolute; inset: auto 0 0 0; height: 30%; background: linear-gradient(rgb(6 5 10 / 0), rgb(6 5 10 / .55)); }   /* under the live controls + bar */
-  .copy { position: absolute; left: 4cqw; top: 7cqw; width: 48cqw; display: flex; flex-direction: column; align-items: flex-start; font-family: var(--ui); }
+  .copy { position: absolute; left: 4cqw; top: 6cqw; width: 48cqw; display: flex; flex-direction: column; align-items: flex-start; font-family: var(--ui); }
   .kick { font: 600 .86cqw/1.3 var(--ui); letter-spacing: .18em; text-transform: uppercase; color: rgb(255 255 255 / .78); margin: 0 0 1.3cqw; }
   .kick.series { font-family: "Shippori Mincho B1", serif; font-weight: 800; letter-spacing: .1em; text-transform: none; color: #f6d27a; padding: .3cqw 1cqw;
     border: 1px solid rgb(246 210 122 / .6); border-radius: 99px; background: rgb(40 20 8 / .45); }
   h1 { margin: 0; font: 900 5.6cqw/1.12 var(--title); letter-spacing: .01em; text-wrap: balance; text-shadow: 0 .2cqw 1.4cqw rgb(0 0 0 / .55); }
   body[data-cat="nobunaga-suntory"] h1 { font-weight: 800; }
-  h1 span { display: block; white-space: nowrap; }
+  h1 span { display: block; text-wrap: balance; }   /* a line that does not fit wraps (balanced; Japanese at phrase boundaries) */
+  body[data-lang="ja"] h1 span { word-break: auto-phrase; } body[data-lang="zh"] h1 span { word-break: keep-all; line-break: strict; }
   .tag { margin: 1.1cqw 0 0; font: 600 1.5cqw/1.35 var(--ui); color: rgb(255 255 255 / .92); max-width: 46cqw; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
     text-shadow: 0 1px 6px rgb(0 0 0 / .6); }
   .chips { display: flex; flex-wrap: wrap; gap: .6cqw; margin-top: 1.5cqw; max-width: 48cqw; }
@@ -67,12 +68,17 @@
   await document.fonts.ready;
   // the title fits the column: shrink (never below 3.2cqw wide / 5cqw compact) until every line fits and the block ends in time
   const W = document.body.clientWidth, cq = W / 100, copy = document.querySelector('.copy');
-  const maxW = (compact ? 64 : 48) * cq, endMax = compact ? 0.5 * innerHeight : 30 * cq;
+  const maxW = (compact ? 64 : 48) * cq, endMax = compact ? 0.5 * innerHeight : 31 * cq;
   let f = compact ? 7.6 : 5.6; const fmin = compact ? 5 : 3.2;
-  const lines = () => [...h1.children].map((s) => s.getBoundingClientRect().width);
-  while (f > fmin && (Math.max(...lines()) > maxW || copy.getBoundingClientRect().bottom > endMax)) { f -= .1; h1.style.fontSize = `${f}cqw`; }
+  const lines = () => [h1.scrollWidth, ...[...h1.children].map((s) => s.scrollWidth)];
+  // too tall: the title keeps its size as long as possible — first the tagline goes to one line, then the chips get smaller, then the title shrinks
+  const tall = () => copy.getBoundingClientRect().bottom > endMax;
+  if (tall()) document.querySelector('.tag').style.webkitLineClamp = '1';
+  if (tall()) document.querySelectorAll('.chip').forEach((c) => { c.style.fontSize = '.92cqw'; });
+  while (f > fmin && (Math.max(...lines()) > maxW || tall())) { f -= .1; h1.style.fontSize = `${f}cqw`; }
   const end = copy.getBoundingClientRect().bottom;
-  window.TPL = { done: true, fit: end <= endMax + .5 && Math.max(...lines()) <= maxW + 1, end: +(end / cq).toFixed(2), endMax: +(endMax / cq).toFixed(2), h1: +f.toFixed(1) };
+  const nl = Math.round(h1.getBoundingClientRect().height / (parseFloat(getComputedStyle(h1).fontSize) * 1.12));
+  window.TPL = { done: true, lines: nl, fit: end <= endMax + .5 && Math.max(...lines()) <= maxW + 1 && nl <= 3, end: +(end / cq).toFixed(2), endMax: +(endMax / cq).toFixed(2), h1: +f.toFixed(1) };
 })().catch((e) => { window.TPL = { done: true, err: String(e) }; });
 </script>
 </body></html>

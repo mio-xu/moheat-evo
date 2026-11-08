@@ -100,15 +100,19 @@
     // ------------------------------------------------ popovers
     const pops = { vol: $('.u2-pop-vol'), heat: $('.u2-pop-heat'), set: $('.u2-set'), opt: $('.u2-pop-opt') }, owners = { vol: $('.u2-opt-vol'), heat: $('.u2-heat'), set: $('.u2-gear'), opt: null };
     let optKey = null;
-    const close = () => Object.keys(pops).forEach((k) => { pops[k].hidden = true; owners[k]?.setAttribute('aria-expanded', 'false'); });
+    // small players (phones): ⚙ opens as a bottom sheet over the whole page (the 210 px picture is too small for it)
+    const sheet = document.createElement('div'); sheet.className = 'u2 u2-sheet'; sheet.hidden = true; if (A.cat) sheet.dataset.cat = A.cat; document.body.appendChild(sheet);
+    sheet.addEventListener('pointerdown', (e) => { if (e.target === sheet) close(); });
+    const close = () => { Object.keys(pops).forEach((k) => { pops[k].hidden = true; owners[k]?.setAttribute('aria-expanded', 'false'); }); sheet.hidden = true; if (pops.set.parentElement !== root) root.appendChild(pops.set); };
     // a popover opens above its button: bar buttons right-aligned to it, cover option pickers left-aligned (phones: full width)
     const open = (k, ownerEl) => { const was = !pops[k].hidden && (k !== 'opt' || ownerEl?.dataset.pick === optKey); close(); if (was) return;
       if (k === 'opt') { owners.opt = ownerEl; optKey = ownerEl.dataset.pick; }
       renderPop(k); pops[k].hidden = false; owners[k]?.setAttribute('aria-expanded', 'true');
+      if (k === 'set' && big() <= 620) { sheet.lang = root.lang; sheet.appendChild(pops.set); sheet.hidden = false; return; }
       const b = owners[k].getBoundingClientRect(), r = root.getBoundingClientRect(), wide = big() > 620;
       if (k === 'opt') { pops.opt.style.left = wide ? `${b.left - r.left}px` : ''; pops.opt.style.right = wide ? 'auto' : ''; pops.opt.style.bottom = `${r.bottom - b.top + 6}px`; }
       else if (k !== 'set') pops[k].style.right = wide ? `${Math.max(4, r.right - b.right)}px` : ''; };
-    document.addEventListener('pointerdown', (e) => { if (!root.contains(e.target) || (!e.target.closest('.u2-pop') && !e.target.closest('[aria-haspopup]'))) close(); });
+    document.addEventListener('pointerdown', (e) => { if (sheet.contains(e.target)) return; if (!root.contains(e.target) || (!e.target.closest('.u2-pop') && !e.target.closest('[aria-haspopup]'))) close(); });
     addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
     const sw = (on, k, dis) => `<button type="button" class="u2-sw" role="switch" aria-checked="${!!on}" data-k="${k}" ${dis ? 'disabled' : ''}></button>`;
     const range = (k, v, cls = '') => `<input class="u2-range ${cls}" type="range" min="0" max="100" step="1" value="${Math.round(v * 100)}" data-k="${k}" style="--v:${Math.round(v * 100)}%">`;
@@ -133,12 +137,12 @@
         pops.opt.innerHTML = `<h3>${esc(pickL(o.label))}</h3><div class="u2-chips u2-wrap">${o.items.map((it) =>
           `<button type="button" class="u2-chipb" data-opt="${esc(o.key)}" data-v="${esc(it.v)}" aria-pressed="${!!it.on}">${esc(pickL(it.label))}</button>`).join('')}</div>`; }
     };
-    root.addEventListener('input', (e) => { const r = e.target.closest('.u2-range'); if (!r) return; const v = r.value / 100; r.style.setProperty('--v', `${r.value}%`);
+    const onInput = (e) => { const r = e.target.closest('.u2-range'); if (!r) return; const v = r.value / 100; r.style.setProperty('--v', `${r.value}%`);
       const val = r.parentElement.querySelector('.u2-val');
       if (r.dataset.k === 'vol') { A.setVolume?.(v); if (val) val.textContent = r.value; }
       if (r.dataset.k === 'int') { A.setIntensity?.(v); if (val) val.textContent = `${r.value}%`; }
-      paint(); });
-    root.addEventListener('click', (e) => {
+      paint(); };
+    const onClick = (e) => {
       const b = e.target.closest('button'); if (!b || b.disabled) return;
       const k = b.dataset.k;
       if (b.classList.contains('u2-sw')) { const on = b.getAttribute('aria-checked') !== 'true';
@@ -159,7 +163,8 @@
       if (b.classList.contains('u2-gear')) return open('set');
       if (b.classList.contains('u2-fs')) { A.toggleFullscreen?.(); paint(); return; }
       if (b.classList.contains('u2-gal')) { A.openEndings?.(); return; }
-    });
+    };
+    for (const el of [root, sheet]) { el.addEventListener('input', onInput); el.addEventListener('click', onClick); }
 
     // ------------------------------------------------ auto-hide (opt-in)
     let idleT = 0; const wake = () => { root.classList.remove('u2-idle'); clearTimeout(idleT); idleT = setTimeout(() => root.classList.add('u2-idle'), 3000); };

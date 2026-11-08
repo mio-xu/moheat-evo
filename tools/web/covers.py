@@ -14,6 +14,7 @@ with tools/art/cover_plate.py). This script renders the finished cover image fro
   python3 tools/web/covers.py                       # every demo in nav.js DEMOS
   python3 tools/web/covers.py Demo24_GakuCamp …     # only these folders
   python3 tools/web/covers.py --langs en,zh --publish
+  python3 tools/web/covers.py --check               # no render: which finished covers are missing / older than their inputs
 FAIL (exit 1) when a copy block does not end above the live controls (title too long → shorten it in cover.json) or a file goes over
 its budget (w1920 ≤ 260 KB, w1280 ≤ 160 KB, c1200 ≤ 140 KB). Needs no server (own http.server + headless Chrome, at most one)."""
 import json, os, re, subprocess, sys, tempfile
@@ -21,6 +22,33 @@ from PIL import Image
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 BUDGET = {'w1920': 260, 'w1280': 160, 'c1200': 140}   # KB
+LANGS = ('en', 'ja', 'zh')
+SIZES = ('w1920', 'w1280', 'c1200')
+
+
+def sha(p):
+    import hashlib
+    try: return hashlib.sha1(open(p, 'rb').read()).hexdigest()[:12]
+    except OSError: return None
+
+
+def inputs(cat, d):
+    """what a finished cover depends on: the data, the picture, the template (a template change = every cover is stale)"""
+    dd = os.path.join(REPO, 'demos', cat, d)
+    return {'cover.json': sha(os.path.join(dd, 'cover.json')), 'art.webp': sha(os.path.join(dd, 'media', 'cover', 'art.webp')),
+            'cover_tpl.html': sha(os.path.join(REPO, 'tools', 'web', 'cover_tpl.html'))}
+
+
+def stale(cat, d):
+    """[] when media/cover/ holds every finished image rendered from the current inputs, else the reasons (check_demo.py G7 ui)"""
+    od = os.path.join(REPO, 'demos', cat, d, 'media', 'cover'); out = []
+    miss = [f'{l}.{z}.webp' for l in LANGS for z in SIZES if not os.path.exists(os.path.join(od, f'{l}.{z}.webp'))]
+    if miss: out.append('missing ' + ', '.join(miss))
+    try: st = json.load(open(os.path.join(od, 'stamp.json')))
+    except (OSError, ValueError): return out + ['no media/cover/stamp.json (render with tools/web/covers.py)']
+    cur = inputs(cat, d); ch = [k for k in cur if cur[k] != st.get(k)]
+    if ch: out.append('changed since the render: ' + ', '.join(ch) + f' → python3 tools/web/covers.py {d}')
+    return out
 
 
 def demos(args):
@@ -43,6 +71,9 @@ def main():
     publish = '--publish' in a; args = [x for x in a if not x.startswith('--')]
     todo = [(c, d) for c, d in demos(args) if os.path.exists(os.path.join(REPO, 'demos', c, d, 'cover.json'))]
     if not todo: sys.exit('no demo with cover.json')
+    if '--check' in a:   # no render: list stale / missing finished covers (exit 1 if any)
+        bad = [f'{d}: {"; ".join(r)}' for c, d in todo for r in [stale(c, d)] if r]
+        print('\n'.join(bad) or 'all finished covers are current'); sys.exit(1 if bad else 0)
     with tempfile.TemporaryDirectory() as tmp:
         r = subprocess.run(['node', os.path.join(REPO, 'tools', 'web', 'cover_render.js'), tmp, *[f'demos/{c}/{d}' for c, d in todo], '--langs', langs],
                            capture_output=True, text=True, cwd=REPO, timeout=3600)
@@ -75,6 +106,8 @@ def main():
             for f in os.listdir(od):
                 k = f.split('.')[1] if f.count('.') == 2 else None
                 if k in BUDGET and os.path.getsize(os.path.join(od, f)) > BUDGET[k] * 1024: bad.append(f'{d}/{f} over {BUDGET[k]} KB')
+            if langs.split(',') == list(LANGS) and not any(x.startswith(d + ' ') for x in bad):   # a full render: stamp it
+                tmp = os.path.join(od, f'stamp.json.{os.getpid()}'); json.dump(inputs(c, d), open(tmp, 'w'), indent=1); os.replace(tmp, os.path.join(od, 'stamp.json'))
             print(d, ' · '.join(row))
     if bad: print('FAIL\n  ' + '\n  '.join(bad)); sys.exit(1)
     print('PASS')
