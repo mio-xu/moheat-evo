@@ -1,6 +1,7 @@
 """Build a layered demo stage from plain-background poses + one background plate (DEMO_DESIGN_GUIDE §6.2) — Pillow + numpy only.
 
   python3 tools/art/build_stage.py <demo folder> [--preview]
+  python3 tools/art/build_stage.py <demo folder> --mouths-only   # swap in LivePortrait mouth sets, leave the finished layers alone
 
 Reads <demo>/project/stage.json:
   { "src": "assets/art", "skipVideo": "media/video/[vt]_",
@@ -24,6 +25,7 @@ import numpy as np
 from PIL import Image, ImageFilter
 
 ap = argparse.ArgumentParser(); ap.add_argument("demo"); ap.add_argument("--preview", action="store_true")
+ap.add_argument("--mouths-only", action="store_true", help='only (re)write the "mouth": "lp" sets into the existing media/layers.js; every other layer stays as built / cleaned')
 a = ap.parse_args()
 D = os.path.abspath(a.demo); HERE = os.path.dirname(os.path.abspath(__file__))
 cfg = json.load(open(os.path.join(D, "project", "stage.json")))
@@ -153,6 +155,41 @@ def find_fire(path):
     return [round(float((xs * w).sum() / w.sum()) / 480, 3), round(float((ys * w).sum() / w.sum()) / 270, 3)]
 
 
+def lp_set(name, p, cut, box, f):
+    """"mouth": "lp" — a mouth SET from tools/art/lp_mouths.py: closed (= the pose's own pixels) + open levels warped by LivePortrait
+    from that same picture, all one fixed block, so the corners never jump (DEMO_DESIGN_GUIDE §6 mouth step). kind "mouth_lv" + level."""
+    LPD = os.path.join(D, "assets", "lp_mouths"); mf = os.path.join(LPD, "lp_mouths.json")
+    m = (json.load(open(mf)) if os.path.exists(mf) else {}).get(name); run = f"~/ml/LivePortrait/.venv/bin/python tools/art/lp_mouths.py {sys.argv[1]} {name} --sheet"
+    if not m: sys.exit(f"pose {name}: \"mouth\": \"lp\" but no assets/lp_mouths/{name}_lv*.png — run {run}")
+    if m.get("of") and m["of"] != hashlib.md5(open(src(p["src"]), "rb").read()).hexdigest()[:10]:
+        sys.exit(f"pose {name}: {p['src']}.png changed after its mouth set was made — run {run}")
+    x, y, w, h = m["rect"]; rx, ry = round((x - box[0]) * f), round((y - box[1]) * f); res = []
+    for k in range(m["levels"] + 1):
+        im = Image.open(os.path.join(LPD, f"{name}_lv{k}.png")).convert("RGBA").resize((max(1, round(w * f)), max(1, round(h * f))), Image.LANCZOS)
+        ca = cut.getchannel("A").crop((rx, ry, rx + im.width, ry + im.height))   # only where the character layer is solid
+        im.putalpha(Image.fromarray(np.minimum(np.asarray(im.getchannel("A")), np.asarray(ca)).astype(np.uint8)))
+        if p.get("matte") == "green":
+            q = np.asarray(im).copy(); q[..., 1] = np.minimum(q[..., 1], np.maximum(q[..., 0], q[..., 2]).astype(int) + 6).astype(np.uint8); im = Image.fromarray(q)
+        pn = f"{name}_mouth{k}"; im.save(out(os.path.join(ART, pn + ".webp")), quality=92, method=6)
+        res.append({"src": f"art/{pn}.webp", "rect": [rx, ry, im.width, im.height], "kind": "mouth_lv", "level": k, "im": im})
+    print(f"pose {name}: LivePortrait mouth set, {m['levels']} open levels")
+    return res
+
+
+if a.mouths_only:
+    lj = os.path.join(D, "media", "layers.js"); t = open(lj).read(); head = t[:t.index("{")]; data = json.loads(t[t.index("{"):t.rindex("}") + 1])
+    sets = {}
+    for vw in data["views"].values():
+        pn = vw["char"]["src"].split("char_")[1].split(".")[0]; p = cfg["poses"].get(pn)
+        if not p or p.get("mouth") != "lp": continue
+        if pn not in sets:
+            cut = Image.open(os.path.join(D, "media", vw["char"]["src"].split("?")[0])).convert("RGBA"); box = vw["char"]["box"]
+            sets[pn] = lp_set(pn, p, cut, box, vw["char"]["w"] / (box[2] - box[0]))
+            for q in sets[pn]: q["src"] += "?v=" + hashlib.md5(open(os.path.join(ART, q["src"][4:]), "rb").read()).hexdigest()[:8]
+        vw["patches"] = [q for q in vw["patches"] if q["kind"] not in ("mouth", "mouth_quiet", "mouth_lv")] + [{k: q[k] for k in ("src", "rect", "kind", "level")} for q in sets[pn]]
+    open(out(lj), "w").write(head + json.dumps(data, ensure_ascii=False, indent=1) + ";\n"); print(f"wrote media/layers.js (mouth sets only: {', '.join(sets) or 'none'})")
+    sys.exit(0)
+
 data = {"views": {}}
 if cfg.get("skipVideo"): data["skipVideo"] = cfg["skipVideo"]
 if cfg.get("hooks"): data["hooks"] = cfg["hooks"]   # where the base demo keeps its state (view, mouth) — see shared/layers.js
@@ -215,25 +252,8 @@ if pcfg["patches"]:
         pose["patches"].append({"src": f"art/{pn}.webp", "rect": [round((x - bx) * f), round((y - by) * f), im.width, im.height], "kind": e["kind"],
                                 "im": im})
 
-# "mouth": "lp" — a mouth SET from tools/art/lp_mouths.py: closed (= the pose's own pixels) + open levels warped by LivePortrait from
-# that same picture, all one fixed block, so the corners never jump (DEMO_DESIGN_GUIDE §6 mouth step). kind "mouth_lv" + level 0..n.
-LPD = os.path.join(D, "assets", "lp_mouths"); lpm = json.load(open(os.path.join(LPD, "lp_mouths.json"))) if os.path.exists(os.path.join(LPD, "lp_mouths.json")) else {}
-for name, p in cfg["poses"].items():
-    if p.get("mouth") != "lp": continue
-    m = lpm.get(name); run = f"~/ml/LivePortrait/.venv/bin/python tools/art/lp_mouths.py {sys.argv[1]} {name} --sheet"
-    if not m: sys.exit(f"pose {name}: \"mouth\": \"lp\" but no assets/lp_mouths/{name}_lv*.png — run {run}")
-    if m.get("of") and m["of"] != hashlib.md5(open(src(p["src"]), "rb").read()).hexdigest()[:10]:
-        sys.exit(f"pose {name}: {p['src']}.png changed after its mouth set was made — run {run}")
-    pose = poses[name]; x, y, w, h = m["rect"]; bx, by = pose["box"][:2]; f = pose["f"]; rx, ry = round((x - bx) * f), round((y - by) * f)
-    for k in range(m["levels"] + 1):
-        im = Image.open(os.path.join(LPD, f"{name}_lv{k}.png")).convert("RGBA").resize((max(1, round(w * f)), max(1, round(h * f))), Image.LANCZOS)
-        ca = pose["cut"].getchannel("A").crop((rx, ry, rx + im.width, ry + im.height))   # only where the character layer is solid
-        im.putalpha(Image.fromarray(np.minimum(np.asarray(im.getchannel("A")), np.asarray(ca)).astype(np.uint8)))
-        if p.get("matte") == "green":
-            q = np.asarray(im).copy(); q[..., 1] = np.minimum(q[..., 1], np.maximum(q[..., 0], q[..., 2]).astype(int) + 6).astype(np.uint8); im = Image.fromarray(q)
-        pn = f"{name}_mouth{k}"; im.save(out(os.path.join(ART, pn + ".webp")), quality=92, method=6)
-        pose["patches"].append({"src": f"art/{pn}.webp", "rect": [rx, ry, im.width, im.height], "kind": "mouth_lv", "level": k, "im": im})
-    print(f"pose {name}: LivePortrait mouth set, {m['levels']} open levels")
+for name, p in cfg["poses"].items():   # "mouth": "lp" sets (lp_set above)
+    if p.get("mouth") == "lp": pose = poses[name]; pose["patches"] += lp_set(name, p, pose["cut"], pose["box"], pose["f"])
 
 # views: data for shared/layers.js + the flat fallback still (same placement maths as the page)
 FW, FH = 1920, 1080
