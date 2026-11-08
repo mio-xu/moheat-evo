@@ -230,7 +230,7 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 
 | 步 | 做什么 | 门禁：查什么 · 用什么 · 通过标准 | 防住的 §11.1 |
 |---|---|---|---|
-| **G0 开工** | `git log --oneline -15` + 重读本节、§7、§11.1、`USER_PREFERENCES.md`；给 2–4 个方案；写 `project/layers.md`（画面 × 层 × L0–L4 × credits / 美元） | 用户（或统筹会话）选定方案和预算（Seedance ≤ 1500、OpenAI ≤ 10 美元 / Demo）；`check_demo.py <demo> --quick --checklist` 生成 `project/CHECKLIST.md` | 理解错、按旧标准开工、方案太重 |
+| **G0 开工** | `git log --oneline -15` + 重读本节、§7、§11.1、`USER_PREFERENCES.md`；给 2–4 个方案；写 `project/layers.md`（画面 × 层 × L0–L4 × credits / 美元） | 用户（或统筹会话）选定方案和预算（Seedance ≤ 1500、OpenAI ≤ 15 美元 / Demo，用户 2026-11-09 由 10 提到 15）；`check_demo.py <demo> --quick --checklist` 生成 `project/CHECKLIST.md` | 理解错、按旧标准开工、方案太重 |
 | **G1 剧本 + 冷热 + 语言** | 先按 `tools/qa/SCRIPT_TEMPLATE.md` 写 `project/script.md`：**世界规则卡**（§0.1）、**镜头表**（每个画面"你"在哪、谁在哪边、手里拿什么 / 不拿什么、远景还是近景、谁说话）、冷热表；**出图前**由用户 / 统筹审过剧本 + 镜头表 + 冷热表（提效标准 4）；然后 `lines.js`（ja + en）、`l10n.js`（zh，韩语留位置：`subs.js` LANGS）；冷热表用 DUAL；每个回答二选一、能说出口 | 冷热表每行写出物理来源（人声暖、贴耳最强）；**DUAL 展示四项都安排到**：同一只耳冷热快速切换、强度到顶、左右方向、冷热同时输出（G6 用 `#cmd` 实测）；§0.1 成品要求逐条对过（魔法世界有规则卡）；script.md 审过才出图 | 出图后才发现镜头 / 道具不对、魔法冷热说不通 |
 | **G2 声音** | ElevenLabs 试听 3 个 → 用户选 → 合成（交接文档 §4） | 选定的 voice id 记进交接文档 / README | — |
 | **G3 出图** | 按 §6.5 素材标准 S1–S7（角色卡 `docs/characters/<id>.md`、提示词 `python3 tools/art/prompts/fill.py <模板> <角色>`）；**先做 1 个完整画面打样**（底图 + 嘴套 + 眨眼 + 合成 + 在页面里播放）给用户 / 统筹审过再批量（提效标准 5）；§5.3 工具顺序，先 `probe`（429 / Retry-After 长 → OpenAI）；提示词：新姿势「full figure inside the frame with margin」、按参考重画「同样取景不拉远」、手上拿什么不拿什么、只画人物；特写给远景 + 近景两张参考；差分一律遮罩编辑；同一底图的差分和同脸姿势当场一起提交 | **只看输出文件**：每个 job 都有新图（`exists` = 错误）、网页端历史多了一张卡片；`assets/poses_preview.jpg` 并排对比同一个人（CHECKLIST） | 没出图却"成功"、重名跳过、共用账号、加道具 / 全身像、近景远景不一致 |
@@ -238,7 +238,7 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 | **G5 页面** | §7.3 骨架（复制同类最近的 Demo）、`media/layers.js` + `shared/layers.js`、`hooks`；改 shared 马上 `bump.py --stage`；文件只放自己的文件夹 / 本品类 `_kit/` | `check_demo.py <demo> --quick` 的 **G5 行全 PASS**：syntax、refs（无 `<base>`、无别的 Demo 路径）、links（无断链）、files（静态 404）、cache（shared 和 `media/layers.js` 的 `?v=` 最新）、l10n、voice（`shared/voice.js`）、end（回本 Demo 封面「↺ もう一度 · Play again」） | 嘴不动（缓存）、依赖别的 Demo、语法错误、写死路径 |
 | **G6 测试** | 自动通关（两条分支）、三语、手机 | `check_demo.py <demo>`（默认：自己的 headless Chrome，`?auto=1&nomic&sub=zh` 通关 + 7 种尺寸）：**runtime**（0 异常 / 0 失败请求）、**l10n-live**（无 `[MoHeatSub] no zh`）、**end-live**、**thermal**（`#cmd` 实测：同时冷热、≤ 3 s 冷热切换、左右差、峰值 ≥ 50 %、结束 stop）、**mobile** 全 PASS；上线前 `--full`（加 alt 分支 + `check_mouth.js` 口型）；自己看一段说话和眨眼、对照 §0.1 成品要求（CHECKLIST） | 测试通过但嘴不动、手机不好用、测试被干扰 |
 | **G7 上线** | 封面 `?cover=1` → `media/cover.jpg`、`thumbs.py`、`nav.js` DEMOS、官网菜单、`credits.html`；重做版 `merge_remake.py`（**先自动跑 check_demo，FAIL 就拒绝合并**，`--force` 要在提交说明里写理由），合并后对原文件夹再跑一次；**只提交自己的路径、自己提交**（硬规则，2026-11-08 一天出了 3 次事）：整份文件都是自己的用 `git commit -- <路径>`；共用文件里还有别人没提交的改动时，用临时索引（`GIT_INDEX_FILE` + `read-tree HEAD` + 只放自己基于 HEAD 的版本 + `commit-tree` / `update-ref HEAD <新> <旧>`）；**永远不用不带路径的 `git commit`**（会带走别人暂存的东西），**永远不让 HEAD 往回走**（共用的 main 上不 reset / rebase / amend / 强推，出错就再做一个往前的修正提交）；共用文档一律写临时文件再替换（不先清空再写），改之前马上重读；提交后 `git show --stat HEAD` | `check_demo.py` 0 FAIL（**release** 行：封面、三语缩略图不比封面 / `l10n.js` 旧、菜单、credits 写明 layered）；统筹会话 push 后 Pages `built` | 带上别人的改动、只提交版本号、`$F` 路径 |
-| **G8 收尾** | README / 交接文档 / `WORKLOG.md`、预算记账（`python3 tools/report/balances.py --budget`：每个 Demo 的 OpenAI 估算，80 % 预警、超过 10 美元先停，check_demo 的 hygiene 也会报）、`tools/cleanup/audit.py`；新问题 → §11.1 **并变成一个检查** | **hygiene** 行 PASS（assets 不进 git、无大文件、有预算记录、有 CHECKLIST）；CHECKLIST 手动项都打勾 | — |
+| **G8 收尾** | README / 交接文档 / `WORKLOG.md`、预算记账（`python3 tools/report/balances.py --budget`：每个 Demo 的 OpenAI 估算，80 % 预警、超过 15 美元先停，check_demo 的 hygiene 也会报）、`tools/cleanup/audit.py`；新问题 → §11.1 **并变成一个检查** | **hygiene** 行 PASS（assets 不进 git、无大文件、有预算记录、有 CHECKLIST）；CHECKLIST 手动项都打勾 | — |
 
 **check_demo.py 用法**
 ```
@@ -489,7 +489,7 @@ python3 tools/qa/check_demo.py <demo> --checklist        # 同时写 / 刷新 pr
 | S12 | **先审 1–2 张再批量**：1 个完整画面打样（底图 + 嘴套 + 眨眼 + 合成 + 页面播放）审过才铺开 | G3 门禁；CHECKLIST |
 | S13 | **每个 Demo 记账**：`project/openai_log.json`（images.py / extend_pose.py 自动写，重跑也记 `prior_usage`）、Seedance credits 写进 README | `balances.py --budget`；hygiene 行 |
 | S15 | **换装 / 换发型要由剧情交代**（用户 2026-11-08）：每套造型在角色卡 `looks[]` 登记（id、参考图、服装、发型、在哪一场为什么换）；`stage.json` 每个姿势写 `"look"`（多人时加 `"character"`），剧本镜头表每场写 look；同一段剧情里的近景 / 远景用同一套，拿的东西、头饰跟着一致 | check_demo **looks**（发色在所有姿势里一致；服装颜色只在同一个 look 里比，粗查）+ `poses_preview.jpg` 逐项看 |
-| S14 | **到上限先停**：OpenAI 80 % 预警，超过 10 美元 / Seedance 1500 credits 停下交给用户 | `balances.py --demo <demo>` 退出码 1 / 2 → hygiene WARN |
+| S14 | **到上限先停**：OpenAI 80 % 预警，超过 15 美元（2026-11-09 起）/ Seedance 1500 credits 停下交给用户 | `balances.py --demo <demo>` 退出码 1 / 2 → hygiene WARN |
 
 ### 6.6 效率工具与多会话协作（提效标准 13 条，用户 2026-11-08 认可）
 
@@ -731,6 +731,8 @@ main.layout
 - **新图和旧图重名，脚本跳过了**（Demo31：`gpt_image.py` 见到同名旧整图输出 exists，后面的差分全做在旧图上）→ 新一轮出图前先把旧图改名（`flat_*`），脚本输出里的 `exists` 当成错误处理。〔G3〕
 - **多个会话共用账号、网页和 ~/Downloads**（Demo26 / Demo25 互相拿错下载；ChatGPT 输入框残留别人的草稿；Seedance 历史里有相似提示词；Chrome 拦截同一网站的连续自动下载）→ 提交前清空输入框；`web_helpers.js` 按本 Demo 提示词里独有的句子找卡片；下载后先看一眼缩略图再改名移走，拿错的按原名放回；ChatGPT 网页不作为常规出图路线。〔G3〕
 - **OpenAI 安全审核拒绝了贴耳私语的差分**（"whispering into her ear" + 敞开的衬衫）→ 差分提示词只写嘴和眼的变化（"嘴微张，轻声说话"），不写亲密动作；被拒时换中性说法再试。〔G3〕
+- **古代 / 奇幻设定里出现不合时代的饰品**（2026-11-09，Demo45 紫苑：架空古代的国师戴着眼镜 / 单片镜，用户：「古代人不会戴眼镜」）→ 角色卡里的现代锚点（眼镜、墨镜、耳机、手机、拉链…）换到历史 / 奇幻设定时一律去掉，除非剧情交代；设定图提示词写明 "no glasses, no sunglasses, no earbuds, nothing modern"，换成别的锚点（泪痣、发饰、羽扇）；已出的图用遮罩编辑去掉（眼周椭圆 + 镜链，脸保持不变）。〔G3 · CHECKLIST：没有不合时代的饰品〕
+- **特写姿势站错了边**（2026-11-09，Demo45 紫苑贴左耳的特写画在了右边）→ 贴耳特写的提示词写成「他的脸在画面左三分之一 / 右三分之一，身体朝画面中间倾」，不只写 "at the LEFT side"；出图后先看脸在哪边再做差分。〔G3〕
 - **模型擅自改了构图或加了东西**：坐到左边多出一个杯子（岳）；门口那张把门框和"你"的手画进人物层（紫苑）；按旧静帧重画时写了 "full figure"，人物缩成小小的全身像（Demo40 椿）→ 提示词写明手上拿什么、不拿什么，"只画人物，不画门框、墙、别人的手"；按参考图重画写「同样的取景和大小，不要拉远」，不写 full figure；但新姿势要写「full figure inside the frame with margin」防截断（见 G4 半截身体）。每张图出来先和参考图并排看一眼再出差分。〔G3 · CHECKLIST：没有多余道具 / 背景〕
 - **近景 / 特写和远景不像同一个人**（Demo31 贴耳、靠肩：画风更柔更写实、发色变浅、脸变成熟；紫苑：前一个画面已摘的眼镜又戴上了）→ 特写 / 事件 CG 同时给**远景 + 近景两张参考**（`images.py` 的 `ref` 可写成列表），提示词开头写"同一个人、同一画风，不要更写实、不要变浅色头发"；"只改动作"的编辑牵涉脸上的东西（眼镜）就当新姿势，单独出张嘴 / 闭眼；每次合成看 `assets/poses_preview.jpg` 逐项对比（发型发色、瞳色、配饰、服装、画风）并按剧情顺序查连续性。〔G4 · CHECKLIST：poses_preview〕
 
