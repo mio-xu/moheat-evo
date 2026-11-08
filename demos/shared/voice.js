@@ -56,7 +56,10 @@
     if (h.includes(p)) return 1;
     if (p.includes(h) && h.length >= Math.min(3, p.length)) return .5 + .45 * h.length / p.length;
     const A = grams(p), B = grams(h), n = overlap(A, B);
-    return Math.max(2 * n / (A.length + B.length), .85 * n / A.length);
+    // letter pairs of a short answer turn up by chance in a long unrelated sentence (EN "help me" in a 50-letter remark):
+    // the one-sided score shrinks with the length ratio, and Latin letters (few distinct pairs) count less → no match = ask again
+    const len = Math.min(1, Math.sqrt(2.5 * (A.length + 1) / (B.length + 1))), latin = /^[a-z0-9]+$/.test(p);
+    return Math.max(2 * n / (A.length + B.length), .85 * n / A.length * len * (latin ? .75 : 1));
   }
   // English: also word by word (stems + a few synonyms), so a paraphrase with the same key words passes
   const STOP = new Set('i a an the to of is am are was were be it its that this so and or just do did really very me my'.split(' '));
@@ -183,7 +186,7 @@
     if (pick < 0 && final && !s.single) { const o = [ORD, ORD_ZH].map((L) => L.findIndex((re, k) => k < sc.length && alts.some((a) => re.test(norm(a))))).find((x) => x >= 0); if (o >= 0) pick = o; }
     if (pick < 0 && final && s1 >= .12) {   // a near miss (unrelated talk in the room does not count)
       s.fails++;
-      if (s.single && s.lenient !== false && (s.fails >= 2 || s1 >= .2)) pick = 0;
+      if (s.single && s.lenient !== false && (s.fails >= 2 || s1 >= .2) && norm(heard).length <= 24) pick = 0;   // a long unrelated remark never counts as the answer
     }
     if (pick >= 0) { hit(pick, heard); return; }
     showPill(final ? 'retry' : '', final ? `🤔「${heard}」 ${T('もう一度', 'Try again', '再说一次')}` : `「${heard}」`, s.anchor());
