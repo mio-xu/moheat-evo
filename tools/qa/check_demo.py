@@ -238,7 +238,12 @@ dirty = {l[3:].strip('"') for l in dirty}
 cache_fail, cache_warn = [], []
 for ref, v in re.findall(r'(?:src|href)="([^"?#]+)\?v=([^"&]+)"', html):
     p = resolve(ref); rp = os.path.relpath(p, REPO)
-    if not os.path.exists(p) or not v.isdigit(): continue
+    if not os.path.exists(p): continue
+    if not v.isdigit():   # content-hash version (tools/web/bump.py --auto): stale when it is not the file's current hash
+        import hashlib
+        h = hashlib.sha1(open(p, 'rb').read()).hexdigest()[:8]
+        if re.fullmatch(r'[0-9a-f]{6,12}', v) and v != h: cache_fail.append(f'{ref}?v={v}: content is now {h} — python3 tools/web/bump.py --auto {rp}')
+        continue
     shared = rp.startswith('demos/shared/') or os.path.dirname(p) == REPO
     if shared and int(v) < site_max.get(p, 0):
         cache_fail.append(f'{ref}?v={v}: other pages use ?v={site_max[p]} — bump (python3 tools/web/bump.py {rp})'); continue
