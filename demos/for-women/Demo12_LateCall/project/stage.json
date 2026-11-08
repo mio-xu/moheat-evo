@@ -30,10 +30,10 @@
    "matte": "ai",
    "regions_mouth": [
     [
-     1635,
-     745,
-     145,
-     78
+     1670,
+     715,
+     180,
+     100
     ]
    ],
    "regions_eyes": [
@@ -66,16 +66,16 @@
    ],
    "regions_eyes": [
     [
-     1110,
-     335,
-     72,
-     42
+     1113,
+     433,
+     86,
+     48
     ],
     [
-     1300,
-     258,
-     78,
-     42
+     1302,
+     353,
+     92,
+     48
     ]
    ]
   },
@@ -91,9 +91,9 @@
    "pose": "call",
    "bg": "street",
    "fire": null,
-   "x": 0.6694,
+   "x": 0.71,
    "y": 1.02,
-   "height": 1.0
+   "height": 1.04
   },
   "close": {
    "still": "ren_close.webp",
@@ -111,7 +111,7 @@
    "fire": null,
    "x": 0.5,
    "y": 1.02,
-   "height": 1.0
+   "height": 1.04
   },
   "hug": {
    "still": "ren_hug.webp",

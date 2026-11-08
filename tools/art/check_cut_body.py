@@ -2,7 +2,7 @@
 """Find character layers whose body is visibly cut off inside the frame (user 2026-11-08: "人物在画面中全出现，但是身体只有半截").
 
 A char layer is anchored at its bottom centre (x, y = frame fractions, height = fraction of the frame; shared/layers.js).
-If the picture's bottom / left / right edge is opaque (the body was cut there) and that edge lands INSIDE the frame,
+If the picture's bottom / left / right / top edge is opaque (the body was cut there) and that edge lands INSIDE the frame,
 the viewer sees a body that stops in mid-air. Fix: extend the pose (outpaint the missing body with the image API) or
 move / scale the layer so the cut edge sits outside the frame.
 
@@ -24,7 +24,7 @@ def load_layers(path):
 
 
 def edge_fill(a, side):
-    band = {'bottom': a[-3:, :], 'left': a[:, :3].T, 'right': a[:, -3:].T}[side]
+    band = {'bottom': a[-3:, :], 'left': a[:, :3].T, 'right': a[:, -3:].T, 'top': a[:3, :]}[side]
     return float((band > 128).any(axis=0).mean())
 
 
@@ -48,8 +48,9 @@ def check(demo):
                 out.append((name, 'missing', str(e))); continue
         a = seen[src]
         hf = c['height']; wf = hf * (c['w'] / c['h']) * (9 / 16)
-        bottom, left, right = c['y'], c['x'] - wf / 2, c['x'] + wf / 2
-        for side, pos, inside in (('bottom', bottom, bottom < 1 + MARGIN), ('left', left, left > -MARGIN), ('right', right, right < 1 + MARGIN)):
+        bottom, left, right, top = c['y'], c['x'] - wf / 2, c['x'] + wf / 2, c['y'] - hf
+        # top: hair cut flat by the picture's top edge, hanging 2 % below the frame top (Ren / Shion: "y": 1.02 with "height": 1.0)
+        for side, pos, inside in (('bottom', bottom, bottom < 1 + MARGIN), ('left', left, left > -MARGIN), ('right', right, right < 1 + MARGIN), ('top', top, top > -MARGIN)):
             f = edge_fill(a, side)
             if f > 0.04 and inside:
                 out.append((name, side, f'{os.path.basename(src)}: {f:.0%} of the {side} edge is body, edge at {pos:.3f} of the frame'))

@@ -8,7 +8,7 @@ Your room (bg_room / bg_room_open) has no Ren in it: Demo12's pictures are used 
 import importlib.util, json, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-spec = importlib.util.spec_from_file_location('d12', os.path.join(ROOT, '..', 'Demo12_LateCall', 'scripts', 'seedance.py'))
+spec = importlib.util.spec_from_file_location('d12', os.path.join(ROOT, 'scripts', 'seedance.py'))
 d12 = importlib.util.module_from_spec(spec); spec.loader.exec_module(d12)
 
 PLAIN = ("Plain flat MID-GREY studio background (#707070), completely empty: no scenery, no floor line, no shadow on the background. "

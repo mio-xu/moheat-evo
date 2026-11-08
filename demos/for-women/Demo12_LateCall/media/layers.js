@@ -12,12 +12,12 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_call.webp?v=712ea4f5",
+    "src": "art/char_call.webp?v=b73c6099",
     "w": 1700,
     "h": 1304,
-    "x": 0.6694,
+    "x": 0.71,
     "y": 1.02,
-    "height": 1.0,
+    "height": 1.04,
     "box": [
      935,
      0,
@@ -37,12 +37,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/call_eyes.webp?v=d4e1b6e5",
+     "src": "art/call_eyes.webp?v=bb5e15d3",
      "rect": [
-      522,
-      217,
-      332,
-      227
+      541,
+      234,
+      298,
+      190
      ],
      "kind": "eyes"
     }
@@ -59,7 +59,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_close.webp?v=68f06984",
+    "src": "art/char_close.webp?v=2da72094",
     "w": 1700,
     "h": 1061,
     "x": 0.55,
@@ -74,22 +74,22 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/close_mouth.webp?v=278b8846",
+     "src": "art/close_mouth.webp?v=726258be",
      "rect": [
-      848,
-      439,
-      342,
-      219
+      831,
+      385,
+      427,
+      283
      ],
      "kind": "mouth"
     },
     {
-     "src": "art/close_eyes.webp?v=f01b36c7",
+     "src": "art/close_eyes.webp?v=e7fcefd6",
      "rect": [
-      618,
-      133,
-      577,
-      338
+      642,
+      157,
+      533,
+      288
      ],
      "kind": "eyes"
     }
@@ -111,7 +111,7 @@ window.MOHEAT_LAYERS = {
     "h": 1440,
     "x": 0.5,
     "y": 1.02,
-    "height": 1.0,
+    "height": 1.04,
     "box": [
      590,
      0,
@@ -131,12 +131,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/door_eyes.webp?v=bca30f15",
+     "src": "art/door_eyes.webp?v=0f13dd2f",
      "rect": [
-      403,
-      178,
-      432,
-      237
+      404,
+      283,
+      435,
+      220
      ],
      "kind": "eyes"
     }
