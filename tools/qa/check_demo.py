@@ -383,6 +383,20 @@ try:
         ub += _cv.stale(CAT, NAME)
 except Exception as e: ub.append(f'tools/web/covers.py: {e}')
 if 'shared/shell.js' not in read(os.path.join(D, 'index.html')): ub.append('index.html does not load ../../shared/shell.js (the UI v2 adapter)')
+# series.css hides the old stage before the shell paints — only on <html data-u2> pages; a page with series.css and no shell (live/) must not say data-u2
+_nosh = []
+for f in glob.glob(os.path.join(D, '**', '*.html'), recursive=True):
+    if re.search(r'(^|[\\/])(project|output|assets|production)[\\/]', os.path.relpath(f, D)): continue
+    t = read(f); rf = os.path.relpath(f, D)
+    if 'shared/series.css' not in t: continue
+    u2 = bool(re.search(r'<html[^>]*\sdata-u2\b', t)); sh = 'shared/shell.js' in t
+    if sh and not u2: ub.append(f'{rf}: loads shell.js but <html> has no data-u2 (series.css pre-paint hide off: old cover flashes)')
+    if u2 and not sh: ub.append(f'{rf}: <html data-u2> without shell.js — its stage would stay hidden')
+    if not sh: _nosh.append(f)
+if not A.quick and _nosh:   # pages without the shell (private live talk pages): their own stage must show (tools/web/check_stage_visible.js)
+    csv = subprocess.run(['node', os.path.join(REPO, 'tools', 'web', 'check_stage_visible.js'), *_nosh], capture_output=True, text=True, cwd=REPO)
+    try: ub += json.loads(csv.stdout.strip().splitlines()[-1]).get('fails', [])
+    except Exception: ub.append('check_stage_visible.js gave no result: ' + csv.stderr.strip()[-200:])
 for f in glob.glob(os.path.join(D, '*.css')) + glob.glob(os.path.join(D, '*.js')):
     if re.search(r'\.u2[-\s.{:\[]|\bu2-[a-z]', read(f)): ub.append(f'{os.path.basename(f)} styles / touches the shared interface (.u2…) — the UI is shared code only')
 if not A.quick and not ub:

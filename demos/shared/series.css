@@ -176,5 +176,7 @@ html.l10n-fade .intro :is(h1, h2, h3, p, li, .chip, button, .opt, label, .series
 @keyframes moheat-l10n-failsafe { to { visibility: visible; opacity: 1; } }
 
 /* UI v2 (DEMO_DESIGN_GUIDE §7.3): the page's own cover HTML / stage never paints before the shared interface is on — this stylesheet is
-   in <head>, so it holds from the first frame (shell.js runs at the end of <body>; 300 ms of Japanese cover text otherwise, l10n-flash) */
-html:not(.u2-on) .stage > *, .stage .intro, .stage .vv { visibility: hidden !important; }
+   in <head>, so it holds from the first frame (shell.js runs at the end of <body>; 300 ms of Japanese cover text otherwise, l10n-flash).
+   Only on pages that load shell.js — they say so with <html data-u2> (check_demo G7 ui checks: shell.js ⇔ data-u2). Pages without the
+   shell (the private live talk pages Demo23/live, Demo43/live) keep their own cover and stage (2026-11-09: they were blacked out). */
+html[data-u2]:not(.u2-on) .stage > *, html[data-u2] .stage .intro, html[data-u2] .stage .vv { visibility: hidden !important; }
