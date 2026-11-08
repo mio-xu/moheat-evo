@@ -452,6 +452,8 @@
     // UI2_V = content hash of ui2.js + ui2.css (python3 tools/web/bump.py --auto keeps it current: cat ui2.js ui2.css | shasum, 8 hex)
     const UI2_V = 'ae34e286';
     const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = new URL(`ui2.css?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(css);
+    let cssReady = false; const cssOk = () => { if (!cssReady) { cssReady = true; mount(); } };   // mount only once ui2.css applies: an unstyled first frame left the player column off-centre (Demo21 check_ui band 16 / 58 px under load)
+    css.addEventListener('load', cssOk); css.addEventListener('error', cssOk); real.st(cssOk, 3000);
     const js = document.createElement('script'); js.src = new URL(`ui2.js?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(js);
     let started = false, cover = null, ui = null, relayout2 = () => {};
     document.addEventListener('click', (e) => { if (e.target.closest?.('#startBtn')) started = true; }, true);
@@ -513,7 +515,7 @@
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watchBar); else watchBar();
     addEventListener('load', () => { relayout(); document.fonts?.ready.then(relayout); });
     function mount() {
-      if (ui || !cover || !window.MoHeatUI2) return;
+      if (ui || !cover || !cssReady || !window.MoHeatUI2) return;
       const go = () => { const stage = document.querySelector('.stage-col .stage') || document.querySelector('.stage'); if (!stage) return;
         ui = SH.ui2view = MoHeatUI2.mount(stage, A); document.documentElement.classList.add('u2-on'); relayout2(); real.st(function tick() { try { ui.paint(); } catch (e) { real.st(() => { throw e; }); } real.st(tick, 250); }, 250);
         addEventListener('moheat:sublang', () => ui.paint()); addEventListener('moheat:playmode', () => ui.paint());
