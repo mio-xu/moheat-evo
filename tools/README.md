@@ -7,7 +7,7 @@ Rule: one QA entry point — new checks go **into** `tools/qa/check_demo.py`, no
 ## QA (gates G4–G8)
 | Tool | Use |
 |---|---|
-| `python3 tools/qa/check_demo.py <demo> [--quick\|--full] [--checklist] [--json]` | THE entry point: PASS / WARN / FAIL table; G4 layers / cut-body / patches / eyes / edges / fringe / blink / far-motion / looks, G5 syntax / refs / links / files / cache / l10n / voice / end, G6 browser rows, G7 cover / release / style, G8 hygiene (incl. budget, script.md) |
+| `python3 tools/qa/check_demo.py <demo> [--quick\|--full] [--parallel] [--checklist] [--json]` | THE entry point (one headless Chrome at a time; `--parallel` = main + alt together, max 2): PASS / WARN / FAIL table; G4 layers / cut-body / patches / eyes / edges / fringe / blink / far-motion / looks, G5 syntax / refs / links / files / cache / l10n / voice / end, G6 browser rows, G7 cover / release (thumbnails vs cover by content: `assets/images/demos/<dir>.thumbs.json`) / style, G8 hygiene (incl. budget, script.md) |
 | `python3 tools/qa/check_deps.py [--fail] [--json] [--scripts]` | dependency rule (§12.1): a demo loads only its folder, `demos/shared`, its category `_kit` |
 | `python3 tools/qa/changed.py <since> [--worktree] [--json]` | which demos × QA areas (art / mouth / thermal / ui / mobile) changed → tester roles + checks |
 | `python3 tools/qa/ci_report.py <since> [--all]` | CI half (`.github/workflows/qa.yml`): check_deps + check_demo --quick on changed demos, annotations + summary, always exit 0 (never blocks Pages) |
@@ -35,8 +35,8 @@ Rule: one QA entry point — new checks go **into** `tools/qa/check_demo.py`, no
 ## Web / release (G5 / G7)
 | Tool | Use |
 |---|---|
-| `python3 tools/web/bump.py <files…> [--stage]` · `--auto [files…]` · `--check` | `?v=` numbers; `--auto` = content hash (8 hex), `--check` lists stale ones |
-| `merge_remake.py` · `remake_page.py` · `thumbs.py` · `check_cover.py` · `cover_shots.js` · `check_shell.js` · `check_mobile.html` | remakes, thumbnails, cover standard, UI shell, mobile check |
+| `python3 tools/web/bump.py <files…> [--stage]` · `--auto [files…]` · `--check [--shared]` | `?v=` numbers; `--auto` = content hash (8 hex), `--check` lists stale ones (wrong hash, lower number, or a number set before the file's last commit) |
+| `merge_remake.py` · `remake_page.py` · `thumbs.py` (writes the `<dir>.thumbs.json` content stamp; commit it with the jpgs) · `check_cover.py` · `cover_shots.js` · `check_shell.js` · `check_mobile.html` | remakes, thumbnails, cover standard, UI shell, mobile check |
 | `node tools/l10n/check_missing.js <lang> [folder]` | untranslated strings |
 
 ## Workflow (several sessions, one working tree)

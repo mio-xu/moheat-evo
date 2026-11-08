@@ -9,6 +9,11 @@ table; exit code 1 when anything FAILs. Every lesson in §11.1 that a script can
   python3 tools/qa/check_demo.py <staging> --remake-of <orig>   # a remake before merge_remake.py: refs to <orig> allowed, menu / thumbs skipped
   python3 tools/qa/check_demo.py <demo folder> --checklist      # also write / refresh <demo>/project/CHECKLIST.md (manual items kept)
   options: --secs N (playthrough limit, default 300) · --json (machine-readable) · --no-mobile
+           --parallel (--full: main + alt playthrough at once, mouth after — at most 2 browsers; default = one browser at a time)
+Browsers (2026-11-08: main + alt + mouth started together = 3 Chromes, under load the probe timed out "did not answer"): by default
+ONE headless Chrome at a time — the main playthrough runs while the static checks work, then alt, mouth, shell, cover one after the
+other. The wait for the probe is longer than page_probe.js's own deadline (--secs + 900 s), so a slow run answers with what it has
+instead of being killed; a probe that still gives no answer is retried once alone.
 Per-demo exceptions (each with a reason) go in <demo>/project/qa.json:
   { "l10n_ignore": ["…"],                              Japanese strings that are never shown (TTS readings, keys)
     "skip": { "patches": "why", "thermal": "why" } }    a check id → reason (shown as SKIP)
@@ -48,6 +53,7 @@ ap = argparse.ArgumentParser(description='One QA entry point for a demo (DEMO_DE
 ap.add_argument('demo'); ap.add_argument('--quick', action='store_true'); ap.add_argument('--full', action='store_true')
 ap.add_argument('--remake-of', default=None); ap.add_argument('--checklist', nargs='?', const='', default=None)
 ap.add_argument('--secs', type=int, default=300); ap.add_argument('--json', action='store_true'); ap.add_argument('--no-mobile', action='store_true')
+ap.add_argument('--parallel', action='store_true')
 A = ap.parse_args()
 D = os.path.abspath(A.demo); NAME = os.path.basename(D); CAT = os.path.basename(os.path.dirname(D))
 REL = os.path.relpath(D, REPO)
@@ -74,14 +80,21 @@ def read(p):
 
 
 # ---------------------------------------------------------------- browser probe first (runs while the static checks work)
-probe = None
+# ONE browser at a time by default (max-2-browsers rule; 3 at once timed out under load): main now, alt / mouth after it (--parallel:
+# alt next to main, still ≤ 2). PROBE_WAIT > page_probe.js's own deadline (secs + 900) so a slow probe answers with partial results.
+probe = probe_alt = None
+PROBE = ['node', os.path.join(REPO, 'tools', 'qa', 'page_probe.js'), D, '--secs', str(A.secs)]
+PROBE_WAIT = A.secs + 1200
+
+
+def start_probe(extra):
+    return subprocess.Popen(PROBE + extra, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
+
+
 if not A.quick and os.path.exists(os.path.join(D, 'index.html')):
-    cmd = ['node', os.path.join(REPO, 'tools', 'qa', 'page_probe.js'), D, '--secs', str(A.secs)] + (['--no-mobile'] if A.no_mobile else [])
-    probe = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
-    probe_alt = subprocess.Popen(cmd[:3] + ['--secs', str(A.secs), '--alt', '--no-mobile'], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True) if A.full else None
-mouth = None
-if A.full and os.path.exists(os.path.join(D, 'media', 'layers.js')):
-    mouth = subprocess.Popen(['node', os.path.join(REPO, 'tools', 'art', 'check_mouth.js'), D, str(min(A.secs, 240))], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    probe = start_probe(['--no-mobile'] if A.no_mobile else [])
+    if A.full and A.parallel: probe_alt = start_probe(['--alt', '--no-mobile'])
+HAS_MOUTH = A.full and os.path.exists(os.path.join(D, 'media', 'layers.js'))
 
 # ---------------------------------------------------------------- what the page loads
 INDEX = os.path.join(D, 'index.html')
@@ -405,13 +418,17 @@ def take(proc, timeout):
 
 
 if probe:
-    res = take(probe, A.secs + 900)
-    if not res: row('G6', 'runtime', 'FAIL', 'the browser probe did not answer (Chrome / port problem?)')
+    res = take(probe, PROBE_WAIT)
+    if not res:   # killed / crashed / no JSON: once more, alone (nothing else of ours is running now)
+        if probe_alt: probe_alt.kill(); probe_alt = None
+        res = take(start_probe(['--no-mobile'] if A.no_mobile else []), PROBE_WAIT)
+    if not res: row('G6', 'runtime', 'FAIL', 'the browser probe did not answer twice (Chrome / port problem? see `node tools/qa/page_probe.js <demo>`)')
     else:
         runs = [('', res)]
-        if A.full and probe_alt:
-            ra = take(probe_alt, A.secs + 300)
+        if A.full:
+            ra = take(probe_alt or start_probe(['--alt', '--no-mobile']), PROBE_WAIT)   # sequential unless --parallel started it already
             if ra: runs.append(('alt ', ra))
+            else: row('G6', 'alt runtime', 'FAIL', 'the alt-branch probe did not answer')
         for tag, r in runs:
             P = r.get('play') or {}
             errs = [f'exception: {x}' for x in P.get('exceptions', [])] + [f'console.error: {x}' for x in P.get('console', [])] + [f'request: {x}' for x in P.get('bad', [])] + [f'probe: {x}' for x in r.get('errors', [])]
@@ -428,6 +445,9 @@ if probe:
             else: row('G6', f'{tag}end-live', 'WARN', f'did not reach the end within {P.get("secs")} s (raise --secs, or the auto path stalls)')
             st, summ, info = thermal(P.get('cmds', []), P.get('secs'))
             if P.get('cmds') and P['cmds'][-1][1].strip().lower() != 'stop' and P.get('ended'): st = 'WARN'; summ += '; does not end on stop'
+            if A.full and not tag and P.get('cmds'):   # the thermal-use score for the menu (tools/qa/thermal_score.py → thermal_scores.json; then --write-nav)
+                sys.path.insert(0, os.path.join(REPO, 'tools', 'qa')); import thermal_score
+                ts, tp = thermal_score.update(NAME, P['cmds'], P.get('secs'), 'check_demo --full (?auto run)'); info.append(f'thermal-use score {ts} / 100 {tp} → tools/qa/thermal_scores.json')
             row('G6', f'{tag}thermal', st, summ, info)
         M = res.get('mobile')
         if M and any(m['problems'] for m in M):   # parallel Chrome runs make one-screen results flaky: a size fails only if it fails twice
@@ -446,8 +466,9 @@ if probe:
             badd = [f'{d["size"]}: ' + '; '.join(d['problems']) for d in DG if d['problems']]
             row('G6', 'drag', 'FAIL' if badd or not DG else 'PASS', f'{len(badd)} of {len(DG)} sizes: the browser takes the finger' if badd else
                 f'{len(DG)} sizes: strokes reach the page, no scroll / zoom / pointercancel' if DG else 'no result', badd)
-if mouth:
-    try: out, _ = mouth.communicate(timeout=A.secs + 300)
+if HAS_MOUTH:   # after the probes: one browser at a time
+    mouth = subprocess.Popen(['node', os.path.join(REPO, 'tools', 'art', 'check_mouth.js'), D, str(min(A.secs, 240))], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    try: out, _ = mouth.communicate(timeout=A.secs + 600)
     except subprocess.TimeoutExpired: mouth.kill(); out = 'timeout'
     fl = [l.strip()[2:] for l in out.splitlines() if l.strip().startswith('✗')]
     row('G6', 'mouth', 'FAIL' if mouth.returncode else 'PASS', f'{len(fl)} lip-sync problem(s)' if mouth.returncode else 'mouth opens only while talking', fl or ([out.strip().splitlines()[-1]] if mouth.returncode and out.strip() else []))

@@ -1,0 +1,34 @@
+{
+ "base": {
+  "inputs": {
+   "demos/for-men/Demo14_MintStream/l10n.js": "4e9e3706d56dfd4d48be367846161461f6acce0d",
+   "demos/for-men/Demo14_MintStream/media/cover.jpg": "45e247d407f8d993747181713d5dfe9bf80e4bb2",
+   "demos/shared/cover.js": "4f3bb841dc60ac2c0196b4939c6ae64ee2354dfb"
+  },
+  "thumb": "31be7ea8f69091abf66f8df899dcd6aadfd26071"
+ },
+ "en": {
+  "inputs": {
+   "demos/for-men/Demo14_MintStream/l10n.js": "4e9e3706d56dfd4d48be367846161461f6acce0d",
+   "demos/for-men/Demo14_MintStream/media/cover.jpg": "45e247d407f8d993747181713d5dfe9bf80e4bb2",
+   "demos/shared/cover.js": "4f3bb841dc60ac2c0196b4939c6ae64ee2354dfb"
+  },
+  "thumb": "31be7ea8f69091abf66f8df899dcd6aadfd26071"
+ },
+ "ja": {
+  "inputs": {
+   "demos/for-men/Demo14_MintStream/l10n.js": "4e9e3706d56dfd4d48be367846161461f6acce0d",
+   "demos/for-men/Demo14_MintStream/media/cover.jpg": "45e247d407f8d993747181713d5dfe9bf80e4bb2",
+   "demos/shared/cover.js": "4f3bb841dc60ac2c0196b4939c6ae64ee2354dfb"
+  },
+  "thumb": "783e84a869cce4bca1ba927db78201f59708927e"
+ },
+ "zh": {
+  "inputs": {
+   "demos/for-men/Demo14_MintStream/l10n.js": "4e9e3706d56dfd4d48be367846161461f6acce0d",
+   "demos/for-men/Demo14_MintStream/media/cover.jpg": "45e247d407f8d993747181713d5dfe9bf80e4bb2",
+   "demos/shared/cover.js": "4f3bb841dc60ac2c0196b4939c6ae64ee2354dfb"
+  },
+  "thumb": "c298b247cafd69ded0f2d86d070a8d691e88317b"
+ }
+}
