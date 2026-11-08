@@ -1,23 +1,26 @@
-# Promo video — 信長と、語らう (real-time AI talk × MoHeat Evo), ~62 s
+# Promo video — 信長と、語らう × MoHeat Evo, 62.5 s
 
-Built from the REAL demo, not re-drawn: two live sessions are recorded on the private live pages, then replayed frame by frame in
-the same pages under a virtual clock, so the real engine draws every frame (pictures, mouths, voice-driven DUAL warmth, #cmd).
-Large outputs stay outside git (work folder = any scratch folder, e.g. `$W`).
+All footage comes from the PUBLIC scripted pages (Demo23 / 41 / 42): each page is replayed frame by frame in headless Chrome
+under a virtual clock (`hooks.js`), so the real engine draws every frame (pictures, mouths, the voice-driven DUAL warmth, `#cmd`).
+Your turns are typed through the page's own input (`TALKDEMO.say`); their spoken versions are ElevenLabs lines (`user_voice.py`).
+Large outputs stay outside git (work folder `$W`, e.g. a scratch folder). No server keys, no live session needed.
 
 | Step | Command | Output |
 |---|---|---|
-| 0 | `python3 ../../server.py` (private live server :8771, password file `~/.moheat_live_pass`) | |
-| 1 record (costs ElevenLabs credits, a few short turns) | `node record.js /live azuchi $W/rec/solo.json "信長様、あなたの夢は何ですか？" "ちょっと寒くなってきました…"` · `node record.js /live/roundtable kyoto $W/rec/rt.json "見てください、外は雪ですよ！窓を開けてみませんか？" "お二人は、熱燗とハイボール、どっちが好きですか？"` | every agent line, timing, TTS mp3 |
-| 2 your voice | `python3 user_voice.py $W/user` (ElevenLabs `kainushi`, ~84 chars), then trim silences (`*_t.wav`) | |
-| 3 state passes | `node render.js replay $W/rec/solo.json $W/r_solo --say-delay 3.45,3.35` · `… rt.json $W/r_rt --say-delay 4.5,1.5` · `node render.js script /demos/nobunaga-suntory/Demo23_NobunagaTalk/ $W/s_gifu --scene gifu` (+ Demo42 yamazaki `s_yama`, Demo41 tea `s_tea`) | state.jsonl, audio.json |
-| 4 edit | `python3 edit.py $W` (prints the capture ranges) | frames.json, audio_plan.json |
-| 5 frames | the same render.js commands with `--ranges <printed ranges>` (deterministic: same frames as the state pass) | frames/*.jpg (3840 × 2160) |
-| 6 composite | `node comp.js $W` | comp/*.png (1920 × 1080) |
-| 7 sound | `python3 mix.py $W` | mix.wav |
-| 8 encode | `ffmpeg -framerate 30 -i $W/comp/%05d.png -i $W/mix.wav -c:v libx264 -profile:v high -preset slow -crf 15 -pix_fmt yuv420p -c:a aac -b:a 256k -movflags +faststart out.mp4` | |
+| 0 | `python3 -m http.server 8790 --bind 127.0.0.1` (repo root) | |
+| 1 your voice | `python3 user_voice.py $W/user` (~46 chars), trim silences → `u5_t.wav`, `u6_t.wav`; `levels.json` (20 Hz RMS, see STATE) | |
+| 2 state passes | `node render.js /demos/nobunaga-suntory/Demo23_NobunagaTalk/ $W/s_gifu --scene gifu` (hook) · `… Demo23 $W/n_tea --scene tea --say "はい\|茶器です\|こたつで温まります！\|はい\|おいしいです" --say-delay 1,1,2.07,1,1 --fix-stand` · `… Demo42 $W/k_rt --scene kyoto --say "はい\|焼き鳥のねぎまがおすすめです！\|こたつでみかんです\|はい" --say-delay 1,2.43,1,1 --fix-stand` · `… Demo42 $W/s_yama --scene yamazaki` · `… Demo41 $W/s_tea --scene tea` | state.jsonl, audio.json |
+| 3 edit | `python3 edit.py $W` (prints the capture ranges) | frames.json, audio_plan.json |
+| 4 frames | the same render.js commands + `--ranges <printed>` (+ `--max`) | frames/*.jpg (3840 × 2160) |
+| 5 composite | `node comp.js $W --out comp4k --dpr 2 --jpg` | 4K frames |
+| 6 sound | `python3 mix.py $W`, then loudnorm (−16 LUFS, −1.5 dBTP, linear two-pass) → `mix_norm.wav` | |
+| 7 encode | 1080p: `ffmpeg -framerate 30 -i comp4k/%05d.jpg -i mix_norm.wav -vf scale=1920:1080:flags=lanczos,format=yuv420p -c:v libx264 -profile:v high -preset slow -crf 15 -c:a aac -b:a 256k` · 4K: same without scale, crf 16 | |
+| 8 QA | `python3 qa.py out.mp4 $W/qa` (contact sheet, loudness, true peak) | |
 
-Files: `cdp.js` (headless Chrome over CDP), `hooks.js` (record / replay / virtual clock / audio patch, injected before the page),
-`record.js`, `render.js`, `edit.py` (the cut on the 128 BPM grid + overlays), `comp.html` + `comp.js` (vector overlays in the
-style of the user's MoHeat Evo film: STYLE in the work folder), `mix.py` (voices panned where the engine placed them, room sounds,
-the film's soundtrack ducked under the demo sound), `user_voice.py`.
+Files: `cdp.js` (headless Chrome over CDP), `hooks.js` (virtual clock, audio patch, `fixStand` framing fix), `render.js`,
+`edit.py` (the cut on the 128 BPM grid + all overlays), `comp.html` + `comp.js` (vector overlays in the style of the MoHeat Evo
+film), `mix.py` (voices panned where the engine placed them, room sounds, the film's soundtrack ducked under the demo sound),
+`user_voice.py`, `qa.py`.
+`--fix-stand`: the engine's standing pose (`_kit/talk/main.js` frame() 'left' / 'right') is drawn so tall that his head is cut off;
+the capture draws it 14 % smaller from the same feet line (kit bug reported, not fixed here).
 Music: "EDM Detection Mode" by Kevin MacLeod (incompetech.com), CC BY 4.0 — the 60 s edit used by the MoHeat Evo film.

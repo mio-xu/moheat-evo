@@ -46,12 +46,17 @@ seg('k_rt', 41.55, 41.55 + B(50), part='rt', you={'u': 'u5', 'near': 41.8})
 # 93 – 108 beats: montage (7 cuts: 3 + 6 × 2 beats): the three demos, then hot ↔ cold moments from other places
 MONT = [('cover', 'Demo23_NobunagaTalk', '1 : 1 · 信長と', 'Talk with Nobunaga'), ('cover', 'Demo41_IeyasuTalk', '1 : 1 · 家康と', 'Talk with Ieyasu'),
         ('cover', 'Demo42_SengokuRoundtable', 'ふたりと · 座談会', 'Round table with both'),
-        ('s_yama', 54.0, '山崎 · 蒸溜釜の熱', 'Yamazaki: heat from the stills'), ('s_yama', 87.3, '山崎 · 氷の杯', 'An iced glass at your ear'),
-        ('s_tea', 98.6, '茶室 · 熱いお茶', 'Tea room: “It’s hot”'), ('s_tea', 56.5, '茶室 · すきま風', 'A draught through the shoji')]
+        ('s_yama', ('I', 'left', 53.5), '山崎 · 蒸溜釜の熱', 'Yamazaki: heat from the stills'), ('s_yama', ('N', 'right_ear', 87.0), '山崎 · 氷の杯', 'An iced glass at your ear'),
+        ('s_tea', ('I', 'left_ear', 98.2), '茶室 · 熱いお茶', 'Tea room: “It’s hot”'), ('s_tea', ('I', 'left_ear', 56.2), '茶室 · すきま風', 'A draught through the shoji')]
+
+
+def pick(cap, who, key, near):   # 0.55 s after that character starts talking at that place in THIS capture (timings drift ±0.3 s per run)
+    fr = sorted(ST[cap].values(), key=lambda q: q['t'])
+    return next(q['t'] for q in fr if q['t'] >= near - 2 and q.get('ch') and q['ch'].get(who, {}).get('key') == key and q['ch'][who]['talk']) + .55
 for i, m in enumerate(MONT):
     t0, t1 = B(93 + (0 if i == 0 else 1 + 2 * i)), B(93 + 3 + 2 * i)
     if m[0] == 'cover': SEGS.append(dict(cap=None, cover=m[1], t0=t0, t1=t1, part='montage', label=m[2:]))
-    else: SEGS.append(dict(cap=m[0], a=m[1], b=m[1] + 2 * BEAT, t0=t0, t1=t1, part='montage', label=m[2:]))
+    else: a = pick(m[0], *m[1]); SEGS.append(dict(cap=m[0], a=a, b=a + (t1 - t0), t0=t0, t1=t1, part='montage', label=m[2:]))
 SEGS.append(dict(cap=None, t0=B(108), t1=B(120), part='flow'))
 for S_ in SEGS:   # your turn, from the capture itself: "your turn" opens (a) → the reply starts (b)
     Y = S_.get('you')
@@ -143,6 +148,7 @@ for fi in range(int(round(DUR * FPS))):
         hs = .82 if part == 'montage' else 1
         hx = 56 if side == 'L' else 1920 - int(520 * hs) - 56
         D['hud'] = {'m': st.get('m', [0, 0, 0, 0]), 'cmd': st.get('cmd', 'stop'), 'tags': tags(st, S['cap']), 'x': hx, 'y': 104, 's': hs, 'a': fa}
+        if part == 'montage': D['hud'].update(x=1920 - int(520 * hs) - 56, y=1080 - 56 - int(318 * hs), a=1)   # quick cuts: bottom right, clear of faces
         corner = {'x': 56, 'y': 40} if side == 'L' else {'r': 56, 'y': 40}
         if part == 'hook':   # first appearance: zoomed in, with a caption, then into its corner
             k = ease((lt - 2.45) / .8)
