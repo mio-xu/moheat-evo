@@ -301,5 +301,15 @@
   "voice_id": "Qey7kdhUoCmL00JnjtZj",
   "confirmed": "2026-11-08",
   "pick": "r1_a"
+ },
+ "saku": {
+  "name": "朔 Saku",
+  "persona": "20 岁，老家神社的继承人、你的青梅竹马，偶像级帅哥（栗色蓬松短发、泪痣、靛蓝浴衣、白狐面）；平时爱捉弄你、嘴硬带笑，今年夏祭り突然认真；贴耳时低而认真",
+  "description": "A Japanese young man, 20, a strikingly handsome childhood friend. A bright, clear, youthful tenor-baritone with a playful, teasing smile in his voice; quick and casual, a mischievous little laugh, warm and lively. When he turns serious the voice drops lower, slower and softer, a little shy. Close up it becomes a low, gentle, intimate whisper. Not husky, not deep bass, not childish, not flirty-showy. Native Japanese speaker. Clean close-mic recording, no background noise.",
+  "sample": "[playfully] おーい、こっち！ …ったく、毎年はぐれるよな、お前。 [laughs softly] ほら、手。…はぐれるなよ。 [casually] 暑いだろ？ あおいでやるよ。…どう、涼しい？ [teasing] かき氷食ったあとの息、冷たいだろ。ふーっ。 [laughs] 顔、赤いぞ。 [softly] …なあ。花火、毎年一緒に見てるけどさ。 [whispers] …今年は、幼なじみとしてじゃなくて、見たい。",
+  "compare": [],
+  "demos": [
+   "for-women/Demo30_SakuFestival"
+  ]
  }
 }
