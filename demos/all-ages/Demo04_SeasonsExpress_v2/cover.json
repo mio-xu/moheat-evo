@@ -60,5 +60,13 @@
    "en": "Spring cherry station",
    "zh": "春日樱花站"
   }
- ]
+ ],
+ "faces": {
+  "eye": [
+   72,
+   35
+  ],
+  "face": 22,
+  "_why": "chibi face: SCRFD does not see it; placed by scripts/render_mp4.py --cover (ex .72, ey .35, face .22 of H)"
+ }
 }

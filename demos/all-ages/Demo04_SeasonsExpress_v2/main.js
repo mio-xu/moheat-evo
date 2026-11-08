@@ -198,6 +198,20 @@ const ICE = (() => {
   return cv;
 })();
 const shieldAt = (side, t) => { if (COVERART) return side === 'L' ? .62 : 0; const t0 = side === 'L' ? 2.6 : 5.4; return smooth((t - t0) / 2.6) * (1 - smooth((t - 12.5) / 2.5)); };
+function openWin(side) { const ws = WINS.filter((w) => w.side === side); return ws.reduce((a, w) => ((w.box[2] - w.box[0]) * (w.box[3] - w.box[1]) > (a.box[2] - a.box[0]) * (a.box[3] - a.box[1]) ? w : a), ws[0]); }
+function drawSash(c, side, t) {   // the window you chose in the tunnel: its upper sash slides down (wood + brass), wind streaks in the opening
+  if (win.side !== side || t < 66 || t > T_TUNNEL[1] + 1) return;
+  const w = openWin(side); if (!w) return;
+  const [x0, y0, x1, y1] = w.box, k = smooth((t - 66) / 1.2) * (1 - smooth((t - T_TUNNEL[1]) / 1)), y = y0 + (y1 - y0) * .55 * k;
+  c.save(); c.beginPath(); c.rect(x0, y0, x1 - x0, y1 - y0); c.clip();
+  c.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < 8; i++) { const yy = y0 + ((i * 53 + t * 420) % Math.max(1, y - y0)), a = .25 * k; c.strokeStyle = side === 'L' ? `rgba(220,245,255,${a})` : `rgba(255,190,120,${a})`;
+    c.lineWidth = 2; c.beginPath(); c.moveTo(side === 'L' ? x0 : x1, yy); c.lineTo(side === 'L' ? x1 : x0, yy + 30); c.stroke(); }
+  c.globalCompositeOperation = 'source-over';
+  const g = c.createLinearGradient(0, y - 14, 0, y + 14); g.addColorStop(0, '#6b3d1c'); g.addColorStop(.45, '#c98c4a'); g.addColorStop(.55, '#e2b46a'); g.addColorStop(1, '#5a3216');
+  c.fillStyle = g; c.fillRect(x0, y - 14, x1 - x0, 28); c.fillStyle = 'rgba(255,255,255,.18)'; c.fillRect(x0, y + 14, x1 - x0, (y1 - y) - 14);   // the lowered glass below the sash
+  c.restore();
+}
 function drawShield(c, side, t) {
   const h = shieldAt(side, t); if (h <= .01) return;
   const b = BOX[side], top = H * (1 - h);
@@ -326,20 +340,35 @@ function drawIcicles(c, t) {
 }
 
 // ---------------------------------------------------------------- tunnel: the carriage splits in two (ice cabin left / fire cabin right)
-const SPLIT = 46;
+const SPLIT = 30;
 const splitAt = (t) => SPLIT * smooth((t - (T_TUNNEL[0] + 1.2)) / 1.6) * (1 - smooth((t - (T_TUNNEL[1] - 1.2)) / 1.4));
-function drawSeam(c, s, t, tv) {   // the gap between the two cabins: a soft frosted-glass seam, ice light on the left edge, fire light on the right
+let SEAM_CV = null;
+function drawSeam(c, s, t, tv) {   // the gap between the two cabins: a soft, wide frosted-air seam (no hard pole), ice light left, fire light right
   if (s < .5) return;
-  const x0 = W / 2 - s - 30, x1 = W / 2 + s + 30;
+  const k = s / SPLIT, x0 = W / 2 - s - 110, x1 = W / 2 + s + 110;
+  c.save(); c.beginPath(); c.rect(W / 2 - s - 1, 0, 2 * s + 2, H); c.clip();   // through the gap: the tunnel walls rush past (motion-blurred)
+  c.filter = 'blur(5px)';
+  for (const [img, xa, xb] of [['tunnel_ice_wall', W / 2 - s - 1, W / 2], ['tunnel_lava_wall', W / 2, W / 2 + s + 1]]) {
+    if (!ok(img)) continue; const off = (posAt(tv) * V * 1.5) % 1024;
+    c.save(); c.beginPath(); c.rect(xa, 0, xb - xa, H); c.clip();
+    for (let y = -off * 1.05; y < H; y += 1024 * 1.05) c.drawImage(IMG[img], 300, 0, 300, 1024, xa - 40, y, (xb - xa) + 80, 1024 * 1.05);
+    c.restore();
+  }
+  c.filter = 'none'; c.fillStyle = 'rgba(12,8,22,.45)'; c.fillRect(W / 2 - s - 1, 0, 2 * s + 2, H); c.restore();   // a dim gap, lit by the walls
+  const sc = SEAM_CV || (SEAM_CV = document.createElement('canvas')); sc.width = Math.ceil(x1 - x0); sc.height = 270; const q = sc.getContext('2d');
   c.save();
-  let g = c.createLinearGradient(x0, 0, x1, 0);
-  g.addColorStop(0, 'rgba(150,215,255,0)'); g.addColorStop(.3, 'rgba(170,225,255,.75)'); g.addColorStop(.5, 'rgba(245,240,255,.85)'); g.addColorStop(.7, 'rgba(255,175,110,.75)'); g.addColorStop(1, 'rgba(255,160,90,0)');
-  c.fillStyle = g; c.fillRect(x0, 0, x1 - x0, H);
+  const g = q.createLinearGradient(0, 0, sc.width, 0);
+  g.addColorStop(0, 'rgba(150,215,255,0)'); g.addColorStop(.32, `rgba(170,225,255,${.22 * k})`); g.addColorStop(.5, `rgba(240,238,255,${.16 * k})`);
+  g.addColorStop(.68, `rgba(255,175,110,${.22 * k})`); g.addColorStop(1, 'rgba(255,160,90,0)');
+  q.fillStyle = g; q.fillRect(0, 0, sc.width, sc.height);
+  const v = q.createLinearGradient(0, 0, 0, sc.height); v.addColorStop(0, 'rgba(0,0,0,.6)'); v.addColorStop(.25, 'rgba(0,0,0,0)'); v.addColorStop(.8, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.5)');
+  q.globalCompositeOperation = 'destination-out'; q.fillStyle = v; q.fillRect(0, 0, sc.width, sc.height);   // the glow fades out at the ceiling and the floor
+  c.drawImage(sc, x0, 0, x1 - x0, H);
   c.globalCompositeOperation = 'lighter';
-  for (let i = 0; i < 26; i++) {   // motes drifting up the seam (ice sparkles left, embers right)
-    const ph = (tv * (.12 + hash(i) * .1) + hash(i + 3)) % 1, y = H * (1 - ph), x = W / 2 + (hash(i + 7) - .5) * 2 * s, left = x < W / 2;
-    c.fillStyle = left ? `rgba(220,245,255,${.7 * Math.sin(Math.PI * ph)})` : `rgba(255,200,130,${.7 * Math.sin(Math.PI * ph)})`;
-    c.beginPath(); c.arc(x, y, 2 + hash(i + 9) * 2.5, 0, 7); c.fill();
+  for (let i = 0; i < 40; i++) {   // frost sparkles drift right, embers drift left, crossing the seam and fading as they leave their cabin
+    const ice = i % 2 === 0, ph = (tv * (.09 + hash(i) * .08) + hash(i + 3)) % 1, x = ice ? lerp(W / 2 - 160, W / 2 + 120, ph) : lerp(W / 2 + 160, W / 2 - 120, ph);
+    const y = H * (.15 + .7 * hash(i + 7)) + Math.sin(tv * 1.3 + i) * 18 - (ice ? 0 : 40 * ph), a = k * .75 * Math.sin(Math.PI * ph);
+    c.fillStyle = ice ? `rgba(225,245,255,${a})` : `rgba(255,190,120,${a})`; c.beginPath(); c.arc(x, y, 1.6 + hash(i + 9) * 2.4, 0, 7); c.fill();
   }
   c.restore();
 }
@@ -457,9 +486,10 @@ function drawFig(c, view, cx, bottom, height, o = {}) {
   c.drawImage(F.im, x0, bottom - height, w, height);
   const tv = o.tv || 0;
   if (!(tv - (F.lastDrawn ?? -9) < .25)) F.appear = tv;   // (re)appearing: no blink in the first 0.7 s (guide §6.4)
+  if (tv - VIS.last > 0 && tv - VIS.last < .1) VIS.t += tv - VIS.last; VIS.last = tv;
   F.lastDrawn = tv; LAST_FIG = view;
   if (tv > F.blinkAt + 8 || tv < F.blinkAt - 8) F.blinkAt = tv + 1 + Math.random() * 3;   // after a seek / pause
-  if (tv >= F.blinkAt && tv - F.appear > .7) { F.blinkTo = tv + .11 + Math.random() * .04; BLINKS.push([tv, F.blinkTo, view, tv]); F.blinkAt = tv + (Math.random() < .15 ? .32 : 2 + Math.random() * 4); }
+  if (tv >= F.blinkAt && tv - F.appear > .7) { F.blinkTo = tv + .11 + Math.random() * .04; BLINKS.push([tv, F.blinkTo, view, VIS.t]); F.blinkAt = tv + (Math.random() < .15 ? .32 : 2 + Math.random() * 4); }
   if (API_DEBUG && API_DEBUG.blink != null) F.blinkTo = API_DEBUG.blink ? tv + 1 : 0;
   const at = (p) => [x0 + p.rect[0] * k, bottom - height + p.rect[1] * k, p.rect[2] * k, p.rect[3] * k];
   if (tv < F.blinkTo) for (const p of F.eyes) if (okI(p.im)) c.drawImage(p.im, ...at(p));
@@ -470,24 +500,24 @@ function drawFig(c, view, cx, bottom, height, o = {}) {
 }
 // MoHeatLayers-compatible test API (tools/art/check_mouth.js / check_motion.js): this page draws its own conductor layers (no parallax:
 // the figure sits still in the carriage; the scenery moves behind the glass), so check the same mouth / blink / breathing rules here.
-let LAST_FIG = null, API_DEBUG = null; const BLINKS = [];
+let LAST_FIG = null, API_DEBUG = null; const BLINKS = [], VIS = { t: 0, last: -1 };
 const VIEW_STEM = Object.fromEntries(Object.entries(LY).map(([stem, v]) => [v.view, stem]));
 const curView = () => { const ln = lineNow(lastT), w = ln && { holo: 'holo', ear: 'ear', aisle: 'wave' }[ln.where]; if (w) return w;
   return LAST_FIG && FIG[LAST_FIG]?.state && tvClock - FIG[LAST_FIG].state.tv < .3 ? LAST_FIG : 'none'; };
 window.MoHeatLayers = {
   live: true,
-  get debug() { return API_DEBUG; }, set debug(v) { API_DEBUG = v; },
+  get debug() { return API_DEBUG; }, set debug(v) { API_DEBUG = v; if (!v) for (const F of Object.values(FIG)) { F.state = null; F.blinkTo = 0; } },
   render(stem) {
     const v = LY[stem]; if (!v || !okI(FIG[v.view]?.im)) return null;
     const g = document.createElement('canvas'); g.width = W; g.height = H; const x = g.getContext('2d');
     x.fillStyle = API_DEBUG?.solid ? '#ff00ff' : '#0e4660'; x.fillRect(0, 0, W, H);
-    const P = { holo: [W / 2, H * 1.0, H * .95], ear: [W * .83, H * 1.06, H], wave: [W / 2, H * 1.0, H * .9] }[v.view];
+    const P = [v.char.x * W, v.char.y * H, v.char.height * H];   // the placement media/layers.js declares (check_motion crops its eye shots from it)
     drawFig(x, v.view, P[0], P[1], P[2], { tv: tvClock, alpha: 1 }); return g;
   },
-  state() { const view = curView(), st = (view !== 'none' && FIG[view]?.state) || { lv: 0, e: 0, blink: false }, ln = lineNow(lastT), e = ln ? ln.e : 0;
+  state() { const view = curView(), f = view !== 'none' && FIG[view]?.state, st = (f && tvClock - f.tv < .3 && f) || { lv: 0, e: 0, blink: false }, ln = lineNow(lastT), e = ln ? ln.e : 0;
     return { mouth: st.lv > 0 ? 1 : 0, open: st.lv > 0, level: st.lv, tgt: e, rel: e, env: e, blink: st.blink, view, stem: VIEW_STEM[view] || '', speaker: null, figs: null,
       patches: view !== 'none' ? (LY[VIEW_STEM[view]]?.patches || []).map((p) => p.kind) : [] }; },
-  motion() { const view = curView(), st = view !== 'none' && FIG[view]?.state; return { t: tvClock, liveT: tvClock, blink: !!(st && st.blink), blinks: BLINKS.slice(-400),
+  motion() { const view = curView(), f = view !== 'none' && FIG[view]?.state, st = f && tvClock - f.tv < .3 && f; return { t: tvClock, liveT: tvClock, blink: !!(st && st.blink), blinks: BLINKS.slice(-400),
     breath: 0, phase: (tvClock * Math.PI * 2 / 4) % (Math.PI * 2), view, stem: VIEW_STEM[view] || '', draw: null, live: true }; },
 };
 // in person in the aisle, right behind your table (cut at the knees by the table edge): the tea, the storm lamp, "next stop, spring!", goodbye
@@ -519,11 +549,11 @@ function conductorInPerson(c, t, tv) {
       c.save(); c.globalCompositeOperation = 'lighter'; const g = c.createRadialGradient(x, y, 0, x, y, 90); g.addColorStop(0, 'rgba(255,230,170,.95)'); g.addColorStop(1, 'rgba(255,170,90,0)');
       c.fillStyle = g; c.fillRect(x - 90, y - 90, 180, 180); c.restore();
     }
-    const a = smooth((fly - .6) / .4) * (1 - back);
+    const a = smooth((fly - .85) / .15) * (1 - back), pop = 1 - .12 * (1 - smooth((t - s0 - .8) / .35));
     if (a > .01) {
       c.save(); c.globalCompositeOperation = 'lighter'; const gx = W * .86, gy = H * .55, g = c.createRadialGradient(gx, gy, 0, gx, gy, 520);   // its own warm glow in the dark
       g.addColorStop(0, `rgba(255,170,90,${.32 * a})`); g.addColorStop(1, 'rgba(255,170,90,0)'); c.fillStyle = g; c.fillRect(gx - 520, gy - 520, 1040, 1040); c.restore();
-      drawFig(c, 'ear', W * .83 + 60 * (1 - a), H * 1.06, H * 1.0, { talk: ln && ln.where === 'ear' ? ln.e : 0, alpha: a, tv });
+      drawFig(c, 'ear', W * .83 + 60 * (1 - a), H * 1.06, H * 1.0 * pop, { talk: ln && ln.where === 'ear' ? ln.e : 0, alpha: a, tv });
     }
   }
 }
@@ -552,7 +582,7 @@ function emitFx(t, dt) {
     cueDone.add(q.t);
     for (let i = 0; i < 14; i++) { const [x, y] = winPt(q.side); spawn({ img: 'fx_steam', x, y, vx: (q.side === 'L' ? 1 : -1) * (80 + Math.random() * 160), vy: -30 - Math.random() * 50, drag: .8, size: 160 + Math.random() * 120, grow: 1.2, rot: Math.random() * 6, spin: .3, life: 0, max: 2.4, a: .55 }); }
   }
-  for (const s of [90.2, A.silence[1] + .1]) if (t >= s && !cueDone.has(s) && t < s + .5) { cueDone.add(s); spawn({ img: 'fx_season_swirl', x: W / 2, y: 330, vx: 0, vy: 0, size: 300, grow: 1.4, rot: 0, spin: 4, life: 0, max: 2.4, a: .9, blend: 'screen' }); }
+  for (const s of [90.2, A.silence[1] + .1]) if (t >= s && !cueDone.has(s) && t < s + .5) { cueDone.add(s); spawn({ img: 'fx_season_swirl', x: W / 2, y: 560, vx: 0, vy: 0, size: 300, grow: 1.4, rot: 0, spin: 4, life: 0, max: 2.4, a: .9, blend: 'screen' }); }
   const seg = segAt(t).key, R = (rate) => Math.random() < dt * rate, boost = (side) => (win.side === side && t >= 66 && t < T_TUNNEL[1] ? 2.2 : 1);
   if (seg === 'spring' && t > T_SPRING && R(4)) { const [x, y] = winPt(Math.random() < .5 ? 'L' : 'R'); spawn({ img: 'fx_sakura_petal', x, y, vx: (x < W / 2 ? 1 : -1) * (60 + Math.random() * 90), vy: 30 + Math.random() * 40, size: 26 + Math.random() * 18, rot: Math.random() * 6, spin: 2, life: 0, max: 6, a: .95 }); }
   if (seg === 'winter') for (const side of ['L', 'R']) if (R(1.6 * runeOpen(side, t))) { const [x, y] = winPt(side); spawn({ img: 'fx_snowflake', x, y, vx: (side === 'L' ? 1 : -1) * (40 + Math.random() * 60), vy: 40, size: 24 + Math.random() * 20, rot: 0, spin: 1, life: 0, max: 3, a: .7, add: true }); }
@@ -729,6 +759,7 @@ function frame(t, dt, thOut) {
     if (prev) drawLook(c, prev, side, t, tv, 1);
     drawLook(c, cur, side, t, tv, prev ? a : 1);
     drawShield(c, side, t);
+    drawSash(c, side, t);
     const fl = lightning(side, t); if (fl > .01) { c.fillStyle = `rgba(245,248,255,${.8 * fl})`; c.fillRect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0); }
     c.drawImage(car, b.x0, 0, b.x1 - b.x0, H, b.x0, 0, b.x1 - b.x0, H);
     frameGlow(c, th, t, side);
@@ -921,9 +952,9 @@ function titleCard(c, t) {
   if (t > 125.65 && t < 126.9) { c.textAlign = 'center'; c.globalAlpha = clamp(Math.min((t - 125.65) / .2, (126.9 - t) / .3), 0, 1); c.font = '800 96px "Zen Maru Gothic", sans-serif'; c.fillStyle = '#ffd6e8'; c.fillText('🌸「春！」', W / 2, H / 2); c.globalAlpha = 1; }
   if (t > 147.5) {
     c.globalAlpha = clamp((t - 147.5) / .8, 0, 1); c.textAlign = 'center';
-    c.fillStyle = 'rgba(40,20,40,.45)'; c.fillRect(W / 2 - 430 - 300, 140, 860, 150);
-    c.fillStyle = '#fff'; c.font = '700 54px "Zen Maru Gothic", sans-serif'; c.fillText('終点・さくら駅', W / 2 - 300, 214);
-    c.fillStyle = '#f7dceb'; c.font = '500 28px Inter, sans-serif'; c.fillText('Last stop — Cherry Blossom Station', W / 2 - 300, 262); c.globalAlpha = 1;
+    c.textAlign = 'left'; c.fillStyle = 'rgba(40,20,40,.5)'; c.fillRect(70, 60, 620, 120); c.fillStyle = '#ffb3cf'; c.fillRect(70, 60, 5, 120);
+    c.fillStyle = '#fff'; c.font = '700 50px "Zen Maru Gothic", sans-serif'; c.fillText('終点・さくら駅', 96, 122);
+    c.fillStyle = '#f7dceb'; c.font = '500 26px Inter, sans-serif'; c.fillText('Last stop — Cherry Blossom Station', 96, 160); c.globalAlpha = 1;
   }
 }
 async function ready() { await document.fonts.ready; await Promise.all([...Object.values(IMG), ...Object.values(FIG).flatMap((f) => [f.im, ...f.eyes.map((p) => p.im), ...f.mouth.map((p) => p.im)])].map((im) => im.decode().catch(() => {}))); }
