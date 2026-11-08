@@ -1,0 +1,464 @@
+{
+ "Demo01_SnowFoxfire": {
+  "score": 85,
+  "parts": {
+   "active": 1,
+   "switch": 1,
+   "dual": 0.0,
+   "lr": 1,
+   "range": 1.0,
+   "variety": 1
+  },
+  "secs": 161,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo02_FanMeeting": {
+  "score": 85,
+  "parts": {
+   "active": 1,
+   "switch": 1,
+   "dual": 0.0,
+   "lr": 1,
+   "range": 1.0,
+   "variety": 1
+  },
+  "secs": 151,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo03_ShiningSmileConcert": {
+  "score": 85,
+  "parts": {
+   "active": 1,
+   "switch": 1,
+   "dual": 0.0,
+   "lr": 1,
+   "range": 1.0,
+   "variety": 1
+  },
+  "secs": 151,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo04_SeasonsExpress": {
+  "score": 84,
+  "parts": {
+   "active": 1,
+   "switch": 1,
+   "dual": 0.0,
+   "lr": 1,
+   "range": 0.96,
+   "variety": 1
+  },
+  "secs": 152,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo05_GifuCastle": {
+  "score": 80,
+  "parts": {
+   "active": 1,
+   "switch": 1,
+   "dual": 0.0,
+   "lr": 1,
+   "range": 0.68,
+   "variety": 1
+  },
+  "secs": 172,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo06_FutureWhisky": {
+  "score": 75,
+  "parts": {
+   "active": 1,
+   "switch": 0.5,
+   "dual": 0.0,
+   "lr": 1,
+   "range": 0.81,
+   "variety": 1
+  },
+  "secs": 180,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo07_KyotoIzakaya": {
+  "score": 83,
+  "parts": {
+   "active": 1,
+   "switch": 1,
+   "dual": 0.0,
+   "lr": 1,
+   "range": 0.87,
+   "variety": 1
+  },
+  "secs": 178,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo08_YamazakiDistillery": {
+  "score": 83,
+  "parts": {
+   "active": 1,
+   "switch": 1,
+   "dual": 0.0,
+   "lr": 1,
+   "range": 0.85,
+   "variety": 1
+  },
+  "secs": 154,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo09_SengokuBanquet": {
+  "score": 82,
+  "parts": {
+   "active": 1,
+   "switch": 1,
+   "dual": 0.0,
+   "lr": 1,
+   "range": 0.82,
+   "variety": 1
+  },
+  "secs": 153,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo10_CaveSpring": {
+  "score": 84,
+  "parts": {
+   "active": 1,
+   "switch": 1,
+   "dual": 0.0,
+   "lr": 1,
+   "range": 0.95,
+   "variety": 1
+  },
+  "secs": 181,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo11_Naomi": {
+  "score": 69,
+  "parts": {
+   "active": 1,
+   "switch": 1,
+   "dual": 0.0,
+   "lr": 0.2,
+   "range": 0.76,
+   "variety": 1
+  },
+  "secs": 108,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo12_LateCall": {
+  "score": 0,
+  "parts": {
+   "active": 0.0,
+   "switch": 0.0,
+   "dual": 0.0,
+   "lr": 0.0,
+   "range": 0.0,
+   "variety": 0.0
+  },
+  "secs": 420,
+  "how": "pure run (did not end)",
+  "date": "2026-11-08"
+ },
+ "Demo13_NaomiCam": {
+  "score": 75,
+  "parts": {
+   "active": 1,
+   "switch": 1,
+   "dual": 0.0,
+   "lr": 0.44,
+   "range": 0.88,
+   "variety": 1
+  },
+  "secs": 130,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo14_MintStream": {
+  "score": 69,
+  "parts": {
+   "active": 1,
+   "switch": 0.0,
+   "dual": 0.21,
+   "lr": 1,
+   "range": 0.72,
+   "variety": 1
+  },
+  "secs": 166,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo15_FamilyCall": {
+  "score": 69,
+  "parts": {
+   "active": 1,
+   "switch": 0.25,
+   "dual": 0.33,
+   "lr": 1,
+   "range": 0.83,
+   "variety": 0.5
+  },
+  "secs": 158,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo16_FamilyCall2": {
+  "score": 83,
+  "parts": {
+   "active": 1,
+   "switch": 0.0,
+   "dual": 1,
+   "lr": 1,
+   "range": 0.9,
+   "variety": 1
+  },
+  "secs": 159,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo17_CocoaStream": {
+  "score": 80,
+  "parts": {
+   "active": 1,
+   "switch": 0.25,
+   "dual": 0.83,
+   "lr": 1,
+   "range": 0.69,
+   "variety": 0.88
+  },
+  "secs": 188,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo18_HinataStream": {
+  "score": 83,
+  "parts": {
+   "active": 1,
+   "switch": 0.25,
+   "dual": 1,
+   "lr": 1,
+   "range": 0.77,
+   "variety": 0.88
+  },
+  "secs": 177,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo19_LunaStream": {
+  "score": 79,
+  "parts": {
+   "active": 1,
+   "switch": 0.5,
+   "dual": 0.45,
+   "lr": 1,
+   "range": 0.77,
+   "variety": 0.88
+  },
+  "secs": 170,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo20_HinataHandshake": {
+  "score": 83,
+  "parts": {
+   "active": 1,
+   "switch": 0.0,
+   "dual": 1,
+   "lr": 1,
+   "range": 0.96,
+   "variety": 0.88
+  },
+  "secs": 119,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo21_JinLounge": {
+  "score": 75,
+  "parts": {
+   "active": 1,
+   "switch": 0.0,
+   "dual": 0.82,
+   "lr": 0.91,
+   "range": 0.84,
+   "variety": 0.75
+  },
+  "secs": 72,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo22_ShionRain": {
+  "score": 86,
+  "parts": {
+   "active": 1,
+   "switch": 0.25,
+   "dual": 1,
+   "lr": 1,
+   "range": 0.78,
+   "variety": 1
+  },
+  "secs": 132,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo23_NobunagaTalk": {
+  "score": 72,
+  "parts": {
+   "active": 1,
+   "switch": 0.0,
+   "dual": 1,
+   "lr": 0.6,
+   "range": 0.72,
+   "variety": 0.81
+  },
+  "secs": 115,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo24_GakuCamp": {
+  "score": 85,
+  "parts": {
+   "active": 1,
+   "switch": 0.25,
+   "dual": 1,
+   "lr": 1,
+   "range": 0.73,
+   "variety": 1
+  },
+  "secs": 138,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo25_HatsumodeDate": {
+  "score": 87,
+  "parts": {
+   "active": 1,
+   "switch": 0.25,
+   "dual": 1,
+   "lr": 1,
+   "range": 0.86,
+   "variety": 1
+  },
+  "secs": 191,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo26_BecomeNaomi": {
+  "score": 81,
+  "parts": {
+   "active": 1,
+   "switch": 0.25,
+   "dual": 1,
+   "lr": 0.61,
+   "range": 0.88,
+   "variety": 1
+  },
+  "secs": 137,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo28_SnowFoxLullaby": {
+  "score": 84,
+  "parts": {
+   "active": 1,
+   "switch": 0.0,
+   "dual": 1,
+   "lr": 1,
+   "range": 0.95,
+   "variety": 1
+  },
+  "secs": 113,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo29_FamilyVisit": {
+  "score": 83,
+  "parts": {
+   "active": 1,
+   "switch": 0.0,
+   "dual": 1,
+   "lr": 1,
+   "range": 0.85,
+   "variety": 1
+  },
+  "secs": 155,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo30_SakuFestival": {
+  "score": 91,
+  "parts": {
+   "active": 1,
+   "switch": 0.75,
+   "dual": 1,
+   "lr": 1,
+   "range": 0.68,
+   "variety": 1
+  },
+  "secs": 141,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo31_SummerRooftop": {
+  "score": 85,
+  "parts": {
+   "active": 1,
+   "switch": 0.25,
+   "dual": 1,
+   "lr": 1,
+   "range": 0.77,
+   "variety": 1
+  },
+  "secs": 151,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo41_IeyasuTalk": {
+  "score": 69,
+  "parts": {
+   "active": 1,
+   "switch": 0.0,
+   "dual": 1,
+   "lr": 0.48,
+   "range": 0.72,
+   "variety": 0.75
+  },
+  "secs": 131,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo42_SengokuRoundtable": {
+  "score": 70,
+  "parts": {
+   "active": 1,
+   "switch": 0.0,
+   "dual": 1,
+   "lr": 0.42,
+   "range": 0.72,
+   "variety": 0.88
+  },
+  "secs": 143,
+  "how": "pure run",
+  "date": "2026-11-08"
+ },
+ "Demo43_BlizzardInn": {
+  "score": 83,
+  "parts": {
+   "active": 1,
+   "switch": 0.25,
+   "dual": 1,
+   "lr": 0.68,
+   "range": 0.95,
+   "variety": 1
+  },
+  "secs": 420,
+  "how": "pure run (did not end)",
+  "date": "2026-11-08"
+ }
+}
