@@ -519,7 +519,7 @@ if HAS_MOUTH:   # after the probes: one browser at a time
 
 # ---------------------------------------------------------------- G6 unified shell (tools/web/check_shell.js, guide §2 / §7.3 统一外壳)
 if not A.quick and 'shared/shell.js' in read(os.path.join(D, 'index.html')):
-    sh = subprocess.run(['node', os.path.join(REPO, 'tools', 'web', 'check_shell.js'), D, '--secs', str(A.secs)], capture_output=True, text=True)
+    sh = subprocess.run(['node', os.path.join(REPO, 'tools', 'web', 'check_shell.js'), D, '--secs', str(max(A.secs, 600))], capture_output=True, text=True)   # long stories (Demo43 ≈ 5.5 min) need the room; a real hang is the 75 s stall gate
     try:
         r = json.loads(sh.stdout.strip().splitlines()[-1]); bad = []
         if r.get('stalled'): bad.append(f'pure mode stalled at {r["stalled"]["secs"]} s (nothing changed for 75 s): {r["stalled"]["state"][:160]} — mark the waiting control data-auto or add it to MoHeatShell.AUTO')
