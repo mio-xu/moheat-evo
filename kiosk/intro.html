@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>MoHeat Evo · Thermal intro</title>
+  <style>
+    /* the 30-second thermal intro outside kiosk mode (TASKS #50 ①): connect the headset, then the same intro the kiosk uses */
+    :root { color-scheme: dark; --ff: Inter, "Noto Sans JP", "PingFang SC", "Hiragino Sans", system-ui, sans-serif; }
+    html, body { margin: 0; height: 100%; background: radial-gradient(ellipse at 50% 40%, #1d1630, #0b0a12 70%); color: #f6f0fa; font-family: var(--ff); overflow: hidden; }
+    .bar { position: fixed; left: 0; right: 0; top: 0; z-index: 5; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 10px 14px; font-size: 13px; }
+    .bar a { color: #cfc3dc; margin-right: auto; text-decoration: none; font-weight: 700; }
+    .bar select, .bar button { background: #17121f; color: #fff; border: 1px solid rgba(255,255,255,.25); border-radius: 8px; min-height: 36px; padding: 0 10px; font: inherit; }
+    .status.ok { color: #5fd38a; } .status.err { color: #ff9aa9; }
+    .langs button[aria-pressed=true] { background: #fff; color: #17121f; }
+    #host { position: fixed; inset: 0; }
+    .start { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center; padding: 16px; }
+    .start h1 { margin: 0; font: 800 clamp(26px, 6vmin, 60px)/1.15 var(--ff); } .start p { margin: 0; color: #cfc3dc; font-size: clamp(15px, 2.4vmin, 22px); max-width: 32em; }
+    .start button { min-height: 60px; padding: 0 30px; border-radius: 999px; border: 0; background: linear-gradient(135deg, #ffd58a, #ff9f6e); color: #2a1606; font: 700 clamp(18px, 3vmin, 28px)/1 var(--ff); cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="bar"><a href="../">← MoHeat Evo</a>
+    <span class="langs"><button data-l="en">EN</button> <button data-l="ja">日本語</button> <button data-l="zh">中文</button></span>
+    <select id="portSelect"></select><button id="addPort">+ Add</button><button id="connectBtn">Connect</button><span class="status" id="deviceStatus"><span>Not connected</span></span></div>
+  <div id="host"></div>
+  <div class="start" id="start"><h1 data-t="h"></h1><p data-t="p"></p><button type="button" id="go" data-t="go"></button></div>
+  <script src="../device.js?v=2"></script>
+  <script src="../demos/shared/thermintro.js?v=efc6816b"></script>
+  <script>
+    (() => {
+      const T = { h: { en: '30-second thermal intro', ja: '30 秒の温冷入門', zh: '30 秒冷热入门' },
+        p: { en: 'Connect MoHeat Evo (top right), put it on, and feel left / right, warm / cool, both at once — then choose a comfortable strength.', ja: 'MoHeat Evo をつないで（右上）装着し、左右・温冷・同時の温冷を体験して、ちょうどいい強さを選びます。', zh: '连接 MoHeat Evo（右上角）并戴好，感受左右、冷热、冷热同时，然后选择舒服的强度。' },
+        go: { en: '▶ Start', ja: '▶ はじめる', zh: '▶ 开始' }, done: { en: '✓ Done — enjoy the demos', ja: '✓ 完了 — デモをお楽しみください', zh: '✓ 完成 — 去体验 Demo 吧' } };
+      let l = (() => { try { return sessionStorage.getItem('moheat.sublang') || 'en'; } catch { return 'en'; } })();
+      const paint = () => { document.querySelectorAll('[data-t]').forEach((e) => { e.textContent = T[e.dataset.t][l] || T[e.dataset.t].en; });
+        document.querySelectorAll('.langs button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.l === l))); };
+      document.querySelector('.langs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; l = b.dataset.l; try { sessionStorage.setItem('moheat.sublang', l); } catch {} paint(); });
+      const $ = (s) => document.querySelector(s);
+      const dev = MoHeatDevice.create({ select: $('#portSelect'), addBtn: $('#addPort'), connectBtn: $('#connectBtn'), status: $('#deviceStatus') });
+      const lvl = (() => { try { return (+JSON.parse(localStorage.getItem('moheat.intensity')) || 50) / 100; } catch { return .5; } })();
+      let fin = false;
+      $('#go').addEventListener('click', () => { if (fin) { location.href = '../#demos'; return; } $('#start').hidden = true;
+        MoHeatIntro.mount($('#host'), { send: dev.send, level: Math.min(lvl, .8), cap: 1, lang: () => l, connected: () => dev.isConnected(),
+          onDone: ({ level }) => { try { localStorage.setItem('moheat.intensity', JSON.stringify(Math.round(level * 100))); } catch {}   // the demos' intensity slider starts here (shell.js)
+            $('#host').innerHTML = ''; $('#start').hidden = false; $('#go').textContent = T.done[l]; fin = true; } }).start(); });
+      paint();
+    })();
+  </script>
+</body>
+</html>

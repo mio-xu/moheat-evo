@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en" data-kiosk-app>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>MoHeat Evo · Exhibition</title>
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="kiosk.css?v=1" />
+</head>
+<body>
+  <!-- MoHeat Evo exhibition (kiosk) mode — DEMO_DESIGN_GUIDE §7.4, staff guide docs/kiosk.md. Views: attract · welcome · intro · menu · card; staff panel behind 5 taps top-left + PIN. -->
+  <main id="app">
+    <section id="v-attract" class="view" hidden>
+      <div class="att-slides"></div>
+      <div class="att-copy"><div class="logo">MoHeat <span>Evo</span></div><p class="att-tag"></p><p class="att-touch"></p></div>
+    </section>
+
+    <section id="v-welcome" class="view" hidden>
+      <div class="wel-top"><div class="logo">MoHeat <span>Evo</span></div><p class="wel-tag" data-t="tag"></p></div>
+      <div class="langs" role="group" aria-label="Language"></div>
+      <ol class="picto">
+        <li><svg viewBox="0 0 120 90" aria-hidden="true"><path d="M20 52 Q20 10 60 10 Q100 10 100 52" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><rect x="8" y="44" width="24" height="34" rx="10" fill="#6cc4ff"/><rect x="88" y="44" width="24" height="34" rx="10" fill="#ff8a4a"/><text x="20" y="67" text-anchor="middle" font-size="16" font-weight="800" fill="#08121e">L</text><text x="100" y="67" text-anchor="middle" font-size="16" font-weight="800" fill="#2a1206">R</text></svg><b data-t="p1"></b></li>
+        <li><svg viewBox="0 0 120 90" aria-hidden="true"><circle cx="34" cy="45" r="22" fill="#ff8a4a"/><circle cx="86" cy="45" r="22" fill="#6cc4ff"/><path d="M34 14 q-6 -8 0 -12 M44 16 q-6 -8 0 -12 M24 16 q-6 -8 0 -12" stroke="#ffb070" stroke-width="3" fill="none"/><path d="M86 10 v10 M80 13 l12 6 M92 13 l-12 6" stroke="#bfe9ff" stroke-width="3"/></svg><b data-t="p2"></b></li>
+        <li><svg viewBox="0 0 120 90" aria-hidden="true"><rect x="10" y="14" width="44" height="28" rx="5" fill="rgba(255,255,255,.25)"/><rect x="66" y="14" width="44" height="28" rx="5" fill="rgba(255,255,255,.25)"/><rect x="10" y="50" width="44" height="28" rx="5" fill="rgba(255,255,255,.25)"/><rect x="66" y="50" width="44" height="28" rx="5" fill="#ffd58a"/><path d="M84 58 l12 6 l-12 6z" fill="#2a1606"/></svg><b data-t="p3"></b></li>
+      </ol>
+      <button type="button" class="big go" id="startVisit"></button>
+      <button type="button" class="link" id="skipIntro"></button>
+      <div class="rec"><h3 data-t="rec"></h3><div class="rec-row"></div><div class="nums"><span data-t="numsH"></span><div class="nums-row" role="group"></div></div><button type="button" class="link" id="moreDemos" data-t="more"></button></div>
+      <p class="hygiene" id="hygiene" hidden data-t="hygiene"></p>
+      <aside class="qq" id="qq"><div class="qr"></div><p data-t="qq"></p></aside>
+    </section>
+
+    <section id="v-intro" class="view" hidden><div class="intro-host"></div></section>
+
+    <section id="v-menu" class="view" hidden>
+      <header class="menu-head"><div class="logo sm">MoHeat <span>Evo</span></div><h2 data-t="pick"></h2><button type="button" class="link" id="replayIntro" data-t="replay"></button></header>
+      <div class="menu-top"></div>
+      <div class="menu-grid"></div>
+    </section>
+
+    <section id="v-card" class="view" hidden>
+      <!-- one question per screen, auto-advance on tap, Skip + Skip all everywhere, closes itself after 15 s without input (user 2026-11-08) -->
+      <div class="card-wrap">
+        <div class="card-main">
+          <p class="card-kicker"><span class="card-title"></span> · <span data-t="quick"></span></p>
+          <div class="q-dots" aria-hidden="true"></div>
+          <div class="q" aria-live="polite"></div>
+          <div class="q-more"><button type="button" class="link" id="addComment" data-t="addComment"></button><input type="text" id="comment" maxlength="80" autocomplete="off" hidden /></div>
+          <div class="card-btns"><button type="button" class="big" id="cardSkip" data-t="skip"></button><button type="button" class="link" id="cardSkipAll" data-t="skipAll"></button></div>
+        </div>
+        <aside class="card-qr"><div class="qr"></div><p data-t="scan"></p><p class="small" data-t="nodata"></p></aside>
+      </div>
+      <div class="q-thanks" hidden><div class="logo">MoHeat <span>Evo</span></div><p data-t="thanksBig"></p></div>
+    </section>
+  </main>
+
+  <div class="corner" id="corner" aria-hidden="true"></div>
+  <div class="devdot" id="devdot" aria-hidden="true"></div>
+
+  <div class="overlay" id="pinBox" hidden>
+    <div class="panel pin"><h3>Staff · PIN</h3><input type="password" inputmode="numeric" id="pin" maxlength="8" autocomplete="off" /><p class="err" id="pinErr"></p>
+      <div class="row"><button type="button" id="pinOk" class="go">OK</button><button type="button" id="pinCancel">Cancel</button></div></div>
+  </div>
+
+  <div class="overlay" id="staff" hidden>
+    <div class="panel staff">
+      <header><h3>Staff panel</h3><button type="button" id="staffClose">Close ✕</button></header>
+      <div class="staff-cols">
+        <div>
+          <h4>Device</h4>
+          <div class="device"><select id="portSelect"></select><button type="button" id="addPort">+ Add</button><button type="button" id="connectBtn">Connect</button><span class="status" id="deviceStatus"><span>Not connected</span></span></div>
+          <p class="hint">Authorise the headset once with “+ Add”: every page then connects by itself.</p>
+          <h4>Settings</h4>
+          <label>Default language <select id="sLang"></select></label>
+          <label>Intensity cap <input type="range" id="sCap" min="30" max="100" step="5" /><b id="sCapV"></b></label>
+          <label>New visitor starts at <input type="range" id="sStart" min="20" max="100" step="5" /><b id="sStartV"></b></label>
+          <label>Idle reset after <input type="number" id="sIdle" min="20" max="600" step="5" /> s</label>
+          <label>Site link (QR) <input type="url" id="sSite" /></label>
+          <label>Price currency <select id="sCur"><option value="auto">auto (from language)</option><option>JPY</option><option>USD</option><option>CNY</option><option>EUR</option><option>KRW</option></select></label>
+          <label>Price bands (<span id="sCurNow"></span>) <input type="text" id="sBands" placeholder="comma-separated, 4–5 bands" style="flex:1" /></label>
+          <label>Experience <select id="sCut"><option value="show">Show cut (60–90 s, default)</option><option value="full">Full demo</option></select></label>
+          <label><input type="checkbox" id="sHyg" /> Hygiene badge on the welcome screen</label>
+          <label>Queue pick page (QR) <input type="url" id="sPick" placeholder="default: site link + kiosk/pick.html" /></label>
+          <label>Product-news form (optional QR) <input type="url" id="sNews" placeholder="https://… (empty = no QR)" /></label>
+          <label>New PIN <input type="password" inputmode="numeric" id="sPin" maxlength="8" placeholder="4–8 digits" /></label>
+          <h4>Demos offered</h4>
+          <div class="row"><button type="button" id="dAll">All</button><button type="button" id="dNone">None</button></div>
+          <div class="demo-list" id="sDemos"></div>
+        </div>
+        <div>
+          <h4>Statistics <small>(this browser only · anonymous)</small></h4>
+          <div class="row" role="tablist"><button type="button" data-w="today" class="on">Today</button><button type="button" data-w="all">All time</button></div>
+          <div id="statSum" class="stat-sum"></div>
+          <table class="stat"><thead><tr><th>#</th><th>Demo</th><th>Started</th><th>Finished</th><th>Pure / Int.</th><th>★</th><th>Favourite moment</th></tr></thead><tbody id="statBody"></tbody></table>
+          <div id="statComments" class="comments"></div>
+          <div class="row"><button type="button" id="exCsv">Export CSV</button><button type="button" id="exCom">Comments CSV</button><button type="button" id="exJson">Export JSON</button><button type="button" id="exClear" class="danger">Clear stats…</button></div>
+          <h4>Kiosk</h4>
+          <p class="hint" id="offlineOut"></p>
+          <div class="row"><button type="button" id="fsBtn">Fullscreen</button><button type="button" id="queueBtn">Open queue screen (window 2)</button><button type="button" id="posterBtn">Print QR poster</button><button type="button" id="reportBtn">Daily report</button><button type="button" id="offlineBtn">Save all demos for offline</button><button type="button" id="attractBtn">Show attract loop</button><button type="button" id="exitKiosk" class="danger">Exit kiosk mode</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../device.js?v=2"></script>
+  <script>window.MOHEAT_NAV_DATA_ONLY = true;</script>
+  <script src="../demos/shared/nav.js?v=8fa268d8"></script>
+  <script src="../demos/shared/kiosk.js?v=9a1dcc94"></script>
+  <script src="../demos/shared/thermintro.js?v=efc6816b"></script>
+  <script src="qrcode.min.js"></script>
+  <script src="pitches.js?v=1"></script>
+  <script src="app.js?v=1"></script>
+</body>
+</html>

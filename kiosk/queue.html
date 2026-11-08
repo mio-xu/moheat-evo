@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MoHeat Evo · Queue screen</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    :root { color-scheme: dark; --warm: #ff8a4a; --cool: #6cc4ff; --gold: #ffd58a; --ff: Inter, "Noto Sans JP", "PingFang SC", "Hiragino Sans", system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #07060c; color: #f6f0fa; font-family: var(--ff); cursor: none; }
+    .wrap { position: fixed; inset: 0; display: grid; grid-template-columns: 64fr 36fr; grid-template-rows: auto 1fr; gap: 2vh 2vw; padding: 3vh 2.4vw; }
+    header { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 2vw; }
+    .logo { font: 800 5.4vh/1 var(--ff); background: linear-gradient(90deg, var(--cool), var(--warm)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .logo span { font-weight: 300; }
+    header p { margin: 0; font: 600 2.8vh/1.2 var(--ff); color: #cfc3dc; }
+    .left { display: flex; flex-direction: column; gap: 1.6vh; min-height: 0; }
+    .now { font: 700 3.4vh/1.2 var(--ff); min-height: 4vh; } .now .no { display: inline-grid; place-items: center; min-width: 1.8em; height: 1.8em; padding: 0 .4em; margin-right: .5em; border-radius: 999px; background: var(--gold); color: #2a1606; }
+    .mirror { position: relative; flex: 1; min-height: 0; border-radius: 2vh; overflow: hidden; background: #000; }
+    .mirror img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.2s; }
+    .mirror img.on { opacity: 1; } .mirror img.kb.on { animation: kb 9s linear forwards; }
+    @keyframes kb { from { transform: scale(1.03); } to { transform: scale(1.12) translateX(-1.5%); } }
+    .mirror .sub { position: absolute; left: 4%; right: 4%; bottom: 4%; text-align: center; font: 700 3.2vh/1.35 var(--ff); text-shadow: 0 2px 8px #000, 0 0 2px #000; }
+    .mirror .tag { position: absolute; left: 2%; top: 3%; padding: .4em .9em; border-radius: 999px; background: rgba(0,0,0,.55); font: 700 2vh/1 var(--ff); color: #ffd58a; }
+    .right { display: flex; flex-direction: column; gap: 2vh; min-height: 0; }
+    .ears { position: relative; flex: 1.2; min-height: 0; border-radius: 2vh; background: radial-gradient(ellipse at 50% 60%, #1b1528, #0c0a12 70%); }
+    .ears canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .ears .lab { position: absolute; left: 0; right: 0; bottom: 2.5%; text-align: center; font: 600 2.2vh/1.2 var(--ff); color: #cfc3dc; }
+    .qrbox { display: flex; gap: 1.6vw; align-items: center; background: rgba(255,255,255,.04); border-radius: 2vh; padding: 1.6vh; }
+    .qr { width: 22vh; flex: none; background: #fff; border-radius: 1.4vh; padding: 1vh; } .qr svg { display: block; width: 100%; height: auto; }
+    .qrbox p { margin: 0; font: 800 3.2vh/1.25 var(--ff); } .qrbox small { display: block; margin-top: .8vh; font: 500 2vh/1.3 var(--ff); color: #cfc3dc; }
+    .top h3 { margin: 0 0 1vh; font: 700 2vh/1 var(--ff); color: var(--gold); letter-spacing: .1em; text-transform: uppercase; }
+    .top ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 1vh; } .top li { display: flex; align-items: center; gap: 1vw; font: 700 2.6vh/1.2 var(--ff); }
+    .top li .no { flex: none; display: grid; place-items: center; width: 2em; height: 2em; border-radius: 999px; background: var(--gold); color: #2a1606; }
+    .top li small { display: block; font: 500 1.9vh/1.3 var(--ff); color: #ffc9a6; }
+    .hint { position: fixed; right: 1vw; bottom: .6vh; font-size: 11px; color: #3c3448; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header><div class="logo">MoHeat <span>Evo</span></div><p id="tag"></p></header>
+    <section class="left"><div class="now" id="now"></div><div class="mirror" id="mirror"><span class="tag" id="mtag"></span><div class="sub" id="sub"></div></div></section>
+    <section class="right">
+      <div class="ears"><canvas id="ears"></canvas><div class="lab" id="earsLab"></div></div>
+      <div class="qrbox"><div class="qr" id="qr"></div><p><span id="qrT"></span><small id="qrS"></small></p></div>
+      <div class="top"><h3 id="topH"></h3><ol id="top"></ol></div>
+    </section>
+  </div>
+  <p class="hint">F = fullscreen</p>
+  <script>window.MOHEAT_NAV_DATA_ONLY = true;</script>
+  <script src="../demos/shared/nav.js?v=8fa268d8"></script>
+  <script src="../demos/shared/kiosk.js?v=9a1dcc94"></script>
+  <script src="qrcode.min.js"></script>
+  <script src="pitches.js?v=1"></script>
+  <script src="queue.js?v=1"></script>
+</body>
+</html>

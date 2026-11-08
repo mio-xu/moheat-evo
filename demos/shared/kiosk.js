@@ -1,0 +1,351 @@
+// MoHeatKiosk — exhibition (kiosk) mode (TASKS #54, user 2026-11-08; DEMO_DESIGN_GUIDE §7.4 "展示模式", staff guide docs/kiosk.md).
+// One computer, visitor after visitor. This file is the shared core:
+//   · storage (localStorage, every access in try / catch): flag 'moheat.kiosk' = '1', staff settings 'moheat.kiosk.cfg',
+//     anonymous local stats 'moheat.kiosk.stats' (never sent anywhere), the current visit in sessionStorage 'moheat.kiosk.visit'.
+//   · resetVisitor(): device stop, language back to the staff default, intensity back to the gentle start level (≤ cap),
+//     mode back to INTERACTIVE (the default; pure is the option), thermal on, subtitles M, no reduced motion; the previous visitor's visit is dropped.
+//   · stats: visitor(), started(dir, mode), finished(dir), card(dir, { stars, moment, comment }), table(), csv(), json().
+// On a DEMO page (loaded by shared/nav.js only while kiosk mode is on, or with ?kiosk=1) it also:
+//   · hides the demo switcher / page guide / site links, adds a big "✕ End" button, auto-connects the authorised device,
+//     caps the intensity slider, records started / finished + mode, collects the demo's thermal moments (chapter × #cmd),
+//   · end of the demo (its own cover comes back) → the experience card (kiosk/#card); no input for idle s on the cover / paused
+//     (3 × idle while an interactive story waits; never while a pure story plays) → reset → welcome; 5 taps top-left → staff panel.
+// The kiosk app itself is kiosk/index.html (+ kiosk/app.js); this file is loaded there as a library.
+(() => {
+  if (window.MoHeatKiosk) return;
+  const QS = new URLSearchParams(location.search);
+  const LSg = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } };
+  const LSs = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+  const SSg = (k, d) => { try { const v = sessionStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } };
+  const SSs = (k, v) => { try { if (v === null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, JSON.stringify(v)); } catch {} };
+  const flag = () => { try { return localStorage.getItem('moheat.kiosk') === '1'; } catch { return false; } };
+  if (QS.get('kiosk') === '1') { try { localStorage.setItem('moheat.kiosk', '1'); } catch {} }
+
+  // ---------------------------------------------------------------- staff settings
+  const DEF = { lang: 'en', cap: 80, start: 50, idle: 60, demos: null, pin: '0000', site: 'https://moheat-evo.github.io/', newsUrl: '', langs: ['en', 'ja', 'zh'], currency: 'auto', bands: {}, cut: 'show', hygiene: false, pickUrl: '' };
+  // purchase-intent card: price bands per currency (staff can replace them in the panel; 'auto' = from the display language)
+  const BANDS = { JPY: ['≤ ¥10,000', '¥10,000–20,000', '¥20,000–30,000', '¥30,000+'], USD: ['≤ $70', '$70–140', '$140–200', '$200+'],
+    CNY: ['≤ ¥500', '¥500–1,000', '¥1,000–1,500', '¥1,500+'], EUR: ['≤ €65', '€65–130', '€130–190', '€190+'], KRW: ['≤ ₩100,000', '₩100,000–200,000', '₩200,000–300,000', '₩300,000+'] };
+  // "where would you use it?" — fixed order, pick up to 2 (user 2026-11-08)
+  const SCENES = [
+    { id: 'asmr', en: 'ASMR · sleep & relaxing', ja: 'ASMR・睡眠・リラックス', zh: 'ASMR · 睡眠放松' },
+    { id: 'romance', en: 'Romance · character voices', ja: '恋愛・キャラボイス', zh: '恋爱 · 角色语音' },
+    { id: 'games', en: 'Games & VR', ja: 'ゲーム・VR', zh: '游戏 · VR' },
+    { id: 'comfort', en: 'Comfort · family, pets', ja: '安心・家族・ペット', zh: '陪伴 · 家人宠物' },
+    { id: 'brand', en: 'Brand & event experiences', ja: 'ブランド・イベント体験', zh: '品牌 · 活动体验' },
+    { id: 'travel', en: 'Travel & sightseeing', ja: '旅行・観光', zh: '旅行 · 观光' },
+    { id: 'focus', en: 'Focus · sleep aid', ja: '集中・睡眠サポート', zh: '专注 · 助眠' },
+    { id: 'other', en: 'Other', ja: 'その他', zh: '其他' },
+  ];
+  const CUR_OF = { ja: 'JPY', zh: 'CNY', 'zh-Hant': 'CNY', ko: 'KRW', en: 'USD' };
+  const currency = (lang) => { const c = { ...DEF, ...LSg('moheat.kiosk.cfg', {}) }; return c.currency && c.currency !== 'auto' ? c.currency : CUR_OF[lang] || 'USD'; };
+  const bands = (cur) => { const c = { ...DEF, ...LSg('moheat.kiosk.cfg', {}) }; return (c.bands && c.bands[cur]?.length ? c.bands[cur] : BANDS[cur]) || BANDS.USD; };
+  const cfg = () => ({ ...DEF, ...LSg('moheat.kiosk.cfg', {}) });
+  const setCfg = (patch) => LSs('moheat.kiosk.cfg', { ...LSg('moheat.kiosk.cfg', {}), ...patch });
+
+  // ---------------------------------------------------------------- local anonymous stats (per day)
+  const day = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const SK = 'moheat.kiosk.stats';
+  const load = () => { const s = LSg(SK, null); return s && s.days ? s : { v: 1, days: {} }; };
+  const edit = (fn) => { const s = load(), d = s.days[day()] ||= { visitors: 0, plays: {}, cards: 0, skipped: 0, comments: [] }; fn(d); LSs(SK, s); };
+  const play = (d, dir) => { const p = d.plays[dir] ||= { started: 0, finished: 0, pure: 0, interactive: 0, stars: 0, rated: 0, moments: {} }; p.buy ||= { yes: 0, maybe: 0, no: 0 }; p.price ||= {}; p.scenes ||= {}; return p; };
+  const stats = {
+    visitor: () => edit((d) => { d.visitors++; }),
+    started: (dir, mode) => edit((d) => { const p = play(d, dir); p.started++; p[mode === 'interactive' ? 'interactive' : 'pure']++; }),
+    finished: (dir) => edit((d) => { play(d, dir).finished++; }),
+    card: (dir, r) => edit((d) => {
+      if (!r || (!r.stars && !r.moment && !r.comment && !r.buy && !(r.scenes || []).length)) { d.skipped++; return; }
+      d.cards++; const p = play(d, dir);
+      if (r.buy) { p.buy[r.buy] = (p.buy[r.buy] || 0) + 1; }
+      if (r.price && r.buy !== 'no') { p.price[r.price] = (p.price[r.price] || 0) + 1; d.cross ||= {}; const k = `${r.buy}|${r.price}`; d.cross[k] = (d.cross[k] || 0) + 1; }
+      if (r.stars) { p.stars += r.stars; p.rated++; }
+      for (const sc of (r.scenes || []).slice(0, 2)) { p.scenes[sc] = (p.scenes[sc] || 0) + 1; d.sceneBuy ||= {}; const k = `${sc}|${r.buy || 'unanswered'}`; d.sceneBuy[k] = (d.sceneBuy[k] || 0) + 1; }
+      if (r.moment) p.moments[r.moment] = (p.moments[r.moment] || 0) + 1;
+      if (r.comment) { d.comments.push({ t: new Date().toISOString().slice(11, 16), dir, stars: r.stars || null, text: String(r.comment).slice(0, 120) }); if (d.comments.length > 500) d.comments.shift(); }
+    }),
+    // rows per demo: { dir, started, finished, pure, interactive, avg, rated, top } for today ('today') or all days ('all')
+    table(which = 'today') {
+      const s = load(), days = which === 'all' ? Object.values(s.days) : [s.days[which === 'today' ? day() : which]].filter(Boolean), m = {};
+      let visitors = 0, cards = 0, skipped = 0; const buy = { yes: 0, maybe: 0, no: 0 }, cross = {}, scenes = {}, sceneBuy = {};
+      for (const d of days) { visitors += d.visitors; cards += d.cards; skipped += d.skipped;
+        for (const [k, n] of Object.entries(d.cross || {})) cross[k] = (cross[k] || 0) + n;
+        for (const [k, n] of Object.entries(d.sceneBuy || {})) sceneBuy[k] = (sceneBuy[k] || 0) + n;
+        for (const [dir, p] of Object.entries(d.plays)) { const r = m[dir] ||= { dir, started: 0, finished: 0, pure: 0, interactive: 0, stars: 0, rated: 0, moments: {}, buy: { yes: 0, maybe: 0, no: 0 }, price: {}, scenes: {} };
+          for (const k of ['started', 'finished', 'pure', 'interactive', 'stars', 'rated']) r[k] += p[k];
+          for (const [k, n] of Object.entries(p.buy || {})) { r.buy[k] += n; buy[k] += n; }
+          for (const [k, n] of Object.entries(p.price || {})) r.price[k] = (r.price[k] || 0) + n;
+          for (const [k, n] of Object.entries(p.scenes || {})) { r.scenes[k] = (r.scenes[k] || 0) + n; scenes[k] = (scenes[k] || 0) + n; }
+          for (const [k, n] of Object.entries(p.moments)) r.moments[k] = (r.moments[k] || 0) + n; } }
+      const rows = Object.values(m).map((r) => ({ ...r, avg: r.rated ? Math.round(r.stars / r.rated * 10) / 10 : null,
+        top: Object.entries(r.moments).sort((a, b) => b[1] - a[1])[0]?.[0] || '' })).sort((a, b) => b.started - a.started || b.finished - a.finished);
+      return { visitors, cards, skipped, rows, buy, cross, scenes, sceneBuy };
+    },
+    json: () => JSON.stringify({ exported: new Date().toISOString(), note: 'MoHeat Evo kiosk · anonymous local counts (this browser only)', ...load() }, null, 1),
+    csv() {
+      const q = (v) => (/[",\n]/.test(String(v)) ? `"${String(v).replace(/"/g, '""')}"` : String(v ?? ''));
+      const fmt = (o) => Object.entries(o || {}).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k}: ${n}`).join('; ');
+      const out = [['date', 'visitors_that_day', 'demo', 'started', 'finished', 'pure', 'interactive', 'ratings', 'avg_rating', 'top_moment', 'buy_yes', 'buy_maybe', 'buy_no', 'price_bands', 'scenes', 'cards_that_day', 'skipped_cards_that_day'].join(',')];
+      const days = Object.entries(load().days).sort();
+      for (const [date, d] of days) {
+        const ps = Object.entries(d.plays); if (!ps.length) out.push([date, d.visitors, '', 0, 0, 0, 0, 0, '', '', 0, 0, 0, '', '', d.cards, d.skipped].map(q).join(','));
+        for (const [dir, p] of ps) out.push([date, d.visitors, dir, p.started, p.finished, p.pure, p.interactive, p.rated, p.rated ? (p.stars / p.rated).toFixed(2) : '',
+          Object.entries(p.moments).sort((a, b) => b[1] - a[1])[0]?.[0] || '', p.buy?.yes || 0, p.buy?.maybe || 0, p.buy?.no || 0, fmt(p.price), fmt(p.scenes), d.cards, d.skipped].map(q).join(','));
+      }
+      out.push('', 'purchase intent x price band (all days)', 'date,intent,price_band,count');
+      for (const [date, d] of days) for (const [k, n] of Object.entries(d.cross || {})) { const [b, pr] = k.split('|'); out.push([date, b, pr, n].map(q).join(',')); }
+      out.push('', 'scene x purchase intent (all days)', 'date,scene,intent,count');
+      for (const [date, d] of days) for (const [k, n] of Object.entries(d.sceneBuy || {})) { const [sc, b] = k.split('|'); out.push([date, sc, b, n].map(q).join(',')); }
+      return out.join('\n') + '\n';
+    },
+    commentsCsv() {
+      const q = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`, out = ['date,time,demo,stars,comment'];
+      for (const [date, d] of Object.entries(load().days).sort()) for (const c of d.comments) out.push([date, c.t, c.dir, c.stars ?? '', c.text].map(q).join(','));
+      return out.join('\n') + '\n';
+    },
+    clear: () => LSs(SK, { v: 1, days: {} }),
+  };
+
+  // ---------------------------------------------------------------- per-visitor reset
+  const stopDevice = () => { try { window.MoHeatDevice?.current?.send('stop'); } catch {} };
+  // mode: interactive is the default (user 2026-11-08; pure = the option, taps always work)
+  function resetVisitor() {
+    const c = cfg(); stopDevice();
+    LSs('moheat.mode', 'interactive'); LSs('moheat.heat', true); LSs('moheat.intensity', Math.min(c.start, c.cap)); LSs('moheat.subs', 'm'); LSs('moheat.reduce', false);
+    LSs('moheat.volume', 70);
+    try { localStorage.setItem('moheat.guide', 'done'); } catch {}   // the kiosk intro replaces the page tour
+    SSs('moheat.kiosk.visit', null); SSs('moheat.kiosk.level', null);
+    try { if (c.lang && c.lang !== 'en') sessionStorage.setItem('moheat.sublang', c.lang); else sessionStorage.removeItem('moheat.sublang'); } catch {}
+  }
+  function enter() { try { if (localStorage.getItem('moheat.kiosk') !== '1') { LSs('moheat.kiosk.guidePrev', localStorage.getItem('moheat.guide')); localStorage.setItem('moheat.kiosk', '1'); } } catch {} }
+  function exit() {
+    stopDevice();
+    try { const g = LSg('moheat.kiosk.guidePrev', null); if (g) localStorage.setItem('moheat.guide', g); else localStorage.removeItem('moheat.guide');
+      localStorage.removeItem('moheat.kiosk'); localStorage.removeItem('moheat.kiosk.guidePrev'); } catch {}
+  }
+  const visit = { get: () => SSg('moheat.kiosk.visit', null), set: (v) => SSs('moheat.kiosk.visit', v), patch: (p) => SSs('moheat.kiosk.visit', { ...(SSg('moheat.kiosk.visit', {}) || {}), ...p }) };
+  // ---------------------------------------------------------------- the offered list, numbers, top 3, the queue pick link (one place)
+  // numbers = position in the staff's offered list; the phone page gets the list as demo numbers (?o=28.1.2…), stable across nav.js re-sorts
+  const dnum = (d) => +((d.dir.match(/^Demo(\d+)/) || [])[1] || 0);
+  const offered = (DEMOS) => { const c = cfg(); return DEMOS.filter((d) => !c.demos || c.demos.includes(d.dir)); };
+  const num = (DEMOS, d) => offered(DEMOS).indexOf(d) + 1;
+  // "try these first": staff-featured, then the thermal-use score (tools/qa/thermal_score.py → nav.js HEAT), then list order
+  const top3 = (DEMOS) => { const H = window.MoHeatOrder?.HEAT || {}, o = offered(DEMOS);
+    return [...o.filter((d) => d.featured), ...o.filter((d) => !d.featured).sort((a, b) => (H[b.dir] || 0) - (H[a.dir] || 0))].slice(0, 3); };
+  const pickUrl = (DEMOS) => { const c = cfg(), base = (c.site || DEF.site).replace(/\/?$/, '/');
+    return `${c.pickUrl || `${base}kiosk/pick.html`}?o=${offered(DEMOS).map(dnum).join('.')}&top=${top3(DEMOS).map(dnum).join('.')}`; };
+  // ---------------------------------------------------------------- window 1 ↔ window 2 (queue screen), same computer: BroadcastChannel
+  const bc = 'BroadcastChannel' in window ? new BroadcastChannel('moheat-kiosk') : null;
+  let queueSeen = 0; bc?.addEventListener('message', (e) => { if (e.data?.t === 'hello') queueSeen = Date.now(); });
+  const post = (m) => { try { bc?.postMessage(m); } catch {} };
+  const thermalOf = (s) => { const th = { l: { h: 0, c: 0 }, r: { h: 0, c: 0 } };   // device text → 0–1 per ear (heat 0–200, cool 35–80)
+    for (const m of String(s).matchAll(/\b([LR])([HC])\s*(\d+)/g)) { const n = +m[3], e = th[m[1].toLowerCase()]; if (m[2] === 'H') e.h = Math.min(1, n / 200); else e.c = n ? Math.max(0, Math.min(1, (n - 35) / 45)) : 0; } return th; };
+  const K = window.MoHeatKiosk = { currency, bands, BANDS, SCENES, on: flag, cfg, setCfg, stats, resetVisitor, enter, exit, visit, day, DEF, stopDevice,
+    offered, num, top3, pickUrl, dnum, post, thermalOf, get queueOn() { return Date.now() - queueSeen < 6000; } };
+
+  // ================================================================ demo pages (kiosk mode on)
+  const kioskApp = /\/kiosk\/(index\.html)?$/.test(location.pathname) || document.documentElement.dataset.kioskApp != null;
+  if (kioskApp || !flag() || ['cover', 'render', 'embed', 'auto'].some((k) => QS.has(k))) return;
+  const ROOT = (() => { const m = location.pathname.match(/^(.*\/)demos\/[^/]+\/[^/]+\//); return m ? m[1] : '/'; })();
+  const HOME = `${ROOT}kiosk/`;
+  // real time: shell.js freezes Date.now / setTimeout while paused (and speeds them up while seeking) — idle reset must not freeze
+  const RN = () => +new Date();
+  const RT = (() => { try { const f = document.createElement('iframe'); f.hidden = true; f.setAttribute('aria-hidden', 'true'); document.documentElement.appendChild(f); const w = f.contentWindow;
+    return { st: w.setTimeout.bind(w), si: w.setInterval.bind(w) }; } catch { return { st: setTimeout, si: setInterval }; } })();
+  try { localStorage.setItem('moheat.guide', 'done'); } catch {}
+  const dir = (location.pathname.match(/\/demos\/[^/]+\/([^/]+)\//) || [])[1] || '';
+  const c = cfg();
+  const L = () => window.MoHeatSub?.lang || (() => { try { return sessionStorage.getItem('moheat.sublang'); } catch { return null; } })() || 'en';
+  const TX = { end: { en: '✕ End', ja: '✕ 終わる', zh: '✕ 结束' }, vol: { en: 'Volume', ja: '音量', zh: '音量' },
+    lost: { en: 'Headset disconnected', ja: 'ヘッドホンの接続が切れました', zh: '耳机已断开' }, lostS: { en: 'Please ask the staff — the story keeps playing.', ja: 'スタッフにお声がけください（物語はそのまま続きます）。', zh: '请联系工作人员（故事会继续播放）。' },
+    rest: { en: 'A short thermal pause for comfort', ja: '快適さのため、温冷を少しお休み', zh: '为了舒适，冷热短暂休息' },
+    cut: { en: 'Highlights', ja: 'ハイライト', zh: '精华' } };
+  // ---------------------------------------------------------------- volume for the whole page (media elements + Web Audio): installed
+  // before the demo builds its audio graph (graphs are built on Start), every connection to the speakers goes through one gain per context
+  let vol = Math.max(0, Math.min(100, LSg('moheat.volume', 70))) / 100;
+  const vgains = new Map();
+  // the unified shell's own bottom bar (volume, ▶/⏸, 🌡 …) wins when it is there: MoHeatShell.setVolume → kiosk uses it, adds no slider
+  const SHELL_VOL = () => typeof window.MoHeatShell?.setVolume === 'function';
+  if (window.AudioNode && !SHELL_VOL()) {
+    const connect = AudioNode.prototype.connect;
+    AudioNode.prototype.connect = function (dst, ...a) {
+      if (dst instanceof AudioDestinationNode && !this.__mkVol) { let g = vgains.get(dst.context); if (!g) { g = dst.context.createGain(); g.__mkVol = true; g.gain.value = vol; connect.call(g, dst); vgains.set(dst.context, g); } return connect.call(this, g, ...a); }
+      return connect.call(this, dst, ...a);
+    };
+  }
+  const setVol = (v) => { vol = v; if (SHELL_VOL()) { try { window.MoHeatShell.setVolume(v); } catch {} LSs('moheat.volume', Math.round(v * 100)); return; } LSs('moheat.volume', Math.round(v * 100)); vgains.forEach((g) => { try { g.gain.value = v; } catch {} });
+    document.querySelectorAll('audio, video').forEach((m) => { try { m.volume = v; } catch {} }); };
+  setInterval(() => document.querySelectorAll('audio, video').forEach((m) => { if (Math.abs(m.volume - vol) > .01) try { m.volume = vol; } catch {} }), 1000);
+  const tx = (o) => o[L()] || o.en;
+
+  const css = document.createElement('style');
+  css.textContent = `.dnav, .dn-panel, .mg-help, .mg-veil, .mg-hole, .mg-tip { display: none !important; }
+  header.bar a.brand, #credits a, .dn-foot a { pointer-events: none; }
+  .mk-vol { position: fixed; z-index: 9990; right: 14px; bottom: 14px; display: flex; align-items: center; gap: 10px; padding: 6px 16px 6px 12px; min-height: 56px; border-radius: 999px;
+    background: rgba(20,12,24,.9); border: 2px solid rgba(255,255,255,.45); color: #fff; font: 700 16px/1 Inter, "Noto Sans JP", "PingFang SC", sans-serif; box-shadow: 0 6px 24px rgba(0,0,0,.45); }
+  .mk-vol span { font-size: 24px; } .mk-vol input { width: clamp(120px, 14vw, 220px); height: 44px; accent-color: #ffd58a; cursor: pointer; }
+  .mk-end { position: fixed; z-index: 9990; right: 14px; bottom: 82px; min-height: 52px; min-width: 52px; padding: 0 20px; border-radius: 999px; border: 2px solid rgba(255,255,255,.5);
+    background: rgba(20,12,24,.85); color: #fff; font: 700 17px/1 Inter, "Noto Sans JP", "PingFang SC", sans-serif; cursor: pointer; box-shadow: 0 6px 24px rgba(0,0,0,.45); }
+  .mk-cut { position: fixed; z-index: 9990; left: 14px; bottom: 14px; padding: 10px 16px; border-radius: 999px; background: rgba(20,12,24,.85); color: #ffd58a; font: 700 15px/1 Inter, "Noto Sans JP", "PingFang SC", sans-serif; }
+  html.mk-fade body { opacity: 0; transition: opacity 1.3s ease; }
+  .mk-note { position: fixed; z-index: 9992; left: 50%; top: 70px; transform: translateX(-50%); padding: 10px 18px; border-radius: 12px; background: rgba(30,40,60,.92); color: #d6f1ff; font: 600 16px/1.3 Inter, "Noto Sans JP", "PingFang SC", sans-serif; }
+  .mk-note[hidden], .mk-alert[hidden] { display: none; }
+  .mk-alert { position: fixed; z-index: 9995; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(720px, 92vw); padding: 28px 30px; border-radius: 22px; background: #3a0f1a; border: 3px solid #ff7a90;
+    color: #fff; text-align: center; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 20px 80px rgba(0,0,0,.7); font: 600 20px/1.35 Inter, "Noto Sans JP", "PingFang SC", sans-serif; }
+  .mk-alert b { font-size: clamp(26px, 4vw, 40px); }
+  .mk-corner { position: fixed; z-index: 9991; left: 0; top: 0; width: 56px; height: 56px; }`;
+  document.head.appendChild(css);
+
+  // the end button + the hidden staff corner
+  const ui = () => {
+    if (document.querySelector('.mk-end')) return;
+    document.querySelector('.dnav')?.remove();   // ← / → on the cover would switch demos through these links (shell.js)
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'mk-end'; b.addEventListener('click', () => leave('card'));
+    const lab = () => { b.textContent = tx(TX.end); vb.title = tx(TX.vol); vb.querySelector('input').setAttribute('aria-label', tx(TX.vol)); };
+    const vb = document.createElement('label'); vb.className = 'mk-vol'; vb.innerHTML = `<span aria-hidden="true">🔊</span><input type="range" min="0" max="100" step="1" value="${Math.round(vol * 100)}">`;
+    vb.querySelector('input').addEventListener('input', (e) => setVol(+e.target.value / 100));
+    lab(); addEventListener('moheat:sublang', lab); document.body.appendChild(b); if (!SHELL_VOL()) document.body.appendChild(vb); setVol(vol);
+    const corner = document.createElement('div'); corner.className = 'mk-corner'; corner.setAttribute('aria-hidden', 'true'); document.body.appendChild(corner);
+    let taps = []; corner.addEventListener('click', () => { const n = Date.now(); taps = taps.filter((t) => n - t < 3000).concat(n); if (taps.length >= 5) leave('staff'); });
+    // intensity cap on the page's slider (the shell already restored the visitor's level)
+    const inten = document.getElementById('intensity');
+    if (inten) { inten.max = String(c.cap); if (+inten.value > c.cap) { inten.value = c.cap; inten.dispatchEvent(new Event('input', { bubbles: true })); } }
+    autoConnect(); guardDevice();
+    try { navigator.wakeLock?.request('screen').catch(() => {}); } catch {}
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ui); else ui();
+  addEventListener('load', () => { document.querySelector('.dnav')?.remove(); });
+
+  // device: the port was authorised once by staff (kiosk staff panel) → open it on every page without a click
+  function autoConnect(tries = 0) {
+    const btn = document.getElementById('connectBtn'), sel = document.getElementById('portSelect');
+    if (!btn || !('serial' in navigator)) return;
+    if (window.MoHeatDevice?.current?.isConnected()) return;
+    if (sel && !sel.disabled && sel.value !== '' && /connect/i.test(btn.textContent) && !/disconnect/i.test(btn.textContent)) { btn.click(); return; }
+    if (tries < 12) setTimeout(() => autoConnect(tries + 1), 500);
+  }
+
+  // ---------------------------------------------------------------- started / finished, thermal moments
+  const v0 = visit.get(); if (!v0 || v0.dir !== dir) visit.set({ dir, t0: Date.now(), started: false, finished: false, mode: null, moments: [] });
+  const intro = () => document.getElementById('intro');
+  const playing = () => { const i = intro(); return !!i && i.classList.contains('hidden'); };
+  let wasPlaying = false, ended = false;
+  const chapterLabels = () => {
+    const S = window.MoHeatShell;
+    if (S?.chapters?.length) return S.chapters.map((ch) => ch.label || ch.en || '');
+    return [...document.querySelectorAll('#steps li')].map((li) => li.textContent.split(' · ')[0].trim());
+  };
+  const chapterNow = () => { try { return window.MoHeatShell?.chapter ? window.MoHeatShell.chapter() : -1; } catch { return -1; } };
+  const per = new Map();   // chapter index → { w: max warm, c: max cool }
+  const parse = (s) => { let w = 0, cl = 0; for (const m of String(s).matchAll(/\b([LR])([HC])\s*(\d+)/g)) { const n = +m[3]; if (m[2] === 'H') w = Math.max(w, n); else cl = Math.max(cl, n); } return { w, cl }; };
+  setInterval(() => {
+    const p = playing();
+    if (p && !wasPlaying) {   // playback (re)starts
+      const v = visit.get() || {}; if (!v.started) { stats.started(dir, window.MoHeatPlay?.mode || 'pure'); visit.patch({ started: true, mode: window.MoHeatPlay?.mode || 'pure' }); }
+      if (CUT && !cutStarted) startCut();
+    }
+    if (!p && wasPlaying && intro() && !ended) {   // its own cover came back = the end
+      ended = true; const v = visit.get() || {}; if (!v.finished) { stats.finished(dir); visit.patch({ finished: true }); }
+      setTimeout(() => leave('card'), 1800);
+    }
+    wasPlaying = p;
+    if (p) {
+      const cmd = document.getElementById('cmd')?.textContent || '', { w, cl } = parse(cmd), k = chapterNow();
+      post({ t: 'thermal', th: thermalOf(rest ? '' : cmd) });
+      if (k >= 0 && (w || cl)) learn(k, w / 200 + Math.max(0, cl - 35) / 45);
+      // a moment = a chapter; demos without chapters: the scene name in the sound-map card (#posInfo, §7.3)
+      const key = k >= 0 ? k : (document.getElementById('posInfo')?.textContent || '').trim().slice(0, 40);
+      if ((key || key === 0) && (w || cl)) { const e = per.get(key) || { w: 0, c: 0, n: per.size }; e.w = Math.max(e.w, w); e.c = Math.max(e.c, cl); per.set(key, e); saveMoments(); }
+    }
+  }, 500);
+  let lastSave = 0;
+  function saveMoments(force) {
+    if (!force && Date.now() - lastSave < 3000) return; lastSave = Date.now();
+    const labels = chapterLabels(), list = [];
+    per.forEach((e, k) => { const label = typeof k === 'number' ? labels[k] : k; if (!label) return; const kind = e.w > 40 && e.c > 30 ? 'dual' : e.w >= e.c * 1.5 ? 'warm' : 'cool';
+      list.push({ k: e.n, label, kind, s: e.w / 200 + Math.max(0, e.c - 35) / 45 }); });
+    list.sort((a, b) => b.s - a.s); list.splice(6); list.sort((a, b) => a.k - b.k);   // the 6 strongest, in story order
+    visit.patch({ moments: list, title: document.querySelector('.intro h1')?.textContent?.trim() || document.title });
+  }
+
+  // ---------------------------------------------------------------- idle reset
+  let last = RN();
+  for (const e of ['pointerdown', 'keydown', 'touchstart', 'wheel']) addEventListener(e, () => { last = RN(); }, { capture: true, passive: true });
+  RT.si(() => {
+    const idle = (RN() - last) / 1000, p = playing(), paused = !!window.MoHeatShell?.paused, pure = window.MoHeatPlay?.mode !== 'interactive';
+    const limit = !p || paused ? c.idle : pure ? Infinity : c.idle * 3;
+    if (idle > limit) leave(p || (visit.get() || {}).started ? 'card' : 'reset');
+  }, 1000);
+
+  let leaving = false;
+  function leave(where) {
+    if (leaving) return; leaving = true; saveMoments(true); stopDevice();
+    try { window.MoHeatShell?.pause?.(true); } catch {}
+    document.querySelectorAll('audio, video').forEach((m) => { try { m.pause(); } catch {} });
+    RT.st(() => { location.href = `${HOME}#${where}`; }, 150);   // the stop line goes out first
+  }
+  K.leave = leave;
+
+  // ---------------------------------------------------------------- show cut (60–90 s of the demo's best thermal moments; kiosk default)
+  // the start chapter = staff data (SHOWCUT) → else the chapter with the strongest thermal output learned from earlier plays on this
+  // machine ('moheat.kiosk.heat.<dir>', every play teaches it) → else chapter 2 when there are ≥ 3 (skips the slow opening), else the start.
+  // Then CUT_S seconds of real playback, a fade and the experience card (counted as finished).
+  const SHOWCUT = {};   // { DemoNN_Name: { from: chapter index, secs: 80 } } — optional per-demo picks
+  const CUT = (() => { try { return (sessionStorage.getItem('moheat.kiosk.cut') || c.cut || 'show') === 'show'; } catch { return true; } })();
+  const CUT_S = (SHOWCUT[dir]?.secs) || 80;
+  const HK = `moheat.kiosk.heat.${dir}`, heatMap = LSg(HK, {});
+  let learnT = 0; function learn(k, v) { heatMap[k] = Math.max(heatMap[k] || 0, Math.round(v * 100) / 100); if (Date.now() - learnT > 4000) { learnT = Date.now(); LSs(HK, heatMap); } }
+  let cutStarted = false, cutEnd = 0, chip = null;
+  function startCut() {
+    cutStarted = true;
+    setTimeout(() => {   // after the shell has registered its chapters
+      const n = chapterLabels().length, best = Object.entries(heatMap).sort((a, b) => b[1] - a[1])[0];
+      let from = SHOWCUT[dir]?.from ?? (best ? +best[0] : n >= 3 ? 1 : 0);
+      from = Math.max(0, Math.min(from, n - 1)); if (n > 1 && from >= n - 1 && n > 2) from = n - 2;   // leave room to play
+      if (from > 0) { try { window.MoHeatShell?.seekTo?.(from); } catch {} }
+      const go = () => { if (window.MoHeatShell?.chapter && from > 0 && window.MoHeatShell.chapter() < from) return realT(go, 500); cutEnd = Date.now() + CUT_S * 1000; tick(); };
+      realT(go, 600);
+    }, 400);
+    chip = document.createElement('div'); chip.className = 'mk-cut'; document.body.appendChild(chip);
+  }
+  const realT = (fn, ms) => setTimeout(fn, ms);   // the story's own clock: a paused show cut does not run out
+  function tick() {
+    if (leaving) return; const left = Math.max(0, Math.round((cutEnd - Date.now()) / 1000));
+    if (chip) chip.textContent = `${tx(TX.cut)} · ${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`;
+    if (left <= 0) { const v = visit.get() || {}; if (!v.finished) { stats.finished(dir); visit.patch({ finished: true, cut: true }); }
+      document.documentElement.classList.add('mk-fade'); return RT.st(() => leave('card'), 1500); }
+    realT(tick, 500);
+  }
+
+  // ---------------------------------------------------------------- device safety: duty-cycle pause + big disconnected alert
+  // continuous thermal output for DUTY_ON s → "stop" and a DUTY_OFF s pause (the demo's commands are held back meanwhile)
+  const DUTY_ON = 120, DUTY_OFF = 10; let onSince = 0, rest = false, alertBox = null;
+  function guardDevice(n = 0) {
+    const d = window.MoHeatDevice?.current; if (!d) { if (n < 40) setTimeout(() => guardDevice(n + 1), 500); return; }
+    if (d.__mk) return; d.__mk = true; const send = d.send;
+    d.send = (line) => {
+      if (/^stop$/i.test(line)) { onSince = 0; return send(line); }
+      if (rest) return undefined;
+      const active = /\b[LR][HC]\s*[1-9]/.test(line); if (!active) onSince = 0; else if (!onSince) onSince = RN();
+      if (onSince && RN() - onSince > DUTY_ON * 1000) { rest = true; onSince = 0; send('stop'); note(tx(TX.rest)); RT.st(() => { rest = false; note(''); }, DUTY_OFF * 1000); return undefined; }
+      return send(line);
+    };
+  }
+  let noteEl = null; function note(t) { if (!noteEl) { noteEl = document.createElement('div'); noteEl.className = 'mk-note'; document.body.appendChild(noteEl); } noteEl.textContent = t; noteEl.hidden = !t; }
+  const alertShow = (on) => { if (!alertBox) { alertBox = document.createElement('div'); alertBox.className = 'mk-alert'; alertBox.setAttribute('role', 'alert'); document.body.appendChild(alertBox); }
+    alertBox.innerHTML = `<b>🔌 ${tx(TX.lost)}</b><span>${tx(TX.lostS)}</span>`; alertBox.hidden = !on; post({ t: 'alert', on }); };
+  navigator.serial?.addEventListener('disconnect', () => alertShow(true));
+  navigator.serial?.addEventListener('connect', () => { setTimeout(() => { autoConnect(); setTimeout(() => { if (window.MoHeatDevice?.current?.isConnected()) alertShow(false); }, 1500); }, 400); });
+  addEventListener('click', (e) => { if (alertBox && !alertBox.hidden && e.target.closest('.mk-alert')) alertBox.hidden = true; });
+
+  // ---------------------------------------------------------------- the queue screen (window 2): state, subtitles, a mirror of the picture
+  setInterval(() => post({ t: 'state', view: 'demo', dir }), 2000); post({ t: 'state', view: 'demo', dir });
+  let lastSub = '';
+  setInterval(() => {
+    const s = document.querySelector('#subs .one, #subs .line, #bubble')?.textContent?.trim() || ''; if (s !== lastSub) { lastSub = s; post({ t: 'sub', text: s }); }
+    if (!K.queueOn || !playing()) return;
+    const st = document.querySelector('.stage-col .stage') || document.querySelector('.stage');
+    const src = [...(st?.querySelectorAll('canvas, video') || [])].sort((a, b) => b.clientWidth * b.clientHeight - a.clientWidth * a.clientHeight)[0];
+    if (!src || src.clientWidth < 200) return;
+    try { const cv = (K.__cv ||= document.createElement('canvas')); cv.width = 640; cv.height = 360; cv.getContext('2d').drawImage(src, 0, 0, 640, 360); post({ t: 'frame', url: cv.toDataURL('image/jpeg', .62) }); } catch {}
+  }, 450);
+})();

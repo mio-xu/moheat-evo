@@ -1,0 +1,294 @@
+// MoHeat Evo exhibition (kiosk) app — kiosk/index.html (DEMO_DESIGN_GUIDE §7.4, staff guide docs/kiosk.md).
+// attract (idle, thermal off) → welcome (language, pictograms) → 30 s intro (shared/thermintro.js) → menu → demo page (shared/kiosk.js)
+// → #card (rating, buy?, price band, favourite moment, comment, QR) → reset → welcome. Staff: 5 taps top-left + PIN.
+// Routes (hash): #welcome (default) · #attract · #card · #staff · #reset. Storage + stats: shared/kiosk.js (MoHeatKiosk).
+(() => {
+  const K = window.MoHeatKiosk, D = window.MoHeatDemos || { DEMOS: [] };
+  const QS = new URLSearchParams(location.search);
+  if (QS.get('kiosk') === '0') { K.exit(); location.replace('../'); return; }
+  K.enter();
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  let cfg = K.cfg();
+  const LANG_NAMES = { en: 'English', ja: '日本語', zh: '中文', ko: '한국어' };
+  const lang = () => { try { return sessionStorage.getItem('moheat.sublang') || cfg.lang || 'en'; } catch { return cfg.lang || 'en'; } };
+  const setLang = (l) => { try { if (l === 'en') sessionStorage.removeItem('moheat.sublang'); else sessionStorage.setItem('moheat.sublang', l); } catch {}
+    document.documentElement.lang = l; paint(); intro?.repaint(); };
+  const T = {
+    tag: { en: 'Feel warm and cool on each ear — with sound in 3D.', ja: '立体音響とともに、左右の耳で温かさと冷たさを。', zh: '立体声的同时，左右耳感受冷与热。' },
+    p1: { en: 'Put on the headset', ja: 'ヘッドホンをつける', zh: '戴上耳机' }, p2: { en: 'Feel warm & cool', ja: '温かい・冷たいを感じる', zh: '感受冷与热' },
+    p3: { en: 'Pick a story', ja: '物語を選ぶ', zh: '选一个故事' },
+    rec: { en: 'Try these first', ja: 'まずはこちら', zh: '推荐先体验' }, more: { en: 'More stories →', ja: 'ほかの物語 →', zh: '更多故事 →' },
+    hygiene: { en: '🧼 Ear pads cleaned for every visitor · disposable covers available', ja: '🧼 イヤーパッドは毎回消毒 · 使い捨てカバーあります', zh: '🧼 耳罩每位访客消毒 · 可提供一次性耳罩套' },
+    numsH: { en: 'Chose a number while waiting? Tap it:', ja: '待っている間に選んだ番号をタップ：', zh: '排队时选好了号码？点这里：' },
+    qq: { en: 'Scan to choose while you wait', ja: '待っている間にスキャンして選ぼう', zh: '排队时扫码先选' },
+    start: { en: '▶ Start', ja: '▶ はじめる', zh: '▶ 开始' }, skipIntro: { en: 'I know MoHeat Evo — skip the 30-second intro', ja: '使ったことがある — 30 秒の案内をとばす', zh: '我用过 — 跳过 30 秒引导' },
+    pick: { en: 'Pick a story', ja: '物語を選んでください', zh: '选择一个故事' }, replay: { en: '↺ Intro again', ja: '↺ 案内をもう一度', zh: '↺ 再看一次引导' },
+    thanks: { en: 'Thank you!', ja: 'ありがとうございました！', zh: '谢谢体验！' },
+    quick: { en: 'a few quick taps — thank you!', ja: 'かんたんな質問にタップで — ありがとう！', zh: '点几下就好 — 谢谢！' },
+    thanksBig: { en: 'Thank you — enjoy the show!', ja: 'ありがとうございました！', zh: '谢谢你的体验！' },
+    addComment: { en: '+ add a comment', ja: '+ ひとこと書く', zh: '+ 写一句话' }, skipAll: { en: 'Skip all', ja: 'すべてスキップ', zh: '全部跳过' },
+    rate: { en: 'How was the warm / cool?', ja: '温かさ・冷たさは、どうでしたか？', zh: '冷热的感觉怎么样？' },
+    buy: { en: 'Would you want MoHeat Evo as a product?', ja: 'MoHeat Evo が製品になったら、ほしいですか？', zh: '如果 MoHeat Evo 成为产品，你会想要吗？' },
+    yes: { en: 'Yes', ja: 'はい', zh: '想' }, maybe: { en: 'Maybe', ja: 'たぶん', zh: '也许' }, no: { en: 'No', ja: 'いいえ', zh: '不想' },
+    price: { en: 'If it were sold, what price would feel fair?', ja: 'もし販売されるなら、いくらが妥当だと思いますか？', zh: '如果出售，你觉得多少钱比较合适？' },
+    scenes: { en: 'Where would you use it? (up to 2)', ja: 'どんな場面で使いたい？（2 つまで）', zh: '你会在什么场景用它？（最多 2 个）' },
+    fav: { en: 'Your favourite moment', ja: 'いちばん良かった瞬間', zh: '最喜欢的瞬间' },
+    comment: { en: 'One line (optional)', ja: 'ひとこと（任意）', zh: '一句话（可选）' },
+    done: { en: 'Done', ja: '送信', zh: '完成' }, skip: { en: 'Skip', ja: 'スキップ', zh: '跳过' },
+    scan: { en: 'Scan to take home what you just experienced', ja: 'スキャンして、いまの体験をおみやげに', zh: '扫码带走刚才的体验小结' },
+    nodata: { en: 'No personal data is collected.', ja: '個人情報は集めません。', zh: '不收集任何个人信息。' },
+    news: { en: 'Product news? (optional, your choice)', ja: '製品ニュース（任意）', zh: '产品消息？（可选）' },
+    lost: { en: 'Headset disconnected', ja: 'ヘッドホンの接続が切れました', zh: '耳机已断开' }, bat: { en: 'Headset battery low', ja: 'ヘッドホンの電池が少なくなっています', zh: '耳机电量低' },
+    staffHelp: { en: 'Please ask the staff.', ja: 'スタッフにお声がけください。', zh: '请联系工作人员。' },
+    touch: { en: 'Touch to start · タッチしてスタート · 点击开始', ja: 'Touch to start · タッチしてスタート · 点击开始', zh: 'Touch to start · タッチしてスタート · 点击开始' },
+  };
+  const t = (k) => (T[k] && (T[k][lang()] || T[k].en)) || '';
+  function paint() {
+    $$('[data-t]').forEach((e) => { e.textContent = t(e.dataset.t); });
+    $('#startVisit').textContent = t('start'); $('#skipIntro').textContent = t('skipIntro');
+    $$('.langs button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.l === lang())));
+    renderRec(); $('#hygiene').hidden = !cfg.hygiene;
+    if (!$('#v-menu').hidden) renderMenu();
+    if (!$('#v-card').hidden) renderCard(false);
+  }
+  $('.langs').innerHTML = (cfg.langs || ['en', 'ja', 'zh']).map((l) => `<button type="button" data-l="${l}">${LANG_NAMES[l] || l}</button>`).join('');
+  $('.langs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) setLang(b.dataset.l); });
+
+  // ---------------------------------------------------------------- device (authorised once in the staff panel, then auto)
+  const dev = MoHeatDevice.create({ select: $('#portSelect'), addBtn: $('#addPort'), connectBtn: $('#connectBtn'), status: $('#deviceStatus') },
+    { onConnect: () => { $('#devdot').classList.add('ok'); alert_(null); }, onDisconnect: (lost) => { $('#devdot').classList.remove('ok'); if (lost) alert_('lost'); },
+      // firmware replies: a battery report such as "BAT 14" / "battery: 14%" → the big low-battery alert under 15 % (if the firmware sends one)
+      log: (l) => { const m = /^← .*\bbat(?:tery)?\D{0,3}(\d{1,3})/i.exec(l); if (m && +m[1] < 15) alert_('bat'); } });
+  function alert_(k) { let el = $('#alertBig'); if (!el) { el = document.createElement('div'); el.id = 'alertBig'; el.className = 'alert-big'; el.setAttribute('role', 'alert'); document.body.appendChild(el); el.addEventListener('click', () => { el.hidden = true; }); }
+    el.hidden = !k; if (k) el.innerHTML = k === 'lost' ? `<b>🔌 ${t('lost')}</b><span>${t('staffHelp')}</span>` : `<b>🔋 ${t('bat')}</b><span>${t('staffHelp')}</span>`; }
+  let thermalOn = true;   // false in the attract loop: nothing goes out
+  const send = (line) => { if (thermalOn || /^stop$/i.test(line)) dev.send(line); if (view === 'intro') K.post({ t: 'thermal', th: K.thermalOf(/^stop$/i.test(line) ? '' : line) }); };
+  setInterval(() => K.post({ t: 'state', view, dir: pending || (view === 'card' ? (K.visit.get() || {}).dir : null) }), 2000);
+  const autoConnect = (n = 0) => { if (dev.isConnected()) return; const s = $('#portSelect');
+    if (s && !s.disabled && s.value !== '') { $('#connectBtn').click(); return; } if (n < 10) setTimeout(() => autoConnect(n + 1), 500); };
+  autoConnect(); navigator.serial?.addEventListener('connect', () => setTimeout(autoConnect, 400));
+  try { navigator.wakeLock?.request('screen').catch(() => {}); document.addEventListener('visibilitychange', () => { if (!document.hidden) navigator.wakeLock?.request('screen').catch(() => {}); }); } catch {}
+
+  // ---------------------------------------------------------------- views
+  let view = '';
+  function go(v) {
+    view = v; $$('.view').forEach((s) => { s.hidden = s.id !== `v-${v}`; });
+    K.post({ t: 'state', view: v, dir: pending || (v === 'card' ? (K.visit.get() || {}).dir : null) });
+    if (v !== 'intro') K.post({ t: 'thermal', th: K.thermalOf('') });
+    thermalOn = v !== 'attract';
+    if (v !== 'intro') intro?.stop();
+    if (v === 'attract') { send('stop'); startAttract(); } else stopAttract();
+    if (v === 'menu') renderMenu();
+    document.documentElement.dataset.view = v; last = Date.now();
+  }
+  function newVisitor() { pending = null; K.resetVisitor(); cfg = K.cfg(); document.documentElement.lang = lang(); paint(); }
+  function reset(toAttract = false) { send('stop'); newVisitor(); go(toAttract ? 'attract' : 'welcome'); }
+
+  const volGet = () => { try { return (+JSON.parse(localStorage.getItem('moheat.volume')) || 70) / 100; } catch { return .7; } };
+  const volSet = (v) => { try { localStorage.setItem('moheat.volume', JSON.stringify(Math.round(v * 100))); } catch {} };
+  // welcome → intro → menu
+  let intro = null;
+  const level = () => Math.min(cfg.cap, +(localStorage.getItem('moheat.intensity') || cfg.start)) / 100;
+  function begin(withIntro) {
+    K.stats.visitor(); sessionStorage.setItem('moheat.kiosk.counted', '1');
+    if (!withIntro) return go('menu');
+    go('intro');
+    intro = MoHeatIntro.mount($('.intro-host'), { send, volume: volGet, onVolume: volSet, level: Math.min(cfg.start, cfg.cap) / 100, cap: cfg.cap / 100, lang, connected: () => dev.isConnected(),
+      onLevel: (k) => { try { localStorage.setItem('moheat.intensity', JSON.stringify(Math.round(k * 100))); } catch {} },
+      onDone: ({ level: k }) => { try { localStorage.setItem('moheat.intensity', JSON.stringify(Math.round(Math.min(k, cfg.cap / 100) * 100))); } catch {} if (pending) openDemo(pending); else go('menu'); } });
+    intro.start();
+  }
+  $('#startVisit').addEventListener('click', () => begin(true));
+  $('#skipIntro').addEventListener('click', () => begin(false));
+  $('#replayIntro').addEventListener('click', () => { go('intro'); intro = MoHeatIntro.mount($('.intro-host'), { send, volume: volGet, onVolume: volSet, level: level(), cap: cfg.cap / 100, lang, connected: () => dev.isConnected(),
+    onDone: ({ level: k }) => { try { localStorage.setItem('moheat.intensity', JSON.stringify(Math.round(k * 100))); } catch {} go('menu'); } }); intro.start(); });
+
+  // menu: the demos staff offer (default all), thumbnails in the display language
+  // numbers = position in the offered list (the same numbers on the phone pick page, its QR carries the list: no server)
+  const offered = () => K.offered(D.DEMOS), num = (d) => K.num(D.DEMOS, d), top3 = () => K.top3(D.DEMOS), pickUrl = () => K.pickUrl(D.DEMOS);
+  const title = (d) => d[lang()] || d.en;
+  const pitch = (d) => { const p = (window.MOHEAT_PITCH || {})[d.dir]; return p ? { line: p[lang()] || p.en, hot: p.hot ? p.hot[lang()] || p.hot.en : '' } : { line: '', hot: '' }; };
+  const thumb = (d, l) => `../assets/images/demos/${d.dir}${l ? '.' + l : ''}.jpg`;
+  const img = (d) => `<img alt="" src="${thumb(d, lang())}" onerror="this.onerror=null;this.src='${thumb(d)}'">`;
+  const tile = (d, big) => { const p = pitch(d); return `<button type="button" data-dir="${d.dir}"><span class="no">${num(d)}</span>${img(d)}<b>${title(d)}</b>${big && p.line ? `<small>${p.line}</small>` : ''}${big && p.hot ? `<em>${p.hot}</em>` : ''}</button>`; };
+  function renderRec() { $('.rec-row').innerHTML = top3().map((d) => tile(d, true)).join('');
+    $('.nums-row').innerHTML = offered().map((d) => `<button type="button" data-dir="${d.dir}" title="${title(d).replace(/"/g, '&quot;')}">${num(d)}</button>`).join(''); qr($('#qq .qr'), pickUrl()); }
+  function renderMenu() {
+    $('.menu-top').innerHTML = top3().map((d) => tile(d, true)).join('');
+    $('.menu-grid').innerHTML = offered().map((d) => tile(d, false)).join('');
+  }
+  let pending = null;   // a demo picked on the welcome screen: intro first, then straight to it
+  const openDemo = (dir) => { const d = D.DEMOS.find((x) => x.dir === dir); if (!d) return;
+    K.visit.set({ dir: d.dir, t0: Date.now(), started: false, finished: false, mode: null, moments: [] }); send('stop');
+    try { sessionStorage.setItem('moheat.kiosk.cut', cfg.cut || 'show'); } catch {}
+    location.href = `../demos/${d.cat}/${d.dir}/`; };
+  for (const sel of ['.menu-grid', '.menu-top']) $(sel).addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) openDemo(b.dataset.dir); });
+  $('.rec-row').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { pending = b.dataset.dir; begin(true); } });
+  $('#moreDemos').addEventListener('click', () => begin(true));   // new visitors get the intro too, then the full menu
+  $('.nums-row').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { pending = b.dataset.dir; begin(true); } });
+
+  // ---------------------------------------------------------------- experience card: one question per screen, a tap = answer + next
+  // rating → buy? → fair price (only after yes / maybe) → where would you use it (≤ 2; auto-next on the 2nd tap or 1.6 s after the 1st)
+  // → favourite moment (only when the demo had thermal moments). Skip (this question) + Skip all on every screen; 15 s without input
+  // closes the card (answers so far are kept, none = skipped); thank-you ≤ 2 s; the comment hides behind a small link.
+  const answer = { stars: 0, buy: null, price: null, moment: null, scenes: [] };
+  const ICON = { warm: '🔥', cool: '❄️', dual: '🔥❄️' };
+  let qi = 0, sceneT = 0;
+  const qs = () => { const v = K.visit.get() || {}; const q = ['rate', 'buy'];
+    if (answer.buy === 'yes' || answer.buy === 'maybe') q.push('price'); q.push('scenes'); if ((v.moments || []).length) q.push('fav'); return q; };
+  function renderCard(fresh = true) {
+    const v = K.visit.get() || {}, d = D.DEMOS.find((x) => x.dir === v.dir);
+    if (fresh) { Object.assign(answer, { stars: 0, buy: null, price: null, moment: null, scenes: [] }); qi = 0; $('#comment').value = ''; $('#comment').hidden = true; $('#addComment').hidden = false; $('.q-thanks').hidden = true; $('.card-wrap').hidden = false; }
+    $('.card-title').textContent = d ? title(d) : 'MoHeat Evo';
+    const list = qs(), k = list[qi];
+    $('.q-dots').innerHTML = list.map((_, j) => `<i class="${j < qi ? 'done' : j === qi ? 'now' : ''}"></i>`).join('');
+    const opts = (items, sel) => `<div class="chips big-chips">${items.map(([val, label]) => `<button type="button" data-v="${String(val).replace(/"/g, '&quot;')}" aria-pressed="${sel(val)}">${label}</button>`).join('')}</div>`;
+    let html = `<h2>${t(k)}</h2>`;
+    if (k === 'rate') html += `<div class="stars">${[1, 2, 3, 4, 5].map((n) => `<button type="button" data-v="${n}" aria-label="${n}" class="${n <= answer.stars ? 'on' : ''}">★</button>`).join('')}</div>`;
+    if (k === 'buy') html += opts(['yes', 'maybe', 'no'].map((x) => [x, t(x)]), (x) => answer.buy === x);
+    if (k === 'price') { const cur = K.currency(lang()); html += opts(K.bands(cur).map((b) => [`${cur} ${b}`, b]), (x) => answer.price === x); }
+    if (k === 'scenes') html += opts(K.SCENES.map((s) => [s.id, s[lang()] || s.en]), (x) => answer.scenes.includes(x));
+    if (k === 'fav') html += opts((v.moments || []).slice(0, 6).map((m) => [m.label, `<i>${ICON[m.kind] || ''}</i>${m.label}`]), (x) => answer.moment === x);
+    $('.q').innerHTML = html; $('.q').dataset.q = k;
+    $('#cardSkip').textContent = t('skip');
+    qr($('.card-qr .qr'), summaryUrl(v));
+    let news = $('.card-qr .news'); if (cfg.newsUrl) { if (!news) { news = document.createElement('div'); news.className = 'news'; news.innerHTML = '<div class="qr"></div><p></p>'; $('.card-qr').appendChild(news); }
+      qr($('.qr', news), cfg.newsUrl); $('p', news).textContent = t('news'); } else news?.remove();
+  }
+  const nextQ = () => { clearTimeout(sceneT); qi++; if (qi >= qs().length) return closeCard(true); renderCard(false); };
+  $('.q').addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return; const k = $('.q').dataset.q, v = b.dataset.v;
+    if (k === 'rate') answer.stars = +v; if (k === 'buy') { answer.buy = v; if (v === 'no') answer.price = null; } if (k === 'price') answer.price = v; if (k === 'fav') answer.moment = v;
+    if (k === 'scenes') { const a = answer.scenes; if (a.includes(v)) a.splice(a.indexOf(v), 1); else a.push(v); renderCard(false); clearTimeout(sceneT);
+      if (a.length >= 2) sceneT = setTimeout(nextQ, 350); else if (a.length) sceneT = setTimeout(nextQ, 1600); return; }
+    renderCard(false); setTimeout(nextQ, 280);   // a short beat so the tap is seen
+  });
+  $('#addComment').addEventListener('click', () => { $('#addComment').hidden = true; $('#comment').hidden = false; $('#comment').focus(); });
+  $('#comment').addEventListener('keydown', (e) => { if (e.key === 'Enter') nextQ(); });
+  let carded = false;
+  function closeCard(save) {
+    if (carded) return; carded = true; clearTimeout(sceneT);
+    const v = K.visit.get() || {}, r = { ...answer, comment: $('#comment').value.trim() };
+    if (v.dir) K.stats.card(v.dir, save ? r : null);
+    $('.card-wrap').hidden = true; $('.q-thanks').hidden = false;
+    setTimeout(() => reset(), 1600);
+  }
+  $('#cardSkip').addEventListener('click', () => nextQ());
+  $('#cardSkipAll').addEventListener('click', () => closeCard(true));   // keeps what was already tapped (nothing = skipped)
+  function summaryUrl(v) {
+    const base = (cfg.site || K.DEF.site).replace(/\/?$/, '/');
+    const p = new URLSearchParams({ d: v.dir || '', l: lang() }); if (answer.moment) p.set('m', answer.moment);
+    return `${base}kiosk/summary.html?${p}`;
+  }
+  function qr(el, text) {
+    if (!el) return; if (el.dataset.q === text) return; el.dataset.q = text;
+    try { const q = qrcode(0, 'M'); q.addData(unescape(encodeURIComponent(text))); q.make(); el.innerHTML = q.createSvgTag({ cellSize: 4, margin: 2, scalable: true }); } catch { el.textContent = text; }
+  }
+
+  // ---------------------------------------------------------------- attract loop (thermal off)
+  let attT = 0, attI = 0;
+  function startAttract() {
+    const box = $('.att-slides'), ds = offered(); if (!ds.length) return;
+    $('.att-tag').textContent = `${T.tag.en} · ${T.tag.ja}`; $('.att-touch').textContent = T.touch.en;
+    if (!box.children.length || box.dataset.n !== String(ds.length)) { box.dataset.n = ds.length; box.innerHTML = ds.map((d) => `<img alt="" src="${thumb(d)}" loading="lazy">`).join(''); }
+    const show = () => { const im = box.children; [...im].forEach((x, j) => x.classList.toggle('on', j === attI % im.length)); attI++; };
+    clearInterval(attT); show(); attT = setInterval(show, 6000);
+  }
+  function stopAttract() { clearInterval(attT); attT = 0; }
+  $('#v-attract').addEventListener('click', () => reset(false));
+
+  // ---------------------------------------------------------------- idle: intro / menu / card → reset; welcome → attract
+  let last = Date.now();
+  for (const e of ['pointerdown', 'keydown', 'touchstart', 'input']) addEventListener(e, () => { last = Date.now(); }, { capture: true, passive: true });
+  setInterval(() => {
+    if (!$('#staff').hidden || !$('#pinBox').hidden) return;
+    const idle = (Date.now() - last) / 1000;
+    if (view === 'intro') return;   // the intro runs by itself and ends on the menu
+    if (view === 'card' && idle > 15) return closeCard(true);   // never block the next visitor
+    if ((view === 'menu') && idle > cfg.idle) return reset();
+    if (view === 'welcome' && idle > cfg.idle) go('attract');
+  }, 1000);
+
+  // ---------------------------------------------------------------- staff: 5 taps top-left + PIN
+  let taps = [];
+  $('#corner').addEventListener('click', () => { const n = Date.now(); taps = taps.filter((x) => n - x < 3000).concat(n); if (taps.length >= 5) { taps = []; askPin(); } });
+  function askPin() { $('#pinBox').hidden = false; $('#pin').value = ''; $('#pinErr').textContent = ''; setTimeout(() => $('#pin').focus(), 50); }
+  const tryPin = () => { if ($('#pin').value === String(cfg.pin)) { $('#pinBox').hidden = true; openStaff(); } else { $('#pinErr').textContent = 'Wrong PIN'; $('#pin').value = ''; } };
+  $('#pinOk').addEventListener('click', tryPin); $('#pin').addEventListener('keydown', (e) => { if (e.key === 'Enter') tryPin(); });
+  $('#pinCancel').addEventListener('click', () => { $('#pinBox').hidden = true; if (location.hash === '#staff') reset(); });
+  let statWhich = 'today';
+  function openStaff() {
+    send('stop'); cfg = K.cfg(); $('#staff').hidden = false;
+    $('#sLang').innerHTML = (cfg.langs || ['en', 'ja', 'zh']).map((l) => `<option value="${l}"${l === cfg.lang ? ' selected' : ''}>${LANG_NAMES[l] || l}</option>`).join('');
+    $('#sCap').value = cfg.cap; $('#sStart').value = cfg.start; $('#sIdle').value = cfg.idle; $('#sSite').value = cfg.site; $('#sNews').value = cfg.newsUrl || '';
+    $('#sCur').value = cfg.currency || 'auto'; bandsField(); $('#sCut').value = cfg.cut || 'show'; $('#sHyg').checked = !!cfg.hygiene; $('#sPick').value = cfg.pickUrl || '';
+    $('#sDemos').innerHTML = D.DEMOS.map((d, i) => `<label><input type="checkbox" value="${d.dir}"${!cfg.demos || cfg.demos.includes(d.dir) ? ' checked' : ''}> ${i + 1} · ${d.en}</label>`).join('');
+    capLabels(); renderStats();
+  }
+  const bandsField = () => { const cur = K.currency(cfg.lang); $('#sCurNow').textContent = cur; $('#sBands').value = K.bands(cur).join(', '); $('#sBands').dataset.cur = cur; };
+  const capLabels = () => { $('#sCapV').textContent = `${$('#sCap').value}%`; $('#sStartV').textContent = `${Math.min(+$('#sStart').value, +$('#sCap').value)}%`; };
+  function saveStaff() {
+    const demos = $$('#sDemos input').filter((x) => x.checked).map((x) => x.value), pin = $('#sPin').value.trim();
+    const cur = $('#sBands').dataset.cur, list = $('#sBands').value.split(',').map((x) => x.trim()).filter(Boolean);
+    const bands = { ...(K.cfg().bands || {}) }; if (cur && list.length >= 2) bands[cur] = list.slice(0, 6);
+    K.setCfg({ lang: $('#sLang').value, cap: +$('#sCap').value, start: Math.min(+$('#sStart').value, +$('#sCap').value), idle: Math.max(20, +$('#sIdle').value || 60),
+      site: $('#sSite').value.trim() || K.DEF.site, cut: $('#sCut').value, hygiene: $('#sHyg').checked, pickUrl: $('#sPick').value.trim(), newsUrl: $('#sNews').value.trim(), currency: $('#sCur').value, bands,
+      demos: demos.length === D.DEMOS.length ? null : demos, ...(/^\d{4,8}$/.test(pin) ? { pin } : {}) });
+    cfg = K.cfg(); capLabels();
+  }
+  $('#staff').addEventListener('change', (e) => { if (e.target.id === 'sCur') { K.setCfg({ currency: e.target.value }); cfg = K.cfg(); bandsField(); } saveStaff(); });
+  $('#staff').addEventListener('input', (e) => { if (e.target.type === 'range') capLabels(); });
+  $('#dAll').addEventListener('click', () => { $$('#sDemos input').forEach((x) => { x.checked = true; }); saveStaff(); });
+  $('#dNone').addEventListener('click', () => { $$('#sDemos input').forEach((x) => { x.checked = false; }); saveStaff(); });
+  $('#staffClose').addEventListener('click', () => { saveStaff(); $('#staff').hidden = true; reset(); });
+  $$('#staff [data-w]').forEach((b) => b.addEventListener('click', () => { statWhich = b.dataset.w; $$('#staff [data-w]').forEach((x) => x.classList.toggle('on', x === b)); renderStats(); }));
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  function renderStats() {
+    const s = K.stats.table(statWhich), name = (dir) => { const i = D.DEMOS.findIndex((d) => d.dir === dir); return i >= 0 ? `${i + 1} · ${D.DEMOS[i].en}` : dir; };
+    const b = s.buy, nb = b.yes + b.maybe + b.no, pct = (n) => (nb ? `${Math.round(100 * n / nb)}%` : '–');
+    const topPrice = Object.entries(s.cross).sort((a, c) => c[1] - a[1])[0];
+    $('#statSum').innerHTML = `<div><b>${s.visitors}</b>visitors</div><div><b>${s.rows.reduce((a, r) => a + r.started, 0)}</b>plays</div><div><b>${s.cards}</b>cards (${s.skipped} skipped)</div>`
+      + `<div><b>${pct(b.yes)} / ${pct(b.maybe)} / ${pct(b.no)}</b>buy: yes / maybe / no (${nb})</div><div><b>${topPrice ? esc(topPrice[0].split('|')[1]) : '–'}</b>top price band</div>`
+      + `<div><b>${esc(Object.entries(s.scenes).sort((a, c) => c[1] - a[1]).slice(0, 2).map(([k, n]) => `${(K.SCENES.find((x) => x.id === k) || { en: k }).en} ${n}`).join(' · ') || '–')}</b>top use scenes</div>`;
+    $('#statBody').innerHTML = s.rows.map((r, i) => `<tr><td class="n">${i + 1}</td><td>${esc(name(r.dir))}</td><td class="n">${r.started}</td><td class="n">${r.finished}</td><td class="n">${r.pure} / ${r.interactive}</td><td class="n">${r.avg ?? '–'}${r.rated ? ` (${r.rated})` : ''}</td><td>${esc(r.top)}</td></tr>`).join('')
+      || '<tr><td colspan="7">No plays yet</td></tr>';
+    const all = JSON.parse(K.stats.json()), days = statWhich === 'all' ? Object.entries(all.days) : Object.entries(all.days).filter(([d]) => d === K.day());
+    const cs = days.flatMap(([d, x]) => x.comments.map((c) => `${d} ${c.t} · ${name(c.dir)}${c.stars ? ` · ${'★'.repeat(c.stars)}` : ''}: ${c.text}`));
+    $('#statComments').innerHTML = cs.length ? cs.slice(-30).reverse().map((c) => `<div>${esc(c)}</div>`).join('') : '';
+  }
+  const download = (name, text, type) => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); };
+  $('#exCsv').addEventListener('click', () => download(`moheat-kiosk-${K.day()}.csv`, '﻿' + K.stats.csv(), 'text/csv'));
+  $('#exCom').addEventListener('click', () => download(`moheat-kiosk-comments-${K.day()}.csv`, '﻿' + K.stats.commentsCsv(), 'text/csv'));
+  $('#exJson').addEventListener('click', () => download(`moheat-kiosk-${K.day()}.json`, K.stats.json(), 'application/json'));
+  $('#exClear').addEventListener('click', () => { if (confirm('Delete all kiosk statistics in this browser? Export them first.')) { K.stats.clear(); renderStats(); } });
+  $('#fsBtn').addEventListener('click', () => { (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()).catch?.(() => {}); });
+  $('#attractBtn').addEventListener('click', () => { saveStaff(); $('#staff').hidden = true; go('attract'); });
+  $('#queueBtn').addEventListener('click', () => { window.open('queue.html', 'moheat-queue', 'popup,width=1280,height=720'); });
+  $('#posterBtn').addEventListener('click', () => { window.open('poster.html', 'moheat-poster'); });
+  $('#reportBtn').addEventListener('click', () => { window.open('report.html', 'moheat-report'); });
+  $('#offlineBtn').addEventListener('click', () => offline());
+  async function offline() {
+    const out = $('#offlineOut'); if (!('serviceWorker' in navigator)) { out.textContent = 'This browser has no service worker support.'; return; }
+    try {
+      const reg = await navigator.serviceWorker.register('../kiosk-sw.js', { scope: '../' }); await navigator.serviceWorker.ready;
+      const list = await (await fetch('precache.json', { cache: 'no-store' })).json();
+      const files = [...list.shared, ...offered().flatMap((d) => list.demos[d.dir] || [])];   // shared files + only the demos on offer
+      const ch = new MessageChannel(); ch.port1.onmessage = (e) => { const m = e.data; out.textContent = m.done ? `✓ ${m.ok} files saved for offline (${m.fail} failed) · ${Math.round(m.bytes / 1048576)} MB` : `Saving… ${m.n} / ${files.length}`; };
+      (reg.active || navigator.serviceWorker.controller)?.postMessage({ t: 'precache', files }, [ch.port2]); out.textContent = `Saving… 0 / ${files.length}`;
+    } catch (e) { out.textContent = `Offline save failed: ${e.message}`; }
+  }
+  $('#exitKiosk').addEventListener('click', () => { if (!confirm('Exit kiosk mode on this browser?')) return; send('stop'); K.exit();
+    try { navigator.serviceWorker?.getRegistrations().then((rs) => rs.forEach((r) => r.active?.scriptURL.endsWith('kiosk-sw.js') && r.unregister())); caches?.delete('moheat-kiosk-v1'); } catch {} location.href = '../'; });
+
+  // ---------------------------------------------------------------- route
+  addEventListener('pagehide', () => send('stop'));
+  const route = () => {
+    const h = location.hash.slice(1); history.replaceState(null, '', location.pathname + location.search);
+    if (h === 'card' && (K.visit.get() || {}).dir) { carded = false; go('card'); renderCard(true); paint(); last = Date.now(); }
+    else if (h === 'staff') { reset(); askPin(); }
+    else if (h === 'attract') reset(true);
+    else reset();
+  };
+  window.MoHeatKioskApp = { go, reset, get view() { return view; }, get intro() { return intro; }, answer, closeCard, openStaff, dev };
+  route();
+})();

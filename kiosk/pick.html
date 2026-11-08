@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>MoHeat Evo · Choose while you wait</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    :root { color-scheme: dark; --warm: #ff8a4a; --cool: #6cc4ff; --gold: #ffd58a; --ff: Inter, "Noto Sans JP", "PingFang SC", "Hiragino Sans", system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #0b0a12; color: #f6f0fa; font: 16px/1.5 var(--ff); }
+    header { position: sticky; top: 0; z-index: 5; padding: 12px 16px; background: rgba(11,10,18,.94); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(255,255,255,.08); }
+    .logo { font: 800 24px/1 var(--ff); background: linear-gradient(90deg, var(--cool), var(--warm)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .logo span { font-weight: 300; }
+    header p { margin: 4px 0 8px; color: #cfc3dc; font-size: 14px; }
+    .langs { display: flex; gap: 6px; } .langs button { flex: 1; min-height: 44px; border-radius: 999px; border: 1px solid rgba(255,255,255,.3); background: none; color: #fff; font: 600 15px/1 var(--ff); }
+    .langs button[aria-pressed=true] { background: #fff; color: #17121f; }
+    main { padding: 12px 16px 40px; display: grid; gap: 12px; max-width: 720px; margin: 0 auto; }
+    h2 { margin: 10px 0 0; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
+    .d { display: grid; grid-template-columns: 38% 1fr; gap: 10px; align-items: center; width: 100%; padding: 0; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); color: #fff; text-align: left; font: inherit; cursor: pointer; position: relative; }
+    .d img { width: 100%; height: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
+    .d div { padding: 8px 10px 8px 0; } .d b { display: block; font-size: 15px; line-height: 1.3; } .d small { display: block; color: #cfc3dc; font-size: 13px; line-height: 1.35; margin-top: 2px; }
+    .d em { display: block; color: #ffc9a6; font-style: normal; font-size: 13px; margin-top: 2px; }
+    .no { position: absolute; left: 6px; top: 6px; min-width: 32px; height: 32px; padding: 0 6px; border-radius: 999px; display: grid; place-items: center; background: var(--gold); color: #2a1606; font: 800 17px/1 var(--ff); }
+    .pick { position: fixed; inset: 0; z-index: 10; background: #0b0a12; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; gap: 14px; }
+    .pick[hidden] { display: none; }
+    .pick .big { font: 800 min(34vw, 180px)/1 var(--ff); color: var(--gold); }
+    .pick h1 { margin: 0; font-size: 24px; } .pick p { margin: 0; color: #cfc3dc; } .pick img { width: min(100%, 520px); border-radius: 14px; }
+    .pick button { min-height: 48px; padding: 0 22px; border-radius: 999px; border: 1px solid rgba(255,255,255,.3); background: none; color: #fff; font: 600 15px/1 var(--ff); }
+    footer { text-align: center; color: #8e82a0; font-size: 12px; padding: 0 16px 30px; }
+  </style>
+</head>
+<body>
+  <header><div class="logo">MoHeat <span>Evo</span></div><p data-t="intro"></p><div class="langs"><button data-l="en">English</button><button data-l="ja">日本語</button><button data-l="zh">中文</button></div></header>
+  <main id="list"></main>
+  <footer data-t="privacy"></footer>
+  <section class="pick" id="pick" hidden></section>
+  <script>window.MOHEAT_NAV_DATA_ONLY = true;</script>
+  <script src="../demos/shared/nav.js?v=8fa268d8"></script>
+  <script src="pitches.js?v=1"></script>
+  <script>
+  // Queue preview (TASKS #54, docs/kiosk/REQUIREMENTS.md §9): people in line scan the kiosk's QR, read the pitches on their phone and pick a
+  // number; at the machine they tap the same number. No server: ?o=<demo numbers in kiosk order, dot-separated> comes from the kiosk
+  // (its staff panel's "offered demos"), &top=<3 demo numbers>. Nothing is stored or sent; the pick only lives on this screen.
+  (() => {
+    const Q = new URLSearchParams(location.search), all = (window.MoHeatDemos || { DEMOS: [] }).DEMOS;
+    const byNo = (n) => all.find((d) => +((d.dir.match(/^Demo(\d+)/) || [])[1]) === +n);
+    const list = (Q.get('o') ? Q.get('o').split('.').map(byNo).filter(Boolean) : all);
+    const top = (Q.get('top') || '').split('.').map(byNo).filter((d) => d && list.includes(d));
+    const nav = navigator.language || 'en'; let l = ['en', 'ja', 'zh'].includes(Q.get('l')) ? Q.get('l') : nav.startsWith('ja') ? 'ja' : nav.startsWith('zh') ? 'zh' : 'en';
+    const T = { intro: { en: 'Choose your story while you wait — then tap the same number at the machine.', ja: '待っている間に物語を選んで、順番が来たら同じ番号をタップ。', zh: '排队时先选好故事，轮到你时在机器上点同样的号码。' },
+      top: { en: 'Try these first', ja: 'まずはこちら', zh: '推荐先体验' }, all: { en: 'All stories', ja: 'すべての物語', zh: '全部故事' },
+      yours: { en: 'Your pick', ja: 'あなたの番号', zh: '你选的号码' }, show: { en: 'At the machine, tap this number.', ja: '順番が来たら、この番号をタップしてください。', zh: '轮到你时，在机器上点这个号码。' },
+      back: { en: '← Choose another', ja: '← ほかを選ぶ', zh: '← 重新选择' }, privacy: { en: 'Nothing is stored or sent. MoHeat Evo · thermal headphones', ja: '何も保存・送信しません。MoHeat Evo · 温冷ヘッドホン', zh: '不保存、不发送任何信息。MoHeat Evo · 冷热耳机' } };
+    const P = (d) => (window.MOHEAT_PITCH || {})[d.dir] || {};
+    const img = (d) => `../assets/images/demos/${d.dir}.${l}.jpg`, img0 = (d) => `../assets/images/demos/${d.dir}.jpg`;
+    const card = (d) => { const p = P(d), n = list.indexOf(d) + 1; return `<button class="d" data-n="${n}"><span class="no">${n}</span><img src="${img(d)}" onerror="this.onerror=null;this.src='${img0(d)}'" alt="" loading="lazy"><div><b>${d[l] || d.en}</b>${p[l] || p.en ? `<small>${p[l] || p.en}</small>` : ''}${p.hot ? `<em>${p.hot[l] || p.hot.en}</em>` : ''}</div></button>`; };
+    let picked = 0;
+    const paint = () => {
+      document.documentElement.lang = l;
+      document.querySelectorAll('[data-t]').forEach((e) => { e.textContent = T[e.dataset.t][l]; });
+      document.querySelectorAll('.langs button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.l === l)));
+      document.getElementById('list').innerHTML = (top.length ? `<h2>${T.top[l]}</h2>${top.map(card).join('')}` : '') + `<h2>${T.all[l]}</h2>${list.map(card).join('')}`;
+      const box = document.getElementById('pick'), d = list[picked - 1]; box.hidden = !d;
+      if (d) box.innerHTML = `<p>${T.yours[l]}</p><div class="big">${picked}</div><h1>${d[l] || d.en}</h1><img src="${img(d)}" onerror="this.onerror=null;this.src='${img0(d)}'" alt=""><p>${T.show[l]}</p><button type="button" id="back">${T.back[l]}</button>`;
+    };
+    document.querySelector('.langs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { l = b.dataset.l; paint(); } });
+    document.getElementById('list').addEventListener('click', (e) => { const b = e.target.closest('.d'); if (b) { picked = +b.dataset.n; paint(); scrollTo(0, 0); } });
+    document.getElementById('pick').addEventListener('click', (e) => { if (e.target.id === 'back') { picked = 0; paint(); } });
+    paint();
+  })();
+  </script>
+</body>
+</html>

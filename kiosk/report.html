@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>MoHeat Evo · Daily kiosk report</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    /* the staff panel's "Daily report": one printable page per day from the local anonymous counts (nothing leaves this browser) */
+    @page { size: A4 portrait; margin: 12mm; }
+    body { margin: 0; font: 14px/1.45 Inter, "Noto Sans JP", "PingFang SC", system-ui, sans-serif; color: #17121f; background: #fff; }
+    main { max-width: 190mm; margin: 0 auto; padding: 16px; }
+    h1 { margin: 0 0 4px; font-size: 22px; } h2 { margin: 18px 0 6px; font-size: 15px; border-bottom: 2px solid #17121f; padding-bottom: 3px; }
+    .kpi { display: flex; gap: 12px; flex-wrap: wrap; } .kpi div { border: 1px solid #ccc; border-radius: 8px; padding: 8px 12px; min-width: 110px; } .kpi b { display: block; font-size: 22px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; } th, td { text-align: left; padding: 4px 6px; border-bottom: 1px solid #e3e3e3; } td.n { text-align: right; font-variant-numeric: tabular-nums; }
+    .bars div { display: grid; grid-template-columns: 200px 1fr 50px; gap: 8px; align-items: center; margin: 3px 0; } .bars i { display: block; height: 12px; background: #f08a4a; border-radius: 3px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .note { color: #6b6078; font-size: 12px; } .noprint { margin: 10px 0; } @media print { .noprint { display: none; } }
+    .noprint button, .noprint select { font: inherit; padding: 6px 12px; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="noprint"><select id="day"></select> <button onclick="print()">Print / Save as PDF</button> <button id="dl">Download HTML</button></div>
+    <h1>MoHeat Evo · kiosk report <span id="date"></span></h1>
+    <p class="note">Anonymous counts stored only in this browser (no personal data). Generated <span id="gen"></span>.</p>
+    <div class="kpi" id="kpi"></div>
+    <h2>Most played demos</h2><table><thead><tr><th>#</th><th>Demo</th><th>Started</th><th>Finished</th><th>Finish rate</th><th>Pure / Int.</th><th>★ avg (n)</th><th>Favourite moment</th></tr></thead><tbody id="rows"></tbody></table>
+    <h2>Would you want it as a product?</h2><div class="bars" id="buy"></div>
+    <h2>Fair price (yes / maybe only)</h2><div class="bars" id="price"></div>
+    <h2>Where would you use it?</h2><div class="bars" id="scenes"></div>
+    <h2>To improve first</h2><ul id="improve"></ul>
+    <h2>Comments</h2><ul id="comments"></ul>
+  </main>
+  <script>window.MOHEAT_NAV_DATA_ONLY = true;</script>
+  <script src="../demos/shared/nav.js?v=8fa268d8"></script>
+  <script src="../demos/shared/kiosk.js?v=9a1dcc94"></script>
+  <script>
+  (() => {
+    const K = window.MoHeatKiosk, D = window.MoHeatDemos.DEMOS, raw = JSON.parse(K.stats.json());
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const name = (dir) => { const d = D.find((x) => x.dir === dir); return d ? d.en : dir; };
+    const days = Object.keys(raw.days).sort().reverse(); if (!days.includes(K.day())) days.unshift(K.day());
+    const sel = document.getElementById('day'); sel.innerHTML = ['all', ...days].map((d) => `<option value="${d}">${d === 'all' ? 'All days' : d}</option>`).join(''); sel.value = new URLSearchParams(location.search).get('d') || K.day();
+    const bars = (el, obj, label = (k) => k) => { const tot = Object.values(obj).reduce((a, b) => a + b, 0) || 1;
+      el.innerHTML = Object.entries(obj).sort((a, b) => b[1] - a[1]).map(([k, n]) => `<div><span>${esc(label(k))}</span><i style="width:${100 * n / tot}%"></i><span>${n} · ${Math.round(100 * n / tot)}%</span></div>`).join('') || '<p class="note">No answers yet.</p>'; };
+    function paint() {
+      const w = sel.value, t = K.stats.table(w); document.getElementById('date').textContent = w === 'all' ? '· all days' : `· ${w}`; document.getElementById('gen').textContent = new Date().toLocaleString();
+      const plays = t.rows.reduce((a, r) => a + r.started, 0), rated = t.rows.reduce((a, r) => a + r.rated, 0), stars = t.rows.reduce((a, r) => a + r.stars, 0);
+      document.getElementById('kpi').innerHTML = `<div><b>${t.visitors}</b>visitors</div><div><b>${plays}</b>plays</div><div><b>${rated ? (stars / rated).toFixed(1) : '–'}</b>avg ★ (${rated})</div><div><b>${t.cards}</b>cards · ${t.skipped} skipped</div>`;
+      document.getElementById('rows').innerHTML = t.rows.map((r, i) => `<tr><td class="n">${i + 1}</td><td>${esc(name(r.dir))}</td><td class="n">${r.started}</td><td class="n">${r.finished}</td><td class="n">${r.started ? Math.round(100 * r.finished / r.started) : 0}%</td><td class="n">${r.pure} / ${r.interactive}</td><td class="n">${r.avg ?? '–'} (${r.rated})</td><td>${esc(r.top)}</td></tr>`).join('') || '<tr><td colspan="8">No plays.</td></tr>';
+      bars(document.getElementById('buy'), t.buy); const price = {}; Object.entries(t.cross).forEach(([k, n]) => { const p = k.split('|')[1]; price[p] = (price[p] || 0) + n; }); bars(document.getElementById('price'), price);
+      bars(document.getElementById('scenes'), t.scenes, (k) => (K.SCENES.find((x) => x.id === k) || { en: k }).en);
+      // improvement priorities (REQUIREMENTS §9): lowest-rated demos (≥ 3 ratings), lowest finish rate (≥ 3 starts), and the moments people loved
+      const imp = [...t.rows.filter((r) => r.rated >= 3).sort((a, b) => a.avg - b.avg).slice(0, 3).map((r) => `Lowest rating: ${esc(name(r.dir))} — ★ ${r.avg} (${r.rated})`),
+        ...t.rows.filter((r) => r.started >= 3).sort((a, b) => a.finished / a.started - b.finished / b.started).slice(0, 2).map((r) => `Most often left early: ${esc(name(r.dir))} — ${Math.round(100 * r.finished / r.started)}% finished`),
+        ...t.rows.filter((r) => r.top).slice(0, 3).map((r) => `Loved moment in ${esc(name(r.dir))}: “${esc(r.top)}” — keep / reuse it`)];
+      document.getElementById('improve').innerHTML = imp.map((x) => `<li>${x}</li>`).join('') || '<li class="note">Not enough data yet (needs ≥ 3 ratings per demo).</li>';
+      const cs = Object.entries(raw.days).filter(([d]) => w === 'all' || d === w).flatMap(([d, x]) => x.comments.map((c) => `${d} ${c.t} · ${name(c.dir)}${c.stars ? ` · ${'★'.repeat(c.stars)}` : ''}: ${c.text}`));
+      document.getElementById('comments').innerHTML = cs.map((c) => `<li>${esc(c)}</li>`).join('') || '<li class="note">No comments.</li>';
+    }
+    sel.addEventListener('change', paint);
+    document.getElementById('dl').addEventListener('click', () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['<!doctype html>' + document.documentElement.outerHTML], { type: 'text/html' })); a.download = `moheat-kiosk-report-${sel.value}.html`; a.click(); });
+    paint();
+  })();
+  </script>
+</body>
+</html>

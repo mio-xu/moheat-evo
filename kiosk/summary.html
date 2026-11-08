@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MoHeat Evo · Your experience</title>
+  <style>
+    :root { color-scheme: dark; --warm: #ff8a4a; --cool: #6cc4ff; --gold: #ffd58a; }
+    body { margin: 0; background: #0b0a12; color: #f6f0fa; font: 16px/1.55 Inter, "Noto Sans JP", "PingFang SC", system-ui, sans-serif; }
+    main { max-width: 640px; margin: 0 auto; padding: 20px 16px 40px; }
+    .logo { font: 800 30px/1 inherit; background: linear-gradient(90deg, var(--cool), var(--warm)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .logo span { font-weight: 300; }
+    img.cover { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 14px; margin: 16px 0 8px; background: #1a1424; }
+    h1 { font-size: 24px; line-height: 1.25; margin: 6px 0; } h2 { font-size: 16px; color: var(--gold); margin: 22px 0 6px; }
+    .moment { display: inline-block; padding: 6px 12px; border-radius: 999px; background: rgba(255,255,255,.1); }
+    ul { padding-left: 1.2em; } li { margin: 4px 0; }
+    a.btn { display: block; text-align: center; margin: 12px 0; padding: 14px; border-radius: 999px; background: linear-gradient(135deg, var(--gold), #ff9f6e); color: #2a1606; font-weight: 700; text-decoration: none; }
+    a.alt { background: none; border: 1px solid rgba(255,255,255,.3); color: #fff; }
+    .langs { display: flex; gap: 8px; margin-top: 10px; } .langs a { color: #cfc3dc; }
+    small { color: #a99ab8; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="logo">MoHeat <span>Evo</span></div>
+    <img class="cover" id="cover" alt="" />
+    <p id="kicker"><small></small></p>
+    <h1 id="title"></h1>
+    <div id="momentBox" hidden><h2 data-t="fav"></h2><span class="moment" id="moment"></span></div>
+    <h2 data-t="what"></h2>
+    <ul id="points"></ul>
+    <a class="btn" id="again" data-t="again"></a>
+    <a class="btn alt" id="site" data-t="site"></a>
+    <p class="langs"><a href="#" data-l="en">English</a><a href="#" data-l="ja">日本語</a><a href="#" data-l="zh">中文</a></p>
+    <p><small data-t="privacy"></small></p>
+  </main>
+  <script>window.MOHEAT_NAV_DATA_ONLY = true;</script>
+  <script src="../demos/shared/nav.js?v=8fa268d8"></script>
+  <script>
+  // The take-away page behind the kiosk card's QR code (DEMO_DESIGN_GUIDE §7.4): ?d=<demo folder>&l=<en|ja|zh>&m=<favourite moment>.
+  // Static, no personal data, nothing stored or sent.
+  (() => {
+    const Q = new URLSearchParams(location.search), D = (window.MoHeatDemos || { DEMOS: [] }).DEMOS;
+    let l = ['en', 'ja', 'zh'].includes(Q.get('l')) ? Q.get('l') : 'en';
+    const d = D.find((x) => x.dir === Q.get('d')), m = (Q.get('m') || '').slice(0, 80);
+    const T = {
+      kicker: { en: 'You just experienced', ja: 'いま体験したのは', zh: '你刚刚体验的是' },
+      fav: { en: 'Your favourite moment', ja: 'いちばん良かった瞬間', zh: '你最喜欢的瞬间' },
+      what: { en: 'What you felt', ja: '感じたこと', zh: '你感受到的' },
+      p: { en: ['3D binaural sound: voices and sounds around your head', 'Warm and cool on each ear, following the story: fire, snow, wind, a voice close to you', 'Fast hot ↔ cold switching, and cool + warm on the same ear at once (MoHeat Evo DUAL)'],
+        ja: ['立体音響：声や音が頭のまわりから聞こえる', '物語に合わせて左右の耳に温かさと冷たさ：火、雪、風、耳もとの声', '温 ↔ 冷のすばやい切り替え、同じ耳に冷たいと温かいを同時に（MoHeat Evo DUAL）'],
+        zh: ['立体声：声音在你头部四周', '左右耳随故事感受冷和热：火、雪、风、耳边的声音', '冷热快速切换，同一只耳朵冷热同时（MoHeat Evo DUAL）'] },
+      again: { en: 'Watch / listen again online', ja: 'オンラインでもう一度', zh: '在线再体验一次' },
+      site: { en: 'About MoHeat Evo', ja: 'MoHeat Evo について', zh: '了解 MoHeat Evo' },
+      privacy: { en: 'This page stores nothing and knows nothing about you.', ja: 'このページは何も保存せず、あなたの情報も持っていません。', zh: '本页面不保存任何内容，也不含你的任何信息。' },
+    };
+    const paint = () => {
+      document.documentElement.lang = l;
+      document.querySelectorAll('[data-t]').forEach((e) => { e.textContent = T[e.dataset.t][l]; });
+      document.querySelector('#kicker small').textContent = T.kicker[l];
+      document.getElementById('title').textContent = d ? (d[l] || d.en) : 'MoHeat Evo';
+      document.getElementById('points').innerHTML = T.p[l].map((x) => `<li>${x}</li>`).join('');
+      const c = document.getElementById('cover'); if (d) { c.onerror = () => { c.onerror = null; c.src = `../assets/images/demos/${d.dir}.jpg`; }; c.src = `../assets/images/demos/${d.dir}.${l}.jpg`; } else c.hidden = true;
+      document.getElementById('momentBox').hidden = !m; document.getElementById('moment').textContent = m;
+      document.getElementById('again').href = d ? `../demos/${d.cat}/${d.dir}/?sub=${l}&kiosk=0` : '../';
+      document.getElementById('site').href = '../';
+    };
+    document.querySelector('.langs').addEventListener('click', (e) => { const a = e.target.closest('a'); if (a) { e.preventDefault(); l = a.dataset.l; paint(); } });
+    paint();
+  })();
+  </script>
+</body>
+</html>
