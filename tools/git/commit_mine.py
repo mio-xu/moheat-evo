@@ -10,6 +10,7 @@ someone else's staged files and never moves HEAD backwards.
   python3 tools/git/commit_mine.py "<message>" --hunks <path> <regex>     # only the hunks of `git diff HEAD -- <path>` whose text matches
   python3 tools/git/commit_mine.py "<message>" --patch my.diff            # a patch against HEAD (e.g. `git diff HEAD -- f > my.diff`, edited)
   python3 tools/git/commit_mine.py -F msg.txt <paths…>                    # message from a file
+  MOHEAT_AGENT=<id>: warn when a path is claimed by another agent (tools/git/claim.py, docs/CLAIMS.md)
   options: --dry (show what would go in, commit nothing) · --force-add (add ignored files) · --no-trailer
 
   --hunks / --patch / paths can be mixed and repeated. Paths may hold spaces (quote them in zsh: "demos/x/My file.md").
@@ -93,6 +94,10 @@ def main():
     tr = os.environ.get('COMMIT_TRAILER')
     if tr and not a.no_trailer and tr.strip() not in msg: msg += '\n' + tr.strip() + '\n'
 
+    agent = os.environ.get('MOHEAT_AGENT')
+    if agent:  # docs/CLAIMS.md: warn before committing a path another agent claimed
+        r = subprocess.run([sys.executable, os.path.join(ROOT, 'tools', 'git', 'claim.py'), 'check', agent, *a.paths, *[h[0] for h in a.hunks]], capture_output=True, text=True)
+        if r.returncode: print(r.stdout.rstrip() + '\n  (committing anyway: you named these paths yourself — tell that agent)')
     gitdir = git('rev-parse', '--absolute-git-dir').strip()
     idx = os.path.join(gitdir, f'index.mine.{os.getpid()}.{uuid.uuid4().hex[:8]}')
     env = dict(os.environ, GIT_INDEX_FILE=idx)
