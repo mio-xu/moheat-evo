@@ -197,9 +197,29 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 - **对齐**：同一排卡片 / 按钮的第一行内容（标题）要在同一高度，状态标记（正在播放等）放在标题下面。
 - **出图后检查**：用 `?sub=en / ja / zh` 各看一次封面、缩略图、作品列表；有语言不一致或挤歪就改素材，不在页面上打补丁。
 
-## 6. 动画（放在最后做）
+## 6. 画面制作（分层）与动画
 
 > **先看 §6.3**：Seedance 只给通过准入的素材；下面的循环 / 过渡片段规则只适用于已经决定要做的视频片段，不再是每个画面的默认做法（用户 2026-11-08）。
+
+### 标准制作流程：岳（Demo27_GakuFireside）的做法（用户 2026-11-08 定为所有新 Demo 的标准）
+
+画面一律这样做；Seedance 视频只给通过 §6.3 三条准入的动态 CG。范例：`demos/for-women/Demo27_GakuFireside/`（`project/stage.json`、`scripts/seedance.py`、`project/layers.md`）。
+
+1. **设定图**：用户选定造型（人物设计方案 → 设定图）。保留角色的辨识度（Demo27 保留了遮眼刘海）。
+2. **分层计划**：先写 `project/layers.md`，列出每个画面用哪个姿势、哪些姿势可以共用一张脸、哪些是事件 CG、一共多少 credits，发给用户确认。Demo27 一共 8 个画面，约 425 credits。
+3. **出图**（Seedance，每张 25 credits，16:9 2K）：
+   - 每个场地出一张**空场景背景**（"empty scene, no people"），火、灯这类光源放在固定的位置。
+   - **立绘基准**：纯色浅灰底（#c8c8c8），正面、眼睛高度的机位，光线方向和背景一致。
+   - **只换动作和道具的姿势**（拿杯子、挥手、举毯子）：在立绘基准上编辑，提示词写"脸、头、头发、表情、位置保持不变，只改手和手上的东西"。这样可以直接共用基准的脸部差分，每个姿势只花 1 张。
+   - **脸的位置会变的姿势**（身体侧倾、特写、事件 CG）：参考基准单独出图，再出它自己的差分。
+   - **差分**：在每张底图上编辑出"嘴微张（不露牙）"和"闭眼（刘海保持不变）"，提示词写明"只改嘴 / 眼，不移动、不缩放"。
+   - 底图出来后，同一批差分和姿势**马上一起提交**：API 输出链接 30–60 分钟就失效（§11）。API 不能上传时改用网页端，提示词完全一样（`project/web_prompts.json`），下载后用 `scripts/web_take.py <name>` 改名。
+4. **检查每张图**：长相是否一致、有没有多出来的道具（Demo27 "坐到左边" 被加了一个杯子，重出了）、画里有没有画进背景层的东西（火、桌子）。
+5. **合成**：写 `project/stage.json`（姿势、`near_mouth` / `near_eyes` 位置提示、`erase` / `keep` 区域、每个画面的摆位和火的位置），然后运行 `python3 tools/art/build_stage.py <demo> --preview`。这一步用 Pillow + numpy，约 1 分钟，不占 GPU。每次都要看截取预览和备用静帧拼图。
+6. **页面**：剧情代码只需要画静帧 `media/art/<still>.jpg`（`build_stage.py` 生成的备用静帧）。页面在剧情代码之前加载 `media/layers.js` 和 `../../shared/layers.js`，它们会把每张静帧自动换成分层动画：背景视差、火光、呼吸、口型、眨眼、边缘光。重做旧 Demo 时，旧的 `main.js` 可以按路径原样复用（Demo27 复用了 Demo24 的）。火星、热气、雪这些特效继续用代码画，摆位时要让道具对齐代码里写死的位置。
+7. **测试**：两条分支都用 `?auto=1` / `?auto=1&alt=1` 自动跑完，0 报错、没有 404，三种语言，一屏。`?flat` 可以对照原始静帧。
+8. **封面和缩略图**：用 headless Chrome 截 `?cover=1` 存成 `media/cover.jpg`，再运行 `python3 tools/web/thumbs.py <文件夹>` 生成三种语言的缩略图，菜单用的缩略图存成 `assets/images/demos/<文件夹>.jpg`。
+9. **动态 CG**：只在用户试玩后觉得需要时才做（§6.3），按 §4b 的视频标准。
 
 - **顺序**：先用静帧把整个 Demo 做完、测完，最后才做 Seedance 视频（避免场景变了导致视频作废）。
 - **标准（交接文档 §4b）**：
@@ -382,7 +402,7 @@ AVOID  ：chibi, realistic photo, 3D, extra fingers, deformed hands, readable te
 
 ## 7. 页面与版式
 
-- **以最近一个同类 Demo 为模板**复制（女性向：Demo21 / 22 的 `index.html` + `style.css` + `main.js` + `audio.js` + `lines.js` + `l10n.js`），共用 `../../shared/game.css`、`../../shared/series.css`、`../../shared/nav.js`、`../../../device.js`。
+- **以最近一个同类 Demo 为模板**复制（女性向：Demo21 / 22 的 `index.html` + `style.css` + `main.js` + `audio.js` + `lines.js` + `l10n.js`），共用 `../../shared/game.css`、`../../shared/series.css`、`../../shared/nav.js`、`../../../device.js`；画面按 §6「标准制作流程」用 `media/layers.js` + `../../shared/layers.js`（范例 Demo27）。
 - **固定结构**：见 §7.3 UI 规范（所有 Demo 一样，新 Demo 必须照做）。
 - **一屏检查**：在 1280×720、1440×800、1920×1080 下 `scrollHeight <= innerHeight`，**右侧栏也不能出现内部滚动**（§7.3）。
 - **URL 参数**：
@@ -463,10 +483,10 @@ main.layout
 3. **用户确认**：造型（设定图）。
 4. 声音试听 → **用户选** → 合成全部台词。
    - 造型对比图、声音试听页一生成就**自动打开给用户看**（用户 2026-11-08）：`open -a Preview <对比图>` 并激活 Preview；试听页 `open tools/eleven/out/index.html`（或 Chrome 打开 `localhost:8765/tools/eleven/out/index.html`）。不要只给路径。
-5. 出静帧（网页 GPT Image 2）→ 检查人物一致性、构图方位 → 转成 `media/art/*.jpg`。
+5. 按 §6「标准制作流程」出图并合成：空场景背景 + 纯色底姿势 + 张嘴 / 闭眼差分 → `tools/art/build_stage.py` → `media/art/` + `media/layers.js`。
 6. 写页面 / 游戏 / 音频 → 自动通关测试（脚本自动点击，记录画面切换、`DUAL` 指令、报错）→ 封面 → 菜单 → commit + push。
 7. **用户试玩反馈** → 修改。
-8. 做动画（§6）→ 再测一遍 → commit + push。
+8. 动态 CG（只在用户试玩后需要时，§6.3 准入 + §4b 视频标准）→ 再测一遍 → commit + push。
 9. 更新交接文档（Demo 状态、声音 id、credits、坑）和该 Demo 的 README。
 
 ## 9. 验收清单
@@ -477,7 +497,7 @@ main.layout
 - [ ] 画风与所属系列一致（同一风格锚、同一编号），主色与 UI 强调色一致；封面标题不压在人物脸上；缩略图、nav.js、官网菜单都加好了。
 - [ ] 声音是用户选定的；署名正确：封面 `#credits` 写明声音、美术 / 视频工具、音乐；有商标、历史人物、饮酒内容的在 `nav.js` 的 `RIGHTS` 里加一行；`credits.html` 的表格里加上这个 Demo。
 - [ ] 语音输入判定（§2.1）：每个选项 / 台词 / 动作都能用说的完成（`MoHeatVoice._hear()` 走遍所有分支），无关的话不会误判；不支持识别时点按照常可用。
-- [ ] 动画首尾帧与静帧完全一致，切换处没有跳帧或重影。
+- [ ] 分层画面：每个画面的截取预览都看过（嘴 / 眼只截到该截的地方），备用静帧拼图里没有残留的背景色或抠掉的洞；`?flat` 正常。有动态 CG 时，首尾帧与静帧完全一致。
 - [ ] 大文件（原始 PNG、下载的视频、wav）都在 `.gitignore` 里；只提交压缩后的 `media/`。
 - [ ] README、交接文档已更新；已 push。
 
