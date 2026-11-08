@@ -49,5 +49,10 @@ for v in VIEWS:
     out[f"tsubaki_{v}_talk"] = {"ref": f"tsubaki_{v}", "prompt": EDIT.format(what=MOUTH)}
     if v != "pray":   # she prays with her eyes already closed
         out[f"tsubaki_{v}_blink"] = {"ref": f"tsubaki_{v}", "prompt": EDIT.format(what=BLINK)}
+FP = os.path.join(ROOT, "project/face_points.json")   # measured mouth / eye ellipses → masked edits (only those may change)
+if os.path.exists(FP):
+    for v, f in json.load(open(FP)).items():
+        out[f"tsubaki_{v}_talk"]["mask"] = "{},{},{},{}".format(*f["mouth"])
+        if "eyes" in f: out[f"tsubaki_{v}_blink"]["mask"] = ";".join("{},{},{},{}".format(*e) for e in f["eyes"])
 json.dump(out, open(os.path.join(ROOT, "project/web_prompts.json"), "w"), ensure_ascii=False, indent=1)
 print(len(out) - 1, "jobs")

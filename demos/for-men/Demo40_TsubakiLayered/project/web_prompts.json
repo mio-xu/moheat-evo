@@ -29,11 +29,13 @@
  },
  "tsubaki_stall_talk": {
   "ref": "tsubaki_stall",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture."
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture.",
+  "mask": "1307,459,70,45"
  },
  "tsubaki_stall_blink": {
   "ref": "tsubaki_stall",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture."
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture.",
+  "mask": "1168,378,75,55;1334,288,75,55"
  },
  "bg_amazake": {
   "ref": "d25:amazake",
@@ -48,11 +50,13 @@
  },
  "tsubaki_amazake_talk": {
   "ref": "tsubaki_amazake",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture."
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture.",
+  "mask": "1308,522,75,45"
  },
  "tsubaki_amazake_blink": {
   "ref": "tsubaki_amazake",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture."
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture.",
+  "mask": "1052,441,80,60;1308,297,80,60"
  },
  "bg_fire": {
   "ref": "d25:fire",
@@ -67,11 +71,13 @@
  },
  "tsubaki_fire_talk": {
   "ref": "tsubaki_fire",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture."
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture.",
+  "mask": "1765,513,70,45"
  },
  "tsubaki_fire_blink": {
   "ref": "tsubaki_fire",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture."
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture.",
+  "mask": "1594,432,75,55;1783,333,75,55"
  },
  "bg_close": {
   "ref": "d25:close",
@@ -86,11 +92,13 @@
  },
  "tsubaki_close_talk": {
   "ref": "tsubaki_close",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture."
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture.",
+  "mask": "1739,787,100,60"
  },
  "tsubaki_close_blink": {
   "ref": "tsubaki_close",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture."
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture.",
+  "mask": "1658,423,120,85;1991,576,120,85"
  },
  "bg_pray": {
   "ref": "d25:pray",
@@ -105,7 +113,8 @@
  },
  "tsubaki_pray_talk": {
   "ref": "tsubaki_pray",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture."
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture.",
+  "mask": "996,507,65,45"
  },
  "bg_omikuji": {
   "ref": "d25:omikuji",
@@ -120,11 +129,13 @@
  },
  "tsubaki_omikuji_talk": {
   "ref": "tsubaki_omikuji",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture."
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture.",
+  "mask": "1336,567,70,45"
  },
  "tsubaki_omikuji_blink": {
   "ref": "tsubaki_omikuji",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture."
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture.",
+  "mask": "1210,432,75,55;1390,387,75,55"
  },
  "bg_stole": {
   "ref": "d25:stole",
@@ -139,10 +150,12 @@
  },
  "tsubaki_stole_talk": {
   "ref": "tsubaki_stole",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture."
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her mouth: slightly open as if talking softly, a small natural opening, no teeth showing. Do not move, zoom or crop the picture.",
+  "mask": "1175,752,75,50"
  },
  "tsubaki_stole_blink": {
   "ref": "tsubaki_stole",
-  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture."
+  "prompt": "Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, lighting and background — and change ONLY her eyes: closed in a natural blink (eyelids down, lashes visible); her bangs stay exactly as they are. Do not move, zoom or crop the picture.",
+  "mask": "907,630,85,60;1168,396,85,60"
  }
 }
