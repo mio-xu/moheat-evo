@@ -7,6 +7,12 @@
 
 ---
 
+## 2026-11-09 · Demo47–50 美术合成 G4（agent `compose`，统筹分派）
+- **做了什么**：四个新 Demo 的分层合成全部完成并提交：Demo47 鬼屋提灯（4361eeea、2aea8c84、a2eb5aa0）、Demo48 动物温泉（52310622）、Demo49 ナオミの夏（d5970d9b、4b4b6bca）、Demo50 西瓜（1047f604、4b4b6bca）。每个 Demo：`project/face_points.json`（网格量眼 / 嘴）→ `scripts/variant_prompts.py` 遮罩合成眨眼（`images.py --composite`）→ `scripts/make_stage.py` → build_stage → lp_mouths（Q 版 / 动物 / 胡子一律 `warp: false`）→ check_cut_body / check_patches / check_art / style_card 全 0 FAIL；联系图 `project/stills_contact.jpg`（副本在协调者 scratchpad `prepro/PICKS/`）。工具：`check_art.py` 新增 full-edge（d9a4de32、16a4b67b），`build_stage.py` 新增 `"shadow"`（接触影 + AO，烘进每画面背景）和 `"no_green"`（00594932）；§11.1 加两条。Demo44 / Demo46 full-edge 只改摆位（124df251、a3bc5528）。Demo48 猴子台词按 stability 0.3 重配（m01–m04）。
+- **状态**：G4 完成，页面（UI v2，G5）还没做：Demo47 / 48 是游戏（精灵由页面移动），Demo49 / 50 是故事。花费 OpenAI：47 ≈ $6.6、48 ≈ $5.7、49 ≈ $5.7、50 ≈ $3.7（各 ≤ $15）。
+- **下一步**：G5 页面（hooks 见各 stage.json：LANTERN / ONSEN / NAOMI / SUIKA.S.view / who），之后 check_mouth / check_motion / plan_sim / check_demo。Demo04（已上线）的 full-edge：cond_holo_v 上下贴边、cond_ear_v 顶部贴边，等统筹排期。
+- **问题**：magenta 幕布 + 粉灰毛色 → 抠图绿边（`no_green` 解决）；夜景 / 雨景直接调色会把毛色推成紫色（先去饱和、先解混幕布再调色）；Demo50 夜景嘴套 LP 找不到线（夜间调色后线变淡：`dark` 降到 7）。
+
 ## 2026-11-09 · Demo04「季節が、暴走する。」v2 全面升级（agent `d04`，统筹分派，TASKS #49）
 - **做了什么**：在临时文件夹 `Demo04_SeasonsExpress_v2` 做完后用 `merge_remake.py` 并回原文件夹（提交 8f99675e，旧版备份 `~/Desktop/MoHeat Evo 备份/all-ages/Demo04_SeasonsExpress_20261109-0523/`）。魔法 × 赛博变形车厢（`scripts/prepare_art.py`：`car_closed` / `car_open` → `car_base` + `car_runes_ice` / `car_runes_fire` + 窗框发光层；木墙板按铰链翻开、冬冰蓝 + 冰晶护盾、夏橙 + 通风口热风、隧道车厢左右分开、失控时符文霓虹、樱花站合上），全息报站屏、车顶弹簧玩具、壁灯、茶、呼气。季节精灵小列车长「ハルフユ」（`docs/characters/halfy.md`，设计 A；`project/stage.json` 3 个姿势 + 闭眼差分 + 嘴套 `warp: false`），全息播报 + 本人出现 5 次（捧茶、暴雨点灯、停电时贴右耳耳语、「下一站春天」、到站告别）。ElevenLabs `halfy` r1_a（3 个试听在 `project/voice_audition/`，可换：`pick.py halfy r1_b` → `scripts/voice.py --langs ja,en,zh`），三语配音跟随字幕语言（`main.js` 的 `voiceLang()`，日语兜底；MP4 用日语）。DUAL 冷热（`scripts/thermal.py` 无仲裁 + 符文开合门控 + 壁灯 / 茶蒸汽设计包络；冬季先左后右慢速示范；100–108 s 每秒冷热切换），三个互动（长按捧茶、选冰窗 / 火窗、喊「春！」）。UI v2 封面（页面渲染 `scripts/render_mp4.py --cover` → `covers.py`）；MP4 重新导出（`video/final/`，本地）。
 - **状态**：merge_remake 门禁 `check_demo --full` 0 FAIL（31 PASS）；check_sync ALL PASS；check_motion OK；drive_story（互动、英文）OK；check_mobile 7/7。菜单标题（nav.js）仍是「季節が暴走する魔法の列車」——改成「季節が、暴走する。」要等 UI 负责人统一 bump nav.js 时一起改（不然所有页面的 ?v 都会过期）。
