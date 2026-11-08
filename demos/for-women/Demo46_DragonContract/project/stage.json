@@ -72,7 +72,23 @@
      "alpha": 0.75,
      "band": 0.05,
      "tongue_a": 0.5
-    }
+    },
+    "fang": [
+     [
+      [
+       1329,
+       371
+      ],
+      [
+       1343,
+       371
+      ],
+      [
+       1336,
+       389
+      ]
+     ]
+    ]
    },
    "mouth": "lp"
   },
@@ -301,6 +317,9 @@
    "pose": "gaku_base",
    "bg": "valley",
    "fire": null,
+   "x": 0.34,
+   "y": 1.0,
+   "height": 1.0,
    "who": "G"
   },
   "valley_G_wing": {
@@ -322,6 +341,9 @@
    "pose": "ren_ear",
    "bg": "lake",
    "fire": null,
+   "x": 0.692,
+   "y": 1.0,
+   "height": 1.0,
    "who": "R"
   },
   "night_H": {
@@ -372,6 +394,9 @@
     0.9,
     0.72
    ],
+   "x": 0.692,
+   "y": 1.0,
+   "height": 1.0,
    "who": "R"
   },
   "t_study_G": {
@@ -382,6 +407,9 @@
     0.9,
     0.7
    ],
+   "x": 0.34,
+   "y": 1.0,
+   "height": 1.0,
    "who": "G",
    "small": true
   },
@@ -404,6 +432,9 @@
     0.9,
     0.7
    ],
+   "x": 0.692,
+   "y": 1.0,
+   "height": 1.0,
    "who": "R",
    "small": true
   },
@@ -466,6 +497,9 @@
    "pose": "ren_ear",
    "bg": "valley",
    "fire": null,
+   "x": 0.692,
+   "y": 1.0,
+   "height": 1.0,
    "who": "R",
    "small": true
   },
@@ -517,6 +551,9 @@
    "pose": "gaku_base",
    "bg": "lake",
    "fire": null,
+   "x": 0.34,
+   "y": 1.0,
+   "height": 1.0,
    "who": "G",
    "small": true
   },
@@ -566,6 +603,9 @@
     0.9,
     0.72
    ],
+   "x": 0.34,
+   "y": 1.0,
+   "height": 1.0,
    "who": "G",
    "small": true
   },

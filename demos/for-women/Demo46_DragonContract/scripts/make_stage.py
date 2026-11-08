@@ -9,7 +9,7 @@ POSES = ['hinata_base', 'hinata_ear', 'gaku_base', 'gaku_wing', 'ren_base', 'ren
 BGS = {'study': [.9, .7], 'valley': None, 'lake': None, 'dawn': [.9, .72]}
 MATTE = {'hinata': 'green', 'gaku': None, 'ren': 'green'}
 LP = {p: {"view": {"rotate": "auto"}, "teeth": {"alpha": .75, "band": .05, "tongue_a": .5}} for p in POSES}   # men: subtle teeth (Demo24 / 30)
-LP['hinata_base']['fang'] = []   # his tiny fang is drawn at one mouth corner: add a "fang" polygon after the first lp sheet if it vanishes
+LP['hinata_base']['fang'] = [[[1329, 371], [1343, 371], [1336, 389]]]   # his tiny drawn fang (it vanished at lv2 / lv3 in the first sheet)
 VIEWS = {   # view: (still, pose, bg)
     'study_H': ('hinata_study', 'hinata_base', 'study'), 'study_H_ear': ('hinata_whisper', 'hinata_ear', 'study'),
     'valley_G': ('gaku_valley', 'gaku_base', 'valley'), 'valley_G_wing': ('gaku_wing', 'gaku_wing', 'valley'),
