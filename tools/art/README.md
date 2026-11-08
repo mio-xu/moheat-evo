@@ -7,3 +7,9 @@
   Config: `<demo>/project/patches.json` (only names; `near` / `centre` + `radius` when the search is fooled — check
   `--preview`). Pillow + numpy only. Tested on Demo15's grandparents frames: grandma's mouth and grandpa's two eyes land within a
   few px of the hand-measured patches; a variant that came back zoomed needs a `centre` hint.
+- `check_patches.py <demo>` — every patch at 100 % (base | base + patch | diff ×4 in `assets/patch_check/`) + `mouths.jpg` (each
+  mouth closed | open at 2×). Exit code 1 on SEAM / OUTER (jaw, cheek or hair redrawn around the mouth) / OUTSIDE / BORDER / BOUNDS;
+  lists NO-MOUTH views. Run after every `build_stage.py`.
+- `check_mouth.js <demo> [seconds] [--alt] [--shots]` — the lip-sync at runtime: headless Chrome on its own port runs the story
+  (`?auto=1&nomic`), samples `MoHeatLayers.state()` every frame and flags SILENT-OPEN / NO-MOVE / NO-PATCH / UNMAPPED / STUCK-OPEN /
+  HALF / FLICKER; `--shots` saves each view's open / closed frame to `assets/mouth_check/`. Both branches (`--alt`).

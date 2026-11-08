@@ -216,7 +216,7 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/booth_mouth.webp?v=47b7590b",
+     "src": "art/booth_mouth.webp?v=c74d737e",
      "rect": [
       615,
       404,
@@ -226,12 +226,12 @@ window.MOHEAT_LAYERS = {
      "kind": "mouth"
     },
     {
-     "src": "art/booth_eyes.webp?v=bdf60c04",
+     "src": "art/booth_eyes.webp?v=285e779b",
      "rect": [
-      516,
-      235,
-      304,
-      188
+      493,
+      242,
+      381,
+      242
      ],
      "kind": "eyes"
     }
