@@ -1,0 +1,40 @@
+{
+ "src": "assets/art",
+ "bgs": {
+  "torii": {
+   "src": "bg_torii",
+   "fire": null
+  }
+ },
+ "poses": {
+  "torii": {
+   "src": "tsubaki_torii",
+   "talk": "tsubaki_torii_talk",
+   "blink": "tsubaki_torii_blink",
+   "matte": "ai",
+   "centre_mouth": [
+    1515,
+    495
+   ],
+   "radius_mouth": [
+    55,
+    32
+   ],
+   "near_eyes": [
+    1485,
+    385
+   ]
+  }
+ },
+ "views": {
+  "torii": {
+   "still": "tsubaki_torii",
+   "pose": "torii",
+   "bg": "torii",
+   "fire": null,
+   "x": 0.5,
+   "y": 1.0,
+   "height": 1.0
+  }
+ }
+}

@@ -13,9 +13,10 @@ LOOK = ("Tsubaki: the exact young woman from image 1 — very long silver-white 
         "braided cord, soft pink-red eyes, a small red camellia pin; a white furisode fading to crimson at the sleeves with red camellias, "
         "a gold obi, a white fur stole.")
 END = "Wide 16:9 game scene. No text, no logo, no watermark, no speech bubbles, no UI, no readable writing anywhere."
-# Light character (silver hair, white furisode) → DARK grey plain background (guide §6: #404040) + "matte": "ai" in stage.json.
-PLAIN = ("Plain flat DARK-GREY studio background (#404040), completely empty: no scenery, no snow, no floor line, no shadow on the "
-         "background. Keep the same lighting on her as in image 1 (warm lantern light, cool night fill).")
+# Light character with dark lineart (silver hair, white furisode, dark-lavender lines): neither grey works (light grey eats the white
+# clothes, dark grey eats the lineart between hair strands — Demo40 first try) → flat chroma GREEN (no green anywhere on her).
+PLAIN = ("Plain flat CHROMA-KEY GREEN background (#00B140), one even colour, completely empty: no scenery, no snow, no floor line, no "
+         "shadow and no gradient on the background, no green on her. Keep the same lighting on her as in image 2 (warm lantern light, cool night fill).")
 EDIT = ("Edit this exact image. Keep EVERYTHING identical — same pose, hands, framing, size, position, hair strands, clothes, colours, "
         "lighting and background — and change ONLY {what}. Do not move, zoom or crop the picture.")
 MOUTH = "her mouth: slightly open as if talking softly, a small natural opening, no teeth showing"
@@ -30,11 +31,21 @@ for v in VIEWS:
     out[f"bg_{v}"] = {"ref": f"d25:{v}", "prompt": "Image 1 is the reference picture. Remove the young woman completely (and any hand or cup "
         "she holds) and fill the space with what is behind her — the same Japanese shrine on New Year's Eve night: snow, lanterns, navy sky, "
         "bokeh lights, distant crowd silhouettes — the same composition, colours, lighting and art style. Empty scene, no people.\n\n" + END}
-    out[f"tsubaki_{v}"] = {"ref": f"d25:{v}", "prompt": "Image 1 is the CHARACTER, POSE and STYLE reference: redraw the same young woman in "
-        "the same pose, size and position in the frame, same art style.\n\n" + STYLE + "\n\n" + LOOK + "\n\nSame pose as image 1: "
+    if v == "torii":   # the character reference itself: her torii pose, redrawn once on the green background
+        out["tsubaki_torii"] = {"ref": "tsubaki_torii_grey", "prompt": "Edit this exact image. Keep the young woman EXACTLY as she is — same "
+            "pose, hands, framing, size, position, face, hair strands, lineart, clothes and colours — and replace ONLY the dark grey background "
+            "with a flat CHROMA-KEY GREEN (#00B140): one even colour everywhere around her and in every gap between her hair strands, no "
+            "shadow, no gradient, no green on her. Do not move, zoom or crop the picture."}
+        out["tsubaki_torii_talk"] = {"ref": "tsubaki_torii", "prompt": EDIT.format(what=MOUTH)}
+        out["tsubaki_torii_blink"] = {"ref": "tsubaki_torii", "prompt": EDIT.format(what=BLINK)}
+        continue
+    out[f"tsubaki_{v}"] = {"ref": ["tsubaki_torii", f"d25:{v}"], "prompt": "Image 1 is the CHARACTER and STYLE reference: draw this exact young "
+        "woman (face, hair, eyes, hair ornament, furisode, fur stole, lineart and colouring). Image 2 shows only the POSE, FRAMING and SCALE "
+        "for this picture (its art style and her details there are older: follow image 1 for how she looks).\n\n" + STYLE + "\n\n" + LOOK + "\n\nSame pose as image 1: "
         + pose_text(v) + " Mouth CLOSED (lips together) in the same expression.\n\nSAME FRAMING AND SCALE as image 1: do NOT zoom out and do NOT "
-        "draw more of her body than image 1 shows — her head, shoulders and hands are exactly where and as big as in image 1, cut by the "
-        "picture edges in the same places. Leave out the viewer's hand / arm if image 1 has one.\n\n" + PLAIN + "\n\n" + END}
+        "draw more of her body than image 2 shows — her head, shoulders and hands are exactly where and as big as in image 2, cut by the "
+        "picture edges in the same places. Leave out the viewer's hand / arm if image 2 has one.\n\n" + PLAIN + "\n\n" + END}
+    if v == "torii": continue
     out[f"tsubaki_{v}_talk"] = {"ref": f"tsubaki_{v}", "prompt": EDIT.format(what=MOUTH)}
     if v != "pray":   # she prays with her eyes already closed
         out[f"tsubaki_{v}_blink"] = {"ref": f"tsubaki_{v}", "prompt": EDIT.format(what=BLINK)}
