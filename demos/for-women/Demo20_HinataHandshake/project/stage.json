@@ -108,7 +108,19 @@
      0.26
     ],
     "minh": 0.16,
-    "light": 0.4
+    "light": 0.4,
+    "warp": false,
+    "centre": [
+     733,
+     881
+    ],
+    "radius": [
+     130,
+     102
+    ],
+    "lift": 0.08,
+    "drop": 0.24,
+    "dark": 20
    }
   },
   "wave": {

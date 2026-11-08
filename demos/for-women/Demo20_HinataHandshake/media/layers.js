@@ -201,45 +201,45 @@ window.MOHEAT_LAYERS = {
      "kind": "eyes"
     },
     {
-     "src": "art/lean_mouth0.webp?v=656db916",
+     "src": "art/lean_mouth0.webp?v=e741ff48",
      "rect": [
-      359,
-      480,
-      292,
-      245
+      371,
+      490,
+      256,
+      218
      ],
      "kind": "mouth_lv",
      "level": 0
     },
     {
-     "src": "art/lean_mouth1.webp?v=7668c8bb",
+     "src": "art/lean_mouth1.webp?v=589eff38",
      "rect": [
-      359,
-      480,
-      292,
-      245
+      371,
+      490,
+      256,
+      218
      ],
      "kind": "mouth_lv",
      "level": 1
     },
     {
-     "src": "art/lean_mouth2.webp?v=eef040cd",
+     "src": "art/lean_mouth2.webp?v=39f0d1ed",
      "rect": [
-      359,
-      480,
-      292,
-      245
+      371,
+      490,
+      256,
+      218
      ],
      "kind": "mouth_lv",
      "level": 2
     },
     {
-     "src": "art/lean_mouth3.webp?v=420c2ccb",
+     "src": "art/lean_mouth3.webp?v=5d5ac5ac",
      "rect": [
-      359,
-      480,
-      292,
-      245
+      371,
+      490,
+      256,
+      218
      ],
      "kind": "mouth_lv",
      "level": 3
