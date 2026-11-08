@@ -136,7 +136,7 @@
   const vis = (e) => e.isConnected && e.offsetParent !== null && getComputedStyle(e).visibility !== 'hidden' && !e.disabled && e.getBoundingClientRect().width > 0;
   const playing = () => { const i = document.getElementById('intro'); return !!i && i.classList.contains('hidden'); };
   if (!EXPORT) setInterval(() => {
-    if (!Play.pure || !playing()) return;
+    if (!(Play.pure || QS.has('auto')) || !playing()) return;   // ?auto (test runs, page_probe): the same default answers, for demos without their own ?auto code (Demo12)
     if (SH.autoplay) { if (!G.busy) { let r; try { r = SH.autoplay(G); } catch (e) { real.st(() => { throw e; }); } if (r) return; } else return; }   // the game plays itself (below)
     // the first visible control that was not pressed in the last 5 s (a press that did nothing — e.g. the demo was not listening
     // yet — is repeated instead of waiting forever); it is pressed after a natural 2.2 s pause
