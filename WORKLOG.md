@@ -6,52 +6,6 @@
 > 用户偏好在 `USER_PREFERENCES.md`，整体状态在 `HANDOFF_ASMR_DEMOS.md`，用户任务清单在 `TASKS.md`。
 
 ---
-## 2026-11-08 · Demo18 ひなた 抓娃娃机检查 + 修正（moheat-evo-60 交接的验收子任务）
-
-- **问题（v8 实际画面）**：爪子 518 px 高、关在 635 px 的玻璃箱里，停车位置就已经插进玩偶堆里；`grabY()` 比停车位置还高 17 px → 「下降」其实往上走、「提起」往下走，猫根本没被提起；猫底部被玻璃下沿直线切掉；代码画的 3 px 细线接在图里 9 px 粗的吊绳上；两边的爪是横向挤压（铰链离开外壳）。
-- **修正（`main.js` v9，e614bcd，`index.html` 的 `main.js?v=9` 已被 fc6ebd7 一起提交）**：爪子 220 px，外壳停在天花板下（`parkY()`），猫 185 px 坐在玩偶堆上（底 ≈ y 652，阴影）；整个爪子从天花板支点像钟摆一样挂着，摆动由滑轨加速度驱动（固定 10 ms 子步，帧率无关）；图里的吊绳条拉伸到天花板；两边的爪绕铰链旋转 0.17 rad（夹在脸颊下面，在猫前面；中间爪在猫后面）；抓娃娃机图层随画面淡入淡出（v8 切到包厢时瞬间消失）。剧情时间：长按 2.2 s → 稳 0.35 s → 下降 1.5 s → 合拢 0.45 s → 第 1 次提到一半滑落 / 第 2 次提起 1.2 s、移到出口 1.3 s、松开掉落。
-- **检查**：虚拟时钟逐帧渲染整段（30 fps）+ 无头 Chrome 跑完三遍（`?auto=1` en、`&alt=1` ja、zh）：全部走完 6 个画面、0 JS 错误、DUAL 正常；手机 390×844 / 844×390 一屏检查 0 问题。审查图（不进 git）：`demos/for-men/Demo18_HinataStream/assets/review_claw_1_grab_2x.jpg` `_2_lift_2x` `_3_chute_2x` `_4_sequence`。
-- **包厢**：QA 会话 fc6ebd7 重切了 booth 贴片；嘴 2 倍看过（闭 / 开都干净，无双嘴 / 方框）；**眨眼两眼都闭上，但闭眼线下面还透出一点橙色虹膜（约 2 倍时可见）** → 留给 QA 会话（贴片中心 alpha 不够 / 眼睛区域偏）。延长的身体自然。
-- **问题**：`DEMO_DESIGN_GUIDE.md` 在 14:53 被别的会话写成 0 字节（工作区，HEAD 完好），本会话没动它，§11.1 教训见交接报告，等文件恢复后补。
-
-
-## 2026-11-08 · 信长 AI 对话拆成三个 Demo（Demo23 信长 / Demo41 家康 / Demo42 座谈会）
-
-**做了什么**
-- 用户：「Keep the Nobunaga AI demo as THREE separate demos: only Nobunaga, only Ieyasu, and a multi-person round-table」（TASKS #46）。
-- Demo23_NobunagaTalk = 「信長と、語らう」（只和信长，原网址）；新 `demos/nobunaga-suntory/Demo41_IeyasuTalk/` = 「家康と、語らう」；新 `demos/nobunaga-suntory/Demo42_SengokuRoundtable/` = 「信長と家康の、座談会」。
-- 新文件夹只有 `index.html`（`<base href="../Demo23_NobunagaTalk/">`，引擎 / 剧本 / 声音 / l10n 全部按路径复用，没有复制）。对象由 `<body data-cast="N|I|NI">` 固定，`main.js` 读取；封面只剩地点选择（相手一行删掉）。
-- 六个页面（3 公开 + 3 私密实时：`live/index.html` 信长、`live/ieyasu.html`、`live/roundtable.html`）全部由 `node demos/nobunaga-suntory/Demo23_NobunagaTalk/scripts/pages.js` 从两个模板生成。`server.py` 加短网址 `/live/nobunaga` `/live/ieyasu` `/live/roundtable`（同一密码、同一 limits）；`start_demo.command` 打印三个地址；`scripts/prompt_dry.js --all` 也检查三个实时页的 cast。
-- nav.js DEMOS + RIGHTS、官网菜单（index.html）、credits.html、l10n.js（新标题 / 副标题三语；删掉旧的对象按钮词）、三语缩略图（`tools/web/thumbs.py` + 菜单用 `<dir>.jpg`）、README、HANDOFF。
-
-**测试**：自己的标签页 + `python3 -m http.server 8793`：Demo41 京都（EN）开始 → 说「お酒が好きです」→ 过渡句 → 结束回到自己的封面；Demo42 安土（中文）开始 → 三人台词 → 过渡句 → 结束回封面；页面加载的 88 个资源无 404；`tools/web/check_mobile.html?only=Demo23,Demo41,Demo42` 7 种尺寸都是一屏。私密版：临时密码文件 + 端口 8794 跑 server.py，未登录跳登录页，登录后三个入口 303 到对应页面并 200，`server.py` / `local/` 仍 404；只做了 prompt 干跑，没有付费对话。
-
-**下一步 / 注意**
-- nav.js 的 `?v=` 没有在所有页面上提升（nav.js 里还有别的会话没提交的改动，由那个会话 / 统筹一起 bump）。subs.js 加载 `l10n.js?v=3` 是全站固定号，老访客最多缓存 10 分钟。
-- `DEMO_DESIGN_GUIDE.md` 在 14:52 被某个会话写成了 0 字节（工作区，未提交）——不是本会话改的，需要统筹确认后用 `git show HEAD:DEMO_DESIGN_GUIDE.md` 加上那个会话的新内容恢复。
-
----
-
-## 2026-11-08 · 女性向重制 莲 / 仁 / 紫苑（Demo33→12、Demo34→21、Demo35→22）· 交接（统筹要求转后台）
-
-**现在的状态（三个都是暂存文件夹，还没合并上线）**
-- 画面全部用 OpenAI gpt-image-2 做完（空背景、各姿势、张嘴 / 闭眼差分）：`demos/for-women/Demo33_RenNightCall`、`Demo34_JinVipRoom`、`Demo35_ShionRainyNight`。规格：`project/stage.json`；成品：`media/art/*` + `media/layers.js`（build_stage 生成）；原图在 `assets/art/`（不进 git）。
-- 截断的身体已补（extend_pose）：`python3 tools/art/check_cut_body.py` 对三个 Demo 都是 0 报告。
-- 嘴 / 眼补丁：自动找位置在 莲 close/door 和 紫苑 dryer/window 上找错了（补丁贴到头发上 / 两张嘴），已经在 stage.json 里写死 `regions_mouth` / `regions_eyes` 并重建。`check_patches.py` 现在：莲 嘴 0.3–1.2、眼 3.0–3.8；仁 全部 1.4–2.3；紫苑 嘴 0.4–0.5、眼 seam 3.3–4.0，100 % 表（`assets/patch_check/*.png`）目视干净。教训在 `DEMO_DESIGN_GUIDE.md` §11.1（最后一条，**还没提交**：指南里有别的会话未提交的改动，我没有一起提交）。
-- 页面的数据钩子：莲 `CALL.S.view` / `CALL.FW.mouth`；仁 `JIN.S.view` / `JIN.S.lv`；紫苑 `SHION.S.view` / `SHION.S.lv`。
-
-**还要做（按顺序）**
-1. 运行时 2× 检查，在自己新开的标签页（不要用用户的标签页）：本地 `python3 -m http.server` 打开每个暂存页 `?auto=1` 和 `?auto=1&alt=1`；每个画面：张嘴补丁正好在闭嘴上、没有两张嘴 / 方框 / 色缝、只在说话时动、安静时闭上、切画面不闪、两只眼都眨。另外看紫苑 dryer 马尾后面有没有淡光晕。
-2. 完整测试：EN / 日本語 / 中文；无 404；一屏；手机竖 390×844、横 844×390（播放器尽量大、按钮 ≥ 44 px、无横向滚动、触摸长按可用；`tools/web/check_mobile.html` / `tools/art/check_mouth.js` 是我做的辅助，未提交，可用可删）；2× 深色底看抠图；`assets/poses_preview.jpg` 看近远景一致和剧情连贯。
-3. 合并：`python3 tools/web/merge_remake.py demos/for-women/Demo12_LateCall demos/for-women/Demo33_RenNightCall`（以及 Demo21_… ← Demo34、Demo22_… ← Demo35）。合并时不要删掉已有的热感事件。
-4. 每个：封面 headless Chrome `?cover=1` → `media/cover.jpg` + `assets/images/demos/<folder>.jpg`；`python3 tools/web/thumbs.py <folder>`；需要的话 `python3 tools/web/bump.py --stage demos/shared/nav.js`（shared 文件本身要显式提交）；README；本地提交（统筹说不要 push / pull），把 hash 发给统筹。
-
-**未提交、归属不确定的改动**：`tools/art/build_stage.py`、`tools/art/check_patches.py`、`tools/openai/images.py`（`--mask`）有工作区改动，部分是我的、部分可能是别的会话的——提交前先看 `git diff`。
-
-**花费**：OpenAI 约 29 次图像调用（莲 8、仁 11、紫苑 10，详见各自的 `project/openai_log.json`）+ 约 8 次补身体，估计 $6–9（以账单为准，每个 Demo 预算 ≤ $10）。Seedance 只在开头用了少量（见 `project/seedance_log.json`），≤ 1500 credits 的预算远没用完。
-
-**已知问题**：OpenAI 遮罩编辑仍会整图轻微重画，所以补丁位置一定要用 `regions_*` 写死并看 check_patches；build_stage 偶尔在 0 % CPU 卡住（这次 紫苑 卡了 5 分钟，杀掉重跑就好）。
-
 ## 2026-11-08 · 补全"半截身体"的画面（Demo24 岳 / Demo20 陽向 / Demo31 渚）· 后台 agent（统筹会话审查）
 
 **做了什么**
