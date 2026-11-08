@@ -62,7 +62,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/sit_mouth2.webp?v=4ca9222e",
+     "src": "art/sit_mouth2.webp?v=480fe79e",
      "rect": [
       763,
       490,
@@ -73,7 +73,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/sit_mouth3.webp?v=16ac432b",
+     "src": "art/sit_mouth3.webp?v=bd48c7a0",
      "rect": [
       763,
       490,
@@ -146,7 +146,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/log_mouth2.webp?v=ddf12990",
+     "src": "art/log_mouth2.webp?v=53a440a1",
      "rect": [
       611,
       385,
@@ -157,7 +157,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/log_mouth3.webp?v=b8b9880d",
+     "src": "art/log_mouth3.webp?v=84625fb7",
      "rect": [
       611,
       385,
@@ -230,7 +230,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/left_mouth2.webp?v=f2735366",
+     "src": "art/left_mouth2.webp?v=e6f4ff61",
      "rect": [
       584,
       418,
@@ -241,7 +241,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/left_mouth3.webp?v=5037becc",
+     "src": "art/left_mouth3.webp?v=85d345b7",
      "rect": [
       584,
       418,
@@ -314,7 +314,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/coffee_mouth2.webp?v=7a94c551",
+     "src": "art/coffee_mouth2.webp?v=1b80b43b",
      "rect": [
       763,
       491,
@@ -325,7 +325,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/coffee_mouth3.webp?v=193deb0d",
+     "src": "art/coffee_mouth3.webp?v=3a88ebde",
      "rect": [
       763,
       491,
@@ -398,7 +398,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/imo_mouth2.webp?v=d01048b6",
+     "src": "art/imo_mouth2.webp?v=1ce8e204",
      "rect": [
       792,
       475,
@@ -409,7 +409,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/imo_mouth3.webp?v=52aacb3d",
+     "src": "art/imo_mouth3.webp?v=3ecadb06",
      "rect": [
       792,
       475,
@@ -482,7 +482,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/blanket_mouth2.webp?v=84d91859",
+     "src": "art/blanket_mouth2.webp?v=c54c2263",
      "rect": [
       736,
       338,
@@ -493,7 +493,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/blanket_mouth3.webp?v=25702cb6",
+     "src": "art/blanket_mouth3.webp?v=d0d282e8",
      "rect": [
       736,
       338,
@@ -534,45 +534,45 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/whisper_mouth0.webp?v=c67a05f4",
+     "src": "art/whisper_mouth0.webp?v=4f92a1af",
      "rect": [
-      621,
-      495,
-      198,
-      168
+      635,
+      506,
+      172,
+      146
      ],
      "kind": "mouth_lv",
      "level": 0
     },
     {
-     "src": "art/whisper_mouth1.webp?v=195ebaba",
+     "src": "art/whisper_mouth1.webp?v=68eadeb3",
      "rect": [
-      621,
-      495,
-      198,
-      168
+      635,
+      506,
+      172,
+      146
      ],
      "kind": "mouth_lv",
      "level": 1
     },
     {
-     "src": "art/whisper_mouth2.webp?v=9070b603",
+     "src": "art/whisper_mouth2.webp?v=f1dfd73c",
      "rect": [
-      621,
-      495,
-      198,
-      168
+      635,
+      506,
+      172,
+      146
      ],
      "kind": "mouth_lv",
      "level": 2
     },
     {
-     "src": "art/whisper_mouth3.webp?v=814385ee",
+     "src": "art/whisper_mouth3.webp?v=66b0d051",
      "rect": [
-      621,
-      495,
-      198,
-      168
+      635,
+      506,
+      172,
+      146
      ],
      "kind": "mouth_lv",
      "level": 3
@@ -640,7 +640,7 @@ window.MOHEAT_LAYERS = {
      "level": 1
     },
     {
-     "src": "art/bye_mouth2.webp?v=b7d1cbe9",
+     "src": "art/bye_mouth2.webp?v=f5da2264",
      "rect": [
       772,
       456,
@@ -651,7 +651,7 @@ window.MOHEAT_LAYERS = {
      "level": 2
     },
     {
-     "src": "art/bye_mouth3.webp?v=7dc60822",
+     "src": "art/bye_mouth3.webp?v=ab3d2d6f",
      "rect": [
       772,
       456,
