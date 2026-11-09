@@ -147,7 +147,7 @@
 
       // 2 · warm hands on ear A, then the first Super Chat menu: a steamed towel or a chilled spoon
       setStep(1);
-      await go(null, earView(A), () => { SND.fx.rustle(1.2 * A, .2); });
+      await go(null, 'greet', () => { SND.fx.rustle(1.2 * A, .2); });   // her warm hands: the pose with free hands (not the ear pick)
       S.hand = 1; SND.fx.massage(A);
       await say('m04', EAR(A));
       await say('m05', EAR(A));
@@ -187,7 +187,7 @@
       await say('m10', EAR(A));
       await action('🛏️', '寝返り', 'Roll over', 15);
       S.stone = 0; SND.fx.rustle(0, .15); S.side = B;
-      await go(null, earView(B), () => {});
+      await go(null, 'greet', () => {});
       S.hand = 1; SND.fx.massage(B);
       await say('m11', EAR(B));
       // her warm hands leave ear B and the cool mist goes on at once, a quiet beat before she speaks again:

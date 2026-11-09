@@ -593,7 +593,7 @@
       output(th, S.started); radar(S.started ? src : [], th);
       $('clock').textContent = fmt(S.clock);
       $('posInfo').textContent = { hut: 'Mountain hut', gate: 'Cave mouth', tunnel: `Cave · fork ${S.tunnel.fork + 1}`, spring: 'Hidden spring' }[S.scene];
-      blowEl.hidden = !blowWanted(); blowEl.classList.toggle('hot', blowing);
+      blowEl.hidden = !blowWanted(); blowEl.classList.toggle('hot', blowing); blowEl.style.right = S.step === 'spring' ? '24cqw' : '';   // the candle stands at the bottom right of the spring
       const lv = micState === 'on' ? micLevel() : 0;
       blowEl.querySelectorAll('.mic i').forEach((b, i) => { const on = lv * 9 > (i + 1) / 7; b.style.height = `${on ? 35 + 65 * Math.min(1, lv * 9 - i / 7) : 15}%`; b.style.opacity = on ? 1 : .35; });
       $('micBars').hidden = micState !== 'on';

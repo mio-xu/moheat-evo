@@ -53,6 +53,7 @@ button, select, input { font: inherit; color: inherit; }
 .hud-top { position: absolute; top: 1.4cqw; right: 1.4cqw; z-index: 3; display: flex; gap: .6cqw; }
 .hud-btn { cursor: pointer; border-radius: 999px; padding: .45cqw 1cqw; border: 1px solid rgba(255, 213, 138, .45); background: rgba(10, 8, 16, .6); color: #f6eedd;
   font: 700 clamp(9px, 1cqw, 15px)/1.2 "Noto Sans JP", Inter, sans-serif; }
+@media (max-width: 1100px), (pointer: coarse) { .stage .hud-top .hud-btn, .blow button { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; } }
 .hud-btn:hover { background: rgba(255, 213, 138, .18); }
 .hud-btn.off { opacity: .55; }
 .inv { position: absolute; left: 1.4cqw; bottom: 1.4cqw; z-index: 3; display: flex; gap: .7cqw; }
