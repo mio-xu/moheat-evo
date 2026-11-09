@@ -166,13 +166,13 @@
     const AUTO = QS.has('auto'), ALT = QS.has('alt');
     const cv = $('scene'), ctx = cv.getContext('2d'), stage = $('stage');
     const NAME = D.who || {};
-    const NAMES = (window.MOHEAT_L10N || {}).names || {};
-    const nm = (who, l) => (l === 'ja' ? NAME[who] : (NAMES[NAME[who]] || {})[l]) || NAME[who] || who;
+    // the demo's l10n.js (names) arrives after this runs (shared/subs.js loads it): read it when needed
+    const nm = (who, l) => (l === 'ja' ? NAME[who] : ((window.MOHEAT_L10N || {}).names?.[NAME[who]] || {})[l]) || NAME[who] || who;
     const PURE = () => !!(window.MoHeatPlay && window.MoHeatPlay.pure) || QS.has('sample');
 
     // ---- texts the engine writes on the page get their 中文 here (data has zh: steps, answers, places; names from l10n names)
     // (the demo's l10n.js is loaded later by shared/subs.js and replaces window.MOHEAT_L10N: these strings are merged into it then)
-    const EXTRA = {}, mergeL10 = (v) => { if (v && typeof v === 'object') { v.text = v.text || {}; v.text.zh = v.text.zh || {}; for (const [k, z] of Object.entries(EXTRA)) if (!(k in v.text.zh)) v.text.zh[k] = z; } return v; };
+    const EXTRA = {}, mergeL10 = (v) => { if (v && typeof v === 'object') { v.text = v.text || {}; v.text.zh = v.text.zh || {}; for (const w of Object.keys(NAME)) { const z = v.names?.[NAME[w]]?.zh; if (z) { EXTRA[`${NAME[w]}に答えてみよう`] = `回答${z}吧`; EXTRA[NAME[w]] = z; } } for (const [k, z] of Object.entries(EXTRA)) if (!(k in v.text.zh)) v.text.zh[k] = z; } return v; };
     { let cur = mergeL10(window.MOHEAT_L10N); try { Object.defineProperty(window, 'MOHEAT_L10N', { configurable: true, get: () => cur, set: (v) => { cur = mergeL10(v); } }); } catch {} }
     const zh = (ja, z) => { if (ja && z && !EXTRA[ja]) { EXTRA[ja] = z; mergeL10(window.MOHEAT_L10N); } };
     const PROMPT = (who) => [`${NAME[who]}に答えてみよう`, `Answer ${nm(who, 'en')}`, `回答${nm(who, 'zh')}吧`];
@@ -267,14 +267,14 @@
     // press and hold for `sec`; let go part-way → false (the story says the let-go line and asks again); 18 s untouched finishes it
     function stillHold(sec, allowSlip, icon = '', ja = 'じっとする（長押し）', en = 'Keep still (press and hold)', side = '') {
       return new Promise((res) => {
-        actEl.classList.toggle('side', !!side); actEl.classList.toggle('side-r', side === 'right');
+        actEl.classList.toggle('act-side', !!side); actEl.classList.toggle('side-r', side === 'right');
         actEl.innerHTML = `<button class="act-btn hold">${icon ? `<i>${icon}</i>` : ''}<b>${esc(ja)}</b><span>${esc(en)}</span><em class="bar"><u></u></em></button>`; actEl.classList.add('show');
         const b = actEl.querySelector('button'), bar = b.querySelector('u'); let down = false, k = 0, upFor = 0, last = performance.now(); const t0 = last;
         const set = (v) => (e) => { e?.preventDefault?.(); down = v; b.classList.toggle('down', v); };
         b.addEventListener('pointerdown', set(true)); for (const ev of ['pointerup', 'pointerleave', 'pointercancel']) b.addEventListener(ev, set(false));
         const key = (v) => (e) => { if (e.code === 'Space' && !e.repeat) { e.preventDefault(); e.stopPropagation(); down = v; b.classList.toggle('down', v); } };
         const kd = key(true), ku = key(false); addEventListener('keydown', kd, true); addEventListener('keyup', ku, true);
-        const end = (ok) => { removeEventListener('keydown', kd, true); removeEventListener('keyup', ku, true); actEl.classList.remove('show', 'side', 'side-r'); actEl.innerHTML = ''; S.hold = 0; res(ok); };
+        const end = (ok) => { removeEventListener('keydown', kd, true); removeEventListener('keyup', ku, true); actEl.classList.remove('show', 'act-side', 'side-r'); actEl.innerHTML = ''; S.hold = 0; res(ok); };
         const my = run_;
         const tick = () => {
           if (my !== run_) return end(false);

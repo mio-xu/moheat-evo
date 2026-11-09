@@ -66,13 +66,13 @@
   // again), finishing resolves true. No touch at all for 18 s also finishes (the story never stalls).
   function watchHold(sec, allowSlip) {
     return new Promise((res) => {
-      actEl.classList.add('side'); actEl.innerHTML = `<button class="act-btn hold"><i>👁</i><b>見つめる（長押し）</b><span>Watch the flame (press and hold)</span><em class="bar"><u></u></em></button>`; actEl.classList.add('show');
+      actEl.classList.add('act-side'); actEl.innerHTML = `<button class="act-btn hold"><i>👁</i><b>見つめる（長押し）</b><span>Watch the flame (press and hold)</span><em class="bar"><u></u></em></button>`; actEl.classList.add('show');
       const b = actEl.querySelector('button'), bar = b.querySelector('u'); let down = false, k = 0, upFor = 0, last = performance.now(); const t0 = last;
       const set = (v) => (e) => { e?.preventDefault?.(); down = v; b.classList.toggle('down', v); };
       b.addEventListener('pointerdown', set(true)); for (const ev of ['pointerup', 'pointerleave', 'pointercancel']) b.addEventListener(ev, set(false));
       const key = (v) => (e) => { if (e.code === 'Space') { e.preventDefault(); down = v; b.classList.toggle('down', v); } };
       const kd = key(true), ku = key(false); addEventListener('keydown', kd); addEventListener('keyup', ku);
-      const end = (ok) => { removeEventListener('keydown', kd); removeEventListener('keyup', ku); actEl.classList.remove('show', 'side'); actEl.innerHTML = ''; res(ok); };
+      const end = (ok) => { removeEventListener('keydown', kd); removeEventListener('keyup', ku); actEl.classList.remove('show', 'act-side'); actEl.innerHTML = ''; res(ok); };
       const tick = () => {
         const n = performance.now(), dt = (n - last) / 1000; last = n;
         const holding = down || (AUTO && !(ALT && allowSlip && k > .35)) || (k === 0 && n - t0 > 18000);

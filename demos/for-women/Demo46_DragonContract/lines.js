@@ -959,7 +959,7 @@ window.DRAGON_LINES = {
       {
        "ja": "陽向の契約書",
        "en": "Hinata's contract scrap",
-       "zh": "陽向的契约书",
+       "zh": "阳向的契约书",
        "then": [
         "h14"
        ],

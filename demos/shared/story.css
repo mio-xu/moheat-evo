@@ -36,11 +36,11 @@
 @keyframes st-nudge { 50% { box-shadow: 0 0 1.6cqw rgba(var(--st-hi), .6); } }
 .stage:has(.intro:not(.hidden)) :is(.choices, .act, .subs, .hud-top) { display: none !important; }
 /* a hold placed beside the person (cfg.holdSide): left / right third */
-.act.side { left: 22%; }
-.act.side.side-r { left: 78%; }
+.act.act-side { left: 22%; }
+.act.act-side.side-r { left: 78%; }
 @container (max-width: 620px) {
   .choices { flex-direction: column; bottom: 14cqw; } .ch b, .act-btn b { font-size: 3.2cqw; } .ch span, .act-btn span { font-size: 2.3cqw; }
-  .act.side { left: 26%; } .act.side.side-r { left: 74%; }
+  .act.act-side { left: 26%; max-width: 50cqw; } .act.act-side.side-r { left: 74%; }
 }
 
 /* もっと話す · keep talking (after the story): where × who (hidden buttons driven by the cover's options) */

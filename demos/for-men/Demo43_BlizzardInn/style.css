@@ -43,8 +43,8 @@ body.cover-only .cover-copy { margin-top: 0 !important; }
 }
 
 /* the keep-still hold sits on the left (Mint and her moxa stick are on the right) */
-.act.side { left: 22%; }
-@container (max-width: 620px) { .act.side { left: 26%; } }
+.act.act-side { left: 22%; }
+@container (max-width: 620px) { .act.act-side { left: 26%; } }
 /* speaker name in the subtitle */
 .subs .who { font-style: normal; margin-right: .6em; opacity: .9; }
 .subs .who.wM { color: #9ff0d8; } .subs .who.wH { color: #ffb070; } .subs .who.wN { color: #ffd27a; } .subs .who.wあなた { color: #c9d4ff; }

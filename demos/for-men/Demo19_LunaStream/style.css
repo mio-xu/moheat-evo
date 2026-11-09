@@ -43,5 +43,5 @@ body.cover-only .cover-copy { margin-top: 0 !important; }
 }
 
 /* the flame hold sits to the right of her (the flame is in the middle of the picture) */
-.act.side { left: 79%; }
-@container (max-width: 620px) { .act.side { left: 76%; } }
+.act.act-side { left: 79%; }
+@container (max-width: 620px) { .act.act-side { left: 76%; } }
