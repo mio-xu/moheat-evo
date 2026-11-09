@@ -6,7 +6,7 @@
 //     mode back to INTERACTIVE (the default; pure is the option), thermal on, subtitles M, no reduced motion; the previous visitor's visit is dropped.
 //   · stats: visitor(), started(dir, mode), finished(dir), card(dir, { stars, moment, comment }), table(), csv(), json().
 // On a DEMO page (loaded by shared/nav.js only while kiosk mode is on, or with ?kiosk=1) it also:
-//   · hides the demo switcher / page guide / site links, adds a big "✕ End" button, auto-connects the authorised device,
+//   · hides the demo switcher / page guide / site links, adds a big "End" button, auto-connects the authorised device,
 //     caps the intensity slider, records started / finished + mode, collects the demo's thermal moments (chapter × #cmd),
 //   · end of the demo (its own cover comes back) → the experience card (kiosk/#card); no input for idle s on the cover / paused
 //     (3 × idle while an interactive story waits; never while a pure story plays) → reset → welcome; 5 taps top-left → staff panel.
@@ -134,7 +134,7 @@
     LSs('moheat.volume', .7);   // 0–1, the same scale as shell.js
     try { localStorage.setItem('moheat.guide', 'done'); } catch {}   // the kiosk intro replaces the page tour
     SSs('moheat.kiosk.visit', null); SSs('moheat.kiosk.level', null);
-    try { if (c.lang && c.lang !== 'en') sessionStorage.setItem('moheat.sublang', c.lang); else sessionStorage.removeItem('moheat.sublang'); } catch {}
+    try { if (c.lang && c.lang !== 'en') sessionStorage.setItem('moheat.sublang', c.lang); else sessionStorage.removeItem('moheat.sublang'); sessionStorage.removeItem('moheat.voicelang'); } catch {}   // the voice language is per visitor too
   }
   function enter() { try { if (localStorage.getItem('moheat.kiosk') !== '1') { LSs('moheat.kiosk.guidePrev', localStorage.getItem('moheat.guide')); localStorage.setItem('moheat.kiosk', '1'); } } catch {} }
   function exit() {
@@ -179,7 +179,7 @@
   const dir = (location.pathname.match(/\/demos\/[^/]+\/([^/]+)\//) || [])[1] || '';
   const c = cfg();
   const L = () => window.MoHeatSub?.lang || (() => { try { return sessionStorage.getItem('moheat.sublang'); } catch { return null; } })() || 'en';
-  const TX = { end: { en: '✕ End', ja: '✕ 終わる', zh: '✕ 结束' }, vol: { en: 'Volume', ja: '音量', zh: '音量' },
+  const TX = { end: { en: 'End', ja: '終わる', zh: '结束' }, vol: { en: 'Volume', ja: '音量', zh: '音量' },
     lost: { en: 'MoHeat Evo disconnected', ja: 'MoHeat Evo の接続が切れました', zh: 'MoHeat Evo 已断开' }, lostS: { en: 'Please ask the staff — the story keeps playing.', ja: 'スタッフにお声がけください（物語はそのまま続きます）。', zh: '请联系工作人员（故事会继续播放）。' },
     rest: { en: 'A short thermal pause for comfort', ja: '快適さのため、温冷を少しお休み', zh: '为了舒适，冷热短暂休息' },
     cut: { en: 'Highlights', ja: 'ハイライト', zh: '精华' } };
@@ -226,8 +226,8 @@
     if (document.querySelector('.mk-end')) return;
     document.querySelector('.dnav')?.remove();   // ← / → on the cover would switch demos through these links (shell.js)
     const b = document.createElement('button'); b.type = 'button'; b.className = 'mk-end'; b.addEventListener('click', () => leave('card'));
-    const lab = () => { b.textContent = tx(TX.end); vb.title = tx(TX.vol); vb.querySelector('input').setAttribute('aria-label', tx(TX.vol)); };
-    const vb = document.createElement('label'); vb.className = 'mk-vol'; vb.innerHTML = `<span aria-hidden="true">🔊</span><input type="range" min="0" max="100" step="1" value="${Math.round(vol * 100)}">`;
+    const lab = () => { b.textContent = tx(TX.end); vb.title = tx(TX.vol); vb.querySelector('span').textContent = tx(TX.vol); vb.querySelector('input').setAttribute('aria-label', tx(TX.vol)); };
+    const vb = document.createElement('label'); vb.className = 'mk-vol'; vb.innerHTML = `<span></span><input type="range" min="0" max="100" step="1" value="${Math.round(vol * 100)}">`;
     vb.querySelector('input').addEventListener('input', (e) => setVol(+e.target.value / 100));
     lab(); addEventListener('moheat:sublang', lab); document.body.appendChild(b); document.body.appendChild(vb); setVol(vol);
     RT.si(() => { vb.hidden = !!document.querySelector('.u2 [data-k=vol]'); }, 1000);
@@ -350,7 +350,7 @@
   }
   let noteEl = null; function note(t) { if (!noteEl) { noteEl = document.createElement('div'); noteEl.className = 'mk-note'; document.body.appendChild(noteEl); } noteEl.textContent = t; noteEl.hidden = !t; }
   const alertShow = (on) => { if (!alertBox) { alertBox = document.createElement('div'); alertBox.className = 'mk-alert'; alertBox.setAttribute('role', 'alert'); document.body.appendChild(alertBox); }
-    alertBox.innerHTML = `<b>🔌 ${tx(TX.lost)}</b><span>${tx(TX.lostS)}</span>`; alertBox.hidden = !on; };
+    alertBox.innerHTML = `<b>${tx(TX.lost)}</b><span>${tx(TX.lostS)}</span>`; alertBox.hidden = !on; };
   // ONE source of truth: device.js's state (connected / reconnecting / lost / off / error) → the alert here + the queue screen
   const devState = () => ({ t: 'device', ...(window.MoHeatDevice?.state || { state: 'off' }) });
   addEventListener('moheat:device', (e) => { alertShow(e.detail?.state === 'lost'); post({ t: 'device', ...e.detail }); });

@@ -16,7 +16,8 @@ window.TALK_BRAIN = (() => {
 
   let E = null, i = 0, used = new Set(), P = null, beats = [], TOPICS = [];
   const buf = {};   // id → Promise<AudioBuffer|null>
-  const fetchVoice = (id) => buf[id] || (buf[id] = fetch(`${VOICE}${id}.m4a`).then((r) => (r.ok ? r.arrayBuffer() : null)).then((a) => (a ? window.TKAudio.decode(a) : null)).catch(() => null));
+  const VOK = (id) => (window.MoHeatVoice ? MoHeatVoice.key(id) : id);   // voice language (shared/shell.js): one cache entry per language, ja fallback
+  const fetchVoice = (id, k = VOK(id)) => buf[k] || (buf[k] = (window.MoHeatVoice ? MoHeatVoice.fetch(id, VOICE) : fetch(`${VOICE}${id}.m4a`)).then((r) => (r.ok ? r.arrayBuffer() : null)).then((a) => (a ? window.TKAudio.decode(a) : null)).catch(() => null));
   const think = (a = .45, b = 1) => new Promise((r) => setTimeout(r, (a + Math.random() * (b - a)) * 1000));
 
   // the beats of this place for this cast: a line plays when "in" lists the cast, or (no "in") when its speaker is there

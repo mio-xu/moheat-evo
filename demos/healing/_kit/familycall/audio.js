@@ -5,6 +5,10 @@ window.CallAudio = (() => {
   let ac = null, master = null, dry = null, verb = null, noise = null, muted = false;
   const rnd = (a, b) => a + Math.random() * (b - a);
   const voices = {};
+  // voice language (shared/shell.js MoHeatVoice; tools/web/voice_lang.py): one cache entry per language, ja fallback, a switch preloads the lines used so far
+  const VF = (id, base, q = '') => (window.MoHeatVoice ? MoHeatVoice.fetch(id, base, q) : fetch(`${base}${id}.m4a${q}`));
+  const VIDS = new Set(), VK = (id) => (VIDS.add(id), window.MoHeatVoice ? MoHeatVoice.key(id) : id);
+  addEventListener('moheat:voicelang', () => loadVoices([...VIDS]));
   let level = 0, an = null, abuf = null;      // their voices level (for lip sync + thermal)
 
   function init() {
@@ -64,14 +68,15 @@ window.CallAudio = (() => {
   // ---------------------------------------------------------------- their voices
   function loadVoices(ids) {
     if (!ac) return;
-    for (const id of ids) if (!voices[id]) voices[id] = fetch(`../_kit/familycall/media/voice/${id}.m4a`).then((r) => r.arrayBuffer()).then((b) => ac.decodeAudioData(b)).then((buf) => (voices[id] = buf)).catch(() => (voices[id] = null));
+    for (const id of ids) for (const k of [VK(id)]) if (!voices[k]) voices[k] = VF(id, '../_kit/familycall/media/voice/', '').then((r) => r.arrayBuffer()).then((b) => ac.decodeAudioData(b)).then((buf) => (voices[k] = buf)).catch(() => (voices[k] = null));
   }
-  const ready = (id) => voices[id] && !(voices[id] instanceof Promise);
+  const ready = (id) => voices[VK(id)] && !(voices[VK(id)] instanceof Promise);
   // where: 'phone' or { az, dist } for his real voice → Promise that resolves when the line ends
   function say(id, where = 'phone', gain = 1.4, far = false) {
     return new Promise(async (res) => {
-      if (voices[id] instanceof Promise) await voices[id];
-      const buf = voices[id]; if (!ac || !buf) return res();
+      if (voices[VK(id)] === undefined) loadVoices([id]);   // not loaded in this voice language yet
+      if (voices[VK(id)] instanceof Promise) await voices[VK(id)];
+      const buf = voices[VK(id)]; if (!ac || !buf) return res();
       const s = ac.createBufferSource(); s.buffer = buf; const g = ac.createGain(); g.gain.value = gain;
       s.connect(g); g.connect(an);
       if (where === 'phone' && phone) {

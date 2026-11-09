@@ -5,6 +5,10 @@ window.HTAudio = (() => {
   let ac = null, master = null, dry = null, verb = null, noise = null, muted = false;
   const rnd = (a, b) => a + Math.random() * (b - a);
   const voices = {};
+  // voice language (shared/shell.js MoHeatVoice; tools/web/voice_lang.py): one cache entry per language, ja fallback, a switch preloads the lines used so far
+  const VF = (id, base, q = '') => (window.MoHeatVoice ? MoHeatVoice.fetch(id, base, q) : fetch(`${base}${id}.m4a${q}`));
+  const VIDS = new Set(), VK = (id) => (VIDS.add(id), window.MoHeatVoice ? MoHeatVoice.key(id) : id);
+  addEventListener('moheat:voicelang', () => loadVoices([...VIDS]));
   let level = 0, an = null, abuf = null;
 
   function init() {
@@ -45,12 +49,13 @@ window.HTAudio = (() => {
   // ---------------------------------------------------------------- voices
   function loadVoices(ids) {
     if (!ac) return;
-    for (const id of ids) if (!voices[id]) voices[id] = fetch(`media/voice/${id}.m4a`).then((r) => { if (!r.ok) throw 0; return r.arrayBuffer(); }).then((b) => ac.decodeAudioData(b)).then((buf) => (voices[id] = buf)).catch(() => (voices[id] = null));
+    for (const id of ids) for (const k of [VK(id)]) if (!voices[k]) voices[k] = VF(id, 'media/voice/', '').then((r) => { if (!r.ok) throw 0; return r.arrayBuffer(); }).then((b) => ac.decodeAudioData(b)).then((buf) => (voices[k] = buf)).catch(() => (voices[k] = null));
   }
   function say(id, where = { az: 0, dist: .8 }, gain = 1.4) {   // → Promise, resolves when the line ends (no file yet: a pause)
     return new Promise(async (res) => {
-      if (voices[id] instanceof Promise) await voices[id];
-      const buf = voices[id]; if (!ac || !buf) return setTimeout(res, 2200);
+      if (voices[VK(id)] === undefined) loadVoices([id]);   // not loaded in this voice language yet
+      if (voices[VK(id)] instanceof Promise) await voices[VK(id)];
+      const buf = voices[VK(id)]; if (!ac || !buf) return setTimeout(res, 2200);
       const s = ac.createBufferSource(); s.buffer = buf; const g = ac.createGain(); g.gain.value = gain;
       const c = chain(where.az, where.dist, where.dist < .3 ? .03 : .15);
       s.connect(g); g.connect(c.g); g.connect(an);

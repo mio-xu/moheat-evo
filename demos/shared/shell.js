@@ -44,6 +44,36 @@
   }
   const LS = { get(k, d) { try { const v = localStorage.getItem('moheat.' + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
     set(k, v) { try { localStorage.setItem('moheat.' + k, JSON.stringify(v)); } catch {} } };
+  // ---------------------------------------------------------------- voice language (user 2026-11-09): a second setting next to the subtitles
+  // MoHeatVoice.pref() 'same' (DEFAULT = follow the subtitle language) | 'ja' | 'en' | 'zh'; remembered like the subtitle choice
+  // (localStorage 'moheat.voicelang'; kiosk mode: this session only, its per-visitor reset clears it). Answer judging / buttons stay on
+  // the SUBTITLE language (voice.js). Files: ja = <base><id>.m4a (as before), en / zh = <base><lang>/<id>.m4a; a missing dub → ja.
+  //   MoHeatVoice.lang() · .pref() · .set(p) · .key(id) (cache key per language) · .url(id, base, q) · .fetch(id, base, q) → Response (ja fallback)
+  //   event 'moheat:voicelang' { lang, pref } whenever the effective voice language changes (loaders key their cache by .key(id))
+  const VOICE = window.MoHeatVoice = (() => {
+    const LANGS = ['ja', 'en', 'zh'];   // languages with dubs (ko: add here once media/voice/ko/ exists)
+    const KEY = 'moheat.voicelang';
+    const KIOSK = (() => { try { const k = QS.get('kiosk') ?? localStorage.getItem('moheat.kiosk'); return !!k && k !== '0'; } catch { return false; } })();
+    const load = () => { if (!KIOSK) try { const v = localStorage.getItem(KEY); if (v) return v; } catch {} try { return sessionStorage.getItem(KEY); } catch { return null; } };
+    let pref = QS.get('voice') || load() || 'same';
+    const sub = () => window.MoHeatSub?.lang || (() => { try { return QS.get('sub') || sessionStorage.getItem('moheat.sublang') || (!KIOSK && localStorage.getItem('moheat.sublang')) || 'en'; } catch { return 'en'; } })();
+    const lang = () => { const l = pref === 'same' ? sub() : pref; return LANGS.includes(l) ? l : 'ja'; };
+    let last = lang(); const fire = () => { const l = lang(); if (l !== last) { last = l; dispatchEvent(new CustomEvent('moheat:voicelang', { detail: { lang: l, pref } })); } };
+    addEventListener('moheat:sublang', fire);
+    const url = (id, base = 'media/voice/', q = '', l = lang()) => (l === 'ja' ? `${base}${id}.m4a${q}` : `${base}${l}/${id}.m4a${q}`);
+    const missed = new Set();
+    return {
+      LANGS, lang, pref: () => pref, url,
+      set(p) { pref = ['same', ...LANGS].includes(p) ? p : 'same'; try { sessionStorage.setItem(KEY, pref); } catch {} if (!KIOSK) try { localStorage.setItem(KEY, pref); } catch {} fire(); dispatchEvent(new CustomEvent('moheat:voicepref', { detail: pref })); },
+      key: (id) => { const l = lang(); return l === 'ja' ? id : `${l}:${id}`; },
+      fetch(id, base = 'media/voice/', q = '') {
+        const l = lang(), ja = url(id, base, q, 'ja');
+        if (l === 'ja') return fetch(ja);
+        const back = () => { if (!missed.has(l + id)) { missed.add(l + id); console.info(`voice fallback ${id} ${l} → ja`); } return fetch(ja); };
+        return fetch(url(id, base, q, l)).then((r) => (r.ok ? r : back()), back);
+      },
+    };
+  })();
   const T = {   // shell texts: en / ja / zh (ko: add a column — subs.js LANGS decides which ones are offered)
     pure: ['Just listen', 'きくだけ', '纯聆听'], inter: ['Interactive', 'いっしょに参加', '互动'],
     pureHint: ['plays through by itself · no mic', '操作なしで最後まで · マイクなし', '无需操作，自动播完 · 不用麦克风'],
@@ -132,6 +162,7 @@
   // phone's answer button) + the known gates in SH.AUTO (add a selector there instead of a per-demo workaround)
   SH.AUTO = ['#answerBtn'];
   const SEL = () => ['.stage .choices .ch', '.stage .act .act-btn', '.stage #micGate button', '.stage .mic-gate button', '.stage .chips .chip-c', '.stage .ix-btn', '.stage [data-auto]', ...SH.AUTO].join(', ');
+  SH.voiceLang = () => VOICE.lang();   // the effective voice language (MoHeatVoice.lang)
   const seen = new WeakMap();
   const vis = (e) => e.isConnected && e.offsetParent !== null && getComputedStyle(e).visibility !== 'hidden' && !e.disabled && e.getBoundingClientRect().width > 0;
   const playing = () => { const i = document.getElementById('intro'); return !!i && i.classList.contains('hidden'); };
@@ -450,7 +481,7 @@
   // ---------------------------------------------------------------- UI v2: the live adapter for demos/shared/ui2.js
   if (V2) {
     // UI2_V = content hash of ui2.js + ui2.css (python3 tools/web/bump.py --auto keeps it current: cat ui2.js ui2.css | shasum, 8 hex)
-    const UI2_V = 'ae34e286';
+    const UI2_V = '9b952a95';
     const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = new URL(`ui2.css?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(css);
     let cssReady = false; const cssOk = () => { if (!cssReady) { cssReady = true; mount(); } };   // mount only once ui2.css applies: an unstyled first frame left the player column off-centre (Demo21 check_ui band 16 / 58 px under load)
     css.addEventListener('load', cssOk); css.addEventListener('error', cssOk); real.st(cssOk, 3000);
@@ -472,6 +503,7 @@
       get cover() { return { base: COVER_BASE, langs: window.MoHeatSub?.langs || ['en', 'ja', 'zh'] }; },
       state: () => (playing() ? (paused ? 'paused' : 'playing') : !ready ? 'loading' : started ? 'ended' : 'cover'),
       lang: () => window.MoHeatSub?.lang || 'en', setLang: (l) => window.MoHeatSub?.set?.(l),
+      voice: () => VOICE.pref(), setVoice: (p) => VOICE.set(p), voiceLangs: VOICE.LANGS,
       mode: () => mode, setMode: (m) => setMode(m),
       start: () => { if (!ready) return; document.getElementById('startBtn')?.click(); },
       togglePause: () => pause(!paused),

@@ -25,6 +25,7 @@
     volume: { en: 'Volume', ja: '音量', zh: '音量' }, mute: { en: 'Mute', ja: 'ミュート', zh: '静音' },
     thermal: { en: 'Thermal', ja: '温冷', zh: '温冷' }, intensity: { en: 'Intensity', ja: '強さ', zh: '强度' },
     settings: { en: 'Settings', ja: '設定', zh: '设置' }, full: { en: 'Fullscreen', ja: '全画面', zh: '全屏' }, exitFull: { en: 'Exit fullscreen', ja: '全画面を終了', zh: '退出全屏' },
+    voice: { en: 'Voice', ja: '音声', zh: '配音' }, sameAsSubs: { en: 'Same as subtitles', ja: '字幕と同じ', zh: '与字幕相同' },
     language: { en: 'Language', ja: '言語', zh: '语言' }, subs: { en: 'Subtitles', ja: '字幕', zh: '字幕' }, size: { en: 'Size', ja: 'サイズ', zh: '大小' },
     on: { en: 'On', ja: 'オン', zh: '开' }, off: { en: 'Off', ja: 'オフ', zh: '关' },
     motion: { en: 'Reduce motion', ja: '動きを減らす', zh: '减少动态' }, motionHint: { en: 'Calmer picture, no shaking', ja: '画面の揺れをおさえる', zh: '画面更平稳，不晃动' },
@@ -134,6 +135,7 @@
         const d = A.device?.() || {}, sv = A.subs?.() ?? 'm';
         pops.set.innerHTML = `<h3>${t('settings')}</h3>
           <div class="u2-line"><span>${t('language')}</span><span class="u2-seg" role="group">${langs.map((l) => `<button type="button" data-lang="${l}" aria-pressed="${l === lang()}">${NAMES[l] || l}</button>`).join('')}</span></div>
+          ${A.voice ? `<div class="u2-line u2-line-wrap"><span>${t('voice')}</span><span class="u2-seg" role="group">${['same', ...(A.voiceLangs || [])].map((v) => `<button type="button" data-voice="${v}" aria-pressed="${v === A.voice()}">${v === 'same' ? t('sameAsSubs') : NAMES[v] || v}</button>`).join('')}</span></div>` : ''}
           <div class="u2-line"><span>${t('subs')}</span>${sw(sv !== 'off', 'subs')}</div>
           <div class="u2-line"><span>${t('size')}</span><span class="u2-seg" role="group">${['s', 'm', 'l'].map((s) => `<button type="button" data-size="${s}" aria-pressed="${sv === s}" ${sv === 'off' ? 'disabled' : ''}>${s.toUpperCase()}</button>`).join('')}</span></div>
           <div class="u2-line u2-vol-line"><span>${t('volume')}</span>${range('vol', A.volume?.() ?? 1)}</div>
@@ -162,6 +164,7 @@
         if (k === 'heat') A.setHeat?.(on); if (k === 'subs') A.setSubs?.(on ? 'm' : 'off'); if (k === 'motion') A.setReduced?.(on); if (k === 'hide') A.setAutohide?.(on); if (k === 'side') A.setSide?.(on);
         const owner = Object.keys(pops).find((p) => pops[p].contains(b)); renderPop(owner); paint(); return; }
       if (b.dataset.lang) { A.setLang?.(b.dataset.lang); renderPop('set'); paint(); return; }
+      if (b.dataset.voice) { A.setVoice?.(b.dataset.voice); renderPop('set'); return; }
       if (b.dataset.size) { A.setSubs?.(b.dataset.size); renderPop('set'); return; }
       if (k === 'connect') { A.connect?.(); return; }
       if (k === 'lr') { A.lrCheck?.(); return; }

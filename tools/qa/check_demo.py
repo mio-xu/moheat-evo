@@ -316,6 +316,31 @@ has_voice = 'shared/voice.js' in html
 if not has_voice and talks and 'voice' in QA.get('skip', {}): row('G5', 'voice', 'SKIP', QA['skip']['voice'])
 else: row('G5', 'voice', 'PASS' if has_voice else 'FAIL' if talks else 'SKIP',
     'shared/voice.js loaded (answers by voice, judged)' if has_voice else 'dialogue demo without shared/voice.js' if talks else 'no dialogue')
+# ---------------------------------------------------------------- G5 dub: the voice language (shared/shell.js MoHeatVoice, user 2026-11-09)
+# every voice loader goes through MoHeatVoice (tools/web/voice_lang.py) — FAIL if not; ja complete; en / zh: missing lines = WARN (the page
+# plays ja for them); dub files that exist but are git-ignored are not on Pages = WARN
+_dub_bad, _dub_warn, _dub_note = [], [], ''
+_vjs = [f for f in glob.glob(os.path.join(D, '*.js')) + glob.glob(os.path.join(D, '..', '_kit', '*', '*.js')) if re.search(r'fetch\(`[^`$]*\$\{id\}\.m4a|VF\(id, |MoHeatVoice\.(fetch|key)', read(f))]
+_vjs = [f for f in _vjs if os.path.dirname(f) == D or re.search(re.escape('_kit/' + os.path.basename(os.path.dirname(f))) + r'/', html)]
+for f in _vjs:
+    t = read(f)
+    if re.search(r'fetch\(`[^`$]*\$\{id\}\.m4a', t) and 'MoHeatVoice' not in t and 'VF(' not in t:
+        _dub_bad.append(f'{os.path.relpath(f, D)}: voice loader not wired to the voice language — python3 tools/web/voice_lang.py {os.path.relpath(f, REPO)}')
+    for base in set(re.findall(r"VF\(id, '([^']*)'", t)) | set(re.findall(r'MoHeatVoice\.fetch\(id, ([A-Za-z_]+)', t)) or {'media/voice/'}:
+        vd = os.path.normpath(os.path.join(D, base)) if not re.match(r'^[A-Z_]+$', base) else os.path.join(os.path.dirname(f), 'media', 'voice')
+        ja = sorted(os.path.basename(x)[:-4] for x in glob.glob(os.path.join(vd, '*.m4a')))
+        if not ja: continue
+        for l in ('en', 'zh'):
+            have = {os.path.basename(x)[:-4] for x in glob.glob(os.path.join(vd, l, '*.m4a'))}
+            miss = [i for i in ja if i not in have]
+            if not have: _dub_warn.append(f'{os.path.relpath(vd, D)}: no {l} dub — plays ja'); continue
+            if miss: _dub_warn.append(f'{os.path.relpath(vd, D)}/{l}: {len(miss)} of {len(ja)} line(s) missing — those play ja ({", ".join(miss[:6])}{" …" if len(miss) > 6 else ""})')
+            ign = subprocess.run(['git', 'check-ignore', '-q', os.path.join(vd, l, next(iter(have)) + '.m4a')], cwd=REPO).returncode == 0
+            if ign: _dub_warn.append(f'{os.path.relpath(vd, D)}/{l}: git-ignored — not on GitHub Pages (the page falls back to ja)')
+        _dub_note = f'{len(ja)} ja line(s)'
+if _vjs or _dub_bad:
+    row('G5', 'dub', 'FAIL' if _dub_bad else 'WARN' if _dub_warn else 'PASS',
+        f'{len(_dub_bad)} voice loader(s) not wired' if _dub_bad else f'{len(_dub_warn)} dub note(s)' if _dub_warn else f'voice language wired; ja / en / zh complete ({_dub_note})', _dub_bad + _dub_warn)
 end_static = re.search(r'もう一度 · Play again', alljs) is not None or 'shared/shell.js' in html   # UI v2: the shared interface shows ↺ Play again on the own cover
 navaway = re.findall(r'location(?:\.href)?\s*=\s*[^;\n]*Demo\d{2}|location\.(?:assign|replace)\([^)]*Demo\d{2}', alljs)
 row('G5', 'end', 'FAIL' if (not end_static or navaway) else 'PASS',
@@ -412,6 +437,9 @@ if not A.quick and not ub and 'device.js' in read(os.path.join(D, 'index.html'))
     cdv = subprocess.run(['node', os.path.join(REPO, 'tools', 'web', 'check_device.js'), REL], capture_output=True, text=True, cwd=REPO)
     try: ub += [f'device: {f}' for f in json.loads(cdv.stdout.strip().splitlines()[-1]).get('fails', [])]
     except Exception: ub.append('check_device.js gave no result: ' + cdv.stderr.strip()[-200:])
+for _a in ([D], ['--kiosk']):   # no emoji / pictographs in the cover chips and the kiosk's texts (user 2026-11-09; tools/web/check_symbols.py)
+    _cs = subprocess.run([sys.executable, os.path.join(REPO, 'tools', 'web', 'check_symbols.py'), *_a], capture_output=True, text=True)
+    if _cs.returncode: ub += [f'symbol: {l}' for l in _cs.stdout.strip().splitlines()[:-1]][:12]
 row('G7', 'ui', 'FAIL' if ub else 'PASS', f'{len(ub)} difference(s) from the one interface' if ub else
     ('finished covers current, shell.js, no own UI rules' + ('' if A.quick else '; identical to the reference in 5 states × 2 sizes')), ub)
 # ---------------------------------------------------------------- G7 category style (tools/art/style_card.py, demos/<cat>/_kit/style.json)

@@ -96,8 +96,6 @@ demos/all-ages/Demo04_SeasonsExpress_v2/video/
 
 # Dubbed en / zh voice takes (user 2026-11-09, comparison only; tools/eleven/dub.py): Demo43's are ~13 MB per language → kept local
 # (re-render: python3 scripts/voice.py --lang en|zh); Demo01's film has no per-line ja files in git → its per-line takes stay local too.
-demos/for-men/Demo43_BlizzardInn/media/voice/en/
-demos/for-men/Demo43_BlizzardInn/media/voice/zh/
 demos/all-ages/Demo01_SnowFoxfire/media/voice/
 demos/for-women/Demo45_CelestialPalace/assets/
 demos/for-women/Demo46_DragonContract/assets/
@@ -110,8 +108,6 @@ demos/for-men/Demo44_MagicAcademy/media/voice/zh/
 demos/for-women/Demo45_CelestialPalace/media/voice/en/
 demos/for-women/Demo45_CelestialPalace/media/voice/zh/
 # nobunaga talk kit dubs (229 lines, ~7.5 MB per language at 64 kb/s > the 2 MB rule) → local; re-render: Demo23 scripts/voice.py --lang en|zh
-demos/nobunaga-suntory/_kit/talk/media/voice/en/
-demos/nobunaga-suntory/_kit/talk/media/voice/zh/
 # Demo46 dubs (124 lines, ~4.6 MB per language > the 2 MB rule) → local; re-render: Demo46 scripts/voice.py --lang en|zh
 demos/for-women/Demo46_DragonContract/media/voice/en/
 demos/for-women/Demo46_DragonContract/media/voice/zh/

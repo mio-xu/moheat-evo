@@ -595,7 +595,7 @@ function emitFx(t, dt) {
 
 // ---------------------------------------------------------------- voices (Web Audio: the subtitle language; holo = front, ear = right ear, aisle = front)
 const LANG = () => (window.MoHeatSub && ['en', 'ja', 'zh'].includes(window.MoHeatSub.lang) ? window.MoHeatSub.lang : 'en');   // subtitle / UI language
-const voiceLang = () => { const l = (window.MoHeatShell?.voiceLang?.() ) || LANG(); return VO.lines.a1.dur[l] ? l : 'ja'; };   // user 2026-11-09 (latest): the voice follows the subtitle language (ja / en / zh), ja fallback; the MP4 stays Japanese
+const voiceLang = () => { const l = window.MoHeatVoice?.lang() || LANG(); return VO.lines.a1.dur[l] ? l : 'ja'; };   // user 2026-11-09 (latest): the voice follows the subtitle language (ja / en / zh), ja fallback; the MP4 stays Japanese
 let ac = null; const BUF = {}; let playingLine = null;
 function audio() { if (!ac) { const C = window.AudioContext || window.webkitAudioContext; ac = new C(); } if (ac.state === 'suspended') ac.resume().catch(() => {}); return ac; }
 function loadLang(l) {
@@ -993,4 +993,4 @@ async function coverArt() {   // media/cover/art.webp: the split carriage (winte
 if (RENDER) { document.body.classList.add('rendering'); renderAll(); }
 else if (COVERART) { document.body.classList.add('rendering'); coverArt(); }
 else if (QS.has('cover') && previewT == null) mix.preload = 'none';
-else { requestAnimationFrame(loop); if (!LINEAR) { loadLang('ja'); loadLang(voiceLang()); addEventListener('moheat:sublang', () => loadLang(voiceLang())); } }   // decode the voices early (a suspended context decodes too)
+else { requestAnimationFrame(loop); if (!LINEAR) { loadLang('ja'); loadLang(voiceLang()); addEventListener('moheat:voicelang', () => loadLang(voiceLang())); } }   // decode the voices early (a suspended context decodes too)

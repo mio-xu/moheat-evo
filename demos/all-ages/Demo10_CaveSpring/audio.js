@@ -158,13 +158,18 @@ window.CaveAudio = (() => {
   };
   // Kohaku's voice lines (media/voice/<id>.m4a): decoded up front, played dry-ish and close, at the fox's direction
   const voices = {};
+  // voice language (shared/shell.js MoHeatVoice; tools/web/voice_lang.py): one cache entry per language, ja fallback, a switch preloads the lines used so far
+  const VF = (id, base, q = '') => (window.MoHeatVoice ? MoHeatVoice.fetch(id, base, q) : fetch(`${base}${id}.m4a${q}`));
+  const VIDS = new Set(), VK = (id) => (VIDS.add(id), window.MoHeatVoice ? MoHeatVoice.key(id) : id);
+  addEventListener('moheat:voicelang', () => loadVoices([...VIDS]));
   function loadVoices(ids) {
     if (!ac) return;
-    for (const id of ids) if (!voices[id]) voices[id] = fetch(`media/voice/${id}.m4a`).then((r) => r.arrayBuffer()).then((b) => ac.decodeAudioData(b)).then((buf) => (voices[id] = buf)).catch(() => (voices[id] = null));
+    for (const id of ids) for (const k of [VK(id)]) if (!voices[k]) voices[k] = VF(id, 'media/voice/', '').then((r) => r.arrayBuffer()).then((b) => ac.decodeAudioData(b)).then((buf) => (voices[k] = buf)).catch(() => (voices[k] = null));
   }
-  const voicePending = (id) => voices[id] instanceof Promise;
+  const voicePending = (id) => voices[VK(id)] instanceof Promise;
   function voice(id, az = 0) {   // → duration in s, or 0 when not loaded yet
-    const buf = voices[id];
+    if (voices[VK(id)] === undefined) loadVoices([id]);   // not loaded in this voice language yet
+    const buf = voices[VK(id)];
     if (!ac || !buf || buf instanceof Promise) return 0;
     shot(az, .9, .25, (o) => { const s = ac.createBufferSource(); s.buffer = buf; const g = ac.createGain(); g.gain.value = 1.6; s.connect(g).connect(o); s.start(); }, buf.duration);
     return buf.duration;

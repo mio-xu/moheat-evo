@@ -7,6 +7,10 @@ window.INNAudio = (() => {
   let ac = null, master = null, dry = null, verb = null, noise = null, muted = false;
   const rnd = (a, b) => a + Math.random() * (b - a);
   const voices = {};
+  // voice language (shared/shell.js MoHeatVoice; tools/web/voice_lang.py): one cache entry per language, ja fallback, a switch preloads the lines used so far
+  const VF = (id, base, q = '') => (window.MoHeatVoice ? MoHeatVoice.fetch(id, base, q) : fetch(`${base}${id}.m4a${q}`));
+  const VIDS = new Set(), VK = (id) => (VIDS.add(id), window.MoHeatVoice ? MoHeatVoice.key(id) : id);
+  addEventListener('moheat:voicelang', () => loadVoices([...VIDS]));
   let level = 0, an = null, abuf = null;
 
   function init() {
@@ -47,7 +51,7 @@ window.INNAudio = (() => {
   // ---------------------------------------------------------------- voices (a story line by id, or any decoded buffer: the live talk)
   function loadVoices(ids) {
     if (!ac) return;
-    for (const id of ids) if (!voices[id]) voices[id] = fetch(`media/voice/${id}.m4a`).then((r) => { if (!r.ok) throw 0; return r.arrayBuffer(); }).then((b) => ac.decodeAudioData(b)).then((buf) => (voices[id] = buf)).catch(() => (voices[id] = null));
+    for (const id of ids) for (const k of [VK(id)]) if (!voices[k]) voices[k] = VF(id, 'media/voice/', '').then((r) => { if (!r.ok) throw 0; return r.arrayBuffer(); }).then((b) => ac.decodeAudioData(b)).then((buf) => (voices[k] = buf)).catch(() => (voices[k] = null));
   }
   const decode = (ab) => ac.decodeAudioData(ab);
   function play(buf, where, gain) {
@@ -61,9 +65,9 @@ window.INNAudio = (() => {
     });
   }
   async function say(id, where = { az: 0, dist: .8 }, gain = 1.4) {   // → resolves when the line ends (no file: a pause)
-    if (!voices[id]) loadVoices([id]);
-    if (voices[id] instanceof Promise) await voices[id];
-    return play(voices[id], where, gain);
+    if (!voices[VK(id)]) loadVoices([id]);
+    if (voices[VK(id)] instanceof Promise) await voices[VK(id)];
+    return play(voices[VK(id)], where, gain);
   }
   function voiceLevel() {
     if (!an) return 0;
