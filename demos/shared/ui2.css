@@ -109,7 +109,6 @@ html.ui2.mfs .u2-bar { border-radius: 0; height: calc(clamp(44px, 4.2vw, 64px) +
 .u2-line > span:first-child { flex: 1 1 auto; font-weight: 600; }
 .u2-line-wrap { flex-wrap: wrap; padding: 4px 0; }   /* the Voice row: its four buttons drop under the label when the panel is narrow */
 .u2-line small { display: block; font-weight: 400; color: var(--u2-dim); font-size: var(--u2-fs-s); }
-.u2-beta { font-size: .7em; font-weight: 700; padding: .1em .45em; border-radius: 4px; background: var(--u2-accent); color: var(--u2-on-accent); margin-left: .4em; vertical-align: .15em; }
 .u2-sw { width: 46px; height: 28px; border-radius: 14px; border: 0; background: rgba(255, 255, 255, .22); position: relative; flex: none; }
 .u2-sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; transition: transform .15s; }
 .u2-sw[aria-checked="true"] { background: var(--u2-accent); }

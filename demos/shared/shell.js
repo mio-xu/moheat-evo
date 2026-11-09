@@ -534,7 +534,7 @@
   // ---------------------------------------------------------------- UI v2: the live adapter for demos/shared/ui2.js
   if (V2) {
     // UI2_V = content hash of ui2.js + ui2.css (python3 tools/web/bump.py --auto keeps it current: cat ui2.js ui2.css | shasum, 8 hex)
-    const UI2_V = '90220da1';
+    const UI2_V = '0550fb66';
     const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = new URL(`ui2.css?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(css);
     let cssReady = false; const cssOk = () => { if (!cssReady) { cssReady = true; mount(); } };   // mount only once ui2.css applies: an unstyled first frame left the player column off-centre (Demo21 check_ui band 16 / 58 px under load)
     css.addEventListener('load', cssOk); css.addEventListener('error', cssOk); real.st(cssOk, 3000);

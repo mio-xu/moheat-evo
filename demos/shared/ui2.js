@@ -4,7 +4,7 @@
 //     the option row (cover.json "options") · language. Switching language swaps to the pre-cached image of that language.
 //   · CONTROL BAR, always visible (⚙ "hide controls" is opt-in): ▶/⏸ · chapter progress (seekable; Interactive: back / reached only) ·
 //     mode · volume · thermal on/off + intensity · ⚙ · ⛶.
-//   · ⚙ SETTINGS: language, subtitles on/off + size, reduce motion, hide controls, device connect, head tracking (Beta, later).
+//   · ⚙ SETTINGS: language, subtitles on/off + size, reduce motion, hide controls, device connect.
 //   · STATES on .u2[data-state]: loading → cover → playing ⇄ paused → ended (= the demo's own cover: Play again · mode · endings).
 // The component knows nothing about a demo: it talks to an ADAPTER (MoHeatUI2.mount(stage, adapter)). The live adapter is built on
 // shared/shell.js (MoHeatShell / MoHeatPlay / MoHeatSub / MoHeatDevice); preview/ui2/ uses a mock adapter. Adapter fields (all optional
@@ -35,7 +35,6 @@
     notConn: { en: 'Not connected', ja: '未接続', zh: '未连接' }, reconnecting: { en: 'Reconnecting…', ja: '再接続中…', zh: '正在重新连接…' },
     lost: { en: 'Disconnected — plug it back in', ja: '切断されました — 挿し直してください', zh: '已断开 — 请重新插上' }, devError: { en: 'Could not open', ja: '開けませんでした', zh: '无法打开' },
     disconnect: { en: 'Disconnect', ja: '切断', zh: '断开' },
-    head: { en: 'Head tracking', ja: 'ヘッドトラッキング', zh: '头部追踪' }, beta: { en: 'Beta', ja: 'ベータ', zh: '测试' }, soon: { en: 'Coming soon', ja: '近日公開', zh: '即将推出' },
     side: { en: 'Info panel', ja: '情報パネル', zh: '信息面板' }, sideHint: { en: 'Sound map and thermal meters', ja: '音の位置と温冷メーター', zh: '声音方位与温冷表' },
     lr: { en: 'Left / right check', ja: '左右チェック', zh: '左右声道检查' }, thermo: { en: 'Thermal check', ja: '温冷チェック', zh: '温冷检查' }, run: { en: 'Test', ja: 'テスト', zh: '测试' },
     credits: { en: 'Credits', ja: 'クレジット', zh: '制作名单' },
@@ -126,7 +125,7 @@
       else if (k !== 'set') pops[k].style.right = wide ? `${Math.max(4, r.right - b.right)}px` : ''; };
     document.addEventListener('pointerdown', (e) => { if (sheet.contains(e.target)) return; if (!(root.contains(e.target) || under.contains(e.target)) || (!e.target.closest('.u2-pop') && !e.target.closest('[aria-haspopup]'))) close(); });
     addEventListener('keydown', (e) => { if (e.key !== 'Escape' || !(!sheet.hidden || Object.values(pops).some((p) => !p.hidden))) return; close(); e.stopImmediatePropagation(); e.preventDefault(); }, true);   // Esc with a panel open only closes it (not ■ STOP)
-    const sw = (on, k, dis) => `<button type="button" class="u2-sw" role="switch" aria-checked="${!!on}" data-k="${k}" ${dis ? 'disabled' : ''}></button>`;
+    const sw = (on, k) => `<button type="button" class="u2-sw" role="switch" aria-checked="${!!on}" data-k="${k}"></button>`;
     const range = (k, v, cls = '') => `<input class="u2-range ${cls}" type="range" min="0" max="100" step="1" value="${Math.round(v * 100)}" data-k="${k}" style="--v:${Math.round(v * 100)}%">`;
     // the cover's two selectors (the same picker chip as the demo's options): subtitle language and voice, independent
     const selectors = () => [{ key: '__subs', label: T.subs, items: langs.map((l) => ({ v: l, label: NAMES[l] || l, on: l === lang() })) },
@@ -149,7 +148,6 @@
             ${d.serial === false ? '' : `<button type="button" class="u2-btn2" data-k="connect">${t(d.connected ? 'disconnect' : 'connect')}</button>`}</div>
           <div class="u2-line"><span>${t('lr')}</span><button type="button" class="u2-btn2" data-k="lr">${t('run')}</button></div>
           <div class="u2-line"><span>${t('thermo')}</span><button type="button" class="u2-btn2" data-k="thermo" ${d.connected ? '' : 'disabled'}>${t('run')}</button></div>
-          <div class="u2-line"><span>${t('head')}<span class="u2-beta">${t('beta')}</span><small>${t('soon')}</small></span>${sw(false, 'head', true)}</div>
           ${A.creditsUrl ? `<div class="u2-line"><span>${t('credits')}</span><a class="u2-btn2" href="${esc(A.creditsUrl)}" target="_blank" rel="noopener">↗</a></div>` : ''}`;
       }
       if (k === 'opt') { const o = [...(A.options?.() || []), ...selectors()].find((x) => x.key === optKey); if (!o) return;
