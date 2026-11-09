@@ -1,0 +1,5 @@
+/* なつやすみ、ナオミと せんぷうき — palette only (layout: ../../shared/story.css). */
+:root { --bg: #17150f; --panel: #201d16; --panel-2: #2c2820; --line: #544d3e; --gold: #ffe0a8; --st-hi: 240, 214, 160; --st-on: 150, 110, 70; --st-sub: 26, 22, 16; --st-bar: linear-gradient(90deg, #d0b080, #ffe6b0); }
+.bar { background: #120f0a; }
+.brand span { color: #e8c88f; }
+.btn.primary { background: linear-gradient(135deg, #8a6a3e, #f0c070); }

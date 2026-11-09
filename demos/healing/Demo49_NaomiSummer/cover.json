@@ -1,0 +1,69 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo49_NaomiSummer --publish",
+ "scene": true,
+ "title": {
+  "en": "Summer Fan Days\nwith Naomi",
+  "ja": "なつやすみ、\nナオミと せんぷうき",
+  "zh": "暑假，\n娜奥米和电风扇"
+ },
+ "tagline": {
+  "en": "A hot, slow afternoon with a very relaxed cat",
+  "ja": "とろけるナオミと すごす、夏の午後",
+  "zh": "和融化的猫一起度过的夏日午后"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "A real cat, a summer room",
+    "ja": "ほんとうの猫と、夏の部屋",
+    "zh": "真实的猫，夏天的房间"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "summer heat · a warm cat",
+    "ja": "夏の暑さ・あたたかい猫",
+    "zh": "夏天的闷热・暖暖的猫"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "the fan · ice bottle · rain air",
+    "ja": "せんぷうき・氷水のびん・雨の風",
+    "zh": "电风扇・冰水瓶・雨的风"
+   }
+  }
+ ],
+ "tone": "24 20 12",
+ "options": [],
+ "chapters": [
+  {
+   "en": "A hot afternoon",
+   "ja": "午後の暑さ",
+   "zh": "午后的闷热"
+  },
+  {
+   "en": "The streamer",
+   "ja": "リボンあそび",
+   "zh": "逗飘带"
+  },
+  {
+   "en": "Ice bottle and melon",
+   "ja": "氷のびんと すいか",
+   "zh": "冰瓶和西瓜"
+  },
+  {
+   "en": "Evening shower",
+   "ja": "夕立",
+   "zh": "雷阵雨"
+  },
+  {
+   "en": "Night",
+   "ja": "夜",
+   "zh": "夜晚"
+  }
+ ]
+}
