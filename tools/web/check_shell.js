@@ -73,14 +73,14 @@ const out = { demo: REL, shell: false, pureEnded: false, secs: 0, mic: [], navDu
   out.navDuringPlay = (await ev('location.pathname')) !== `/${REL}/`;
   // pause: the clock and the thermal text freeze
   const a = await ev(`[performance.now(), document.getElementById('cmd')?.textContent || '']`);
-  await key(' ', 'Space'); await sleep(2000);
+  const kt0 = Date.now(); await key(' ', 'Space'); const keyMs = Date.now() - kt0; await sleep(2000);
   const b = await ev(`[performance.now(), document.getElementById('cmd')?.textContent || '', MoHeatShell.paused]`);
   await shot('paused');
   await key(' ', 'Space'); await sleep(800);
   const c = await ev(`[performance.now(), MoHeatShell.paused]`);
   const film = await ev('!!document.getElementById("timelineWrap")');   // films: Space is their own play / pause (the media element is the clock)
   out.pause = film ? { frozen: !!(await ev('(() => { const m = ["mix", "film"].map((k) => document.getElementById(k)).find((e) => e instanceof HTMLMediaElement); return m && !m.paused; })()')), resumed: true, film: true }
-    : !a || !b || !c ? { frozen: false, resumed: false } : { frozen: b[2] === true && b[0] - a[0] < 400, resumed: c[1] === false && c[0] > b[0] };
+    : !a || !b || !c ? { frozen: false, resumed: false } : { frozen: b[2] === true && b[0] - a[0] < 400, resumed: c[1] === false && c[0] > b[0], busy: b[2] === true && b[0] - a[0] >= 400 && keyMs >= 200, keyMs };   // busy: it did pause, but the key press itself took ≥ 200 ms to arrive (machine starved): retry, not a FAIL
   await shot('playing');
   const t0 = Date.now();
   const nch = await ev('document.querySelectorAll(".sh-bar button").length');

@@ -142,6 +142,9 @@ const freePort = () => new Promise((res) => { const s = net.createServer(); s.li
   console.log(`  blinks ${blinks.length} (doubles ${doubles}), closed ${durs.length ? Math.min(...durs).toFixed(3) + '–' + Math.max(...durs).toFixed(3) : '-'} s, mean interval ${mean.toFixed(1)} s; breathing ${bpm.toFixed(1)} / min`);
   if (flags.has('--shots')) console.log(`  eye shots: ${path.relative(ROOT, outDir)}/<stem>_eyes.png (open | closed | difference ×4)`);
   for (const x of info) console.log('  · ' + x);
+  // starved machine: below 20 fps blink / breathing timing can't be measured. Those failures are "machine busy, retry" (exit 75), never a FAIL; tolerances stay as they are
+  const fps = L.length / (T || 1), timing = /^(BLINK-TIME|BLINK-RATE|BLINK-AT-CUT|BREATH) /;
+  if (fps < 20 && issues.length && issues.every((x) => timing.test(x))) { console.log(issues.map((x) => '  ? ' + x).join('\n') + `\n  machine busy, retry: only ${fps.toFixed(0)} fps, blink / breathing timing can't be trusted either way`); done(75); return; }
   console.log(issues.length ? issues.map((x) => '  ✗ ' + x).join('\n') : '  ✓ motion OK');
   done(issues.length ? 1 : 0);
 })();

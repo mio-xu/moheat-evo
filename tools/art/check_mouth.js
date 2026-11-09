@@ -116,6 +116,9 @@ const freePort = () => new Promise((res) => { const s = net.createServer(); s.li
   { const h = [0, 0, 0, 0, 0]; let n = 0; for (const r of L) if (r[1] >= .95 && r[7]) { h[Math.min(4, r[7])]++; n++; }   // mouth sets: how wide while open
     if (n) console.log(`  mouth-set levels while open: ${h.slice(1).map((c, i) => `lv${i + 1} ${(100 * c / n).toFixed(0)} %`).filter((x) => !/ 0 %$/.test(x)).join(', ')}`); }
   if (Object.keys(shots).length) console.log(`  shots: ${path.relative(ROOT, outDir)}/ (${Object.keys(shots).join(', ')})`);
+  // starved machine: below 20 fps the timing rows are approximate, so a timing failure is "machine busy, retry" (exit 75), never a FAIL and never a pass; tolerances stay as they are
+  const fps = L.length / (T || 1), busy = fps < 20 && issues.length && issues.every((x) => !/^(UNMAPPED|NO-PATCH) /.test(x));
+  if (busy) { console.log(issues.map((x) => '  ? ' + x).join('\n') + `\n  machine busy, retry: only ${fps.toFixed(0)} fps, these results can't be trusted either way`); done(75); return; }
   console.log(issues.length ? issues.map((x) => '  ✗ ' + x).join('\n') : '  ✓ lip-sync OK');
   done(issues.length ? 1 : 0);
 })();

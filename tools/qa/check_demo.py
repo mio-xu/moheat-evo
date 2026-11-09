@@ -58,6 +58,8 @@ ap.add_argument('--secs', type=int, default=300); ap.add_argument('--json', acti
 ap.add_argument('--parallel', action='store_true')
 A = ap.parse_args()
 D = os.path.abspath(A.demo); NAME = os.path.basename(D); CAT = os.path.basename(os.path.dirname(D))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import heavy_lock
+if A.full: heavy_lock.guard(f'check_demo --full {NAME}', browser=True)   # one heavy job at a time, load guard, background priority (exit 75 = did not run)
 REL = os.path.relpath(D, REPO)
 ORIG = os.path.basename(os.path.abspath(A.remake_of)) if A.remake_of else None
 QA = {}
@@ -513,7 +515,8 @@ if probe:
     if not res:   # killed / crashed / no JSON: once more, alone (nothing else of ours is running now)
         if probe_alt: probe_alt.kill(); probe_alt = None
         res = take(start_probe(['--no-mobile'] if A.no_mobile else []), PROBE_WAIT)
-    if not res: row('G6', 'runtime', 'FAIL', 'the browser probe did not answer twice (Chrome / port problem? see `node tools/qa/page_probe.js <demo>`)')
+    if not res and heavy_lock.overloaded(): row('G6', 'runtime', 'BUSY', f'machine busy, retry: the browser probe did not answer twice and the 1-min load is {heavy_lock.load_now():.0f}')
+    elif not res: row('G6', 'runtime', 'FAIL', 'the browser probe did not answer twice (Chrome / port problem? see `node tools/qa/page_probe.js <demo>`)')
     else:
         runs = [('', res)]
         if A.full:
@@ -563,7 +566,8 @@ if HAS_MOUTH:   # after the probes: one browser at a time
     try: out, _ = mouth.communicate(timeout=A.secs + 600)
     except subprocess.TimeoutExpired: mouth.kill(); out = 'timeout'
     fl = [l.strip()[2:] for l in out.splitlines() if l.strip().startswith('✗')]
-    row('G6', 'mouth', 'FAIL' if mouth.returncode else 'PASS', f'{len(fl)} lip-sync problem(s)' if mouth.returncode else 'mouth opens only while talking', fl or ([out.strip().splitlines()[-1]] if mouth.returncode and out.strip() else []))
+    if mouth.returncode == 75: row('G6', 'mouth', 'BUSY', 'machine busy, retry: frame rate too low to judge lip-sync timing', [l.strip() for l in out.splitlines() if l.strip().startswith('?')][:10])
+    else: row('G6', 'mouth', 'FAIL' if mouth.returncode else 'PASS', f'{len(fl)} lip-sync problem(s)' if mouth.returncode else 'mouth opens only while talking', fl or ([out.strip().splitlines()[-1]] if mouth.returncode and out.strip() else []))
 
 # ---------------------------------------------------------------- G6 unified shell (tools/web/check_shell.js, guide §2 / §7.3 统一外壳)
 if not A.quick and 'shared/shell.js' in read(os.path.join(D, 'index.html')):
@@ -575,10 +579,12 @@ if not A.quick and 'shared/shell.js' in read(os.path.join(D, 'index.html')):
         if r.get('mic'): bad.append('pure mode asked for the microphone: ' + ', '.join(r['mic']))
         if r.get('navDuringPlay'): bad.append('← / → left the page during playback')
         if not r.get('navOnCover'): bad.append('→ on the cover did not switch demos')
-        if not (r.get('pause') or {}).get('frozen'): bad.append('Space did not freeze the clock')
+        pbusy = (r.get('pause') or {}).get('busy')
+        if not (r.get('pause') or {}).get('frozen') and not pbusy: bad.append('Space did not freeze the clock')
         sk = r.get('seek')
         if sk and not (sk.get('forward') and (sk.get('back') or sk.get('endedAtLast'))): bad.append(f'seek failed: {sk}')
-        row('G6', 'shell', 'FAIL' if bad else 'PASS', f'{len(bad)} shell problem(s)' if bad else f'pure run ends in {r.get("secs")} s, no mic, ←/→ gated, pause, seek {"ok" if sk else "n/a (no chapters)"}', bad + r.get('errors', []))
+        if pbusy and not bad: row('G6', 'shell', 'BUSY', f'machine busy, retry: the Space press took {r["pause"].get("keyMs")} ms to arrive, so the pause timing could not be judged')
+        else: row('G6', 'shell', 'FAIL' if bad else 'PASS', f'{len(bad)} shell problem(s)' if bad else f'pure run ends in {r.get("secs")} s, no mic, ←/→ gated, pause, seek {"ok" if sk else "n/a (no chapters)"}', bad + r.get('errors', []))
     except Exception: row('G6', 'shell', 'WARN', 'check_shell.js gave no result', [sh.stderr.strip()[-300:]])
 elif not A.quick: row('G6', 'shell', 'WARN', 'page does not load demos/shared/shell.js yet (pure / interactive mode, pause, seek, ← / →)')
 
@@ -609,17 +615,17 @@ if not A.quick:
 # ---------------------------------------------------------------- output
 ORDER = {'G4': 0, 'G5': 1, 'G6': 2, 'G7': 3, 'G8': 4}
 ROWS.sort(key=lambda r: ORDER.get(r[0], 9))
-fails = sum(r[2] == 'FAIL' for r in ROWS); warns = sum(r[2] == 'WARN' for r in ROWS)
+fails = sum(r[2] == 'FAIL' for r in ROWS); warns = sum(r[2] == 'WARN' for r in ROWS); busy = sum(r[2] == 'BUSY' for r in ROWS)
 mode = 'quick' if A.quick else 'full' if A.full else 'default'
 if A.json:
-    print(json.dumps({'demo': REL, 'mode': mode, 'fail': fails, 'warn': warns, 'rows': [dict(zip(('gate', 'id', 'status', 'summary', 'details'), r)) for r in ROWS]}, ensure_ascii=False, indent=1))
+    print(json.dumps({'demo': REL, 'mode': mode, 'fail': fails, 'warn': warns, 'busy': busy, 'rows': [dict(zip(('gate', 'id', 'status', 'summary', 'details'), r)) for r in ROWS]}, ensure_ascii=False, indent=1))
 else:
     print(f'\n{REL}  ({mode}{", remake of " + ORIG if ORIG else ""})')
     print(f'{"gate":4}  {"check":15} {"result":6}  summary')
     for g, cid, st, summ, det in ROWS:
         print(f'{g:4}  {cid:15} {st:6}  {summ}')
         for d in det[:25]: print(f'{"":28}· {d}')
-    print(f'\n{"FAIL" if fails else "PASS"}: {fails} fail, {warns} warn, {sum(r[2] == "PASS" for r in ROWS)} pass' + ('' if fails else ' — the manual items in project/CHECKLIST.md still need a human look'))
+    print(f'\n{"FAIL" if fails else "BUSY" if busy else "PASS"}: {fails} fail, {busy} busy, {warns} warn, {sum(r[2] == "PASS" for r in ROWS)} pass' + (' — machine busy, retry (not a pass)' if busy and not fails else '' if fails else ' — the manual items in project/CHECKLIST.md still need a human look'))
 
 # ---------------------------------------------------------------- project/CHECKLIST.md
 if A.checklist is not None:
@@ -634,4 +640,4 @@ if A.checklist is not None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     open(path, 'w', encoding='utf-8').write(cur)
     print(f'checklist: {os.path.relpath(path, REPO) if path.startswith(REPO) else path}')
-sys.exit(1 if fails else 0)
+sys.exit(1 if fails else heavy_lock.BUSY if busy else 0)

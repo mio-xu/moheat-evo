@@ -26,6 +26,22 @@ function take() {   // synchronous: spawn() is
   }
 }
 const release = () => { if (!slot) return; try { if (+fs.readFileSync(slot, 'utf8') === process.pid) fs.unlinkSync(slot); } catch {} slot = null; };
+// Low priority (user 2026-11-09): QA browsers run under `nice -n 10`, so the user's own work wins when the CPU is contended. NOT `taskpolicy -b`: measured 2026-11-09 on Demo22
+// (check_mouth, idle machine) -b = 6-8 fps, `-c utility` = 12 fps, nice 10 / 19 = 60 fps, same as normal. Timing checks that still get starved answer "machine busy, retry"
+// (exit 75 / BUSY row), they don't fail. MOHEAT_QA_PRIORITY=normal = normal priority. Linux (GitHub Actions): system Chrome.
+const MAC_CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+function launch(cmd, args) {
+  let c = String(cmd), a = [...(args || [])];
+  if (c === MAC_CHROME && process.platform !== 'darwin') { c = process.env.CHROME_BIN || 'google-chrome'; a.push('--no-sandbox', '--disable-dev-shm-usage'); }
+  if (process.env.MOHEAT_QA_PRIORITY === 'normal') return [c, a];
+  return ['nice', ['-n', '10', c, ...a]];
+}
+// What is ours, for tools/qa/patrol.py --clean: a small record per QA tool / server (pid + start time), removed on a normal exit.
+const REG = path.join(process.env.MOHEAT_HEAVY_DIR || path.join(os.homedir(), '.moheat_heavy'), 'qa'), regd = new Set();
+function register(pid, kind) {
+  try { fs.mkdirSync(REG, { recursive: true }); const f = path.join(REG, `${pid}.json`); fs.writeFileSync(f, JSON.stringify({ pid, kind, owner: process.pid, started: Date.now(), tool: process.argv[1] || '' })); regd.add(f); } catch {}
+}
+register(process.pid, 'tool');
 const isChrome = (c) => /Google Chrome|chromium/i.test(String(c)), isServer = (c, a) => /python/.test(String(c)) && (a || []).some((x) => /serve\.py$|^http\.server$/.test(String(x)));
 const tmpProfile = (a) => { const m = (a || []).map((x) => /^--user-data-dir=(.+)$/.exec(String(x))).find(Boolean); return m && path.resolve(m[1]).startsWith(fs.realpathSync(os.tmpdir())) ? path.resolve(m[1]) : null; };
 function closeAll() {
@@ -33,14 +49,18 @@ function closeAll() {
   kids.clear();
   for (const p of profiles) try { fs.rmSync(p, { recursive: true, force: true }); } catch {}
   profiles.clear(); release();
+  for (const f of regd) try { fs.unlinkSync(f); } catch {}
+  regd.clear();
 }
 cp.spawn = function (cmd, args, opts) {
   const chrome = isChrome(cmd), server = isServer(cmd, args);
   if (chrome) take();
-  const k = realSpawn.call(cp, cmd, args, opts);
+  const [c2, a2] = chrome ? launch(cmd, args) : [cmd, args];
+  const k = realSpawn.call(cp, c2, a2, opts);
   if (chrome || server) {
-    kids.add(k);
-    k.once('exit', () => { kids.delete(k); if (chrome && ![...kids].some((x) => isChrome(x.spawnfile))) release(); });
+    k.__chrome = chrome; kids.add(k);
+    if (server && k.pid) register(k.pid, 'server');
+    k.once('exit', () => { kids.delete(k); if (chrome && ![...kids].some((x) => x.__chrome)) release(); });
     const prof = chrome ? tmpProfile(args) : null; if (prof) profiles.add(prof);
     if (k.pid) {   // this process killed outright (SIGKILL): the watchdog closes what it left, only while that child is still alive
       const w = realSpawn.call(cp, '/bin/sh', ['-c', 'while kill -0 "$1" 2>/dev/null && kill -0 "$2" 2>/dev/null; do sleep 3; done; if ! kill -0 "$1" 2>/dev/null; then kill -9 "$2" 2>/dev/null; sleep 1; [ -n "$3" ] && rm -rf -- "$3"; fi', 'sh', String(process.pid), String(k.pid), prof || ''], { detached: true, stdio: 'ignore' });
