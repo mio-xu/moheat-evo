@@ -31,7 +31,7 @@ tmp = os.path.join(D, 'assets', 'art', '_cover_src.png'); os.makedirs(os.path.di
 FACE, EYE = face(tmp); T_FACE = float(opt('--face', .285)); T_EYE = [float(v) for v in opt('--eye', '.72,.31').split(',')]
 k = T_FACE / FACE; pw, ph = round(W * k), round(H * k); px, py = round(T_EYE[0] * W - EYE[0] * pw), round(T_EYE[1] * H - EYE[1] * ph)
 if '--shrink' in a:   # a whole group (several faces): keep every face clear of the copy column — shrink the painting by this factor, anchored bottom-right
-    k = float(opt('--shrink', '.85')); pw, ph = round(W * k), round(H * k); px, py = W - pw, H - ph
+    k = float(opt('--shrink', '.85')); pw, ph = round(W * k), round(H * k); px, py = W - pw + round(float(opt('--shift', '0')) * W), H - ph + round(float(opt('--down', '0')) * H)   # --shift / --down: further right / down (the edges are cropped)
 base = Image.new('RGB', (W, H), (16, 12, 24)); base.paste(Image.open(tmp).resize((pw, ph), Image.LANCZOS), (px, py))
 print(f'painting: face {FACE:.3f} eye {EYE[0]:.3f},{EYE[1]:.3f} → placed at {px / W:.2f},{py / H:.2f} size {k:.2f}')
 if '--reuse' not in a:
@@ -53,6 +53,20 @@ if '--reuse' not in a:
     os.makedirs(os.path.dirname(LOG), exist_ok=True); json.dump(log, open(LOG + '.tmp', 'w'), indent=1); os.replace(LOG + '.tmp', LOG); print('usage', r.get('usage'))
 raw = Image.open(RAW).convert('RGB').resize((W, H), Image.LANCZOS)
 if '--paste' in a:
-    keep = Image.new('L', (W, H), 0); keep.paste(255, (px + 40, py + 40, px + pw - 40, py + ph - 40)); raw = Image.composite(base, raw, keep.filter(ImageFilter.GaussianBlur(14)))
+    # only the sides with a gap are feathered (a gap-free side stays the original up to the frame edge): left = --feather, top = 16 px (a band above the figures: never fade their hair)
+    import numpy as np
+    F = int(opt('--feather', '14')); Y, X = np.mgrid[0:H, 0:W]; ramp = lambda d, f: np.clip(d / max(1, f), 0, 1)
+    k_ = np.ones((H, W), np.float32)
+    if px > 0: k_ = np.minimum(k_, ramp(X - px - 20, 2 * F))
+    if py > 0: k_ = np.minimum(k_, ramp(Y - py - 12, 32))
+    if px + pw < W: k_ = np.minimum(k_, ramp(px + pw - 12 - X, 32))
+    if py + ph < H: k_ = np.minimum(k_, ramp(py + ph - 12 - Y, 32))
+    keep = Image.fromarray((k_ * 255).astype(np.uint8), 'L')
+    # the model's new areas differ in tone from the original (it relights): match them to the original along the seams (one gain per channel), then blend
+    A0 = np.asarray(base, np.float32); R0 = np.asarray(raw, np.float32); S = np.zeros((H, W), bool)
+    if px > 0: S[max(0, py):H, px + 60:px + 240] = True
+    if py > 0: S[py + 30:py + 120, max(0, px):W] = True
+    if S.any(): g = (A0[S].mean(0) + 1) / (R0[S].mean(0) + 1); raw = Image.fromarray(np.clip(R0 * g, 0, 255).astype(np.uint8), 'RGB')
+    raw = Image.composite(base, raw, keep)
 raw.resize((1920, 1080), Image.LANCZOS).save(OUT, quality=92); os.remove(tmp)
 f2, e2 = face(OUT); print(f'plate: {OUT}\nfit numbers: from = {{ eye: [{e2[0]:.3f}, {e2[1]:.3f}], face: {f2:.3f} }}')
