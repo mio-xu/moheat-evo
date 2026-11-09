@@ -182,8 +182,6 @@
   .dn-card b{display:block;margin-top:4px;font:700 14px/1.3 "Noto Sans JP",sans-serif}
   .dn-card small{display:block;margin-top:2px;font:500 12px/1.3 Inter,sans-serif;color:#cbbfb8}
   .dn-card small.dn-now{color:#ffd58a;font-weight:600}   /* under the title, so every card's title lines up */
-  .dn-ser{grid-column:1/-1;margin:6px 4px -2px;font:700 12px/1.2 "Noto Sans JP",Inter,sans-serif;color:#e8d6cc;display:flex;align-items:center;gap:8px}
-  .dn-ser::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.1)}
   .dn-card em i{font-style:normal;margin-left:6px;padding:1px 6px;border-radius:999px;background:#ff7a59;color:#fff;letter-spacing:.06em}
   .dn-card em s{text-decoration:none;color:#ffd58a}
   .dn-top h4{color:#ffd58a}
@@ -217,7 +215,7 @@
     + GROUPS.map((g, gi) => `<button type="button" role="tab" data-g="${gi}"><span data-gt="${gi}"></span><i>${count(gi)}</i></button>`).join('') + '</div>'
     + (TOP.length ? `<section class="dn-top" data-g="top"><h4 data-w="top"></h4><div class="dn-grid">${TOP.map((d) => card(d, DEMOS.indexOf(d), true)).join('')}</div></section>` : '')
     + GROUPS.map((g, gi) => `<section data-g="${gi}"><h4><span data-gt="${gi}"></span>${span(gi)}</h4><div class="dn-grid">` + DEMOS.map((d, i) => d.group !== gi ? '' :
-    (d.series && DEMOS[i - 1]?.series !== d.series ? `<h5 class="dn-ser" data-ser="${d.series}"></h5>` : '') + card(d, i)).join('') + '</div></section>').join('')
+    card(d, i)).join('') + '</div></section>').join('')
     + '<p class="dn-foot"><a href="../../../credits.html" data-w="credits"></a> · <span data-w="rights"></span> · © 2026 MoHeat Evo</p>';
   function paint() {   // texts in the display language; again whenever it changes
     for (const r of [nav, panel]) {
@@ -225,7 +223,6 @@
       r.querySelectorAll('[data-gt]').forEach((e) => { e.textContent = GT(+e.dataset.gt); });
       r.querySelectorAll('[data-d]').forEach((e) => { e.textContent = TITLE(DEMOS[+e.dataset.d]); }); r.querySelectorAll('[data-heat]').forEach((e) => { e.textContent = `${pickT(W.heat)} ${e.dataset.heat}`; });
       r.querySelectorAll('[data-part]').forEach((e) => { const l = LG(), [n, of] = e.dataset.part.split('/'); e.textContent = l === 'en' ? `Part ${n} / ${of}` : l === 'ja' ? `第${n}話 / 全${of}話` : `第${n}集 / 共${of}集`; });
-      r.querySelectorAll('[data-ser]').forEach((e) => { e.textContent = pickT(SERIES[e.dataset.ser] || { en: e.dataset.ser }); });
     }
     // thumbnails in the display language (assets/images/demos/<dir>.<lang>.jpg from tools/web/thumbs.py; missing → <dir>.jpg)
     panel.querySelectorAll('img[data-t]').forEach((im) => { const i = +im.dataset.t, src = thumb(i, LG()); if (im.dataset.l === LG()) return; im.dataset.l = LG(); im.onerror = () => { im.onerror = null; im.src = thumb(i); }; im.src = src; });
