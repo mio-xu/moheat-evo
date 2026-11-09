@@ -276,7 +276,7 @@
   // leaving the page, or a phone call / Siri (user 2026-11-09, iPhone: back from another app the voice was gone and the demo looked frozen, since iOS leaves the context
   // 'interrupted', its resume() needs a tap and the voice's end event never comes): pause the same way as ⏸, thermal off; on return the same pause → play sequence runs by itself, and only if the context still isn't running does the big tap-to-continue appear (pause() below).
   let autoPaused = false;
-  const onCtxState = (c) => { const off = () => !EXPORT && !c.__own && !paused && (c.state === 'interrupted' || c.state === 'suspended') && playing(); if (off()) real.st(() => { if (off()) pause(true); }, 400); };   // 400 ms: an engine's own quick suspend + resume is not an interruption
+  const onCtxState = (c) => { if (c.state === 'running') c.__ran = true; const off = () => !EXPORT && !c.__own && !paused && (c.state === 'interrupted' || (c.state === 'suspended' && c.__ran && ![...ctxs].some((x) => x.state === 'running'))) && playing(); if (off()) real.st(() => { if (off()) pause(true); }, 400); };   // 400 ms: an engine's own quick suspend + resume is not an interruption
   if (!EXPORT) {
     const away = () => { if (playing()) { if (!paused) autoPaused = true; pause(true); } else stopDevice(); };
     document.addEventListener('visibilitychange', () => { if (document.hidden) away(); else if (autoPaused) { autoPaused = false; pause(false); } });
@@ -562,7 +562,7 @@
     SH.ui2 = A;
     // films: a tap on the picture is the same one pause (not the film's own media.pause, which the bar would not know about)
     const filmTap = () => { const st = document.querySelector('.stage-col .stage') || document.querySelector('.stage'); if (!st || (!FILM() && !EMBED)) return;
-      st.addEventListener('click', (e) => { if (e.target.closest('.u2, button, a, input') || !playing()) return; e.stopImmediatePropagation(); e.preventDefault(); pause(!paused); }, true); };
+      st.addEventListener('click', (e) => { if (!e.isTrusted || e.target.closest('.u2, button, a, input') || !playing()) return; e.stopImmediatePropagation(); e.preventDefault(); pause(!paused); }, true); };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', filmTap); else filmTap();
     // the original page layout stays (user 2026-11-09): only the player column is centred vertically when it is shorter than the side panel
     const relayout = () => dispatchEvent(new Event('resize'));
