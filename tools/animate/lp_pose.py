@@ -227,4 +227,5 @@ def main():
 
 
 if __name__ == "__main__":
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "qa")); import heavy_lock; heavy_lock.guard("lp_pose (LivePortrait)")
     main()

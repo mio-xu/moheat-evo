@@ -75,6 +75,8 @@ def main():
     publish = '--publish' in a; args = [x for x in a if not x.startswith('--')]
     todo = [(c, d) for c, d in demos(args) if os.path.exists(os.path.join(REPO, 'demos', c, d, 'cover.json'))]
     if not todo: sys.exit('no demo with cover.json')
+    if len(todo) > 1 and '--publish-only' not in a:   # a batch: one heavy job at a time
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'qa')); import heavy_lock; heavy_lock.guard(f'covers.py ({len(todo)} demos)', browser=True)
     if '--publish-only' in a:   # no render: menu thumbnails + media/cover.jpg from the finished images already on disk
         import thumbs
         for c, d in todo:

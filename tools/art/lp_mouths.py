@@ -26,6 +26,7 @@ import hashlib, json, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 args = [a for a in sys.argv[1:] if not a.startswith("--")]; flags = {a for a in sys.argv[1:] if a.startswith("--")}
 D = os.path.abspath(args[0]); ONLY = args[1:]
+sys.path.insert(0, os.path.join(HERE, "..", "qa")); import heavy_lock; heavy_lock.guard(f"lp_mouths {os.path.basename(D)}")   # one heavy job at a time
 sys.argv = sys.argv[:1]      # lp_pose rewrites argv at import
 sys.path.insert(0, os.path.join(HERE, "..", "animate"))
 import cv2, numpy as np

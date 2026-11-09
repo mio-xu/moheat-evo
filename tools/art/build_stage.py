@@ -34,6 +34,7 @@ ap = argparse.ArgumentParser(); ap.add_argument("demo"); ap.add_argument("--prev
 ap.add_argument("--mouths-only", action="store_true", help='only (re)write the "mouth": "lp" sets into the existing media/layers.js; every other layer stays as built / cleaned')
 a = ap.parse_args()
 D = os.path.abspath(a.demo); HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, "..", "qa")); import heavy_lock; heavy_lock.guard(f"build_stage {os.path.basename(D)}")   # one heavy job at a time
 cfg = json.load(open(os.path.join(D, "project", "stage.json")))
 SRC = os.path.join(D, cfg.get("src", "assets/art")); ART = os.path.join(D, "media", "art"); os.makedirs(ART, exist_ok=True)
 src = lambda n: os.path.join(SRC, n + ".png")

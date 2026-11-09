@@ -100,4 +100,5 @@ def main():
 
 
 if __name__ == "__main__":
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "..", "tools", "qa")); import heavy_lock; heavy_lock.guard("render_mp4 Demo04", browser=True)   # one heavy job at a time
     main()
