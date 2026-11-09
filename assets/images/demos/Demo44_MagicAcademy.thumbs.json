@@ -1,26 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/for-men/Demo44_MagicAcademy/media/cover/stamp.json": "242b3723274a8c88c89ec75d5dc286efea32651c"
+   "demos/for-men/Demo44_MagicAcademy/media/cover/stamp.json": "9ba2232f24b13a9b9d56df7cc9f5aa2fcd071844"
   },
-  "thumb": "3ed8765527e975fc9abfe5f3fbb365b50fc41c18"
+  "thumb": "83869cc4011090d8e34463bfaf522dcbd94388bb"
  },
  "en": {
   "inputs": {
-   "demos/for-men/Demo44_MagicAcademy/media/cover/stamp.json": "242b3723274a8c88c89ec75d5dc286efea32651c"
+   "demos/for-men/Demo44_MagicAcademy/media/cover/stamp.json": "9ba2232f24b13a9b9d56df7cc9f5aa2fcd071844"
   },
-  "thumb": "3ed8765527e975fc9abfe5f3fbb365b50fc41c18"
+  "thumb": "83869cc4011090d8e34463bfaf522dcbd94388bb"
  },
  "ja": {
   "inputs": {
-   "demos/for-men/Demo44_MagicAcademy/media/cover/stamp.json": "242b3723274a8c88c89ec75d5dc286efea32651c"
+   "demos/for-men/Demo44_MagicAcademy/media/cover/stamp.json": "9ba2232f24b13a9b9d56df7cc9f5aa2fcd071844"
   },
-  "thumb": "84e14f8fe54abd1c56295d3998b733c07f62b308"
+  "thumb": "39af36b8b7f625f5ecb8a40e84ac2da2e8eee5af"
  },
  "zh": {
   "inputs": {
-   "demos/for-men/Demo44_MagicAcademy/media/cover/stamp.json": "242b3723274a8c88c89ec75d5dc286efea32651c"
+   "demos/for-men/Demo44_MagicAcademy/media/cover/stamp.json": "9ba2232f24b13a9b9d56df7cc9f5aa2fcd071844"
   },
-  "thumb": "4e20a1111e6845fd0c15dfae3dfa9a5ce4dee166"
+  "thumb": "24c21649805d694d06878674d70738cfbafe5f2e"
  }
 }

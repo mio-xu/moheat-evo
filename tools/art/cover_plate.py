@@ -6,6 +6,7 @@ The edit is used as it is (the model relights the whole frame; pasting the origi
 Then the face is measured again on the plate (SCRFD) and printed as the MoHeatCover.fit() numbers to use.
 
   ~/ml/layers/bin/python tools/art/cover_plate.py <demo folder> <painting> [--face .285] [--eye .72,.31] [--hint "what is around"] [--reuse]
+  [--shrink .85 (a group: anchored bottom-right, every face clear of the copy column)] [--who "The three people stay exactly as they are…"]
   → <demo>/media/art/cover_plate.jpg (1920×1080) + raw <demo>/assets/art/cover_plate_raw.png
 In the demo: C.fit(ctx, { eye, face } (printed), () => ctx.drawImage(plate, 0, 0, W, H), { at: { y, face }, tone }) — see Demo22 main.js.
 """
@@ -29,14 +30,15 @@ def face(path):
 tmp = os.path.join(D, 'assets', 'art', '_cover_src.png'); os.makedirs(os.path.dirname(tmp), exist_ok=True); Image.open(SRC).convert('RGB').save(tmp)
 FACE, EYE = face(tmp); T_FACE = float(opt('--face', .285)); T_EYE = [float(v) for v in opt('--eye', '.72,.31').split(',')]
 k = T_FACE / FACE; pw, ph = round(W * k), round(H * k); px, py = round(T_EYE[0] * W - EYE[0] * pw), round(T_EYE[1] * H - EYE[1] * ph)
+if '--shrink' in a:   # a whole group (several faces): keep every face clear of the copy column — shrink the painting by this factor, anchored bottom-right
+    k = float(opt('--shrink', '.85')); pw, ph = round(W * k), round(H * k); px, py = W - pw, H - ph
 base = Image.new('RGB', (W, H), (16, 12, 24)); base.paste(Image.open(tmp).resize((pw, ph), Image.LANCZOS), (px, py))
 print(f'painting: face {FACE:.3f} eye {EYE[0]:.3f},{EYE[1]:.3f} → placed at {px / W:.2f},{py / H:.2f} size {k:.2f}')
 if '--reuse' not in a:
     KEY = os.environ.get('OPENAI_API_KEY') or open(os.path.expanduser('~/.openai_key')).read().strip()
     mask = Image.new('RGBA', (W, H), (0, 0, 0, 0)); mask.paste((0, 0, 0, 255), (px + 40, py + 40, px + pw - 40, py + ph - 40))
     prompt = ('Extend this anime illustration outward so it fills the whole 16:9 frame: continue the same place naturally on every side ('
-              + opt('--hint', 'the room, its walls, ceiling and floor') + '). The person stays exactly as he is: do not redraw or move him, add no other '
-              'person, no hands, no text. Same painting style, colours and light; the new areas quiet, a little darker toward the left edge.')
+              + opt('--hint', 'the room, its walls, ceiling and floor') + '). ' + opt('--who', 'The person stays exactly as he is: do not redraw or move him, add no other person') + ', no hands, no text. Same painting style, colours and light; the new areas quiet, a little darker toward the left edge.')
     bnd = uuid.uuid4().hex; body = b''
     for kk, v in {'model': 'gpt-image-2', 'prompt': prompt, 'size': f'{W}x{H}', 'quality': 'high', 'n': '1'}.items(): body += f'--{bnd}\r\nContent-Disposition: form-data; name="{kk}"\r\n\r\n{v}\r\n'.encode()
     for kk, im in (('image[]', base), ('mask', mask)):
