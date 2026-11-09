@@ -22,7 +22,15 @@
   // UI v2 (DEMO_DESIGN_GUIDE §7.3 "UI v2", user 2026-11-08): the finished-cover image + the one control bar + ⚙ (demos/shared/ui2.js).
   // ONE switch for every demo; until the release flips it, ?ui=2 turns it on for this browser (remembered, so ‹ › keeps it) and ?ui=1 off.
   SH.UI_V2 = true;
-  const QS = new URLSearchParams(location.search), EXPORT = QS.has('cover') || QS.has('render') || QS.has('embed');
+  const QS = new URLSearchParams(location.search), EXPORT = QS.has('cover') || QS.has('render'), EMBED = QS.has('embed') && !EXPORT;
+  // ?embed = the home page's player (user 2026-11-09 「这里只需要一个播放按钮，自动播放英文版纯享版本」): the finished English cover + one play button, then the pure version in
+  // English, tap to pause. Only ?cover / ?render are exports. The visitor's own settings are not read or written here: every moheat.* key of this frame is English / default and writes are dropped.
+  if (EMBED) { document.documentElement.classList.add('embed');
+    const sg = Storage.prototype.getItem, ss = Storage.prototype.setItem, sr = Storage.prototype.removeItem, ours = (k) => /^moheat\./.test(String(k));
+    Storage.prototype.getItem = function (k) { return ours(k) ? (/\.sublang$/.test(k) ? 'en' : null) : sg.call(this, k); };
+    Storage.prototype.setItem = function (k, v) { if (!ours(k)) ss.call(this, k, v); };
+    Storage.prototype.removeItem = function (k) { if (!ours(k)) sr.call(this, k); };
+    const s = document.createElement('style'); s.textContent = 'html.embed .bar, html.embed .side, html.embed .legend { display: none !important; } html.embed, html.embed body { overflow: hidden; background: #000; height: 100%; } html.embed body { display: flex; flex-direction: column; justify-content: center; } html.embed .layout { width: 100%; } html.embed .stage button:not(.u2-start):not(.u2-paused) { pointer-events: none; } html.embed :is(.coach, .dock, #hintBtn, .hud-goal) { display: none !important; } html.embed .layout { display: block; padding: 0; max-width: none; } html.embed .stage-col { margin: 0; } html.embed .stage { border-radius: 0; border: 0; box-shadow: none; width: 100%; margin: 0; }'; document.head.appendChild(s); }
   if (EXPORT) document.documentElement.removeAttribute('data-u2');   // no UI v2 here, so .u2-on never comes: series.css must not keep the stage hidden (2026-11-09: the home-page player and exports were black, sound only)
   try { if (QS.get('ui') === '2') localStorage.setItem('moheat.ui', '2'); else if (QS.get('ui') === '1') localStorage.removeItem('moheat.ui'); } catch {}
   const V2 = !EXPORT && (SH.UI_V2 || (() => { try { return localStorage.getItem('moheat.ui') === '2'; } catch { return false; } })());
@@ -154,9 +162,9 @@
   const stopDevice = () => devSend.forEach((s) => { try { s('stop'); } catch {} });
 
   // ---------------------------------------------------------------- mode
-  let mode = QS.has('interactive') ? 'interactive' : QS.has('pure') ? 'pure' : LS.get('mode', 'interactive');   // default = interactive (user 2026-11-08); pure (just listen) is the option, a remembered choice wins
+  let mode = QS.has('interactive') ? 'interactive' : QS.has('pure') || EMBED ? 'pure' : LS.get('mode', 'interactive');   // default = interactive (user 2026-11-08); pure (just listen) is the option, a remembered choice wins
   const Play = window.MoHeatPlay = { get mode() { return mode; }, get pure() { return mode === 'pure' && !QS.has('auto'); }, reduced: false };
-  const setMode = (m) => { mode = m; LS.set('mode', m); document.documentElement.dataset.playmode = m; paint(); dispatchEvent(new CustomEvent('moheat:playmode', { detail: m })); };
+  const setMode = (m) => { mode = m; if (!EMBED) LS.set('mode', m); document.documentElement.dataset.playmode = m; paint(); dispatchEvent(new CustomEvent('moheat:playmode', { detail: m })); };
 
   // pure mode: answer for the listener after a natural pause (the default = first button; holds are held)
   // what pure mode presses: the standard answer markup (§7.3 3) + any element marked data-auto (a demo's own gate, e.g. a ringing
@@ -482,7 +490,7 @@
   // ---------------------------------------------------------------- UI v2: the live adapter for demos/shared/ui2.js
   if (V2) {
     // UI2_V = content hash of ui2.js + ui2.css (python3 tools/web/bump.py --auto keeps it current: cat ui2.js ui2.css | shasum, 8 hex)
-    const UI2_V = '19c9cd52';
+    const UI2_V = '27f81e3f';
     const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = new URL(`ui2.css?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(css);
     let cssReady = false; const cssOk = () => { if (!cssReady) { cssReady = true; mount(); } };   // mount only once ui2.css applies: an unstyled first frame left the player column off-centre (Demo21 check_ui band 16 / 58 px under load)
     css.addEventListener('load', cssOk); css.addEventListener('error', cssOk); real.st(cssOk, 3000);
@@ -498,6 +506,8 @@
     // Start is offered when the page has loaded — or 5 s after its HTML at the latest (the demo streams the rest; nothing waits for every voice file)
     let ready = false; const isReady = () => { ready = true; ui?.paint(); };
     Promise.all([new Promise((r) => (document.readyState === 'complete' ? r() : addEventListener('load', r))), document.fonts?.ready]).then(isReady);
+    // the home page's menu opens a demo with ?embed=1&autoplay=1: play at once when the browser allows sound here (phones: the visitor taps Start)
+    if (EMBED && QS.has('autoplay')) { const go = () => { try { const AC = window.AudioContext || window.webkitAudioContext, c = new AC(), ok = c.state === 'running'; c.close(); if (ok && !started) A.start(); } catch {} }; addEventListener('load', () => real.st(go, 400)); }
     const late = () => real.st(isReady, 5000); if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', late); else late();
     const A = {
       get cat() { return location.pathname.split('/demos/')[1]?.split('/')[0]; },
@@ -535,7 +545,7 @@
     };
     SH.ui2 = A;
     // films: a tap on the picture is the same one pause (not the film's own media.pause, which the bar would not know about)
-    const filmTap = () => { const st = document.querySelector('.stage-col .stage') || document.querySelector('.stage'); if (!st || !FILM()) return;
+    const filmTap = () => { const st = document.querySelector('.stage-col .stage') || document.querySelector('.stage'); if (!st || (!FILM() && !EMBED)) return;
       st.addEventListener('click', (e) => { if (e.target.closest('.u2, button, a, input') || !playing()) return; e.stopImmediatePropagation(); e.preventDefault(); pause(!paused); }, true); };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', filmTap); else filmTap();
     // the original page layout stays (user 2026-11-09): only the player column is centred vertically when it is shorter than the side panel

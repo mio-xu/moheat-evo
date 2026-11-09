@@ -3,6 +3,7 @@
 // their own cover / stage: the UI v2 pre-paint rule in series.css only applies to <html data-u2> pages (2026-11-09: it blacked them out).
 // --export: pages WITH shell.js opened as ?embed=1 and ?render=1. shell.js skips UI v2 there, so .u2-on never comes and series.css would keep the stage hidden
 // unless shell.js drops data-u2 (2026-11-09: the home-page player was black, sound only). FAIL when the picture (a hidden canvas / video / img, or the largest child) or the whole stage is hidden.
+// --export, ?embed=1 only: the home-page player at iframe sizes 400×278 and 900×585 = the finished cover + exactly one visible button (play): cover image loaded, no old intro or page chrome showing, no scrolling inside.
 // Prints ONE JSON object { pages, fails }; exit 1 on FAIL.
 //   node tools/web/check_stage_visible.js [page.html …]            (default: every such page under demos/)
 //   node tools/web/check_stage_visible.js --export [page.html …]   (default: every shell.js page under demos/)
@@ -24,14 +25,19 @@ const out = { pages: pages.map((p) => path.relative(ROOT, p)), fails: [] };
   const chrome = spawn('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', ['--headless=new', `--remote-debugging-port=${dp}`, `--user-data-dir=${prof}`, '--mute-audio', '--window-size=1440,900', 'about:blank'], { stdio: 'ignore' });
   const done = () => { try { chrome.kill(); } catch {} try { http.kill(); } catch {} try { fs.rmSync(prof, { recursive: true, force: true }); } catch {}
     process.stdout.write(JSON.stringify(out) + '\n'); process.exit(out.fails.length ? 1 : 0); };
-  setTimeout(() => { out.fails.push('timeout'); done(); }, 30000 + 15000 * pages.length * QUERIES.length);
+  setTimeout(() => { out.fails.push('timeout'); done(); }, 30000 + 15000 * pages.length * (EXPORT ? 3 : 1));
   let ws; for (let i = 0; i < 80 && !ws; i++) { await sleep(250); try { const l = await (await fetch(`http://127.0.0.1:${dp}/json/list`)).json(); ws = l.find((x) => x.type === 'page')?.webSocketDebuggerUrl; } catch {} }
   const sock = new WebSocket(ws); await new Promise((r) => sock.addEventListener('open', r)); let id = 0; const wait = {};
   sock.addEventListener('message', (e) => { const m = JSON.parse(e.data); if (m.id && wait[m.id]) { wait[m.id](m); delete wait[m.id]; } });
   const cdp = (method, params = {}) => new Promise((r) => { const i = ++id; wait[i] = r; sock.send(JSON.stringify({ id: i, method, params })); });
   const ev = async (x) => (await cdp('Runtime.evaluate', { expression: x, awaitPromise: true, returnByValue: true })).result?.result?.value;
   await cdp('Page.enable');
-  for (const p of out.pages) for (const q of QUERIES) {
+  const EMBED_CHECK = `(() => { const de = document.documentElement, u = document.querySelector('.u2'), pic = document.querySelector('.u2-pic'), intro = document.querySelector('.stage .intro');
+    const vis = (e) => !!e && getComputedStyle(e).visibility !== 'hidden' && getComputedStyle(e).display !== 'none' && e.getBoundingClientRect().width > 0;
+    const hits = [[.5, .3], [.25, .45], [.75, .45], [.5, .6]].map(([x, y]) => document.elementFromPoint(innerWidth * x, innerWidth * 9 / 16 * y)).map((e) => !!e?.closest?.('.u2'));
+    return { u2on: de.classList.contains('u2-on'), pic: !!pic && pic.naturalWidth > 0, picVis: vis(pic), introVis: vis(intro) && !u, play: vis(document.querySelector('.u2-start')), buttons: [...document.querySelectorAll('button')].filter((x) => vis(x) && x.getBoundingClientRect().height > 0 && !x.closest('.u2-paused')).length, chrome: vis(document.querySelector('header.bar')), scroll: de.scrollHeight > innerHeight + 1 || de.scrollWidth > innerWidth + 1, hits }; })()`;
+  for (const p of out.pages) for (const q of QUERIES) for (const size of q === '?embed=1' ? [[400, 278], [900, 585]] : [null]) {
+    if (EXPORT) await cdp('Emulation.setDeviceMetricsOverride', size ? { width: size[0], height: size[1], deviceScaleFactor: 1, mobile: false } : { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
     await cdp('Page.navigate', { url: `http://127.0.0.1:${hp}/${p.split(path.sep).join('/')}${q}` });
     for (let i = 0; i < 40; i++) { await sleep(250); if (await ev(`document.readyState === 'complete'`)) break; }
     await sleep(3000);   // past the 2.5 s l10n fail-safe
@@ -42,6 +48,11 @@ const out = { pages: pages.map((p) => path.relative(ROOT, p)), fails: [] };
       const hid = (e) => getComputedStyle(e).visibility === 'hidden', picture = kids.filter((e) => /^(CANVAS|VIDEO|IMG)$/.test(e.tagName) && hid(e)).map((e) => e.id || e.tagName);
       return { kids: kids.length, hidden, picture, bigHidden: !!big && hid(big), u2: document.documentElement.hasAttribute('data-u2') }; })()`);
     if (!r || r.noStage) continue;   // a page without a stage: nothing to hide
+    if (size) {
+      await sleep(1500);
+      const e = await ev(EMBED_CHECK), bad = !e ? ['no result'] : [!e.u2on && 'UI v2 not on', !e.pic && 'cover image not loaded', !e.picVis && 'cover image hidden', e.introVis && 'old intro showing', !e.play && 'no play button', e.buttons !== 1 && `${e.buttons} visible buttons (want 1)`, e.chrome && 'the device / page bar shows', e.scroll && 'scrolls inside the iframe', e.hits.includes(false) && `elementFromPoint outside the player (${e.hits})`].filter(Boolean);
+      if (bad.length) out.fails.push(`${p}${q} @${size.join('×')}: ${bad.join('; ')}`);
+    }
     if (EXPORT) {
       if (r.picture.length || r.bigHidden || (r.kids && r.hidden.length === r.kids)) out.fails.push(`${p}${q}: stage hidden, sound only (hidden: ${r.hidden.slice(0, 4).join(', ')}${r.u2 ? '; <html> still has data-u2' : ''}): shell.js must drop data-u2 when it skips UI v2`);
       continue;
