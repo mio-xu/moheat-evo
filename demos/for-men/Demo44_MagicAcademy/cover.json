@@ -1,0 +1,164 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo44_MagicAcademy --publish",
+ "title": {
+  "en": "Summoned by Mistake",
+  "ja": "まちがい召喚と、\nまほう学院の三人",
+  "zh": "错误召唤：\n魔法学院的三人"
+ },
+ "tagline": {
+  "en": "A princess, an alchemist and a witch — one night at the academy of magic",
+  "ja": "召喚科の王女と、錬金術師と、氷の魔女",
+  "zh": "召唤科的公主、炼金术师和冰之魔女"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "A royal academy of magic",
+    "ja": "王立の魔法学院",
+    "zh": "王立魔法学院"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "furnace flare · hot cocoa · the fireplace",
+    "ja": "かまどの炎・ホットココア・暖炉",
+    "zh": "炉火・热可可・壁炉"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "broom wind · ice crystals round your head",
+    "ja": "ほうきの風・頭をめぐる氷の結晶",
+    "zh": "扫帚的风・绕头一圈的冰晶"
+   }
+  }
+ ],
+ "tone": "12 14 32",
+ "options": [
+  {
+   "key": "place",
+   "when": "ended",
+   "label": {
+    "en": "Where",
+    "ja": "場所",
+    "zh": "地点"
+   },
+   "items": [
+    {
+     "v": "hall",
+     "label": {
+      "en": "Hall",
+      "ja": "大広間",
+      "zh": "大厅"
+     }
+    },
+    {
+     "v": "sky",
+     "label": {
+      "en": "Sky",
+      "ja": "上空",
+      "zh": "上空"
+     }
+    },
+    {
+     "v": "lab",
+     "label": {
+      "en": "Workshop",
+      "ja": "工房",
+      "zh": "工房"
+     }
+    },
+    {
+     "v": "tower",
+     "label": {
+      "en": "Tower",
+      "ja": "塔の上",
+      "zh": "塔顶"
+     }
+    },
+    {
+     "v": "dawn",
+     "label": {
+      "en": "Dawn",
+      "ja": "夜明け",
+      "zh": "黎明"
+     }
+    }
+   ]
+  },
+  {
+   "key": "who",
+   "when": "ended",
+   "label": {
+    "en": "With",
+    "ja": "だれと",
+    "zh": "和谁"
+   },
+   "items": [
+    {
+     "v": "T",
+     "label": {
+      "en": "Tsubaki",
+      "ja": "椿",
+      "zh": "椿"
+     }
+    },
+    {
+     "v": "C",
+     "label": {
+      "en": "Cocoa",
+      "ja": "ココア",
+      "zh": "可可"
+     }
+    },
+    {
+     "v": "L",
+     "label": {
+      "en": "Luna",
+      "ja": "ルナ",
+      "zh": "露娜"
+     }
+    },
+    {
+     "v": "TCL",
+     "label": {
+      "en": "All three",
+      "ja": "三人",
+      "zh": "三个人"
+     }
+    }
+   ]
+  }
+ ],
+ "options_note": "sky = Tsubaki only (her broom view); keep-talking after the story",
+ "chapters": [
+  {
+   "en": "The summoning hall",
+   "ja": "召喚の大広間",
+   "zh": "召唤大厅"
+  },
+  {
+   "en": "Above the academy",
+   "ja": "学院の上空",
+   "zh": "学院上空"
+  },
+  {
+   "en": "The alchemy workshop",
+   "ja": "錬金工房",
+   "zh": "炼金工房"
+  },
+  {
+   "en": "Night tea on the tower",
+   "ja": "塔の上の夜のお茶会",
+   "zh": "塔顶的夜间茶会"
+  },
+  {
+   "en": "Dawn on the tower",
+   "ja": "夜明けの塔",
+   "zh": "黎明的塔顶"
+  }
+ ]
+}

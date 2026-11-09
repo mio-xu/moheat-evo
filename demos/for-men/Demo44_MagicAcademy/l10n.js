@@ -173,10 +173,24 @@ window.MOHEAT_L10N = {
    "塔の上のお茶会": "塔顶茶会",
    "椿": "椿",
    "ココア": "可可",
-   "ルナ": "露娜"
+   "ルナ": "露娜",
+   "椿・ココア・ルナ ElevenLabs": "椿・可可・露娜 ElevenLabs",
+   "Live (DUAL): each voice warms the ear it speaks at, with its loudness; the broom's head wind peaks in the dive and swings left → right in the turn, the furnace on your right flares while the frosty cabinet cools your left, hot cocoa at your right cheek turns cool when she blows, and ice crystals circle your head past the fireplace.": "实时（DUAL）：每个人的声音按音量让她说话那一侧的耳朵变暖；俯冲时扫帚的迎面风最强，转弯时从左扫到右；右边的炉火腾起，左边结霜的冷柜吹来寒气；贴在右脸的热可可，被她一吹就变凉；冰晶绕着你的头飞过壁炉。",
+   "Original characters in a special version · everyone speaks Japanese there · voices ElevenLabs · art OpenAI gpt-image · layered stills · free talk = scripted preview": "原创角色的特别版 · 那里的人都说日语 · 配音 ElevenLabs · 美术 OpenAI gpt-image · 分层静帧 · 自由对话为剧本预览版",
+   "ASMR · Crossover": "ASMR · 穿越篇"
   },
-  "ja": {},
-  "en": {}
+  "ja": {
+   "椿・ココア・ルナ ElevenLabs": "椿・ココア・ルナ ElevenLabs",
+   "Live (DUAL): each voice warms the ear it speaks at, with its loudness; the broom's head wind peaks in the dive and swings left → right in the turn, the furnace on your right flares while the frosty cabinet cools your left, hot cocoa at your right cheek turns cool when she blows, and ice crystals circle your head past the fireplace.": "リアルタイム（DUAL）：声はその音量で、話しかける側の耳を温めます。ほうきの向かい風は急降下で最大に、旋回で左から右へ。右のかまどが燃え上がり、左の冷却棚は霜の冷気を流します。右頬のホットココアは息を吹きかけられると冷たくなり、氷の結晶が暖炉の前を通って頭のまわりを回ります。",
+   "Original characters in a special version · everyone speaks Japanese there · voices ElevenLabs · art OpenAI gpt-image · layered stills · free talk = scripted preview": "オリジナルキャラクターの特別版 · その世界ではみんな日本語を話します · 声 ElevenLabs · 絵 OpenAI gpt-image · レイヤー静止画 · 自由会話は台本プレビュー",
+   "ASMR · Crossover": "ASMR · クロスオーバー"
+  },
+  "en": {
+   "椿・ココア・ルナ ElevenLabs": "Tsubaki · Cocoa · Luna — ElevenLabs",
+   "Live (DUAL): each voice warms the ear it speaks at, with its loudness; the broom's head wind peaks in the dive and swings left → right in the turn, the furnace on your right flares while the frosty cabinet cools your left, hot cocoa at your right cheek turns cool when she blows, and ice crystals circle your head past the fireplace.": "Live (DUAL): each voice warms the ear it speaks at, with its loudness; the broom's head wind peaks in the dive and swings left → right in the turn, the furnace on your right flares while the frosty cabinet cools your left, hot cocoa at your right cheek turns cool when she blows, and ice crystals circle your head past the fireplace.",
+   "Original characters in a special version · everyone speaks Japanese there · voices ElevenLabs · art OpenAI gpt-image · layered stills · free talk = scripted preview": "Original characters in a special version · everyone speaks Japanese there · voices ElevenLabs · art OpenAI gpt-image · layered stills · free talk = scripted preview",
+   "ASMR · Crossover": "ASMR · Crossover"
+  }
  },
  "names": {
   "椿": {

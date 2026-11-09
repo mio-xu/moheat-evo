@@ -1,0 +1,6 @@
+/* まちがい召喚と、まほう学院の三人 — palette only (layout: ../../shared/story.css). Night-blue academy + brass + ember. */
+:root { --bg: #0c0e1c; --panel: #151829; --panel-2: #1e2238; --line: #3c4260; --gold: #ffd08a; --st-hi: 214, 190, 255; --st-on: 96, 74, 178; --st-sub: 12, 14, 30; --st-bar: linear-gradient(90deg, #9fb8ff, #e8d6ff); }
+.bar { background: #0a0c18; }
+.brand span { color: #c9b6ff; }
+.btn.primary { background: linear-gradient(135deg, #5a48b8, #c78cf0); }
+.subs .who.wT { color: #ffc6cf; } .subs .who.wC { color: #ffc98f; } .subs .who.wL { color: #a9c6ff; }

@@ -1,0 +1,56 @@
+/* shared/story.css — stage elements of the story-engine pages (shared/story.js): subtitles, answers, press-and-hold, もっと話す picker.
+   From Demo43's style.css. A demo's own style.css sets only its palette:
+   --st-hi (button border / glow, "r,g,b"), --st-on (hover / pressed, "r,g,b"), --st-bar (hold bar gradient), --st-sub (subtitle box "r,g,b"),
+   and the speaker colours .subs .who.w<K>. */
+:root { --st-hi: 255, 194, 122; --st-on: 217, 84, 43; --st-sub: 13, 16, 24; --st-bar: linear-gradient(90deg, #ffb46b, #ffd28a); }
+.vv { bottom: auto; top: .6cqw; }
+.intro .hero.a { position: absolute; width: 1px; height: 1px; }
+.intro .cleared { color: #f2f6ff; background: rgba(var(--st-on), .3); border-color: rgba(var(--st-hi), .6); }
+
+/* subtitles (sizes from series.css) */
+.subs { position: absolute; z-index: 3; display: flex; justify-content: center; pointer-events: none; opacity: 0; transition: opacity .25s; }
+.subs.show { opacity: 1; }
+.subs .line { display: flex; flex-direction: column; align-items: center; background: rgba(var(--st-sub), .64); }
+.subs .ja { color: #fff; font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif; font-weight: 700; }
+.subs .en { color: #dfe6f6; font-family: Inter, sans-serif; }
+.subs .who { font-style: normal; margin-right: .6em; opacity: .9; }
+.subs .who.wあなた { color: #c9d4ff; }
+
+/* your turn: choices / action / hold */
+.choices, .act { position: absolute; left: 50%; bottom: 12cqw; transform: translate(-50%, .6cqw); z-index: 4; opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s; }
+.choices.show, .act.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.choices { display: flex; gap: 1.2cqw; }
+.ch, .act-btn { cursor: pointer; border-radius: 1.4cqw; border: 1px solid rgba(var(--st-hi), .55); background: rgba(22, 20, 26, .82); color: #fff; padding: 1cqw 2cqw;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background .15s, transform .15s; user-select: none; -webkit-user-select: none; touch-action: none; }
+.ch:hover, .act-btn:hover { background: rgba(var(--st-on), .55); transform: translateY(-2px); }
+.ch b, .act-btn b { display: block; font: 700 clamp(11px, 1.6cqw, 26px)/1.3 "Zen Maru Gothic", "Noto Sans JP", sans-serif; }
+.ch span, .act-btn span { display: block; font: 500 clamp(9px, 1.05cqw, 16px)/1.3 Inter, sans-serif; color: #dfe6f6; }
+.act-btn { display: grid; grid-template-columns: auto auto; grid-template-rows: auto auto; column-gap: 1cqw; align-items: center; text-align: left; animation: st-nudge 1.6s ease-in-out infinite; }
+.act-btn i { grid-row: span 2; font-style: normal; font-size: clamp(18px, 2.6cqw, 40px); }
+.act-btn:not(:has(i)) { grid-template-columns: auto; }
+.act-btn.hold { grid-template-rows: auto auto auto; }
+.act-btn.hold i { grid-row: span 3; }
+.act-btn.hold.down { background: rgba(var(--st-on), .7); transform: scale(.97); }
+.act-btn .bar { grid-column: -2; display: block; height: .45cqw; min-height: 4px; margin-top: .5cqw; border-radius: 9px; background: rgba(255, 255, 255, .15); overflow: hidden; }
+.act-btn .bar u { display: block; height: 100%; width: 0; background: var(--st-bar); }
+@keyframes st-nudge { 50% { box-shadow: 0 0 1.6cqw rgba(var(--st-hi), .6); } }
+.stage:has(.intro:not(.hidden)) :is(.choices, .act, .subs, .hud-top) { display: none !important; }
+/* a hold placed beside the person (cfg.holdSide): left / right third */
+.act.side { left: 22%; }
+.act.side.side-r { left: 78%; }
+@container (max-width: 620px) {
+  .choices { flex-direction: column; bottom: 14cqw; } .ch b, .act-btn b { font-size: 3.2cqw; } .ch span, .act-btn span { font-size: 2.3cqw; }
+  .act.side { left: 26%; } .act.side.side-r { left: 74%; }
+}
+
+/* もっと話す · keep talking (after the story): where × who (hidden buttons driven by the cover's options) */
+.intro .talk-pick { margin: .6cqw 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: .6cqw; }
+.intro .talk-pick[hidden] { display: none; }
+.intro .talk-pick > small { flex-basis: 100%; font: 700 clamp(10px, 1.05cqw, 15px)/1.3 Inter, "Noto Sans JP", sans-serif; color: #ffd9a8; }
+.intro .talk-pick .tp { min-height: 44px; min-width: 44px; padding: 0 1.2cqw; border-radius: 99px; border: 1px solid rgba(var(--st-hi), .6); background: rgba(22, 20, 26, .7); color: #fff;
+  font: 700 clamp(11px, 1.15cqw, 17px) "Zen Maru Gothic", "Noto Sans JP", sans-serif; cursor: pointer; }
+.intro .talk-pick .tp:hover { background: rgba(var(--st-on), .55); }
+.intro .talk-pick .tp-row { display: flex; flex-wrap: wrap; gap: .5cqw; flex-basis: 100%; }
+.intro .talk-pick .tpl { min-height: 44px; padding: 0 1cqw; border-radius: .8cqw; border: 1px solid rgba(255, 255, 255, .28); background: rgba(22, 20, 26, .55); color: #dfe6ff;
+  font: 600 clamp(10px, 1.05cqw, 15px) "Zen Maru Gothic", "Noto Sans JP", sans-serif; cursor: pointer; }
+.intro .talk-pick .tpl[aria-pressed="true"] { background: rgba(var(--st-hi), .85); color: #1a1208; border-color: rgb(var(--st-hi)); }
