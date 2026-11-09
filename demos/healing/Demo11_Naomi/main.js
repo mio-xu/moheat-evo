@@ -68,12 +68,14 @@
     bubble.classList.add('show'); clearTimeout(bubbleTimer); bubbleTimer = setTimeout(() => bubble.classList.remove('show'), ms);
   }
   function setStep(id) { S.step = id; S.st = 0; renderGoal(); renderSteps(); }
+  const goalTag = () => { const P = window.MoHeatSub?.pick; const t = S.done ? { ja: 'おやすみ', en: 'Good night', zh: '晚安' } : { ja: 'ナオミ', en: 'Naomi', zh: '直美' }; return P ? P(t) : t.en; };
+  addEventListener('moheat:sublang', () => { if (S?.started) renderGoal(); });
   function renderGoal() {
     const s = STEPS.find((x) => x[0] === S.step);
     let sub = s[2];
     if (S.step === 'play') sub += ` · 🪶 ${S.catches} / 3`;
     if (S.step === 'poke') sub += ` · 👉 ${S.pokes} / 3`;
-    goalEl.innerHTML = `<small>${S.done ? 'Good night' : 'Naomi'}</small><b>${s[1]}</b><span>${sub}</span>`;
+    goalEl.innerHTML = `<small>${goalTag()}</small><b>${s[1]}</b><span>${sub}</span>`;
   }
   function renderSteps() { const i = STEPS.findIndex((x) => x[0] === S.step); $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i || S.done ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
   function renderHearts() { invEl.innerHTML = `<div class="hearts" title="なかよし度 · Bond">${HEART_STEPS.map((_, i) => `<i class="${i < S.hearts ? 'on' : ''}">♥</i>`).join('')}<em>なかよし · bond</em></div>`; }
@@ -85,7 +87,7 @@
 
   // action widget (bottom right): "call" button for the call step, "blow" for the food
   let holding = false, keyHold = false, callTap = false;
-  const ab = $('blowBtn');
+  const ab = $('blowBtn'), BLOW_WORDS = ab.dataset.voice, CALL_WORDS = 'ナオミ|なおみ|naomi|おいで|call|come|直美|娜奥米|过来';
   ab.addEventListener('pointerdown', (e) => { e.preventDefault(); holding = true; ab.classList.add('holding'); if (S.step === 'call') callTap = true; });
   for (const ev of ['pointerup', 'pointerleave', 'pointercancel']) ab.addEventListener(ev, () => { holding = false; ab.classList.remove('holding'); });
   $('micBars').innerHTML = '<i></i>'.repeat(6);
@@ -95,6 +97,7 @@
     const call = S.step === 'call';
     actEl.querySelector('.lbl').textContent = call ? '🎤 声 · voice' : '🌬 息 · breath';
     ab.textContent = call ? '📣 ナオミ〜 · Call' : 'ふーふー · Blow';
+    const words = call ? CALL_WORDS : BLOW_WORDS; if (ab.dataset.voice !== words) ab.dataset.voice = words;   // what voice.js listens for follows the step
     actEl.classList.toggle('call', call);
   }
 
@@ -415,8 +418,9 @@
       const E = ear[e], hh = Math.min(1, sum[e].h), cc = Math.min(1, sum[e].c);
       let mode = E.mode;
       if (!mode) mode = hh > cc ? 'h' : 'c';
+      else if (!MoHeatDwell.may(E, dt)) { /* keep the current direction */ }
       else if (mode === 'h' && cc > hh + .06) mode = 'c'; else if (mode === 'c' && hh > cc + .06) mode = 'h';
-      if (mode !== E.mode) { E.v = 0; E.mode = mode; }
+      if (mode !== E.mode) { E.v = 0; E.mode = mode; E.held = 0; }
       const target = mode === 'h' ? Math.min(.9, hh) : cc;
       const tau = target > E.v ? (mode === 'h' ? .35 : .18) : .3;
       E.v += (target - E.v) * (1 - Math.exp(-dt / tau));
@@ -601,7 +605,6 @@
     setTimeout(() => {
       S.started = false; stopOutput(); for (const l of Object.values(L)) l.stop(); L = {};
       bubble.classList.remove('show');
-      const c = $('cleared'); c.hidden = false; c.textContent = `💤 ナオミと、ふわふわの一日 · A fluffy day together (${fmt(S.clock)})`;
       $('startBtn').textContent = '↺ もう一度 · Play again';
       $('intro').classList.remove('hidden'); drawCover();
     }, 1200);
@@ -609,7 +612,7 @@
   function resetNaomi() { Object.assign(N, { pose: 'close', x: 960, y: 1150, s: 1, flip: false, face: '', tilt: 0, squish: 0, jump: 0, show: false, near: 0, purr: 0, purrT: 0, tx: null, pounceT: -1, cool: 0, cd: 0, az: -1.25 }); }
   function start() {
     SND.init(); ensureMic();
-    S = fresh(); resetNaomi(); parts = []; pulses = []; $('cleared').hidden = true;
+    S = fresh(); resetNaomi(); parts = []; pulses = [];
     $('intro').classList.add('hidden'); S.started = true;
     const jump = QS.get('step');
     if (jump && STEPS.some((s) => s[0] === jump) && jump !== 'wake') jumpTo(jump);

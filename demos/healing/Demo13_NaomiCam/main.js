@@ -78,12 +78,14 @@
     $('pushTime').textContent = simTime().slice(0, 5); pushEl.classList.add('show'); clearTimeout(pushTimer); pushTimer = setTimeout(() => pushEl.classList.remove('show'), ms);
   }
   function setStep(id) { if (id !== 'cool') CA.fan(0); S.step = id; S.st = 0; renderGoal(); renderSteps(); dockUI(); }
+  const goalTag = () => { const P = window.MoHeatSub?.pick; const t = S.done ? { ja: 'おかえり', en: 'Welcome home', zh: '欢迎回家' } : { ja: 'ナオミカメラ', en: 'Naomi Cam', zh: '直美摄像头' }; return P ? P(t) : t.en; };
+  addEventListener('moheat:sublang', () => { if (S?.started) renderGoal(); });
   function renderGoal() {
     const s = STEPS.find((x) => x[0] === S.step) || ['connect', '接続中…', 'Connecting…'];
     let sub = s[2];
     if (S.step === 'laser') sub += ` · 🐾 ${S.catches} / 3`;
     if (S.step === 'cool') sub += ` · 🌡 ${naomiTemp().toFixed(1)}℃`;
-    goalEl.innerHTML = `<small>${S.done ? 'Welcome home' : 'Naomi Cam'}</small><b>${s[1]}</b><span>${sub}</span>`;
+    goalEl.innerHTML = `<small>${goalTag()}</small><b>${s[1]}</b><span>${sub}</span>`;
   }
   function renderSteps() { const i = STEPS.findIndex((x) => x[0] === S.step); $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i || S.done ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
   function renderHearts() { invEl.innerHTML = `<div class="hearts" title="なかよし度 · Bond">${HEART_STEPS.map((_, i) => `<i class="${i < S.hearts ? 'on' : ''}">♥</i>`).join('')}<em>なかよし · bond</em></div>`; }
@@ -535,8 +537,9 @@
       const E = ear[e], hh = Math.min(1, sum[e].h), cc = Math.min(1, sum[e].c);
       let mode = E.mode;
       if (!mode) mode = hh > cc ? 'h' : 'c';
+      else if (!MoHeatDwell.may(E, dt)) { /* keep the current direction */ }
       else if (mode === 'h' && cc > hh + .06) mode = 'c'; else if (mode === 'c' && hh > cc + .06) mode = 'h';
-      if (mode !== E.mode) { E.v = 0; E.mode = mode; }
+      if (mode !== E.mode) { E.v = 0; E.mode = mode; E.held = 0; }
       const target = mode === 'h' ? Math.min(.9, hh) : cc;
       const tau = target > E.v ? (mode === 'h' ? .35 : .18) : .3;
       E.v += (target - E.v) * (1 - Math.exp(-dt / tau));
@@ -875,7 +878,6 @@
     S.done = true; renderGoal(); renderSteps(); dockUI();
     setTimeout(() => {
       S.started = false; stopOutput(); for (const l of Object.values(L)) l.stop(); L = {}; CA.motorLevel(0);
-      const c = $('cleared'); c.hidden = false; c.textContent = `🏠 ただいま、ナオミ · Home with Naomi (${fmt(S.clock)})`;
       $('startBtn').textContent = '↺ もう一度 · Watch again';
       $('intro').classList.remove('hidden'); dockUI();
     }, 1500);
@@ -891,7 +893,7 @@
   }
   function start() {
     SND.init(); CA.init();
-    S = fresh(); resetAll(); parts = []; pulses = []; $('cleared').hidden = true;
+    S = fresh(); resetAll(); parts = []; pulses = [];
     $('intro').classList.add('hidden'); S.started = true;
     const jump = QS.get('step');
     if (jump && STEPS.some((s) => s[0] === jump)) jumpTo(jump);

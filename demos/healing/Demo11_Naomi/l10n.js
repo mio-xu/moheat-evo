@@ -81,8 +81,7 @@ window.MOHEAT_L10N = {
    "🌬 息 · breath": "🌬 气息",
    "📣 ナオミ〜 · Call": "📣 直美〜",
    "ナオミ〜": "直美〜",
-   "ふーふー · Blow": "呼呼",
-   "💤 ナオミと、ふわふわの一日 · A fluffy day together (": "💤 和直美一起的软绵绵一天（"
+   "ふーふー · Blow": "呼呼"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -108,8 +107,7 @@ window.MOHEAT_L10N = {
    "📣 ナオミ〜 · Call": "📣 ナオミ〜",
    "ナオミ〜": "ナオミ〜",
    "ふーふー · Blow": "ふーふー",
-   "ふーふー": "ふーふー",
-   "💤 ナオミと、ふわふわの一日 · A fluffy day together (": "💤 ナオミと、ふわふわの一日（"
+   "ふーふー": "ふーふー"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -135,8 +133,7 @@ window.MOHEAT_L10N = {
    "📣 ナオミ〜 · Call": "📣 Call",
    "ナオミ〜": "Call",
    "ふーふー · Blow": "Blow",
-   "ふーふー": "Blow",
-   "💤 ナオミと、ふわふわの一日 · A fluffy day together (": "💤 A fluffy day together ("
+   "ふーふー": "Blow"
   }
  },
  "names": {

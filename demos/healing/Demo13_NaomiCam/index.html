@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../shared/game.css?v=cf4af921" />
   <link rel="stylesheet" href="style.css?v=2bbc50a0" />
-  <link rel="stylesheet" href="../../shared/series.css?v=766bb94f" />
+  <link rel="stylesheet" href="../../shared/series.css?v=c53f93eb" />
   <script>if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add('embed');</script>
   <style>/* ?embed=1 — used by the site's demo menu: stage only */
     html.embed .bar, html.embed .side { display: none !important; }
@@ -48,7 +48,7 @@
         <div class="dock" id="dock">
           <button class="dk pan" id="panL" type="button" data-voice="ひだり|左|左へ|left|pan left|左边" data-voice-strict data-voice-hold="1.2" title="Pan left (←)">◀</button>
           <button class="dk" id="thermBtn" type="button" data-voice="サーモ|さーも|thermal|温度|热成像" data-voice-strict title="Thermal view"><span class="ic">🌡</span><span class="tx">サーモ · Thermal</span></button>
-          <button class="dk talk" id="talkBtn" type="button" data-voice="はなす|話す|呼ぶ|よぶ|ナオミ|naomi|talk|call|说话|叫" data-voice-strict data-voice-hold="2" title="Hold to talk (Space)"><span class="ic">🎤</span><span class="tx">話す · Talk</span><span class="mic" id="micBars"></span></button>
+          <button class="dk talk" id="talkBtn" type="button" data-voice="はなす|話す|呼ぶ|よぶ|ナオミ|naomi|talk|call|说话|叫|直美|おやすみ|good night|goodnight|晚安" data-voice-strict data-voice-hold="2" title="Hold to talk (Space)"><span class="ic">🎤</span><span class="tx">話す · Talk</span><span class="mic" id="micBars"></span></button>
           <button class="dk" id="laserBtn" type="button" data-voice="レーザー|れーざー|laser|激光" data-voice-strict title="Laser pointer"><span class="ic">🔴</span><span class="tx">レーザー · Laser</span></button>
           <button class="dk" id="fanBtn" type="button" data-voice="扇風機|せんぷうき|fan|风扇" data-voice-strict title="Electric fan"><span class="ic">🌀</span><span class="tx">扇風機 · Fan</span></button>
           <button class="dk" id="feedBtn" type="button" data-voice="ごはん|ご飯|えさ|feed|food|喂食|吃饭" data-voice-strict title="Food dispenser"><span class="ic">🍚</span><span class="tx">ごはん · Feed</span></button>
@@ -62,7 +62,6 @@
 
         <div class="intro" id="intro">
           <div class="cover-copy">
-            <p class="cleared" id="cleared" hidden></p>
             <div class="intro-actions">
               <button class="btn primary big" id="startBtn" type="button">▶ カメラをひらく · Open camera</button>
               <button class="btn" id="lrBtn" type="button">🎧 Left / Right check</button>
@@ -104,8 +103,9 @@
   <script src="../../shared/shell.js?v=7c9f249f"></script>
   <script src="../_kit/naomi/audio.js?v=6404a7c1"></script>
   <script src="audio.js?v=bffe51a2"></script>
-  <script src="main.js?v=b1a0e38a"></script>
-  <script src="../../shared/voice.js?v=f22be3de"></script>
+  <script src="../_kit/naomi/dwell.js?v=691a00f2"></script>
+  <script src="main.js?v=aba40027"></script>
+  <script src="../../shared/voice.js?v=1ad3f455"></script>
   <script src="../../shared/nav.js?v=d96ea34d"></script>
 </body>
 </html>
