@@ -199,6 +199,8 @@
 
     // ------------------------------------------------ paint: everything from the adapter's state
     let sig = '';
+    // paint runs every tick: rewriting a button's content between press and release loses the click (a press on the old <span>, the release on a new one), so only real changes are written
+    const H = (el) => ({ set innerHTML(v) { if (el.__h !== v) { el.__h = v; el.innerHTML = v; } } });
     const paint = () => {
       const st = A.state?.() || 'cover', L = lang(); root.dataset.state = st; root.lang = L;
       root.classList.toggle('u2-autohide', !!A.autohide?.()); under.classList.toggle('u2-autohide', !!A.autohide?.()); under.dataset.state = st;
@@ -206,27 +208,27 @@
       // cover controls
       const ld = A.loaded?.() ?? 1, ready = A.ready?.() ?? ld >= 1, s = $('.u2-start');
       s.disabled = !ready;
-      s.innerHTML = st === 'ended' ? `${I.again}<span>${t('again')}</span>` : ready ? `${I.play}<span>${t('start')}</span>` : `${I.play}<span>${t('start')}</span><span class="u2-ld">${Math.round(ld * 100)}%</span>`;
+      H(s).innerHTML = st === 'ended' ? `${I.again}<span>${t('again')}</span>` : ready ? `${I.play}<span>${t('start')}</span>` : `${I.play}<span>${t('start')}</span><span class="u2-ld">${Math.round(ld * 100)}%</span>`;
       $('.u2-load').style.setProperty('--p', `${Math.round(ld * 100)}%`);
       const m = A.mode?.() || 'interactive';
       const modeHtml = `<button type="button" data-mode="interactive" aria-pressed="${m === 'interactive'}" title="${esc(t('interHint'))}">${I.hand}<span>${t('inter')}</span></button>`
         + `<button type="button" data-mode="pure" aria-pressed="${m === 'pure'}" title="${esc(t('pureHint'))}">${I.ear}<span>${t('pure')}</span></button>`;
-      $('.u2-mode-c').innerHTML = modeHtml; $('.u2-mode-b').innerHTML = modeHtml;
-      const mt = $('.u2-mode-t'); mt.innerHTML = m === 'interactive' ? I.hand : I.ear; mt.title = mt.ariaLabel = `${t(m === 'interactive' ? 'inter' : 'pure')} — ${t(m === 'interactive' ? 'interHint' : 'pureHint')}`;
+      H($('.u2-mode-c')).innerHTML = modeHtml; H($('.u2-mode-b')).innerHTML = modeHtml;
+      const mt = $('.u2-mode-t'); H(mt).innerHTML = m === 'interactive' ? I.hand : I.ear; mt.title = mt.ariaLabel = `${t(m === 'interactive' ? 'inter' : 'pure')} — ${t(m === 'interactive' ? 'interHint' : 'pureHint')}`;
       // option groups (cover.json "options"): one picker chip each — "label  current ▾" — that opens the list above it
       const opts = A.options?.() || [];
       const picks = opts.map((o) => { const cur = o.items.find((it) => it.on) || o.items[0];
         return `<button type="button" class="u2-chipb u2-pick" data-pick="${esc(o.key)}" aria-haspopup="true"><small>${esc(pickL(o.label))}</small><span>${esc(pickL(cur.label))}</span>${I.chev}</button>`; }).join('');
-      $('.u2-row-opt').innerHTML = picks; $('.u2-picks-c').innerHTML = picks;
-      $('.u2-lang-l').innerHTML = I.globe;
-      $('.u2-langs').innerHTML = langs.map((l) => `<button type="button" class="u2-chipb" data-lang="${l}" aria-pressed="${l === L}" lang="${l}">${NAMES[l] || l}</button>`).join('');
+      H($('.u2-row-opt')).innerHTML = picks; H($('.u2-picks-c')).innerHTML = picks;
+      H($('.u2-lang-l')).innerHTML = I.globe;
+      H($('.u2-langs')).innerHTML = langs.map((l) => `<button type="button" class="u2-chipb" data-lang="${l}" aria-pressed="${l === L}" lang="${l}">${NAMES[l] || l}</button>`).join('');
       const clr = $('.u2-clear'), ct = st === 'ended' ? A.cleared?.() : ''; clr.hidden = !ct; if (ct) clr.textContent = ct;   // e.g. "🎉 Cleared in 1:40" (the demo's own #cleared)
       const en = A.endings?.();
       root.querySelectorAll('.u2-gal').forEach((gal) => { gal.hidden = !(en && en.total > 1 && st === 'ended');
-        if (!gal.hidden) { gal.innerHTML = `${I.star}<span>${t('endings')}</span> ${en.got} / ${en.total}`; gal.title = t('endings'); } });
+        if (!gal.hidden) { H(gal).innerHTML = `${I.star}<span>${t('endings')}</span> ${en.got} / ${en.total}`; gal.title = t('endings'); } });
       // bar
       const playing = st === 'playing';
-      const pp = $('.u2-pp'); pp.innerHTML = playing ? I.pause : st === 'ended' ? I.again : I.play; pp.title = pp.ariaLabel = t(playing ? 'pause' : 'play');
+      const pp = $('.u2-pp'); H(pp).innerHTML = playing ? I.pause : st === 'ended' ? I.again : I.play; pp.title = pp.ariaLabel = t(playing ? 'pause' : 'play');
       $('.u2-paused').title = t('resume');
       const cs = A.chapters?.() || [], c = A.chapter?.() ?? -1, reached = A.reached?.() ?? c, inter = m === 'interactive', live = st === 'playing' || st === 'paused';
       const key = `${cs.length}|${L}`;
@@ -238,11 +240,11 @@
         b.querySelector('i').style.setProperty('--p', live && i === c ? `${Math.round((A.progress?.() ?? 0) * 100)}%` : '0%');
         const lab = `${NUM[i] || i + 1} ${pickL(cs[i].label)}`; b.querySelector('.u2-tip').textContent = lock && live ? `${lab} · ${t('locked')}` : lab; b.ariaLabel = lab;
       });
-      $('.u2-now').innerHTML = live && c >= 0 && cs[c] ? `<b>${NUM[c] || c + 1}</b>${esc(pickL(cs[c].label))}` : '';
-      const vol = A.volume?.() ?? 1, vb = $('.u2-opt-vol'); vb.innerHTML = vol > 0 ? I.vol : I.mute; vb.title = vb.ariaLabel = t('volume');
+      H($('.u2-now')).innerHTML = live && c >= 0 && cs[c] ? `<b>${NUM[c] || c + 1}</b>${esc(pickL(cs[c].label))}` : '';
+      const vol = A.volume?.() ?? 1, vb = $('.u2-opt-vol'); H(vb).innerHTML = vol > 0 ? I.vol : I.mute; vb.title = vb.ariaLabel = t('volume');
       const hb = $('.u2-heat'); hb.classList.toggle('off', !(A.heat?.() ?? true)); hb.title = hb.ariaLabel = t('thermal');
       $('.u2-gear').title = $('.u2-gear').ariaLabel = t('settings');
-      const fs = A.fullscreen?.(), fb = $('.u2-fs'); fb.innerHTML = fs ? I.exitFull : I.full; fb.title = fb.ariaLabel = t(fs ? 'exitFull' : 'full');
+      const fs = A.fullscreen?.(), fb = $('.u2-fs'); H(fb).innerHTML = fs ? I.exitFull : I.full; fb.title = fb.ariaLabel = t(fs ? 'exitFull' : 'full');
     };
     addEventListener('resize', () => { showPic(); });
     paint();
