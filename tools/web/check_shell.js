@@ -79,7 +79,7 @@ const out = { demo: REL, shell: false, pureEnded: false, secs: 0, mic: [], navDu
   const c = await ev(`[performance.now(), MoHeatShell.paused]`);
   const film = await ev('!!document.getElementById("timelineWrap")');   // films: Space is their own play / pause (the media element is the clock)
   out.pause = film ? { frozen: !!(await ev('(() => { const m = ["mix", "film"].map((k) => document.getElementById(k)).find((e) => e instanceof HTMLMediaElement); return m && !m.paused; })()')), resumed: true, film: true }
-    : !a || !b || !c ? { frozen: false, resumed: false } : { frozen: b[2] === true && b[0] - a[0] < 400, resumed: c[1] === false && c[0] > b[0] };
+    : !a || !b || !c ? { frozen: false, resumed: false } : { frozen: b[2] === true && b[0] - a[0] < 1000,   /* 2 s of real time passed: frozen = well under that (400 ms was too tight under machine load — Demo21 2026-11-09) */ resumed: c[1] === false && c[0] > b[0] };
   await shot('playing');
   const t0 = Date.now();
   const nch = await ev('document.querySelectorAll(".sh-bar button").length');
