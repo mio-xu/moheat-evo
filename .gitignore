@@ -131,3 +131,11 @@ demos/**/analysis/
 *.ics
 generation-prompts.json
 web_prompts.json
+
+# Source art, analysis charts and storyboards that no page loads (kept on disk, not published)
+/demos/all-ages/Demo0[12]_*/art/
+/demos/all-ages/Demo0[34]_*/assets/**/*.png
+/demos/nobunaga-suntory/Demo0[5-9]_*/assets/**/*.png
+/demos/all-ages/Demo0[34]_*/thermal/
+/demos/nobunaga-suntory/Demo0[5-9]_*/thermal/
+/demos/all-ages/Demo04_*/storyboard/
