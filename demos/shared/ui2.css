@@ -234,3 +234,10 @@ html.embed .u2 .u2-row-start, html.embed .u2 .u2-row-start:has(.u2-picks:not(:em
 html.embed .u2 .u2-start { width: clamp(58px, 12cqw, 108px); height: clamp(58px, 12cqw, 108px); padding: 0; border-radius: 50%; font-size: 0; justify-content: center; box-shadow: 0 10px 34px rgba(0, 0, 0, .45); }
 html.embed .u2 .u2-start svg { width: 42%; height: 42%; margin: 0; }
 html.embed .u2 .u2-start span { display: none; }
+
+/* the phone settings sheet: every control at least 44 px high (the track of a switch stays 28: its transparent border is the hit area) */
+.u2.u2-sheet .u2-seg { height: 50px; }
+.u2.u2-sheet .u2-seg button { min-height: 44px; }
+.u2.u2-sheet .u2-sw { width: 62px; height: 44px; border: 8px solid transparent; background-clip: padding-box; box-sizing: border-box; }
+.u2.u2-sheet .u2-btn2 { height: 44px; }
+.u2 .u2-row-start .u2-seg { padding: 2px; }   /* cover mode buttons: 44 × 44 inside the 50 px row */

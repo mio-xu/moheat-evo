@@ -461,7 +461,7 @@ function thermalEdges(ctx, th) {
 }
 
 function offscreenHint(ctx, st) {
-  if (st.t > A.present[st.who][1] + .3) return;   // gone: no edge arrow
+  if (st.t > A.present[st.who][1] + .3 || document.documentElement.classList.contains('ix-quiz')) return;   // gone, or the "which side?" quiz is on: no edge arrow
   const absAz = Math.abs(st.az); if (absAz < 105) return;
   const a = clamp((absAz - 105) / 15, 0, 1) * clamp((5 - st.d) / 1.5, 0, 1);
   const sd = Math.sign(st.az) || 1, x = sd < 0 ? 60 : W - 60, p = PAL[st.who];

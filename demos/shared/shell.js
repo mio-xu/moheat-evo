@@ -263,12 +263,14 @@
   // ---------------------------------------------------------------- pause
   // a film the page itself stopped (■ STOP) and nothing will restart: ▶ and a seek must play it. An interactive gate's wait is not that.
   const filmEl = () => (FILM() ? ['mix', 'film'].map((k) => document.getElementById(k)).find((e) => e instanceof HTMLMediaElement) : null);
+  // paused = the device got 'stop', so the panel shows it (the frozen engine would leave the last values up); its next frame after resume writes them again
+  const zeroMeters = () => { const c = document.getElementById('cmd'); if (c) c.textContent = 'stop'; for (const k of ['Lc', 'Lh', 'Rc', 'Rh']) { const v = document.getElementById(`v${k}`), m = document.getElementById(`m${k}`); if (v) v.textContent = '0'; if (m) m.style.width = '0%'; } };
   const filmHeld = () => { const f = filmEl(); return !!f && f.paused && !f.ended && playing() && !document.querySelector('.stage.ix-wait'); };
   const pause = (on) => {
     if (on === paused || EXPORT) return;
     if (!on) autoPaused = false;
     rebase(() => { paused = on; });
-    if (on) { stopDevice(); ctxs.forEach((c) => c.state === 'running' && c.suspend().catch(() => {}));
+    if (on) { stopDevice(); zeroMeters(); ctxs.forEach((c) => c.state === 'running' && c.suspend().catch(() => {}));
       document.querySelectorAll('audio, video').forEach((m) => { if (!m.paused) { media.add(m); m.pause(); } }); }
     else { const lost = [...ctxs].filter((c) => c.state !== 'running' && c.state !== 'closed');   // in the tap's own call: iOS allows resume() only in a user gesture, also from 'interrupted'
       lost.forEach((c) => c.resume().catch(() => {}));
@@ -511,7 +513,7 @@
   // ---------------------------------------------------------------- UI v2: the live adapter for demos/shared/ui2.js
   if (V2) {
     // UI2_V = content hash of ui2.js + ui2.css (python3 tools/web/bump.py --auto keeps it current: cat ui2.js ui2.css | shasum, 8 hex)
-    const UI2_V = 'e2062c53';
+    const UI2_V = '1d39626b';
     const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = new URL(`ui2.css?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(css);
     let cssReady = false; const cssOk = () => { if (!cssReady) { cssReady = true; mount(); } };   // mount only once ui2.css applies: an unstyled first frame left the player column off-centre (Demo21 check_ui band 16 / 58 px under load)
     css.addEventListener('load', cssOk); css.addEventListener('error', cssOk); real.st(cssOk, 3000);

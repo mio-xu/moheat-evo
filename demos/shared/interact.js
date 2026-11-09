@@ -133,6 +133,7 @@
   .ix-done small{display:block;font:600 clamp(10px,1.4cqw,20px)/1.3 Inter,sans-serif;color:#efe3c8}
   @keyframes ixPop{0%{opacity:0;transform:translate(-50%,10px) scale(.9)}20%{opacity:1;transform:translate(-50%,0) scale(1.05)}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-14px)}}
   .stage.ix-wait .subs{visibility:hidden}
+  html.ix-quiz #radar{visibility:hidden}
   .ix-chip{position:absolute;top:1.2cqw;right:1.2cqw;z-index:5;cursor:pointer;border-radius:999px;padding:.45cqw 1cqw;border:1px solid rgba(246,210,122,.45);
     background:rgba(18,10,4,.6);color:#f9ecd0;font:700 clamp(9px,1cqw,14px)/1.2 "Noto Sans JP",Inter,sans-serif}
   .ix-chip.off{opacity:.55;border-color:rgba(255,255,255,.2)}
@@ -230,7 +231,7 @@
   const say = (g) => (g.kind === 'choice' && g.what ? g.what : g.sub ? [g.sub.ja, g.sub.en] : g.what || ['', '']);   // a choice shows its question
   function start(g) {
     cur = { g, t0: performance.now(), speech: 0, silence: 0, heard: false, blow: 0, b: 0, holding: false, done: false };
-    fired.add(g); media.pause(); stage.classList.add('ix-wait'); render(); listen(g);
+    fired.add(g); media.pause(); stage.classList.add('ix-wait'); document.documentElement.classList.toggle('ix-quiz', g.answer != null); render(); listen(g);   // ix-quiz: a question with a right answer, the radar / side labels must not give it away
   }
   // voice input (shared/voice.js): your line / your answer is recognised and judged
   const V = window.MoHeatVoice;
@@ -289,7 +290,7 @@
   function finish(ok, pick) {
     if (!cur) return;
     unlisten();
-    const { g } = cur; cur = null; card?.remove(); card = null; stage.classList.remove('ix-wait');
+    const { g } = cur; cur = null; card?.remove(); card = null; stage.classList.remove('ix-wait'); document.documentElement.classList.remove('ix-quiz');
     let wait = 0;
     if (ok) {
       wait = 450;
@@ -329,7 +330,7 @@
       lastT = t;
       if (!cur) return null;
     }
-    if (!media.paused) { unlisten(); cur = null; card?.remove(); card = null; stage.classList.remove('ix-wait'); return null; }   // ▶ pressed: skip
+    if (!media.paused) { unlisten(); cur = null; card?.remove(); card = null; stage.classList.remove('ix-wait'); document.documentElement.classList.remove('ix-quiz'); return null; }   // ▶ pressed: skip
     const c = cur, g = c.g, waited = (n - c.t0) / 1000;
     const lv = g.kind === 'choice' ? 0 : level(), loud = lv > Math.max(.018, floor * 3.2);
     if (!loud) floor = floor * .97 + lv * .03;
