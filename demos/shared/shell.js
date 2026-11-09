@@ -92,7 +92,6 @@
     loading: ['Loading…', '読み込み中…', '加载中…'], heatOn: ['Thermal on', '温冷 ON', '温冷 开'], heatOff: ['Thermal off', '温冷 OFF', '温冷 关'],
     subs: ['Subtitles', '字幕', '字幕'], off: ['off', 'オフ', '关'], motion: ['Reduce motion', '動きを減らす', '减少动态'],
     devLost: ['Device disconnected — plug it back in and press Connect.', 'デバイスが切断されました — つなぎ直して Connect を押してください。', '设备已断开 — 请重新连接后点 Connect。'],
-    micDenied: ['Microphone blocked — answers work by tapping; allow the mic in the address bar to speak.', 'マイクが使えません — タップで答えられます。話すにはアドレスバーで許可してください。', '麦克风被拒绝 — 可以点按回答；要用声音请在地址栏允许麦克风。'],
     micOff: ['Microphone is off. You can tap to answer.', 'マイクがオフです。タップで答えられます。', '麦克风未开启，可以点按回答。'],
     devErr: ['Could not open MoHeat Evo — unplug it, plug it back in and press Connect.', 'MoHeat Evo を開けませんでした — 抜き差ししてから Connect を押してください。', '无法打开 MoHeat Evo — 请重新插拔后点 Connect。'],
     loadFail: ['Some files did not load — check the connection and reload the page.', '一部のファイルを読み込めませんでした — 接続を確かめて再読み込みしてください。', '部分文件加载失败 — 请检查网络后刷新页面。'],
@@ -515,8 +514,6 @@
   addEventListener('error', (e) => { const el = e.target; if (el && el !== window && /^(IMG|AUDIO|VIDEO|SCRIPT|SOURCE)$/.test(el.tagName)) toast('loadFail'); }, true);
   addEventListener('moheat:device', (e) => { const st = e.detail?.state; if (st === 'lost') toast('devLost'); if (st === 'error') toast('devErr');
     if (st === 'connected') { const el = document.querySelector('.sh-toast'); if (el) el.hidden = true; } });   // device.js = the one source
-  navigator.permissions?.query({ name: 'microphone' }).then((p) => { p.onchange = () => { if (p.state === 'denied' && !Play.pure) toast('micDenied'); }; }).catch(() => {});
-  addEventListener('moheat:micdenied', () => toast('micDenied'));
 
   // ---------------------------------------------------------------- volume (one master for Web Audio + <audio>/<video>; ⚙ / bar slider, kiosk)
   // the demo's own levels stay as they are: a media element's volume becomes (what the demo set) × master; Web Audio gets one master gain

@@ -65,11 +65,16 @@
   const STOP = new Set('i a an the to of is am are was were be it its that this so and or just do did really very me my'.split(' '));
   const WSYN = { look: 'see', watch: 'see', stare: 'see', saw: 'see', seen: 'see', closer: 'near', close: 'near', come: 'near', hot: 'warm', cozy: 'warm', cool: 'cold', chilly: 'cold', freezing: 'cold',
     thanks: 'thank', yeah: 'yes', yep: 'yes', okay: 'yes', ok: 'yes', sure: 'yes', hi: 'hello', hey: 'hello', bye: 'goodbye', night: 'goodnight', love: 'like', adore: 'like', beautiful: 'pretty', lovely: 'pretty', cute: 'pretty', stay: 'remain', more: 'longer' };
+  // words that say nothing about WHICH answer: they alone can never pick one ("hello what is this" must not choose "What contract?"). An answer made only of them still matches itself.
+  const GEN_EN = new Set("what who where when why how which whats hello hi hey um uh hmm oh ah well you your we our they them there here this that these those it its is are was were be do does did not no don't i'm im it's that's can could would will please a an the to of and or so just i me my".split(' '));
+  const GEN_CJK = ['什么', '这个', '那个', '这是', '那是', '怎么', '为什么', '哪里', '哪个', '吗', '呢', '啊', '嗯', 'これ', 'それ', 'あれ', 'なに', 'なん', '何', 'どれ', 'どこ', 'だれ', '誰', 'いつ', 'どう', 'ねえ', 'あの', 'えっと'];
+  const strip = (t) => { let s = String(t || '').toLowerCase().replace(/[a-z']+/g, (w) => (GEN_EN.has(w) ? ' ' : w)); for (const g of GEN_CJK) s = s.split(g).join(' '); return s; };
   const stem = (w) => { w = w.replace(/'s$/, ''); w = WSYN[w] || w; if (w.length > 4) w = w.replace(/(ing|ed|es|s)$/, ''); return WSYN[w] || w; };
   const words = (t) => (String(t || '').toLowerCase().match(/[a-z']+/g) || []).filter((w) => !STOP.has(w)).map(stem);
-  const wsim = (heard, W) => { const H = new Set(words(heard)); if (!H.size || !W.length) return 0; const n = W.filter((w) => H.has(w)).length; return Math.min(1, n / W.length) * (W.length === 1 ? .8 : 1); };
-  const prep = (phrase) => { const out = variants(norm(phrase)).filter(Boolean); const W = /[a-z]{2}/i.test(phrase) ? words(phrase) : []; if (W.length) out.push({ W }); return out; };
-  const score = (heard, preps) => { const h = norm(heard); let s = 0; for (const p of preps) s = Math.max(s, typeof p === 'string' ? sim1(h, p) : wsim(heard, p.W)); return s; };
+  const GEN_W = new Set([...GEN_EN].map(stem));   // the same words after stem()
+  const wsim = (heard, W) => { const H = new Set(words(heard)); if (!H.size || !W.length) return 0; const C = W.filter((w) => !GEN_W.has(w)), T = C.length ? C : W; const n = T.filter((w) => H.has(w)).length; return Math.min(1, n / T.length) * (T.length === 1 ? .8 : 1); };
+  const prep = (phrase) => { const core = norm(strip(phrase)); if (!core) return Object.assign([{ g: norm(phrase) }], { gen: true }); const out = variants(core).filter(Boolean), W = /[a-z]{2}/i.test(phrase) ? words(phrase) : []; if (W.length) out.push({ W }); return out; };
+  const score = (heard, preps) => { const h = norm(strip(heard)), raw = norm(heard); let s = 0; for (const p of preps) s = Math.max(s, typeof p === 'string' ? sim1(h, p) : p.g ? (raw === p.g ? 1 : 0) : wsim(heard, p.W)); return s; };
   const ORD = [/(^|[^0-9])1(番|ばん|つめ|つ目|個目|st)|一番目|一つ目|ひとつめ|いちばんめ|最初|さいしょ|first|ファースト|^いち$|^one$/,
     /(^|[^0-9])2(番|ばん|つめ|つ目|個目|nd)|二番|二つ目|ふたつめ|にばんめ|second|^に$|^two$/,
     /(^|[^0-9])3(番|ばん|つめ|つ目|個目|rd)|三番|三つ目|みっつめ|third/, /(^|[^0-9])4(番|ばん|つめ|つ目|個目|th)|四番|四つ目|よっつめ|fourth/];
@@ -160,7 +165,7 @@
   function idle() { if (sess) showPill(active() ? '' : 'off', active() ? hint(sess) : T('🎙 OFF · タップで声入力', '🎙 OFF · Tap for voice', '🎙 OFF · 点击开启语音'), sess.anchor()); }
   function begin(o) {
     end();
-    sess = { ...o, preps: o.phrases.map((ph) => expand(ph).flatMap(prep)), fails: 0, done: false, anchor: o.anchor || (() => []) };
+    sess = { ...o, preps: o.phrases.map((ph) => { const l = expand(ph).map(prep), real = l.filter((x) => !x.gen); return (real.length ? real : l).flat(); }), /* an answer's generic-only spellings (data-voice "what") count only when the whole answer is generic, and then only said exactly */ fails: 0, done: false, anchor: o.anchor || (() => []) };
     if (OFF || pure()) { sess = null; return null; }
     if (denied) { micOff(); return sess; }   // no speech recognition, or the microphone refused: everything stays a tap
     idle(); startRec();
