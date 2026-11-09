@@ -1,5 +1,26 @@
 {
  "mouth_exceptions": {
-  "cocoa_blow": "silent pose (she blows on your cheek between c08 and c09; no line plays on it) \u2014 a pursed-lips still, so no mouth set"
- }
+  "cocoa_blow": "silent pose (she blows on your cheek between c08 and c09; no line plays on it) — a pursed-lips still, so no mouth set"
+ },
+ "l10n_ignore": [
+  "召唤大厅",
+  "我不是龙",
+  "这是哪里？",
+  "坐上扫帚",
+  "学院上空",
+  "再快一点！",
+  "慢一点…",
+  "抓紧（长按）",
+  "炼金工房",
+  "「我开动了」",
+  "塔顶的夜间茶会",
+  "别动（长按）",
+  "好美",
+  "好冰！",
+  "黎明的塔顶",
+  "椿的山茶花发饰",
+  "可可的缎带",
+  "露娜的月亮耳坠"
+ ],
+ "_l10n_ignore_why": "中文 labels stored in lines.js for the engine (shared/story.js registers them); not Japanese text on the page"
 }
