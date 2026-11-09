@@ -166,9 +166,9 @@
         if (!gate() && !/^stop$/i.test(line)) return undefined;
         real.ct(retry);
         if (/^(stop|DUAL)/i.test(line)) { ears.L.p = ears.R.p = ''; return send(line); }
-        const now = real.now(); let held = false;
-        const out = line.replace(/\b([LR])([CH])(\d+)\b/g, (m, e, p, v) => { if (+v === 0) return m; const st = ears[e]; if (st.p && st.p !== p && now - st.t < 150) { held = true; return `${e}${p}0`; } st.p = p; st.t = now; return m; });
-        if (held) retry = real.st(() => inst.send(line), 160);
+        const now = real.now(); let wait = 0;
+        const out = line.replace(/\b([LR])([CH])(\d+)\b/g, (m, e, p, v) => { if (+v === 0) return m; const st = ears[e]; if (st.p && st.p !== p && now - st.t < 150) { wait = Math.max(wait, 150 - (now - st.t)); return `${e}${p}0`; } st.p = p; st.t = now; return m; });
+        if (wait) retry = real.st(() => inst.send(line), wait + 2);   // the moment the 0.15 s are over, not later
         return send(out); };
       return inst; };
   }

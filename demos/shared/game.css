@@ -42,6 +42,9 @@ button, select, input { font: inherit; color: inherit; }
 /* thermal edge glow: what each ear feels, at the matching side of the picture */
 .glow { position: absolute; top: 0; bottom: 0; width: 16%; pointer-events: none; opacity: 0; transition: opacity .12s linear; z-index: 1; }
 .glow.l { left: 0; } .glow.r { right: 0; }
+/* the layer's inner edge drew a hairline on iPhone: fade to nothing before it (also in story.css) */
+.glow.l { -webkit-mask-image: linear-gradient(to right, #000 55%, transparent 92%); mask-image: linear-gradient(to right, #000 55%, transparent 92%); }
+.glow.r { -webkit-mask-image: linear-gradient(to left, #000 55%, transparent 92%); mask-image: linear-gradient(to left, #000 55%, transparent 92%); }
 
 /* ---------- game HUD (sizes follow the stage width) ---------- */
 .hud-goal { position: absolute; top: 1.4cqw; left: 1.4cqw; z-index: 3; max-width: 52cqw; padding: .6cqw 1.1cqw .6cqw 1cqw; border-radius: .8cqw;
