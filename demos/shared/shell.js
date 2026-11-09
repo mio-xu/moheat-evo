@@ -535,7 +535,7 @@
       get cover() { return { base: COVER_BASE, langs: window.MoHeatSub?.langs || ['en', 'ja', 'zh'] }; },
       state: () => (playing() ? (paused || filmHeld() ? 'paused' : 'playing') : !ready ? 'loading' : started ? 'ended' : 'cover'),
       lang: () => window.MoHeatSub?.lang || 'en', setLang: (l) => window.MoHeatSub?.set?.(l),
-      voice: () => VOICE.pref(), setVoice: (p) => VOICE.set(p), voiceLangs: VOICE.LANGS,
+      voice: () => VOICE.pref(), setVoice: (p) => VOICE.set(p), voiceLangs: VOICE.LANGS, voiceFixed: () => FILM(),   /* films have one mixed soundtrack (no per-language mix yet): the row stays, greyed */
       mode: () => mode, setMode: (m) => setMode(m),
       start: () => { if (!ready) return; document.getElementById('startBtn')?.click(); },
       togglePause: () => { if (!paused && filmHeld()) filmEl().play().catch(() => {}); else pause(!paused); },

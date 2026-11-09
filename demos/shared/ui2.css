@@ -115,6 +115,8 @@ html.ui2.mfs .u2-bar { border-radius: 0; height: calc(clamp(44px, 4.2vw, 64px) +
 .u2-sw[aria-checked="true"] { background: var(--u2-accent); }
 .u2-sw[aria-checked="true"]::after { transform: translateX(18px); }
 .u2-sw:disabled { opacity: .4; }
+.u2-seg button:disabled { opacity: .4; cursor: default; }
+.u2-note { font-size: var(--u2-fs-s); opacity: .7; }
 .u2-pop .u2-seg { height: 36px; }
 .u2-pop .u2-seg button { padding: 0 .75em; font-size: var(--u2-fs-s); }
 .u2-range { -webkit-appearance: none; appearance: none; width: 100%; height: 28px; background: transparent; margin: 0; }
