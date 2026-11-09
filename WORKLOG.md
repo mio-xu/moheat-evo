@@ -7,6 +7,15 @@
 
 ---
 
+## 2026-11-09 机器过载治理（agent fixes6）
+
+做了：`tools/qa/heavy_lock.py`（全机一个重活队列 + 负载门槛 + 低优先级，退出码 75 = 没跑）；check_demo --full、build_stage、lp_mouths、lp_pose、render_mp4、covers 批量已接入；`changed.py --run`（只测改动）；`patrol.py`（一行巡查）；`qa-full.yml` + `ci_full.py`（手动云端全量）；浏览器用 nice 10，时序检查帧率过低报 BUSY。
+状态：本地提交，未 push。云端工作流要等 push 到 main 才能触发，还没跑过。starved 下 check_shell 的 BUSY 分支没跑完，只有 motion 的 BUSY 分支实测过。
+下一步：小修 1–6，续接记录在统筹的 scratchpad `fixes/fixes_STATE.md`。Demo04 的 stage.json / layers.js / 两张 still 已改好但未提交（第 5 项）。第 1 项提交前要先告诉统筹（宣传片 --fix-stand 会重复缩小）。
+问题：`taskpolicy -b` 让无头 Chrome 从 60 fps 掉到 6–8 fps，见 §11.1。现有 19 个 ppid=1 的旧 http.server 不属于可识别的 QA 进程，巡查只计数不关闭。
+
+---
+
 ## 2026-11-09 去符号 + 配音语言设置（agent ui3）
 
 做了：菜单纯文字（★ 推荐例外）、封面 chips 和 kiosk 文案去 emoji（a384330f，33 张封面重渲染，`tools/web/check_symbols.py`、`check_menu_text.js`）；配音语言设置（c247aee5：⚙ Voice 行、`MoHeatVoice`、18 个 audio.js + talk kit + Demo04、G5 dub 行；Demo43 en / zh 转 64 kb/s 和 talk kit en / zh 进 git）；测试浏览器自动关闭（`tools/qa/chrome_guard.js`、`reap_chrome.py`）。kiosk/precache.json 已重生成，--check 通过。
