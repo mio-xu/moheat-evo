@@ -17,6 +17,8 @@ const said = (opt('--say', '') || '').split('|').filter(Boolean);
 const SAY = (opt('--say-delay', '') || '').split(',').filter(Boolean).map(Number);   // s from "your turn" to the typed line, per turn (default 1.5; = the length of your spoken line)
 const FPS = +opt('--fps', 30), MAX = +opt('--max', 150), SEED = +opt('--seed', 7);
 const RANGES = (opt('--ranges', '') || '').split(',').filter(Boolean).map((r) => r.split('-').map(Number));
+const DPR = +opt('--dpr', 2), KEEP_UI = argv.includes('--keep-ui');   // --keep-ui: the whole page as it runs (only the page's subtitles are off; ours are burned in)
+const SPEAK = opt('--speak', '') ? JSON.parse(fs.readFileSync(opt('--speak'), 'utf8')) : [];   // per turn: null | { text, dur, lv } — while you "speak", the page's own turn panel shows the words coming in and its mic bars move
 const inRange = (t) => RANGES.some(([a, b]) => t >= a - 1e-6 && t < b);
 fs.mkdirSync(path.join(out, 'frames'), { recursive: true }); fs.mkdirSync(path.join(out, 'voices'), { recursive: true });
 
@@ -26,14 +28,14 @@ const SEEDED = `(() => { let a = ${SEED} >>> 0 || 1; Math.random = function () {
 const CSS = `#subs{display:none!important} .vv{display:none!important} #stage .hud-top{display:none!important} #turn{visibility:hidden!important} #behind{visibility:hidden!important} html:not(.u2-on) .stage > #scene, html:not(.u2-on) .stage > .glow { visibility: visible !important; }`;
 
 (async () => {
-  const cfg = { mode: 'script', fixStand: argv.includes('--fix-stand'), ls: { 'moheat.talk.scene': JSON.stringify(opt('--scene', 'tea')), 'moheat.sublang': 'en' } };
+  const cfg = { mode: 'script', fixStand: argv.includes('--fix-stand'), ls: { 'moheat.talk.scene': JSON.stringify(opt('--scene', 'tea')), 'moheat.sublang': 'en', 'moheat.voicelang': 'ja' } };
   const url = `${BASE}${src}?nomic${said.length ? '' : '&pure'}`;
-  const B = await launch({ dpr: 2, onEvent: (m) => { if (m.method === 'Runtime.consoleAPICalled' && m.params.type === 'error') console.error('[console]', m.params.args.map((a) => a.description || a.value).join(' ').slice(0, 300)); } });
+  const B = await launch({ dpr: DPR, onEvent: (m) => { if (m.method === 'Runtime.consoleAPICalled' && m.params.type === 'error') console.error('[console]', m.params.args.map((a) => a.description || a.value).join(' ').slice(0, 300)); } });
   await B.cdp('Page.addScriptToEvaluateOnNewDocument', { source: `window.__PROMO=${JSON.stringify(cfg)};\n${SEEDED}\n` + fs.readFileSync(path.join(__dirname, 'hooks.js'), 'utf8') });
   await B.cdp('Page.navigate', { url });
   // load: step the virtual clock (no frames needed) until the page is ready
   for (let i = 0; i < 200; i++) { await B.ev(`window.__step && __step(50)`); await sleep(40); if (await B.ev(`document.readyState === 'complete' && !!document.getElementById('startBtn') && !document.getElementById('startBtn').disabled`)) break; }
-  await B.ev(`(() => { const s = document.createElement('style'); s.textContent = ${JSON.stringify(CSS)}; document.head.append(s); })()`);
+  await B.ev(`(() => { const s = document.createElement('style'); s.textContent = ${JSON.stringify(KEEP_UI ? '#subs{display:none!important}' : CSS)}; document.head.append(s); })()`);
   await document_fonts(B);
   for (let i = 0; i < 30; i++) await B.ev(`__step(${1000 / FPS})`);
   const stage = await B.ev(`(() => { const r = document.getElementById('stage').getBoundingClientRect(), s = document.querySelector('.side')?.getBoundingClientRect(); return { x: r.x, y: r.y, w: r.width, h: r.height, side: s ? { x: s.x, y: s.y, w: s.width, h: s.height } : null }; })()`);
@@ -52,7 +54,13 @@ const CSS = `#subs{display:none!important} .vv{display:none!important} #stage .h
     const vt = +(f / FPS).toFixed(4);
     await B.ev(`__step(${1000 / FPS})`);
     const s = await B.ev(STATE); s.f = f; s.t = vt; st.write(JSON.stringify(s) + '\n');
-    if (inRange(vt)) { await B.shot(path.join(out, 'frames', `${String(f).padStart(5, '0')}.jpg`), { quality: 93 }); shots++; }
+    const sp = SPEAK[k];
+    if (sp && s.phase === 'listen' && listenSince >= 0) {
+      const x = vt - listenSince - .35, pr = Math.max(0, Math.min(1, x / sp.dur)), lv = x >= 0 && x < sp.dur ? (sp.lv[Math.floor(x * 20)] || 0) : 0;
+      await B.ev(`(() => { const t = document.getElementById('turnText'); if (${pr} > 0) { t.textContent = ${JSON.stringify(sp.text)}.slice(0, Math.ceil(${pr} * ${sp.text.length})); t.className = ${pr} < 1 ? 'interim' : ''; }
+        document.querySelectorAll('#mic i').forEach((el, i) => { const v = Math.max(0, Math.min(1, ${lv} * 1.3 - i * .1)); el.style.height = (15 + 85 * v) + '%'; el.style.opacity = .4 + .6 * v; }); })()`);
+    }
+    if (inRange(vt)) { await B.shot(path.join(out, 'frames', `${String(f).padStart(5, '0')}.jpg`), { quality: +opt('--q', 93) }); shots++; }
     // your turn: the next --say line, typed --say-delay s after the turn opens; after the last one, End
     if (said.length) {
       if (s.done) { if (endT < 0) endT = vt; if (vt - endT > 3) break; continue; }

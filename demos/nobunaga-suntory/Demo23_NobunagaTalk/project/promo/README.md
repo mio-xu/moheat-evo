@@ -1,3 +1,5 @@
+> **Current cut = v4 "one take"**: `node render.js /demos/nobunaga-suntory/Demo42_SengokuRoundtable/ $W/v4 --scene kyoto --say "はい|焼き鳥のねぎまがおすすめです！|こたつでみかんです|えっ…いや、何も知らないです…" --say-delay 1,2.77,1.93,3.12 --ranges 32-106 --max 107 --fix-stand --keep-ui --dpr 1 --q 96 --speak $W/speak.json`, then `edit.py`, `mix.py`, `comp.js --out comp_v4`, ffmpeg. Whole page, dialogue subtitles only, then one closing line; music = the series' synthesised koto. The steps below describe the earlier layered cuts.
+
 # Promo video — 信長と、語らう × MoHeat Evo, 62.5 s (v3: plain text, the demo's own radar as the only output graphic, real shots)
 
 All footage comes from the PUBLIC scripted pages (Demo23 / 41 / 42): each page is replayed frame by frame in headless Chrome

@@ -8,7 +8,7 @@ import json, math, os, subprocess, sys
 import numpy as np
 
 W = sys.argv[1]; SR = 48000; FPS = 30
-plan = json.load(open(os.path.join(W, 'audio_plan.json'))); BEAT = plan['beats']; DUR = 62.5
+plan = json.load(open(os.path.join(W, 'audio_plan.json'))); DUR = plan['dur']
 N = int(DUR * SR); out = np.zeros((N, 2)); dry_voice = np.zeros(N); duck = np.zeros(N)   # duck: 1 where a voice plays
 rng = np.random.default_rng(3)
 
@@ -122,7 +122,7 @@ def fx(kind, t, az):
         place(x, t, az, .35)
 
 
-PLACE = {'n_tea': 'tea', 'k_rt': 'kyoto', 's_gifu': 'gifu', 's_yama': 'yamazaki', 's_tea': 'tea'}
+PLACE = {'v4': 'kyoto', 'n_tea': 'tea', 'k_rt': 'kyoto', 's_gifu': 'gifu', 's_yama': 'yamazaki', 's_tea': 'tea'}
 AUD = {}
 for s in plan['segs']:
     cap = s.get('cap')
@@ -159,30 +159,39 @@ for s in plan['segs']:
         ps = [p for p in pos.get(e['id'], []) if p[0] <= s0 + .02]; az, dist = (ps[-1][1], ps[-1][2]) if ps else (0, 1.3)
         place(x, t0 + s0 - a, az, dist, gain=1.0, vo=True)
         print(f"voice {cap} {key} {e['id']} src {s0:.2f} → video {t0 + s0 - a:.2f}  az {az:+.2f} d {dist}")
-    if s.get('you'):   # your spoken turn: from the front, close (the mic), 0.35 s after "your turn" opens
-        Y = s['you']; x = norm_rms(load(os.path.join(W, 'user', Y['u'] + '_t.wav')), .075); place(fade(x), t0 + (Y['a'] + .35 - a), 0, .55, gain=.9, rev=.05, vo=True)
+    for Y in s.get('you') or []:   # your spoken turns: from the front, close (the mic)
+        x = norm_rms(load(os.path.join(W, 'user', Y['u'] + '_t.wav')), .075); place(fade(x), t0 + (Y['s'] - a), 0, .55, gain=.9, rev=.05, vo=True)
 
-# ---------------------------------------------------------------- music: the film's soundtrack, under everything in the captured parts
-mus = subprocess.run(['ffmpeg', '-v', 'error', '-i', os.path.join(W, 'music', 'soundtrack.wav'), '-ac', '2', '-ar', str(SR), '-f', 'f32le', '-'], capture_output=True).stdout
-mus = np.frombuffer(mus, dtype=np.float32).reshape(-1, 2).astype(np.float64)[:N]
-mus = np.vstack([mus, np.zeros((N - len(mus), 2))])
-gdb = np.zeros(N)
-for s in plan['segs']:
-    i0, i1 = int(s['t0'] * SR), int(s['t1'] * SR)
-    gdb[i0:i1] = {'hook': -14, 'real': -3, 'title': 0, 'solo': -14, 'rt': -14, 'montage': -2, 'how': -3, 'end': 0}[s['part']]
-for a_, b_ in plan.get('breathe', []): gdb[int(a_ * SR):int(b_ * SR)] = -26   # one moment that breathes: the music almost gone
-gdb = np.minimum(gdb, np.where(duck > 0, -19, 0))                       # hard duck under the voices (−5 dB more)
-# smooth (attack 80 ms, release 350 ms) with a simple one-pole on the dB curve, both directions
-k_a, k_r = math.exp(-1 / (.08 * SR)), math.exp(-1 / (.35 * SR)); g = np.empty(N); v = gdb[0]
+# ---------------------------------------------------------------- music: the Nobunaga series' own synthesised koto (Karplus-Strong,
+# miyako-bushi; Demo09 build_audio.py, listed as synthesized in credits.html): up only at the very start and on the closing line, a
+# whisper under the scene, silent whenever anyone speaks.
+def koto_note(hz, dur=2.4):
+    n = int(dur * SR); p = int(SR / hz); buf = rng.uniform(-1, 1, p); o = np.zeros(n)
+    for i in range(n):
+        o[i] = buf[i % p]; buf[i % p] = .5 * (buf[i % p] + buf[(i + 1) % p]) * .996
+    return hp(o, 80)
+SCALE = [329.63, 349.23, 440.0, 493.88, 523.25, 659.26, 698.46]
+PHRASE = [(0, 4), (1.1, 2), (1.9, 1), (3.2, 0), (5.0, 3), (5.8, 4), (6.6, 6), (8.4, 5), (10.6, 2), (11.4, 1), (12.2, 0), (14.4, 4), (15.2, 3), (16.0, 2), (17.6, 0)]
+OUTRO = [(0, 4), (.8, 3), (1.6, 2), (2.4, 0)]
+music = np.zeros((N, 2))
+def pluck(t, k, g=1.):
+    x = koto_note(SCALE[k]) * .5 * g; i0 = int(t * SR); m_ = min(len(x), N - i0); pan = (k - 3) / 8
+    if m_ > 0: music[i0:i0 + m_, 0] += x[:m_] * (1 - pan); music[i0:i0 + m_, 1] += x[:m_] * (1 + pan)
+t_ = 0.
+while t_ < plan['take']:
+    for dt, k in PHRASE:
+        if t_ + dt < plan['take'] - .5: pluck(t_ + dt, k)
+    t_ += 19.5
+for dt, k in OUTRO: pluck(plan['take'] + .1 + dt, k, 1.1)
+first = np.argmax(duck > 0) / SR
+gdb = np.full(N, -26.)                                     # under the scene: very low
+gdb[:int(first * SR)] = -7                                 # the very start, before the first word
+gdb[int(plan['take'] * SR):] = -7                          # the closing line
+gdb = np.where(duck > 0, -70., gdb)                        # silent while anyone speaks
+k_a, k_r = math.exp(-1 / (.05 * SR)), math.exp(-1 / (.4 * SR)); g = np.empty(N); v = gdb[0]
 for i in range(N):
     tgt = gdb[i]; k = k_a if tgt < v else k_r; v = k * v + (1 - k) * tgt; g[i] = v
-music = mus * (10 ** (g / 20))[:, None] * .55
-
-# taiko-style hits on the big downbeats (low sine drop + a slap), centred
-for t in plan.get('hits', []):
-    n = int(.9 * SR); tn = tt(n)
-    x = np.sin(2 * math.pi * (55 + 70 * np.exp(-tn * 18)) * tn) * np.exp(-tn * 5) * .55 + lp(noise(n), 900) * np.exp(-tn * 40) * .25
-    i0 = int(t * SR); m = min(n, N - i0); music[i0:i0 + m] += x[:m, None] * .5
+music = music * (10 ** (g / 20))[:, None]
 
 mix = out + music
 # gentle bus: soft-knee limiter → peak −1.5 dBFS, then a true-peak safe gain
