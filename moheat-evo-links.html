@@ -13,110 +13,93 @@
 <style>
 :root {
   --bg: #f4f4f2; --card: #ffffff; --ink: #1d2422; --ink-soft: #4c5754; --ink-faint: #6b7672; --line: #e2e4e0;
-  --warm: #d9481f; --warm-bg: #fdeee8; --warm-ink: #a8340f;
-  --cool: #0e7c86; --cool-bg: #e4f3f4; --cool-ink: #0a626b;
+  --warm: #d9481f; --cool: #0e7c86; --cool-bg: #e4f3f4; --cool-ink: #0a626b;
   --stop: #b3261e; --stop-bg: #fcebe9; --on: #1d2422; --on-ink: #ffffff;
   color-scheme: light dark;
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #11161a; --card: #1a2126; --ink: #e9edeb; --ink-soft: #b7c0bc; --ink-faint: #929d97; --line: #2c353b;
-    --warm: #ff7a4d; --warm-bg: #33201a; --warm-ink: #ffb097;
-    --cool: #3fb6c0; --cool-bg: #14292c; --cool-ink: #84d6dc;
+    --warm: #ff7a4d; --cool: #3fb6c0; --cool-bg: #14292c; --cool-ink: #84d6dc;
     --stop: #ff8a80; --stop-bg: #36201e; --on: #e9edeb; --on-ink: #11161a;
   }
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--bg); color: var(--ink); line-height: 1.55; font-family: Archivo, "Noto Sans JP", "Hiragino Kaku Gothic ProN", system-ui, sans-serif; }
+body { margin: 0; min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; background: var(--bg); color: var(--ink); line-height: 1.4; font-family: Archivo, "Noto Sans JP", "Hiragino Kaku Gothic ProN", system-ui, sans-serif; }
 html[lang="ja"] body { font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", system-ui, sans-serif; }
 html[lang="zh"] body { font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; }
 a { color: inherit; }
-.wrap { max-width: 1120px; margin: 0 auto; padding: max(14px, env(safe-area-inset-top)) 16px calc(32px + env(safe-area-inset-bottom)); }
-.top { display: flex; justify-content: flex-end; margin-bottom: 10px; }
-.langs { display: inline-flex; padding: 3px; gap: 2px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); }
-.langs button { min-height: 44px; min-width: 64px; padding: 0 14px; border: 0; border-radius: 999px; background: transparent; color: var(--ink-soft); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+/* One screen, no scrolling (user, 2026-11-09): the two device photos take whatever height is left. */
+.wrap { width: 100%; max-width: 560px; margin: 0 auto; min-height: min(100vh, 720px); min-height: min(100dvh, 720px); display: flex; flex-direction: column; padding: max(8px, env(safe-area-inset-top)) 12px max(8px, env(safe-area-inset-bottom)); }
+.cols { flex: 1; display: grid; grid-template-rows: 1fr auto; gap: 10px; }
+.col { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+h1 { margin: 0; font-family: Archivo, sans-serif; font-weight: 800; font-size: clamp(26px, 7.6vw, 40px); line-height: 1; letter-spacing: -.01em; white-space: nowrap; }
+.langs { flex: none; display: inline-flex; padding: 2px; gap: 1px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); }
+.langs button { min-height: 44px; min-width: 44px; padding: 0 9px; border: 0; border-radius: 999px; background: transparent; color: var(--ink-soft); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
 .langs button[aria-pressed="true"] { background: var(--on); color: var(--on-ink); }
-.cols { display: grid; gap: 22px; }
-h1 { margin: 0; font-family: Archivo, sans-serif; font-weight: 800; font-size: clamp(38px, 10vw, 54px); line-height: 1.02; letter-spacing: -.01em; }
-.tag { margin: 6px 0 0; font-size: 15px; font-weight: 700; color: var(--ink-soft); }
-.bar { height: 5px; border-radius: 3px; margin: 14px 0; background: linear-gradient(90deg, #d9481f, #f08a2e 32%, #c9c2ae 55%, #57a7a5 78%, #0e7c86); }
-.intro { margin: 0; font-size: 15.5px; }
-.rules { display: grid; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
-.rule { display: flex; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 14px; border: 2px solid; }
-.rule svg { flex: none; width: 30px; height: 30px; }
-.rule b { display: block; font-size: 17px; line-height: 1.3; }
-.rule span { display: block; font-size: 13.5px; line-height: 1.4; color: var(--ink-soft); }
+.intro { margin: 0; font-size: 14.5px; color: var(--ink-soft); }
+.devices { flex: 1 1 96px; min-height: 96px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0; }
+.devices figure { position: relative; margin: 0; overflow: hidden; border-radius: 12px; background: #15181b; }
+.devices img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.devices figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 10px 7px; color: #fff; background: linear-gradient(transparent, rgba(0,0,0,.78)); font-size: 12.5px; line-height: 1.25; }
+.devices b { display: block; font-size: 15.5px; }
+.devices .w { border-bottom: 3px solid #d9481f; } .devices .c { border-bottom: 3px solid #1f9aa6; }
+.rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 0; padding: 0; list-style: none; }
+.rule { display: flex; flex-direction: column; gap: 2px; padding: 7px 8px; border-radius: 12px; border: 1.5px solid; min-width: 0; }
+.rule svg { width: 22px; height: 22px; }
+.rule b { font-size: 13.5px; line-height: 1.2; white-space: pre-line; }
+.rule span { font-size: 12px; line-height: 1.2; color: var(--ink-soft); }
 .rule.yes { border-color: var(--cool); background: var(--cool-bg); } .rule.yes svg, .rule.yes b { color: var(--cool-ink); }
 .rule.no { border-color: var(--stop); background: var(--stop-bg); } .rule.no svg, .rule.no b { color: var(--stop); }
 .rule.photo { border-color: var(--line); background: var(--card); }
-section { margin-top: 24px; }
-.cols > div > section:first-child { margin-top: 0; }
-h2 { margin: 0 0 10px; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
-html[lang="ja"] h2, html[lang="zh"] h2 { letter-spacing: .04em; font-size: 14px; }
-.photos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 16px 0 0; }
-.photos img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 12px; background: var(--line); }
-.hl { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.hl li { padding: 11px 14px; border-radius: 12px; background: var(--card); border: 1px solid var(--line); }
-.hl b { display: block; font-size: 15px; } .hl span { display: block; font-size: 13.5px; color: var(--ink-soft); }
-.links { display: grid; gap: 8px; }
-.links a { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; padding: 9px 14px; border-radius: 12px; background: var(--card); border: 1px solid var(--line); text-decoration: none; }
+.links { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.links a { grid-column: span 2; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 46px; padding: 4px 6px; border-radius: 12px; background: var(--card); border: 1px solid var(--line); text-decoration: none; font-size: 13.5px; font-weight: 600; line-height: 1.15; }
+.links a:nth-child(-n+2) { grid-column: span 3; font-size: 14.5px; }
+.links a:nth-child(2) { background: var(--on); color: var(--on-ink); border-color: var(--on); }
 .links a:hover { border-color: var(--warm); }
 .links a:focus-visible, .langs button:focus-visible { outline: 2px solid var(--warm); outline-offset: 2px; }
-.links b { display: block; font-size: 15px; } .links span span { display: block; font-size: 12.5px; color: var(--ink-faint); overflow-wrap: anywhere; }
-.links svg { flex: none; width: 18px; height: 18px; color: var(--ink-faint); }
-.collab { margin: 0 0 10px; font-size: 14.5px; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; padding: 0; list-style: none; }
-.chips li { padding: 5px 12px; border-radius: 999px; font-size: 13.5px; font-weight: 600; color: var(--warm-ink); background: var(--warm-bg); }
-.note { margin: 0; font-size: 13.5px; color: var(--ink-soft); }
-footer { margin-top: 26px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-faint); }
+.collab { margin: 0; font-size: 13.5px; color: var(--ink-soft); }
+footer { font-size: 12px; line-height: 1.3; color: var(--ink-faint); }
 footer p { margin: 0; }
-@media (min-width: 900px) {
-  .wrap { padding-top: 22px; }
-  .cols { grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: start; }
+@media (min-width: 900px), (min-width: 560px) and (orientation: landscape) {
+  .wrap { max-width: 1040px; padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+  .cols { grid-template-rows: none; grid-template-columns: 1.1fr 1fr; gap: 20px; }
+  .col2 { justify-content: center; gap: 10px; }
+}
+@media (min-width: 900px) and (min-height: 600px) {
+  .wrap { max-width: 1180px; min-height: 0; padding-top: 20px; padding-bottom: 20px; }
+  .cols { grid-template-columns: 1.3fr 1fr; align-items: center; gap: 44px; } .col { gap: 14px; } .col2 { gap: 18px; }
+  .devices { flex: none; }
+  .devices figure { aspect-ratio: 1; }
+  h1 { font-size: 52px; } .intro { font-size: 17px; }
+  .langs button { padding: 0 13px; font-size: 14px; }
+  .rule { padding: 11px 12px; gap: 4px; } .rule svg { width: 26px; height: 26px; } .rule b { font-size: 15px; } .rule span { font-size: 13px; }
+  .links a { min-height: 56px; font-size: 15px; } .links a:nth-child(-n+2) { font-size: 16px; }
+  .collab { font-size: 15px; } footer { font-size: 12.5px; }
 }
 </style>
 </head>
 <body>
 <main class="wrap">
-  <div class="top"><div class="langs" role="group" aria-label="Language" id="langs"></div></div>
   <div class="cols">
-    <div>
-      <header>
-        <h1>MoHeat Evo</h1>
-        <p class="tag" data-t="tag"></p>
-        <div class="bar" aria-hidden="true"></div>
-        <p class="intro" data-t="intro"></p>
-      </header>
-      <ul class="rules" aria-label="Visitors">
-        <li class="rule yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 11V6.5a1.5 1.5 0 0 0-3 0V11"/><path d="M15 10V4.5a1.5 1.5 0 0 0-3 0V10"/><path d="M12 10.5v-6a1.5 1.5 0 0 0-3 0V12"/><path d="M18 8.5a1.5 1.5 0 0 1 3 0V14a7 7 0 0 1-7 7h-2c-2.8 0-4.5-1.1-5.9-3.3L3.6 14a1.6 1.6 0 0 1 2.6-1.8L9 14.5V6"/></svg><div><b data-t="r1"></b><span data-t="r1s"></span></div></li>
-        <li class="rule no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M5.7 5.7l12.6 12.6"/></svg><div><b data-t="r2"></b><span data-t="r2s"></span></div></li>
-        <li class="rule photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="14" r="3.5"/></svg><div><b data-t="r3"></b><span data-t="r3s"></span></div></li>
-      </ul>
-      <div class="photos">
-        <img src="assets/posters/siggraph-hero.jpg" width="1280" height="720" alt="" data-alt="alt1" />
-        <img src="assets/posters/siggraph-asia-2026.jpg" width="1280" height="720" alt="" data-alt="alt2" />
+    <div class="col">
+      <header class="top"><h1>MoHeat Evo</h1><div class="langs" role="group" aria-label="Language" id="langs"></div></header>
+      <p class="intro" data-t="intro"></p>
+      <div class="devices">
+        <figure class="w"><img src="assets/images/links/device-warm.webp" width="800" height="666" alt="" data-alt="alt1" /><figcaption><b data-t="warm"></b><span data-t="warmS"></span></figcaption></figure>
+        <figure class="c"><img src="assets/images/links/device-cool.webp" width="800" height="666" alt="" data-alt="alt2" /><figcaption><b data-t="cool"></b><span data-t="coolS"></span></figcaption></figure>
       </div>
-      <section aria-labelledby="hl-h">
-        <h2 id="hl-h" data-t="hlH"></h2>
-        <ul class="hl">
-          <li><b data-t="h1"></b><span data-t="h1s"></span></li>
-          <li><b data-t="h2"></b><span data-t="h2s"></span></li>
-          <li><b data-t="h3"></b><span data-t="h3s"></span></li>
-        </ul>
-      </section>
     </div>
-    <div>
-      <section aria-labelledby="l-h">
-        <h2 id="l-h" data-t="linksH"></h2>
-        <div class="links" id="links"></div>
-      </section>
-      <section aria-labelledby="c-h">
-        <h2 id="c-h" data-t="collabH"></h2>
-        <p class="collab" data-t="collab"></p>
-        <ul class="chips" id="chips"></ul>
-        <p class="note" data-t="collabR"></p>
-      </section>
+    <div class="col col2">
+      <ul class="rules" aria-label="Visitors">
+        <li class="rule yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 11V6.5a1.5 1.5 0 0 0-3 0V11"/><path d="M15 10V4.5a1.5 1.5 0 0 0-3 0V10"/><path d="M12 10.5v-6a1.5 1.5 0 0 0-3 0V12"/><path d="M18 8.5a1.5 1.5 0 0 1 3 0V14a7 7 0 0 1-7 7h-2c-2.8 0-4.5-1.1-5.9-3.3L3.6 14a1.6 1.6 0 0 1 2.6-1.8L9 14.5V6"/></svg><b data-t="r1"></b><span data-t="r1s"></span></li>
+        <li class="rule no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M5.7 5.7l12.6 12.6"/></svg><b data-t="r2"></b><span data-t="r2s"></span></li>
+        <li class="rule photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="14" r="3.5"/></svg><b data-t="r3"></b><span data-t="r3s"></span></li>
+      </ul>
+      <nav class="links" id="links" aria-label="Links"></nav>
+      <p class="collab" data-t="collab"></p>
       <footer><p data-t="by"></p><p data-t="joint"></p></footer>
     </div>
   </div>
@@ -124,78 +107,42 @@ footer p { margin: 0; }
 </main>
 <script>
 (() => {
-  const NAMES = { en: 'English', ja: '日本語', zh: '中文' }, KEY = 'moheat.links.lang';
+  const NAMES = { en: 'EN', ja: '日本語', zh: '中文' }, KEY = 'moheat.links.lang';
   const T = {
     en: {
-      tag: 'Headphones that let you feel temperature with sound',
-      intro: 'A non-contact thermal headphone. LED heating and ethanol-mist cooling deliver warmth and coolness around your ears, in sync with sound, with no skin contact.',
-      r1: 'Staff here: please touch and try it', r1s: 'When a staff member is present, you are welcome to try MoHeat Evo.',
-      r2: 'No staff here: please do not touch', r2s: 'If no staff member is nearby, please look only.',
-      r3: 'Photos are OK', r3s: 'Photos and videos are welcome, and so is sharing them.',
-      alt1: 'A person wearing MoHeat Evo, its light glowing warm red', alt2: 'A person wearing MoHeat Evo, its light glowing cool teal',
-      hlH: 'Highlights',
-      h1: 'Fast hot and cold switching', h1s: 'Warmth and coolness can change quickly, following the moment in the sound.',
-      h2: 'Left and right', h2s: 'Each ear can feel something different, so a voice or a breeze has a direction.',
-      h3: 'Cool and warm on the same ear', h3s: 'Both can be felt on one ear at the same time.',
-      linksH: 'Links',
-      site: 'Project site', siteS: 'How it works, videos and exhibitions',
-      demo: 'Try the demos', demoS: 'The demo section of the project site',
-      li: 'LinkedIn', liS: 'Jiayi Xu',
-      me: 'Personal site', meS: 'Jiayi Xu: research and publications',
-      mail: 'Email', mailS: 'xu.jiayi@star.rcast.u-tokyo.ac.jp',
-      collabH: 'Work with us',
-      collab: 'We are looking for partners to make content and experiences with temperature, in these areas and more.',
-      chips: ['ASMR and character voice', 'Games and VR', 'Brand experiences', 'Live events and fan meetings', 'Music'],
-      collabR: 'Joint research with universities and institutes and co-development with companies are also welcome. Please reach out by email or LinkedIn.',
-      by: 'XU Jiayi, Inami-Monnai Laboratory, Research Center for Advanced Science and Technology, The University of Tokyo',
+      intro: 'Non-contact thermal headphones: warmth and coolness around your ears, in sync with music, stories and games.',
+      warm: 'Warmth', warmS: 'LED light', cool: 'Coolness', coolS: 'Ethanol mist',
+      alt1: 'Inside the MoHeat Evo ear cup, its LEDs lit', alt2: 'Inside the MoHeat Evo ear cup, a fine mist rising from the nozzle',
+      r1: 'Please try it', r1s: 'when staff are here',
+      r2: 'Please do not touch', r2s: 'when no staff are here',
+      r3: 'Photos OK', r3s: 'Sharing welcome',
+      site: 'Project site', demo: 'Try the demos', li: 'LinkedIn', me: 'Personal site', mail: 'Email',
+      collab: 'Want to create with temperature? Creators, companies and researchers are welcome to get in touch.',
+      by: 'XU Jiayi, Inami-Monnai Lab, RCAST, The University of Tokyo',
       joint: 'Joint research with Suntory Global Innovation Center',
     },
     ja: {
-      tag: '音とともに温度を感じるヘッドホン',
-      intro: 'LEDの光による加熱とエタノールミストによる冷却で、肌に触れることなく耳まわりに温感・冷感を届ける、ヘッドホン型の非接触温冷覚デバイスです。音と温度が同期します。',
-      r1: 'スタッフがいるとき：触れて体験できます', r1s: 'スタッフがいる場合に限り、MoHeat Evoを体験していただけます。',
-      r2: 'スタッフがいないとき：触らないでください', r2s: 'スタッフが近くにいないときは、ご覧いただくだけでお願いします。',
-      r3: '写真撮影OK', r3s: '写真・動画の撮影とSNSへの投稿を歓迎します。',
-      alt1: 'MoHeat Evoを装着した人物。暖色の赤い光', alt2: 'MoHeat Evoを装着した人物。寒色の青緑の光',
-      hlH: '特長',
-      h1: '温と冷をすばやく切り替え', h1s: '音の瞬間に合わせて、暖かさと冷たさがすばやく変わります。',
-      h2: '左右それぞれに', h2s: '左右の耳で別々の感覚を届けられるので、声や風に方向が生まれます。',
-      h3: '同じ耳に、冷たさと暖かさ', h3s: '片方の耳で、冷たさと暖かさを同時に感じられます。',
-      linksH: 'リンク',
-      site: 'プロジェクトサイト', siteS: 'デバイスの仕組み・映像・展示情報',
-      demo: 'デモを体験する', demoS: 'プロジェクトサイトのデモコーナー',
-      li: 'LinkedIn', liS: 'Jiayi Xu',
-      me: '個人ウェブサイト', meS: 'Jiayi Xu：研究紹介・論文',
-      mail: 'メール', mailS: 'xu.jiayi@star.rcast.u-tokyo.ac.jp',
-      collabH: 'コラボレーション',
-      collab: '温度を使ったコンテンツや体験を一緒につくるパートナーを探しています。たとえば、次のような分野です。',
-      chips: ['ASMR・キャラクターボイス', 'ゲーム・VR', 'ブランド体験', 'ライブイベント・ファンミーティング', '音楽'],
-      collabR: '大学・研究機関との共同研究、企業との共同開発のご相談も歓迎します。メールまたはLinkedInからお気軽にご連絡ください。',
-      by: 'XU Jiayi（許 佳禕）東京大学 先端科学技術研究センター 稲見・門内研究室',
+      intro: '肌に触れずに、耳まわりへ温かさと冷たさを届けるヘッドホン。音楽や物語、ゲームと同期します。',
+      warm: '温かさ', warmS: 'LEDの光', cool: '冷たさ', coolS: 'エタノールミスト',
+      alt1: 'MoHeat Evoのイヤーカップ内部。LEDが点灯している', alt2: 'MoHeat Evoのイヤーカップ内部。ノズルから細かいミストが出ている',
+      r1: '体験できます', r1s: 'スタッフ在席時',
+      r2: '触らないで\nください', r2s: 'スタッフ不在時',
+      r3: '撮影OK', r3s: 'SNS投稿も歓迎',
+      site: 'プロジェクトサイト', demo: 'デモを体験', li: 'LinkedIn', me: '個人サイト', mail: 'メール',
+      collab: '温度を使った作品づくりや共同研究のパートナーを募集しています。お気軽にご連絡ください。',
+      by: 'XU Jiayi（許 佳禕）東京大学 先端研 稲見・門内研究室',
       joint: 'サントリーグローバルイノベーションセンターとの共同研究',
     },
     zh: {
-      tag: '随声音感受温度的耳机',
-      intro: '一款非接触式温感耳机。通过 LED 加热和乙醇雾冷却，不接触皮肤，就能在耳朵周围带来温暖和清凉，并与声音同步。',
-      r1: '有工作人员时：欢迎触摸体验', r1s: '仅在有工作人员在场时，可以体验 MoHeat Evo。',
-      r2: '没有工作人员时：请勿触摸', r2s: '附近没有工作人员时，请只观看。',
-      r3: '可以拍照', r3s: '欢迎拍照、录像，也欢迎分享到社交媒体。',
-      alt1: '佩戴 MoHeat Evo 的人，耳机发出暖红色的光', alt2: '佩戴 MoHeat Evo 的人，耳机发出冷青色的光',
-      hlH: '特点',
-      h1: '冷热快速切换', h1s: '温暖和清凉可以随声音的瞬间快速变化。',
-      h2: '左右分别呈现', h2s: '左右耳可以感受到不同的温度，声音和微风因此有了方向。',
-      h3: '同一只耳朵，冷热同时', h3s: '一只耳朵可以同时感受到清凉和温暖。',
-      linksH: '链接',
-      site: '项目网站', siteS: '工作原理、视频和展览信息',
-      demo: '体验 Demo', demoS: '项目网站的 Demo 区',
-      li: 'LinkedIn', liS: 'Jiayi Xu',
-      me: '个人网站', meS: 'Jiayi Xu：研究与论文',
-      mail: '邮箱', mailS: 'xu.jiayi@star.rcast.u-tokyo.ac.jp',
-      collabH: '合作',
-      collab: '我们正在寻找合作伙伴，一起创作带有温度的内容和体验，例如以下领域。',
-      chips: ['ASMR 与角色语音', '游戏与 VR', '品牌体验', '现场活动与粉丝见面会', '音乐'],
-      collabR: '也欢迎与大学、研究机构开展联合研究，或与企业共同开发。请通过邮箱或 LinkedIn 联系我们。',
-      by: 'XU Jiayi（许佳祎），东京大学 先端科学技术研究中心 稻见・门内研究室',
+      intro: '不接触皮肤，在耳朵周围带来温暖与清凉的耳机，与音乐、故事、游戏同步。',
+      warm: '温暖', warmS: 'LED 光', cool: '清凉', coolS: '乙醇雾',
+      alt1: 'MoHeat Evo 耳罩内部，LED 亮起', alt2: 'MoHeat Evo 耳罩内部，喷口冒出细雾',
+      r1: '欢迎体验', r1s: '有工作人员时',
+      r2: '请勿触摸', r2s: '没有工作人员时',
+      r3: '可以拍照', r3s: '欢迎分享',
+      site: '项目网站', demo: '体验 Demo', li: 'LinkedIn', me: '个人网站', mail: '邮箱',
+      collab: '欢迎内容创作者、企业和研究机构与我们合作，一起创作带有温度的内容。',
+      by: 'XU Jiayi（许佳祎），东京大学 先端研 稻见・门内研究室',
       joint: '与三得利全球创新中心的联合研究',
     },
   };
@@ -206,8 +153,7 @@ footer p { margin: 0; }
     ['me', 'https://jiayi-xu-hci.github.io/'],
     ['mail', 'mailto:xu.jiayi@star.rcast.u-tokyo.ac.jp'],
   ];
-  const ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>';
-  const langs = document.getElementById('langs'), links = document.getElementById('links'), chips = document.getElementById('chips');
+  const langs = document.getElementById('langs'), links = document.getElementById('links');
   const load = () => { try { const v = localStorage.getItem(KEY); return T[v] ? v : 'en'; } catch { return 'en'; } };
   const save = (v) => { try { localStorage.setItem(KEY, v); } catch {} };
   const el = (tag, text) => { const e = document.createElement(tag); e.textContent = text; return e; };
@@ -217,8 +163,7 @@ footer p { margin: 0; }
     document.querySelectorAll('[data-alt]').forEach((e) => { e.alt = t[e.dataset.alt]; });
     langs.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.l === l)));
     links.replaceChildren(...LINKS.map(([k, href]) => { const a = document.createElement('a'); a.href = href; if (href.startsWith('http')) { a.target = '_blank'; a.rel = 'noopener'; }
-      const s = document.createElement('span'); s.append(el('b', t[k]), el('span', t[k + 'S'])); a.append(s); a.insertAdjacentHTML('beforeend', ARROW); return a; }));
-    chips.replaceChildren(...t.chips.map((c) => el('li', c)));
+      a.textContent = t[k]; return a; }));
   }
   langs.append(...Object.keys(T).map((l) => { const b = el('button', NAMES[l]); b.type = 'button'; b.dataset.l = l; b.lang = l; b.addEventListener('click', () => { save(l); render(l); }); return b; }));
   render(load());
