@@ -1,9 +1,0 @@
-{
- "_doc": "Measured on 2× grids (source px of assets/art/<pose>.png): eyes = blink-mask ellipses [cx, cy, rx, ry] (grandma's eyes are drawn closed in her smile, as in Demo15 / 16 / 29: no blink), mouth = the drawn closed mouth [cx, cy, rx, ry]; grandpa's mouth is a short line UNDER his moustache (moustache = polygon kept over the opening).",
- "grandma_base": {"mouth": [1338, 381, 28, 7]},
- "grandma_fan": {"mouth": [995, 664, 62, 20]},
- "grandpa_base": {"eyes": [[1203, 296, 34, 32], [1319, 294, 32, 32]], "mouth": [1275, 425, 20, 6],
-                  "moustache": [[1178, 332], [1250, 322], [1300, 322], [1368, 335], [1362, 380], [1330, 398], [1270, 405], [1205, 400], [1180, 385]]},
- "grandpa_melon": {"eyes": [[1735, 240, 26, 24], [1822, 238, 26, 24]], "mouth": [1768, 328, 16, 5],
-                   "moustache": [[1700, 286], [1745, 280], [1800, 280], [1850, 290], [1845, 312], [1800, 320], [1745, 320], [1705, 310]]}
-}

@@ -1,5 +1,0 @@
-# Complete a body cut by the picture edge (masked outpaint; tools/art/extend_pose.py / complete_cutout.py send the mask)
-# fields: {what_missing} {backdrop_colour} {backdrop_name}
-# refs: [<padded pose>]
-Image 1 is a character on a flat {backdrop_name} {backdrop_colour} backdrop whose body is cut off by the old picture edge. Fill ONLY the empty area: continue {what_missing} naturally, in exactly the same art style, line weight, colours, light and clothing details, at the same scale.
-Everything that is already drawn stays pixel-identical. The new part ends inside the picture with backdrop around it (or continues off the new bottom edge for a bust). No new props, no scenery, no text.

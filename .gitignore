@@ -109,3 +109,29 @@ demos/for-women/Demo45_CelestialPalace/media/voice/zh/
 # Demo46 dubs (124 lines, ~4.6 MB per language > the 2 MB rule) → local; re-render: Demo46 scripts/voice.py --lang en|zh
 demos/for-women/Demo46_DragonContract/media/voice/en/
 demos/for-women/Demo46_DragonContract/media/voice/zh/
+
+# Development files stay on this computer; the public repo holds only what the pages serve.
+/tools/
+/docs/
+/proposals/
+/.github/
+/AGENTS.md
+/CLAUDE.md
+/DEMO_DESIGN_GUIDE.md
+/HANDOFF_ASMR_DEMOS.md
+/TASKS.md
+/USER_PREFERENCES.md
+/WORKLOG.md
+/requirements.txt
+demos/**/project/
+demos/**/scripts/
+demos/**/tools/
+demos/**/analysis/
+*.py
+*.md
+!/README.md
+*.command
+*.sh
+*.ics
+generation-prompts.json
+web_prompts.json

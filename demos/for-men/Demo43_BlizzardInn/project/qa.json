@@ -1,5 +1,0 @@
-{
- "_doc": "check_demo.py exceptions for Demo43 (each with its reason)",
- "l10n_ignore": ["🤲 じっとする（長押し） Keep still (press and hold)", "あなた"],
- "_l10n_ignore_why": "the hold button is translated per part (<b> じっとする（長押し） → zh in l10n.js, <span> English) by shared/subs.js; あなた is the speaker label of your own words, translated by subs.js NAMES (built in)"
-}

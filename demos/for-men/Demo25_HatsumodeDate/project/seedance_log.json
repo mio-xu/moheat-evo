@@ -1,7 +1,0 @@
-{
- "design_A_camellia": {
-  "generation": "api_62e9b4f79c145c9a452410e535888064e0adb199775fb0096f362727cc2d6905",
-  "idempotency_key": "moheat-d25-design-A-camellia-t2i-v1",
-  "mode": "t2i"
- }
-}
