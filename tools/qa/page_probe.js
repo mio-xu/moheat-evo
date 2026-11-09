@@ -36,7 +36,7 @@ const out = { demo: REL, play: null, mobile: null, errors: [] };
     '--use-angle=metal', '--enable-gpu', '--disable-background-timer-throttling', '--disable-renderer-backgrounding',
     '--disable-backgrounding-occluded-windows', '--window-size=1440,900', '--mute-audio', 'about:blank'], { stdio: 'ignore' });
   const done = () => { try { chrome.kill(); } catch {} try { http.kill(); } catch {} try { fs.rmSync(prof, { recursive: true, force: true }); } catch {}
-    process.stdout.write(JSON.stringify(out) + '\n'); process.exit(0); };
+    process.stdout.write(JSON.stringify(out) + '\n', () => process.exit(0)); };   // exit only after the write: a pipe holds 64 KB (a long play's #cmd log is larger) and process.exit drops the rest
   setTimeout(() => { out.errors.push('probe timeout'); done(); }, (SECS + 900) * 1000);
   let ws;
   for (let i = 0; i < 160 && !ws; i++) {   // up to 40 s: Chrome starts slowly while other sessions run theirs
@@ -171,4 +171,4 @@ const out = { demo: REL, play: null, mobile: null, errors: [] };
     await cdp('Emulation.setTouchEmulationEnabled', { enabled: false }); await cdp('Emulation.clearDeviceMetricsOverride');
   }
   done();
-})().catch((e) => { out.errors.push(String(e && e.stack || e)); process.stdout.write(JSON.stringify(out) + '\n'); process.exit(0); });
+})().catch((e) => { out.errors.push(String(e && e.stack || e)); process.stdout.write(JSON.stringify(out) + '\n', () => process.exit(0)); });
