@@ -191,6 +191,7 @@ window.MOHEAT_L10N = {
     "什么契约",
     "契约是什么",
     "what contract",
+    "what do you mean by that",
     "what's the contract",
     "けいやくってなに",
     "なんの契約"
