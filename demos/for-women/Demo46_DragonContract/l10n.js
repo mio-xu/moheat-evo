@@ -150,17 +150,31 @@ window.MOHEAT_L10N = {
    "陽向の契約書": "陽向的契约书",
    "岳の鱗": "岳的鳞片",
    "蓮の氷の花": "蓮的冰之花",
-   "陽向": "陽向",
+   "陽向": "阳向",
    "岳": "岳",
-   "蓮": "蓮"
+   "蓮": "莲",
+   "陽向・岳・蓮 ElevenLabs": "陽向・岳・蓮 ElevenLabs",
+   "Live (DUAL): each voice warms the ear it speaks at, with its loudness; the fireplace on your right and the frosted window on your left; the wings' downdraft is the cold peak, dragon breath lights the beacon ahead, his closed wing cuts the wind on your left and warms it from within, and his song walks in from far across the frozen lake.": "实时（DUAL）：每个人的声音按音量让他说话那一侧的耳朵变暖；书房右边是壁炉，左边是结霜的窗；振翅的下冲气流凉到顶点，龙息点燃前方的烽火台，翅膀从左边合拢，挡住寒风，翅膜里透着温暖；他的歌声隔着冰湖从远处慢慢走近。",
+   "Original characters in a special version · everyone speaks Japanese there · voices ElevenLabs · art OpenAI gpt-image · layered stills · free talk = scripted preview": "原创角色的特别版 · 那里的人都说日语 · 配音 ElevenLabs · 美术 OpenAI gpt-image · 分层静帧 · 自由对话为剧本预览版",
+   "ASMR · Crossover": "ASMR · 穿越篇"
   },
-  "ja": {},
-  "en": {}
+  "ja": {
+   "陽向・岳・蓮 ElevenLabs": "陽向・岳・蓮 ElevenLabs",
+   "Live (DUAL): each voice warms the ear it speaks at, with its loudness; the fireplace on your right and the frosted window on your left; the wings' downdraft is the cold peak, dragon breath lights the beacon ahead, his closed wing cuts the wind on your left and warms it from within, and his song walks in from far across the frozen lake.": "リアルタイム（DUAL）：声はその音量で、話しかける側の耳を温めます。書斎は右に暖炉、左に霜の窓。羽ばたきの風は冷たさの頂点、竜の息は正面の烽火台を灯し、閉じた翼は左の寒風をさえぎって内側の火であたためます。歌声は氷の湖の遠くから近づいてきます。",
+   "Original characters in a special version · everyone speaks Japanese there · voices ElevenLabs · art OpenAI gpt-image · layered stills · free talk = scripted preview": "オリジナルキャラクターの特別版 · その世界ではみんな日本語を話します · 声 ElevenLabs · 絵 OpenAI gpt-image · レイヤー静止画 · 自由会話は台本プレビュー",
+   "ASMR · Crossover": "ASMR · クロスオーバー"
+  },
+  "en": {
+   "陽向・岳・蓮 ElevenLabs": "Hinata · Gaku · Ren — ElevenLabs",
+   "Live (DUAL): each voice warms the ear it speaks at, with its loudness; the fireplace on your right and the frosted window on your left; the wings' downdraft is the cold peak, dragon breath lights the beacon ahead, his closed wing cuts the wind on your left and warms it from within, and his song walks in from far across the frozen lake.": "Live (DUAL): each voice warms the ear it speaks at, with its loudness; the fireplace on your right and the frosted window on your left; the wings' downdraft is the cold peak, dragon breath lights the beacon ahead, his closed wing cuts the wind on your left and warms it from within, and his song walks in from far across the frozen lake.",
+   "Original characters in a special version · everyone speaks Japanese there · voices ElevenLabs · art OpenAI gpt-image · layered stills · free talk = scripted preview": "Original characters in a special version · everyone speaks Japanese there · voices ElevenLabs · art OpenAI gpt-image · layered stills · free talk = scripted preview",
+   "ASMR · Crossover": "ASMR · Crossover"
+  }
  },
  "names": {
   "陽向": {
    "en": "Hinata",
-   "zh": "陽向"
+   "zh": "阳向"
   },
   "岳": {
    "en": "Gaku",
@@ -168,7 +182,7 @@ window.MOHEAT_L10N = {
   },
   "蓮": {
    "en": "Ren",
-   "zh": "蓮"
+   "zh": "莲"
   }
  },
  "voice": {

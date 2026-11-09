@@ -1,0 +1,6 @@
+/* 竜の王と、エルフの王と、小悪魔 — palette only (layout: ../../shared/story.css). Dusk violet + rose + ember. */
+:root { --bg: #0f0d1c; --panel: #181526; --panel-2: #231f36; --line: #483f62; --gold: #ffc8a0; --st-hi: 255, 180, 210; --st-on: 122, 54, 138; --st-sub: 16, 12, 30; --st-bar: linear-gradient(90deg, #ff8fc0, #ffd0a0); }
+.bar { background: #0c0a16; }
+.brand span { color: #ff9fc8; }
+.btn.primary { background: linear-gradient(135deg, #7a368a, #f08fb0); }
+.subs .who.wH { color: #ffb0d0; } .subs .who.wG { color: #ffc98f; } .subs .who.wR { color: #c6dcff; }

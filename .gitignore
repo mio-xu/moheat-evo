@@ -105,8 +105,6 @@ demos/healing/Demo49_NaomiSummer/assets/
 demos/healing/Demo50_WatermelonSummer/assets/
 # nobunaga talk kit dubs (229 lines, ~7.5 MB per language at 64 kb/s > the 2 MB rule) → local; re-render: Demo23 scripts/voice.py --lang en|zh
 # Demo46 dubs (124 lines, ~4.6 MB per language > the 2 MB rule) → local; re-render: Demo46 scripts/voice.py --lang en|zh
-demos/for-women/Demo46_DragonContract/media/voice/en/
-demos/for-women/Demo46_DragonContract/media/voice/zh/
 
 # Development files stay on this computer; the public repo holds only what the pages serve.
 /tools/

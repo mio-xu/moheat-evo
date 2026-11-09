@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/for-women/Demo46_DragonContract/media/cover/stamp.json": "5af1b3e9a3ea1e20b8ccae69c9e9f549bc8b9da2"
+  },
+  "thumb": "e1b69417e9a114d4217c62aa5bd7f8ddfdb53c39"
+ },
+ "en": {
+  "inputs": {
+   "demos/for-women/Demo46_DragonContract/media/cover/stamp.json": "5af1b3e9a3ea1e20b8ccae69c9e9f549bc8b9da2"
+  },
+  "thumb": "e1b69417e9a114d4217c62aa5bd7f8ddfdb53c39"
+ },
+ "ja": {
+  "inputs": {
+   "demos/for-women/Demo46_DragonContract/media/cover/stamp.json": "5af1b3e9a3ea1e20b8ccae69c9e9f549bc8b9da2"
+  },
+  "thumb": "5accebf6eff740277502361204c5316bfe811590"
+ },
+ "zh": {
+  "inputs": {
+   "demos/for-women/Demo46_DragonContract/media/cover/stamp.json": "5af1b3e9a3ea1e20b8ccae69c9e9f549bc8b9da2"
+  },
+  "thumb": "77c312fda4763af0628a1484cf61567dd1194c6f"
+ }
+}

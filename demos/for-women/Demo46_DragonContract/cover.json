@@ -1,0 +1,156 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo46_DragonContract --publish",
+ "title": {
+  "en": "The Dragon King,\nthe Elf King\nand the Little Devil",
+  "ja": "竜の王と、\nエルフの王と、\n小悪魔",
+  "zh": "龙王、精灵王\n与小恶魔"
+ },
+ "tagline": {
+  "en": "A contract you signed by accident, and three who will not let go",
+  "ja": "うっかり結んだ契約と、手放してくれない三人",
+  "zh": "一纸误签的契约，和不肯放手的三个人"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "A storybook fantasy",
+    "ja": "おとぎの幻想世界",
+    "zh": "童话般的幻想世界"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "dragon breath · fireplace · inside his wing",
+    "ja": "竜の息・暖炉・翼の内側",
+    "zh": "龙息・壁炉・翅膀里的温暖"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "wing downdraft · frozen lake · cliff wind",
+    "ja": "羽ばたきの風・氷の湖・崖の風",
+    "zh": "振翅的风・冰湖・崖上的风"
+   }
+  }
+ ],
+ "tone": "15 12 28",
+ "options": [
+  {
+   "key": "place",
+   "when": "ended",
+   "label": {
+    "en": "Where",
+    "ja": "場所",
+    "zh": "地点"
+   },
+   "items": [
+    {
+     "v": "study",
+     "label": {
+      "en": "Study",
+      "ja": "書斎",
+      "zh": "书房"
+     }
+    },
+    {
+     "v": "valley",
+     "label": {
+      "en": "Valley",
+      "ja": "竜の谷",
+      "zh": "龙之谷"
+     }
+    },
+    {
+     "v": "lake",
+     "label": {
+      "en": "Lake",
+      "ja": "氷の湖",
+      "zh": "冰湖"
+     }
+    },
+    {
+     "v": "dawn",
+     "label": {
+      "en": "Dawn",
+      "ja": "夜明け",
+      "zh": "黎明"
+     }
+    }
+   ]
+  },
+  {
+   "key": "who",
+   "when": "ended",
+   "label": {
+    "en": "With",
+    "ja": "だれと",
+    "zh": "和谁"
+   },
+   "items": [
+    {
+     "v": "H",
+     "label": {
+      "en": "Hinata",
+      "ja": "陽向",
+      "zh": "阳向"
+     }
+    },
+    {
+     "v": "G",
+     "label": {
+      "en": "Gaku",
+      "ja": "岳",
+      "zh": "岳"
+     }
+    },
+    {
+     "v": "R",
+     "label": {
+      "en": "Ren",
+      "ja": "蓮",
+      "zh": "莲"
+     }
+    },
+    {
+     "v": "HGR",
+     "label": {
+      "en": "All three",
+      "ja": "三人",
+      "zh": "三个人"
+     }
+    }
+   ]
+  }
+ ],
+ "options_note": "Keep talking after the story: drives #talkPick .tpl / .tp",
+ "chapters": [
+  {
+   "en": "The contract study",
+   "ja": "契約の書斎",
+   "zh": "契约书房"
+  },
+  {
+   "en": "The dragon valley",
+   "ja": "竜の谷",
+   "zh": "龙之谷"
+  },
+  {
+   "en": "The frozen lake",
+   "ja": "氷の湖",
+   "zh": "冰湖"
+  },
+  {
+   "en": "The study, late at night",
+   "ja": "書斎・夜更け",
+   "zh": "深夜的书房"
+  },
+  {
+   "en": "Dawn",
+   "ja": "夜明け",
+   "zh": "黎明"
+  }
+ ]
+}
