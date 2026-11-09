@@ -5,7 +5,7 @@ window.MOHEAT_LAYERS = {
    "view": "day_pancake",
    "fire": null,
    "bg": {
-    "src": "art/bg_day__day_pancake.webp?v=8175dd61",
+    "src": "art/bg_day__day_pancake.webp?v=b8c2aae8",
     "fire": [
      0.529,
      0.709
@@ -37,33 +37,13 @@ window.MOHEAT_LAYERS = {
      ],
      "kind": "eyes"
     }
-   ],
-   "more": [
-    {
-     "char": {
-      "src": "art/char_prop_bottle.webp?v=d49a7057",
-      "w": 684,
-      "h": 1311,
-      "x": 0.91,
-      "y": 0.93,
-      "height": 0.5,
-      "box": [
-       949,
-       61,
-       1633,
-       1372
-      ],
-      "who": "X"
-     },
-     "patches": []
-    }
    ]
   },
   "naomi_bat": {
    "view": "day_bat",
    "fire": null,
    "bg": {
-    "src": "art/bg_day__day_bat.webp?v=845d9fcd",
+    "src": "art/bg_day__day_bat.webp?v=a9a8339c",
     "fire": [
      0.529,
      0.709
@@ -94,26 +74,6 @@ window.MOHEAT_LAYERS = {
       269
      ],
      "kind": "eyes"
-    }
-   ],
-   "more": [
-    {
-     "char": {
-      "src": "art/char_prop_bottle.webp?v=d49a7057",
-      "w": 684,
-      "h": 1311,
-      "x": 0.91,
-      "y": 0.93,
-      "height": 0.5,
-      "box": [
-       949,
-       61,
-       1633,
-       1372
-      ],
-      "who": "X"
-     },
-     "patches": []
     }
    ]
   },
@@ -179,7 +139,7 @@ window.MOHEAT_LAYERS = {
    "view": "rain_startle",
    "fire": null,
    "bg": {
-    "src": "art/bg_rain__rain_startle.webp?v=7fa5a5a1",
+    "src": "art/bg_rain__rain_startle.webp?v=11ce5674",
     "fire": [
      0.31,
      0.296
@@ -210,26 +170,6 @@ window.MOHEAT_LAYERS = {
       213
      ],
      "kind": "eyes"
-    }
-   ],
-   "more": [
-    {
-     "char": {
-      "src": "art/char_prop_bottle_rain.webp?v=a6c6f97a",
-      "w": 684,
-      "h": 1311,
-      "x": 0.66,
-      "y": 0.93,
-      "height": 0.5,
-      "box": [
-       949,
-       61,
-       1633,
-       1372
-      ],
-      "who": "X"
-     },
-     "patches": []
     }
    ]
   },
@@ -275,7 +215,7 @@ window.MOHEAT_LAYERS = {
    "view": "night_pancake",
    "fire": null,
    "bg": {
-    "src": "art/bg_night__night_pancake.webp?v=dde9a631",
+    "src": "art/bg_night__night_pancake.webp?v=0101bf14",
     "fire": [
      0.561,
      0.245
@@ -306,26 +246,6 @@ window.MOHEAT_LAYERS = {
       224
      ],
      "kind": "eyes"
-    }
-   ],
-   "more": [
-    {
-     "char": {
-      "src": "art/char_prop_bottle_night.webp?v=f8fb883b",
-      "w": 684,
-      "h": 1311,
-      "x": 0.78,
-      "y": 0.93,
-      "height": 0.5,
-      "box": [
-       949,
-       61,
-       1633,
-       1372
-      ],
-      "who": "X"
-     },
-     "patches": []
     }
    ]
   }
