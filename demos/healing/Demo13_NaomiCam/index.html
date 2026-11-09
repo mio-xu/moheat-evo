@@ -42,19 +42,19 @@
         <canvas id="osd" width="1920" height="1080"></canvas>
         <i class="glow l" id="glowL"></i><i class="glow r" id="glowR"></i>
         <div class="hud-goal" id="goal"></div>
-        <div class="hud-top"><button class="hud-btn" id="hintBtn" type="button">💡 ヒント · Hint</button><button class="hud-btn" id="soundBtn" type="button">🔊</button></div>
+        <div class="hud-top"><button class="hud-btn" id="hintBtn" type="button" data-voice="ヒント|hint|ヒントちょうだい|提示" data-voice-strict>💡 ヒント · Hint</button><button class="hud-btn" id="soundBtn" type="button">🔊</button></div>
         <div class="inv" id="inv"></div>
         <div class="push" id="push"><i>🐾</i><div><small>NaomiCam · <span id="pushTime">now</span></small><b></b><span></span></div></div>
         <div class="dock" id="dock">
-          <button class="dk pan" id="panL" type="button" title="Pan left (←)">◀</button>
-          <button class="dk" id="thermBtn" type="button" title="Thermal view"><span class="ic">🌡</span><span class="tx">サーモ · Thermal</span></button>
-          <button class="dk talk" id="talkBtn" type="button" title="Hold to talk (Space)"><span class="ic">🎤</span><span class="tx">話す · Talk</span><span class="mic" id="micBars"></span></button>
-          <button class="dk" id="laserBtn" type="button" title="Laser pointer"><span class="ic">🔴</span><span class="tx">レーザー · Laser</span></button>
-          <button class="dk" id="fanBtn" type="button" title="Electric fan"><span class="ic">🌀</span><span class="tx">扇風機 · Fan</span></button>
-          <button class="dk" id="feedBtn" type="button" title="Food dispenser"><span class="ic">🍚</span><span class="tx">ごはん · Feed</span></button>
-          <button class="dk" id="heatBtn" type="button" title="Heated blanket"><span class="ic">🔥</span><span class="tx">ホットカーペット · Heat</span></button>
-          <button class="dk" id="snapBtn" type="button" title="Snapshot"><span class="ic">📸</span></button>
-          <button class="dk pan" id="panR" type="button" title="Pan right (→)">▶</button>
+          <button class="dk pan" id="panL" type="button" data-voice="ひだり|左|左へ|left|pan left|左边" data-voice-strict data-voice-hold="1.2" title="Pan left (←)">◀</button>
+          <button class="dk" id="thermBtn" type="button" data-voice="サーモ|さーも|thermal|温度|热成像" data-voice-strict title="Thermal view"><span class="ic">🌡</span><span class="tx">サーモ · Thermal</span></button>
+          <button class="dk talk" id="talkBtn" type="button" data-voice="はなす|話す|呼ぶ|よぶ|ナオミ|naomi|talk|call|说话|叫" data-voice-strict data-voice-hold="2" title="Hold to talk (Space)"><span class="ic">🎤</span><span class="tx">話す · Talk</span><span class="mic" id="micBars"></span></button>
+          <button class="dk" id="laserBtn" type="button" data-voice="レーザー|れーざー|laser|激光" data-voice-strict title="Laser pointer"><span class="ic">🔴</span><span class="tx">レーザー · Laser</span></button>
+          <button class="dk" id="fanBtn" type="button" data-voice="扇風機|せんぷうき|fan|风扇" data-voice-strict title="Electric fan"><span class="ic">🌀</span><span class="tx">扇風機 · Fan</span></button>
+          <button class="dk" id="feedBtn" type="button" data-voice="ごはん|ご飯|えさ|feed|food|喂食|吃饭" data-voice-strict title="Food dispenser"><span class="ic">🍚</span><span class="tx">ごはん · Feed</span></button>
+          <button class="dk" id="heatBtn" type="button" data-voice="ホットカーペット|カーペット|heat|heated blanket|carpet|地毯|加热" data-voice-strict title="Heated blanket"><span class="ic">🔥</span><span class="tx">ホットカーペット · Heat</span></button>
+          <button class="dk" id="snapBtn" type="button" data-voice="写真|しゃしん|さつえい|撮影|snapshot|photo|picture|拍照" data-voice-strict title="Snapshot"><span class="ic">📸</span></button>
+          <button class="dk pan" id="panR" type="button" data-voice="みぎ|右|右へ|right|pan right|右边" data-voice-strict data-voice-hold="1.2" title="Pan right (→)">▶</button>
         </div>
         <div class="coach" id="coach"><b></b><span></span></div>
         <div class="toast" id="toast"><b></b><span></span></div>
@@ -105,6 +105,7 @@
   <script src="../_kit/naomi/audio.js?v=6404a7c1"></script>
   <script src="audio.js?v=bffe51a2"></script>
   <script src="main.js?v=b1a0e38a"></script>
+  <script src="../../shared/voice.js?v=5b86894f"></script>
   <script src="../../shared/nav.js?v=237e6818"></script>
 </body>
 </html>

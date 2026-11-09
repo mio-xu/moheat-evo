@@ -15,7 +15,7 @@
 // (shared/playmode.js: no microphone at all). Toggle: the 🎙 pill (saved).
 // The audio is processed by the browser's speech service (Chrome / Edge: Google / Microsoft; Safari: Apple); nothing is stored here.
 (() => {
-  if (window.MoHeatVoice) return;
+  if (window.MoHeatVoice?.listen) return;   // shell.js also owns window.MoHeatVoice (the voice LANGUAGE: lang / url / fetch …), so check for this file's own API; the two are merged at the end
   const QS = new URLSearchParams(location.search);
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   const OFF = QS.has('cover') || QS.has('render') || QS.has('auto');
@@ -127,7 +127,8 @@
   let rec = null, recOn = false, denied = !SR, netFails = 0, sess = null;
   const micAllowed = () => { const m = document.getElementById('micOn'); return !m || m.checked; };
   const pure = () => window.MoHeatPlay?.pure === true;   // pure listening mode (shared/playmode.js): no microphone, no recognition
-  const active = () => !OFF && !pure() && enabled && !denied && micAllowed();
+  const paused = () => document.documentElement.classList.contains('shell-paused');   // nothing is heard while the demo is paused; scan() starts it again on resume
+  const active = () => !OFF && !pure() && enabled && !denied && micAllowed() && !paused();
   function make() {
     const r = new SR(); r.continuous = true; r.interimResults = true; r.maxAlternatives = 4; r.lang = LANG();
     r.onstart = () => { netFails = 0; };
@@ -181,12 +182,13 @@
     const order = sc.map((v, i) => [v, i]).sort((a, b) => b[0] - a[0]);
     const [s1, i1] = order[0], s2 = order[1] ? order[1][0] : 0;
     let pick = -1;
-    if (s.single) { if (s1 >= (final ? .28 : .6) || (final && YES.test(norm(heard)))) pick = 0; }
+    if (s.strict) { if (final && s1 >= .6 && s1 - s2 >= .15) pick = i1; }   // controls that are always on screen (a camera dock, Hint): room talk must not press them
+    else if (s.single) { if (s1 >= (final ? .28 : .6) || (final && YES.test(norm(heard)))) pick = 0; }
     else if (final ? (s1 >= .25 && s1 - s2 >= .08 && s1 >= 1.3 * s2) : (s1 >= .6 && s1 - s2 >= .25)) pick = i1;
-    if (pick < 0 && final && !s.single) { const o = [ORD, ORD_ZH].map((L) => L.findIndex((re, k) => k < sc.length && alts.some((a) => re.test(norm(a))))).find((x) => x >= 0); if (o >= 0) pick = o; }
+    if (pick < 0 && final && !s.single && !s.strict) { const o = [ORD, ORD_ZH].map((L) => L.findIndex((re, k) => k < sc.length && alts.some((a) => re.test(norm(a))))).find((x) => x >= 0); if (o >= 0) pick = o; }
     if (pick < 0 && final && s1 >= .12) {   // a near miss (unrelated talk in the room does not count)
       s.fails++;
-      if (s.single && s.lenient !== false && (s.fails >= 2 || s1 >= .2) && norm(heard).length <= 24) pick = 0;   // a long unrelated remark never counts as the answer
+      if (s.single && !s.strict && s.lenient !== false && (s.fails >= 2 || s1 >= .2) && norm(heard).length <= 24) pick = 0;   // a long unrelated remark never counts as the answer
     }
     if (pick >= 0) { hit(pick, heard); return; }
     showPill(final ? 'retry' : '', final ? `🤔「${heard}」 ${T('もう一度', 'Try again', '再说一次')}` : `「${heard}」`, s.anchor());
@@ -199,7 +201,16 @@
   }
 
   // ---------------------------------------------------------------- auto mode: answer buttons on the page
-  const SEL = '.ch, .act-btn:not(.hold), .chip-c, #micGate button, .ix-cheer button, [data-voice]';
+  const SEL = '.ch, .act-btn, .chip-c, #micGate button, .ix-cheer button, [data-voice]';
+  // press-and-hold buttons: saying the words presses it, and it is held until the game takes it away (or data-voice-hold seconds, default 8), then released
+  function press(el) {
+    if (!el.matches('.hold, [data-voice-hold]')) return el.click();
+    if (el.__mvHeld) return; el.__mvHeld = true;
+    const fire = (t) => el.dispatchEvent(new PointerEvent(t, { bubbles: true, cancelable: true, pointerId: 1, isPrimary: true, pointerType: 'mouse', button: 0, buttons: t === 'pointerdown' ? 1 : 0 }));
+    fire('pointerdown');
+    const t0 = performance.now(), max = (parseFloat(el.dataset.voiceHold) || 8) * 1000;
+    const iv = setInterval(() => { if (el.isConnected && visible(el) && performance.now() - t0 < max) return; clearInterval(iv); el.__mvHeld = false; fire('pointerup'); }, 100);
+  }
   const visible = (el) => {
     if (!el.isConnected || el.disabled || el.closest('.ix-card, .intro:not(.hidden), [hidden]')) return false;
     const q = el.getBoundingClientRect(); if (q.width < 2 || q.height < 2) return false;
@@ -216,15 +227,19 @@
     return out.map((x) => x.trim()).filter(Boolean);
   }
   let autoSig = '', autoEls = [], manual = false;
+  // pause and resume (shell.js freezes this page's timers while paused, so also on the class change), and a recogniser that ended without telling us
+  const syncRec = () => { if (sess && !sess.done) { if (active()) startRec(); else if (recOn) stopRec(); } };
+  new MutationObserver(syncRec).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
   function scan() {
+    syncRec();
     if (manual) return;
-    const els = OFF || pure() ? [] : [...document.querySelectorAll(SEL)].filter(visible);
+    const els = OFF || pure() ? [] : [...document.querySelectorAll(SEL)].filter((e) => !e.parentElement?.closest('button') && !e.closest('.u2')).filter(visible);   // not the text inside a button (subs.js marks it), not the settings panel's Voice row
     if (!els.length) { if (autoSig) { autoSig = ''; autoEls = []; end(); } return; }
     const sig = els.map((e) => e.dataset.voice || [...e.querySelectorAll(':scope > b:not(.one), :scope > span:not(.one)')].map((x) => x.textContent).join('/') || e.textContent).join('|');
     if (sig !== autoSig) {
       autoSig = sig; autoEls = els;
-      begin({ phrases: els.map(phrasesOf), single: els.length === 1, lenient: true, anchor: () => autoEls.filter((e) => e.isConnected), onHit: (i) => els[i]?.click() });
-      if (sess) sess.els = els;
+      begin({ phrases: els.map(phrasesOf), single: els.length === 1, lenient: true, anchor: () => autoEls.filter((e) => e.isConnected), onHit: (i) => { if (els[i]) press(els[i]); autoSig = ''; } });   // autoSig: controls that stay on screen (Left / Right, valves) keep listening for the next word
+      if (sess) { sess.els = els; sess.strict = els.some((e) => e.matches('[data-voice-strict]')); }
     } else if (pill?.isConnected) place(autoEls);
   }
   setInterval(scan, 250);
@@ -252,7 +267,7 @@
   }
 
   // ---------------------------------------------------------------- API
-  window.MoHeatVoice = {
+  const API = {
     supported: !!SR && !OFF,
     get enabled() { return enabled; }, setEnabled,
     /** listening for this turn right now (use it to skip a level-only fallback) */
@@ -268,4 +283,5 @@
     /** testing: feed a transcript as if it had been heard */
     _hear: (text, final = true) => { if (sess && !sess.done) judge([text], final); },
   };
+  window.MoHeatVoice = Object.defineProperties(window.MoHeatVoice || {}, Object.getOwnPropertyDescriptors(API));
 })();
