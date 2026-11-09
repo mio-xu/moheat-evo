@@ -54,3 +54,7 @@
 .intro .talk-pick .tpl { min-height: 44px; padding: 0 1cqw; border-radius: .8cqw; border: 1px solid rgba(255, 255, 255, .28); background: rgba(22, 20, 26, .55); color: #dfe6ff;
   font: 600 clamp(10px, 1.05cqw, 15px) "Zen Maru Gothic", "Noto Sans JP", sans-serif; cursor: pointer; }
 .intro .talk-pick .tpl[aria-pressed="true"] { background: rgba(var(--st-hi), .85); color: #1a1208; border-color: rgb(var(--st-hi)); }
+
+/* side warm / cool glows (game.css .glow = a 16 % wide layer; on iPhone its inner edge drew a hairline, a visible seam): fade to nothing before the layer's edge */
+.glow.l { -webkit-mask-image: linear-gradient(to right, #000 55%, transparent 92%); mask-image: linear-gradient(to right, #000 55%, transparent 92%); }
+.glow.r { -webkit-mask-image: linear-gradient(to left, #000 55%, transparent 92%); mask-image: linear-gradient(to left, #000 55%, transparent 92%); }
