@@ -460,5 +460,19 @@
   "secs": 420,
   "how": "pure run (did not end)",
   "date": "2026-11-08"
+ },
+ "Demo44_MagicAcademy": {
+  "score": 98,
+  "parts": {
+   "active": 1,
+   "switch": 1,
+   "dual": 1,
+   "lr": 0.96,
+   "range": 0.91,
+   "variety": 1
+  },
+  "secs": 269,
+  "how": "check_demo --full (?auto run)",
+  "date": "2026-11-09"
  }
 }

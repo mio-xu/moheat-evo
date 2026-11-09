@@ -663,7 +663,7 @@
     $('soundBtn')?.addEventListener('click', (e) => { A.setMuted(!A.isMuted()); e.target.textContent = A.isMuted() ? '🔇' : '🔊'; });
     // tests: show(view, ...events) stops the story and holds one picture with its events running (tools: scratch shots / sheets)
     const show = (v, ...evs) => { run_++; if (!S.started) begin('story'); resetThermal(); S.mode = 'story'; S.view = v; S.fade = 0; S.white = 0; S.dark = 0; for (const e of evs) event(e); };
-    const API = window[cfg.ns] = { get S() { return S; }, E, thermal: () => thermal(.05), both: () => both, log: cmdLog, done: false, start, startTalk, event, show };
+    const API = window[cfg.ns] = { get S() { return S; }, E, thermal: () => thermal(.05), both: () => both, log: cmdLog, done: false, start, startTalk, event, show, finish };
     setStep(0); talkUI();
     if (QS.has('cover')) { document.body.classList.add('cover-only'); return API; }
     if (QS.has('autoplay') || AUTO) {

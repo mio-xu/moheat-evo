@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/for-men/Demo44_MagicAcademy/media/cover/stamp.json": "242b3723274a8c88c89ec75d5dc286efea32651c"
+  },
+  "thumb": "3ed8765527e975fc9abfe5f3fbb365b50fc41c18"
+ },
+ "en": {
+  "inputs": {
+   "demos/for-men/Demo44_MagicAcademy/media/cover/stamp.json": "242b3723274a8c88c89ec75d5dc286efea32651c"
+  },
+  "thumb": "3ed8765527e975fc9abfe5f3fbb365b50fc41c18"
+ },
+ "ja": {
+  "inputs": {
+   "demos/for-men/Demo44_MagicAcademy/media/cover/stamp.json": "242b3723274a8c88c89ec75d5dc286efea32651c"
+  },
+  "thumb": "84e14f8fe54abd1c56295d3998b733c07f62b308"
+ },
+ "zh": {
+  "inputs": {
+   "demos/for-men/Demo44_MagicAcademy/media/cover/stamp.json": "242b3723274a8c88c89ec75d5dc286efea32651c"
+  },
+  "thumb": "4e20a1111e6845fd0c15dfae3dfa9a5ce4dee166"
+ }
+}

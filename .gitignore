@@ -103,8 +103,6 @@ demos/all-ages/Demo47_GhostLantern/assets/
 demos/all-ages/Demo48_AnimalOnsen/assets/
 demos/healing/Demo49_NaomiSummer/assets/
 demos/healing/Demo50_WatermelonSummer/assets/
-demos/for-men/Demo44_MagicAcademy/media/voice/en/
-demos/for-men/Demo44_MagicAcademy/media/voice/zh/
 demos/for-women/Demo45_CelestialPalace/media/voice/en/
 demos/for-women/Demo45_CelestialPalace/media/voice/zh/
 # nobunaga talk kit dubs (229 lines, ~7.5 MB per language at 64 kb/s > the 2 MB rule) → local; re-render: Demo23 scripts/voice.py --lang en|zh
