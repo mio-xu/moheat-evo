@@ -7,6 +7,14 @@
 
 ---
 
+## 2026-11-09 去符号 + 配音语言设置（agent ui3）
+
+做了：菜单纯文字（★ 推荐例外）、封面 chips 和 kiosk 文案去 emoji（a384330f，33 张封面重渲染，`tools/web/check_symbols.py`、`check_menu_text.js`）；配音语言设置（c247aee5：⚙ Voice 行、`MoHeatVoice`、18 个 audio.js + talk kit + Demo04、G5 dub 行；Demo43 en / zh 转 64 kb/s 和 talk kit en / zh 进 git）；测试浏览器自动关闭（`tools/qa/chrome_guard.js`、`reap_chrome.py`）。kiosk/precache.json 已重生成，--check 通过。
+
+验证只做了抽查（用户决定先停 UI 检查）：3 张封面肉眼看过；配音在 Demo22（1440×900）和 Demo41（390×844）上试过：默认跟字幕、切 zh 后请求 voice/zh/、字幕不变、缺文件回退 ja。**全量门禁没有在这些改动之后跑过**，各 Demo 的状态见下一条记录。
+
+未做：电影类 Demo（01、02、05–09）分语言混音；Demo04 走自己的文件命名（只换了语言来源）；Demo44–46 的 en / zh 和 Demo01 dry 仍在 .gitignore（未接入，等 page-build agent）；Demo21 空带未复现、原因未证实。Demo45–50 未提交的 cover.json 被 check_symbols --fix 去了 chips 符号（page-build agent 的文件）。
+
 ## 2026-11-09 UI v2 全量门禁：停止时的真实状态（agent ui3）
 
 **不是「33 全绿」。** 用户决定先停掉 UI 检查，下面是停止时每个 Demo 的结果，时间点都早于之后的封面 chips / kiosk 去符号和配音语言设置（这些改动之后没有再跑全量门禁）。
