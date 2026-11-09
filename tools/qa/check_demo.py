@@ -404,6 +404,10 @@ if not A.quick and not ub:
     try:
         r = json.loads(cu.stdout.strip().splitlines()[-1]); ub += [f for f in r.get('fails', []) if f.startswith(NAME + ' ')] + r.get('errors', [])
     except Exception: ub.append('check_ui.js gave no result: ' + cu.stderr.strip()[-200:])
+if not A.quick:   # the demo menu is plain text (user 2026-11-09; the one exception = the ★ of the Recommended tab): tools/web/check_menu_text.js, en / ja / zh
+    cmt = subprocess.run(['node', os.path.join(REPO, 'tools', 'web', 'check_menu_text.js'), D], capture_output=True, text=True, cwd=REPO)
+    try: ub += [f'menu symbol: {f}' for f in json.loads(cmt.stdout.strip().splitlines()[-1]).get('fails', [])]
+    except Exception: ub.append('check_menu_text.js gave no result: ' + cmt.stderr.strip()[-200:])
 if not A.quick and not ub and 'device.js' in read(os.path.join(D, 'index.html')):   # the device state: one source, silent reconnect across demos (tools/web/check_device.js, mock serial)
     cdv = subprocess.run(['node', os.path.join(REPO, 'tools', 'web', 'check_device.js'), REL], capture_output=True, text=True, cwd=REPO)
     try: ub += [f'device: {f}' for f in json.loads(cdv.stdout.strip().splitlines()[-1]).get('fails', [])]

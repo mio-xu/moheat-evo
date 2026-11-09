@@ -189,7 +189,7 @@
   const TITLE = (d) => pickT({ ja: d.ja, en: d.en, zh: d.zh });
   const GZH = ['全年龄', '治愈', '男性向', '女性向', '信长系列'];
   const GT = (gi) => { const [ja, en] = GROUPS[gi].split(' · '); return pickT({ ja, en, zh: GZH[gi] }); };
-  const W = { all: { ja: 'すべて', en: 'All', zh: '全部' }, now: { ja: '▶ 再生中', en: '▶ Now playing', zh: '▶ 正在播放' }, ep: { ja: '第', en: 'Ep ', zh: '第' },
+  const W = { all: { ja: 'すべて', en: 'All', zh: '全部' }, now: { ja: '再生中', en: 'Now playing', zh: '正在播放' }, heat: { ja: '温冷', en: 'Thermal', zh: '温冷' }, ep: { ja: '第', en: 'Ep ', zh: '第' },
     demos: { ja: 'デモ', en: 'Demos', zh: '演示' }, rec: { ja: '★ おすすめ', en: '★ Recommended', zh: '★ 推荐', ko: '★ 추천' }, top: { ja: 'まずはこれから · 温冷をいちばん感じられる3本', en: 'Try these first · the most thermal feedback', zh: '推荐先体验 · 冷热反馈最丰富的3个' }, credits: { ja: '権利表記', en: 'Credits', zh: '版权与署名' },
     rights: { ja: '声・イラスト・音楽・商標', en: 'voices, art, music, trademarks', zh: '配音、美术、音乐、商标' }, prev: { ja: '前へ', en: 'Previous', zh: '上一个' }, next: { ja: '次へ', en: 'Next', zh: '下一个' } };
   const nav = document.createElement('nav'); nav.className = 'dnav'; nav.setAttribute('aria-label', 'Choose another demo');
@@ -204,7 +204,7 @@
   const span = (gi) => { const n = DEMOS.map((d, i) => (d.group === gi ? i + 1 : 0)).filter(Boolean); return gi < 4 ? (n.length > 1 ? ` · ${n[0]}–${n[n.length - 1]}` : ` · ${n[0]}`) : ''; };
   const count = (gi) => DEMOS.filter((d) => d.group === gi).length;   // level 1: category tabs (+ "all"); level 2: that category's demos
   const card = (d, i, top) => { const of = d.part ? DEMOS.filter((x) => x.series === d.series && x.part).length : 0;   // one menu card
-    return `<a class="dn-card${i === cur ? ' is-cur' : ''}" href="${href(d)}"><img src="${thumb(i)}" data-t="${i}" alt="" loading="lazy"><span><em>${top ? `<s>🌡 ${HEAT[d.dir] || '★'}</s> · ` : ''}Demo ${i + 1}${d.part && of > 1 ? ` · <span data-part="${d.part}/${of}"></span>` : ''}${d.new ? '<i>NEW</i>' : ''}</em><b data-d="${i}"></b>${i === cur ? '<small class="dn-now" data-w="now"></small>' : ''}</span></a>`; };
+    return `<a class="dn-card${i === cur ? ' is-cur' : ''}" href="${href(d)}"><img src="${thumb(i)}" data-t="${i}" alt="" loading="lazy"><span><em>${top && HEAT[d.dir] ? `<s data-heat="${HEAT[d.dir]}"></s> · ` : ''}Demo ${i + 1}${d.part && of > 1 ? ` · <span data-part="${d.part}/${of}"></span>` : ''}${d.new ? '<i>NEW</i>' : ''}</em><b data-d="${i}"></b>${i === cur ? '<small class="dn-now" data-w="now"></small>' : ''}</span></a>`; };
   // "Recommended" is its OWN top-level tab (user 2026-11-09: never mixed into the category lists); the categories show only their demos
   panel.innerHTML = `<div class="dn-tabs" role="tablist">${TOP.length ? `<button type="button" role="tab" data-g="top"><span data-w="rec"></span><i>${TOP.length}</i></button>` : ''}<button type="button" role="tab" data-g="all"><span data-w="all"></span><i>${DEMOS.length}</i></button>`
     + GROUPS.map((g, gi) => `<button type="button" role="tab" data-g="${gi}"><span data-gt="${gi}"></span><i>${count(gi)}</i></button>`).join('') + '</div>'
@@ -216,7 +216,7 @@
     for (const r of [nav, panel]) {
       r.querySelectorAll('[data-w]').forEach((e) => { e.textContent = pickT(W[e.dataset.w]); });
       r.querySelectorAll('[data-gt]').forEach((e) => { e.textContent = GT(+e.dataset.gt); });
-      r.querySelectorAll('[data-d]').forEach((e) => { e.textContent = TITLE(DEMOS[+e.dataset.d]); });
+      r.querySelectorAll('[data-d]').forEach((e) => { e.textContent = TITLE(DEMOS[+e.dataset.d]); }); r.querySelectorAll('[data-heat]').forEach((e) => { e.textContent = `${pickT(W.heat)} ${e.dataset.heat}`; });
       r.querySelectorAll('[data-part]').forEach((e) => { const l = LG(), [n, of] = e.dataset.part.split('/'); e.textContent = l === 'en' ? `Part ${n} / ${of}` : l === 'ja' ? `第${n}話 / 全${of}話` : `第${n}集 / 共${of}集`; });
       r.querySelectorAll('[data-ser]').forEach((e) => { e.textContent = pickT(SERIES[e.dataset.ser] || { en: e.dataset.ser }); });
     }
