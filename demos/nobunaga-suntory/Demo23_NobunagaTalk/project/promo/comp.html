@@ -1,190 +1,44 @@
 <!doctype html>
-<!-- Promo compositor page: one 1920 × 1080 frame per window.render(desc) (desc = one entry of frames.json written by edit.py).
-     Footage = deterministic captures of the real demo pages (render.js); everything drawn here is vector (DOM / SVG / canvas) at
-     full resolution, styled after the user's MoHeat Evo film (STYLE.md: Inter + Hiragino, orange #ff7a2f / blue #5fb4ff). -->
+<!-- Promo compositor v3: one 1920 × 1080 frame per window.render(desc) (edit.py → frames.json). Deliberately plain, like the user's
+     own film: one typeface family, white text on flat dark boxes, left aligned, no glow / blur / gradients / shadows / icons. The only
+     output graphic is the demo's own radar, cropped from the same captured frame as the picture. -->
 <html lang="ja"><head><meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0c0e12;--ink:#f4f1ec;--muted:#a8afb8;--acc:#ff7a2f;--cold:#5fb4ff;--card:#171b22;--line:#2a313b;--N:#ff9a72;--I:#8fe0b4;--you:#ffd9a8}
-*{box-sizing:border-box}html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:var(--bg)}
-body{font-family:Inter,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
-.jp{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",Inter,sans-serif}
-#root{position:absolute;inset:0;overflow:hidden}
-.layer{position:absolute;inset:0}
-.foot{position:absolute;inset:0;overflow:hidden;background:#000}
-.foot img{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
-.grad{position:absolute;inset:0;pointer-events:none}
-.vign{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 55%,rgba(0,0,0,.42) 100%)}
-.fill{position:absolute;inset:0;background:var(--bg)}
-/* subtitles: JA over EN, centred low, dark pill */
-#sub{position:absolute;left:0;right:0;margin:0 auto;bottom:54px;width:fit-content;max-width:1560px;text-align:center;padding:16px 34px 18px;border-radius:22px;
-  background:rgba(8,9,12,.62);backdrop-filter:blur(8px);box-shadow:0 10px 40px rgba(0,0,0,.35)}
-#sub .ja{font-size:50px;font-weight:800;line-height:1.25;letter-spacing:.01em;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.4)}
-#sub .ja b{font-weight:800;margin-right:.45em;font-size:.72em;vertical-align:.12em}
-#sub .en{font-size:32px;font-weight:500;line-height:1.3;color:#dde1e6;margin-top:6px}
-/* film-style text block */
-.kick{font-size:22px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
-.h-ja{font-size:78px;font-weight:800;letter-spacing:.01em;line-height:1.15;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.45)}
-.h-en{font-size:34px;font-weight:500;line-height:1.3;color:#d9dde2;margin-top:14px}
-.acc{color:var(--acc)}.cold{color:var(--cold)}
-.badge{position:absolute;display:flex;align-items:center;gap:12px;padding:10px 20px;border-radius:999px;background:rgba(8,9,12,.66);backdrop-filter:blur(8px);
-  font-size:24px;font-weight:700;letter-spacing:.04em;color:#fff;box-shadow:0 8px 30px rgba(0,0,0,.35);white-space:nowrap}
-.badge i{width:14px;height:14px;border-radius:50%;background:#ff3b3b;box-shadow:0 0 12px #ff3b3b}
-.badge small{font-size:20px;font-weight:600;color:var(--muted);letter-spacing:.02em}
-/* the viewer's turn */
-#you{position:absolute;left:50%;bottom:64px;transform:translateX(-50%);display:flex;align-items:center;gap:26px;padding:20px 34px;border-radius:26px;
-  background:rgba(14,16,22,.78);border:1px solid rgba(255,217,168,.35);backdrop-filter:blur(10px);box-shadow:0 14px 50px rgba(0,0,0,.45);min-width:760px}
-#you .mic{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#ffb07a,#ff7a2f);display:grid;place-items:center;flex:none;box-shadow:0 0 0 8px rgba(255,122,47,.18)}
-#you .mic svg{width:30px;height:30px}
-#you .k{font-size:21px;font-weight:700;letter-spacing:.12em;color:var(--you);text-transform:uppercase}
-#you .t{font-size:44px;font-weight:800;color:#fff;line-height:1.25}
-#you .e{font-size:28px;font-weight:500;color:#cfd4da}
-#you canvas{flex:none}
-.think{display:inline-flex;gap:8px;margin-left:10px;vertical-align:middle}.think b{width:12px;height:12px;border-radius:50%;background:#fff}
-/* HUD */
-#hud{position:absolute;width:520px;padding:20px 22px 18px;border-radius:22px;background:rgba(12,14,18,.78);border:1px solid rgba(255,255,255,.14);
-  backdrop-filter:blur(12px);box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06);transform-origin:0 0}
-#hud .hd{display:flex;justify-content:space-between;align-items:baseline;font-size:17px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-#hud .hd b{color:#fff;letter-spacing:.02em;text-transform:none;font-family:Manrope,Inter;font-size:20px}#hud .hd b span{color:#ff927b}
-#hud .row{display:flex;gap:18px;align-items:center;margin-top:8px}
-#hud .bars{flex:1;display:grid;gap:9px}
-#hud .bar{display:grid;grid-template-columns:76px 1fr 44px;align-items:center;gap:10px;font-size:17px;font-weight:600;color:#cfd4da}
-#hud .bar .tr{height:12px;border-radius:6px;background:rgba(255,255,255,.08);overflow:hidden}
-#hud .bar .tr i{display:block;height:100%;border-radius:6px}
-#hud .bar b{text-align:right;font-family:"JetBrains Mono",monospace;font-size:17px;color:#fff}
-#hud .cmd{margin-top:12px;font-family:"JetBrains Mono",monospace;font-size:17px;color:#9aa3ad;white-space:nowrap;letter-spacing:.01em}
-#hud .cmd em{font-style:normal;color:#fff}
-#hud .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;min-height:38px}
-#hud .tag{padding:6px 13px;border-radius:999px;font-size:19px;font-weight:700;white-space:nowrap}
-#hud .tag.h{background:rgba(255,122,47,.18);color:#ffc29f;border:1px solid rgba(255,122,47,.45)}
-#hud .tag.c{background:rgba(95,180,255,.16);color:#bfe0ff;border:1px solid rgba(95,180,255,.45)}
-#hudcap{position:absolute;text-align:left;width:780px;padding:18px 26px 20px;border-radius:20px;background:rgba(8,9,12,.62);backdrop-filter:blur(10px);box-shadow:0 14px 44px rgba(0,0,0,.4)}
-.tcard{display:inline-block;text-align:left;padding:16px 26px 18px;border-radius:20px;background:rgba(8,9,12,.6);backdrop-filter:blur(10px);box-shadow:0 14px 44px rgba(0,0,0,.4)}
-.tcard .h-ja{margin-top:0!important}
-/* cards */
-.center{position:absolute;left:0;right:0;text-align:center}
-.chips{position:absolute;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:18px}
-.chip{display:flex;align-items:center;gap:14px;padding:16px 26px;border-radius:20px;background:var(--card);border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.35)}
-.chip .ic{font-size:40px}.chip .l1{font-size:28px;font-weight:800;color:#fff}.chip .l2{font-size:19px;font-weight:500;color:var(--muted);margin-top:2px}
-.arrow{font-size:34px;color:var(--acc);font-weight:800}
-.node{position:absolute;width:300px;padding:26px 22px 24px;border-radius:22px;background:var(--card);border:1px solid var(--line);box-shadow:0 14px 40px rgba(0,0,0,.4);text-align:left}
-.node .n{width:44px;height:44px;border-radius:50%;background:var(--acc);color:#fff;font-weight:800;font-size:24px;display:flex;align-items:center;justify-content:center}
-.node h4{margin:14px 0 0;font-size:31px;font-weight:800;line-height:1.15}.node h5{margin:4px 0 0;font-size:21px;font-weight:600;color:#d9dde2}
-.node p{margin:10px 0 0;font-size:19px;line-height:1.35;color:var(--muted)}
-.mono{font-family:"JetBrains Mono",monospace}
-.pip{position:absolute;border-radius:18px;overflow:hidden;background:#000;border:2px solid rgba(255,255,255,.28);box-shadow:0 18px 60px rgba(0,0,0,.55)}
-.pip img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.pip-label{position:absolute;left:14px;bottom:12px;display:flex;align-items:center;gap:10px;padding:6px 14px;border-radius:999px;background:rgba(8,9,12,.72);color:#fff;font-size:20px;font-weight:700;letter-spacing:.04em}
-.pip-label i{width:12px;height:12px;border-radius:50%}
-#flash{position:absolute;inset:0;pointer-events:none}
-.credit{position:absolute;left:100px;bottom:28px;font-size:15px;color:#6f7782}
-</style></head>
-<body><div id="root"></div>
+*{box-sizing:border-box}html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#0c0e12}
+body{font-family:Inter,"Hiragino Sans","Hiragino Kaku Gothic ProN",sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+#root,.foot{position:absolute;inset:0;overflow:hidden}
+.foot img{position:absolute;left:0;top:0;transform-origin:0 0}
+.box{position:absolute;background:rgba(0,0,0,.72);padding:14px 24px 16px}
+.ja{font-weight:700;line-height:1.3}.en{font-weight:500;line-height:1.3;margin-top:4px}
+.name{color:#b8bec6;font-weight:500;margin-right:.6em}
+.radar{position:absolute;overflow:hidden;border-radius:18px;background:#15100b}
+.radar img{position:absolute;left:0;top:0;transform-origin:0 0;filter:brightness(1.8) contrast(1.12)}
+.big{position:absolute;left:100px}
+</style></head><body><div id="root"></div>
 <script>
-const $ = (h) => { const t = document.createElement('template'); t.innerHTML = h.trim(); return t.content.firstChild; };
-const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
-const ease = (x) => { x = clamp(x); return 1 - Math.pow(1 - x, 3); };       // ease-out cubic
-const easeIO = (x) => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
-const pop = (p) => `opacity:${ease(p * 1.6).toFixed(3)};transform:translateY(${((1 - ease(p)) * 24).toFixed(1)}px) scale(${(0.965 + 0.035 * ease(p)).toFixed(4)})`;
-const md = (s) => (s || '').replace(/\*([^*]+)\*/g, '<span class="acc">$1</span>').replace(/~([^~]+)~/g, '<span class="cold">$1</span>');
-const NAME = { N: ['信長', 'Nobunaga', 'var(--N)'], I: ['家康', 'Ieyasu', 'var(--I)'], Y: ['あなた', 'You', 'var(--you)'] };
-const imgCache = {};
-async function img(src) { if (!src) return null; let im = imgCache[src]; if (!im) { im = new Image(); im.src = src; imgCache[src] = im; } if (!im.complete || !im.naturalWidth) await im.decode().catch(() => {}); return im; }
-function drop(n = 40) { const ks = Object.keys(imgCache); if (ks.length > n) for (const k of ks.slice(0, ks.length - n)) delete imgCache[k]; }
-
-// footage: crop [x, y, w, h] of the source picture → the full frame (cover), optional grade / blur / dim
-async function foot(f) {
-  const im = await img(f.src); if (!im) return '';
-  const [x, y, w, h] = f.crop || [0, 0, im.naturalWidth, im.naturalHeight], s = 1920 / w;
-  const flt = [f.grade !== false ? 'contrast(1.06) saturate(1.06) brightness(.98)' : '', f.blur ? `blur(${f.blur}px)` : ''].join(' ');
-  return `<div class="foot" style="opacity:${f.a ?? 1}"><img src="${f.src}" style="width:${im.naturalWidth}px;height:${im.naturalHeight}px;transform:scale(${s}) translate(${-x}px,${-y}px);filter:${flt}">
-    ${f.dim ? `<div class="fill" style="opacity:${f.dim}"></div>` : ''}${f.vign !== false ? '<div class="vign"></div>' : ''}</div>`;
-}
-
-// the MoHeat Evo output HUD: head from above, L / R cups each with warm + cool at once, 4 bars, the DUAL command, sources
-function hud(H) {
-  const [Lc, Lh, Rc, Rh] = H.m.map((v) => clamp(v)), W = 476;
-  const cup = (x, h, c, lab) => `
-    <circle cx="${x}" cy="88" r="${46 + 38 * h}" fill="url(#gh)" opacity="${(.15 + .85 * h) * (h > .01)}"/>
-    <circle cx="${x}" cy="88" r="${40 + 34 * c}" fill="url(#gc)" opacity="${(.15 + .85 * c) * (c > .01)}"/>
-    <rect x="${x - 25}" y="42" width="50" height="92" rx="23" fill="#11151b" stroke="#4a5361" stroke-width="3"/>
-    <clipPath id="cp${lab}"><rect x="${x - 22}" y="45" width="44" height="86" rx="20"/></clipPath>
-    <g clip-path="url(#cp${lab})"><rect x="${x - 22}" y="45" width="44" height="43" fill="#ff7a2f" opacity="${(.12 + .88 * h).toFixed(3)}"/>
-    <rect x="${x - 22}" y="88" width="44" height="43" fill="#5fb4ff" opacity="${(.12 + .88 * c).toFixed(3)}"/></g>
-    <text x="${x}" y="96" text-anchor="middle" font-size="24" font-weight="800" fill="#fff" font-family="Inter">${lab}</text>`;
-  const svg = `<svg width="170" height="176" viewBox="${W / 2 - 150} 0 300 176" style="flex:none;overflow:visible">
-    <defs><radialGradient id="gh"><stop offset="0" stop-color="#ff7a2f" stop-opacity=".95"/><stop offset=".55" stop-color="#ff7a2f" stop-opacity=".3"/><stop offset="1" stop-color="#ff7a2f" stop-opacity="0"/></radialGradient>
-    <radialGradient id="gc"><stop offset="0" stop-color="#5fb4ff" stop-opacity=".95"/><stop offset=".55" stop-color="#5fb4ff" stop-opacity=".3"/><stop offset="1" stop-color="#5fb4ff" stop-opacity="0"/></radialGradient></defs>
-    ${cup(W / 2 - 92, Lh, Lc, 'L')}${cup(W / 2 + 92, Rh, Rc, 'R')}
-    <ellipse cx="${W / 2}" cy="88" rx="64" ry="78" fill="#2a313b" stroke="#3c4552" stroke-width="3"/>
-    <path d="M${W / 2 - 13},${12} L${W / 2},${-6} L${W / 2 + 13},${12}" fill="#2a313b" stroke="#3c4552" stroke-width="3"/>
-    <text x="${W / 2}" y="176" text-anchor="middle" font-size="17" fill="#a8afb8" font-family="Inter">front</text></svg>`;
-  const bar = (lab, v, col) => `<div class="bar"><span>${lab}</span><div class="tr"><i style="width:${(v * 100).toFixed(1)}%;background:${col};box-shadow:0 0 12px ${col}"></i></div><b>${Math.round(v * 100)}</b></div>`;
-  const cmd = (H.cmd || 'stop').replace(/(\d+)/g, '<em>$1</em>');
-  const tags = (H.tags || []).map(([k, t]) => `<span class="tag ${k}">${t}</span>`).join('');
-  return `<div id="hud" style="left:${H.x}px;top:${H.y}px;opacity:${H.a};transform:scale(${H.s || 1})">
-    <div class="hd"><span>Output</span><b>MoHeat <span>Evo</span></b></div>
-    <div class="row">${svg}<div class="bars">${bar('L cool', Lc, '#5fb4ff')}${bar('L warm', Lh, '#ff7a2f')}${bar('R cool', Rc, '#5fb4ff')}${bar('R warm', Rh, '#ff7a2f')}</div></div>
-    <div class="cmd">${cmd}</div><div class="tags">${tags}</div></div>`;
-}
-
-function waveCanvas(levels) {
-  const c = document.createElement('canvas'); c.width = 360; c.height = 80; c.style.width = '180px'; c.style.height = '40px';
-  const g = c.getContext('2d'); g.fillStyle = '#ffd9a8';
-  levels.forEach((v, i) => { const h = 6 + 68 * clamp(v); g.beginPath(); g.roundRect(i * 15 + 2, 40 - h / 2, 9, h, 5); g.fill(); });
-  return c;
-}
-
+const cache = {};
+async function img(src) { let i = cache[src]; if (!i) { i = new Image(); i.src = src; cache[src] = i; } if (!i.complete || !i.naturalWidth) await i.decode().catch(() => {}); return i; }
+function drop() { const k = Object.keys(cache); for (const x of k.slice(0, Math.max(0, k.length - 30))) delete cache[x]; }
+function wave(levels) { const c = document.createElement('canvas'); c.width = 360; c.height = 72; c.style.cssText = 'width:180px;height:36px;display:block;margin-top:8px'; const g = c.getContext('2d'); g.fillStyle = '#fff'; levels.forEach((v, i) => { const h = 6 + 62 * Math.min(1, v); g.fillRect(i * 15 + 2, 36 - h / 2, 8, h); }); return c; }
 window.render = async (D) => {
   const root = document.getElementById('root'); let h = '';
-  if (D.foot) h += await foot(D.foot);
-  if (D.foot2) h += await foot(D.foot2);
-  if (D.grad) h += `<div class="grad" style="opacity:${D.grad};background:linear-gradient(to top,rgba(5,6,8,.88) 0%,rgba(5,6,8,.35) 42%,rgba(5,6,8,0) 62%),linear-gradient(to right,rgba(5,6,8,.55),rgba(5,6,8,0) 55%)"></div>`;
-  if (D.glow) for (const g of D.glow) h += `<div class="grad" style="background:radial-gradient(ellipse at ${g.x}% ${g.y}%,${g.c} 0%,rgba(0,0,0,0) ${g.r}%);opacity:${g.a};mix-blend-mode:screen"></div>`;
-  for (const c of D.cards || []) h += card(c);
-  if (D.badge) for (const b of D.badge) h += `<div class="badge" style="${b.r != null ? `right:${b.r}px` : `left:${b.x}px`};top:${b.y}px;${pop(b.p)}">${b.dot ? `<i style="background:${b.dot};box-shadow:0 0 12px ${b.dot}"></i>` : ''}${b.html}</div>`;
-  if (D.hud) h += hud(D.hud);
-  if (D.hudcap) h += `<div id="hudcap" style="left:${D.hudcap.x}px;top:${D.hudcap.y}px;${pop(D.hudcap.p)}"><div class="kick">${D.hudcap.k}</div><div class="h-ja jp" style="font-size:58px;margin-top:6px">${md(D.hudcap.ja)}</div><div class="h-en" style="font-size:30px;margin-top:6px">${md(D.hudcap.en)}</div></div>`;
-  if (D.text) for (const t of D.text) h += `<div style="position:absolute;left:${t.x}px;${t.y != null ? `top:${t.y}px` : `bottom:${t.b}px`};width:${t.w || 1500}px;text-align:${t.align || 'left'};${pop(t.p)}"><div class="${t.card ? 'tcard' : ''}">
-    ${t.k ? `<div class="kick">${t.k}</div>` : ''}${t.ja ? `<div class="h-ja jp" style="${t.jas ? `font-size:${t.jas}px;` : ''}margin-top:10px">${md(t.ja)}</div>` : ''}${t.en ? `<div class="h-en" style="${t.ens ? `font-size:${t.ens}px;` : ''}${t.card ? 'margin-top:6px' : ''}">${md(t.en)}</div>` : ''}</div></div>`;
-  if (D.sub) { const n = NAME[D.sub.who]; h += `<div id="sub" style="opacity:${D.sub.a}"><div class="ja jp">${n ? `<b style="color:${n[2]}">${n[0]}</b>` : ''}${D.sub.ja}</div><div class="en">${D.sub.en}</div></div>`; }
-  if (D.you) h += `<div id="you" style="${pop(D.you.p)}"><div class="mic"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V22h2v-3.08A7 7 0 0 0 19 12h-2z"/></svg></div>
-    <div style="flex:1"><div class="k">${D.you.k}</div>${D.you.t ? `<div class="t jp">${D.you.t}</div><div class="e">${D.you.e || ''}</div>` : ''}</div><span id="wv"></span></div>`;
-  if (D.flash) h += `<div id="flash" style="background:${D.flash.c || '#fff'};opacity:${D.flash.a}"></div>`;
-  if (D.fade) h += `<div class="fill" style="opacity:${D.fade}"></div>`;
+  if (D.foot) { const f = D.foot, im = await img(f.src), [x, y, w] = f.crop || [0, 0, im.naturalWidth], s = 1920 / w;
+    h += `<div class="foot" style="opacity:${f.a ?? 1}"><img src="${f.src}" style="width:${im.naturalWidth}px;height:${im.naturalHeight}px;transform:scale(${s}) translate(${-x}px,${-y}px)"></div>`; }
+  if (D.radar) { const r = D.radar, im = await img(r.src), [x, y, w] = r.crop, s = r.size / w;
+    h += `<div class="radar" style="left:${r.x}px;top:${r.y}px;width:${r.size}px;height:${r.size}px;opacity:${r.a}"><img src="${r.src}" style="width:${im.naturalWidth}px;height:${im.naturalHeight}px;transform:scale(${s}) translate(${-x}px,${-y}px)"></div>`; }
+  if (D.line) { const l = D.line; h += `<div class="box" style="left:${l.x}px;${l.y != null ? `top:${l.y}px` : `bottom:${l.b}px`};${l.w ? `width:${l.w}px;` : ''}opacity:${l.a}"><div class="ja" style="font-size:${l.js || 36}px">${l.ja}</div><div class="en" style="font-size:${l.es || 24}px">${l.en}</div></div>`; }
+  if (D.sub) h += `<div class="box" style="left:100px;bottom:64px;max-width:1500px"><div class="ja" style="font-size:46px"><span class="name">${D.sub.name}</span>${D.sub.ja}</div><div class="en" style="font-size:30px">${D.sub.en}</div></div>`;
+  if (D.you) h += `<div class="box" style="left:100px;bottom:64px;max-width:1500px;opacity:${D.you.a}"><div class="ja" style="font-size:46px"><span class="name">あなた</span>${D.you.ja}</div><div class="en" style="font-size:30px">${D.you.en}</div><div id="wv"></div></div>`;
+  if (D.title) h += `<div class="big" style="top:420px;opacity:${D.title.a}"><div style="font-size:78px;font-weight:800;line-height:1.15">${D.title.ja}</div><div style="font-size:34px;font-weight:500;margin-top:16px">${D.title.en}</div></div>`;
+  if (D.end) { const e = D.end, im = await img(e.src); h += `<img src="${e.src}" style="position:absolute;left:1040px;top:140px;width:780px;height:800px;object-fit:cover;border-radius:18px">
+    <div class="big" style="top:440px"><div style="font-size:84px;font-weight:800;letter-spacing:-.02em">MoHeat Evo</div><div style="font-size:36px;font-weight:500;margin-top:18px">moheat-evo.github.io</div></div>
+    <div style="position:absolute;left:100px;bottom:40px;font-size:18px;font-weight:500;color:#8a919b">Music: “EDM Detection Mode” by Kevin MacLeod (incompetech.com), licensed under Creative Commons: By Attribution 4.0</div>`; }
+  if (D.fade) h += `<div style="position:absolute;inset:0;background:#0c0e12;opacity:${D.fade}"></div>`;
   root.innerHTML = h;
-  if (D.you && D.you.wave) document.getElementById('wv').append(waveCanvas(D.you.wave));
-  const ims = [...root.querySelectorAll('img')]; await Promise.all(ims.map((i) => (i.complete ? null : i.decode().catch(() => {}))));
-  drop();
-  await document.fonts.ready;
-  return true;
+  if (D.you && D.you.wave) document.getElementById('wv').append(wave(D.you.wave));
+  await Promise.all([...root.querySelectorAll('img')].map((i) => (i.complete ? null : i.decode().catch(() => {}))));
+  drop(); await document.fonts.ready; return true;
 };
-
-// card scenes (statement / flow / end) — c.p = progress in beats since the scene start
-function card(c) {
-  const b = c.b, at = (beat) => clamp((b - beat) / 1.2);   // element popping in on `beat`
-  if (c.kind === 'chips') {
-    const S = [['🎤', 'あなたが話す', 'You speak'], ['🧠', 'AIが理解', 'AI understands'], ['🗣️', '声で返事', 'They answer by voice'], ['🌡️', '耳に温度', 'MoHeat Evo · warm / cool']];
-    return `<div class="chips" style="top:${c.y}px">${S.map((s, i) => `${i ? `<span class="arrow" style="${pop(at(c.b0 + i * c.step - .3))}">→</span>` : ''}<div class="chip" style="${pop(at(c.b0 + i * c.step))}"><span class="ic">${s[0]}</span><div><div class="l1 jp">${s[1]}</div><div class="l2">${s[2]}</div></div></div>`).join('')}</div>`;
-  }
-  if (c.kind === 'flow') {
-    const N = [['🎤', 'あなたの声', 'Your voice', 'Speech recognition · 日本語 / EN / 中文'], ['🧠', 'AIエージェント', 'AI agent (live)', 'Writes each line in real time: who speaks, where, and what happens (@fire, @window)'],
-      ['🗣️', 'キャラの声', 'Character voices', 'ElevenLabs TTS · Nobunaga & Ieyasu · 3D audio, L / R'], ['🌡️', '温度エンジン', 'Thermal engine', 'Voice loudness × distance + the place (hearth, snow, wind)'], ['🎧', 'MoHeat Evo', 'Each ear: warm + cool', 'DUAL LC · LH · RC · RH, every 0.1 s']];
-    return N.map((n, i) => `<div class="node" style="left:${100 + i * 352}px;top:${c.y}px;${pop(at(c.b0 + i * c.step))}"><div class="n">${n[0]}</div><h4 class="jp">${n[1]}</h4><h5>${n[2]}</h5><p>${n[3]}</p></div>
-      ${i < 4 ? `<div class="arrow" style="position:absolute;left:${100 + i * 352 + 306}px;top:${c.y + 120}px;${pop(at(c.b0 + i * c.step + .5))}">→</div>` : ''}`).join('');
-  }
-  if (c.kind === 'code') return `<div class="mono" style="position:absolute;left:100px;top:${c.y}px;font-size:26px;line-height:1.55;color:#9aa3ad;${pop(at(c.b0))}">${c.lines.map((l, i) => `<div style="${pop(at(c.b0 + i * c.step))}">${l}</div>`).join('')}</div>`;
-  if (c.kind === 'pip') return `<div class="pip" style="left:${c.x}px;top:${c.y}px;width:${c.w}px;height:${c.h}px;${pop(at(c.b0))}"><img src="${c.src}">${c.label ? `<div class="pip-label"><i style="background:${c.dot}"></i>${c.label}</div>` : ''}</div>`;
-  if (c.kind === 'end') return `
-    <div style="position:absolute;left:100px;top:300px;width:900px">
-      <div class="kick" style="${pop(at(0))}">Talk · Listen · Feel</div>
-      <div class="h-ja jp" style="font-size:96px;line-height:1.1;margin-top:16px;${pop(at(.5))}">話す。聴く。<br><span class="acc">感じる。</span></div>
-      <div class="h-en" style="font-size:40px;${pop(at(1.5))}">Talk with Nobunaga — and <span class="acc">feel</span> it.</div>
-      <div style="margin-top:46px;${pop(at(3))}"><div style="font:800 44px Manrope,Inter;letter-spacing:-.02em">MoHeat <span style="color:#ff927b">Evo</span></div>
-      <div style="font-size:24px;color:var(--muted);margin-top:6px">Next-generation thermal headphones · The University of Tokyo × Suntory joint research</div>
-      <div style="font-size:30px;font-weight:700;color:#fff;margin-top:22px">moheat-evo.github.io</div></div></div>
-    <div class="credit">Music: “EDM Detection Mode” by Kevin MacLeod (incompetech.com), licensed under Creative Commons: By Attribution 4.0 · Voices: ElevenLabs · Live AI talk: private demo (server)</div>`;
-  return '';
-}
 </script></body></html>

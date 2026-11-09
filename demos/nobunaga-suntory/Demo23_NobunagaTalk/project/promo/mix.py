@@ -169,7 +169,8 @@ mus = np.vstack([mus, np.zeros((N - len(mus), 2))])
 gdb = np.zeros(N)
 for s in plan['segs']:
     i0, i1 = int(s['t0'] * SR), int(s['t1'] * SR)
-    gdb[i0:i1] = {'hook': -14, 'solo': -14, 'rt': -14, 'montage': -1, 'statement': 0, 'flow': -2, 'end': 0}[s['part']]
+    gdb[i0:i1] = {'hook': -14, 'real': -3, 'title': 0, 'solo': -14, 'rt': -14, 'montage': -2, 'how': -3, 'end': 0}[s['part']]
+for a_, b_ in plan.get('breathe', []): gdb[int(a_ * SR):int(b_ * SR)] = -26   # one moment that breathes: the music almost gone
 gdb = np.minimum(gdb, np.where(duck > 0, -19, 0))                       # hard duck under the voices (−5 dB more)
 # smooth (attack 80 ms, release 350 ms) with a simple one-pole on the dB curve, both directions
 k_a, k_r = math.exp(-1 / (.08 * SR)), math.exp(-1 / (.35 * SR)); g = np.empty(N); v = gdb[0]
@@ -178,8 +179,8 @@ for i in range(N):
 music = mus * (10 ** (g / 20))[:, None] * .55
 
 # taiko-style hits on the big downbeats (low sine drop + a slap), centred
-for c in [12, 20, 45, 96, 108, 120]:
-    t = c * BEAT; n = int(.9 * SR); tn = tt(n)
+for t in plan.get('hits', []):
+    n = int(.9 * SR); tn = tt(n)
     x = np.sin(2 * math.pi * (55 + 70 * np.exp(-tn * 18)) * tn) * np.exp(-tn * 5) * .55 + lp(noise(n), 900) * np.exp(-tn * 40) * .25
     i0 = int(t * SR); m = min(n, N - i0); music[i0:i0 + m] += x[:m, None] * .5
 
