@@ -117,10 +117,12 @@
       if (m.type === 'conversation_initiation_metadata') return cb.onReady?.();
       if (m.type === 'agent_chat_response_part') {
         const p = m.text_response_part || {}; parts = true;
+        if (p.type === 'start') buf = '';   // a new reply: anything left over belongs to one that was cut off
         if (p.text) { buf += p.text; let n; while ((n = buf.indexOf('\n')) >= 0) { line(buf.slice(0, n)); buf = buf.slice(n + 1); } }
         if (p.type === 'stop') { line(buf); buf = ''; cb.onDone?.(); }
         return;
       }
+      if (m.type === 'interruption') { buf = ''; return; }   // the server cut the reply off
       if (m.type === 'agent_response') {   // the full text of the reply: used only when no streamed parts came (else it would repeat them, late, into the next turn)
         if (parts) { parts = false; return; }
         for (const l of (m.agent_response_event?.agent_response || '').split('\n')) line(l); cb.onDone?.();
@@ -142,7 +144,7 @@
         ws.onmessage = (e) => { try { onWs(JSON.parse(e.data)); } catch (err) { console.error(err); } };
         ws.onclose = (e) => { if (me === my) cb.onClose?.(e); };
       },
-      send(text) { buf = ''; wsSend({ type: 'user_message', text }); },
+      send(text) { wsSend({ type: 'user_message', text }); },   // the reply in progress may carry on: its half-received line stays in buf
       async tts(who, text) {
         try {
           const r = await post('/api/talk/tts', { sid, who, text });
