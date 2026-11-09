@@ -43,10 +43,24 @@ window.MOHEAT_L10N = {
    "夏休みの日記に書くね": "我会写进暑假日记里",
    "あしたも遊ぼう": "明天也一起玩吧",
    "ばあちゃん": "奶奶",
-   "じいちゃん": "爷爷"
+   "じいちゃん": "爷爷",
+   "ばあちゃん・じいちゃん ElevenLabs": "ばあちゃん・じいちゃん ElevenLabs",
+   "Live (DUAL): voices at your ear warm it with their loudness; in the midsummer heat grandma's well-water towel cools the left of your neck, the cold melon on your right cheek is the coldest moment, and at dusk her fan and her voice reach the same left ear together.": "实时（DUAL）：耳边的声音按音量变暖；盛夏的热气里，奶奶用井水毛巾贴在你左边脖子上，瞬间变凉；爷爷把刚从小河捞起的西瓜贴到你的右脸，是全程最凉的一刻；傍晚团扇扇着左耳，同时奶奶的声音暖着同一只耳朵。",
+   "Voices ElevenLabs · art OpenAI gpt-image · layered stills": "配音 ElevenLabs · 美术 OpenAI gpt-image · 分层静帧",
+   "ASMR · Healing": "ASMR · 治愈"
   },
-  "ja": {},
-  "en": {}
+  "ja": {
+   "ばあちゃん・じいちゃん ElevenLabs": "ばあちゃん・じいちゃん ElevenLabs",
+   "Live (DUAL): voices at your ear warm it with their loudness; in the midsummer heat grandma's well-water towel cools the left of your neck, the cold melon on your right cheek is the coldest moment, and at dusk her fan and her voice reach the same left ear together.": "リアルタイム（DUAL）：耳元の声はその音量であたたかく。真夏の熱気の中、井戸水の手ぬぐいが左の首すじをひやり。川から上げたすいかは右のほっぺで一番の冷たさ。夕方は同じ左の耳に、うちわの風とばあちゃんの声がいっしょに届きます。",
+   "Voices ElevenLabs · art OpenAI gpt-image · layered stills": "声 ElevenLabs · 絵 OpenAI gpt-image · レイヤー静止画",
+   "ASMR · Healing": "ASMR · いやし"
+  },
+  "en": {
+   "ばあちゃん・じいちゃん ElevenLabs": "Grandma · Grandpa — ElevenLabs",
+   "Live (DUAL): voices at your ear warm it with their loudness; in the midsummer heat grandma's well-water towel cools the left of your neck, the cold melon on your right cheek is the coldest moment, and at dusk her fan and her voice reach the same left ear together.": "Live (DUAL): voices at your ear warm it with their loudness; in the midsummer heat grandma's well-water towel cools the left of your neck, the cold melon on your right cheek is the coldest moment, and at dusk her fan and her voice reach the same left ear together.",
+   "Voices ElevenLabs · art OpenAI gpt-image · layered stills": "Voices ElevenLabs · art OpenAI gpt-image · layered stills",
+   "ASMR · Healing": "ASMR · Healing"
+  }
  },
  "names": {
   "ばあちゃん": {

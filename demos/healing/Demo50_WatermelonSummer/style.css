@@ -1,0 +1,6 @@
+/* なつやすみ、じいちゃんちの すいかわり — palette only (layout: ../../shared/story.css). Summer green + watermelon red. */
+:root { --bg: #12180f; --panel: #1a2117; --panel-2: #252e20; --line: #47533f; --gold: #ffe6a0; --st-hi: 240, 214, 140; --st-on: 96, 140, 70; --st-sub: 18, 26, 14; --st-bar: linear-gradient(90deg, #8fcf6a, #ffde8a); }
+.bar { background: #0e130c; }
+.brand span { color: #c2e08a; }
+.btn.primary { background: linear-gradient(135deg, #4f8a3a, #e0584a); }
+.subs .who.wH { color: #ffd8b0; } .subs .who.wG { color: #bfe0ff; }

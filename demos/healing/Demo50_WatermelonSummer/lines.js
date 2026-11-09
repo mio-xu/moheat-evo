@@ -216,6 +216,10 @@ window.SUIKA_LINES = {
      "h04",
      "left"
     ],
+    [
+     "g06",
+     "front"
+    ],
     {
      "type": "hold",
      "ja": "ふりおろす（長押し）",
@@ -226,10 +230,6 @@ window.SUIKA_LINES = {
       "g07"
      ]
     },
-    [
-     "g06",
-     "front"
-    ],
     [
      "g08",
      "front"

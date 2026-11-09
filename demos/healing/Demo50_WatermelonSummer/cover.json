@@ -1,0 +1,68 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo50_WatermelonSummer --publish",
+ "title": {
+  "en": "Summer at Grandpa's:\nWatermelon Split",
+  "ja": "なつやすみ、\nじいちゃんちの\nすいかわり",
+  "zh": "暑假，\n爷爷家的劈西瓜"
+ },
+ "tagline": {
+  "en": "One long summer day with grandma and grandpa",
+  "ja": "じいちゃん、ばあちゃんと過ごす夏の一日",
+  "zh": "和爷爷奶奶一起的夏日一天"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "A summer in the countryside",
+    "ja": "いなかの夏やすみ",
+    "zh": "乡下的暑假"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "midsummer heat · their voices",
+    "ja": "真夏の熱気・ふたりの声",
+    "zh": "盛夏热气・两位老人的声音"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "river melon · well-water towel · fan",
+    "ja": "川のすいか・井戸水の手ぬぐい・うちわ",
+    "zh": "河水西瓜・井水毛巾・团扇"
+   }
+  }
+ ],
+ "tone": "22 32 18",
+ "options": [],
+ "chapters": [
+  {
+   "en": "The bus stop",
+   "ja": "バス停",
+   "zh": "公交站"
+  },
+  {
+   "en": "The stream",
+   "ja": "小川",
+   "zh": "小河"
+  },
+  {
+   "en": "Watermelon split",
+   "ja": "すいかわり",
+   "zh": "劈西瓜"
+  },
+  {
+   "en": "Evening on the veranda",
+   "ja": "縁側の夕方",
+   "zh": "傍晚的檐廊"
+  },
+  {
+   "en": "Rice fields at night",
+   "ja": "夜の田んぼ",
+   "zh": "夜晚的稻田"
+  }
+ ]
+}
