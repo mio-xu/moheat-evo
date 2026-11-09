@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/all-ages/Demo48_AnimalOnsen/media/cover/stamp.json": "83cfd759da3aa547bfbd91c56d6649f6df62defb"
+  },
+  "thumb": "60909a984cecaa744500ae3bd4496c99588f5c9d"
+ },
+ "en": {
+  "inputs": {
+   "demos/all-ages/Demo48_AnimalOnsen/media/cover/stamp.json": "83cfd759da3aa547bfbd91c56d6649f6df62defb"
+  },
+  "thumb": "60909a984cecaa744500ae3bd4496c99588f5c9d"
+ },
+ "ja": {
+  "inputs": {
+   "demos/all-ages/Demo48_AnimalOnsen/media/cover/stamp.json": "83cfd759da3aa547bfbd91c56d6649f6df62defb"
+  },
+  "thumb": "dffbea744ea61459cc73e817b7fb0f3b68d8be81"
+ },
+ "zh": {
+  "inputs": {
+   "demos/all-ages/Demo48_AnimalOnsen/media/cover/stamp.json": "83cfd759da3aa547bfbd91c56d6649f6df62defb"
+  },
+  "thumb": "1f5d93475f9219863b3fdb4cdbc2d8cccb3c3481"
+ }
+}

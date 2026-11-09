@@ -1,0 +1,69 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo48_AnimalOnsen --publish",
+ "scene": true,
+ "title": {
+  "en": "Steamy Animal\nHot Spring",
+  "ja": "ゆけむり\nどうぶつおんせん",
+  "zh": "蒸汽腾腾的\n动物温泉"
+ },
+ "tagline": {
+  "en": "Mix hot and cold with your ears, for every guest",
+  "ja": "みみで おんどを あわせる おてつだい",
+  "zh": "用耳朵调水温，招待每位客人"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "A game for everyone",
+    "ja": "みんなの ゲーム",
+    "zh": "大家都能玩的游戏"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "hot pipe on the left · steam",
+    "ja": "ひだりの あつい おゆ・ゆげ",
+    "zh": "左边的热水・蒸汽"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "cold pipe on the right · rain",
+    "ja": "みぎの つめたい みず・あめ",
+    "zh": "右边的冷水・雨"
+   }
+  }
+ ],
+ "tone": "20 28 26",
+ "options": [],
+ "chapters": [
+  {
+   "en": "Opening",
+   "ja": "開店",
+   "zh": "开店"
+  },
+  {
+   "en": "The penguin",
+   "ja": "ペンギン",
+   "zh": "企鹅"
+  },
+  {
+   "en": "The monkey family",
+   "ja": "おさる親子",
+   "zh": "猴子母子"
+  },
+  {
+   "en": "Autumn rain",
+   "ja": "秋の雨",
+   "zh": "秋雨"
+  },
+  {
+   "en": "Your turn",
+   "ja": "じぶんの番",
+   "zh": "轮到你"
+  }
+ ]
+}

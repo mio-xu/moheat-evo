@@ -1,0 +1,9 @@
+/* ゆけむり どうぶつおんせん — palette + valves (layout: ../../shared/story.css). */
+:root { --bg: #121a18; --panel: #1b2422; --panel-2: #26312e; --line: #4a5a54; --gold: #ffdca0; --st-hi: 255, 214, 150; --st-on: 200, 90, 50; --st-sub: 18, 24, 22; --st-bar: linear-gradient(90deg, #ff9a60, #ffe2a0); }
+.bar { background: #0e1513; }
+.brand span { color: #ffb878; }
+.btn.primary { background: linear-gradient(135deg, #c8562e, #ffbc6a); }
+.subs .who.wY { color: #ffd59a; } .subs .who.wP { color: #c6e2ff; } .subs .who.wM { color: #ffb6a0; } .subs .who.wF { color: #ffc090; }
+#valves { display: flex; gap: 1.6cqw; }
+#valves .ch { min-width: 15cqw; min-height: 44px; touch-action: none; }
+#valves .ch.on { background: rgba(var(--st-on), .75); transform: scale(.97); }

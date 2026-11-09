@@ -39,10 +39,30 @@ window.MOHEAT_L10N = {
    "ゆずじい": "柚子爷爷",
    "ペン": "小笨",
    "おさる": "猴妈妈",
-   "コン": "小康"
+   "コン": "小康",
+   "ゆずじい・ペン・おさる・コン ElevenLabs": "ゆずじい・ペン・おさる・コン ElevenLabs",
+   "Live (DUAL): the left pipe runs hot, its steam reaches your left ear; the right pipe runs cold, its splash your right; the bath itself warms or cools you from the front. In the rain, cold drops and warm steam arrive on the same ear.": "实时（DUAL）：左边的管子放热水，蒸汽从左耳来；右边是冰凉的山泉，水花飞到右耳；浴池的温度从正前方传来。下雨时冷雨和热气同时落在耳朵上。",
+   "Original characters · voices ElevenLabs · art OpenAI gpt-image · layered stills": "原创角色 · 配音 ElevenLabs · 美术 OpenAI gpt-image · 分层静帧",
+   "ASMR · Game": "ASMR · 游戏",
+   "ひだり：あつい おゆ": "左：热水",
+   "みぎ：つめたい みず": "右：冷水"
   },
-  "ja": {},
-  "en": {}
+  "ja": {
+   "ゆずじい・ペン・おさる・コン ElevenLabs": "ゆずじい・ペン・おさる・コン ElevenLabs",
+   "Live (DUAL): the left pipe runs hot, its steam reaches your left ear; the right pipe runs cold, its splash your right; the bath itself warms or cools you from the front. In the rain, cold drops and warm steam arrive on the same ear.": "リアルタイム（DUAL）：左の管は熱いお湯、ゆげが左の耳へ。右は冷たい山の水、しぶきが右の耳へ。お風呂の温度は正面から。雨の日は、冷たい雨とあたたかいゆげが同じ耳に届きます。",
+   "Original characters · voices ElevenLabs · art OpenAI gpt-image · layered stills": "オリジナルキャラクター · 声 ElevenLabs · 絵 OpenAI gpt-image · レイヤー静止画",
+   "ASMR · Game": "ASMR · ゲーム",
+   "ひだり：あつい おゆ": "ひだり：あつい おゆ",
+   "みぎ：つめたい みず": "みぎ：つめたい みず"
+  },
+  "en": {
+   "ゆずじい・ペン・おさる・コン ElevenLabs": "Yuzu-jii · Pen · Monkey · Kon — ElevenLabs",
+   "Live (DUAL): the left pipe runs hot, its steam reaches your left ear; the right pipe runs cold, its splash your right; the bath itself warms or cools you from the front. In the rain, cold drops and warm steam arrive on the same ear.": "Live (DUAL): the left pipe runs hot, its steam reaches your left ear; the right pipe runs cold, its splash your right; the bath itself warms or cools you from the front. In the rain, cold drops and warm steam arrive on the same ear.",
+   "Original characters · voices ElevenLabs · art OpenAI gpt-image · layered stills": "Original characters · voices ElevenLabs · art OpenAI gpt-image · layered stills",
+   "ASMR · Game": "ASMR · Game",
+   "ひだり：あつい おゆ": "Left: hot water",
+   "みぎ：つめたい みず": "Right: cold water"
+  }
  },
  "names": {
   "ゆずじい": {
