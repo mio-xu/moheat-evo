@@ -61,6 +61,7 @@ body.cover-only .cover-copy { margin-top: 0 !important; }
 .intro .cleared { color: #effff8; background: rgba(95, 224, 184, .2); border-color: rgba(143, 240, 208, .6); }
 .stage:has(.intro:not(.hidden)) :is(.dock, .push) { display: none !important; }
 
+@container (max-width: 480px) { .inv { bottom: 58px; } }   /* phone portrait: the bond hearts sit above the one-row dock */
 @container (max-width: 620px) {
   .dk .tx { display: none; }
   .dk { padding: 0 .9cqw; }
@@ -73,7 +74,8 @@ body.cover-only .cover-copy { margin-top: 0 !important; }
 /* touch (DEMO_DESIGN_GUIDE §7.1): 44 px camera buttons; on a phone-size player the dock wraps onto two rows instead of shrinking */
 @media (max-width: 1100px), (pointer: coarse) {
   .dk { height: 44px; min-width: 44px; }
-  .dock { gap: 4px; bottom: 4px; flex-wrap: wrap; justify-content: center; max-width: calc(100% - 8px); }
+  .dock { gap: 4px; bottom: 4px; flex-wrap: wrap; justify-content: center; max-width: calc(100% - 8px); width: max-content; }   /* left: 50 % alone shrinks it to half the player, so it wrapped with room to spare */
+  .toast { bottom: 94px; width: max-content; max-width: 94cqw; }   /* above the 44 px dock and the coach bubble over it */
 }
 
 /* coach bubble: points at what to press / tap next */
@@ -85,5 +87,5 @@ body.cover-only .cover-copy { margin-top: 0 !important; }
 .coach span { display: block; font: 600 clamp(8px, .95cqw, 15px)/1.25 Inter, sans-serif; opacity: .8; }
 @keyframes coach { 50% { margin-top: -.7cqw; } }
 .stage:has(.intro:not(.hidden)) .coach { display: none !important; }
-/* touch (guide §7.1 拖动手势): on a phone the dock wraps to two rows and covers the lower half of the picture — while you stroke her through the lens it steps aside, so a stroke can start anywhere on her face */
+/* touch (guide §7.1 拖动手势): on a phone the dock takes the bottom of the picture — while you stroke her through the lens it steps aside, so a stroke can start anywhere on her face */
 @media (pointer: coarse), (max-width: 1100px) { .stage.stroke .dock { opacity: 0; pointer-events: none; transition: opacity .25s; } }
