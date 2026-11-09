@@ -211,7 +211,7 @@
       // cover controls
       const ld = A.loaded?.() ?? 1, ready = A.ready?.() ?? ld >= 1, s = $('.u2-start');
       s.disabled = !ready;
-      H(s).innerHTML = st === 'ended' ? `${I.again}<span>${t('again')}</span>` : ready ? `${I.play}<span>${t('start')}</span>` : `${I.play}<span>${t('start')}</span><span class="u2-ld">${Math.round(ld * 100)}%</span>`;
+      H(s).innerHTML = st === 'ended' && !A.picked?.() ? `${I.again}<span>${t('again')}</span>` : ready ? `${I.play}<span>${t('start')}</span>` : `${I.play}<span>${t('start')}</span><span class="u2-ld">${Math.round(ld * 100)}%</span>`;
       $('.u2-load').style.setProperty('--p', `${Math.round(ld * 100)}%`);
       const m = A.mode?.() || 'interactive';
       const modeHtml = `<button type="button" data-mode="interactive" aria-pressed="${m === 'interactive'}" title="${esc(t('interHint'))}">${I.hand}<span>${t('inter')}</span></button>`
@@ -231,7 +231,7 @@
         if (!gal.hidden) { H(gal).innerHTML = `${I.star}<span>${t('endings')}</span> ${en.got} / ${en.total}`; gal.title = t('endings'); } });
       // bar
       const playing = st === 'playing';
-      const pp = $('.u2-pp'); H(pp).innerHTML = playing ? I.pause : st === 'ended' ? I.again : I.play; pp.title = pp.ariaLabel = t(playing ? 'pause' : 'play');
+      const pp = $('.u2-pp'); H(pp).innerHTML = playing ? I.pause : st === 'ended' && !A.picked?.() ? I.again : I.play; pp.title = pp.ariaLabel = t(playing ? 'pause' : 'play');
       $('.u2-paused').title = t('resume');
       const cs = A.chapters?.() || [], c = A.chapter?.() ?? -1, reached = A.reached?.() ?? c, inter = m === 'interactive', live = st === 'playing' || st === 'paused';
       const key = `${cs.length}|${L}`;

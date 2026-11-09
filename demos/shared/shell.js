@@ -534,12 +534,12 @@
   // ---------------------------------------------------------------- UI v2: the live adapter for demos/shared/ui2.js
   if (V2) {
     // UI2_V = content hash of ui2.js + ui2.css (python3 tools/web/bump.py --auto keeps it current: cat ui2.js ui2.css | shasum, 8 hex)
-    const UI2_V = '0cc39726';
+    const UI2_V = '90220da1';
     const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = new URL(`ui2.css?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(css);
     let cssReady = false; const cssOk = () => { if (!cssReady) { cssReady = true; mount(); } };   // mount only once ui2.css applies: an unstyled first frame left the player column off-centre (Demo21 check_ui band 16 / 58 px under load)
     css.addEventListener('load', cssOk); css.addEventListener('error', cssOk); real.st(cssOk, 3000);
     const js = document.createElement('script'); js.src = new URL(`ui2.js?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(js);
-    let started = false, cover = null, ui = null, relayout2 = () => {};
+    let started = false, cover = null, ui = null, relayout2 = () => {}, pickedWho = null;
     document.addEventListener('click', (e) => { if (e.target.closest?.('#startBtn')) started = true; }, true);
     fetch(PAGE + 'cover.json').then((r) => (r.ok ? r.json() : null)).catch(() => null).then((c) => { cover = c || {}; mount(); });
     js.addEventListener('load', () => mount());
@@ -560,7 +560,9 @@
       lang: () => window.MoHeatSub?.lang || 'en', setLang: (l) => window.MoHeatSub?.set?.(l),
       voice: () => VOICE.pref(), setVoice: (p) => VOICE.set(p), voiceLangs: VOICE.LANGS, voiceFixed: () => FILM(),   /* films have one mixed soundtrack (no per-language mix yet): the row stays, greyed */
       mode: () => mode, setMode: (m) => setMode(m),
-      start: () => { if (!ready) return; document.getElementById('startBtn')?.click(); },
+      // the end cover's "With" only selects (user 2026-11-09); Start then talks with them. Nothing picked = Play again
+      start: () => { if (!ready) return; const w = pickedWho && optEl('who', pickedWho); pickedWho = null; if (w) w.click(); else document.getElementById('startBtn')?.click(); },
+      picked: () => !!pickedWho,
       togglePause: () => { if (!paused && filmHeld()) filmEl().play().catch(() => {}); else pause(!paused); },
       // chapter labels: cover.json "chapters" (per language) > the demo's own { ja, en, zh } > its label text
       chapters: () => chapters().map((c, i) => ({ label: cover?.chapters?.[i] || (c.ja || c.zh ? { en: c.en || c.label, ja: c.ja, zh: c.zh || (c.ja && window.MoHeatSub?.tr?.(c.ja, 'zh', false)) || c.en || c.label } : c.label) })), chapter: () => chapter(), reached: () => reached,
@@ -583,8 +585,8 @@
       endings: () => SH.endings?.() || null, openEndings: () => SH.openEndings?.(),
       cleared: () => { const c = document.getElementById('cleared'); return c && !c.hidden && c.textContent.trim() ? c.textContent.trim() : ''; },
       options: () => (cover?.options || []).filter((o) => !o.when || o.when === A.state()).map((o) => ({ key: o.key, label: o.label,
-        items: o.items.map((it) => { const el = optEl(o.key, it.v); return { v: it.v, label: it.label, on: !!el && (el.getAttribute('aria-pressed') === 'true' || el.classList.contains('on')) }; }) })),
-      pick: (k, v) => optEl(k, v)?.click(),
+        items: o.items.map((it) => { const el = optEl(o.key, it.v); return { v: it.v, label: it.label, on: o.key === 'who' ? pickedWho === it.v : !!el && (el.getAttribute('aria-pressed') === 'true' || el.classList.contains('on')) }; }) })),
+      pick: (k, v) => { if (k === 'who') pickedWho = pickedWho === v ? null : v; else optEl(k, v)?.click(); },
       loaded: () => (ready ? 1 : loadedFrac()), ready: () => ready,
     };
     SH.ui2 = A;
