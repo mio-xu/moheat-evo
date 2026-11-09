@@ -425,6 +425,10 @@ if not A.quick and _nosh:   # pages without the shell (private live talk pages):
     csv = subprocess.run(['node', os.path.join(REPO, 'tools', 'web', 'check_stage_visible.js'), *_nosh], capture_output=True, text=True, cwd=REPO)
     try: ub += json.loads(csv.stdout.strip().splitlines()[-1]).get('fails', [])
     except Exception: ub.append('check_stage_visible.js gave no result: ' + csv.stderr.strip()[-200:])
+if not A.quick and 'shared/shell.js' in read(os.path.join(D, 'index.html')):   # the same page as ?embed=1 / ?render=1 (home-page player, exports): the picture must show (§11.1)
+    csv = subprocess.run(['node', os.path.join(REPO, 'tools', 'web', 'check_stage_visible.js'), '--export', os.path.join(D, 'index.html')], capture_output=True, text=True, cwd=REPO)
+    try: ub += json.loads(csv.stdout.strip().splitlines()[-1]).get('fails', [])
+    except Exception: ub.append('check_stage_visible.js --export gave no result: ' + csv.stderr.strip()[-200:])
 for f in glob.glob(os.path.join(D, '*.css')) + glob.glob(os.path.join(D, '*.js')):
     if re.search(r'\.u2[-\s.{:\[]|\bu2-[a-z]', read(f)): ub.append(f'{os.path.basename(f)} styles / touches the shared interface (.u2…) — the UI is shared code only')
 if not A.quick and not ub:
