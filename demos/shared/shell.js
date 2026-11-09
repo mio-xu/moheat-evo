@@ -23,6 +23,7 @@
   // ONE switch for every demo; until the release flips it, ?ui=2 turns it on for this browser (remembered, so ‹ › keeps it) and ?ui=1 off.
   SH.UI_V2 = true;
   const QS = new URLSearchParams(location.search), EXPORT = QS.has('cover') || QS.has('render') || QS.has('embed');
+  if (EXPORT) document.documentElement.removeAttribute('data-u2');   // no UI v2 here, so .u2-on never comes: series.css must not keep the stage hidden (2026-11-09: the home-page player and exports were black, sound only)
   try { if (QS.get('ui') === '2') localStorage.setItem('moheat.ui', '2'); else if (QS.get('ui') === '1') localStorage.removeItem('moheat.ui'); } catch {}
   const V2 = !EXPORT && (SH.UI_V2 || (() => { try { return localStorage.getItem('moheat.ui') === '2'; } catch { return false; } })());
   if (SH.UI_V2) try { localStorage.removeItem('moheat.ui'); } catch {}   // released: the preview key is gone, nobody is left on an old mode
