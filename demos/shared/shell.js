@@ -281,7 +281,9 @@
     const away = () => { if (playing()) { if (!paused) autoPaused = true; pause(true); } else stopDevice(); };
     document.addEventListener('visibilitychange', () => { if (document.hidden) away(); else if (autoPaused) { autoPaused = false; pause(false); } });
     addEventListener('pagehide', away);
-    document.addEventListener('pause', (e) => { const m = e.target; if (!(m instanceof HTMLMediaElement) || !FILM() || !['mix', 'film'].includes(m.id)) return;   // films: the OS stops the element itself
+    // films: the OS stopping the element counts as an interruption; a pause the page asked for (an interactive gate, ■ STOP) does not (2026-11-09: the overlay covered the answer card and froze its timer)
+    const mpause = HTMLMediaElement.prototype.pause; HTMLMediaElement.prototype.pause = function () { this.__jsPause = real.now(); return mpause.call(this); };
+    document.addEventListener('pause', (e) => { const m = e.target; if (!(m instanceof HTMLMediaElement) || !FILM() || !['mix', 'film'].includes(m.id) || real.now() - (m.__jsPause || -1e9) < 1000) return;
       real.st(() => { if (m.paused && !m.ended && !paused && warp === 1 && playing()) pause(true); }, 400); }, true);
   }
 
