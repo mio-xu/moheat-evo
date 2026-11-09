@@ -1,0 +1,164 @@
+{
+ "_note": "UI v2 cover data (DEMO_DESIGN_GUIDE §7.3): edit, then python3 tools/web/covers.py Demo45_CelestialPalace --publish",
+ "title": {
+  "en": "A Celestial\nfrom the Future",
+  "ja": "てんにょ様は、\n未来から",
+  "zh": "来自未来的\n天女"
+ },
+ "tagline": {
+  "en": "A tyrant prince, a star-reading strategist and his shadow guard",
+  "ja": "暴君の皇子と、星読みの軍師と、影の護衛",
+  "zh": "暴君皇子、观星军师与影卫"
+ },
+ "chips": [
+  {
+   "kind": "tag",
+   "text": {
+    "en": "A palace in an invented East",
+    "ja": "架空の東の国の宮殿",
+    "zh": "架空东方国度的宫殿"
+   }
+  },
+  {
+   "kind": "warm",
+   "text": {
+    "en": "brazier · hand-warmer · incense",
+    "ja": "火鉢・手あぶり・香炉",
+    "zh": "火盆・手炉・香炉"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "icy pond · north wind · his feather fan",
+    "ja": "氷の池・北風・羽扇の風",
+    "zh": "冰池・北风・羽扇的风"
+   }
+  }
+ ],
+ "tone": "12 16 34",
+ "options": [
+  {
+   "key": "place",
+   "when": "ended",
+   "label": {
+    "en": "Where",
+    "ja": "場所",
+    "zh": "地点"
+   },
+   "items": [
+    {
+     "v": "pond",
+     "label": {
+      "en": "Pond",
+      "ja": "蓮池",
+      "zh": "莲池"
+     }
+    },
+    {
+     "v": "chamber",
+     "label": {
+      "en": "Chamber",
+      "ja": "寝殿",
+      "zh": "寝殿"
+     }
+    },
+    {
+     "v": "terrace",
+     "label": {
+      "en": "Terrace",
+      "ja": "星見台",
+      "zh": "观星台"
+     }
+    },
+    {
+     "v": "corridor",
+     "label": {
+      "en": "Corridor",
+      "ja": "回廊",
+      "zh": "回廊"
+     }
+    },
+    {
+     "v": "dawn",
+     "label": {
+      "en": "Dawn",
+      "ja": "夜明け",
+      "zh": "黎明"
+     }
+    }
+   ]
+  },
+  {
+   "key": "who",
+   "when": "ended",
+   "label": {
+    "en": "With",
+    "ja": "だれと",
+    "zh": "和谁"
+   },
+   "items": [
+    {
+     "v": "J",
+     "label": {
+      "en": "Jin",
+      "ja": "迅",
+      "zh": "迅"
+     }
+    },
+    {
+     "v": "S",
+     "label": {
+      "en": "Shion",
+      "ja": "紫苑",
+      "zh": "紫苑"
+     }
+    },
+    {
+     "v": "K",
+     "label": {
+      "en": "Saku",
+      "ja": "朔",
+      "zh": "朔"
+     }
+    },
+    {
+     "v": "JSK",
+     "label": {
+      "en": "All three",
+      "ja": "三人",
+      "zh": "三个人"
+     }
+    }
+   ]
+  }
+ ],
+ "options_note": "Keep talking after the story: drives #talkPick .tpl / .tp",
+ "chapters": [
+  {
+   "en": "The frozen lotus pond",
+   "ja": "凍った蓮池",
+   "zh": "结冰的莲池"
+  },
+  {
+   "en": "The crown prince's chamber",
+   "ja": "寝殿",
+   "zh": "寝殿"
+  },
+  {
+   "en": "The star terrace",
+   "ja": "星見台",
+   "zh": "观星台"
+  },
+  {
+   "en": "The moonlit corridor",
+   "ja": "回廊",
+   "zh": "回廊"
+  },
+  {
+   "en": "The pond at dawn",
+   "ja": "夜明けの池",
+   "zh": "黎明的池塘"
+  }
+ ]
+}

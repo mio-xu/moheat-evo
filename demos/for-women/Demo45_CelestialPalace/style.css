@@ -1,0 +1,6 @@
+/* てんにょ様は、未来から — palette only (layout: ../../shared/story.css). Night indigo + palace vermilion + moon gold. */
+:root { --bg: #0c1020; --panel: #151a2c; --panel-2: #1f2438; --line: #414a64; --gold: #ffd59a; --st-hi: 255, 206, 150; --st-on: 168, 52, 66; --st-sub: 12, 16, 34; --st-bar: linear-gradient(90deg, #ff9e7a, #ffdca0); }
+.bar { background: #0a0d1a; }
+.brand span { color: #ff9f8a; }
+.btn.primary { background: linear-gradient(135deg, #a8324a, #f0b070); }
+.subs .who.wJ { color: #ff9f9f; } .subs .who.wS { color: #d9c8ff; } .subs .who.wK { color: #ffd59a; }

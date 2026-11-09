@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/for-women/Demo45_CelestialPalace/media/cover/stamp.json": "64e1e9ed095a8eef3144305c8cff1965ff613913"
+  },
+  "thumb": "805db4820b76248dd7c40ab422cecd09e29d1349"
+ },
+ "en": {
+  "inputs": {
+   "demos/for-women/Demo45_CelestialPalace/media/cover/stamp.json": "64e1e9ed095a8eef3144305c8cff1965ff613913"
+  },
+  "thumb": "805db4820b76248dd7c40ab422cecd09e29d1349"
+ },
+ "ja": {
+  "inputs": {
+   "demos/for-women/Demo45_CelestialPalace/media/cover/stamp.json": "64e1e9ed095a8eef3144305c8cff1965ff613913"
+  },
+  "thumb": "eeea024e259bfb9e5ced1c5645139904e4e7529a"
+ },
+ "zh": {
+  "inputs": {
+   "demos/for-women/Demo45_CelestialPalace/media/cover/stamp.json": "64e1e9ed095a8eef3144305c8cff1965ff613913"
+  },
+  "thumb": "2b3d310542c85c77c933c25d1ef82f5f21dd75fe"
+ }
+}

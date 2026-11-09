@@ -170,10 +170,24 @@ window.MOHEAT_L10N = {
    "朔の狐の面": "朔的狐狸面具",
    "迅": "迅",
    "紫苑": "紫苑",
-   "朔": "朔"
+   "朔": "朔",
+   "迅・紫苑・朔 ElevenLabs": "迅・紫苑・朔 ElevenLabs",
+   "Live (DUAL): each voice warms the ear it speaks at, with its loudness; you fall through the ice of a frozen pond (the cold peak), the brazier leaps up on your right beside the snowy window on your left, one stroke of his feather fan turns the incense warmth on your right ear into cold night air, and the assassins' torches pass from left to right.": "实时（DUAL）：每个人的声音按音量让他说话那一侧的耳朵变暖；你跌进结冰的莲池，寒冷到顶；火盆的火在右侧腾起，左边是飘雪的窗；羽扇一挥，右耳的暖意瞬间变成夜风的凉；刺客的火把从左向右掠过。",
+   "Original characters in a special version · everyone speaks Japanese there · voices ElevenLabs · art OpenAI gpt-image · layered stills · free talk = scripted preview": "原创角色的特别版 · 那里的人都说日语 · 配音 ElevenLabs · 美术 OpenAI gpt-image · 分层静帧 · 自由对话为剧本预览版",
+   "ASMR · Crossover": "ASMR · 穿越篇"
   },
-  "ja": {},
-  "en": {}
+  "ja": {
+   "迅・紫苑・朔 ElevenLabs": "迅・紫苑・朔 ElevenLabs",
+   "Live (DUAL): each voice warms the ear it speaks at, with its loudness; you fall through the ice of a frozen pond (the cold peak), the brazier leaps up on your right beside the snowy window on your left, one stroke of his feather fan turns the incense warmth on your right ear into cold night air, and the assassins' torches pass from left to right.": "リアルタイム（DUAL）：声はその音量で、話しかける側の耳を温めます。氷の蓮池に落ちると冷たさは最大に。右の火鉢が燃え上がり、左の窓からは雪の冷気。羽扇のひとあおぎで、右耳のぬくもりは夜風の冷たさに変わり、刺客の松明が左から右へ通り過ぎます。",
+   "Original characters in a special version · everyone speaks Japanese there · voices ElevenLabs · art OpenAI gpt-image · layered stills · free talk = scripted preview": "オリジナルキャラクターの特別版 · その国ではみんな日本語を話します · 声 ElevenLabs · 絵 OpenAI gpt-image · レイヤー静止画 · 自由会話は台本プレビュー",
+   "ASMR · Crossover": "ASMR · クロスオーバー"
+  },
+  "en": {
+   "迅・紫苑・朔 ElevenLabs": "Jin · Shion · Saku — ElevenLabs",
+   "Live (DUAL): each voice warms the ear it speaks at, with its loudness; you fall through the ice of a frozen pond (the cold peak), the brazier leaps up on your right beside the snowy window on your left, one stroke of his feather fan turns the incense warmth on your right ear into cold night air, and the assassins' torches pass from left to right.": "Live (DUAL): each voice warms the ear it speaks at, with its loudness; you fall through the ice of a frozen pond (the cold peak), the brazier leaps up on your right beside the snowy window on your left, one stroke of his feather fan turns the incense warmth on your right ear into cold night air, and the assassins' torches pass from left to right.",
+   "Original characters in a special version · everyone speaks Japanese there · voices ElevenLabs · art OpenAI gpt-image · layered stills · free talk = scripted preview": "Original characters in a special version · everyone speaks Japanese there · voices ElevenLabs · art OpenAI gpt-image · layered stills · free talk = scripted preview",
+   "ASMR · Crossover": "ASMR · Crossover"
+  }
  },
  "names": {
   "迅": {
