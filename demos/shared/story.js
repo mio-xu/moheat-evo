@@ -314,6 +314,7 @@
       if (!e) return;
       applySet(e.set);
       if (e.pulse) { const [kind, az, lev, rise, hold, fade] = e.pulse; pulses.push({ name, type: 'pulse', t0: S.t, kind, az, lev, rise, hold, fade }); }
+      for (const [kind, az, lev, rise, hold, fade, delay = 0] of e.pulses || []) pulses.push({ name, type: 'pulse', t0: S.t + delay, kind, az, lev, rise, hold, fade });   // several strokes in one event (a fan, a wing)
       if (e.sweep) { const [kind, a0, a1, secs, lev] = e.sweep; pulses.push({ name, type: 'sweep', t0: S.t, kind, a0, a1, secs, lev }); }
       if (e.then) pend.push([S.t + e.then.after, e.then.set]);
     }
