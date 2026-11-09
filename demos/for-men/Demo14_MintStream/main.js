@@ -169,6 +169,7 @@
       // 3 · ear cleaning on ear A (hold still), then the second menu: a warm stone or her mint breath
       setStep(2);
       await go(null, earView(A), () => {});
+      if (S.towel) { S.towel = 0; S.damp = 1; setTimeout(() => { if (my === run) S.damp = 0; }, 3500); }   // thermal: the towel comes off with the picture; the damp skin cools as it dries
       await say('m07', EAR(A));
       await stillHold(6, () => { if (my === run) say('m08x', EAR(A)).catch(() => {}); });
       alive(my);
@@ -177,8 +178,8 @@
       say_(pick(NAMES), m ? 'ミントの吐息ください…！' : '温石で', m ? '¥2,000' : '¥800');
       if (!m) { S.stone = 1; SND.fx.stone(A); await say('m09w', EAR(A)); }
       else {
-        setTimeout(() => { if (my === run) { S.breath = 1; SND.fx.blow(A); setTimeout(() => (S.breath = 0), 1800); } }, 3300);   // "…ふぅー"
-        await say('m09m', EAR(A));
+        setTimeout(() => { if (my === run) { S.breath = 1; SND.fx.blow(A); setTimeout(() => { if (S.breath) S.breath = .45; }, 1800); } }, 3300);   // "…ふぅー", then the mint balm stays cool on that ear
+        await say('m09m', EAR(A)); S.breath = 0;
       }
       alive(my); await sleep(.4);
 
@@ -192,7 +193,7 @@
       await say('m11', EAR(B));
       // her warm hands leave ear B and the cool mist goes on at once, a quiet beat before she speaks again:
       // hot → cold on the same ear within ~2 s (DUAL showcase); then her whisper warms that ear again over the mist
-      S.hand = 0; S.mist = 1; SND.fx.mist(); setTimeout(() => { if (my === run) S.mist = 0; }, 3000);
+      S.hand = 0; S.mist = 1; SND.fx.mist(); setTimeout(() => { if (my === run) S.mist = .5; }, 3000); setTimeout(() => { if (my === run) S.mist = 0; }, 6500);   // thermal: the spray, then the droplets evaporating under her warm whisper
       await sleep(1.8); alive(my);
       await say('m12', EAR(B));
       alive(my); await sleep(.4);
@@ -219,13 +220,13 @@
   }
 
   // ---------------------------------------------------------------- per-frame state + thermal
-  let handK = 0, towelK = 0, spoonK = 0, stoneK = 0, breathK = 0, mistK = 0, blanketK = 0, towelAge = 0;
+  let dampK = 0, handK = 0, towelK = 0, spoonK = 0, stoneK = 0, breathK = 0, mistK = 0, blanketK = 0, towelAge = 0;
   function update(dt) {
     S.t += dt; chatTick(dt); if (!S.started) return;
     S.clock += dt; S.lv = SND.voiceLevel();
     { const vt = talking ? 1 : 0; S.env += (vt - S.env) * (1 - Math.exp(-dt / (vt > S.env ? .06 : .3))); }   // talking envelope (shared/layers.js mouth)
     const ease = (cur, tgt, up, down) => cur + (tgt - cur) * (1 - Math.exp(-dt / (tgt > cur ? up : down)));
-    handK = ease(handK, S.hand, .6, 1.2); spoonK = ease(spoonK, S.spoon, .12, .5); stoneK = ease(stoneK, S.stone, 1, 1.5);
+    dampK = ease(dampK, S.damp || 0, .25, .9); handK = ease(handK, S.hand, .6, 1.2); spoonK = ease(spoonK, S.spoon, .12, .5); stoneK = ease(stoneK, S.stone, 1, 1.5);
     breathK = ease(breathK, S.breath, .12, .4); mistK = ease(mistK, S.mist, .1, .6); blanketK = ease(blanketK, S.blanket, 1.2, 2);
     if (S.towel) { towelAge += dt; if (towelAge > 22) S.towel = 0; } towelK = ease(towelK, S.towel ? 1 - .5 * Math.min(1, towelAge / 20) : 0, .4, 1.2);
   }
@@ -246,6 +247,7 @@
     if (stoneK > .02) add(sd, 'h', .4 * stoneK, '🪨');
     if (breathK > .02) add(sd, 'c', .45 * breathK, '🌿');
     if (mistK > .02) { add(-1.4, 'c', .55 * mistK, '💧'); add(1.4, 'c', .55 * mistK, '💧'); }
+    if (dampK > .02) { add(-1.4, 'c', .32 * dampK, '💧'); add(1.4, 'c', .32 * dampK, '💧'); }   // damp skin drying after the steamed towel
     if (blanketK > .02) add(0, 'h', .2 * blanketK, '🧣');
     return out;
   }
