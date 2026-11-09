@@ -35,7 +35,7 @@
   try { if (QS.get('ui') === '2') localStorage.setItem('moheat.ui', '2'); else if (QS.get('ui') === '1') localStorage.removeItem('moheat.ui'); } catch {}
   const V2 = !EXPORT && (SH.UI_V2 || (() => { try { return localStorage.getItem('moheat.ui') === '2'; } catch { return false; } })());
   if (SH.UI_V2) try { localStorage.removeItem('moheat.ui'); } catch {}   // released: the preview key is gone, nobody is left on an old mode
-  SH.v2 = V2;
+  SH.v2 = V2; SH.contexts = () => [...ctxs];   // tools/web/check_background.js
   // the finished cover is the first thing this page fetches (cover first, everything else after — fix2's speed plan)
   const PAGE = new URL('.', location.href).href, COVER_BASE = PAGE + 'media/cover/';
   if (V2) {
@@ -131,7 +131,9 @@
   const ctxs = new Set(), masters = new WeakMap(), sources = new Set();   // Web Audio: suspended on pause, sped up + muted while seeking
   for (const k of ['AudioContext', 'webkitAudioContext']) {
     const A = window[k]; if (!A) continue;
-    window[k] = class extends A { constructor(...a) { super(...a); ctxs.add(this); } };
+    // resume() does nothing while the demo is paused (engines resume on visibilitychange themselves); suspend() is marked as ours, so a statechange that is NOT ours = an interruption
+    window[k] = class extends A { constructor(...a) { super(...a); ctxs.add(this); this.addEventListener('statechange', () => onCtxState(this)); }
+      suspend() { this.__own = true; return super.suspend(); } resume() { this.__own = false; return paused ? Promise.resolve() : super.resume(); } };
   }
   if (window.AudioNode && !EXPORT) {
     const connect = AudioNode.prototype.connect;
@@ -159,7 +161,7 @@
     MoHeatDevice.create = (...a) => { const inst = create(...a); const send = inst.send; devSend.add(send);
       inst.send = (line) => (gate() || /^stop$/i.test(line) ? send(line) : undefined); return inst; };
   }
-  const stopDevice = () => devSend.forEach((s) => { try { s('stop'); } catch {} });
+  const stopDevice = () => { SH.stops = (SH.stops || 0) + 1; devSend.forEach((s) => { try { s('stop'); } catch {} }); };
 
   // ---------------------------------------------------------------- mode
   let mode = QS.has('interactive') ? 'interactive' : QS.has('pure') || EMBED ? 'pure' : LS.get('mode', 'interactive');   // default = interactive (user 2026-11-08); pure (just listen) is the option, a remembered choice wins
@@ -261,13 +263,27 @@
   // ---------------------------------------------------------------- pause
   const pause = (on) => {
     if (on === paused || EXPORT) return;
+    if (!on) autoPaused = false;
     rebase(() => { paused = on; });
     if (on) { stopDevice(); ctxs.forEach((c) => c.state === 'running' && c.suspend().catch(() => {}));
       document.querySelectorAll('audio, video').forEach((m) => { if (!m.paused) { media.add(m); m.pause(); } }); }
-    else { ctxs.forEach((c) => c.state === 'suspended' && c.resume().catch(() => {}));
-      media.forEach((m) => m.play().catch(() => {})); media.clear(); window.MoHeatShell_resumeFrames?.(); arm(); }
+    else { const lost = [...ctxs].filter((c) => c.state !== 'running' && c.state !== 'closed');   // in the tap's own call: iOS allows resume() only in a user gesture, also from 'interrupted'
+      lost.forEach((c) => c.resume().catch(() => {}));
+      media.forEach((m) => m.play().catch(() => {})); media.clear(); window.MoHeatShell_resumeFrames?.(); arm();
+      if (lost.length) real.st(() => { if (!paused && lost.some((c) => c.state !== 'running' && c.state !== 'closed')) pause(true); }, 1500); }   // it did not come back: show the big play again, never a silent stuck state
     document.documentElement.classList.toggle('shell-paused', paused); paint();
   };
+  // leaving the page, or a phone call / Siri (user 2026-11-09, iPhone: back from another app the voice was gone and the demo looked frozen, since iOS leaves the context
+  // 'interrupted', its resume() needs a tap and the voice's end event never comes): pause the same way as ⏸, thermal off; on return the same pause → play sequence runs by itself, and only if the context still isn't running does the big tap-to-continue appear (pause() below).
+  let autoPaused = false;
+  const onCtxState = (c) => { if (!EXPORT && !c.__own && !paused && (c.state === 'interrupted' || c.state === 'suspended') && playing()) pause(true); };
+  if (!EXPORT) {
+    const away = () => { if (playing()) { if (!paused) autoPaused = true; pause(true); } else stopDevice(); };
+    document.addEventListener('visibilitychange', () => { if (document.hidden) away(); else if (autoPaused) { autoPaused = false; pause(false); } });
+    addEventListener('pagehide', away);
+    document.addEventListener('pause', (e) => { const m = e.target; if (!(m instanceof HTMLMediaElement) || !FILM() || !['mix', 'film'].includes(m.id)) return;   // films: the OS stops the element itself
+      real.st(() => { if (m.paused && !m.ended && !paused && warp === 1 && playing()) pause(true); }, 400); }, true);
+  }
 
   // ---------------------------------------------------------------- chapters + seek bar
   // chapters: the demo's MoHeatShell.chapters (labels) + chapter() (current index), or — no code needed — its progress list #steps
@@ -490,7 +506,7 @@
   // ---------------------------------------------------------------- UI v2: the live adapter for demos/shared/ui2.js
   if (V2) {
     // UI2_V = content hash of ui2.js + ui2.css (python3 tools/web/bump.py --auto keeps it current: cat ui2.js ui2.css | shasum, 8 hex)
-    const UI2_V = '27f81e3f';
+    const UI2_V = 'e5387129';
     const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = new URL(`ui2.css?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(css);
     let cssReady = false; const cssOk = () => { if (!cssReady) { cssReady = true; mount(); } };   // mount only once ui2.css applies: an unstyled first frame left the player column off-centre (Demo21 check_ui band 16 / 58 px under load)
     css.addEventListener('load', cssOk); css.addEventListener('error', cssOk); real.st(cssOk, 3000);

@@ -592,6 +592,14 @@ if not A.quick and 'shared/shell.js' in read(os.path.join(D, 'index.html')):
     except Exception: row('G6', 'shell', 'WARN', 'check_shell.js gave no result', [sh.stderr.strip()[-300:]])
 elif not A.quick: row('G6', 'shell', 'WARN', 'page does not load demos/shared/shell.js yet (pure / interactive mode, pause, seek, ← / →)')
 
+# ---------------------------------------------------------------- G6 background (tools/web/check_background.js): tab switch / phone call never leaves a silent stuck demo
+if not A.quick and 'shared/shell.js' in read(os.path.join(D, 'index.html')):
+    bg = subprocess.run(['node', os.path.join(REPO, 'tools', 'web', 'check_background.js'), D], capture_output=True, text=True, cwd=REPO)
+    try:
+        r = json.loads(bg.stdout.strip().splitlines()[-1])
+        row('G6', 'background', 'FAIL' if r['fails'] else 'PASS', f'{len(r["fails"])} problem(s) after leaving the page' if r['fails'] else 'hidden and interrupted: pauses, stops thermal, the tap carries on', r['fails'])
+    except Exception: row('G6', 'background', 'WARN', 'check_background.js gave no result', [bg.stderr.strip()[-300:]])
+
 # ---------------------------------------------------------------- G6 l10n-flash (tools/qa/l10n_flash.js, guide §2.2; user 2026-11-08: switching demos
 # showed the Japanese cover first): EN and 中文 at desktop + phone size, opened twice in one tab (= arriving from another demo); every frame
 # from first paint is sampled — a Japanese text painted and then replaced by the translation = FAIL

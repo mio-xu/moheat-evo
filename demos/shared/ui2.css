@@ -229,6 +229,6 @@ html.ui2.fit.lay-drawer:not(.embed) body:not(.cover-only) aside.side { z-index: 
 /* ?embed (the home page's player): the finished cover + one large play button; while it plays, tap the picture to pause (.u2-paused). The bar, chips and ⚙ are for the full demo page */
 html.embed .u2-under, html.embed .u2-pop, html.embed .u2-set, html.embed .u2-row-opt, html.embed .u2-row-lang, html.embed .u2-gal, html.embed .u2-clear, html.embed .u2-row-start > :not(.u2-start) { display: none !important; }
 html.embed .u2 .u2-row-start { position: absolute; inset: 0; width: 100%; height: 100%; bottom: 0; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5cqw; box-sizing: border-box; }   /* low in the frame: the title is at the top of the cover */
-html.embed .u2 .u2-start { width: clamp(76px, 15cqw, 124px); height: clamp(76px, 15cqw, 124px); padding: 0; border-radius: 50%; font-size: 0; justify-content: center; box-shadow: 0 10px 34px rgba(0, 0, 0, .45); }
+html.embed .u2 .u2-start { width: clamp(58px, 12cqw, 108px); height: clamp(58px, 12cqw, 108px); padding: 0; border-radius: 50%; font-size: 0; justify-content: center; box-shadow: 0 10px 34px rgba(0, 0, 0, .45); }
 html.embed .u2 .u2-start svg { width: 42%; height: 42%; margin: 0; }
 html.embed .u2 .u2-start span { display: none; }
