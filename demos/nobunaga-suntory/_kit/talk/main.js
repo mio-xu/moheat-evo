@@ -67,14 +67,15 @@
     return { az: p.az, dist: p.d };
   }
   // the picture for a position: kind (bust / ear / stand / far), screen box (centre x, bottom y, height), mirrored or not
+  const STAND_H = 1.032;   // Nobunaga's full-length pose, drawn from 1.12 H: at 1.2 his head was cut by the top edge
   function frame(c, key, az) {
     const sx = (a, k) => W / 2 + Math.sin(a) * W * k;
     switch (key) {
       case 'near': return { kind: 'bust', x: sx(az, .55), y: H * 1.42, h: H * 1.5, z: .55 };
       case 'left_ear': return { kind: 'ear', x: W * .13, y: H * 1.08, h: H * 1.55, flip: false, z: .12 };
       case 'right_ear': return { kind: 'ear', x: W * .87, y: H * 1.08, h: H * 1.55, flip: true, z: .12 };
-      case 'left': return { kind: c === 'N' ? 'stand' : 'bust', x: W * .1, y: H * (c === 'N' ? 1.12 : 1.14), h: H * (c === 'N' ? 1.2 : 1.15), z: 1 };
-      case 'right': return { kind: c === 'N' ? 'stand' : 'bust', x: W * .9, y: H * (c === 'N' ? 1.12 : 1.14), h: H * (c === 'N' ? 1.2 : 1.15), flip: c === 'N', z: 1 };
+      case 'left': return { kind: c === 'N' ? 'stand' : 'bust', x: W * .1, y: H * (c === 'N' ? 1.12 : 1.14), h: H * (c === 'N' ? STAND_H : 1.15), z: 1 };
+      case 'right': return { kind: c === 'N' ? 'stand' : 'bust', x: W * .9, y: H * (c === 'N' ? 1.12 : 1.14), h: H * (c === 'N' ? STAND_H : 1.15), flip: c === 'N', z: 1 };
       case 'window': return { kind: 'far', x: sx(az, .9), y: H * .8, h: H * .5, z: 4 };
       case 'behind': return { kind: 'none', x: W / 2 + Math.sign(az) * W * .7, y: H * 1.1, h: H * .9, z: .9 };
       default: return { kind: 'bust', x: sx(az, .62), y: H * 1.04, h: H * .98, z: 1.3 };
