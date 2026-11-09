@@ -177,6 +177,7 @@
 "demos/healing/_kit/naomi/art/naomi_walk.webp",
 "demos/healing/_kit/naomi/art/prop_bowl.webp",
 "demos/healing/_kit/naomi/audio.js",
+"demos/healing/_kit/naomi/dwell.js",
 "demos/healing/_kit/phone.css",
 "demos/healing/_kit/style.js",
 "demos/healing/_kit/style.json",
