@@ -15,6 +15,7 @@
     .map(([k, ja, en, v]) => `<button class="ch" data-k="${k}" data-voice="${v}"><b>${ja}</b><span>${en}</span></button>`).join('');
   stage.appendChild(ctl);
   function aim(k) {
+    if (!G.ctl) return;   // the game is not asking
     if (!G.cur && k === 'shoo') return; if (k === 'shoo') k = G.cur.side === 'behind' ? 'up' : G.cur.side;
     G.aim = k; E0.fx.swish(k === 'left' ? -1.2 : k === 'right' ? 1.2 : 0, .35);
   }

@@ -186,7 +186,7 @@
   const SEL = () => ['.stage .choices .ch', '.stage .act .act-btn', '.stage #micGate button', '.stage .mic-gate button', '.stage .chips .chip-c', '.stage .ix-btn', '.stage [data-auto]', ...SH.AUTO].join(', ');
   SH.voiceLang = () => VOICE.lang();   // the effective voice language (MoHeatVoice.lang)
   const seen = new WeakMap();
-  const vis = (e) => e.isConnected && e.offsetParent !== null && getComputedStyle(e).visibility !== 'hidden' && !e.disabled && e.getBoundingClientRect().width > 0;
+  const vis = (e) => e.isConnected && e.offsetParent !== null && getComputedStyle(e).visibility !== 'hidden' && !e.disabled && e.getBoundingClientRect().width > 0 && getComputedStyle(e.parentElement).pointerEvents !== 'none';   // a control the game is not offering stays in the layout with pointer-events: none (Demo47: pure mode pressed the hidden Left)
   const playing = () => { const i = document.getElementById('intro'); return !!i && i.classList.contains('hidden'); };
   if (!EXPORT) setInterval(() => {
     if (!(Play.pure || QS.has('auto')) || !playing()) return;   // ?auto (test runs, page_probe): the same default answers, for demos without their own ?auto code (Demo12)
