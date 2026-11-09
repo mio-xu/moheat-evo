@@ -27,7 +27,7 @@
   // English, tap to pause. Only ?cover / ?render are exports. The visitor's own settings are not read or written here: every moheat.* key of this frame is English / default and writes are dropped.
   if (EMBED) { document.documentElement.classList.add('embed');
     const sg = Storage.prototype.getItem, ss = Storage.prototype.setItem, sr = Storage.prototype.removeItem, ours = (k) => /^moheat\./.test(String(k));
-    Storage.prototype.getItem = function (k) { return ours(k) ? (/\.sublang$/.test(k) ? 'en' : null) : sg.call(this, k); };
+    Storage.prototype.getItem = function (k) { return ours(k) ? (/\.(sublang|voicelang)$/.test(k) ? 'en' : null) : sg.call(this, k); };
     Storage.prototype.setItem = function (k, v) { if (!ours(k)) ss.call(this, k, v); };
     Storage.prototype.removeItem = function (k) { if (!ours(k)) sr.call(this, k); };
     const s = document.createElement('style'); s.textContent = 'html.embed .bar, html.embed .side, html.embed .legend { display: none !important; } html.embed, html.embed body { overflow: hidden; background: #000; height: 100%; } html.embed body { display: flex; flex-direction: column; justify-content: center; } html.embed .layout { width: 100%; } html.embed .stage button:not(.u2-start):not(.u2-paused) { pointer-events: none; } html.embed :is(.coach, .dock, #hintBtn, .hud-goal) { display: none !important; } html.embed .layout { display: block; padding: 0; max-width: none; } html.embed .stage-col { margin: 0; } html.embed .stage { border-radius: 0; border: 0; box-shadow: none; width: 100%; margin: 0; }'; document.head.appendChild(s); }
@@ -54,26 +54,27 @@
   const LS = { get(k, d) { try { const v = localStorage.getItem('moheat.' + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
     set(k, v) { try { localStorage.setItem('moheat.' + k, JSON.stringify(v)); } catch {} } };
   // ---------------------------------------------------------------- voice language (user 2026-11-09): a second setting next to the subtitles
-  // MoHeatVoice.pref() 'same' (DEFAULT = follow the subtitle language) | 'ja' | 'en' | 'zh'; remembered like the subtitle choice
+  // MoHeatVoice.pref() 'ja' (DEFAULT) | 'en', independent of the subtitle language; remembered like the subtitle choice
   // (localStorage 'moheat.voicelang'; kiosk mode: this session only, its per-visitor reset clears it). Answer judging / buttons stay on
   // the SUBTITLE language (voice.js). Files: ja = <base><id>.m4a (as before), en / zh = <base><lang>/<id>.m4a; a missing dub → ja.
   //   MoHeatVoice.lang() · .pref() · .set(p) · .key(id) (cache key per language) · .url(id, base, q) · .fetch(id, base, q) → Response (ja fallback)
   //   event 'moheat:voicelang' { lang, pref } whenever the effective voice language changes (loaders key their cache by .key(id))
   const VOICE = window.MoHeatVoice = (() => {
-    const LANGS = ['ja', 'en', 'zh'];   // languages with dubs (ko: add here once media/voice/ko/ exists)
+    const LANGS = ['ja', 'en'];   // the dubs that exist (user 2026-11-09: no Chinese dubbing; ko: add here once media/voice/ko/ exists)
     const KEY = 'moheat.voicelang';
     const KIOSK = (() => { try { const k = QS.get('kiosk') ?? localStorage.getItem('moheat.kiosk'); return !!k && k !== '0'; } catch { return false; } })();
     const load = () => { if (!KIOSK) try { const v = localStorage.getItem(KEY); if (v) return v; } catch {} try { return sessionStorage.getItem(KEY); } catch { return null; } };
-    let pref = QS.get('voice') || load() || 'same';
-    const sub = () => window.MoHeatSub?.lang || (() => { try { return QS.get('sub') || sessionStorage.getItem('moheat.sublang') || (!KIOSK && localStorage.getItem('moheat.sublang')) || 'en'; } catch { return 'en'; } })();
-    const lang = () => { const l = pref === 'same' ? sub() : pref; return LANGS.includes(l) ? l : 'ja'; };
+    const save = (v) => { try { sessionStorage.setItem(KEY, v); } catch {} if (!KIOSK) try { localStorage.setItem(KEY, v); } catch {} };
+    const stored = load();
+    if (stored && !LANGS.includes(stored)) save('ja');   // old values 'same' / 'zh' become Japanese
+    let pref = LANGS.includes(QS.get('voice')) ? QS.get('voice') : LANGS.includes(stored) ? stored : 'ja';
+    const lang = () => pref;
     let last = lang(); const fire = () => { const l = lang(); if (l !== last) { last = l; dispatchEvent(new CustomEvent('moheat:voicelang', { detail: { lang: l, pref } })); } };
-    addEventListener('moheat:sublang', fire);
     const url = (id, base = 'media/voice/', q = '', l = lang()) => (l === 'ja' ? `${base}${id}.m4a${q}` : `${base}${l}/${id}.m4a${q}`);
     const missed = new Set();
     return {
       LANGS, lang, pref: () => pref, url,
-      set(p) { pref = ['same', ...LANGS].includes(p) ? p : 'same'; try { sessionStorage.setItem(KEY, pref); } catch {} if (!KIOSK) try { localStorage.setItem(KEY, pref); } catch {} fire(); dispatchEvent(new CustomEvent('moheat:voicepref', { detail: pref })); },
+      set(p) { pref = LANGS.includes(p) ? p : 'ja'; save(pref); fire(); dispatchEvent(new CustomEvent('moheat:voicepref', { detail: pref })); },
       key: (id) => { const l = lang(); return l === 'ja' ? id : `${l}:${id}`; },
       fetch(id, base = 'media/voice/', q = '') {
         const l = lang(), ja = url(id, base, q, 'ja');
@@ -513,7 +514,7 @@
   // ---------------------------------------------------------------- UI v2: the live adapter for demos/shared/ui2.js
   if (V2) {
     // UI2_V = content hash of ui2.js + ui2.css (python3 tools/web/bump.py --auto keeps it current: cat ui2.js ui2.css | shasum, 8 hex)
-    const UI2_V = '1d39626b';
+    const UI2_V = 'df7ca13b';
     const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = new URL(`ui2.css?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(css);
     let cssReady = false; const cssOk = () => { if (!cssReady) { cssReady = true; mount(); } };   // mount only once ui2.css applies: an unstyled first frame left the player column off-centre (Demo21 check_ui band 16 / 58 px under load)
     css.addEventListener('load', cssOk); css.addEventListener('error', cssOk); real.st(cssOk, 3000);

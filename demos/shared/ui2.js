@@ -25,7 +25,7 @@
     volume: { en: 'Volume', ja: '音量', zh: '音量' }, mute: { en: 'Mute', ja: 'ミュート', zh: '静音' },
     thermal: { en: 'Thermal', ja: '温冷', zh: '温冷' }, intensity: { en: 'Intensity', ja: '強さ', zh: '强度' },
     settings: { en: 'Settings', ja: '設定', zh: '设置' }, full: { en: 'Fullscreen', ja: '全画面', zh: '全屏' }, exitFull: { en: 'Exit fullscreen', ja: '全画面を終了', zh: '退出全屏' },
-    voice: { en: 'Voice', ja: '音声', zh: '配音' }, voiceOnly: { en: '日本語 only for now', ja: '今は日本語のみ', zh: '目前仅日语' }, sameAsSubs: { en: 'Same as subtitles', ja: '字幕と同じ', zh: '与字幕相同' },
+    voice: { en: 'Voice', ja: '音声', zh: '配音' }, voiceOnly: { en: '日本語 only for now', ja: '今は日本語のみ', zh: '目前仅日语' }, jaOnly: { en: '日本語 only', ja: '日本語のみ', zh: '仅日语' }, subsOn: { en: 'Show subtitles', ja: '字幕を表示', zh: '显示字幕' },
     language: { en: 'Language', ja: '言語', zh: '语言' }, subs: { en: 'Subtitles', ja: '字幕', zh: '字幕' }, size: { en: 'Size', ja: 'サイズ', zh: '大小' },
     on: { en: 'On', ja: 'オン', zh: '开' }, off: { en: 'Off', ja: 'オフ', zh: '关' },
     motion: { en: 'Reduce motion', ja: '動きを減らす', zh: '减少动态' }, motionHint: { en: 'Calmer picture, no shaking', ja: '画面の揺れをおさえる', zh: '画面更平稳，不晃动' },
@@ -76,7 +76,7 @@
         <img class="u2-pic" alt="" decoding="async" fetchpriority="high">
         <div class="u2-ctl u2-row-start"><button type="button" class="u2-start"></button><span class="u2-seg u2-mode-c" role="group"></span><span class="u2-picks u2-picks-c"></span><button type="button" class="u2-chipb u2-gal u2-gal-c" hidden></button></div>
         <div class="u2-ctl u2-row-opt"></div>
-        <div class="u2-ctl u2-row-lang"><span class="u2-label u2-lang-l"></span><span class="u2-chips u2-langs"></span></div>
+        <div class="u2-ctl u2-row-lang"></div>
         <button type="button" class="u2-chipb u2-gal" hidden></button>
         <span class="u2-chipb u2-clear" hidden></span>
       </div>
@@ -128,6 +128,9 @@
     addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
     const sw = (on, k, dis) => `<button type="button" class="u2-sw" role="switch" aria-checked="${!!on}" data-k="${k}" ${dis ? 'disabled' : ''}></button>`;
     const range = (k, v, cls = '') => `<input class="u2-range ${cls}" type="range" min="0" max="100" step="1" value="${Math.round(v * 100)}" data-k="${k}" style="--v:${Math.round(v * 100)}%">`;
+    // the cover's two selectors (the same picker chip as the demo's options): subtitle language and voice, independent
+    const selectors = () => [{ key: '__subs', label: T.subs, items: langs.map((l) => ({ v: l, label: NAMES[l] || l, on: l === lang() })) },
+      ...(A.voice ? [{ key: '__voice', label: T.voice, items: (A.voiceLangs || []).map((v) => ({ v, label: NAMES[v] || v, on: v === A.voice() })) }] : [])];
     const renderPop = (k) => {
       if (k === 'vol') pops.vol.innerHTML = `<h3>${t('volume')}</h3><div class="u2-line">${range('vol', A.volume?.() ?? 1)}<span class="u2-val">${Math.round((A.volume?.() ?? 1) * 100)}</span></div>`;
       if (k === 'heat') pops.heat.innerHTML = `<h3>${t('thermal')}</h3><div class="u2-line"><span>${t((A.heat?.() ?? true) ? 'on' : 'off')}</span>${sw(A.heat?.() ?? true, 'heat')}</div>
@@ -135,9 +138,9 @@
       if (k === 'set') {
         const d = A.device?.() || {}, sv = A.subs?.() ?? 'm';
         pops.set.innerHTML = `<h3>${t('settings')}</h3>
-          <div class="u2-line"><span>${t('language')}</span><span class="u2-seg" role="group">${langs.map((l) => `<button type="button" data-lang="${l}" aria-pressed="${l === lang()}">${NAMES[l] || l}</button>`).join('')}</span></div>
-          ${A.voice ? `<div class="u2-line u2-line-wrap"><span>${t('voice')}</span><span class="u2-seg" role="group">${['same', ...(A.voiceLangs || [])].map((v) => `<button type="button" data-voice="${v}" aria-pressed="${v === A.voice()}" ${A.voiceFixed?.() ? 'disabled' : ''}>${v === 'same' ? t('sameAsSubs') : NAMES[v] || v}</button>`).join('')}</span>${A.voiceFixed?.() ? `<span class="u2-note">${t('voiceOnly')}</span>` : ''}</div>` : ''}
-          <div class="u2-line"><span>${t('subs')}</span>${sw(sv !== 'off', 'subs')}</div>
+          <div class="u2-line"><span>${t('subs')}</span><span class="u2-seg" role="group">${langs.map((l) => `<button type="button" data-lang="${l}" aria-pressed="${l === lang()}">${NAMES[l] || l}</button>`).join('')}</span></div>
+          ${A.voice ? `<div class="u2-line u2-line-wrap"><span>${t('voice')}</span><span class="u2-seg" role="group">${(A.voiceLangs || []).map((v) => `<button type="button" data-voice="${v}" aria-pressed="${v === (A.voiceFixed?.() ? 'ja' : A.voice())}" ${A.voiceFixed?.() ? 'disabled' : ''}>${NAMES[v] || v}</button>`).join('')}</span>${A.voiceFixed?.() ? `<span class="u2-note">${t('voiceOnly')}</span>` : ''}</div>` : ''}
+          <div class="u2-line"><span>${t('subsOn')}</span>${sw(sv !== 'off', 'subs')}</div>
           <div class="u2-line"><span>${t('size')}</span><span class="u2-seg" role="group">${['s', 'm', 'l'].map((s) => `<button type="button" data-size="${s}" aria-pressed="${sv === s}" ${sv === 'off' ? 'disabled' : ''}>${s.toUpperCase()}</button>`).join('')}</span></div>
           <div class="u2-line u2-vol-line"><span>${t('volume')}</span>${range('vol', A.volume?.() ?? 1)}</div>
           <div class="u2-line"><span>${t('motion')}<small>${t('motionHint')}</small></span>${sw(A.reduced?.(), 'motion')}</div>
@@ -149,7 +152,7 @@
           <div class="u2-line"><span>${t('head')}<span class="u2-beta">${t('beta')}</span><small>${t('soon')}</small></span>${sw(false, 'head', true)}</div>
           ${A.creditsUrl ? `<div class="u2-line"><span>${t('credits')}</span><a class="u2-btn2" href="${esc(A.creditsUrl)}" target="_blank" rel="noopener">↗</a></div>` : ''}`;
       }
-      if (k === 'opt') { const o = (A.options?.() || []).find((x) => x.key === optKey); if (!o) return;
+      if (k === 'opt') { const o = [...(A.options?.() || []), ...selectors()].find((x) => x.key === optKey); if (!o) return;
         pops.opt.innerHTML = `<h3>${esc(pickL(o.label))}</h3><div class="u2-chips u2-wrap">${o.items.map((it) =>
           `<button type="button" class="u2-chipb" data-opt="${esc(o.key)}" data-v="${esc(it.v)}" aria-pressed="${!!it.on}">${esc(pickL(it.label))}</button>`).join('')}</div>`; }
     };
@@ -171,7 +174,7 @@
       if (k === 'lr') { A.lrCheck?.(); return; }
       if (k === 'thermo') { A.thermoCheck?.(); return; }
       if (b.dataset.mode) { A.setMode?.(b.dataset.mode); paint(); return; }
-      if (b.dataset.opt) { A.pick?.(b.dataset.opt, b.dataset.v); close(); paint(); return; }
+      if (b.dataset.opt) { if (b.dataset.opt === '__subs') A.setLang?.(b.dataset.v); else if (b.dataset.opt === '__voice') A.setVoice?.(b.dataset.v); else A.pick?.(b.dataset.opt, b.dataset.v); close(); paint(); return; }
       if (b.dataset.pick) return open('opt', b);
       if (b.classList.contains('u2-start')) { A.start?.(); paint(); return; }
       if (b.classList.contains('u2-pp')) { if (['cover', 'ended', 'loading'].includes(A.state?.())) A.start?.(); else A.togglePause?.(); paint(); return; }
@@ -220,8 +223,8 @@
       const picks = opts.map((o) => { const cur = o.items.find((it) => it.on) || o.items[0];
         return `<button type="button" class="u2-chipb u2-pick" data-pick="${esc(o.key)}" aria-haspopup="true"><small>${esc(pickL(o.label))}</small><span>${esc(pickL(cur.label))}</span>${I.chev}</button>`; }).join('');
       H($('.u2-row-opt')).innerHTML = picks; H($('.u2-picks-c')).innerHTML = picks;
-      H($('.u2-lang-l')).innerHTML = I.globe;
-      H($('.u2-langs')).innerHTML = langs.map((l) => `<button type="button" class="u2-chipb" data-lang="${l}" aria-pressed="${l === L}" lang="${l}">${NAMES[l] || l}</button>`).join('');
+      H($('.u2-row-lang')).innerHTML = selectors().map((o) => { const fixed = o.key === '__voice' && A.voiceFixed?.(), cur = o.items.find((it) => it.on) || o.items[0];
+        return `<button type="button" class="u2-chipb u2-pick" data-pick="${esc(o.key)}" aria-haspopup="true" ${fixed ? `disabled title="${esc(t('voiceOnly'))}"` : ''}><small>${esc(pickL(o.label))}</small><span>${esc(fixed ? t('jaOnly') : pickL(cur.label))}</span>${fixed ? '' : I.chev}</button>`; }).join('');
       const clr = $('.u2-clear'), ct = st === 'ended' ? A.cleared?.() : ''; clr.hidden = !ct; if (ct) clr.textContent = ct;   // e.g. "🎉 Cleared in 1:40" (the demo's own #cleared)
       const en = A.endings?.();
       root.querySelectorAll('.u2-gal').forEach((gal) => { gal.hidden = !(en && en.total > 1 && st === 'ended');

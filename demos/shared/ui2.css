@@ -115,6 +115,7 @@ html.ui2.mfs .u2-bar { border-radius: 0; height: calc(clamp(44px, 4.2vw, 64px) +
 .u2-sw[aria-checked="true"] { background: var(--u2-accent); }
 .u2-sw[aria-checked="true"]::after { transform: translateX(18px); }
 .u2-sw:disabled { opacity: .4; }
+.u2-pick:disabled { opacity: .6; cursor: default; }
 .u2-seg button:disabled { opacity: .4; cursor: default; }
 .u2-note { font-size: var(--u2-fs-s); opacity: .7; }
 .u2-pop .u2-seg { height: 36px; }
@@ -158,7 +159,10 @@ html.ui2.mfs .stage:has(> .u2) .subs { bottom: 4.5cqw !important; }
   .u2 { --u2-btn: 44px; --u2-chip: 44px; --u2-x: 3cqw; }
   .u2-ctl { width: 94cqw; }
   .u2-row-start { bottom: 8px; }
-  .u2-row-opt, .u2-row-lang { display: none; }
+  .u2-row-opt { display: none; }
+  .u2-row-lang { bottom: 62px; height: 44px; }   /* the two selectors, above Start */
+  .u2:has(.u2-row-start .u2-picks:not(:empty)) .u2-row-lang { display: none; }   /* end cover with options: no room on a phone; both are in ⚙ */
+  .u2-row-lang .u2-pick { height: 44px; }
   .u2-cover > .u2-gal { display: none; }
   .u2-row-start .u2-gal-c { display: inline-flex; height: 44px; position: static; }
   .u2-gal-c span { display: none; }
