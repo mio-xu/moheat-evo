@@ -197,7 +197,7 @@ for fi in range(int(round(DUR * FPS))):
         D['foot'] = {'src': 'file://' + bg, 'crop': [0, 0, 1536, 864], 'blur': 18, 'dim': .72}
         b = lt / BEAT
         D['text'] = [{'x': 160, 'y': 250, 'w': 1600, 'align': 'center', 'k': 'Real-time AI conversation · リアルタイムAI会話', 'ja': '信長と、*リアルタイム*で語らう。', 'jas': 84,
-                      'en': 'A live AI — not a script. And you <span class="acc">feel</span> every word.', 'ens': 36, 'p': clamp(b / 1.2)}]
+                      'en': 'Powered by real-time AI. And you <span class="acc">feel</span> every word.', 'ens': 36, 'p': clamp(b / 1.2)}]
         D['cards'] = [{'kind': 'chips', 'y': 640, 'b': b, 'b0': 2, 'step': 1.2}]
         D['glow'] = [{'x': 50, 'y': 110, 'c': 'rgba(255,122,47,.35)', 'r': 60, 'a': .6}]
     elif part == 'flow':
