@@ -21,3 +21,5 @@ Testers of the MoHeat Evo demos. Devs build, testers only find and report bugs, 
 | QA-电脑 | Chrome, Safari (WebKit), Firefox at 1280×720, 1440×900, 1920×1080, keyboard (F / Esc / space), device connect UI |
 
 **Report** (final message, in Chinese): a bug table with severity (P0 site broken, P1 user-visible, P2 polish), demo, exact repro (URL, steps, screen size, language), expected vs actual, evidence path, suspected file. No fixes. List passing demos briefly.
+
+**浏览器（用户 2026-11-09）**：每个 agent 同时最多 1 个无头浏览器（`tools/qa/chrome_guard.js` 自动排队，设 `MOHEAT_AGENT=<你的 id>`）；新写的工具在 `require('child_process')` 之前先 `require` 它；QA 结束跑 `python3 tools/qa/reap_chrome.py --kill`。
