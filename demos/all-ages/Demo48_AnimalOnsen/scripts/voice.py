@@ -3,7 +3,7 @@
 voice (tools/eleven/cast.json — yuzujii, penguin, monkey (= staff_f voice reused, stability 0.3), fox; HANDOFF §4: eleven_v4, stability 0.4, similarity 0.8, seed 7), the same voice id /
 settings in every language. Text + delivery tags: scripts/script_data.py (L; SAY = kana readings for names / rare kanji, ja only).
 en / zh = the subtitle columns with the ja tags moved in (tools/eleven/dub.py retag), names kept Japanese-style (NAMES).
-→ media/voice/<lang>/<id>.m4a (same ids in every language) + index.json per language + media/voice.js (durations per language).
+→ media/voice/<id>.m4a (ja) · media/voice/<lang>/<id>.m4a (en / zh; same ids) + index.json per language + media/voice.js (durations per language).
 
   python3 scripts/voice.py [--lang ja|en|zh|all] [--count]        (default: all three; only changed lines are rendered)
 ElevenLabs quota is shared (~74k chars until 2026-12-08, coordinator): run --count first; the character use is logged in
@@ -26,6 +26,7 @@ arg = sys.argv[sys.argv.index('--lang') + 1] if '--lang' in sys.argv else 'all'
 LANGS = ['ja', 'en', 'zh'] if arg == 'all' else [arg]
 VOICES = {k: E.voice(v) for k, v in CAST.items()}
 VDIR = os.path.join(ROOT, 'media', 'voice')
+vdir = lambda lang: VDIR if lang == 'ja' else os.path.join(VDIR, lang)   # one convention site-wide: ja flat, dubs in media/voice/<lang>/ (MoHeatVoice)
 
 
 def text(lid, lang):
@@ -42,11 +43,11 @@ for lang in LANGS:
     before = json.load(open(cache_p)) if os.path.exists(cache_p) else {}
     todo = [k for k, (vid, t) in lines.items() if before.get(k) != D.key(vid, lang, t) or not os.path.exists(os.path.join(VDIR, lang, k + '.m4a'))]
     used[lang] = sum(len(lines[k][1]) for k in todo)
-    D.render(lines, lang, os.path.join(VDIR, lang), cache_p, count_only='--count' in sys.argv)
+    D.render(lines, lang, vdir(lang), cache_p, count_only='--count' in sys.argv)
 if '--count' in sys.argv: sys.exit()
 durs = {}
 for lang in ('ja', 'en', 'zh'):
-    p = os.path.join(VDIR, lang, 'index.json')
+    p = os.path.join(vdir(lang), 'index.json')
     if os.path.exists(p): durs[lang] = json.load(open(p))['dur']
 open(os.path.join(ROOT, 'media', 'voice.js'), 'w').write(f'window.{GLOBAL} = ' + json.dumps({'credit': 'ElevenLabs', 'langs': list(durs), 'dur': durs}) + ';\n')
 logp = os.path.join(ROOT, 'project', 'voice_log.json'); log = json.load(open(logp)) if os.path.exists(logp) else []
