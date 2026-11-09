@@ -782,6 +782,9 @@ main.layout
 - **实时对话的回复在下一轮又出现一次**（Demo43 私密实时版，抽出共用的 `shared/talk.js` 时发现：ElevenLabs 文字 agent 先流式发 `agent_chat_response_part`（以 `stop` 结束），随后再发一条整段的 `agent_response`；旧代码在 `send()` 时清掉"已流式"标记，晚到的 `agent_response` 被当成下一轮的回答，一轮一轮错位）→ `agent_response` 只在这一轮没有流式片段时才用，标记在它到达时清掉；没有英文那一半的半截行丢掉。实时 Demo 上线前跑不花 TTS 的冒烟测试（Demo43 `scripts/live_smoke.mjs`：登录私密服务器 → 真实 agent 跑 3 轮，只看文字）。〔G6 · 实时版冒烟测试〕
 - **导出脚本把 QA 图和嘴块也转进了 media/art**（Demo04 v2：`export.py` 遍历整个 `assets/**`，`lp_mouths/` 和 `patch_check/` 的图被当成画面素材转成 webp）→ 导出脚本只用白名单文件夹；新增 `assets/` 子目录时检查 `media/art` 里没有多出来的文件。〔check_demo: media（体积）· CHECKLIST〕
 - **自己画角色的页面（不经 `shared/layers.js`）测不了口型 / 眨眼**（Demo04 v2：车厢里的列车长由 main.js 自己画）→ 页面提供同样的测试接口 `window.MoHeatLayers = { state(), motion(), render(stem), debug }`（字段同 `shared/layers.js`），`check_mouth.js` / `check_motion.js` 照常能跑。〔check_demo: mouth〕
+- **`bump.py --auto <共用文件>` 把 34 个页面全部改脏，挡住了别的 agent 的门禁**（2026-11-09，新 Demo 还在做时）：bump 按"谁引用了这个文件"改所有页面，新页面只是想拿到版本号 → 做到一半的 Demo 用 `python3 tools/web/bump_page.py <Demo>`（只改这一个 Demo 的页面）；`bump.py --auto` 只在要发布共用文件时跑。〔工具: bump_page.py；CHECKLIST〕
+- **引擎在 `main.js` 里注册的中文被 `l10n.js` 冲掉**（2026-11-09，`shared/story.js`）：`subs.js` 晚于 main.js 才加载 `l10n.js`，`window.MOHEAT_L10N = …` 整个替换 → story.js 用属性 setter 在赋值时合并；页面代码动态生成的文字一律在 main.js 执行时注册（`E.zh(ja, zh)`），不要等运行中再加（`subs.js` 的表已缓存）。〔check_demo: l10n-live〕
+
 **G6 测试**
 - **一个门禁 7 分钟 / Demo = bug**（UI v2 发布前，2026-11-09）：check_demo 的 cache 行把全是数字的内容哈希（`series.css?v=53962729`）当成版本号，对每个引用做全历史 `git log -S` → 每个 5 分钟以上；同时整机 load average 200（多个会话的浏览器）→ `check_demo.py` / `bump.py`：6 位以上 = 内容哈希（只比内容），数字版本号的 `-S` 只搜本页历史；跑全站门禁前先看 `uptime`，负载高就先请统筹让其他会话的批量任务暂停。〔G5 cache〕
 - **用户否决了"重新设计版式"**（2026-11-09：信息条 / 侧列方案 → 「原来的版式是好的」）：界面修正只在原版式里做最小改动（控制条放画面下方、播放器那一栏居中、侧栏加宽）；要改版式先给用户看方案。check_ui 加了版式回归（桌面有侧栏、页面不滚动、播放器上下空带平衡）。〔G6 ui〕
