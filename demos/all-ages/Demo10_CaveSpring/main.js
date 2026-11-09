@@ -80,7 +80,9 @@
     say.push(...lines);
   }
   function foxPos() {
-    return { hut: [500, 1040, .92], gate: [235, 1040, .95], tunnel: [960, 1012, .95], spring: ART.hasArt('spring') ? [330, 1015, 1] : [560, 1000, 1] }[S.scene];
+    const p = { hut: [500, 1040, .92], gate: [235, 1040, .95], tunnel: [960, 1012, .95], spring: ART.hasArt('spring') ? [330, 1015, 1] : [560, 1000, 1] }[S.scene];
+    if (stage.clientWidth < 700) { const sr = stage.getBoundingClientRect(), ir = invEl.getBoundingClientRect(); if (ir.width) p[0] = Math.max(p[0], (ir.right - sr.left) / sr.width * W + 165 * p[2]); }   // phones: the inventory takes the bottom-left, she sits clear of it
+    return p;
   }
   function tickBubble(now) {
     if (now < sayUntil) return;
