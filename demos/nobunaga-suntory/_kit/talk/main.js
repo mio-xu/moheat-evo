@@ -349,8 +349,8 @@
   function drawCover() {}   // UI v2: the cover is the finished image (media/cover/, tools/web/covers.py)
 
   // ---------------------------------------------------------------- thermal (DUAL, two layers)
-  //  · VOICE: a voice is warm. Loudness (0.1 + 0.8 × level) at the speaker's direction, × 1 at your ear (≤ 15 cm), × 0.6 within
-  //    60 cm, × 0.3 at the seat, × 0.1 from the window; × 0.6 straight in front (shared by both ears). Silent at your ear: his breath, 0.15.
+  //  · VOICE: a voice is warm. Loudness (0.1 + 0.8 × level) at the speaker's direction, × 1 at your ear (≤ 15 cm), × 0.75 within
+  //    60 cm, × 0.5 at the seat, × 0.2 from the window; × 0.6 straight in front (shared by both ears). Silent at your ear: his breath, 0.15.
   //  · PLACE: only what is really there — the sunset and mountain wind, the hearth, the warm sake and the snowy window, the misty
   //    morning air, the lanterns and the night wind — plus the events the characters bring about for a few seconds (scenes.js events:
   //    gusts, more charcoal, a fan at one ear, an opened window, the stills' heat, an iced glass at your ear, a brazier).
@@ -358,14 +358,14 @@
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S || !S.started) return out;
     for (const c of S.cast) {
-      const ch = S.ch[c], df = ch.dist <= .15 ? 1 : ch.dist <= .6 ? .6 : ch.dist <= 1.5 ? .3 : .1, front = Math.abs(Math.sin(ch.az)) < .45 && Math.cos(ch.az) > 0 ? .6 : 1;
+      const ch = S.ch[c], df = ch.dist <= .15 ? 1 : ch.dist <= .6 ? .75 : ch.dist <= 1.5 ? .5 : .2, front = Math.abs(Math.sin(ch.az)) < .45 && Math.cos(ch.az) > 0 ? .6 : 1;
       if (ch.talking) add(ch.az, 'h', (.1 + .8 * clamp(ch.lv * 8)) * df * front, c === 'N' ? '信' : '家');
       else if (ch.dist <= .15) add(ch.az, 'h', .15, c === 'N' ? '信' : '家');
       else add(ch.az, 'h', 0, '');
     }
     const fade = S.done ? 0 : clamp(S.t / 3);
-    for (const a of scene().amb) add(a.az, a.k, a.s * fade, a.icon);
-    for (const e of S.events) { const x = (S.t - e.t0) / e.dur, env = x < .25 ? x / .25 : 1 - (x - .25) / .75; add(e.az, e.c, e.s * clamp(env), e.icon); }
+    scene().amb.forEach((a, i) => add(a.az, a.k, a.s * fade * (.8 + .2 * Math.sin(S.t * (.7 + i * .23) + i * 2)), a.icon));   // fire and wind are never perfectly steady: calm stretches keep moving
+    for (const e of S.events) { const x = (S.t - e.t0) / e.dur, env = x < .12 ? x / .12 : 1 - (x - .12) / .88; add(e.az, e.c, e.s * clamp(env), e.icon); }
     return out;
   }
   const ear = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
