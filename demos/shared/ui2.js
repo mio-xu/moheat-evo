@@ -113,7 +113,8 @@
     let optKey = null;
     // small players (phones): ⚙ opens as a bottom sheet over the whole page (the 210 px picture is too small for it)
     const sheet = document.createElement('div'); sheet.className = 'u2 u2-sheet'; sheet.hidden = true; if (A.cat) sheet.dataset.cat = A.cat; document.body.appendChild(sheet);
-    sheet.addEventListener('pointerdown', (e) => { if (e.target === sheet) close(); });
+    sheet.addEventListener('pointerdown', (e) => { if (e.target !== sheet) return; close();   // the sheet is gone before the click lands: that click must not hit what was under it (phones opened ☰, then switched demo)
+      const eat = (c) => { c.stopPropagation(); c.preventDefault(); removeEventListener('click', eat, true); }; addEventListener('click', eat, true); setTimeout(() => removeEventListener('click', eat, true), 700); });
     const close = () => { Object.keys(pops).forEach((k) => { pops[k].hidden = true; owners[k]?.setAttribute('aria-expanded', 'false'); }); sheet.hidden = true; if (pops.set.parentElement !== root) root.appendChild(pops.set); };
     // a popover opens above its button: bar buttons right-aligned to it, cover option pickers left-aligned (phones: full width)
     const open = (k, ownerEl) => { const was = !pops[k].hidden && (k !== 'opt' || ownerEl?.dataset.pick === optKey); close(); if (was) return;
