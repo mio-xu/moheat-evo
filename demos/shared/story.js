@@ -488,7 +488,7 @@
       if (talking) add(VO.az?.[pn] ?? 0, cfg.voiceKind?.(S.who) === 'cool' ? 'c' : 'h', (.1 + .8 * clamp(S.lv * 8)) * (VO.distance?.[pn] ?? .28) * (pn === 'front' || pn === 'near' ? (VO.front_split ?? .5) : 1), '');
       for (const [n, [kind, az, lev]] of Object.entries(amb)) add(az, kind === 'warm' ? 'h' : 'c', lev, cfg.icons?.[n] || '');
       for (const p of E.pulses) add(p.az, p.kind === 'warm' ? 'h' : 'c', p.lev, cfg.icons?.[p.name] || '');
-      cfg.sources?.((az, kind, s, icon) => add(az, kind === 'warm' || kind === 'h' ? 'h' : 'c', s, icon), E);
+      cfg.sources?.((az, kind, s, icon = '') => add(az, kind === 'warm' || kind === 'h' ? 'h' : 'c', s, icon), E);
       return out;
     }
     const ear = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
