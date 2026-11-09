@@ -7,6 +7,22 @@
 
 ---
 
+## 2026-11-09 UI v2 全量门禁：停止时的真实状态（agent ui3）
+
+**不是「33 全绿」。** 用户决定先停掉 UI 检查，下面是停止时每个 Demo 的结果，时间点都早于之后的封面 chips / kiosk 去符号和配音语言设置（这些改动之后没有再跑全量门禁）。
+
+| 组 | Demo | 结果 | 这份结果缺什么 |
+|---|---|---|---|
+| 当前树 dbb8f38e（含纯文字菜单检查） | 01 | --full 0 FAIL | 之后的改动没覆盖 |
+| 当前树，但没跑完 | 28 | --full 1 FAIL：`menu symbol: timeout`（load 334，新检查 120 s 没跑完，不是菜单有符号）。没有重跑 | 需要重跑 |
+| 二轮复跑，0 FAIL，Space 容差 400 ms | 02 03 11 12 13 | --full 0 FAIL | 早于纯文字菜单（6cc3e4e7）和 400 ms 改回（56f8c3ef 不影响这 5 个） |
+| 二轮复跑，0 FAIL，但 Space 容差当时是 1000 ms | 07 08 09 21 22 23 24 30 41 42 43 | --full 0 FAIL | 容差被放宽期间跑的（d1a3a272，已改回），Space 冻结这一项在 400 ms 下未验证；也早于纯文字菜单 |
+| 只有第一轮绿 | 04 05 06 10 14 15 16 17 18 19 20 25 26 29 31 | 首轮 --full 0 FAIL | 早于 drawer z-index（1c6fc2f1）、data-u2（888149ed）、css 门控 mount、纯文字菜单；04、10 的当前树重跑中途被停 |
+
+其余事实：Demo21 的 16 / 58 px 空带没有复现，「等 ui2.css 再 mount」只是预防，原因未证实。发布已由统筹推送（7b1af13c）。机器负载高的一大来源是 20 个 ppid=1 的孤儿 headless Chrome（已向统筹列出 PID，没有动）。
+
+下一步：要恢复全量门禁时，对上表全部 Demo 在当时的 HEAD 上跑 `check_demo --full`（最好先清孤儿 Chrome，低负载下跑），再谈「全绿」。
+
 ## 2026-11-09 · 三语配音上线 第 1 阶段：只渲染 en / zh（agent `dub-rollout`，统筹分派）
 - **做了什么**：按 scratchpad `dub/ROLLOUT.md` 的顺序给 22 个常规 Demo + familycall kit + 信长 talk kit + staging Demo46/47/48/50 渲染了逐句 en / zh 配音（ElevenLabs，和 ja 同一个 voice id / eleven_v4 / stability .4 / similarity .8 / seed 7 / 情绪标签，名字保持日式）。每个 Demo 的配音脚本都能 `--lang en|zh [--count]`（互动：`scripts/voice.py`；familycall：`Demo15_FamilyCall/scripts/voice.py`；talk kit：`Demo23_NobunagaTalk/scripts/voice.py`；电影 01/02/05–09：`--lang ja|en|zh`，ja = 从电影缓存导出、不花额度）→ `media/voice/<lang>/<id>.m4a` + `index.json`。`tools/eleven/dub.py`：64 kb/s、保留线守卫（`MOHEAT_EL_RESERVE` 12k）、`encode()` 峰值 > −1 dBFS 自动限幅重编码、`export_ja()` / `FILM_AF`、`PRON` 发音表（Ieyasu → en "Ee-yeh-yah-soo" / zh "依叶亚斯"，STT 验证）。
 - **状态**：页面都还没接（仍播 ja）。< 2 MB / 语言的都进了 git；talk kit（~7.5 MB / 语言）和 Demo46（~4.6 MB）在 `.gitignore`，留在本机。ElevenLabs 余额 26,598（2026-12-08 重置）。
