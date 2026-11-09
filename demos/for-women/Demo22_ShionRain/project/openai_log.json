@@ -293,5 +293,43 @@
    2560,
    1440
   ]
+ },
+ "shion_dryer_r_ext": {
+  "model": "gpt-image-2",
+  "size": "2928x1440",
+  "quality": "high",
+  "seconds": 66,
+  "usage": {
+   "input_tokens": 1677,
+   "input_tokens_details": {
+    "image_tokens": 1485,
+    "text_tokens": 192
+   },
+   "output_tokens": 7013,
+   "output_tokens_details": {
+    "image_tokens": 7013,
+    "text_tokens": 0
+   },
+   "total_tokens": 8690
+  },
+  "out": [
+   2931,
+   1440
+  ],
+  "prior_usage": [
+   {
+    "input_tokens": 1677,
+    "input_tokens_details": {
+     "image_tokens": 1485,
+     "text_tokens": 192
+    },
+    "output_tokens": 7013,
+    "output_tokens_details": {
+     "image_tokens": 7013,
+     "text_tokens": 0
+    },
+    "total_tokens": 8690
+   }
+  ]
  }
 }

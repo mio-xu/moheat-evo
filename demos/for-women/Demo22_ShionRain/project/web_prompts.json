@@ -79,5 +79,11 @@
   "ref": "shion_whisper",
   "prompt": "Edit image 1: only BOTH eyes change — they are fully, gently closed (a relaxed blink), no iris, no pupil, no white of the eye visible at all: the upper lid comes all the way down, the closed lid is a soft curved lash line with the same lash colour and thickness as the open eye.\nThe eyelid skin has exactly the same skin colour, light and shading as the face around it (no grey patch, no ghost of the iris). Eyebrows, hair over the eyes (the long silver bangs across the visible eye, the mole under the eye), glasses and everything else stay pixel-identical. Do not move, scale or redraw anything outside the eyes.",
   "mask": "450,360,80,45"
+ },
+ "shion_dryer_r_ext": {
+  "ref": "shion_dryer_ext",
+  "composite": true,
+  "mask": "795,645,375,285;720,930,225,195;2640,720,390,720",
+  "prompt": "Edit this exact image, same soft anime style, same lighting and dark plain backdrop. Only two changes. (1) On the LEFT of the picture: the hair dryer is GONE. His hand that held it is now open, its fingers gently combing through the long wet brown hair in the foreground; where the dryer was there is only the plain dark backdrop. (2) On the RIGHT of the picture: he now holds the SAME lavender-white hair dryer in his OTHER hand, raised beside his shoulder at the right edge of the frame, the white shirt sleeve of that arm rising from the lower right, the round nozzle pointing down and towards the viewer's right ear. One dryer only, one hand on it, five fingers, natural anatomy. Keep his face, glasses, hair, ponytail, necklace, shirt and the hand in the middle exactly as they are. Do not move, zoom or crop the picture."
  }
 }

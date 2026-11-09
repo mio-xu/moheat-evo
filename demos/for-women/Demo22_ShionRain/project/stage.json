@@ -111,6 +111,35 @@
      45
     ]
    ]
+  },
+  "dryerR": {
+   "src": "shion_dryer_r_ext",
+   "talk": "shion_dryer_r_ext_talk",
+   "blink": "shion_dryer_r_ext_blink",
+   "matte": "ai",
+   "regions_mouth": [
+    [
+     1645,
+     515,
+     95,
+     58
+    ]
+   ],
+   "regions_eyes": [
+    [
+     1468,
+     382,
+     85,
+     46
+    ],
+    [
+     1662,
+     290,
+     92,
+     46
+    ]
+   ],
+   "mouth": "lp"
   }
  },
  "views": {
@@ -136,10 +165,16 @@
   },
   "dryer": {
    "still": "shion_dryer",
-   "alias": [
-    "dryerR"
-   ],
    "pose": "dryer",
+   "bg": "room",
+   "fire": null,
+   "x": 0.502,
+   "y": 1.02,
+   "height": 1.04
+  },
+  "dryerR": {
+   "still": "shion_dryerR",
+   "pose": "dryerR",
    "bg": "room",
    "fire": null,
    "x": 0.502,

@@ -6,7 +6,8 @@ Shion (Demo22) redone: same story, voice, thermal, page (Demo22 by path); new ar
 |---|---|---|---|---|
 | door | bg_door (Demo22 still with Shion removed) | shion_door | own talk + blink | 25 + 75 |
 | towel | bg_room (from Demo22 glasses still) | shion_towel | own talk + blink | 25 + 75 |
-| dryer / dryerR (mirrored by the page) | bg_room | shion_dryer | own talk + blink | 75 |
+| dryer | bg_room | shion_dryer | own talk + blink | 75 |
+| dryerR (his other hand, masked edit of dryer: same face pixels) | bg_room | shion_dryer_r_ext | talk / blink composited from dryer, mouth set shared | 0.25 $ |
 | window | bg_room | same-face edit of shion_dryer | shion_dryer's | 25 |
 | glasses | bg_room, zoomed | shion_glasses | own talk + blink | 75 |
 | whisper | bg_room, zoomed | shion_whisper (event CG) | own talk | 50 |

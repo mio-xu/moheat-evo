@@ -166,9 +166,6 @@ window.MOHEAT_LAYERS = {
   },
   "shion_dryer": {
    "view": "dryer",
-   "alias": [
-    "dryerR"
-   ],
    "fire": null,
    "bg": {
     "src": "art/bg_room.webp?v=b1b0a60d",
@@ -237,6 +234,87 @@ window.MOHEAT_LAYERS = {
     },
     {
      "src": "art/dryer_mouth3.webp?v=91bef6ca",
+     "rect": [
+      760,
+      267,
+      174,
+      146
+     ],
+     "kind": "mouth_lv",
+     "level": 3
+    }
+   ]
+  },
+  "shion_dryerR": {
+   "view": "dryerR",
+   "fire": null,
+   "bg": {
+    "src": "art/bg_room.webp?v=b1b0a60d",
+    "fire": [
+     0.768,
+     0.229
+    ]
+   },
+   "char": {
+    "src": "art/char_dryerR.webp?v=cfdf2ce9",
+    "w": 1700,
+    "h": 954,
+    "x": 0.502,
+    "y": 1.02,
+    "height": 1.04,
+    "box": [
+     364,
+     0,
+     2931,
+     1440
+    ]
+   },
+   "patches": [
+    {
+     "src": "art/dryerR_eyes.webp?v=a3f720b7",
+     "rect": [
+      653,
+      148,
+      291,
+      150
+     ],
+     "kind": "eyes"
+    },
+    {
+     "src": "art/dryerR_mouth0.webp?v=b8122af0",
+     "rect": [
+      760,
+      267,
+      174,
+      146
+     ],
+     "kind": "mouth_lv",
+     "level": 0
+    },
+    {
+     "src": "art/dryerR_mouth1.webp?v=bc9673fa",
+     "rect": [
+      760,
+      267,
+      174,
+      146
+     ],
+     "kind": "mouth_lv",
+     "level": 1
+    },
+    {
+     "src": "art/dryerR_mouth2.webp?v=ca956fea",
+     "rect": [
+      760,
+      267,
+      174,
+      146
+     ],
+     "kind": "mouth_lv",
+     "level": 2
+    },
+    {
+     "src": "art/dryerR_mouth3.webp?v=91bef6ca",
      "rect": [
       760,
       267,

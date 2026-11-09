@@ -11,8 +11,8 @@
   const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
   const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000));
 
-  // ---------------------------------------------------------------- art: one still per view ('dryerR' = the dryer still, never mirrored: his mole / ear cuff / ponytail side stay put)
-  const VIEWS = ['door', 'towel', 'dryer', 'glasses', 'whisper', 'window'];
+  // ---------------------------------------------------------------- art: one still per view ('dryerR' = his own right-side shot: a masked edit, the face is the same pixels as 'dryer', never mirrored)
+  const VIEWS = ['door', 'towel', 'dryer', 'dryerR', 'glasses', 'whisper', 'window'];
   const IMG = {};
   const artReady = Promise.all(VIEWS.map((n) => new Promise((res) => { const im = new Image(); im.onload = () => { IMG[n] = im; res(); }; im.onerror = () => res(); im.src = `media/art/shion_${n}.jpg?v=4`; })));
 
@@ -135,9 +135,10 @@
       setStep(3); S.near = .3; await go('t_dryer_whisper', 'whisper'); SND.fx.rustle(-1.2, .25); await sleep(.6);
       S.ear = 1; await say('s07', LEFT_EAR); S.ear = .3; await sleep(.8); S.ear = 0;
       // the other side: the warm air circles round the back of your head to your right ear, then cool air to finish
-      await go('t_whisper_dryer_r', 'dryerR'); await say('s08', { az: -.3, dist: .5 });
+      await go('t_whisper_dryer_r', 'dryer'); await say('s08', { az: -.3, dist: .5 });   // still the left-side shot: the dryer is on your left until the air has gone round the back
       await action('↪', '右を向く', 'Turn your head');
-      dryerOn(-1.3); await circle(-1.3, -Math.PI + .2, 2.4); S.dryer.az = Math.PI - .2; S.dryer.target = Math.PI - .2; await circle(Math.PI - .2, 1.3, 2.4);
+      dryerOn(-1.3); await circle(-1.3, -Math.PI + .2, 2.4); S.dryer.az = Math.PI - .2; S.dryer.target = Math.PI - .2; S.view = 'dryerR';   // behind your head: he changes hands, picture, sound and thermal now agree on the right
+      await circle(Math.PI - .2, 1.3, 2.4);
       await sleep(2.5); S.wet = 0;
       S.dryer.hot = false; SND.fx.switchOn(1.3, .3); SND.loop('dryer')?.tone(1900); await sleep(1);
       await circle(1.3, -1.3, 4);
@@ -212,7 +213,7 @@
   let cur = null, curView = null, pending = null;
   function loopFor(view) {
     const quiet = !talking;
-    if (view === 'dryer' || view === 'dryerR') return quiet ? 'v_dryer_idle' : 'v_dryer';
+    if (view === 'dryer') return quiet ? 'v_dryer_idle' : 'v_dryer';
     if (view === 'glasses') return quiet ? 'v_glasses_idle' : 'v_glasses';
     if (view === 'window') return quiet ? 'v_window_idle' : 'v_window';
     return { door: 'v_door', towel: 'v_towel', whisper: 'v_whisper' }[view] || null;
@@ -241,7 +242,7 @@
   function drawView(view, alpha, t) {
     if (drawClip(view, alpha)) return;
     const exact = !QS.has('stills') && Object.keys(CLIP).length > 0;   // with video the still must match the clips' frames exactly (no drift)
-    const im = IMG[view === 'dryerR' ? 'dryer' : view], live = !!(window.MoHeatLayers && window.MoHeatLayers.live);   // layered: no page drift (guide §6.4)
+    const im = IMG[view], live = !!(window.MoHeatLayers && window.MoHeatLayers.live);   // layered: no page drift (guide §6.4)
     ctx.globalAlpha = alpha;
     if (!im) { ctx.fillStyle = '#16121e'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
     const z = exact ? 1 : 1.02 + (live ? 0 : .008 * Math.sin(t * 1.1)) + (view === 'glasses' ? .03 * clamp(S.near - 1, 0, .4) / .4 : 0), dh = W * im.height / im.width;
