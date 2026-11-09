@@ -981,7 +981,7 @@ window.DRAGON_LINES = {
       {
        "ja": "蓮の氷の花",
        "en": "Ren's ice flower",
-       "zh": "蓮的冰之花",
+       "zh": "莲的冰之花",
        "then": [
         "r10"
        ],

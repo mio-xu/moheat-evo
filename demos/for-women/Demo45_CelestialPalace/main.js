@@ -6,7 +6,7 @@
   const rnd = (a, b) => a + Math.random() * (b - a), cf = () => window.MoHeatLayers?.flicker?.() ?? 1;
   const ribbons = Array.from({ length: 16 }, () => ({ x: Math.random() * W * .55, y: rnd(.1, .85) * H, s: rnd(.6, 1.2), ph: rnd(0, 6) }));
   S.run({
-    ns: 'PALACE', live: window.PALACE_LIVE, data: window.PALACE_LINES, voice: window.PALACE_VOICE, bg: '#0c1020',
+    ns: 'PALACE', preload: ['end_S', 'end_J', 'end_K'],   /* views the steps don't list: decoded before their first cut */ live: window.PALACE_LIVE, data: window.PALACE_LINES, voice: window.PALACE_VOICE, bg: '#0c1020',
     samplePlace: (end) => ['chamber', 'terrace', 'corridor'][end] || 'dawn',
     loops: { window: { kind: 'wind', dist: 3, gain: .5 }, brazier: { kind: 'fire', dist: 1.6, gain: 1.1 }, wind: { kind: 'wind', dist: 1, gain: .85 }, night: { kind: 'wind', dist: 3, gain: .4 } },
     beds: { pond: [], chamber: [['room', 'room', 0, 3, .28]], terrace: [['room', 'room', 0, 4, .12]], corridor: [['room', 'room', 0, 4, .2]], dawn: [] },

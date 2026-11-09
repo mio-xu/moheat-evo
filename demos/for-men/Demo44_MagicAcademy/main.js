@@ -17,7 +17,7 @@
     c.restore();
   }
   S.run({
-    ns: 'ACAD', live: window.ACAD_LIVE, data: window.ACAD_LINES, voice: window.ACAD_VOICE, bg: '#0c0e1c',
+    ns: 'ACAD', preload: ['lab_C_blow', 'end_T', 'end_C', 'end_L'],   /* views the steps don't list: decoded before their first cut */ live: window.ACAD_LIVE, data: window.ACAD_LINES, voice: window.ACAD_VOICE, bg: '#0c0e1c',
     eventView: { '@blow_right': 'lab_C_blow' },
     samplePlace: (end) => ['hall', 'lab', 'tower'][end] || 'dawn',
     // sound follows the thermal source

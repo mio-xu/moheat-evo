@@ -9,7 +9,7 @@
   // his dark horns read against the night: a cool rim light on each horn (user note on the first art review)
   const HORNS = { valley_G: ['gaku_valley', [[.270, .058], [.345, .052]]], valley_G_wing: ['gaku_wing', [[.205, .04], [.445, .05]]] };
   S.run({
-    ns: 'DRAGON', live: window.DRAGON_LIVE, data: window.DRAGON_LINES, voice: window.DRAGON_VOICE, bg: '#0f0d1c',
+    ns: 'DRAGON', preload: ['end_H', 'end_G', 'end_R'],   /* views the steps don't list: decoded before their first cut */ live: window.DRAGON_LIVE, data: window.DRAGON_LINES, voice: window.DRAGON_VOICE, bg: '#0f0d1c',
     eventView: { '@wing': 'valley_G_wing' },
     holdSide: (st) => (st.id === 'valley' ? 'right' : ''),
     samplePlace: (end) => ['study', 'valley', 'lake'][end] || 'dawn',
