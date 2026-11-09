@@ -18,7 +18,7 @@ def leftovers():
         m = re.match(r'\s*(\d+)\s+(\d+)\s+(\S+)\s+(.*)', line)
         if not m: continue
         pid, ppid, etime, cmd = int(m[1]), int(m[2]), m[3], m[4]
-        if ppid != 1 or 'Google Chrome' not in cmd or '--headless' not in cmd or '--type=' in cmd: continue
+        if ppid != 1 or not re.search(r'Google Chrome|Chromium|chrome-headless-shell', cmd) or '--headless' not in cmd or '--type=' in cmd: continue
         p = re.search(r'--user-data-dir=(\S+)', cmd)
         if p and os.path.realpath(p[1]).startswith(TMP): out.append((pid, etime, p[1]))
     return out
