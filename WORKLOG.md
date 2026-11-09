@@ -7,6 +7,15 @@
 
 ---
 
+## 2026-11-09 小修 + 首页播放器 + 切后台恢复（agent fixes6）
+
+做了：信长站姿不再切头（Demo23 / 41 / 42）；对话 Demo 冷热幅度调大（环境 × 2.2 上限 .55 + 轻微波动，语音按距离 1 / .75 / .5 / .2，事件 .7–.9，Demo42 分数 52 → 60）；Demo13、Demo10 手机重叠；Demo04 两张构图留边；Demo22 右侧吹风机新画面（掩膜编辑，脸像素差 0，气流绕到脑后时换手）；封面选项 chips 换行；`?embed` 首页播放器（英文封面 + 一个播放键 + 纯享英文）；切后台 / 来电（shell.js + `tools/web/check_background.js`）；`check_stage_visible --export`。
+状态：已提交，push 由统筹做。`?embed` 的全量扫描结果见最后的报告。
+下一步：真机 iPhone 确认切后台；`talk.js` 第 6 项未复现（send() 时丢行首是另一个潜在问题，没改）。
+问题：教训见 §11.1（后台优先级、left: 50%、右侧道具、冷热幅度、切后台）。
+
+---
+
 ## 2026-11-09 机器过载治理（agent fixes6）
 
 做了：`tools/qa/heavy_lock.py`（全机一个重活队列 + 负载门槛 + 低优先级，退出码 75 = 没跑）；check_demo --full、build_stage、lp_mouths、lp_pose、render_mp4、covers 批量已接入；`changed.py --run`（只测改动）；`patrol.py`（一行巡查）；`qa-full.yml` + `ci_full.py`（手动云端全量）；浏览器用 nice 10，时序检查帧率过低报 BUSY。
