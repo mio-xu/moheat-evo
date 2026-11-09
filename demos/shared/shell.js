@@ -261,6 +261,9 @@
   }
 
   // ---------------------------------------------------------------- pause
+  // a film the page itself stopped (■ STOP) and nothing will restart: ▶ and a seek must play it. An interactive gate's wait is not that.
+  const filmEl = () => (FILM() ? ['mix', 'film'].map((k) => document.getElementById(k)).find((e) => e instanceof HTMLMediaElement) : null);
+  const filmHeld = () => { const f = filmEl(); return !!f && f.paused && !f.ended && playing() && !document.querySelector('.stage.ix-wait'); };
   const pause = (on) => {
     if (on === paused || EXPORT) return;
     if (!on) autoPaused = false;
@@ -269,7 +272,7 @@
       document.querySelectorAll('audio, video').forEach((m) => { if (!m.paused) { media.add(m); m.pause(); } }); }
     else { const lost = [...ctxs].filter((c) => c.state !== 'running' && c.state !== 'closed');   // in the tap's own call: iOS allows resume() only in a user gesture, also from 'interrupted'
       lost.forEach((c) => c.resume().catch(() => {}));
-      media.forEach((m) => m.play().catch(() => {})); media.clear(); window.MoHeatShell_resumeFrames?.(); arm();
+      media.forEach((m) => m.play().catch(() => {})); media.clear(); if (filmHeld()) filmEl().play().catch(() => {}); window.MoHeatShell_resumeFrames?.(); arm();
       if (lost.length) real.st(() => { if (!paused && lost.some((c) => c.state !== 'running' && c.state !== 'closed')) pause(true); }, 1500); }   // it did not come back: show the big play again, never a silent stuck state
     document.documentElement.classList.toggle('shell-paused', paused); paint();
   };
@@ -298,7 +301,7 @@
   const seek = (i) => {
     if (!playing()) return; const cur = chapter();
     if (Play.mode === 'interactive' && i > reached) return;
-    if (paused) pause(false);
+    if (paused) pause(false); else if (filmHeld()) filmEl().play().catch(() => {});
     if (SH.seek) return SH.seek(i);
     since = real.now();
     if (i <= cur) { target = i; back = true; document.getElementById('startBtn')?.click(); if (i > 0) setWarp(16); else target = null; return; }   // back: from the top, then forward
@@ -530,12 +533,12 @@
     const A = {
       get cat() { return location.pathname.split('/demos/')[1]?.split('/')[0]; },
       get cover() { return { base: COVER_BASE, langs: window.MoHeatSub?.langs || ['en', 'ja', 'zh'] }; },
-      state: () => (playing() ? (paused ? 'paused' : 'playing') : !ready ? 'loading' : started ? 'ended' : 'cover'),
+      state: () => (playing() ? (paused || filmHeld() ? 'paused' : 'playing') : !ready ? 'loading' : started ? 'ended' : 'cover'),
       lang: () => window.MoHeatSub?.lang || 'en', setLang: (l) => window.MoHeatSub?.set?.(l),
       voice: () => VOICE.pref(), setVoice: (p) => VOICE.set(p), voiceLangs: VOICE.LANGS,
       mode: () => mode, setMode: (m) => setMode(m),
       start: () => { if (!ready) return; document.getElementById('startBtn')?.click(); },
-      togglePause: () => pause(!paused),
+      togglePause: () => { if (!paused && filmHeld()) filmEl().play().catch(() => {}); else pause(!paused); },
       // chapter labels: cover.json "chapters" (per language) > the demo's own { ja, en, zh } > its label text
       chapters: () => chapters().map((c, i) => ({ label: cover?.chapters?.[i] || (c.ja || c.zh ? { en: c.en || c.label, ja: c.ja, zh: c.zh || (c.ja && window.MoHeatSub?.tr?.(c.ja, 'zh', false)) || c.en || c.label } : c.label) })), chapter: () => chapter(), reached: () => reached,
       progress: () => { const f = film(), sc = SH.chapters; if (!f || !sc?.[0] || sc[0].t == null) return .5; const k = chapter(), t0 = sc[k]?.t ?? 0, t1 = sc[k + 1]?.t ?? DEMO_DATA.anim.duration; return Math.max(0, Math.min(1, (f.currentTime - t0) / Math.max(1, t1 - t0))); },
