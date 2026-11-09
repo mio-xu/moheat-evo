@@ -159,8 +159,8 @@
    "bg": "holo",
    "fire": null,
    "x": 0.5,
-   "y": 1.0,
-   "height": 1.0
+   "y": 0.98,
+   "height": 0.96
   },
   "wave": {
    "still": "cond_wave_v",
@@ -178,7 +178,7 @@
    "fire": null,
    "x": 0.5,
    "y": 1.0,
-   "height": 1.0
+   "height": 0.98
   }
  }
 }
