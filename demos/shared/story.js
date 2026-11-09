@@ -196,7 +196,7 @@
     const STILL = {}; for (const [stem, v] of Object.entries(LAY.views || {})) { STILL[v.view] = stem; for (const a of v.alias || []) STILL[a] = stem; }
     const IMG = {};
     const need = (v) => new Promise((res) => { if (!v || IMG[v] || !STILL[v]) return res(); const im = new Image(); im.onload = () => { IMG[v] = im; res(); }; im.onerror = () => res(); im.src = `media/art/${STILL[v]}.jpg?v=1`; });
-    const STORY_IDS = []; { const add = (id) => { if (LINES[id] && !STORY_IDS.includes(id)) STORY_IDS.push(id); };
+    const STORY_IDS = []; if (cfg.script) STORY_IDS.push(...Object.keys(LINES)); else { const add = (id) => { if (LINES[id] && !STORY_IDS.includes(id)) STORY_IDS.push(id); };
       for (const st of D.steps) for (const b of st.beats) { if (Array.isArray(b)) { if (b[0] === 'window') { add(b[2]); for (const v of Object.values(D.bridges?.[b[1]] || {})) [].concat(v).forEach(add); } else add(b[0]); } else { for (const o of b.options || []) (o.then || []).forEach(add); (b.let_go || []).forEach(add); } } }
     const storyViews = new Set(); for (const st of D.steps) for (const v of st.view || []) storyViews.add(v);
     for (const v of cfg.preload || []) storyViews.add(v);
@@ -368,6 +368,12 @@
     async function story() {
       const my = ++run_;
       try {
+        if (cfg.script) {   // a game: its own flow instead of the steps (cfg.script(E, my): uses E.say / choice / action / hold / setStep / amb / pulse …)
+          await cfg.script(E, my); alive(my);
+          await sleep(.6); alive(my);
+          try { sessionStorage.setItem(`moheat.${cfg.ns}.cleared`, '1'); } catch {}
+          return finish();
+        }
         for (let i = 0; i < D.steps.length; i++) {
           const st = D.steps[i]; S.step = st; setStep(i);
           S.fade = 0;
@@ -450,6 +456,10 @@
 
     // ---- per frame: ease each source (FX / loops), the thermal sum, the talking envelope
     const K = E.K;
+    Object.assign(E, { say, choice, action, hold: stillHold, setStep, alive, sub, lineView, listen: listenTurn, zh, AUTO, ALT, pure: PURE, my: () => run_,
+      amb: (name, kind, az, lev) => applySet({ [name]: [kind, az, lev] }),
+      pulse: (name, kind, az, lev, rise = .1, hold = .4, fade = .5) => pulses.push({ name, type: 'pulse', t0: S.t, kind, az, lev, rise, hold, fade }),
+      sweep: (name, kind, a0, a1, secs, lev) => pulses.push({ name, type: 'sweep', t0: S.t, kind, a0, a1, secs, lev }) });
     function update(dt) {
       S.t += dt; if (!S.started) return;
       S.clock += dt; S.lv = A.voiceLevel();
@@ -479,7 +489,7 @@
       const out = [], add = (azDeg, k, s, icon) => { if (s > .01) out.push({ az: azDeg * RAD, k, s, icon }); };
       if (!S.started) return out;
       const pn = S.posName;
-      if (talking) add(VO.az?.[pn] ?? 0, 'h', (.1 + .8 * clamp(S.lv * 8)) * (VO.distance?.[pn] ?? .28) * (pn === 'front' || pn === 'near' ? (VO.front_split ?? .5) : 1), '');
+      if (talking) add(VO.az?.[pn] ?? 0, cfg.voiceKind?.(S.who) === 'cool' ? 'c' : 'h', (.1 + .8 * clamp(S.lv * 8)) * (VO.distance?.[pn] ?? .28) * (pn === 'front' || pn === 'near' ? (VO.front_split ?? .5) : 1), '');
       for (const [n, [kind, az, lev]] of Object.entries(amb)) add(az, kind === 'warm' ? 'h' : 'c', lev, cfg.icons?.[n] || '');
       for (const p of E.pulses) add(p.az, p.kind === 'warm' ? 'h' : 'c', p.lev, cfg.icons?.[p.name] || '');
       cfg.sources?.((az, kind, s, icon) => add(az, kind === 'warm' || kind === 'h' ? 'h' : 'c', s, icon), E);
@@ -625,7 +635,7 @@
       for (const k in ear) ear[k] = 0; $('cmd').textContent = 'stop'; if (AUTO) cmdLog.push([+S.clock.toFixed(2), 'stop']);
       sub('', '', ''); actEl.classList.remove('show'); choiceEl.classList.remove('show'); document.querySelectorAll('.mh-turn').forEach((e) => e.remove());
       const endB = D.steps.flatMap((s) => s.beats).find((b) => b && b.ending), c = $('cleared');
-      c.hidden = talk || !endB || end < 0; if (!c.hidden) { const t = endText(endB.options[end]); c.textContent = `${t[0]} · ${t[1]}`; }
+      const note = cfg.endText?.(S); c.hidden = talk || (!note && (!endB || end < 0)); if (!c.hidden) { if (note) c.textContent = note; else { const t = endText(endB.options[end]); c.textContent = `${t[0]} · ${t[1]}`; } }
       $('startBtn').textContent = '↺ もう一度 · Play again'; $('intro').classList.remove('hidden');
       talkUI(); API.done = true; cfg.onFinish?.(E);
     }
