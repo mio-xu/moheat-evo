@@ -18,6 +18,7 @@
 // --shots: when the mouth is open in a view for the first time, saves the canvas to <demo>/assets/mouth_check/<view>_open.png
 // (and a closed one), so the open mouth can be looked at 2× in the real composite.
 // Exit code 1 if anything is flagged. Static patch checks (alignment, seams, patch outside the character): tools/art/check_patches.py.
+require('../qa/chrome_guard');   // closes its browser on any exit; one browser per agent (MOHEAT_MAX_BROWSERS)
 const { spawn } = require('child_process');
 const path = require('path'), fs = require('fs'), net = require('net');
 const ROOT = path.resolve(__dirname, '..', '..');

@@ -15,6 +15,7 @@
 //   errors   uncaught exceptions, console.error, failed requests (≥ 400 / network errors)
 // Diff: same subtitle and command sequences (order exact, times within --tol s — real time, not virtual), same answer-button
 // sequence, same files by name + size (paths may change), screenshots differ in < --px % of pixels (python3 + Pillow), no new errors.
+require('./chrome_guard');   // closes its browser on any exit; one browser per agent (MOHEAT_MAX_BROWSERS)
 const { spawn, spawnSync } = require('child_process');
 const path = require('path'), fs = require('fs'), net = require('net'), os = require('os');
 const ROOT = path.resolve(__dirname, '..', '..');

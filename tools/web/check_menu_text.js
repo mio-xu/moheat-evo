@@ -3,6 +3,7 @@
 // The ONE permanent exception (user confirmed 2026-11-09): the ★ at the start of the "★ Recommended" tab label ([data-w=rec]).
 // © ® ™ are typography, not symbols to remove. Thumbnails are images and are not covered here.
 //   node tools/web/check_menu_text.js [demo folder]     prints ONE JSON object { fails }; exit 1 on FAIL
+require('../qa/chrome_guard');   // closes its browser on any exit; one browser per agent (MOHEAT_MAX_BROWSERS)
 const { spawn } = require('child_process'); const path = require('path'), fs = require('fs'), net = require('net'), os = require('os');
 const ROOT = path.resolve(__dirname, '..', '..'), REL = process.argv[2] ? path.relative(ROOT, path.resolve(process.argv[2])) : 'demos/for-women/Demo24_GakuCamp';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

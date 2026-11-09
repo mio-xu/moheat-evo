@@ -5,6 +5,7 @@
 //   <out>/<dir>.<lang>.wide.png      1280×720 CSS px × 1.5 = 1920×1080
 //   <out>/<dir>.<lang>.compact.png   400×225 CSS px × 3 = 1200×675
 // and reports window.TPL (does the copy block end above the live controls? h1 size used).
+require('../qa/chrome_guard');   // closes its browser on any exit; one browser per agent (MOHEAT_MAX_BROWSERS)
 const { spawn } = require('child_process');
 const path = require('path'), fs = require('fs'), net = require('net'), os = require('os');
 const ROOT = path.resolve(__dirname, '..', '..');

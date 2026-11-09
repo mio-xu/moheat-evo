@@ -10,6 +10,7 @@
 // requestAnimationFrame from document start (= what each painted frame shows), the visible text with Japanese in it
 // (en: kana or kanji, zh: kana). A FLASH = such a text visible in an early frame that is gone from the settled page (it was
 // replaced by the translation after it had been painted). Japanese that stays on screen is not a flash (l10n row / translators).
+require('./chrome_guard');   // closes its browser on any exit; one browser per agent (MOHEAT_MAX_BROWSERS)
 const { spawn } = require('child_process');
 const path = require('path'), fs = require('fs'), net = require('net'), os = require('os');
 

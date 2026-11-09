@@ -8,6 +8,7 @@
 //   visitor's settings reset → stats (visitor, started / finished, rating, buy × price, scene × buy, CSV) → idle → attract
 //   → tap → welcome → demo cover idle → back to the kiosk → 5 taps + PIN → staff panel → exit kiosk clears the flag.
 // --quick skips the demo playback (card opened from a simulated visit).
+require('../qa/chrome_guard');   // closes its browser on any exit; one browser per agent (MOHEAT_MAX_BROWSERS)
 const { spawn } = require('child_process');
 const path = require('path'), fs = require('fs'), net = require('net'), os = require('os');
 const ROOT = path.resolve(__dirname, '..', '..');

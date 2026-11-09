@@ -12,6 +12,7 @@
 //  mobile  tools/web/check_mobile.html for this one folder at its 7 sizes (scroll / overflow / 44 px / guide / drawer), with
 //          nav.js's DEMOS list replaced by this folder for that page only (so a staging folder that is not in the menu is checked too).
 //  drag    touch emulation at 390×844 / 844×390: CDP finger strokes on the picture → no page scroll / zoom / pointercancel (shared/gesture.js).
+require('./chrome_guard');   // closes its browser on any exit; one browser per agent (MOHEAT_MAX_BROWSERS)
 const { spawn } = require('child_process');
 const path = require('path'), fs = require('fs'), net = require('net'), os = require('os');
 const ROOT = path.resolve(__dirname, '..', '..');

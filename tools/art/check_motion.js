@@ -17,6 +17,7 @@
 //   BREATH        breathing outside 12–20 / min
 //   FRAME-DRIFT   the page itself zooms / bobs the layered still (> 0.15 % size or > 0.6 px): the background breathes with her
 // Exit code 1 if anything (not info) is flagged.
+require('../qa/chrome_guard');   // closes its browser on any exit; one browser per agent (MOHEAT_MAX_BROWSERS)
 const { spawn } = require('child_process');
 const path = require('path'), fs = require('fs'), net = require('net');
 const ROOT = path.resolve(__dirname, '..', '..');

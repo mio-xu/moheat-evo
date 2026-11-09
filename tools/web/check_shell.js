@@ -9,6 +9,7 @@
 // --shots DIR saves cover / playing / end screenshots (for reviews).
 // --record: none of the tests above — one plain pure-mode run from Start to the end, the #cmd thermal text sampled every 100 ms
 //   → { cmds: [[secs, cmd], …], ended, secs } (tools/qa/thermal_score.py: the thermal-use score behind the menu's "Try these first").
+require('../qa/chrome_guard');   // closes its browser on any exit; one browser per agent (MOHEAT_MAX_BROWSERS)
 const { spawn } = require('child_process');
 const path = require('path'), fs = require('fs'), net = require('net'), os = require('os');
 const ROOT = path.resolve(__dirname, '..', '..');

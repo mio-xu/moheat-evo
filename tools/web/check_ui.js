@@ -9,6 +9,7 @@
 // reference demo, except: the picture (cover image / scene), chapter count + labels, option-picker contents (talk demos), the category
 // accent colour (normalised to ACCENT), and the stage box itself is compared separately (layout of the page). Old interface pieces
 // that must be gone (the old cover, 🌐 ⛶ 🔊 corner, mode buttons, thermal chip, chapter bar, film transport) = FAIL when visible.
+require('../qa/chrome_guard');   // closes its browser on any exit; one browser per agent (MOHEAT_MAX_BROWSERS)
 const { spawn } = require('child_process'); const path = require('path'), fs = require('fs'), net = require('net'), os = require('os');
 const ROOT = path.resolve(__dirname, '..', '..');
 const argv = process.argv.slice(2), opt = (f, d) => { const i = argv.indexOf(f); return i >= 0 ? argv.splice(i, 2)[1] : d; };

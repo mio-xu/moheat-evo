@@ -3,6 +3,7 @@
 // their own cover / stage: the UI v2 pre-paint rule in series.css only applies to <html data-u2> pages (2026-11-09: it blacked them out).
 // Prints ONE JSON object { pages, fails }; exit 1 on FAIL.
 //   node tools/web/check_stage_visible.js [page.html …]     (default: every such page under demos/)
+require('../qa/chrome_guard');   // closes its browser on any exit; one browser per agent (MOHEAT_MAX_BROWSERS)
 const { spawn } = require('child_process'); const path = require('path'), fs = require('fs'), net = require('net'), os = require('os');
 const ROOT = path.resolve(__dirname, '..', '..');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

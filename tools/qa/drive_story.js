@@ -9,6 +9,7 @@
 // Also: failed requests, exceptions, console errors, '[MoHeatSub] no <lang>', ends on its OWN cover with Play again.
 // --shots: the canvas the first time each view is open / closed / blinking → <dir>/<view>_{open,closed,blink}.png (look 2×).
 // Prints one JSON object; exit 1 when issues / failed requests / exceptions / not ended.
+require('./chrome_guard');   // closes its browser on any exit; one browser per agent (MOHEAT_MAX_BROWSERS)
 const { spawn } = require('child_process');
 const path = require('path'), fs = require('fs'), net = require('net'), os = require('os');
 const ROOT = path.resolve(__dirname, '..', '..');

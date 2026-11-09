@@ -10,6 +10,7 @@
 // (status pill #qdev + big #qalert, fed over the BroadcastChannel). The same sequence: staff Connect → visitor goes to a demo (silent
 // reconnect, kiosk mode) → unplug / replug there → back to the kiosk (silent reconnect) → unplug / replug → manual disconnect → reload
 // stays off. Every surface must agree with MoHeatDevice.state at every step, 0 permission prompts.
+require('../qa/chrome_guard');   // closes its browser on any exit; one browser per agent (MOHEAT_MAX_BROWSERS)
 const { spawn } = require('child_process'); const path = require('path'), fs = require('fs'), net = require('net'), os = require('os');
 const ROOT = path.resolve(__dirname, '..', '..');
 const ARGS = process.argv.slice(2), KIOSK = ARGS.includes('--kiosk'), SHOTS = ARGS.includes('--shots') ? path.resolve(ARGS[ARGS.indexOf('--shots') + 1]) : null;
