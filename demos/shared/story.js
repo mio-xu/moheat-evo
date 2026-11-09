@@ -5,15 +5,14 @@
 //                beats: [id, pos] a line · ['@event'] · ['window', who, id] a free-talk window · { type: choice | action | say | hold }
 //   media/plan.js   window.MOHEAT_PLAN (tools/thermal/plan_js.py ← project/thermal_plan.json): the thermal events (set / pulse /
 //                sweep / then), voice distances, smoothing, step_start, places (もっと話す ambient), reuse (talk views)
-//   media/voice.js  window.<X>_VOICE = { langs, dur: {lang: {id: s}} } + media/voice/<lang>/<id>.m4a (+ index.json per language)
+//   media/voice.js  window.<X>_VOICE = { langs, dur: {lang: {id: s}} } + media/voice/<id>.m4a (ja) · media/voice/<lang>/<id>.m4a (en / zh)
 //   media/layers.js the layered stills (shared/layers.js animates them; hooks <ns>.S.view / lv / who)
 //   main.js      MoHeatStory.run({ ns, data, voice, ... per-demo FX: draw / sfx / loops / beds / icons / eventView / lineView })
 // What it does (same behaviour as Demo43): subtitles (#subs, translated by shared/subs.js), voices placed with HRTF, choices / actions
 // / say-it gates / press-and-hold (judged by shared/voice.js), free-talk windows + もっと話す place × cast (shared/talk.js), chapters
 // (#steps → shared/shell.js), DUAL thermal from the plan (voice layer: (0.1 + 0.8 × loudness) × distance at the speaker's position;
 // ambient layer: the plan's sources), radar + meters + device output (device.js), cross-faded stills, end on its own cover.
-// Voice language: the subtitle language (shared "voice language" setting later: MoHeatShell.voiceLang), Japanese fallback when that
-// language is not published (media/voice/<lang>/index.json 404 → ja, one request).
+// Voice language: the shared setting (MoHeatVoice in shared/shell.js, default = the subtitle language); a dub that is missing plays ja (404 fallback).
 // Tests: ?auto=1 (answers itself) · &alt=1 (last options, let-go paths) · &end=N (that ending) · ?talk=<cast>&place=<place> · &sample.
 (() => {
   if (window.MoHeatStory) return;
@@ -27,7 +26,7 @@
   // ================================================================ audio: voices (per language) + a synthesized sound library
   const A = (() => {
     let ac = null, master = null, dry = null, verb = null, noise = null, muted = false, an = null, abuf = null, level = 0;
-    const voices = {}, langOK = {};
+    const voices = {};
     function init() {
       if (ac) { if (ac.state === 'suspended') ac.resume(); return ac; }
       ac = new (window.AudioContext || window.webkitAudioContext)();
@@ -68,15 +67,14 @@
       g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(amp, t + attack); g.gain.exponentialRampToValueAtTime(.0005, t + dur);
       o.connect(g).connect(out); o.start(t); o.stop(t + dur + .02);
     }
-    // ---- voices: media/voice/<lang>/<id>.m4a; a language without media/voice/<lang>/index.json is not published → Japanese
-    const langReady = (l) => (l === 'ja' ? Promise.resolve(true) : (langOK[l] ??= fetch(`media/voice/${l}/index.json`, { cache: 'no-cache' }).then((r) => r.ok).catch(() => false)));
-    const langNow = (l) => (l === 'ja' || langOK[l] === undefined ? 'ja' : null);
-    function load(id, l) {
-      const k = `${l}:${id}`; if (voices[k] !== undefined || !ac) return;
-      voices[k] = fetch(`media/voice/${l}/${id}.m4a`).then((r) => { if (!r.ok) throw 0; return r.arrayBuffer(); }).then((b) => ac.decodeAudioData(b)).then((buf) => (voices[k] = buf)).catch(() => (voices[k] = null));
+    // ---- voices through MoHeatVoice (shared/shell.js): the voice language setting, media/voice/<id>.m4a (ja) · media/voice/<lang>/<id>.m4a, ja on 404
+    const VF = (id, base = 'media/voice/', q = '') => (window.MoHeatVoice ? window.MoHeatVoice.fetch(id, base, q) : fetch(`${base}${id}.m4a${q}`));
+    const VK = (id) => (window.MoHeatVoice ? window.MoHeatVoice.key(id) : id);
+    function load(id) {
+      const k = VK(id); if (voices[k] !== undefined || !ac) return;
+      voices[k] = VF(id, 'media/voice/').then((r) => { if (!r.ok) throw 0; return r.arrayBuffer(); }).then((b) => ac.decodeAudioData(b)).then((buf) => (voices[k] = buf)).catch(() => (voices[k] = null));
     }
-    async function pickLang(l) { if (l === 'ja') return 'ja'; return (await langReady(l)) ? l : 'ja'; }
-    async function loadVoices(ids, l) { if (!ac) return; const use = await pickLang(l); for (const id of ids) load(id, use); if (use !== 'ja') for (const id of ids.slice(0, 6)) load(id, 'ja'); }
+    function loadVoices(ids) { if (ac) for (const id of ids) load(id); }
     function play(buf, where, gain) {
       return new Promise((res) => {
         if (!ac || !buf) return setTimeout(res, 2200);
@@ -87,11 +85,9 @@
         s.onended = () => res(); s.start();
       });
     }
-    async function say(id, where, gain, l = 'ja') {
-      let use = await pickLang(l), k = `${use}:${id}`;
-      if (voices[k] === undefined) load(id, use);
+    async function say(id, where, gain) {   // a line in the current voice language (loaded on demand after a language switch)
+      const k = VK(id); if (voices[k] === undefined) load(id);
       if (voices[k] instanceof Promise) await voices[k];
-      if (!voices[k] && use !== 'ja') { k = `ja:${id}`; if (voices[k] === undefined) load(id, 'ja'); if (voices[k] instanceof Promise) await voices[k]; }
       return play(voices[k], where, gain);
     }
     function voiceLevel() {
@@ -158,7 +154,7 @@
     function setMuted(v) { muted = v; if (master) master.gain.setTargetAtTime(v ? 0 : .95, ac.currentTime, .05); }
     function lrCheck() { init(); shot(-Math.PI / 2, 1, .1, (o) => tone(o, 880, .4, .2), .5); setTimeout(() => shot(Math.PI / 2, 1, .1, (o) => tone(o, 1175, .4, .2), .5), 900); }
     function stopAll() { for (const k of Object.keys(loops)) loops[k].stop(); }
-    return { init, loadVoices, langReady, say, play, decode: (ab) => ac.decodeAudioData(ab), voiceLevel, loop, loops, fx, setMuted, isMuted: () => muted, lrCheck, stopAll, ctx: () => ac,
+    return { init, loadVoices, say, play, decode: (ab) => ac.decodeAudioData(ab), voiceLevel, loop, loops, fx, setMuted, isMuted: () => muted, lrCheck, stopAll, ctx: () => ac,
       lib: { chain, shot, burst, swell, tone, noiseSrc, place } };
   })();
 
@@ -173,7 +169,6 @@
     const NAMES = (window.MOHEAT_L10N || {}).names || {};
     const nm = (who, l) => (l === 'ja' ? NAME[who] : (NAMES[NAME[who]] || {})[l]) || NAME[who] || who;
     const PURE = () => !!(window.MoHeatPlay && window.MoHeatPlay.pure) || QS.has('sample');
-    const voiceLang = () => { const l = window.MoHeatShell?.voiceLang?.() || window.MoHeatSub?.lang || 'en'; return (VOICE.langs || ['ja']).includes(l) ? l : 'ja'; };
 
     // ---- texts the engine writes on the page get their 中文 here (data has zh: steps, answers, places; names from l10n names)
     // (the demo's l10n.js is loaded later by shared/subs.js and replaces window.MOHEAT_L10N: these strings are merged into it then)
@@ -236,7 +231,7 @@
       const my = run_, L = LINES[id]; if (!L) { console.warn('[story] no line', id); return; }
       const [ja, en, who] = L; S.posName = posName; S.pos = POS(posName); S.who = who;
       sub(who, ja, en); talking++;
-      await A.say(id, S.pos, S.pos.dist < .2 ? 1.8 : 1.45, voiceLang());
+      await A.say(id, S.pos, S.pos.dist < .2 ? 1.8 : 1.45);
       talking--; alive(my);
       await sleep(.3); sub('', '', '');
     }
@@ -640,7 +635,7 @@
       talkUI(); API.done = true; cfg.onFinish?.(E);
     }
     function begin(mode) {
-      A.init(); A.loadVoices(mode === 'talk' ? Object.keys(LINES) : STORY_IDS, voiceLang());
+      A.init(); A.loadVoices(mode === 'talk' ? Object.keys(LINES) : STORY_IDS);
       S = fresh(); S.started = true; S.mode = mode; S.fadeA = 1; viewA = viewB = S.view; mix = 1; puffs.length = 0; resetThermal(); for (const k in K) K[k] = 0;
       BR.reset(); $('cleared').hidden = true;
       $('intro').classList.add('hidden'); API.done = false; cfg.onBegin?.(E);
@@ -668,7 +663,7 @@
     $('soundBtn')?.addEventListener('click', (e) => { A.setMuted(!A.isMuted()); e.target.textContent = A.isMuted() ? '🔇' : '🔊'; });
     // tests: show(view, ...events) stops the story and holds one picture with its events running (tools: scratch shots / sheets)
     const show = (v, ...evs) => { run_++; if (!S.started) begin('story'); resetThermal(); S.mode = 'story'; S.view = v; S.fade = 0; S.white = 0; S.dark = 0; for (const e of evs) event(e); };
-    const API = window[cfg.ns] = { get S() { return S; }, E, thermal: () => thermal(.05), both: () => both, log: cmdLog, done: false, start, startTalk, event, voiceLang, show };
+    const API = window[cfg.ns] = { get S() { return S; }, E, thermal: () => thermal(.05), both: () => both, log: cmdLog, done: false, start, startTalk, event, show };
     setStep(0); talkUI();
     if (QS.has('cover')) { document.body.classList.add('cover-only'); return API; }
     if (QS.has('autoplay') || AUTO) {

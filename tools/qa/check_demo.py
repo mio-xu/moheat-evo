@@ -322,6 +322,7 @@ else: row('G5', 'voice', 'PASS' if has_voice else 'FAIL' if talks else 'SKIP',
 _dub_bad, _dub_warn, _dub_note = [], [], ''
 _vjs = [f for f in glob.glob(os.path.join(D, '*.js')) + glob.glob(os.path.join(D, '..', '_kit', '*', '*.js')) if re.search(r'fetch\(`[^`$]*\$\{id\}\.m4a|VF\(id, |MoHeatVoice\.(fetch|key)', read(f))]
 _vjs = [f for f in _vjs if os.path.dirname(f) == D or re.search(re.escape('_kit/' + os.path.basename(os.path.dirname(f))) + r'/', html)]
+if 'shared/story.js' in html: _vjs.append(os.path.join(REPO, 'demos', 'shared', 'story.js'))   # story-engine pages load their voices there
 for f in _vjs:
     t = read(f)
     if re.search(r'fetch\(`[^`$]*\$\{id\}\.m4a', t) and 'MoHeatVoice' not in t and 'VF(' not in t:
