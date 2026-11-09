@@ -318,7 +318,7 @@
       cheer = Math.max(0, cheer - dt * .35);
       if (enabled) drawFx(dt);
       const bar = cheerEl.querySelector('.bar i'); bar.style.width = `${cheer * 100}%`;
-      if (enabled && t > 146 && cheerCount > 0 && !thanked) { thanked = true; pop(`声援ありがとう！ ×${cheerCount}`, 'Thanks for cheering!'); }
+      if (enabled && t > 146 && cheerCount > 0 && !thanked) { thanked = true; pop(`声援ありがとう！ ×${cheerCount}`, `Thanks for cheering! ×${cheerCount}`); }
       return enabled && playing ? { waiting: false, boost: cheer } : null;
     }
     if (!cur) {

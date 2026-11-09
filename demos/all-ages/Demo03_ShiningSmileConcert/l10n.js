@@ -62,6 +62,8 @@ window.MOHEAT_L10N = {
    "綾音 🔥": "綾音 🔥"
   },
   "en": {
+   "📣 声援": "📣 Cheer",
+   "👏 フレー！": "👏 Hooray!",
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
    "氷と炎の 星光コンサート": "Shining Smile Melody",
    "Shining Smile Melody — Ice & Fire Concert": "Ice & Fire Concert",

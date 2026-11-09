@@ -124,7 +124,8 @@
     const hr = fixed ? { left: 0, top: 0 } : h.getBoundingClientRect(), ph = pill.offsetHeight || 28;
     let y = t - hr.top - 8, below = false;
     if (t - ph - 8 < (fixed ? 0 : hr.top) + 4) { y = b - hr.top + 8; below = true; }
-    pill.style.left = `${(l + r) / 2 - hr.left}px`; pill.style.top = `${y}px`; pill.style.transform = below ? 'translate(-50%,0)' : 'translate(-50%,-100%)';
+    const hw = fixed ? innerWidth : h.getBoundingClientRect().width, half = (pill.offsetWidth || 120) / 2;   // the pill stays inside its stage
+    pill.style.left = `${Math.max(half + 4, Math.min(hw - half - 4, (l + r) / 2 - hr.left))}px`; pill.style.top = `${y}px`; pill.style.transform = below ? 'translate(-50%,0)' : 'translate(-50%,-100%)';
   }
   function hidePill() { clearTimeout(pillTimer); pill?.remove(); }
 
@@ -234,15 +235,15 @@
   new MutationObserver(syncRec).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
   function scan() {
     syncRec();
-    if (manual) return;
+    if (manual) { if (sess?.anchor && pill?.isConnected) place(sess.anchor()); return; }   // the card can change size or move after the pill was placed (mic answer, language split, entrance)
     const els = OFF || pure() ? [] : [...document.querySelectorAll(SEL)].filter((e) => !e.parentElement?.closest('button') && !e.closest('.u2')).filter(visible);   // not the text inside a button (subs.js marks it), not the settings panel's Voice row
     if (!els.length) { if (autoSig) { autoSig = ''; autoEls = []; end(); } return; }
     const sig = els.map((e) => e.dataset.voice || [...e.querySelectorAll(':scope > b:not(.one), :scope > span:not(.one)')].map((x) => x.textContent).join('/') || e.textContent).join('|');
     if (sig !== autoSig) {
       autoSig = sig; autoEls = els;
-      begin({ phrases: els.map(phrasesOf), single: els.length === 1, lenient: true, anchor: () => autoEls.filter((e) => e.isConnected), onHit: (i) => { if (els[i]) press(els[i]); autoSig = ''; } });   // autoSig: controls that stay on screen (Left / Right, valves) keep listening for the next word
+      begin({ phrases: els.map(phrasesOf), single: els.length === 1, lenient: true, anchor: () => autoEls.filter((e) => e.isConnected && !e.matches('[data-voice-quiet]')), onHit: (i) => { if (els[i]) press(els[i]); autoSig = ''; } });   // autoSig: controls that stay on screen (Left / Right, valves) keep listening for the next word
       if (sess) { sess.els = els; sess.strict = els.some((e) => e.matches('[data-voice-strict]')); }
-    } else if (pill?.isConnected) place(autoEls);
+    } else if (pill?.isConnected) place(autoEls.filter((e) => !e.matches('[data-voice-quiet]')));
   }
   setInterval(scan, 250);
   addEventListener('moheat:playmode', () => { if (pure()) { autoSig = ''; autoEls = []; end(); } });   // switched to pure listening: stop listening at once

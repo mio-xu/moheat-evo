@@ -140,7 +140,7 @@
   .stage :is(.ch, .act-btn, .chip-c, #micGate button, .mic-gate button, .ix-btn) { min-height: 44px; min-width: 44px; box-sizing: border-box; }
   .stage .gift-btn { width: 40px !important; height: 40px !important; }
   .stage .msub-hud .ix-chip { position: relative !important; inset: auto !important; }   /* subs.js makes it static: its hit area would then cover the whole 🌐 ⛶ row */
-  .stage .ix-cheer { z-index: 7; } .stage .ix-cheer button { min-height: 36px; }   /* Demo 1–9 "cheer" button: above the demo's own pills */
+  .stage .ix-cheer { z-index: 7; } .stage .ix-cheer button { min-height: 44px; }   /* Demo 1–9 "cheer" button: above the demo's own pills */
   .intro .intro-actions { gap: 6px !important; row-gap: 6px !important; }
   /* the 🌐 / ⛶ / 🔊 buttons in the picture's corner: 32 px, apart and away from the edge so the 44 px hit areas stay inside the picture */
   .stage :is(.hud-top, .msub-hud) { transform: translate(-4px, 4px); gap: 12px !important; }

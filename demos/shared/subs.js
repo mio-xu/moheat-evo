@@ -69,7 +69,8 @@
   const missing = new Set();
   function tr(text, l = lang, warn = true) {
     const k = norm(text); if (!k) return '';
-    const v = map(l).get(k);
+    let v = map(l).get(k);
+    if (v == null) { const m = /^(.*\S)(\s*[×x]\s*\d+)$/.exec(k), base = m && map(l).get(m[1]); if (base != null) v = base + m[2]; }   // a counter after the text ("声援ありがとう！ ×3"): the key is the text alone
     if (v == null && warn && !missing.has(`${l}|${k}`)) { missing.add(`${l}|${k}`); console.warn(`[MoHeatSub] no ${l} for`, k); }
     return v ?? '';
   }
@@ -81,12 +82,13 @@
 
   // ---------------------------------------------------------------- one line per subtitle / answer
   const textOf = (el) => { if (!el) return ''; let t = ''; for (const n of el.childNodes) if (!(n.nodeType === 1 && n.classList.contains('who'))) t += n.textContent; return norm(t); };
-  const BTN = '.ch, .act-btn, .chip-c, #micGate button, .toast, #toast, .hud-goal, #goal';
+  const BTN = '.ch, .act-btn, .chip-c, #micGate button, .toast, #toast, .hud-goal, #goal, .coach';
   const KINDS = [   // [containers, ja, en, tag of .one, classes of .one]
     ['#subs .line', ':scope > .ja:not(.one)', ':scope > .en:not(.one)', null, 'ja'],
     ['#bubble, .bubble', ':scope > b:not(.one)', ':scope > span:not(.one)', 'b', ''],
     [BTN, ':scope > b:not(.one)', ':scope > span:not(.one)', 'b', ''],
     ['.ix-card', ':scope > .ix-line:not(.one)', ':scope > .ix-en:not(.one)', 'div', 'ix-line'],
+    ['.ask, .pop', ':scope > .ja:not(.one)', ':scope > .en:not(.one)', null, ''],   // a demo's own question line / popup (Demo04): paired spans
   ];
   const pick = (jaT, enT) => (lang === 'ja' ? jaT : lang === 'en' || lang === 'off' ? enT || jaT : tr(jaT, lang, jaT !== enT) || enT || jaT);   // ja === en: already in the viewer's language (a typed / auto reply), nothing to translate
   function pair(c, jaSel, enSel, tag, cls) {
@@ -120,7 +122,7 @@
     'マイクに「ふーっ」と息を吹きかけて': { en: 'Blow into the mic — feel the cool on both ears', zh: '对着麦克风"呼——"地吹气，感受双耳的凉意' },
     'ボタンを長押しして「ふーっ」': { en: 'Press and hold to blow', zh: '长按按钮"呼——"地吹' }, 'ふーっ': { en: 'Blow', zh: '呼——' },
     '声に出して乾杯！ または グラスをタップ': { en: 'Say it — or tap the glass', zh: '大声说"干杯！"，或点一下酒杯' }, 'グラスをタップして乾杯！': { en: 'Tap the glass to toast', zh: '点一下酒杯干杯！' },
-    '乾杯！': { en: 'Cheers!', zh: '干杯！' }, 'あなたも参加する': { en: 'Interactive — answer & play along', zh: '参与互动 — 回答并一起玩' },
+    '乾杯！': { en: 'Cheers!', zh: '干杯！' }, '拍手！': { en: 'Applause!', zh: '鼓掌！' }, 'あなたも参加する': { en: 'Interactive — answer & play along', zh: '参与互动 — 回答并一起玩' },
     '声援で参加する': { en: 'Cheer along (mic or tap)', zh: '一起应援（麦克风或点击）' },
     '相手': { en: 'With', zh: '对象' }, '場所': { en: 'Where', zh: '地点' }, 'あなたの言葉': { en: 'You speak', zh: '你的语言' },   // Demo23 pickers
     '正解！': { en: 'Correct!', zh: '答对了！' }, 'ざんねん…': { en: 'Not quite — listen!', zh: '可惜……再听听！' }, 'ちょうどいい！': { en: 'Just right!', zh: '刚刚好！' },
@@ -146,7 +148,7 @@
       const en = m ? AFFIX.exec(m[2].trim()) : null;
       el.dataset.mpre = pre || (en ? en[1] : ''); el.dataset.mpost = post; el.dataset.mja = core;
       el.dataset.men = en ? en[2] : ui.en;
-      if (m && !el.dataset.voice) el.dataset.voice = `${m[1].trim()}|${m[2].trim()}`;
+      if (m && !el.dataset.voice && el.matches('button, .ch, .act-btn, .chip-c')) el.dataset.voice = `${m[1].trim()}|${m[2].trim()}`;   // only what can be pressed: a label ("なかよし · bond") must not count as a voice answer
       el.dataset.mlang = '';
     }
     if (el.dataset.mlang === lang) return;
@@ -212,7 +214,7 @@
 
   // everything else on the page (top bar, side cards, notes, legend, demo switcher, device status, placeholders): a text node whose whole
   // text is in the dictionary (shared/l10n_common.js + the demo's l10n.js) shows that language; it is re-checked whenever the page changes it
-  const SKIP = 'script, style, .dnav, .dn-panel, #subs, #bubble, .bubble, #chatList, .one, .intro, .ix-card, .ix-done, #steps, #sceneTitle, .scene-title, #chatHint, .mono, [data-mshown], [data-morig], [data-voice], ' + BTN;
+  const SKIP = 'script, style, .dnav, .dn-panel, #subs, #bubble, .bubble, #chatList, .one, .intro, .ix-card, .ix-done, .ask, .pop, #steps, #sceneTitle, .scene-title, #chatHint, .mono, [data-mshown], [data-morig], [data-voice], ' + BTN;
   const orig = new WeakMap(), shown = new WeakMap();
   function textNode(n) {
     const el = n.parentElement; if (!el || el.closest(SKIP)) return;
@@ -274,7 +276,7 @@
   const css = document.createElement('style');
   css.textContent = `
   html.msub #subs .line > :is(.ja, .en):not(.one), html.msub :is(#bubble, .bubble, ${BTN}) > :is(b, span):not(.one),
-  html.msub .ix-card > :is(.ix-line, .ix-en):not(.one), .msub-hide { display: none !important; }
+  html.msub .ix-card > :is(.ix-line, .ix-en):not(.one), html.msub :is(.ask, .pop) > :is(.ja, .en):not(.one), .msub-hide { display: none !important; }
   html.msub #subs .line > .one { display: block; }
   ${fontCss()}
   html.msub-off #subs { display: none !important; }

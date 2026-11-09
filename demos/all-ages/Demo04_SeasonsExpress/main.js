@@ -663,9 +663,10 @@ function gateHTML(id) {
   return `<div id="micGate"><p class="ask"><span class="ja">いっしょに「春！」ってさけんで</span><span class="en">Shout “Spring!” with the conductor</span></p>
     <button type="button" data-voice="spring|haru|はる|春|春天|チュンティエン"><b>🌸「春！」</b><span>🌸 “Spring!”</span></button></div>`;
 }
+const stageWait = (on) => $('stage').classList.toggle('ix-wait', on);
 function openGate(g) {
   gate.cur = g; gate.holdT = 0; gate.holding = false; gate.shownAt = 0;
-  media.pause(); gate.pausedForGate = true;
+  stageWait(true); media.pause(); gate.pausedForGate = true;   // .ix-wait as in shared/interact.js: a pause by the story, not by the viewer (shell.js)
 }
 function showGate() {
   const g = gate.cur; gateBox.innerHTML = gateHTML(g.id); gateBox.hidden = false; gate.shownAt = performance.now();
@@ -687,7 +688,7 @@ function closeGate(okk, msg) {
   gate.done.add(g.id); gate.cur = null; gateBox.innerHTML = ''; gateBox.hidden = true;
   if (g.id === 'window' && !win.side) win.side = 'L';
   if (okk && msg) pop(...msg);
-  setTimeout(() => { media.play().catch(() => {}); }, okk ? 500 : 0);
+  setTimeout(() => { stageWait(false); media.play().catch(() => {}); }, okk ? 500 : 0);
 }
 function pop(ja, en) {
   const d = document.createElement('div'); d.className = 'pop'; d.innerHTML = `<span class="ja">${ja}</span><span class="en">${en}</span>`;
@@ -853,16 +854,16 @@ const pause = () => media.pause();
 const toggle = () => (media.paused ? play() : pause());
 playBtn?.addEventListener('click', toggle);
 $('startBtn').addEventListener('click', () => {
-  media.currentTime = 0; reset(); gate.done.clear(); gate.cur = null; gateBox.innerHTML = ''; gateBox.hidden = true; win.side = null; teaLift = 0;
+  media.currentTime = 0; reset(); gate.done.clear(); gate.cur = null; stageWait(false); gateBox.innerHTML = ''; gateBox.hidden = true; win.side = null; teaLift = 0;
   audio(); loadLang('ja'); loadLang(voiceLang()); voiceSeek(0); lastT = 0; play();
 });
 
 mix.addEventListener('play', () => { if (playBtn) playBtn.textContent = '❚❚'; });
 for (const ev of ['pause', 'ended']) mix.addEventListener(ev, () => { if (playBtn) playBtn.textContent = '▶'; if (!gate.cur) stopOutput(); });
-mix.addEventListener('ended', () => { stopLine(); gate.cur = null; gateBox.hidden = true; });
+mix.addEventListener('ended', () => { stopLine(); gate.cur = null; stageWait(false); gateBox.hidden = true; });
 function seekTo(t) {
   media.currentTime = clamp(t, 0, A.duration); reset(); voiceSeek(t); lastT = t;
-  if (gate.cur) { gate.cur = null; gateBox.innerHTML = ''; gateBox.hidden = true; }
+  if (gate.cur) { gate.cur = null; stageWait(false); gateBox.innerHTML = ''; gateBox.hidden = true; }
   for (const g of GATES) { if (g.t < t) { gate.done.add(g.id); if (g.id === 'window' && !win.side) win.side = 'L'; } else gate.done.delete(g.id); }
   if (t < 66) win.side = null;
   $('intro').classList.add('hidden');
