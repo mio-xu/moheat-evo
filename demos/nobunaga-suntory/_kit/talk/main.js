@@ -354,8 +354,8 @@
   function drawCover() {}   // UI v2: the cover is the finished image (media/cover/, tools/web/covers.py)
 
   // ---------------------------------------------------------------- thermal (DUAL, two layers)
-  //  · VOICE: a voice is warm. Loudness (0.1 + 0.8 × level) at the speaker's direction, × 1 at your ear (≤ 15 cm), × 0.75 within
-  //    60 cm, × 0.5 at the seat, × 0.2 from the window; × 0.6 straight in front (shared by both ears). Silent at your ear: his breath, 0.15.
+  //  · VOICE: a voice is warm. Loudness (0.1 + 0.8 × level) at the speaker's direction, × 1 at your ear (≤ 15 cm), × 0.85 within
+  //    60 cm, × 0.7 at the seat, × 0.25 from the window; the far ear gets less of a side voice than of the room (head shadow); × 0.6 straight in front (shared by both ears). Silent at your ear: his breath, 0.15.
   //  · PLACE: only what is really there — the sunset and mountain wind, the hearth, the warm sake and the snowy window, the misty
   //    morning air, the lanterns and the night wind — plus the events the characters bring about for a few seconds (scenes.js events:
   //    gusts, more charcoal, a fan at one ear, an opened window, the stills' heat, an iced glass at your ear, a brazier).
@@ -363,8 +363,8 @@
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S || !S.started) return out;
     for (const c of S.cast) {
-      const ch = S.ch[c], df = ch.dist <= .15 ? 1 : ch.dist <= .6 ? .75 : ch.dist <= 1.5 ? .5 : .2, front = Math.abs(Math.sin(ch.az)) < .45 && Math.cos(ch.az) > 0 ? .6 : 1;
-      if (ch.talking) add(ch.az, 'h', (.1 + .8 * clamp(ch.lv * 8)) * df * front, c === 'N' ? '信' : '家');
+      const ch = S.ch[c], df = ch.dist <= .15 ? 1 : ch.dist <= .6 ? .85 : ch.dist <= 1.5 ? .7 : .25, front = Math.abs(Math.sin(ch.az)) < .45 && Math.cos(ch.az) > 0 ? .6 : 1;
+      if (ch.talking) { add(ch.az, 'h', (.1 + .8 * clamp(ch.lv * 8)) * df * front, c === 'N' ? '信' : '家'); if (out.length) out[out.length - 1].voice = true; }
       else if (ch.dist <= .15) add(ch.az, 'h', .15, c === 'N' ? '信' : '家');
       else add(ch.az, 'h', 0, '');
     }
@@ -376,7 +376,7 @@
   const ear = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
   function thermal(dt) {
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
-    for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
+    for (const s of src) { const sn = Math.sin(s.az), sh = s.voice ? 2.4 : 1.2, wL = clamp(1 - sh * Math.max(0, sn)), wR = clamp(1 - sh * Math.max(0, -sn));   /* sh: head shadow, stronger for a voice than for the room */ sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
     for (const e of ['L', 'R']) for (const k of ['c', 'h']) {
       const target = k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
       const tau = target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
