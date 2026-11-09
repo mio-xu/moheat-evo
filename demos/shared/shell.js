@@ -276,7 +276,7 @@
   // leaving the page, or a phone call / Siri (user 2026-11-09, iPhone: back from another app the voice was gone and the demo looked frozen, since iOS leaves the context
   // 'interrupted', its resume() needs a tap and the voice's end event never comes): pause the same way as ⏸, thermal off; on return the same pause → play sequence runs by itself, and only if the context still isn't running does the big tap-to-continue appear (pause() below).
   let autoPaused = false;
-  const onCtxState = (c) => { if (!EXPORT && !c.__own && !paused && (c.state === 'interrupted' || c.state === 'suspended') && playing()) pause(true); };
+  const onCtxState = (c) => { const off = () => !EXPORT && !c.__own && !paused && (c.state === 'interrupted' || c.state === 'suspended') && playing(); if (off()) real.st(() => { if (off()) pause(true); }, 400); };   // 400 ms: an engine's own quick suspend + resume is not an interruption
   if (!EXPORT) {
     const away = () => { if (playing()) { if (!paused) autoPaused = true; pause(true); } else stopDevice(); };
     document.addEventListener('visibilitychange', () => { if (document.hidden) away(); else if (autoPaused) { autoPaused = false; pause(false); } });
@@ -506,7 +506,7 @@
   // ---------------------------------------------------------------- UI v2: the live adapter for demos/shared/ui2.js
   if (V2) {
     // UI2_V = content hash of ui2.js + ui2.css (python3 tools/web/bump.py --auto keeps it current: cat ui2.js ui2.css | shasum, 8 hex)
-    const UI2_V = 'e5387129';
+    const UI2_V = 'e2062c53';
     const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = new URL(`ui2.css?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(css);
     let cssReady = false; const cssOk = () => { if (!cssReady) { cssReady = true; mount(); } };   // mount only once ui2.css applies: an unstyled first frame left the player column off-centre (Demo21 check_ui band 16 / 58 px under load)
     css.addEventListener('load', cssOk); css.addEventListener('error', cssOk); real.st(cssOk, 3000);
