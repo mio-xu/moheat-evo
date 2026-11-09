@@ -133,7 +133,6 @@
   .ix-done small{display:block;font:600 clamp(10px,1.4cqw,20px)/1.3 Inter,sans-serif;color:#efe3c8}
   @keyframes ixPop{0%{opacity:0;transform:translate(-50%,10px) scale(.9)}20%{opacity:1;transform:translate(-50%,0) scale(1.05)}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-14px)}}
   .stage.ix-wait .subs{visibility:hidden}
-  html.ix-quiz #radar{visibility:hidden}
   .ix-chip{position:absolute;top:1.2cqw;right:1.2cqw;z-index:5;cursor:pointer;border-radius:999px;padding:.45cqw 1cqw;border:1px solid rgba(246,210,122,.45);
     background:rgba(18,10,4,.6);color:#f9ecd0;font:700 clamp(9px,1cqw,14px)/1.2 "Noto Sans JP",Inter,sans-serif}
   .ix-chip.off{opacity:.55;border-color:rgba(255,255,255,.2)}

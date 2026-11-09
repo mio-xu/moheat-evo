@@ -513,7 +513,7 @@ function drawRadar(states, th) {
   }
   c.fillStyle = '#1b2542'; c.strokeStyle = '#6f7b96'; c.beginPath(); c.arc(cx, cy, 36, 0, 7); c.fill(); c.stroke();
   c.fillStyle = '#6f7b96'; c.beginPath(); c.moveTo(cx - 7, cy - 34); c.lineTo(cx, cy - 46); c.lineTo(cx + 7, cy - 34); c.fill();
-  for (const st of states) {
+  if (!document.documentElement.classList.contains('ix-quiz')) for (const st of states) {
     const r = 44 + (R - 44) * clamp(Math.log(st.d / .15) / Math.log(5 / .15), 0, 1);
     const x = cx + Math.sin(rad(st.az)) * r, y = cy - Math.cos(rad(st.az)) * r;
     const col = st.who === 'K' ? '#9fdcff' : '#ffb26b';

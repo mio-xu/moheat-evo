@@ -376,7 +376,7 @@ function thermalEdges(ctx, th) {
 }
 
 function offscreenHint(ctx, st) {
-  const absAz = Math.abs(st.az); if (absAz < 105) return;
+  const absAz = Math.abs(st.az); if (absAz < 105 || document.documentElement.classList.contains('ix-quiz')) return;
   const a = clamp((absAz - 105) / 15, 0, 1) * clamp((5 - st.d) / 1.5, 0, 1);
   const sd = Math.sign(st.az) || 1, x = sd < 0 ? 60 : W - 60;
   ctx.save(); ctx.globalAlpha = a;
@@ -431,7 +431,7 @@ function drawRadar(states, th, t) {
     c.fillStyle = col; c.beginPath(); c.arc(x, y, r0, 0, 7); c.fill();
     c.fillStyle = '#fff'; c.font = '600 20px "Noto Sans JP"'; c.fillText(label, x, y - r0 - 6);
   };
-  for (const st of states) { c.globalAlpha = clamp(st.alpha + .35, 0, 1); dot(st.az, st.d, '#ff8cc6', '綾音 🔥', 13 + st.mouth * 6); c.globalAlpha = 1; }
+  if (!document.documentElement.classList.contains('ix-quiz')) for (const st of states) { c.globalAlpha = clamp(st.alpha + .35, 0, 1); dot(st.az, st.d, '#ff8cc6', '綾音 🔥', 13 + st.mouth * 6); c.globalAlpha = 1; }
   const cs = coolAt(t);
   if (cs.env > .05) { c.globalAlpha = clamp(cs.env * 1.5, 0, 1); dot(cs.az, cs.d, '#7cc4ff', '❄', 10 + cs.env * 8); c.globalAlpha = 1; }
 }

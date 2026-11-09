@@ -266,6 +266,11 @@
   const filmEl = () => (FILM() ? ['mix', 'film'].map((k) => document.getElementById(k)).find((e) => e instanceof HTMLMediaElement) : null);
   // paused = the device got 'stop', so the panel shows it (the frozen engine would leave the last values up); its next frame after resume writes them again
   const zeroMeters = () => { const c = document.getElementById('cmd'); if (c) c.textContent = 'stop'; for (const k of ['Lc', 'Lh', 'Rc', 'Rh']) { const v = document.getElementById(`v${k}`), m = document.getElementById(`m${k}`); if (v) v.textContent = '0'; if (m) m.style.width = '0%'; } };
+  // a tap is a press and release on the same spot of the same element. The end of a hold whose button has just gone lands on the picture and is not a tap (Demo25, phones: it paused the story)
+  let tapDown = null;
+  addEventListener('pointerdown', (e) => { tapDown = { el: e.target, x: e.clientX, y: e.clientY, t: real.now(), far: false }; }, true);
+  addEventListener('pointermove', (e) => { if (tapDown && Math.hypot(e.clientX - tapDown.x, e.clientY - tapDown.y) > 12) tapDown.far = true; }, true);
+  const plainTap = (e) => !!tapDown && tapDown.el === e.target && !tapDown.far && real.now() - tapDown.t < 700;
   const filmHeld = () => { const f = filmEl(); return !!f && f.paused && !f.ended && playing() && !document.querySelector('.stage.ix-wait'); };
   const pause = (on) => {
     if (on === paused || EXPORT) return;
@@ -284,6 +289,10 @@
   let autoPaused = false;
   const onCtxState = (c) => { if (c.state === 'running') c.__ran = true; const off = () => !EXPORT && !c.__own && !paused && (c.state === 'interrupted' || (c.state === 'suspended' && c.__ran && ![...ctxs].some((x) => x.state === 'running'))) && playing(); if (off()) real.st(() => { if (off()) pause(true); }, 400); };   // 400 ms: an engine's own quick suspend + resume is not an interruption
   if (!EXPORT) {
+    // ■ STOP (and Esc, unless it just closed a panel in ui2.js) = output off AND paused, the same on every engine; Re-arm leaves it paused, ▶ continues
+    const stopNow = () => { if (playing() && !document.getElementById('estop')?.classList.contains('tripped')) pause(true); };
+    document.addEventListener('click', (e) => { if (e.target.closest?.('#estop')) stopNow(); }, true);
+    document.addEventListener('keydown', (e) => { if (e.code === 'Escape' && document.getElementById('estop')) stopNow(); }, true);
     const away = () => { if (playing()) { if (!paused) autoPaused = true; pause(true); } else stopDevice(); };
     document.addEventListener('visibilitychange', () => { if (document.hidden) away(); else if (autoPaused) { autoPaused = false; pause(false); } });
     addEventListener('pagehide', away);
@@ -419,7 +428,7 @@
     ui.pause = document.createElement('div'); ui.pause.className = 'sh-pause'; ui.pause.setAttribute('role', 'button'); ui.pause.tabIndex = -1; stage.appendChild(ui.pause);
     ui.pause.addEventListener('click', () => pause(false));
     const canvas = stage.querySelector('canvas, video');
-    if (!FILM()) canvas?.addEventListener('click', (e) => { if (e.isTrusted && playing() && !QS.has('auto') && (Play.pure || !SH.autoplay)) pause(true); });   // games in interactive mode: a tap is a move, not a pause
+    if (!FILM()) canvas?.addEventListener('click', (e) => { if (e.isTrusted && plainTap(e) && playing() && !QS.has('auto') && (Play.pure || !SH.autoplay)) pause(true); });   // games in interactive mode: a tap is a move, not a pause
     film(stage);
     // the demo's progress list (#steps, written by its setStep()) is the chapter list; demos without one still get it
     if (!document.getElementById('steps')) { const ol = document.createElement('ol'); ol.id = 'steps'; ol.hidden = true; ol.className = 'sh-steps'; document.body.appendChild(ol); }
@@ -514,7 +523,7 @@
   // ---------------------------------------------------------------- UI v2: the live adapter for demos/shared/ui2.js
   if (V2) {
     // UI2_V = content hash of ui2.js + ui2.css (python3 tools/web/bump.py --auto keeps it current: cat ui2.js ui2.css | shasum, 8 hex)
-    const UI2_V = 'df7ca13b';
+    const UI2_V = '0cc39726';
     const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = new URL(`ui2.css?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(css);
     let cssReady = false; const cssOk = () => { if (!cssReady) { cssReady = true; mount(); } };   // mount only once ui2.css applies: an unstyled first frame left the player column off-centre (Demo21 check_ui band 16 / 58 px under load)
     css.addEventListener('load', cssOk); css.addEventListener('error', cssOk); real.st(cssOk, 3000);
@@ -570,7 +579,7 @@
     SH.ui2 = A;
     // films: a tap on the picture is the same one pause (not the film's own media.pause, which the bar would not know about)
     const filmTap = () => { const st = document.querySelector('.stage-col .stage') || document.querySelector('.stage'); if (!st || (!FILM() && !EMBED)) return;
-      st.addEventListener('click', (e) => { if (!e.isTrusted || e.target.closest('.u2, button, a, input') || !playing()) return; e.stopImmediatePropagation(); e.preventDefault(); pause(!paused); }, true); };
+      st.addEventListener('click', (e) => { if (!e.isTrusted || e.target.closest('.u2, button, a, input') || !playing() || !plainTap(e)) return; e.stopImmediatePropagation(); e.preventDefault(); pause(!paused); }, true); };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', filmTap); else filmTap();
     // the original page layout stays (user 2026-11-09): only the player column is centred vertically when it is shorter than the side panel
     const relayout = () => dispatchEvent(new Event('resize'));

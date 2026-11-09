@@ -125,7 +125,7 @@
       if (k === 'opt') { pops.opt.style.left = wide ? `${b.left - r.left}px` : ''; pops.opt.style.right = wide ? 'auto' : ''; pops.opt.style.bottom = `${Math.max(6, r.bottom - b.top + 6)}px`; }
       else if (k !== 'set') pops[k].style.right = wide ? `${Math.max(4, r.right - b.right)}px` : ''; };
     document.addEventListener('pointerdown', (e) => { if (sheet.contains(e.target)) return; if (!(root.contains(e.target) || under.contains(e.target)) || (!e.target.closest('.u2-pop') && !e.target.closest('[aria-haspopup]'))) close(); });
-    addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    addEventListener('keydown', (e) => { if (e.key !== 'Escape' || !(!sheet.hidden || Object.values(pops).some((p) => !p.hidden))) return; close(); e.stopImmediatePropagation(); e.preventDefault(); }, true);   // Esc with a panel open only closes it (not ■ STOP)
     const sw = (on, k, dis) => `<button type="button" class="u2-sw" role="switch" aria-checked="${!!on}" data-k="${k}" ${dis ? 'disabled' : ''}></button>`;
     const range = (k, v, cls = '') => `<input class="u2-range ${cls}" type="range" min="0" max="100" step="1" value="${Math.round(v * 100)}" data-k="${k}" style="--v:${Math.round(v * 100)}%">`;
     // the cover's two selectors (the same picker chip as the demo's options): subtitle language and voice, independent

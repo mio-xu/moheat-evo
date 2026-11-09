@@ -115,7 +115,7 @@ html.ui2.mfs .u2-bar { border-radius: 0; height: calc(clamp(44px, 4.2vw, 64px) +
 .u2-sw[aria-checked="true"] { background: var(--u2-accent); }
 .u2-sw[aria-checked="true"]::after { transform: translateX(18px); }
 .u2-sw:disabled { opacity: .4; }
-.u2-pick:disabled { opacity: .6; cursor: default; }
+.u2-pick:disabled { opacity: .75; cursor: default; }
 .u2-seg button:disabled { opacity: .4; cursor: default; }
 .u2-note { font-size: var(--u2-fs-s); opacity: .7; }
 .u2-pop .u2-seg { height: 36px; }
@@ -241,7 +241,7 @@ html.embed .u2 .u2-start span { display: none; }
 
 /* the phone settings sheet: every control at least 44 px high (the track of a switch stays 28: its transparent border is the hit area) */
 .u2.u2-sheet .u2-seg { height: 50px; }
-.u2.u2-sheet .u2-seg button { min-height: 44px; }
+.u2.u2-sheet .u2-seg button { min-height: 44px; min-width: 44px; justify-content: center; }
 .u2.u2-sheet .u2-sw { width: 62px; height: 44px; border: 8px solid transparent; background-clip: padding-box; box-sizing: border-box; }
 .u2.u2-sheet .u2-btn2 { height: 44px; }
 .u2 .u2-row-start .u2-seg { padding: 2px; }   /* cover mode buttons: 44 × 44 inside the 50 px row */

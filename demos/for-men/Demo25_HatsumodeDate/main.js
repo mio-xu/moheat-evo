@@ -302,7 +302,7 @@
       ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.font = S.count ? '700 190px "Shippori Mincho B1", serif' : '700 120px "Shippori Mincho B1", serif';
       ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 30; ctx.fillStyle = S.count ? 'rgba(255,248,236,.92)' : '#ffe3a6';
-      ctx.fillText(S.count ? String(S.count) : '謹賀新年', W / 2, H * .2);
+      ctx.fillText(S.count ? String(S.count) : '謹賀新年', S.count ? W * .17 : W / 2, H * .2);   // the numbers sit beside her face
       if (!S.count) { ctx.font = '600 44px Inter, sans-serif'; ctx.fillText('Happy New Year', W / 2, H * .2 + 100); }
       ctx.restore();
     }
