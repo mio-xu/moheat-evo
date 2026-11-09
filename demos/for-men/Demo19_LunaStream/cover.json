@@ -14,25 +14,25 @@
   {
    "kind": "tag",
    "text": {
-    "en": "🍸 A bar after closing",
-    "ja": "🍸 閉店後のバー",
-    "zh": "🍸 打烊后的酒吧"
+    "en": "A bar after closing",
+    "ja": "閉店後のバー",
+    "zh": "打烊后的酒吧"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "🔥 blue flame · Irish coffee · her voice at your ear",
-    "ja": "🔥 青い炎・コーヒー・耳元の声",
-    "zh": "🔥 蓝色火焰・咖啡・耳边的声音"
+    "en": "blue flame · Irish coffee · her voice at your ear",
+    "ja": "青い炎・コーヒー・耳元の声",
+    "zh": "蓝色火焰・咖啡・耳边的声音"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "🧊 iced shaker · rainy night draft",
-    "ja": "🧊 冷えたシェイカー・雨の夜風",
-    "zh": "🧊 冰镇雪克杯・雨夜的风"
+    "en": "iced shaker · rainy night draft",
+    "ja": "冷えたシェイカー・雨の夜風",
+    "zh": "冰镇雪克杯・雨夜的风"
    }
   }
  ],

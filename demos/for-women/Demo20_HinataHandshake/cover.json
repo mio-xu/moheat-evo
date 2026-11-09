@@ -14,25 +14,25 @@
   {
    "kind": "tag",
    "text": {
-    "en": "🤝 handshake event",
-    "ja": "🤝 握手会",
-    "zh": "🤝 握手会"
+    "en": "handshake event",
+    "ja": "握手会",
+    "zh": "握手会"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "💬 whispers at your ear",
-    "ja": "💬 耳元のささやき",
-    "zh": "💬 耳边低语"
+    "en": "whispers at your ear",
+    "ja": "耳元のささやき",
+    "zh": "耳边低语"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "❄ draft from the entrance",
-    "ja": "❄ 入口のすきま風",
-    "zh": "❄ 门口的穿堂风"
+    "en": "draft from the entrance",
+    "ja": "入口のすきま風",
+    "zh": "门口的穿堂风"
    }
   }
  ],

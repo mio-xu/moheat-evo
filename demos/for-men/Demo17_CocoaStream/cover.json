@@ -14,25 +14,25 @@
   {
    "kind": "tag",
    "text": {
-    "en": "🍫 Baking after closing",
-    "ja": "🍫 閉店後のお菓子作り",
-    "zh": "🍫 打烊后的点心时间"
+    "en": "Baking after closing",
+    "ja": "閉店後のお菓子作り",
+    "zh": "打烊后的点心时间"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "♨️ oven · steam · her voice at your ear",
-    "ja": "♨️ オーブン・湯気・耳元の声",
-    "zh": "♨️ 烤箱・热气・耳边的声音"
+    "en": "oven · steam · her voice at your ear",
+    "ja": "オーブン・湯気・耳元の声",
+    "zh": "烤箱・热气・耳边的声音"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "🧊 fridge · her fu-fu · snowy night",
-    "ja": "🧊 冷蔵庫・ふーふー・雪の夜",
-    "zh": "🧊 冰箱・呼呼吹气・雪夜"
+    "en": "fridge · her fu-fu · snowy night",
+    "ja": "冷蔵庫・ふーふー・雪の夜",
+    "zh": "冰箱・呼呼吹气・雪夜"
    }
   }
  ],

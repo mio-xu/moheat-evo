@@ -1,26 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo08_YamazakiDistillery/media/cover/stamp.json": "dfca184f624e35be4ea621631d450d88ef0e2bbf"
+   "demos/nobunaga-suntory/Demo08_YamazakiDistillery/media/cover/stamp.json": "c6717ab5811609dd8069c14bcff7bb84697a640b"
   },
-  "thumb": "7591919f3cb9a23c389e788f0462fce49b037f8d"
+  "thumb": "d862aaa4ac5c9f5f13dd95da6716f45ebd88bd24"
  },
  "en": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo08_YamazakiDistillery/media/cover/stamp.json": "dfca184f624e35be4ea621631d450d88ef0e2bbf"
+   "demos/nobunaga-suntory/Demo08_YamazakiDistillery/media/cover/stamp.json": "c6717ab5811609dd8069c14bcff7bb84697a640b"
   },
-  "thumb": "7591919f3cb9a23c389e788f0462fce49b037f8d"
+  "thumb": "d862aaa4ac5c9f5f13dd95da6716f45ebd88bd24"
  },
  "ja": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo08_YamazakiDistillery/media/cover/stamp.json": "dfca184f624e35be4ea621631d450d88ef0e2bbf"
+   "demos/nobunaga-suntory/Demo08_YamazakiDistillery/media/cover/stamp.json": "c6717ab5811609dd8069c14bcff7bb84697a640b"
   },
-  "thumb": "cf9bff6af26a2ecf06185b0dc7dbd30880030542"
+  "thumb": "e6921bcb5fbe3fc43e7161831152f0acdf22f0b3"
  },
  "zh": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo08_YamazakiDistillery/media/cover/stamp.json": "dfca184f624e35be4ea621631d450d88ef0e2bbf"
+   "demos/nobunaga-suntory/Demo08_YamazakiDistillery/media/cover/stamp.json": "c6717ab5811609dd8069c14bcff7bb84697a640b"
   },
-  "thumb": "370c92d122ad1c367fe311ae62caf2f67e2e1142"
+  "thumb": "fb29de20c5878cd39447a120145ab0d04c07c7dd"
  }
 }

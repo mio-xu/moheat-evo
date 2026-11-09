@@ -14,25 +14,25 @@
   {
    "kind": "tag",
    "text": {
-    "en": "☎️ the home phone",
-    "ja": "☎️ おうちの電話",
-    "zh": "☎️ 家里的电话"
+    "en": "the home phone",
+    "ja": "おうちの電話",
+    "zh": "家里的电话"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "⛄ Grandpa's snowman",
-    "ja": "⛄ じいちゃんの雪だるま",
-    "zh": "⛄ 爷爷的雪人"
+    "en": "Grandpa's snowman",
+    "ja": "じいちゃんの雪だるま",
+    "zh": "爷爷的雪人"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "🧣 Grandma's scarf",
-    "ja": "🧣 ばあばのマフラー",
-    "zh": "🧣 奶奶的围巾"
+    "en": "Grandma's scarf",
+    "ja": "ばあばのマフラー",
+    "zh": "奶奶的围巾"
    }
   }
  ],

@@ -1,26 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "427439baa688834fbfc74a9f7cc8edde11076245"
+   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "0862fcd1694b80ecac1fc6fae3592e6abd85ef63"
   },
-  "thumb": "bc7fa9b9e30b27482e81948f3ec3455fb30c7634"
+  "thumb": "cd57df805059eae10761137364a4395ad111a1a6"
  },
  "en": {
   "inputs": {
-   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "427439baa688834fbfc74a9f7cc8edde11076245"
+   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "0862fcd1694b80ecac1fc6fae3592e6abd85ef63"
   },
-  "thumb": "bc7fa9b9e30b27482e81948f3ec3455fb30c7634"
+  "thumb": "cd57df805059eae10761137364a4395ad111a1a6"
  },
  "ja": {
   "inputs": {
-   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "427439baa688834fbfc74a9f7cc8edde11076245"
+   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "0862fcd1694b80ecac1fc6fae3592e6abd85ef63"
   },
-  "thumb": "f987f7cb5519cf21a388595d9d39f2e6f8ded92b"
+  "thumb": "e0503d54621b4f58dc7c8497042c8da39d6af62b"
  },
  "zh": {
   "inputs": {
-   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "427439baa688834fbfc74a9f7cc8edde11076245"
+   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "0862fcd1694b80ecac1fc6fae3592e6abd85ef63"
   },
-  "thumb": "25033e17623ff2934bd23d493cee037bea48a7db"
+  "thumb": "0a85c93575a873b2e0b992c4f13a0b78fb60f619"
  }
 }

@@ -18,7 +18,7 @@
     p1: { en: 'Earbuds, then MoHeat Evo', ja: 'イヤホン → MoHeat Evo', zh: '入耳式耳机 → MoHeat Evo' }, p2: { en: 'Feel warm & cool', ja: '温かい・冷たいを感じる', zh: '感受冷与热' },
     p3: { en: 'Pick a story', ja: '物語を選ぶ', zh: '选一个故事' },
     rec: { en: 'Try these first', ja: 'まずはこちら', zh: '推荐先体验' }, more: { en: 'More stories →', ja: 'ほかの物語 →', zh: '更多故事 →' },
-    hygiene: { en: '🧼 Earbuds and ear pads cleaned for every visitor · disposable covers available', ja: '🧼 イヤホンとイヤーパッドは毎回消毒 · 使い捨てカバーあります', zh: '🧼 耳机和耳罩每位访客消毒 · 可提供一次性耳罩套' },
+    hygiene: { en: 'Earbuds and ear pads cleaned for every visitor · disposable covers available', ja: 'イヤホンとイヤーパッドは毎回消毒 · 使い捨てカバーあります', zh: '耳机和耳罩每位访客消毒 · 可提供一次性耳罩套' },
     numsH: { en: 'Picked a number while waiting? Tap it:', ja: '待っている間に選んだ番号をタップ：', zh: '排队时选好了号码？点这里：' },
     qq: { en: 'Scan to choose while you wait', ja: '待っている間にスキャンして選ぼう', zh: '排队时扫码先选' },
     start: { en: '▶ Start', ja: '▶ はじめる', zh: '▶ 开始' }, skipIntro: { en: 'I know MoHeat Evo — skip the 30-second intro', ja: '使ったことがある — 30 秒の案内をとばす', zh: '我用过 — 跳过 30 秒引导' },
@@ -44,7 +44,7 @@
     moreH: { en: 'Want to try another story?', ja: 'ほかの物語も体験しますか？', zh: '想再体验一个故事吗？' },
     moreAll: { en: 'All stories', ja: 'すべての物語', zh: '全部故事' }, finish: { en: 'Finish', ja: 'おわる', zh: '结束' },
     endA: { en: 'Please take off the MoHeat Evo headset first', ja: 'まず MoHeat Evo を外してください', zh: '请先取下 MoHeat Evo 头戴设备' },
-    endASub: { en: 'The warm / cool output is already off. Please tell the staff 👋', ja: '温冷の出力はもう止まっています。スタッフに声をかけてください 👋', zh: '冷热输出已经停止。请告诉工作人员 👋' },
+    endASub: { en: 'The warm / cool output is already off. Please tell the staff.', ja: '温冷の出力はもう止まっています。スタッフに声をかけてください。', zh: '冷热输出已经停止。请告诉工作人员。' },
     endB: { en: 'Now remove the earbuds', ja: 'つぎにイヤホンを外してください', zh: '现在请取下入耳式耳机' },
     endBSub: { en: 'Then a few quick taps about your experience.', ja: 'そのあと、かんたんなアンケートにタップで答えてください。', zh: '然后点几下，告诉我们你的感受。' },
     staffGo: { en: 'Continue (staff)', ja: '続ける（スタッフ）', zh: '继续（工作人员）' }, done2: { en: 'Done', ja: 'できた', zh: '好了' },
@@ -70,7 +70,7 @@
     { // firmware replies: a battery report such as "BAT 14" / "battery: 14%" → the big low-battery alert under 15 % (if the firmware sends one)
       log: (l) => { const m = /^← .*\bbat(?:tery)?\D{0,3}(\d{1,3})/i.exec(l); if (m && +m[1] < 15) alert_('bat'); } });
   function alert_(k) { let el = $('#alertBig'); if (!el) { el = document.createElement('div'); el.id = 'alertBig'; el.className = 'alert-big'; el.setAttribute('role', 'alert'); document.body.appendChild(el); el.addEventListener('click', () => { el.hidden = true; }); }
-    el.hidden = !k; if (k) el.innerHTML = k === 'lost' ? `<b>🔌 ${t('lost')}</b><span>${t('staffHelp')}</span>` : `<b>🔋 ${t('bat')}</b><span>${t('staffHelp')}</span>`; }
+    el.hidden = !k; if (k) el.innerHTML = k === 'lost' ? `<b>${t('lost')}</b><span>${t('staffHelp')}</span>` : `<b>${t('bat')}</b><span>${t('staffHelp')}</span>`; }
   let thermalOn = true;   // false in the attract loop: nothing goes out
   const send = (line) => { if ((thermalOn && S.attended()) || /^stop$/i.test(line)) dev.send(line); if (view === 'intro') K.post({ t: 'thermal', th: K.thermalOf(/^stop$/i.test(line) ? '' : line) }); };
   setInterval(() => K.post({ t: 'state', view, dir: pending || (view === 'card' ? (K.visit.get() || {}).dir : null) }), 2000);
@@ -144,7 +144,7 @@
   // → favourite moment (only when the demo had thermal moments). Skip (this question) + Skip all on every screen; 15 s without input
   // closes the card (answers so far are kept, none = skipped); thank-you ≤ 2 s; the comment hides behind a small link.
   const answer = { stars: 0, buy: null, price: null, moment: null, scenes: [] };
-  const ICON = { warm: '🔥', cool: '❄️', dual: '🔥❄️' };
+  const ICON = { warm: '#ff8a3d', cool: '#6fb7ff', dual: 'linear-gradient(90deg, #ff8a3d 50%, #6fb7ff 50%)' };   // a plain coloured dot (no emoji, user 2026-11-09)
   // pacing (user 2026-11-08, REQUIREMENTS §10): the picked option stays lit ~0.8 s with a soft confirm pulse, a question stays at least
   // 1.5 s before an answer can move on (no accidental double taps), "‹ back" goes one question back; 15 s idle still closes the card
   const CONFIRM = 800, DWELL = 1500;
@@ -164,7 +164,7 @@
     if (k === 'buy') html += opts(['yes', 'maybe', 'no'].map((x) => [x, t(x)]), (x) => answer.buy === x);
     if (k === 'price') { const cur = K.currency(lang()); html += opts(K.bands(cur).map((b) => [`${cur} ${b}`, b]), (x) => answer.price === x); }
     if (k === 'scenes') html += opts(K.SCENES.map((s) => [s.id, s[lang()] || s.en]), (x) => answer.scenes.includes(x));
-    if (k === 'fav') html += opts((v.moments || []).slice(0, 6).map((m) => [m.label, `<i>${ICON[m.kind] || ''}</i>${m.label}`]), (x) => answer.moment === x);
+    if (k === 'fav') html += opts((v.moments || []).slice(0, 6).map((m) => [m.label, `<i style="display:inline-block;width:.6em;height:.6em;border-radius:50%;margin-right:.45em;background:${ICON[m.kind] || 'transparent'}"></i>${m.label}`]), (x) => answer.moment === x);
     $('.q').innerHTML = html; $('.q').dataset.q = k;
     $('#cardSkip').textContent = t('skip'); $('#cardBack').textContent = t('back'); $('#cardBack').hidden = qi === 0;
     qr($('.card-qr .qr'), summaryUrl(v));
@@ -368,7 +368,7 @@
       const reg = await navigator.serviceWorker.register('../kiosk-sw.js', { scope: '../' }); await navigator.serviceWorker.ready;
       const list = await (await fetch('precache.json', { cache: 'no-store' })).json();
       const files = [...list.shared, ...offered().flatMap((d) => list.demos[d.dir] || [])];   // shared files + only the demos on offer
-      const ch = new MessageChannel(); ch.port1.onmessage = (e) => { const m = e.data; out.textContent = m.done ? `✓ ${m.ok} files saved for offline (${m.fail} failed) · ${Math.round(m.bytes / 1048576)} MB` : `Saving… ${m.n} / ${files.length}`; };
+      const ch = new MessageChannel(); ch.port1.onmessage = (e) => { const m = e.data; out.textContent = m.done ? `${m.ok} files saved for offline (${m.fail} failed) · ${Math.round(m.bytes / 1048576)} MB` : `Saving… ${m.n} / ${files.length}`; };
       (reg.active || navigator.serviceWorker.controller)?.postMessage({ t: 'precache', files }, [ch.port2]); out.textContent = `Saving… 0 / ${files.length}`;
     } catch (e) { out.textContent = `Offline save failed: ${e.message}`; }
   }

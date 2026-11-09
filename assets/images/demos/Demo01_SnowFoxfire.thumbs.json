@@ -1,26 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "01947fef79158ddc1de15039ba71400721e81af7"
+   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "c090bd72ff0d1261f6fc529f637781d2e08db249"
   },
-  "thumb": "6d55cadb31b3d47a7d48190f51fca6c938a3f936"
+  "thumb": "08bb3ef9d870498b46a67edd6eeed3df1bbf626c"
  },
  "en": {
   "inputs": {
-   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "01947fef79158ddc1de15039ba71400721e81af7"
+   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "c090bd72ff0d1261f6fc529f637781d2e08db249"
   },
-  "thumb": "6d55cadb31b3d47a7d48190f51fca6c938a3f936"
+  "thumb": "08bb3ef9d870498b46a67edd6eeed3df1bbf626c"
  },
  "ja": {
   "inputs": {
-   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "01947fef79158ddc1de15039ba71400721e81af7"
+   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "c090bd72ff0d1261f6fc529f637781d2e08db249"
   },
-  "thumb": "529dcef2fe1dbaf97e1e71e8f8ea3a418bdc0620"
+  "thumb": "dc746a6ff8f2c0f89da975b913f223fc36819c93"
  },
  "zh": {
   "inputs": {
-   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "01947fef79158ddc1de15039ba71400721e81af7"
+   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "c090bd72ff0d1261f6fc529f637781d2e08db249"
   },
-  "thumb": "0b3c442b53677c55ace287eed5a84f0b5ac7f019"
+  "thumb": "ee02b92bc02c03fec3092838a49ca47cb5930702"
  }
 }

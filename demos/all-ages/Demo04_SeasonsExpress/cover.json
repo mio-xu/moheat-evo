@@ -14,17 +14,17 @@
   {
    "kind": "cool",
    "text": {
-    "en": "❄ ice runes · snow · rain",
-    "ja": "❄ 氷のルーン・雪・雨",
-    "zh": "❄ 冰符文・雪・雨"
+    "en": "ice runes · snow · rain",
+    "ja": "氷のルーン・雪・雨",
+    "zh": "冰符文・雪・雨"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "🔥 fire runes · sun · tea · whisper",
-    "ja": "🔥 炎のルーン・日差し・紅茶・ささやき",
-    "zh": "🔥 火符文・阳光・热茶・耳语"
+    "en": "fire runes · sun · tea · whisper",
+    "ja": "炎のルーン・日差し・紅茶・ささやき",
+    "zh": "火符文・阳光・热茶・耳语"
    }
   }
  ],

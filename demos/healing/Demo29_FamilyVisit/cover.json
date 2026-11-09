@@ -14,25 +14,25 @@
   {
    "kind": "tag",
    "text": {
-    "en": "🏡 To Grandma and Grandpa's",
-    "ja": "🏡 おじいちゃん家へ",
-    "zh": "🏡 回爷爷奶奶家"
+    "en": "To Grandma and Grandpa's",
+    "ja": "おじいちゃん家へ",
+    "zh": "回爷爷奶奶家"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "🔥 kotatsu · stove · a voice at your ear",
-    "ja": "🔥 こたつ・ストーブ・耳元の声",
-    "zh": "🔥 被炉・暖炉・耳边的声音"
+    "en": "kotatsu · stove · a voice at your ear",
+    "ja": "こたつ・ストーブ・耳元の声",
+    "zh": "被炉・暖炉・耳边的声音"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "❄️ station wind · snowball",
-    "ja": "❄️ 駅の風・雪玉",
-    "zh": "❄️ 车站的风・雪球"
+    "en": "station wind · snowball",
+    "ja": "駅の風・雪玉",
+    "zh": "车站的风・雪球"
    }
   }
  ],

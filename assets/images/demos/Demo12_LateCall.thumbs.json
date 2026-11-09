@@ -1,26 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "c82dbef7da9f328a9e071df696470766b44eb9c3"
+   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "5386f732d9e747fe65cc8e0dc7453ee3d6f7570a"
   },
-  "thumb": "75e702b575c328ee4f093250862014f25e6e494d"
+  "thumb": "40f96c3333d973f96d898fe4eb9cb1139290d1b3"
  },
  "en": {
   "inputs": {
-   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "c82dbef7da9f328a9e071df696470766b44eb9c3"
+   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "5386f732d9e747fe65cc8e0dc7453ee3d6f7570a"
   },
-  "thumb": "75e702b575c328ee4f093250862014f25e6e494d"
+  "thumb": "40f96c3333d973f96d898fe4eb9cb1139290d1b3"
  },
  "ja": {
   "inputs": {
-   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "c82dbef7da9f328a9e071df696470766b44eb9c3"
+   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "5386f732d9e747fe65cc8e0dc7453ee3d6f7570a"
   },
-  "thumb": "85da7c957458d5bfab863388320d54f4e000b479"
+  "thumb": "1149f72abb2cfeaa99a76db42e60aac129030043"
  },
  "zh": {
   "inputs": {
-   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "c82dbef7da9f328a9e071df696470766b44eb9c3"
+   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "5386f732d9e747fe65cc8e0dc7453ee3d6f7570a"
   },
-  "thumb": "ea6ceec2e90259d4c579f5948c4865aa27a13cd4"
+  "thumb": "1b648add4e7a5038581356e757c20b5a24969941"
  }
 }

@@ -9,25 +9,25 @@
   {
    "kind": "tag",
    "text": {
-    "en": "🐾 play with a cat",
-    "ja": "🐾 ねこと遊ぶ",
-    "zh": "🐾 和猫咪玩"
+    "en": "play with a cat",
+    "ja": "ねこと遊ぶ",
+    "zh": "和猫咪玩"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "🐈 warmth · purring",
-    "ja": "🐈 ぬくもり・ごろごろ",
-    "zh": "🐈 体温・呼噜呼噜"
+    "en": "warmth · purring",
+    "ja": "ぬくもり・ごろごろ",
+    "zh": "体温・呼噜呼噜"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "👃 cold little nose · rain",
-    "ja": "👃 つめたいお鼻・雨",
-    "zh": "👃 冰凉的小鼻子・雨"
+    "en": "cold little nose · rain",
+    "ja": "つめたいお鼻・雨",
+    "zh": "冰凉的小鼻子・雨"
    }
   }
  ],

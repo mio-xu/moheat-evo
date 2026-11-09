@@ -24,7 +24,7 @@
   const t = (k) => T[k][L()] || T[k].en;
   const st = { view: 'attract', dir: null, sub: '', th: { l: { h: 0, c: 0 }, r: { h: 0, c: 0 } }, frameAt: 0, seen: Date.now(), dev: { state: 'off', error: '' } };
   function devPaint() { const p = $('#qdev'), a = $('#qalert'), s = st.dev.state; p.dataset.state = s; p.querySelector('b').textContent = `MoHeat Evo · ${T['d_' + s] ? t('d_' + s) : s}`;
-    a.hidden = s !== 'lost'; if (!a.hidden) { a.querySelector('b').textContent = `🔌 ${t('lost')}`; a.querySelector('span').textContent = t('lostS'); } }
+    a.hidden = s !== 'lost'; if (!a.hidden) { a.querySelector('b').textContent = `${t('lost')}`; a.querySelector('span').textContent = t('lostS'); } }
   const bc = 'BroadcastChannel' in window ? new BroadcastChannel('moheat-kiosk') : null;
   bc?.addEventListener('message', (e) => { const m = e.data || {}; st.seen = Date.now();
     if (m.t === 'state') { st.view = m.view; st.dir = m.dir || null; if (m.view !== 'demo') st.sub = ''; paint(); }

@@ -1,26 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "d65211c0150a8785d74f8c270a28b285a4bdcd09"
+   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "24fcd6ec88122de80f3dd216884e9b469f76a133"
   },
-  "thumb": "a4c4cd0065948dd2ab0c19a3b0f3d7421b940334"
+  "thumb": "a692806dc50ac28b09458934d5430f1e28120a45"
  },
  "en": {
   "inputs": {
-   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "d65211c0150a8785d74f8c270a28b285a4bdcd09"
+   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "24fcd6ec88122de80f3dd216884e9b469f76a133"
   },
-  "thumb": "a4c4cd0065948dd2ab0c19a3b0f3d7421b940334"
+  "thumb": "a692806dc50ac28b09458934d5430f1e28120a45"
  },
  "ja": {
   "inputs": {
-   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "d65211c0150a8785d74f8c270a28b285a4bdcd09"
+   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "24fcd6ec88122de80f3dd216884e9b469f76a133"
   },
-  "thumb": "cb12d98df1d08436c6d0642fca9fa12f0b466f3e"
+  "thumb": "e1165afb072aa286404640e33fe69492b1d67ac7"
  },
  "zh": {
   "inputs": {
-   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "d65211c0150a8785d74f8c270a28b285a4bdcd09"
+   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "24fcd6ec88122de80f3dd216884e9b469f76a133"
   },
-  "thumb": "26f1a2dac0c3a9e2ce7f3c038bfc0d704c9dada2"
+  "thumb": "5736e13190dafe689ed6b81afcccf0ca66cc9e47"
  }
 }

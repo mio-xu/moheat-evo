@@ -1,26 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "b28367cb01fd2da99770c9428303c1c7688a2106"
+   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "291364c0d478cfc74a17697c9f6e8a4b592a8471"
   },
-  "thumb": "bdeb501fc6e6c73ec245762e8a3297bbe14193f5"
+  "thumb": "bca13e80e5f6a8d02cb2bad28a2c365838354900"
  },
  "en": {
   "inputs": {
-   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "b28367cb01fd2da99770c9428303c1c7688a2106"
+   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "291364c0d478cfc74a17697c9f6e8a4b592a8471"
   },
-  "thumb": "bdeb501fc6e6c73ec245762e8a3297bbe14193f5"
+  "thumb": "bca13e80e5f6a8d02cb2bad28a2c365838354900"
  },
  "ja": {
   "inputs": {
-   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "b28367cb01fd2da99770c9428303c1c7688a2106"
+   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "291364c0d478cfc74a17697c9f6e8a4b592a8471"
   },
-  "thumb": "e973f62f3c888dfb0ffa4d72638e8f3cdb42b373"
+  "thumb": "d8de79bcba51724832758ef30a37e5ea99195e92"
  },
  "zh": {
   "inputs": {
-   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "b28367cb01fd2da99770c9428303c1c7688a2106"
+   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "291364c0d478cfc74a17697c9f6e8a4b592a8471"
   },
-  "thumb": "bcc2cddde93a0bd0040a7b2160d6c7fb70ffde77"
+  "thumb": "0fec49e954a3dcabf17647981563d0a52c364ff6"
  }
 }

@@ -14,25 +14,25 @@
   {
    "kind": "tag",
    "text": {
-    "en": "🏮 A mountain inn in a blizzard",
-    "ja": "🏮 吹雪の山の宿",
-    "zh": "🏮 暴风雪中的山间客栈"
+    "en": "A mountain inn in a blizzard",
+    "ja": "吹雪の山の宿",
+    "zh": "暴风雪中的山间客栈"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "🔥 moxa · hotpot · voices at your ear",
-    "ja": "🔥 お灸・火鍋・耳元の声",
-    "zh": "🔥 艾灸・火锅・耳边的声音"
+    "en": "moxa · hotpot · voices at your ear",
+    "ja": "お灸・火鍋・耳元の声",
+    "zh": "艾灸・火锅・耳边的声音"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "🌿 mint balm · blizzard · night wind",
-    "ja": "🌿 薄荷の軟膏・吹雪・夜風",
-    "zh": "🌿 薄荷膏・暴风雪・夜风"
+    "en": "mint balm · blizzard · night wind",
+    "ja": "薄荷の軟膏・吹雪・夜風",
+    "zh": "薄荷膏・暴风雪・夜风"
    }
   }
  ],

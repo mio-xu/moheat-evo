@@ -121,7 +121,7 @@ def main():
                 k = f.split('.')[1] if f.count('.') == 2 else None
                 if k in BUDGET and os.path.getsize(os.path.join(od, f)) > BUDGET[k] * 1024: bad.append(f'{d}/{f} over {BUDGET[k]} KB')
             if langs.split(',') == list(LANGS) and not any(x.startswith(d + ' ') for x in bad):   # a full render: stamp it
-                tmp = os.path.join(od, f'stamp.json.{os.getpid()}'); json.dump(inputs(c, d), open(tmp, 'w'), indent=1); os.replace(tmp, os.path.join(od, 'stamp.json'))
+                stf = os.path.join(od, f'stamp.json.{os.getpid()}'); json.dump(inputs(c, d), open(stf, 'w'), indent=1); os.replace(stf, os.path.join(od, 'stamp.json'))
             if publish and not any(x.startswith(d + ' ') for x in bad):   # the content stamp check_demo's release row reads
                 import thumbs; thumbs.write_stamp(c, d, langs.split(',') + (['base'] if 'en' in langs.split(',') else []))
             print(d, ' · '.join(row))

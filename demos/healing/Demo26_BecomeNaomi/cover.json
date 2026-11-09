@@ -14,25 +14,25 @@
   {
    "kind": "tag",
    "text": {
-    "en": "🐈 Become Naomi",
-    "ja": "🐈 ナオミになる",
-    "zh": "🐈 变成直美"
+    "en": "Become Naomi",
+    "ja": "ナオミになる",
+    "zh": "变成直美"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "☀ sunny spot · laundry",
-    "ja": "☀ ひだまり・洗濯もの",
-    "zh": "☀ 阳光・晾晒的衣物"
+    "en": "sunny spot · laundry",
+    "ja": "ひだまり・洗濯もの",
+    "zh": "阳光・晾晒的衣物"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "❄️ window glass · fridge",
-    "ja": "❄️ 窓ガラス・冷蔵庫",
-    "zh": "❄️ 窗玻璃・冰箱"
+    "en": "window glass · fridge",
+    "ja": "窓ガラス・冷蔵庫",
+    "zh": "窗玻璃・冰箱"
    }
   }
  ],

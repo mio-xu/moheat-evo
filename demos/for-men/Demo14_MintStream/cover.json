@@ -14,25 +14,25 @@
   {
    "kind": "tag",
    "text": {
-    "en": "🌿 An ear-salon stream",
-    "ja": "🌿 おみみ専門店の配信",
-    "zh": "🌿 耳朵专门店直播"
+    "en": "An ear-salon stream",
+    "ja": "おみみ専門店の配信",
+    "zh": "耳朵专门店直播"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "♨️ steamed towel · warm stone · whisper",
-    "ja": "♨️ 蒸しタオル・温石・ささやき",
-    "zh": "♨️ 热毛巾・温石・耳语"
+    "en": "steamed towel · warm stone · whisper",
+    "ja": "蒸しタオル・温石・ささやき",
+    "zh": "热毛巾・温石・耳语"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "🥄 chilled spoon · mint breath · mist",
-    "ja": "🥄 ひんやりスプーン・ミントの吐息・ミスト",
-    "zh": "🥄 冰勺子・薄荷气息・喷雾"
+    "en": "chilled spoon · mint breath · mist",
+    "ja": "ひんやりスプーン・ミントの吐息・ミスト",
+    "zh": "冰勺子・薄荷气息・喷雾"
    }
   }
  ],

@@ -1,26 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo06_FutureWhisky/media/cover/stamp.json": "7c0e0923d5649a129b156849b504876a0dc37fe1"
+   "demos/nobunaga-suntory/Demo06_FutureWhisky/media/cover/stamp.json": "2081d3fe2e837d44a90b1dfee7664bbe393e6885"
   },
-  "thumb": "2ddb61a8b477987523b3ed82061db5e4aced7177"
+  "thumb": "6d08359aa5f70895b658a9664b3bcfb51820532b"
  },
  "en": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo06_FutureWhisky/media/cover/stamp.json": "7c0e0923d5649a129b156849b504876a0dc37fe1"
+   "demos/nobunaga-suntory/Demo06_FutureWhisky/media/cover/stamp.json": "2081d3fe2e837d44a90b1dfee7664bbe393e6885"
   },
-  "thumb": "2ddb61a8b477987523b3ed82061db5e4aced7177"
+  "thumb": "6d08359aa5f70895b658a9664b3bcfb51820532b"
  },
  "ja": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo06_FutureWhisky/media/cover/stamp.json": "7c0e0923d5649a129b156849b504876a0dc37fe1"
+   "demos/nobunaga-suntory/Demo06_FutureWhisky/media/cover/stamp.json": "2081d3fe2e837d44a90b1dfee7664bbe393e6885"
   },
-  "thumb": "d27638880c4d9540ca8283e26db86c7834b98a73"
+  "thumb": "ba2cd4ce2699c7e286114bdb4d451f0fc3186054"
  },
  "zh": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo06_FutureWhisky/media/cover/stamp.json": "7c0e0923d5649a129b156849b504876a0dc37fe1"
+   "demos/nobunaga-suntory/Demo06_FutureWhisky/media/cover/stamp.json": "2081d3fe2e837d44a90b1dfee7664bbe393e6885"
   },
-  "thumb": "c6128f8564e281a5abede486a159b5439fb580c9"
+  "thumb": "1a666f2e71978b433660f079e57d8258a2fa99ca"
  }
 }

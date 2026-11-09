@@ -14,25 +14,25 @@
   {
    "kind": "tag",
    "text": {
-    "en": "☎️ the home phone",
-    "ja": "☎️ おうちの電話",
-    "zh": "☎️ 家里的电话"
+    "en": "the home phone",
+    "ja": "おうちの電話",
+    "zh": "家里的电话"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "🧣 hand-knitted scarf",
-    "ja": "🧣 手編みのマフラー",
-    "zh": "🧣 手织围巾"
+    "en": "hand-knitted scarf",
+    "ja": "手編みのマフラー",
+    "zh": "手织围巾"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "🚪 cold wind at the front door",
-    "ja": "🚪 玄関の冷たい風",
-    "zh": "🚪 玄关的冷风"
+    "en": "cold wind at the front door",
+    "ja": "玄関の冷たい風",
+    "zh": "玄关的冷风"
    }
   }
  ],

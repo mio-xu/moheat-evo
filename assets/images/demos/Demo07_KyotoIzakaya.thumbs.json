@@ -1,26 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo07_KyotoIzakaya/media/cover/stamp.json": "7acd0736d0556c368d27311a81a82218a381a728"
+   "demos/nobunaga-suntory/Demo07_KyotoIzakaya/media/cover/stamp.json": "8520456ca1280b91fc069d080625c0afc8643f64"
   },
-  "thumb": "f2925b162120c95b129a6e691e167201341dcac7"
+  "thumb": "6667fcd629fb6cfe105f8709a00dfd1f5a483a7d"
  },
  "en": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo07_KyotoIzakaya/media/cover/stamp.json": "7acd0736d0556c368d27311a81a82218a381a728"
+   "demos/nobunaga-suntory/Demo07_KyotoIzakaya/media/cover/stamp.json": "8520456ca1280b91fc069d080625c0afc8643f64"
   },
-  "thumb": "f2925b162120c95b129a6e691e167201341dcac7"
+  "thumb": "6667fcd629fb6cfe105f8709a00dfd1f5a483a7d"
  },
  "ja": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo07_KyotoIzakaya/media/cover/stamp.json": "7acd0736d0556c368d27311a81a82218a381a728"
+   "demos/nobunaga-suntory/Demo07_KyotoIzakaya/media/cover/stamp.json": "8520456ca1280b91fc069d080625c0afc8643f64"
   },
-  "thumb": "ba5fd7f6b1a89a758f68072b64dfa7f34c1527f9"
+  "thumb": "a954cf05eab1fe03fae4409e81802a1630f3bf58"
  },
  "zh": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo07_KyotoIzakaya/media/cover/stamp.json": "7acd0736d0556c368d27311a81a82218a381a728"
+   "demos/nobunaga-suntory/Demo07_KyotoIzakaya/media/cover/stamp.json": "8520456ca1280b91fc069d080625c0afc8643f64"
   },
-  "thumb": "d8c0beaa6a66ade1e0682a7f1e56204c9e15187b"
+  "thumb": "f82a1f22f7d3a24359adf602d4c81705060bc97f"
  }
 }

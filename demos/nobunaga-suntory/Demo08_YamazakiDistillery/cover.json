@@ -14,33 +14,33 @@
   {
    "kind": "warm",
    "text": {
-    "en": "🔥 Nobunaga · left",
-    "ja": "🔥 信長 · 左",
-    "zh": "🔥 信长 · 左"
+    "en": "Nobunaga · left",
+    "ja": "信長 · 左",
+    "zh": "信长 · 左"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "🔥 Ieyasu · right",
-    "ja": "🔥 家康 · 右",
-    "zh": "🔥 家康 · 右"
+    "en": "Ieyasu · right",
+    "ja": "家康 · 右",
+    "zh": "家康 · 右"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "❄ mist · cask warehouse · spring water",
-    "ja": "❄ 霧・熟成庫・名水",
-    "zh": "❄ 雾・熟成库・名水"
+    "en": "mist · cask warehouse · spring water",
+    "ja": "霧・熟成庫・名水",
+    "zh": "雾・熟成库・名水"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "🔥 copper stills",
-    "ja": "🔥 蒸留釜",
-    "zh": "🔥 蒸馏釜"
+    "en": "copper stills",
+    "ja": "蒸留釜",
+    "zh": "蒸馏釜"
    }
   }
  ],

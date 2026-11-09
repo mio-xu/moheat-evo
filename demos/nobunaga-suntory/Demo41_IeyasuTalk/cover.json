@@ -19,25 +19,25 @@
   {
    "kind": "warm",
    "text": {
-    "en": "🔥 hearth",
-    "ja": "🔥 囲炉裏",
-    "zh": "🔥 地炉"
+    "en": "hearth",
+    "ja": "囲炉裏",
+    "zh": "地炉"
    }
   },
   {
    "kind": "tag",
    "text": {
-    "en": "🍵 tea",
-    "ja": "🍵 茶",
-    "zh": "🍵 茶"
+    "en": "tea",
+    "ja": "茶",
+    "zh": "茶"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "🌬 draught",
-    "ja": "🌬 すきま風",
-    "zh": "🌬 漏风"
+    "en": "draught",
+    "ja": "すきま風",
+    "zh": "漏风"
    }
   }
  ],

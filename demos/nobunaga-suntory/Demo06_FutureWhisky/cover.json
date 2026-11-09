@@ -14,25 +14,25 @@
   {
    "kind": "warm",
    "text": {
-    "en": "🔥 Nobunaga · left",
-    "ja": "🔥 信長 · 左",
-    "zh": "🔥 信长 · 左"
+    "en": "Nobunaga · left",
+    "ja": "信長 · 左",
+    "zh": "信长 · 左"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "🔥 Ieyasu · right",
-    "ja": "🔥 家康 · 右",
-    "zh": "🔥 家康 · 右"
+    "en": "Ieyasu · right",
+    "ja": "家康 · 右",
+    "zh": "家康 · 右"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "❄ ice · highball",
-    "ja": "❄ 氷・ハイボール",
-    "zh": "❄ 冰块・嗨棒"
+    "en": "ice · highball",
+    "ja": "氷・ハイボール",
+    "zh": "冰块・嗨棒"
    }
   }
  ],

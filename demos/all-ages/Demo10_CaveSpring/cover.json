@@ -9,25 +9,25 @@
   {
    "kind": "tag",
    "text": {
-    "en": "🧩 Interactive puzzle",
-    "ja": "🧩 なぞ解き",
-    "zh": "🧩 互动解谜"
+    "en": "Interactive puzzle",
+    "ja": "なぞ解き",
+    "zh": "互动解谜"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "🔥 hearth · candles",
-    "ja": "🔥 囲炉裏・ろうそく",
-    "zh": "🔥 地炉・蜡烛"
+    "en": "hearth · candles",
+    "ja": "囲炉裏・ろうそく",
+    "zh": "地炉・蜡烛"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "💧 drafts · fox-fire · underground water",
-    "ja": "💧 すきま風・きつね火・地底の水",
-    "zh": "💧 穿堂风・狐火・地下水"
+    "en": "drafts · fox-fire · underground water",
+    "ja": "すきま風・きつね火・地底の水",
+    "zh": "穿堂风・狐火・地下水"
    }
   }
  ],

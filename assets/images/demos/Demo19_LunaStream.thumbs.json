@@ -1,26 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/for-men/Demo19_LunaStream/media/cover/stamp.json": "783737d5a8290d68a16fee92e75c9eb325277ee3"
+   "demos/for-men/Demo19_LunaStream/media/cover/stamp.json": "9a40c811426361f96bdb86f9bea3da5b8b8f4f7c"
   },
-  "thumb": "8e66e8e96b3e85e69115db5bf1c98fc9e497dd72"
+  "thumb": "d4eaa461bb4af1f5e58b518e197f877e35363fd0"
  },
  "en": {
   "inputs": {
-   "demos/for-men/Demo19_LunaStream/media/cover/stamp.json": "783737d5a8290d68a16fee92e75c9eb325277ee3"
+   "demos/for-men/Demo19_LunaStream/media/cover/stamp.json": "9a40c811426361f96bdb86f9bea3da5b8b8f4f7c"
   },
-  "thumb": "8e66e8e96b3e85e69115db5bf1c98fc9e497dd72"
+  "thumb": "d4eaa461bb4af1f5e58b518e197f877e35363fd0"
  },
  "ja": {
   "inputs": {
-   "demos/for-men/Demo19_LunaStream/media/cover/stamp.json": "783737d5a8290d68a16fee92e75c9eb325277ee3"
+   "demos/for-men/Demo19_LunaStream/media/cover/stamp.json": "9a40c811426361f96bdb86f9bea3da5b8b8f4f7c"
   },
-  "thumb": "557f60c025fdb35a1e73179a7e863b44e74d8bc1"
+  "thumb": "77dd24a4cbcec5b931abab1196572f5ea7ddc984"
  },
  "zh": {
   "inputs": {
-   "demos/for-men/Demo19_LunaStream/media/cover/stamp.json": "783737d5a8290d68a16fee92e75c9eb325277ee3"
+   "demos/for-men/Demo19_LunaStream/media/cover/stamp.json": "9a40c811426361f96bdb86f9bea3da5b8b8f4f7c"
   },
-  "thumb": "7322fb97447591a434d4befd0984fb2044ec771d"
+  "thumb": "4f7db0a84c33d8d1ed945c050f83353c1cf4a7c4"
  }
 }

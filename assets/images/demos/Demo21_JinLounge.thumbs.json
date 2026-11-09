@@ -1,26 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/for-women/Demo21_JinLounge/media/cover/stamp.json": "73e8f90dd89f244b1059cfe0af4b8c9bad9da490"
+   "demos/for-women/Demo21_JinLounge/media/cover/stamp.json": "40875b94a43d47b953f6f7a2eee8a60657a9595d"
   },
-  "thumb": "5f7bddc1cdb73a16157af6a79777e3d15d34c28a"
+  "thumb": "91ba2d3224cac5cdd32138226b0bb0c92bfcaf86"
  },
  "en": {
   "inputs": {
-   "demos/for-women/Demo21_JinLounge/media/cover/stamp.json": "73e8f90dd89f244b1059cfe0af4b8c9bad9da490"
+   "demos/for-women/Demo21_JinLounge/media/cover/stamp.json": "40875b94a43d47b953f6f7a2eee8a60657a9595d"
   },
-  "thumb": "5f7bddc1cdb73a16157af6a79777e3d15d34c28a"
+  "thumb": "91ba2d3224cac5cdd32138226b0bb0c92bfcaf86"
  },
  "ja": {
   "inputs": {
-   "demos/for-women/Demo21_JinLounge/media/cover/stamp.json": "73e8f90dd89f244b1059cfe0af4b8c9bad9da490"
+   "demos/for-women/Demo21_JinLounge/media/cover/stamp.json": "40875b94a43d47b953f6f7a2eee8a60657a9595d"
   },
-  "thumb": "a7b3acac5fb2e926aff1ba05c9406056fa4ad9ab"
+  "thumb": "6bd04036874c1b892438f94e318f7e15153a4dc7"
  },
  "zh": {
   "inputs": {
-   "demos/for-women/Demo21_JinLounge/media/cover/stamp.json": "73e8f90dd89f244b1059cfe0af4b8c9bad9da490"
+   "demos/for-women/Demo21_JinLounge/media/cover/stamp.json": "40875b94a43d47b953f6f7a2eee8a60657a9595d"
   },
-  "thumb": "c17ab72da4ab05f294c94dc3aeb06d04895879b4"
+  "thumb": "a51b4a55e02d2eb0f0dd760b881f21e2f33ae743"
  }
 }

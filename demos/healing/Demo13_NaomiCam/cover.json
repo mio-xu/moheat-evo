@@ -14,25 +14,25 @@
   {
    "kind": "tag",
    "text": {
-    "en": "📹 Pet cam",
-    "ja": "📹 見守りカメラ",
-    "zh": "📹 宠物监控"
+    "en": "Pet cam",
+    "ja": "見守りカメラ",
+    "zh": "宠物监控"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "🌡 thermal view · heated carpet",
-    "ja": "🌡 サーモ・ホットカーペット",
-    "zh": "🌡 热成像・电热地毯"
+    "en": "thermal view · heated carpet",
+    "ja": "サーモ・ホットカーペット",
+    "zh": "热成像・电热地毯"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "🌀 fan · nose · rain",
-    "ja": "🌀 扇風機・お鼻・雨",
-    "zh": "🌀 电风扇・小鼻子・雨"
+    "en": "fan · nose · rain",
+    "ja": "扇風機・お鼻・雨",
+    "zh": "电风扇・小鼻子・雨"
    }
   }
  ],

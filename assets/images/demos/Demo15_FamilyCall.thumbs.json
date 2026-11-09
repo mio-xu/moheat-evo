@@ -1,26 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/healing/Demo15_FamilyCall/media/cover/stamp.json": "0cdee20e1b52b20fb28d61c974e6806fcd5b6e1c"
+   "demos/healing/Demo15_FamilyCall/media/cover/stamp.json": "73e6cad7ba38c0f26998a19909b318c25ea842f0"
   },
-  "thumb": "f59508348722043bcf40895c4de2b18e1fc4f9d5"
+  "thumb": "1e4782e774ad89458ef929f47126ce43200b1c7f"
  },
  "en": {
   "inputs": {
-   "demos/healing/Demo15_FamilyCall/media/cover/stamp.json": "0cdee20e1b52b20fb28d61c974e6806fcd5b6e1c"
+   "demos/healing/Demo15_FamilyCall/media/cover/stamp.json": "73e6cad7ba38c0f26998a19909b318c25ea842f0"
   },
-  "thumb": "f59508348722043bcf40895c4de2b18e1fc4f9d5"
+  "thumb": "1e4782e774ad89458ef929f47126ce43200b1c7f"
  },
  "ja": {
   "inputs": {
-   "demos/healing/Demo15_FamilyCall/media/cover/stamp.json": "0cdee20e1b52b20fb28d61c974e6806fcd5b6e1c"
+   "demos/healing/Demo15_FamilyCall/media/cover/stamp.json": "73e6cad7ba38c0f26998a19909b318c25ea842f0"
   },
-  "thumb": "e1d86f2db04a69f99fb81dd1c5c8adcfcf7cfdc3"
+  "thumb": "4470bbb5697ae6f52c0f4d54194c52549be62654"
  },
  "zh": {
   "inputs": {
-   "demos/healing/Demo15_FamilyCall/media/cover/stamp.json": "0cdee20e1b52b20fb28d61c974e6806fcd5b6e1c"
+   "demos/healing/Demo15_FamilyCall/media/cover/stamp.json": "73e6cad7ba38c0f26998a19909b318c25ea842f0"
   },
-  "thumb": "9425832fd54033af92a51606726ebb973916066a"
+  "thumb": "d70cdcc507ed88a13ba2ed5cfa65bfc589d0fe3c"
  }
 }

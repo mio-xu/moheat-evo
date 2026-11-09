@@ -9,25 +9,25 @@
   {
    "kind": "tag",
    "text": {
-    "en": "🏕 live stream",
-    "ja": "🏕 ライブ配信",
-    "zh": "🏕 直播"
+    "en": "live stream",
+    "ja": "ライブ配信",
+    "zh": "直播"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "🔥 campfire",
-    "ja": "🔥 焚き火",
-    "zh": "🔥 篝火"
+    "en": "campfire",
+    "ja": "焚き火",
+    "zh": "篝火"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "🌬 lake wind",
-    "ja": "🌬 湖の風",
-    "zh": "🌬 湖风"
+    "en": "lake wind",
+    "ja": "湖の風",
+    "zh": "湖风"
    }
   }
  ],

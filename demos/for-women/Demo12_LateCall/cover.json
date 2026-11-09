@@ -14,25 +14,25 @@
   {
    "kind": "tag",
    "text": {
-    "en": "📞 late-night call",
-    "ja": "📞 深夜の電話",
-    "zh": "📞 深夜来电"
+    "en": "late-night call",
+    "ja": "深夜の電話",
+    "zh": "深夜来电"
    }
   },
   {
    "kind": "warm",
    "text": {
-    "en": "📱 phone at your ear",
-    "ja": "📱 スマホの耳・ぬくもり",
-    "zh": "📱 贴耳的手机"
+    "en": "phone at your ear",
+    "ja": "スマホの耳・ぬくもり",
+    "zh": "贴耳的手机"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "❄ snow outside the window",
-    "ja": "❄ 窓の外の雪",
-    "zh": "❄ 窗外的雪"
+    "en": "snow outside the window",
+    "ja": "窓の外の雪",
+    "zh": "窗外的雪"
    }
   }
  ],

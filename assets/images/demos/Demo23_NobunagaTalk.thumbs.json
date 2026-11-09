@@ -1,26 +1,26 @@
 {
  "base": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo23_NobunagaTalk/media/cover/stamp.json": "0c79cc9645606407ed1cbdc345c519e9fc55b2ce"
+   "demos/nobunaga-suntory/Demo23_NobunagaTalk/media/cover/stamp.json": "38786c2107b8b2111a3618d55be86570fdf4efee"
   },
-  "thumb": "6c224ef1b4abad1f460a592f01bc8833d2e34139"
+  "thumb": "b6e26842f58515d78ed8cf77eccbfd67cb2c6dbe"
  },
  "en": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo23_NobunagaTalk/media/cover/stamp.json": "0c79cc9645606407ed1cbdc345c519e9fc55b2ce"
+   "demos/nobunaga-suntory/Demo23_NobunagaTalk/media/cover/stamp.json": "38786c2107b8b2111a3618d55be86570fdf4efee"
   },
-  "thumb": "6c224ef1b4abad1f460a592f01bc8833d2e34139"
+  "thumb": "b6e26842f58515d78ed8cf77eccbfd67cb2c6dbe"
  },
  "ja": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo23_NobunagaTalk/media/cover/stamp.json": "0c79cc9645606407ed1cbdc345c519e9fc55b2ce"
+   "demos/nobunaga-suntory/Demo23_NobunagaTalk/media/cover/stamp.json": "38786c2107b8b2111a3618d55be86570fdf4efee"
   },
-  "thumb": "cb404f8ee649482b0e2565e1b78da05da52fab23"
+  "thumb": "dd60e123fa873ba43a2e950429c240876a5bbc55"
  },
  "zh": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo23_NobunagaTalk/media/cover/stamp.json": "0c79cc9645606407ed1cbdc345c519e9fc55b2ce"
+   "demos/nobunaga-suntory/Demo23_NobunagaTalk/media/cover/stamp.json": "38786c2107b8b2111a3618d55be86570fdf4efee"
   },
-  "thumb": "494f9cf7e68d98419220e0752c1f0c1351af50bc"
+  "thumb": "c99c3d1be9ca5981d2e1ae8f7fad6f8adb6a8044"
  }
 }

@@ -9,17 +9,17 @@
   {
    "kind": "warm",
    "text": {
-    "en": "🔥 vocal · bass · drums",
-    "ja": "🔥 ボーカル・ベース・ドラム",
-    "zh": "🔥 人声・贝斯・鼓"
+    "en": "vocal · bass · drums",
+    "ja": "ボーカル・ベース・ドラム",
+    "zh": "人声・贝斯・鼓"
    }
   },
   {
    "kind": "cool",
    "text": {
-    "en": "❄ bright highs · ice FX",
-    "ja": "❄ きらめく高音・氷のエフェクト",
-    "zh": "❄ 明亮高音・冰霜音效"
+    "en": "bright highs · ice FX",
+    "ja": "きらめく高音・氷のエフェクト",
+    "zh": "明亮高音・冰霜音效"
    }
   }
  ],
