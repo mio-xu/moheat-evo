@@ -49,19 +49,31 @@ window.MOHEAT_L10N = {
    "ぼんちゃん・ゆらり ElevenLabs": "ぼんちゃん・ゆらり ElevenLabs",
    "Live (DUAL): a ghost chills the ear on its side before you see it; turn the warm lantern that way and it flees. From behind, both ears go cold; in the dark storehouse your ears are all you have. Yurari whispers cold.": "实时（DUAL）：鬼靠近时，它那一侧的耳朵先变凉；把温暖的灯笼转向那边，鬼就逃走了。从背后来时两只耳朵一起变凉，黑暗的土仓里全靠耳朵判断方向；悠悠的耳语是凉的。",
    "Original characters · voices ElevenLabs · art OpenAI gpt-image · layered stills": "原创角色 · 配音 ElevenLabs · 美术 OpenAI gpt-image · 分层静帧",
-   "ASMR · Game": "ASMR · 游戏"
+   "ASMR · Game": "ASMR · 游戏",
+   "ひだり": "左",
+   "うしろ": "后面",
+   "みぎ": "右",
+   "あっちいけ！": "走开！"
   },
   "ja": {
    "ぼんちゃん・ゆらり ElevenLabs": "ぼんちゃん・ゆらり ElevenLabs",
    "Live (DUAL): a ghost chills the ear on its side before you see it; turn the warm lantern that way and it flees. From behind, both ears go cold; in the dark storehouse your ears are all you have. Yurari whispers cold.": "リアルタイム（DUAL）：おばけが近づくと、その側の耳がひんやり。あたたかい提灯をそちらへ向けると逃げていきます。うしろから来ると両耳が冷たく、まっくらな土蔵は耳だけが頼り。ゆらりのささやきは、ひんやりしています。",
    "Original characters · voices ElevenLabs · art OpenAI gpt-image · layered stills": "オリジナルキャラクター · 声 ElevenLabs · 絵 OpenAI gpt-image · レイヤー静止画",
-   "ASMR · Game": "ASMR · ゲーム"
+   "ASMR · Game": "ASMR · ゲーム",
+   "ひだり": "ひだり",
+   "うしろ": "うしろ",
+   "みぎ": "みぎ",
+   "あっちいけ！": "あっちいけ！"
   },
   "en": {
    "ぼんちゃん・ゆらり ElevenLabs": "Bon-chan · Yurari — ElevenLabs",
    "Live (DUAL): a ghost chills the ear on its side before you see it; turn the warm lantern that way and it flees. From behind, both ears go cold; in the dark storehouse your ears are all you have. Yurari whispers cold.": "Live (DUAL): a ghost chills the ear on its side before you see it; turn the warm lantern that way and it flees. From behind, both ears go cold; in the dark storehouse your ears are all you have. Yurari whispers cold.",
    "Original characters · voices ElevenLabs · art OpenAI gpt-image · layered stills": "Original characters · voices ElevenLabs · art OpenAI gpt-image · layered stills",
-   "ASMR · Game": "ASMR · Game"
+   "ASMR · Game": "ASMR · Game",
+   "ひだり": "Left",
+   "うしろ": "Behind",
+   "みぎ": "Right",
+   "あっちいけ！": "Go away!"
   }
  },
  "names": {
