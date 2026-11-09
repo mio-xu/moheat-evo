@@ -18,7 +18,7 @@ window.TALK = (() => {
     { id: 'tea', ja: '岐阜城・茶室の囲炉裏', en: 'The tea room by the hearth', short: '🍵 茶室', bg: '../_kit/places/d9_bg_tearoom.webp',
       place: '岐阜城の茶室。正面の囲炉裏で炭が赤く熾り、茶釜が湯気を立てている。丸窓の外は夕焼け。背後の障子からすきま風。',
       topics: ['名物の茶器（つくも茄子など）を集めている話', '茶の湯で家臣に褒美を与える「御茶湯御政道」', '客人に一服点てようという誘い', '戦の合間の静けさ', '未来の世でも茶を飲むのかという好奇心'],
-      amb: [{ az: 0, k: 'h', s: .55, icon: '🔥', ja: '囲炉裏' }, { az: -2.4, k: 'c', s: .22, icon: '🌬', ja: 'すきま風' }],
+      amb: [{ az: 0, k: 'h', s: .34, icon: '🔥', ja: '囲炉裏' }, { az: -2.4, k: 'c', s: .22, icon: '🌬', ja: 'すきま風' }],
       chips: [['🔥', '囲炉裏', 'hearth', 'h'], ['🍵', '茶', 'tea', 'h'], ['🌬', 'すきま風', 'draught', 'k']],
       note: 'DUAL: a voice warms the ear it speaks at, with its loudness, strongest right at your ear. The hearth in front is warm, the draught through the shoji behind you is cool.',
       sound: { fire: .5, kettle: .35 }, events: { fire: { az: 0, s: .8, ja: '炭を足して火が強くなる（正面から暖かい）' }, gust: { az: -2.4, s: .75, ja: '背後の障子からすきま風（後ろ左から冷たい）' } } },

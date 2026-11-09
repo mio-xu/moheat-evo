@@ -91,13 +91,14 @@
 
   // ---------------------------------------------------------------- side panel log + subtitles
   const logEl = $('log');
-  function log(cls, who, text) { const li = document.createElement('li'); li.className = cls; li.innerHTML = who ? `<b>${who}</b>` : ''; li.append(document.createTextNode(text)); logEl.append(li); logEl.scrollTop = logEl.scrollHeight; }
+  function log(cls, who, text) { const li = document.createElement('li'); li.className = cls; li.dataset.mshown = '1'; li.innerHTML = who ? `<b>${who}</b>` : ''; li.append(document.createTextNode(text)); logEl.append(li); logEl.scrollTop = logEl.scrollHeight; }
   function sub(who, ja, en, cls = '') { const w = $('subWho'); w.textContent = who || ''; w.className = `who ${cls}`; $('subJa').textContent = ja || ''; $('subEn').textContent = en || ''; $('subs').classList.toggle('show', !!ja); }
   function setPhase(p) {
     if (!S) return; S.phase = p;
     const turn = $('turn'), name = S.cast.map((c) => T.CAST[c].name.slice(-2)).join('と');
     turn.classList.toggle('show', p === 'listen' || p === 'think' || p === 'connect');
     turn.classList.toggle('think', p !== 'listen');
+    delete $('turnText').dataset.mshown;
     if (p === 'listen') { $('turnK').textContent = 'あなたの番 · Your turn'; $('turnText').textContent = '話しかけてください · Say something'; $('turnText').className = 'interim'; $('typeIn').value = ''; }
     if (p === 'think') { $('turnK').textContent = `${name} · thinking`; $('turnText').textContent = '考え中'; $('turnText').className = ''; }
     if (p === 'connect') { $('turnK').textContent = 'Connecting'; $('turnText').textContent = '支度中'; $('turnText').className = ''; }
@@ -159,6 +160,7 @@
     if (Q.length) return kick();
     if (!turnDone) return;   // more lines are coming
     sub('', '', '');
+    if (S.byeAfter && !S.closing) { S.byeAfter = false; S.closing = true; return ask('close', '（そろそろ失礼します）'); }
     if (S.endAfter || S.closing) return finish(S.limitMsg ? 'limit' : 'bye');
     listen();
   }
@@ -199,7 +201,7 @@
     setPhase('listen'); heard = ''; interim = '';
     if (window.MoHeatPlay?.pure) {   // pure listening (shared/shell.js): your turn passes by itself — a short scripted reply of yours (in the
       const r = B.pureReply?.() || null, my = S;   // display language) is "typed" into the turn panel, then said; no mic, no recognition
-      const t = $('turnText'); let k = 0;
+      const t = $('turnText'); t.dataset.mshown = '1'; let k = 0;   // already in the viewer's language: not for subs.js
       const type = () => { if (S !== my || S.phase !== 'listen') return; if (!r) return submit(null);
         t.textContent = r.slice(0, ++k) + (k < r.length ? '▍' : ''); t.className = k < r.length ? 'interim' : ''; if (k < r.length) setTimeout(type, 55); else setTimeout(() => submit(r), 700); };
       setTimeout(type, 1400); return;
@@ -280,7 +282,10 @@
   }
   $('endBtn').addEventListener('click', () => {   // you leave: they say goodbye if they can, otherwise stop at once
     if (!S || S.done) return;
-    if (S.phase === 'listen' && !S.closing) { stopRec(); S.closing = true; ask('close', '（そろそろ失礼します）'); } else finish('bye');
+    if (S.closing) return finish('bye');
+    stopRec();
+    if (S.phase === 'listen') { S.closing = true; ask('close', '（そろそろ失礼します）'); }
+    else { Q.length = 0; S.byeAfter = true; }   // while someone is speaking: that line ends, the rest is dropped, then they say goodbye
   });
 
   // ---------------------------------------------------------------- per frame

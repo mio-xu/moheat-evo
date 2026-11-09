@@ -88,7 +88,7 @@
     [BTN, ':scope > b:not(.one)', ':scope > span:not(.one)', 'b', ''],
     ['.ix-card', ':scope > .ix-line:not(.one)', ':scope > .ix-en:not(.one)', 'div', 'ix-line'],
   ];
-  const pick = (jaT, enT) => (lang === 'ja' ? jaT : lang === 'en' || lang === 'off' ? enT || jaT : tr(jaT) || enT || jaT);
+  const pick = (jaT, enT) => (lang === 'ja' ? jaT : lang === 'en' || lang === 'off' ? enT || jaT : tr(jaT, lang, jaT !== enT) || enT || jaT);   // ja === en: already in the viewer's language (a typed / auto reply), nothing to translate
   function pair(c, jaSel, enSel, tag, cls) {
     const ja = c.querySelector(jaSel), en = c.querySelector(enSel);
     if (!ja && !en) return;
