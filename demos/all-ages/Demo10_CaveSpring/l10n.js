@@ -105,7 +105,6 @@ window.MOHEAT_L10N = {
    "▶ はじめる · Start": "▶ 开始",
    "🎧 Left / Right check": "🎧 左右声道检查",
    "Headphones on · mic optional (blow to fan the fire / blow out candles; or hold the Blow button) · connect MoHeat Evo to feel where the heat and the cold are": "请戴上耳机 · 麦克风可选（吹气扇旺火焰 / 吹灭蜡烛；也可长按“吹气”按钮） · 连接 MoHeat Evo，感受冷热所在的方位",
-   "🎉 クリア！ ひみつの泉、はっけん": "🎉 通关！发现了秘密之泉",
    "ASMR Game · Hidden Spring": "ASMR 游戏 · 秘密之泉",
    "Mountain hut": "山间小屋",
    "Cave mouth": "洞口",
@@ -115,9 +114,7 @@ window.MOHEAT_L10N = {
    "Use the microphone for blowing (level only, nothing recorded)": "用麦克风吹气（只读取音量，不录音）",
    "Straw": "干草",
    "Flint": "打火石",
-   "Cave · fork": "洞穴 · 岔路",
-   "🎉 クリア！ ひみつの泉、はっけん · Cleared in": "🎉 通关！发现了秘密泉水 · 用时",
-   "クリア！ ひみつの泉、はっけん": "通关！发现了秘密泉水"
+   "Cave · fork": "洞穴 · 岔路"
   },
   "ja": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · バイノーラルASMR × 温冷ハプティクス",
@@ -140,9 +137,7 @@ window.MOHEAT_L10N = {
    "Straw": "かれ草",
    "火打ち石": "火打ち石",
    "Flint": "火打ち石",
-   "Cave · fork": "洞くつ · 分かれ道",
-   "🎉 クリア！ ひみつの泉、はっけん · Cleared in": "🎉 クリア！ ひみつの泉、はっけん ·",
-   "クリア！ ひみつの泉、はっけん": "クリア！ ひみつの泉、はっけん"
+   "Cave · fork": "洞くつ · 分かれ道"
   },
   "en": {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · Binaural ASMR × Thermal Haptics",
@@ -154,7 +149,6 @@ window.MOHEAT_L10N = {
    "▶ はじめる · Start": "▶ Start",
    "🎧 Left / Right check": "🎧 Left / Right check",
    "Headphones on · mic optional (blow to fan the fire / blow out candles; or hold the Blow button) · connect MoHeat Evo to feel where the heat and the cold are": "Headphones on · mic optional (blow to fan the fire / blow out candles; or hold the Blow button) · connect MoHeat Evo to feel where the heat and the cold are",
-   "🎉 クリア！ ひみつの泉、はっけん": "🎉 Cleared! You found the hidden spring",
    "ASMR Game · Hidden Spring": "ASMR Game · Hidden Spring",
    "Mountain hut": "Mountain hut",
    "Cave mouth": "Cave mouth",
@@ -166,9 +160,7 @@ window.MOHEAT_L10N = {
    "Straw": "Straw",
    "火打ち石": "Flint",
    "Flint": "Flint",
-   "Cave · fork": "Cave · fork",
-   "🎉 クリア！ ひみつの泉、はっけん · Cleared in": "🎉 Cleared in",
-   "クリア！ ひみつの泉、はっけん": "Cleared! You found the hidden spring"
+   "Cave · fork": "Cave · fork"
   }
  },
  "names": {

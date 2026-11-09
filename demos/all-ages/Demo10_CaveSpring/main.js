@@ -615,7 +615,6 @@
     setTimeout(() => {
       S.started = false; stopOutput(); for (const L of Object.values(loops)) L.stop(); loops = {};
       bubble.classList.remove('show'); say = [];
-      const c = $('cleared'); c.hidden = false; c.textContent = `🎉 クリア！ ひみつの泉、はっけん · Cleared in ${fmt(S.clock)}`;
       $('startBtn').textContent = '↺ もう一度 · Play again';
       $('intro').classList.remove('hidden');
     }, 5000);
@@ -623,7 +622,7 @@
   function start() {
     SND.init(); ensureMic(); SND.loadVoices(Object.keys(window.KOHAKU_LINES || {}));
     const again = S.done;
-    if (again || S.started) { S = fresh(); initGate(); parts = []; pulses = []; busy = false; fadeEl.classList.remove('on'); $('cleared').hidden = true; }   // also a restart mid-game (the shell's chapter seek)
+    if (again || S.started) { S = fresh(); initGate(); parts = []; pulses = []; busy = false; fadeEl.classList.remove('on'); }   // also a restart mid-game (the shell's chapter seek)
     $('intro').classList.add('hidden'); S.started = true; setLoops(S.scene); renderInv(); renderGoal(); renderSteps();
     fox(again ? ['again', 'intro3'] : ['intro1', 'intro2', 'intro3'], true);
   }
