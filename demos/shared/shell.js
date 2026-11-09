@@ -160,7 +160,17 @@
   if (window.MoHeatDevice?.create) {
     const create = MoHeatDevice.create;
     MoHeatDevice.create = (...a) => { const inst = create(...a); const send = inst.send; devSend.add(send);
-      inst.send = (line) => (gate() || /^stop$/i.test(line) ? send(line) : undefined); return inst; };
+      // same ear, cold ↔ hot with one mode per ear: at least 0.15 s at zero in between (the films' rule, for every engine that sends the old form). DUAL drives cool and heat independently, so it needs none
+      const ears = { L: { p: '', t: 0 }, R: { p: '', t: 0 } }; let retry = 0;
+      inst.send = (line) => {
+        if (!gate() && !/^stop$/i.test(line)) return undefined;
+        real.ct(retry);
+        if (/^(stop|DUAL)/i.test(line)) { ears.L.p = ears.R.p = ''; return send(line); }
+        const now = real.now(); let held = false;
+        const out = line.replace(/\b([LR])([CH])(\d+)\b/g, (m, e, p, v) => { if (+v === 0) return m; const st = ears[e]; if (st.p && st.p !== p && now - st.t < 150) { held = true; return `${e}${p}0`; } st.p = p; st.t = now; return m; });
+        if (held) retry = real.st(() => inst.send(line), 160);
+        return send(out); };
+      return inst; };
   }
   const stopDevice = () => { SH.stops = (SH.stops || 0) + 1; devSend.forEach((s) => { try { s('stop'); } catch {} }); };
 
@@ -366,6 +376,8 @@
   .sh-veil.gone { opacity: 0; pointer-events: none; }
   .sh-veil i { width: 1.1em; height: 1.1em; margin-right: .6em; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: shspin .8s linear infinite; }
   @keyframes shspin { to { transform: rotate(1turn); } }
+  @media (max-width: 1100px), (pointer: coarse) { .sh-toast { top: auto !important; bottom: calc(env(safe-area-inset-bottom, 0px) + 8px); width: max-content; } }   /* phones and tablets: below the picture, never over it */
+  @media (max-height: 500px) { .sh-toast { bottom: 2px; padding: 3px 10px !important; font-size: 12px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 92vw !important; } }   /* phone landscape: a thin strip, one line */
   .sh-toast { position: fixed; left: 50%; top: calc(var(--fit-bar, 54px) + 10px); transform: translateX(-50%); z-index: 99; pointer-events: none; max-width: min(92vw, 560px); padding: 12px 16px; border-radius: 12px;
     background: #2a1620; color: #ffe9ee; border: 1px solid #ff7a90; font: 500 14px/1.4 system-ui, sans-serif; box-shadow: 0 8px 30px rgba(0,0,0,.4); }
   .sh-set { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin-top: 8px; font-size: 12px; }
