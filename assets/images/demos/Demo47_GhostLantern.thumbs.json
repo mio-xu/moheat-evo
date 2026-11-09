@@ -1,0 +1,26 @@
+{
+ "base": {
+  "inputs": {
+   "demos/all-ages/Demo47_GhostLantern/media/cover/stamp.json": "6f74d7b25f19316b99c433a55553afabf7180f53"
+  },
+  "thumb": "7d06652ec3afedb210b96a19b3587600672dec97"
+ },
+ "en": {
+  "inputs": {
+   "demos/all-ages/Demo47_GhostLantern/media/cover/stamp.json": "6f74d7b25f19316b99c433a55553afabf7180f53"
+  },
+  "thumb": "7d06652ec3afedb210b96a19b3587600672dec97"
+ },
+ "ja": {
+  "inputs": {
+   "demos/all-ages/Demo47_GhostLantern/media/cover/stamp.json": "6f74d7b25f19316b99c433a55553afabf7180f53"
+  },
+  "thumb": "60a5febd9e77244fd3a5e36fea5b414058798680"
+ },
+ "zh": {
+  "inputs": {
+   "demos/all-ages/Demo47_GhostLantern/media/cover/stamp.json": "6f74d7b25f19316b99c433a55553afabf7180f53"
+  },
+  "thumb": "5fa6f9a1986bdc599361eeb559602dc4b5fe9e0e"
+ }
+}

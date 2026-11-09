@@ -1,0 +1,11 @@
+/* ひやっと！おばけやしきの ちょうちんばん — palette + game controls (layout: ../../shared/story.css). */
+:root { --bg: #100f1e; --panel: #181828; --panel-2: #232338; --line: #454565; --gold: #ffd08a; --st-hi: 255, 196, 120; --st-on: 214, 110, 40; --st-sub: 14, 12, 28; --st-bar: linear-gradient(90deg, #ffae60, #ffe2a0); }
+.bar { background: #0c0b18; }
+.brand span { color: #ffb86b; }
+.btn.primary { background: linear-gradient(135deg, #d9702b, #ffc060); }
+.subs .who.wB { color: #ffd08a; } .subs .who.wY { color: #d6dcff; }
+#lanternCtl .ch { min-width: 11cqw; min-height: 44px; }
+#sweets { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+.sweet { position: absolute; width: max(44px, 5cqw); aspect-ratio: 1; margin: -2.5cqw 0 0 -2.5cqw; border-radius: 50%; border: 0; cursor: pointer; pointer-events: auto;
+  background: radial-gradient(circle at 35% 30%, #fff5d0 0 10%, #ffb060 34%, #e0553b 72%); box-shadow: 0 0 1.4cqw rgba(255,180,90,.8); animation: sw-bob 1.2s ease-in-out infinite; touch-action: none; }
+@keyframes sw-bob { 50% { transform: translateY(-.5cqw); } }
