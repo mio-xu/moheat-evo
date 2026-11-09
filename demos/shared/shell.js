@@ -93,6 +93,7 @@
     subs: ['Subtitles', '字幕', '字幕'], off: ['off', 'オフ', '关'], motion: ['Reduce motion', '動きを減らす', '减少动态'],
     devLost: ['Device disconnected — plug it back in and press Connect.', 'デバイスが切断されました — つなぎ直して Connect を押してください。', '设备已断开 — 请重新连接后点 Connect。'],
     micDenied: ['Microphone blocked — answers work by tapping; allow the mic in the address bar to speak.', 'マイクが使えません — タップで答えられます。話すにはアドレスバーで許可してください。', '麦克风被拒绝 — 可以点按回答；要用声音请在地址栏允许麦克风。'],
+    micOff: ['Microphone is off. You can tap to answer.', 'マイクがオフです。タップで答えられます。', '麦克风未开启，可以点按回答。'],
     devErr: ['Could not open MoHeat Evo — unplug it, plug it back in and press Connect.', 'MoHeat Evo を開けませんでした — 抜き差ししてから Connect を押してください。', '无法打开 MoHeat Evo — 请重新插拔后点 Connect。'],
     loadFail: ['Some files did not load — check the connection and reload the page.', '一部のファイルを読み込めませんでした — 接続を確かめて再読み込みしてください。', '部分文件加载失败 — 请检查网络后刷新页面。'],
   };
@@ -413,6 +414,7 @@
   };
   let toastT = 0;
   const toast = (k) => { let el = document.querySelector('.sh-toast'); if (!el) { el = document.createElement('div'); el.className = 'sh-toast'; el.setAttribute('role', 'alert'); document.body.appendChild(el); }
+  SH.toast = toast;   // voice.js: microphone off
     el.textContent = t(k); el.hidden = false; real.ct(toastT); toastT = real.st(() => { el.hidden = true; }, 4500); };   // top of the page, never over a control, gone after 4.5 s
   const setSubs = (v) => { LS.set('subs', v); document.documentElement.dataset.subs = v; paint(); };
   const setMotion = (v) => { Play.reduced = v; LS.set('reduce', v); document.documentElement.classList.toggle('reduce-motion', v); paint(); dispatchEvent(new CustomEvent('moheat:motion', { detail: v })); };

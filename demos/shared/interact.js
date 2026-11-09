@@ -238,6 +238,7 @@
   const unlisten = () => { vs?.stop(); vs = null; };
   function listen(g) {
     unlisten();
+    if (V && !V.supported) V.micOff?.();   // no speech recognition here: say so once
     if (!V || !V.supported || g.kind === 'blow') return;
     const [ja, en] = say(g), anchor = () => (card ? [card] : []);
     if (g.kind === 'choice') vs = V.listen({ phrases: g.options.map((o) => o.split(/\s[·・]\s/)), anchor, onHit: (i) => { vs = null; finish(true, i); } });

@@ -142,7 +142,7 @@
       }
     };
     r.onerror = (e) => {
-      if (e.error === 'not-allowed' || e.error === 'service-not-allowed' || e.error === 'language-not-supported') { denied = true; if (sess) idle(); hidePill(); }
+      if (e.error === 'not-allowed' || e.error === 'service-not-allowed' || e.error === 'language-not-supported') { denied = true; hidePill(); if (sess) micOff(); }
       else if (e.error === 'network' && ++netFails > 3) { denied = true; hidePill(); }
     };
     r.onend = () => { recOn = false; if (sess && !sess.done && active()) setTimeout(startRec, 250); };
@@ -162,19 +162,16 @@
     end();
     sess = { ...o, preps: o.phrases.map((ph) => expand(ph).flatMap(prep)), fails: 0, done: false, anchor: o.anchor || (() => []) };
     if (OFF || pure()) { sess = null; return null; }
-    if (!SR) { notice(o); return sess; }
+    if (denied) { micOff(); return sess; }   // no speech recognition, or the microphone refused: everything stays a tap
     idle(); startRec();
     return sess;
   }
   // every answer also matches its Chinese and the paraphrases in <demo>/subs_zh.js (MOHEAT_VOICE): close in meaning = a pass
   const expand = (ph) => { const out = [...ph]; for (const p of ph) for (const v of (window.MoHeatSub?.voice(p) || [])) if (!out.includes(v)) out.push(v); return out; };
   function end() { if (sess) { sess.done = true; sess = null; } stopRec(); hidePill(); }
+  // once per page load, when the first answer appears (interactive only: begin() returns earlier in pure mode, ?auto, ?cover, ?render and the home-page player)
   let noticed = false;
-  function notice(o) {   // once: this browser has no speech recognition
-    if (noticed || OFF) return; noticed = true;
-    const els = (o.anchor || (() => []))(); showPill('off', T('🎙 音声入力は Chrome / Edge / Safari で', '🎙 Voice input: Chrome, Edge or Safari', '🎙 语音输入请用 Chrome / Edge / Safari'), els);
-    pillTimer = setTimeout(hidePill, 4500);
-  }
+  function micOff() { if (noticed || OFF || pure()) return; noticed = true; window.MoHeatShell?.toast?.('micOff'); }
   function judge(alts, final) {
     const s = sess, heard = alts[0].trim();
     s.onHeard?.(heard, final);
@@ -268,7 +265,7 @@
 
   // ---------------------------------------------------------------- API
   const API = {
-    supported: !!SR && !OFF,
+    supported: !!SR && !OFF, micOff,
     get enabled() { return enabled; }, setEnabled,
     /** listening for this turn right now (use it to skip a level-only fallback) */
     judging: () => !!(sess && !sess.done && active() && recOn),
