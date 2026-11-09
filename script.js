@@ -187,3 +187,13 @@ contactForm.addEventListener('input', (e) => e.target.closest('.cf-field')?.clas
 document.querySelectorAll('[data-play]').forEach((btn) => btn.addEventListener('click', () => {
   document.querySelector(`.vid-card[data-src*="${btn.dataset.play}"]`)?.click();
 }));
+
+// Looping visuals: play only while on screen; reduced-motion keeps the poster.
+(function(){
+  const vids = document.querySelectorAll('video.loop');
+  if(!vids.length || matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  const vo = new IntersectionObserver((es)=>es.forEach(e=>{
+    if(e.isIntersecting){ const p=e.target.play(); if(p&&p.catch) p.catch(()=>{}); } else e.target.pause();
+  }),{rootMargin:'120px'});
+  vids.forEach(v=>{ v.muted=true; vo.observe(v); });
+})();
