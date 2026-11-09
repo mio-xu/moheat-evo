@@ -52,6 +52,7 @@ const out = { pages: pages.map((p) => path.relative(ROOT, p)), fails: [] };
       await sleep(1500);
       const e = await ev(EMBED_CHECK), bad = !e ? ['no result'] : [!e.u2on && 'UI v2 not on', !e.pic && 'cover image not loaded', !e.picVis && 'cover image hidden', e.introVis && 'old intro showing', !e.play && 'no play button', e.buttons !== 1 && `${e.buttons} visible buttons (want 1)`, e.chrome && 'the device / page bar shows', e.scroll && 'scrolls inside the iframe', e.hits.includes(false) && `elementFromPoint outside the player (${e.hits})`].filter(Boolean);
       if (bad.length) out.fails.push(`${p}${q} @${size.join('×')}: ${bad.join('; ')}`);
+      continue;   // the UI v2 cover covers the stage until play; the hidden-picture rule below is for ?render
     }
     if (EXPORT) {
       if (r.picture.length || r.bigHidden || (r.kids && r.hidden.length === r.kids)) out.fails.push(`${p}${q}: stage hidden, sound only (hidden: ${r.hidden.slice(0, 4).join(', ')}${r.u2 ? '; <html> still has data-u2' : ''}): shell.js must drop data-u2 when it skips UI v2`);
