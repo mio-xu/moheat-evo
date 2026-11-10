@@ -12,7 +12,13 @@ window.TALK_BRAIN = (() => {
   const ZH = (window.MOHEAT_ZH = window.MOHEAT_ZH || {});
   const all = [...flat(D.bridges), ...Object.values(D.scenes).flatMap((p) => [...p.beats.flatMap((b) => b.lines), ...flat(p.bridges)])];
   for (const l of all) if (l.ja && l.zh) ZH[strip(l.ja)] = l.zh;
-  const rx = (list) => list.map(([k, re]) => [k, new RegExp(re, 'iu')]);
+  // 한국어 (2026-11-11): Korean words per topic key, added to the ja / en / zh regexes when the subtitles are Korean
+  const KO = { leave: '이만 가|실례하겠|돌아가|안녕히|잘 있어|가야 해', no: '^(아니|아뇨)|아니에요|아니요|싫어|별로|아직|몰라|안 좋아|없어요',
+    yes: '^(네|예|응|그래|맞아|좋아)|물론|꼭|좋아해|알아요|유명', tea: '차를|차가 맛|녹차|말차|홍차', sake: '술|맥주|와인|위스키|마셔|마시',
+    tenka: '천하|전쟁|싸움|통일|영지|땅', warm: '추워|춥|따뜻|불|난로|에어컨|히터|고타쓰|더워', future: '미래|현대|스마트폰|핸드폰|전화|전기|인터넷|로봇|자동차|비행기|AI',
+    praise: '고마|감사|대단|멋있|멋지|맛있|훌륭|최고|좋네|좋아요|사랑', view: '경치|풍경|강|산|노을|석양|예쁘|아름다', sweet: '별사탕|사탕|단 거|달콤|과자|케이크|초콜릿',
+    food: '꼬치|닭|먹|맛있|요리|밥|라멘|초밥', snow: '눈이|눈 |겨울|함박눈', whisky: '위스키|하이볼|통|온더록|물 탄', mist: '안개|아침', moon: '달이|달빛|보름달|달을', dream: '바다|배|꿈|남만|외국|세계|여행' };
+  const rx = (list) => list.map(([k, re]) => [k, new RegExp(window.MoHeatSub?.lang === 'ko' && KO[k] ? `${re}|${KO[k]}` : re, 'iu')]);
 
   let E = null, i = 0, used = new Set(), P = null, beats = [], TOPICS = [];
   const buf = {};   // id → Promise<AudioBuffer|null>
@@ -77,9 +83,9 @@ window.TALK_BRAIN = (() => {
     },
     // pure listening: what "you" say on your turn (display language) — yes on a yes / no question, else a short nudge to go on
     pureReply() {
-      const b = beats[i], L = window.MoHeatSub?.lang || 'en', k = L === 'ja' ? 0 : L === 'zh' ? 2 : 1;
-      if (b && b.ask === 'yn') return ['はい、もちろん', 'Yes, of course', '嗯，当然'][k];
-      const R = [['なるほど…', 'I see…', '原来如此…'], ['もっと聞かせてください', 'Please, tell me more', '再多讲一点吧'], ['ええ、いい話ですね', 'What a lovely story', '真是个好故事'], ['ふふ、それで？', 'Heh, and then?', '呵呵，然后呢？']];
+      const b = beats[i], L = window.MoHeatSub?.lang || 'en', k = L === 'ja' ? 0 : L === 'zh' ? 2 : L === 'ko' ? 3 : 1;
+      if (b && b.ask === 'yn') return ['はい、もちろん', 'Yes, of course', '嗯，当然', '네, 물론이죠'][k];
+      const R = [['なるほど…', 'I see…', '原来如此…', '그렇군요…'], ['もっと聞かせてください', 'Please, tell me more', '再多讲一点吧', '더 들려주세요'], ['ええ、いい話ですね', 'What a lovely story', '真是个好故事', '네, 좋은 이야기네요'], ['ふふ、それで？', 'Heh, and then?', '呵呵，然后呢？', '후후, 그래서요?']];
       return R[i % R.length][k];
     },
     voice: (it) => (it.id ? fetchVoice(it.id) : Promise.resolve(null)),

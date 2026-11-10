@@ -1,25 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/for-men/Demo43_BlizzardInn/media/cover/stamp.json": "2fceffbd99620140c55a6ed589cf48b5ace2e2ef"
+   "demos/for-men/Demo43_BlizzardInn/media/cover/stamp.json": "5061f333ac9f7d743f25493639524a59705cd4de"
   },
   "thumb": "a8a30b1fc182021464033143f192156679674924"
  },
  "en": {
   "inputs": {
-   "demos/for-men/Demo43_BlizzardInn/media/cover/stamp.json": "2fceffbd99620140c55a6ed589cf48b5ace2e2ef"
+   "demos/for-men/Demo43_BlizzardInn/media/cover/stamp.json": "5061f333ac9f7d743f25493639524a59705cd4de"
   },
   "thumb": "a8a30b1fc182021464033143f192156679674924"
  },
  "ja": {
   "inputs": {
-   "demos/for-men/Demo43_BlizzardInn/media/cover/stamp.json": "2fceffbd99620140c55a6ed589cf48b5ace2e2ef"
+   "demos/for-men/Demo43_BlizzardInn/media/cover/stamp.json": "5061f333ac9f7d743f25493639524a59705cd4de"
   },
   "thumb": "3bcbb27e1632de60e763b504ef5b9bc325e781e0"
  },
+ "ko": {
+  "inputs": {
+   "demos/for-men/Demo43_BlizzardInn/media/cover/stamp.json": "5061f333ac9f7d743f25493639524a59705cd4de"
+  },
+  "thumb": "927c8e01cfcd66a470fa812041712931c0fb669a"
+ },
  "zh": {
   "inputs": {
-   "demos/for-men/Demo43_BlizzardInn/media/cover/stamp.json": "2fceffbd99620140c55a6ed589cf48b5ace2e2ef"
+   "demos/for-men/Demo43_BlizzardInn/media/cover/stamp.json": "5061f333ac9f7d743f25493639524a59705cd4de"
   },
   "thumb": "458657386d819d305a1aadeb5ab3217cf2c7e077"
  }

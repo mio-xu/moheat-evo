@@ -114,14 +114,14 @@
   const Q = [];
   const strip = (s) => s.replace(/\[[^\]]*\]/g, '').replace(/\s+/g, ' ').trim();
   // the side-panel transcript in the display language (shared/subs.js): ja as written, en from the line, zh from l10n / MOHEAT_ZH
-  const shown = (ja, en) => { const l = window.MoHeatSub?.lang || 'en'; return l === 'ja' ? ja : l === 'zh' ? (window.MoHeatSub.tr(ja, 'zh', false) || en || ja) : (en || ja); };
+  const shown = (ja, en) => { const l = window.MoHeatSub?.lang || 'en'; return l === 'ja' ? ja : l === 'zh' || l === 'ko' ? (window.MoHeatSub.tr(ja, l, false) || en || ja) : (en || ja); };
   function push(it) {   // { who, key?, ja (with [tag]), en, id? }
     if (!S || !strip(it.ja || '')) return;
     const who = S.cast.includes(it.who) ? it.who : S.cast[0], key = T.POS[it.key] ? it.key : S.ch[who].key;
     const tag = ((it.ja.match(/^\s*\[([^\]]+)\]/) || [])[1] || '').toLowerCase();
     const item = { ...it, who, key, tag };
     item.audio = B.voice(item);
-    Q.push(item); log(who, T.CAST[who].name.slice(-2), shown(strip(it.ja), it.en)); kick();
+    Q.push(item); log(who, (window.MoHeatSub?.name || String)(T.CAST[who].name.slice(-2)), shown(strip(it.ja), it.en)); kick();
   }
   function line(raw) {   // the live agent's text format: N|position|[tag] せりふ|English · @|gust · #END
     const l = raw.trim(); if (!l || !S) return;
@@ -234,7 +234,7 @@
   }
   $('typeIn').addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.isComposing && e.target.value.trim()) { submit(e.target.value.trim()); e.target.value = ''; } });
   // the typing box hint follows the subtitle language (one language at a time; QA 2026-11-10: the page wrote it bilingual)
-  const typeHint = () => { $('typeIn').placeholder = window.MoHeatSub?.pick?.({ ja: 'キーボードでも入力できます（Enter で送信）', en: 'Or type here, then press Enter', zh: '也可以在这里输入，按 Enter 发送' }) || 'Or type here, then press Enter'; };
+  const typeHint = () => { $('typeIn').placeholder = window.MoHeatSub?.pick?.({ ja: 'キーボードでも入力できます（Enter で送信）', en: 'Or type here, then press Enter', zh: '也可以在这里输入，按 Enter 发送', ko: '키보드로도 입력할 수 있어요 (Enter로 보내기)' }) || 'Or type here, then press Enter'; };
   typeHint(); addEventListener('moheat:sublang', typeHint); addEventListener('load', typeHint);
   async function mic() {   // only for the level bars (and the permission prompt); nothing is recorded
     try {
@@ -279,7 +279,7 @@
   // chapters for the shared control bar (shared/shell.js, DEMO_DESIGN_GUIDE §7.3): greeting → talk (your turns) → farewell.
   // Seeking: the farewell chapter = "leave now" (they say goodbye); a free talk cannot jump forward to a turn that has not happened.
   if (window.MoHeatShell) {
-    MoHeatShell.chapters = [{ label: 'Greeting', ja: 'ごあいさつ', en: 'Greeting', zh: '问候' }, { label: 'Talk', ja: '語らい', en: 'Talk', zh: '对谈' }, { label: 'Farewell', ja: 'おわかれ', en: 'Farewell', zh: '告别' }];
+    MoHeatShell.chapters = [{ label: 'Greeting', ja: 'ごあいさつ', en: 'Greeting', zh: '问候', ko: '인사' }, { label: 'Talk', ja: '語らい', en: 'Talk', zh: '对谈', ko: '이야기' }, { label: 'Farewell', ja: 'おわかれ', en: 'Farewell', zh: '告别', ko: '작별' }];
     MoHeatShell.current = () => (!S ? 0 : S.closing || S.done || S.phase === 'end' ? 2 : S.talkStart || S.silent || logEl.querySelector('li.you') ? 1 : S.phase === 'listen' ? 1 : 0);
     MoHeatShell.seek = (i) => { if (i === 2) $('endBtn').click(); };
   }

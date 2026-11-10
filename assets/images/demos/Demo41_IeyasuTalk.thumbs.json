@@ -1,25 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo41_IeyasuTalk/media/cover/stamp.json": "1d3baea0a126a7b40eaafea3711fbb3f3c1bea00"
+   "demos/nobunaga-suntory/Demo41_IeyasuTalk/media/cover/stamp.json": "1a0a2d93ec5bd12c820e15b01012331245c59475"
   },
   "thumb": "f4f22749bbf7d1dff690e609df2df189a8765690"
  },
  "en": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo41_IeyasuTalk/media/cover/stamp.json": "1d3baea0a126a7b40eaafea3711fbb3f3c1bea00"
+   "demos/nobunaga-suntory/Demo41_IeyasuTalk/media/cover/stamp.json": "1a0a2d93ec5bd12c820e15b01012331245c59475"
   },
   "thumb": "f4f22749bbf7d1dff690e609df2df189a8765690"
  },
  "ja": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo41_IeyasuTalk/media/cover/stamp.json": "1d3baea0a126a7b40eaafea3711fbb3f3c1bea00"
+   "demos/nobunaga-suntory/Demo41_IeyasuTalk/media/cover/stamp.json": "1a0a2d93ec5bd12c820e15b01012331245c59475"
   },
   "thumb": "2ad89c12bf85e5f49c94315a9dabacbb76900d94"
  },
+ "ko": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo41_IeyasuTalk/media/cover/stamp.json": "1a0a2d93ec5bd12c820e15b01012331245c59475"
+  },
+  "thumb": "f979f71de8c94003f94410c9a7ef73dbc04f55cf"
+ },
  "zh": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo41_IeyasuTalk/media/cover/stamp.json": "1d3baea0a126a7b40eaafea3711fbb3f3c1bea00"
+   "demos/nobunaga-suntory/Demo41_IeyasuTalk/media/cover/stamp.json": "1a0a2d93ec5bd12c820e15b01012331245c59475"
   },
   "thumb": "81febf278cf14c51377bff2a61870050c52c9d8d"
  }
