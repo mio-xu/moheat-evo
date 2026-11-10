@@ -79,7 +79,7 @@
   // the taiko match: tap 「ドン！」 as fast as you can for 10 s; she always ends close to your score (no voice: it is a speed game)
   function taikoGame(sec = 10) {
     return new Promise((res) => {
-      actEl.innerHTML = `<button class="act-btn tapper"><i>🥁</i><b>ドン！（連打）</b><span>Don! (tap fast)</span></button>`; actEl.classList.add('show');
+      actEl.innerHTML = `<button class="act-btn tapper" data-no-voice><i>🥁</i><b>ドン！（連打）</b><span>Don! (tap fast)</span></button>`; actEl.classList.add('show');
       const b = actEl.querySelector('button'); const t0 = performance.now(); S.tap = { you: 0, her: 0, left: sec };
       const hit = (e) => { e?.preventDefault?.(); if (!S.tap) return; S.tap.you++; S.tap.hitT = performance.now(); SND.fx.don(); };
       b.addEventListener('pointerdown', hit); const kd = (e) => { if (e.code === 'Space' || e.code === 'Enter') hit(e); }; addEventListener('keydown', kd);

@@ -233,6 +233,9 @@
     ask(text ? 'user' : 'silent', text || '');
   }
   $('typeIn').addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.isComposing && e.target.value.trim()) { submit(e.target.value.trim()); e.target.value = ''; } });
+  // the typing box hint follows the subtitle language (one language at a time; QA 2026-11-10: the page wrote it bilingual)
+  const typeHint = () => { $('typeIn').placeholder = window.MoHeatSub?.pick?.({ ja: 'キーボードでも入力できます（Enter で送信）', en: 'Or type here, then press Enter', zh: '也可以在这里输入，按 Enter 发送' }) || 'Or type here, then press Enter'; };
+  typeHint(); addEventListener('moheat:sublang', typeHint); addEventListener('load', typeHint);
   async function mic() {   // only for the level bars (and the permission prompt); nothing is recorded
     try {
       micStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });

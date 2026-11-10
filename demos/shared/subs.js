@@ -85,7 +85,7 @@
   const BTN = '.ch, .act-btn, .chip-c, #micGate button, .toast, #toast, .hud-goal, #goal, .coach';
   const KINDS = [   // [containers, ja, en, tag of .one, classes of .one]
     ['#subs .line', ':scope > .ja:not(.one)', ':scope > .en:not(.one)', null, 'ja'],
-    ['#bubble, .bubble', ':scope > b:not(.one)', ':scope > span:not(.one)', 'b', ''],
+    ['#bubble, .bubble, .mic-gate .say', ':scope > b:not(.one)', ':scope > span:not(.one)', 'b', ''],   // .mic-gate .say: a "say …" prompt (Demo12 / 15 / 16 / 20)
     [BTN, ':scope > b:not(.one)', ':scope > span:not(.one)', 'b', ''],
     ['.ix-card', ':scope > .ix-line:not(.one)', ':scope > .ix-en:not(.one)', 'div', 'ix-line'],
     ['.ask, .pop', ':scope > .ja:not(.one)', ':scope > .en:not(.one)', null, ''],   // a demo's own question line / popup (Demo04): paired spans
@@ -214,7 +214,7 @@
 
   // everything else on the page (top bar, side cards, notes, legend, demo switcher, device status, placeholders): a text node whose whole
   // text is in the dictionary (shared/l10n_common.js + the demo's l10n.js) shows that language; it is re-checked whenever the page changes it
-  const SKIP = 'script, style, .dnav, .dn-panel, #subs, #bubble, .bubble, #chatList, .one, .intro, .ix-card, .ix-done, .ask, .pop, #steps, #sceneTitle, .scene-title, #chatHint, .mono, [data-mshown], [data-morig], [data-voice], ' + BTN;
+  const SKIP = 'script, style, .dnav, .dn-panel, #subs, #bubble, .bubble, .mic-gate .say, #chatList, .one, .intro, .ix-card, .ix-done, .ask, .pop, #steps, #sceneTitle, .scene-title, #chatHint, .mono, [data-mshown], [data-morig], [data-voice], ' + BTN;
   const orig = new WeakMap(), shown = new WeakMap();
   function textNode(n) {
     const el = n.parentElement; if (!el || el.closest(SKIP)) return;
@@ -275,7 +275,7 @@
   const fontCss = () => Object.entries(LANGS).filter(([, i]) => i.font).map(([l, i]) => `html.msub-${l} :is(.one, [data-mlang="${l}"]) { font-family: ${i.font} !important; }`).join('\n  ');
   const css = document.createElement('style');
   css.textContent = `
-  html.msub #subs .line > :is(.ja, .en):not(.one), html.msub :is(#bubble, .bubble, ${BTN}) > :is(b, span):not(.one),
+  html.msub #subs .line > :is(.ja, .en):not(.one), html.msub :is(#bubble, .bubble, .mic-gate .say, ${BTN}) > :is(b, span):not(.one),
   html.msub .ix-card > :is(.ix-line, .ix-en):not(.one), html.msub :is(.ask, .pop) > :is(.ja, .en):not(.one), .msub-hide { display: none !important; }
   html.msub #subs .line > .one { display: block; }
   ${fontCss()}

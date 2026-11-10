@@ -3,7 +3,7 @@
 // listens only while it is your turn, and the words you say are matched against the answers on screen:
 //   · auto mode: any visible answer button — .ch (choices) · .act-btn (actions, not the press-and-hold ones) · .chip-c (chat /
 //     gift chips) · #micGate button ("say …" gates) · [data-voice] — is picked by saying it; the button is then clicked, so the
-//     demo's own code runs exactly as for a tap. Extra words for a button: data-voice="word|word".
+//     demo's own code runs exactly as for a tap. Extra words for a button: data-voice="word|word"; data-no-voice = tap only (no pill).
 //   · API (interact.js, Demo 1–9): MoHeatVoice.listen({ phrases: [[ja, en, …], …], single, lenient, anchor, onHit, onHeard }).
 // Every answer also matches its 中文 and the paraphrases in <demo>/subs_zh.js (MOHEAT_VOICE), so an answer close in meaning passes.
 // Matching: kana-folded character bigrams (said ⊇ answer → 1), a small kana ↔ kanji table, ordinals (「1番」「ふたつめ」, first /
@@ -59,6 +59,7 @@
     // letter pairs of a short answer turn up by chance in a long unrelated sentence (EN "help me" in a 50-letter remark):
     // the one-sided score shrinks with the length ratio, and Latin letters (few distinct pairs) count less → no match = ask again
     const len = Math.min(1, Math.sqrt(2.5 * (A.length + 1) / (B.length + 1))), latin = /^[a-z0-9]+$/.test(p);
+    if (latin && (n < 2 || n < A.length / 2)) return 0;   // Latin letters: one shared pair is chance ("banana" ~ "name" picked "Who are you…?", Demo43 2026-11-10)
     return Math.max(2 * n / (A.length + B.length), .85 * n / A.length * len * (latin ? .75 : 1));
   }
   // English: also word by word (stems + a few synonyms), so a paraphrase with the same key words passes
@@ -73,8 +74,9 @@
   const words = (t) => (String(t || '').toLowerCase().match(/[a-z']+/g) || []).filter((w) => !STOP.has(w)).map(stem);
   const GEN_W = new Set([...GEN_EN].map(stem));   // the same words after stem()
   const wsim = (heard, W) => { const H = new Set(words(heard)); if (!H.size || !W.length) return 0; const C = W.filter((w) => !GEN_W.has(w)), T = C.length ? C : W; const n = T.filter((w) => H.has(w)).length; return Math.min(1, n / T.length) * (T.length === 1 ? .8 : 1); };
-  const prep = (phrase) => { const core = norm(strip(phrase)); if (!core) return Object.assign([{ g: norm(phrase) }], { gen: true }); const out = variants(core).filter(Boolean), W = /[a-z]{2}/i.test(phrase) ? words(phrase) : []; if (W.length) out.push({ W }); return out; };
-  const score = (heard, preps) => { const h = norm(strip(heard)), raw = norm(heard); let s = 0; for (const p of preps) s = Math.max(s, typeof p === 'string' ? sim1(h, p) : p.g ? (raw === p.g ? 1 : 0) : wsim(heard, p.W)); return s; };
+  const prep = (phrase) => { if (!norm(phrase)) return [];   // an empty phrase (['', '']) matches nothing (it threw in wsim)
+    const core = norm(strip(phrase)); if (!core) return Object.assign([{ g: norm(phrase) }], { gen: true }); const out = variants(core).filter(Boolean), W = /[a-z]{2}/i.test(phrase) ? words(phrase) : []; if (W.length) out.push({ W }); return out; };
+  const score = (heard, preps) => { const h = norm(strip(heard)), raw = norm(heard); let s = 0; for (const p of preps) s = Math.max(s, typeof p === 'string' ? sim1(h, p) : p.g != null ? (raw === p.g ? 1 : 0) : p.W ? wsim(heard, p.W) : 0); return s; };
   const ORD = [/(^|[^0-9])1(番|ばん|つめ|つ目|個目|st)|一番目|一つ目|ひとつめ|いちばんめ|最初|さいしょ|first|ファースト|^いち$|^one$/,
     /(^|[^0-9])2(番|ばん|つめ|つ目|個目|nd)|二番|二つ目|ふたつめ|にばんめ|second|^に$|^two$/,
     /(^|[^0-9])3(番|ばん|つめ|つ目|個目|rd)|三番|三つ目|みっつめ|third/, /(^|[^0-9])4(番|ばん|つめ|つ目|個目|th)|四番|四つ目|よっつめ|fourth/];
@@ -166,11 +168,22 @@
   function idle() { if (sess) showPill(active() ? '' : 'off', active() ? hint(sess) : T('🎙 OFF · タップで声入力', '🎙 OFF · Tap for voice', '🎙 OFF · 点击开启语音'), sess.anchor()); }
   function begin(o) {
     end();
-    sess = { ...o, preps: o.phrases.map((ph) => { const l = expand(ph).map(prep), real = l.filter((x) => !x.gen); return (real.length ? real : l).flat(); }), /* an answer's generic-only spellings (data-voice "what") count only when the whole answer is generic, and then only said exactly */ fails: 0, done: false, anchor: o.anchor || (() => []) };
+    sess = { ...o, preps: o.phrases.map((ph, i) => { const l = expand(ph).filter(Boolean).map(prep), real = l.filter((x) => !x.gen);
+      // an answer's generic-only spellings (data-voice "what") count only when the whole answer is generic, and then only said exactly;
+      // the button's own label always counts (said exactly), even when it is a generic word ("❓ What?": lesson 2026-11-10)
+      const own = (o.labels?.[i] || []).map(prep).filter((x) => x.gen);
+      return [...(real.length ? real : l), ...own].flat(); }),
+      uniq: uniqGrams(o.phrases), fails: 0, done: false, anchor: o.anchor || (() => []) };
     if (OFF || pure()) { sess = null; return null; }
     if (denied) { micOff(); return sess; }   // no speech recognition, or the microphone refused: everything stays a tap
     idle(); startRec();
     return sess;
+  }
+  // per answer: the letter / kana pairs no other answer has, generic words kept ("Not every night!" vs "…Maybe every night":
+  // after stripping "not" both read "every night" and tie; the pairs that differ decide — Demo06, 2026-11-10)
+  function uniqGrams(phrases) {
+    const sets = phrases.map((ph) => new Set(expand(ph).flatMap((p) => grams(norm(p)))));
+    return sets.map((g, i) => new Set([...g].filter((x) => !sets.some((o, j) => j !== i && o.has(x)))));
   }
   // every answer also matches its Chinese and the paraphrases in <demo>/subs_zh.js (MOHEAT_VOICE): close in meaning = a pass
   const expand = (ph) => { const out = [...ph]; for (const p of ph) for (const v of (window.MoHeatSub?.voice(p) || [])) if (!out.includes(v)) out.push(v); return out; };
@@ -189,6 +202,11 @@
     else if (s.single) { if (s1 >= (final ? .28 : .6) || (final && YES.test(norm(heard)))) pick = 0; }
     else if (final ? (s1 >= .25 && s1 - s2 >= .08 && s1 >= 1.3 * s2) : (s1 >= .6 && s1 - s2 >= .25)) pick = i1;
     if (pick < 0 && final && !s.single && !s.strict) { const o = [ORD, ORD_ZH].map((L) => L.findIndex((re, k) => k < sc.length && alts.some((a) => re.test(norm(a))))).find((x) => x >= 0); if (o >= 0) pick = o; }
+    if (pick < 0 && final && !s.single && !s.strict && s1 >= .25 && s2 >= .8 * s1 && s.uniq?.length === sc.length) {   // too close: the words that differ decide
+      const hg = new Set(alts.flatMap((a) => grams(norm(a)))), u = s.uniq.map((U) => [...U].filter((x) => hg.has(x)).length);
+      const o = u.map((v, i) => [v, i]).sort((a, b) => b[0] - a[0]);
+      if (o[0][0] >= 2 && o[0][0] >= 2 * (o[1] ? o[1][0] : 0) && sc[o[0][1]] >= .8 * s1) pick = o[0][1];
+    }
     if (pick < 0 && final && s1 >= .12) {   // a near miss (unrelated talk in the room does not count)
       s.fails++;
       if (s.single && !s.strict && s.lenient !== false && (s.fails >= 2 || s1 >= .2) && norm(heard).length <= 24) pick = 0;   // a long unrelated remark never counts as the answer
@@ -229,6 +247,8 @@
     if (el.dataset.voice) out.push(...el.dataset.voice.split('|'));
     return out.map((x) => x.trim()).filter(Boolean);
   }
+  const labelsOf = (el) => { const b = el.querySelector('b'), sp = el.querySelector('span'); return [...el.querySelectorAll(':scope > b, :scope > span, :scope > .one')].map((x) => x.textContent)
+    .concat(b || sp ? [] : el.textContent.split(/\s[·・]\s/)).map((x) => x.trim()).filter(Boolean); };   // what the button itself says (any language shown)
   let autoSig = '', autoEls = [], manual = false;
   // pause and resume (shell.js freezes this page's timers while paused, so also on the class change), and a recogniser that ended without telling us
   const syncRec = () => { if (sess && !sess.done) { if (active()) startRec(); else if (recOn) stopRec(); } };
@@ -236,12 +256,12 @@
   function scan() {
     syncRec();
     if (manual) { if (sess?.anchor && pill?.isConnected) place(sess.anchor()); return; }   // the card can change size or move after the pill was placed (mic answer, language split, entrance)
-    const els = OFF || pure() ? [] : [...document.querySelectorAll(SEL)].filter((e) => !e.parentElement?.closest('button') && !e.closest('.u2')).filter(visible);   // not the text inside a button (subs.js marks it), not the settings panel's Voice row
+    const els = OFF || pure() ? [] : [...document.querySelectorAll(SEL)].filter((e) => !e.parentElement?.closest('button') && !e.closest('.u2, [data-no-voice]')).filter(visible);   // [data-no-voice]: a tap-only control (a speed game), no "Or say it" pill   // not the text inside a button (subs.js marks it), not the settings panel's Voice row
     if (!els.length) { if (autoSig) { autoSig = ''; autoEls = []; end(); } return; }
     const sig = els.map((e) => e.dataset.voice || [...e.querySelectorAll(':scope > b:not(.one), :scope > span:not(.one)')].map((x) => x.textContent).join('/') || e.textContent).join('|');
     if (sig !== autoSig) {
       autoSig = sig; autoEls = els;
-      begin({ phrases: els.map(phrasesOf), single: els.length === 1, lenient: true, anchor: () => autoEls.filter((e) => e.isConnected && !e.matches('[data-voice-quiet]')), onHit: (i) => { if (els[i]) press(els[i]); autoSig = ''; } });   // autoSig: controls that stay on screen (Left / Right, valves) keep listening for the next word
+      begin({ phrases: els.map(phrasesOf), labels: els.map(labelsOf), single: els.length === 1, lenient: true, anchor: () => autoEls.filter((e) => e.isConnected && !e.matches('[data-voice-quiet]')), onHit: (i) => { if (els[i]) press(els[i]); autoSig = ''; } });   // autoSig: controls that stay on screen (Left / Right, valves) keep listening for the next word
       if (sess) { sess.els = els; sess.strict = els.some((e) => e.matches('[data-voice-strict]')); }
     } else if (pill?.isConnected) place(autoEls.filter((e) => !e.matches('[data-voice-quiet]')));
   }

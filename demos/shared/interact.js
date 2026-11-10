@@ -32,42 +32,29 @@
       { t: 143.9, kind: 'read', what: ['うん、やくそく！', 'Yes — I promise!'] },
     ],
     Demo03_ShiningSmileConcert: 'cheer',
+    // Demo 5–9: every line of yours (subtitle who 'Y') becomes a read gate automatically, from the subtitle data; list only toasts /
+    // blows / choices here, at the time of their line (tools/qa/check_gates.js warns when a time no longer meets a line).
     Demo05_GifuCastle: [
-      { t: 23.0, kind: 'read' },
       { t: 74.35, kind: 'blow', what: ['お茶をふーふーして、冷ましましょう', 'Blow on the tea to cool it'] },
-      { t: 116.8, kind: 'read' },
-      { t: 136.0, kind: 'read' },
     ],
     Demo06_FutureWhisky: [
-      { t: 13.3, kind: 'read' },
-      { t: 115.0, kind: 'read' },
       { t: 131.49, kind: 'choice', what: ['「毎晩こんな酒を？」', '"This kind of drink every night?"'],   // two options instead of one line (user)
         options: ['さすがに、毎晩ではないです · Not every night!', '…毎晩、かもしれません · …Maybe every night'],
         fb: [['家康様が、くすっと笑った', 'Ieyasu chuckles'], ['信長様、うらやましそう', 'Nobunaga looks envious']] },
       { t: 135.63, kind: 'toast', resume: 135.63, what: ['乾杯！', 'Cheers!'] },
-      { t: 147.4, kind: 'read' },
     ],
     Demo07_KyotoIzakaya: [
-      { t: 16.2, kind: 'read' },
       { t: 34.3, kind: 'toast', resume: 34.3 },
       { t: 55.5, kind: 'blow', what: ['殿の焼き鳥を、ふーふーしてあげましょう', "Blow on Nobunaga's yakitori to cool it"] },
-      { t: 107.2, kind: 'read' },
-      { t: 132.4, kind: 'read' },
     ],
     Demo08_YamazakiDistillery: [
-      { t: 16.22, kind: 'read' },
-      { t: 35.87, kind: 'read' },
-      { t: 120.33, kind: 'toast' },
-      { t: 136.1, kind: 'read' },
+      { t: 121.61, kind: 'toast' },
     ],
     Demo09_SengokuBanquet: [
-      { t: 5.1, kind: 'read' },
       { t: 36.2, kind: 'toast', resume: 36.2 },
       { t: 49.69, kind: 'choice', what: ['「まだ飲めるであろう？」', '"Surely you can drink a little more?"'],   // two options instead of one line (user)
         options: ['では、ひとくちだけ · Just one sip, then', 'もう、十分いただきました · I\'ve had plenty'],
         fb: [['信長様、満足そう', 'Nobunaga looks pleased'], ['信長様「遠慮するな」と笑う', 'Nobunaga laughs: "Don\'t hold back"']] },
-      { t: 111.0, kind: 'read' },
-      { t: 146.95, kind: 'read' },
     ],
   };
   const dir = Object.keys(GATES).find((d) => location.pathname.includes(`/${d}/`));
@@ -80,24 +67,32 @@
 
   // each gate: pause at t; for your own subtitle line, just after it appears, and resume near its end (skip the silent rest)
   const subs = A.subs || [], voices = subs.filter((s) => s.who !== 'Y');
-  const list = CHEER ? [] : [...GATES[dir]];
-  if (/^Demo0[5-9]_/.test(dir)) {   // Nobunaga series: every line of yours is a read-aloud gate (unless a toast / blow is already there)
-    for (const s of subs) if (s.who === 'Y' && !list.some((g) => Math.abs(g.t - s.t0) < .5)) list.push({ t: s.t0, kind: 'read' });
-    list.sort((a, b) => a.t - b.t);
+  // Gates follow the subtitle data, not fixed times (re-dubbing moves lines; lesson 2026-11-10): a gate with no text of its
+  // own (`what`) snaps to the nearest line of yours within SNAP s; a read gate that finds none is dropped, never shown empty.
+  const SNAP = 3, used = new Set();
+  const near = (t, w) => { let b = null; for (const s of subs) if (s.who === 'Y' && !used.has(s) && Math.abs(s.t0 - t) < w && (!b || Math.abs(s.t0 - t) < Math.abs(b.t0 - t))) b = s; return b; };
+  const gates = [];
+  for (const g of CHEER ? [] : GATES[dir]) {
+    let sub = near(g.t, .3), snapped = false;
+    if (!sub && !g.what && (g.kind === 'read' || g.kind === 'toast')) { sub = near(g.t, SNAP); snapped = !!sub; }
+    if (g.kind === 'read' && !sub && !(g.what && g.what[0])) { console.warn('[interact] gate without a line dropped', dir, g.t); continue; }
+    if (sub) used.add(sub);
+    gates.push({ ...g, sub, snapped });
   }
-  const gates = list.map((g) => {
-    const sub = subs.find((s) => s.who === 'Y' && Math.abs(s.t0 - g.t) < .3);
-    const t = sub && g.kind === 'read' ? Math.max(g.t, sub.t0 + .12) : g.t;
-    let resume = g.resume;
-    if (resume == null) {
-      if (!sub) resume = t;
+  if (/^Demo0[5-9]_/.test(dir))   // Nobunaga series: every line of yours is a read-aloud gate (unless a gate already holds it)
+    for (const s of subs) if (s.who === 'Y' && !used.has(s) && !gates.some((g) => Math.abs(g.t - s.t0) < .5)) { used.add(s); gates.push({ t: s.t0, kind: 'read', sub: s }); }
+  gates.sort((a, b) => a.t - b.t);
+  for (const g of gates) {
+    const sub = g.sub;
+    if (sub && g.resume == null && (g.kind === 'read' || g.snapped)) g.t = g.snapped ? sub.t0 + .12 : Math.max(g.t, sub.t0 + .12);
+    if (g.resume == null) {
+      if (!sub) g.resume = g.t;
       else {
         const next = voices.find((v) => v.t0 > sub.t0 + .05);
-        resume = Math.max(t, Math.min(sub.t1, next ? next.t0 : sub.t1) - .5);
+        g.resume = Math.max(g.t, Math.min(sub.t1, next ? next.t0 : sub.t1) - .5);
       }
     }
-    return { ...g, t, resume, sub };
-  });
+  }
 
   const store = { get: (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : v === '1'; } catch { return d; } },
     set: (k, v) => { try { localStorage.setItem(k, v ? '1' : '0'); } catch {} } };
@@ -118,7 +113,8 @@
   .ix-mic{display:flex;align-items:flex-end;gap:3px;height:clamp(14px,2cqw,28px)}
   .ix-mic i{width:clamp(3px,.45cqw,6px);height:15%;border-radius:2px;background:#f6d27a;opacity:.35;transition:height .06s,opacity .06s}
   .ix-btn{cursor:pointer;border:1px solid rgba(246,210,122,.6);background:rgba(246,210,122,.12);color:#f9ecd0;border-radius:999px;
-    padding:.55cqw 1.4cqw;font:700 clamp(11px,1.3cqw,17px)/1.2 "Noto Sans JP",Inter,sans-serif;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+    padding:.55cqw 1.4cqw;font:700 clamp(11px,1.3cqw,17px)/1.2 "Noto Sans JP",Inter,sans-serif;touch-action:manipulation;user-select:none;-webkit-user-select:none;
+    min-height:44px;min-width:44px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center}   /* 44 px on every size (QA 2026-11-10: Skip was 26 px at 1280) */
   .ix-btn:hover{background:rgba(246,210,122,.25)}
   .ix-btn.big{font-size:clamp(14px,2cqw,28px);padding:.8cqw 2.4cqw;background:linear-gradient(135deg,#f6d27a,#e0913c);color:#2a1606;border:0}
   .ix-btn.opt{font-size:clamp(13px,1.8cqw,24px);padding:.8cqw 2.2cqw;min-width:22cqw}
@@ -227,8 +223,9 @@
   // ---------------------------------------------------------------- gate state
   const fired = new Set();
   let cur = null, card = null, lastT = media.currentTime || 0, lastNow = performance.now();
-  const say = (g) => (g.kind === 'choice' && g.what ? g.what : g.sub ? [g.sub.ja, g.sub.en] : g.what || ['', '']);   // a choice shows its question
+  const say = (g) => (g.kind === 'choice' && g.what ? g.what : g.sub ? [g.sub.ja, g.sub.en] : g.what || (g.kind === 'toast' ? ['乾杯！', 'Cheers!'] : ['', '']));   // a choice shows its question
   function start(g) {
+    if (g.kind === 'read' && !say(g)[0]) { fired.add(g); return; }   // never a card without a sentence
     cur = { g, t0: performance.now(), speech: 0, silence: 0, heard: false, blow: 0, b: 0, holding: false, done: false };
     fired.add(g); media.pause(); stage.classList.add('ix-wait'); document.documentElement.classList.toggle('ix-quiz', g.answer != null); render(); listen(g);   // ix-quiz: a question with a right answer, the radar / side labels must not give it away
   }

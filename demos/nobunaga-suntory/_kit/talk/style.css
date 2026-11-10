@@ -59,7 +59,7 @@
 .subs .who:empty { display: none; }
 
 /* your turn */
-.turn { position: absolute; top: 1.4cqw; left: 1.4cqw; z-index: 4; width: 42cqw; padding: .7cqw 1.1cqw; border-radius: .9cqw; background: rgba(14, 8, 3, .7);
+.turn { position: absolute; top: 1.4cqw; left: 1.4cqw; z-index: 4; width: 42cqw; padding: .7cqw 1.1cqw; border-radius: .9cqw; background: rgba(14, 8, 3, .88);
   border-left: .3cqw solid var(--gold); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); opacity: 0; transform: translateY(-.5cqw); transition: opacity .3s, transform .3s; pointer-events: none; }
 .turn.show { opacity: 1; transform: none; pointer-events: auto; }
 .turn small { display: block; font: 800 clamp(7px, .8cqw, 13px)/1.2 Inter, "Noto Sans JP", sans-serif; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
@@ -67,8 +67,8 @@
 .turn b.interim { color: #d8c49c; }
 .turn .mic { display: inline-flex; align-items: flex-end; gap: 2px; height: clamp(10px, 1.5cqw, 24px); vertical-align: middle; margin-right: .6cqw; }
 .turn .mic i { width: clamp(3px, .35cqw, 6px); height: 15%; border-radius: 2px; background: #ffd58a; opacity: .4; }
-.turn input { width: calc(100% - 5cqw); border: 1px solid rgba(217, 168, 74, .35); border-radius: .5cqw; background: rgba(0, 0, 0, .35); padding: .25cqw .6cqw;
-  font: 500 clamp(8px, .9cqw, 15px)/1.4 "Noto Sans JP", Inter, sans-serif; color: #fff; }
+.turn input { width: calc(100% - 5cqw); border: 1px solid rgba(217, 168, 74, .35); border-radius: .5cqw; background: rgba(0, 0, 0, .35); padding: .4cqw .8cqw;
+  min-height: 34px; box-sizing: border-box; font: 500 clamp(13px, 1.1cqw, 17px)/1.4 "Noto Sans JP", Inter, sans-serif; color: #fff; }   /* a comfortable field (was 20 px high) */
 .turn.think .mic, .turn.think input { display: none; }
 .turn.think b { color: #d8c49c; }
 .turn.think b::after { content: ""; animation: dots 1.2s steps(4) infinite; }
@@ -85,7 +85,7 @@
 .log li b { font-weight: 700; margin-right: 4px; }
 .log li.N b { color: var(--n); } .log li.I b { color: var(--i); } .log li.you b { color: #fff; } .log li.sys { color: var(--faint); font-style: italic; }
 .endbtn { margin-top: 8px; width: 100%; justify-content: center; }
-@container (max-width: 620px) { .turn { width: 60cqw; } .turn b { font-size: 2.6cqw; } }
+@container (max-width: 620px) { .turn { top: auto; bottom: 2cqw; left: 2cqw; right: 2cqw; width: auto; background: rgba(14, 8, 3, .94); } .turn b { font-size: 3.4cqw; } .turn input { width: 100%; } }   /* phones: along the bottom, opaque, off the character's face (QA 2026-11-10) */
 
 /* public scripted page: an honest "Preview · scripted" tag on the cover */
 .intro .preview-tag { margin: 0; align-self: center; padding: .2em .9em; border-radius: 999px; border: 1px dashed rgba(217, 168, 74, .6); background: rgba(14, 8, 3, .55);
