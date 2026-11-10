@@ -501,8 +501,22 @@
         const tau = rest ? .15 : target > cur ? (k === 'h' ? SM.warm_rise : SM.cool_rise) : (k === 'h' ? SM.warm_fall : SM.cool_fall);
         ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
       }
+      // timing on each ear (guide §3 节奏; QA 2026-11-11): a channel that stopped does not come back for ~1 s (no cut-and-restart
+      // stutter, Demo50 17 s), and a mode does not start within ~1.2 s of the other mode on that ear (both on at once = DUAL is fine)
+      const nowS = performance.now() / 1000;
+      for (const K in ear) {
+        const O = K[0] + (K[1] === 'c' ? 'h' : 'c');
+        if (ear[K] > .03 && !chOn[K] && (nowS - chLast[K] < 1.1 || (ear[O] <= .1 && nowS - chLast[O] < 1.5))   /* a fading other mode (≤ .1) is not DUAL */) ear[K] = 0;
+      }
+      for (const e of ['L', 'R']) {   // and the dominant mode (heat − cool, ±.12) flips at most once per ~1 s: the newly stronger one is held level with the other until then (fan sweeps, Demo49)
+        const h = ear[e + 'h'], c = ear[e + 'c'], s = h - c >= .12 ? 'H' : c - h >= .12 ? 'C' : '', st = dom[e];
+        if (!s || s === st.s) continue;
+        if (st.s && nowS - st.t < 1.5)   /* the engine sees a state at ±.12, before the ±.15 a listener / the check would: 1.5 s keeps ≥ 1 s at ±.15 */ { if (s === 'H') ear[e + 'h'] = c + .1; else ear[e + 'c'] = h + .1; } else { st.s = s; st.t = nowS; }   // ±.12 / .1 here vs ±.15 in the check: PWM rounding must not create a flip the engine did not see
+      }
+      for (const K in ear) { chOn[K] = ear[K] > .03; if (chOn[K]) chLast[K] = nowS; }
       return { th: { ...ear }, src };
     }
+    const chOn = {}, chLast = { Lc: -9, Lh: -9, Rc: -9, Rh: -9 }, dom = { L: { s: '', t: -9 }, R: { s: '', t: -9 } };
 
     // ---- drawing: stills (layered) with cross-fades, the demo's FX (cfg.draw), particles, fades
     let viewA = S.view, viewB = S.view, mix = 1;
