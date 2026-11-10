@@ -47,7 +47,7 @@ window.MoHeatDevice = (() => {
 
     const send = (line) => {
       if (!writer) return chain;
-      chain = chain.then(() => writer.write(enc.encode(line + '\n'))).then(() => log(`→ ${line}`)).catch((e) => log(`! write failed: ${e.message}`));
+      chain = chain.then(() => writer.write(enc.encode(line + '\n'))).then(() => log(`→ ${line}`)).catch((e) => { log(`! write failed: ${e.message}`); if (port && /lost|disconnect|NetworkError/i.test(`${e.name} ${e.message}`)) disconnect(true); });   // unplugged: say so, stop writing
       return chain;
     };
 
@@ -67,7 +67,7 @@ window.MoHeatDevice = (() => {
             if (line) log(`← ${line}`);
           }
         }
-      } catch { /* port closed */ }
+      } catch (e) { if (port && !port.__closing && /lost|disconnect|NetworkError/i.test(`${e?.name} ${e?.message}`)) disconnect(true); }   // the device went away while reading
     }
 
     async function connect(auto = false) {
@@ -79,7 +79,8 @@ window.MoHeatDevice = (() => {
         await p.open({ baudRate: 115200 });
         // Keep the ESP32 out of reset/boot mode on boards with auto-reset wiring.
         await p.setSignals({ dataTerminalReady: false, requestToSend: false }).catch(() => {});
-        port = p;
+        port = p; p.__closing = false;
+        if (!p.__mhLost) { p.__mhLost = true; p.addEventListener?.('disconnect', () => { if (port === p) disconnect(true); }); }   // the port's own event as well as navigator.serial's
         writer = port.writable.getWriter();
         readLoop();
         setStatus(ui.status, 'Connected', 'ok');
@@ -99,12 +100,13 @@ window.MoHeatDevice = (() => {
 
     async function disconnect(lost = false) {
       const p = port;
-      if (!p) return;
+      if (!p || p.__closing) return;
+      p.__closing = true; const w = writer; if (lost) writer = null;   // lost: nothing more is written, isConnected() is false at once
       if (!lost) await send('stop');
       try { await chain; } catch {}
       try { await reader?.cancel(); } catch {}
       try { await readClosed; } catch {}
-      try { writer?.releaseLock(); } catch {}
+      try { w?.releaseLock(); } catch {}
       try { if (!lost) await p.close(); } catch {}
       port = writer = reader = null;
       ui.connectBtn.textContent = 'Connect';

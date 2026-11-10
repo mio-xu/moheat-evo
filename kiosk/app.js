@@ -83,8 +83,14 @@
   try { navigator.wakeLock?.request('screen').catch(() => {}); document.addEventListener('visibilitychange', () => { if (!document.hidden) navigator.wakeLock?.request('screen').catch(() => {}); }); } catch {}
 
   // ---------------------------------------------------------------- views
-  let view = '';
+  let view = '', viewAt = 0, tapAt = 0;
+  // visitor screens: a quick double tap answers once (the second tap must not land on the screen that replaces the first, or toggle a pick
+  // back off — final4 E2E 2026-11-10). Clicks on a visitor button within 350 ms of a screen change or of the last accepted tap are ignored.
+  // Not the staff panel / PIN / corner, and not the guide (shared/thermintro.js has its own guard).
+  document.addEventListener('click', (e) => { const b = e.target.closest?.('button'); if (!b || !b.closest('.view') || b.closest('.intro-host')) return;
+    const n = performance.now(); if (n - viewAt < 350 || n - tapAt < 350) { e.stopImmediatePropagation(); e.preventDefault(); return; } tapAt = n; }, true);
   function go(v) {
+    if (v !== view) viewAt = performance.now();
     view = v; $$('.view').forEach((s) => { s.hidden = s.id !== `v-${v}`; });
     K.post({ t: 'state', view: v, dir: pending || (v === 'card' ? (K.visit.get() || {}).dir : null) });
     if (v !== 'intro') K.post({ t: 'thermal', th: K.thermalOf('') });
@@ -303,11 +309,11 @@
     $('#sDemos').innerHTML = D.DEMOS.map((d, i) => `<label><input type="checkbox" value="${d.dir}"${!cfg.demos || cfg.demos.includes(d.dir) ? ' checked' : ''}> ${i + 1} · ${d.en}</label>`).join('');
     capLabels(); renderStats();
   }
-  const bandsField = () => { const cur = K.currency(cfg.lang); $('#sCurNow').textContent = cur; $('#sBands').value = K.bands(cur).join(', '); $('#sBands').dataset.cur = cur; };
+  const bandsField = () => { const cur = K.currency(cfg.lang); $('#sCurNow').textContent = cur; $('#sBands').value = K.bands(cur).join(' | '); $('#sBands').dataset.cur = cur; };   // '|' between bands: a band itself can hold a comma (¥10,000)
   const capLabels = () => { for (const k of ['W', 'C']) { $(`#sCap${k}V`).textContent = `${$(`#sCap${k}`).value}%`; $(`#sStart${k}V`).textContent = `${Math.min(+$(`#sStart${k}`).value, +$(`#sCap${k}`).value)}%`; } };
   function saveStaff() {
     const demos = $$('#sDemos input').filter((x) => x.checked).map((x) => x.value), pin = $('#sPin').value.trim();
-    const cur = $('#sBands').dataset.cur, list = $('#sBands').value.split(',').map((x) => x.trim()).filter(Boolean);
+    const cur = $('#sBands').dataset.cur, list = K.splitBands($('#sBands').value);
     const bands = { ...(K.cfg().bands || {}) }; if (cur && list.length >= 2) bands[cur] = list.slice(0, 6);
     K.setCfg({ lang: $('#sLang').value, capWarm: +$('#sCapW').value, startWarm: Math.min(+$('#sStartW').value, +$('#sCapW').value), capCool: +$('#sCapC').value, startCool: Math.min(+$('#sStartC').value, +$('#sCapC').value), idle: Math.max(20, +$('#sIdle').value || 60),
       site: $('#sSite').value.trim() || K.DEF.site, cut: $('#sCut').value, hygiene: $('#sHyg').checked, pickUrl: $('#sPick').value.trim(), queue: $('#sQueue').checked, maxDemos: Math.max(0, +$('#sMaxD').value || 0), maxMin: Math.max(0, +$('#sMaxM').value || 0),

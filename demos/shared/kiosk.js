@@ -42,7 +42,11 @@
   ];
   const CUR_OF = { ja: 'JPY', zh: 'CNY', 'zh-Hant': 'CNY', ko: 'KRW', en: 'USD' };
   const currency = (lang) => { const c = { ...DEF, ...LSg('moheat.kiosk.cfg', {}) }; return c.currency && c.currency !== 'auto' ? c.currency : CUR_OF[lang] || 'USD'; };
-  const bands = (cur) => { const c = { ...DEF, ...LSg('moheat.kiosk.cfg', {}) }; return (c.bands && c.bands[cur]?.length ? c.bands[cur] : BANDS[cur]) || BANDS.USD; };
+  // bands are stored as an array; the staff field shows them with ' | ' between (a band can hold a comma: ¥10,000). Older builds split the
+  // field on every comma ("≤ ¥10,000" → "≤ ¥10" + "000"): a piece that starts with three digits is glued back to the one before it
+  const mendBands = (a) => a.reduce((o, x) => { x = String(x).trim(); if (!x) return o; if (o.length && /^\d{3}(\D|$)/.test(x)) o[o.length - 1] += `,${x}`; else o.push(x); return o; }, []);
+  const splitBands = (text) => mendBands(String(text || '').includes('|') ? String(text).split('|') : String(text || '').split(/,(?!\d{3})/));
+  const bands = (cur) => { const c = { ...DEF, ...LSg('moheat.kiosk.cfg', {}) }; return (c.bands && c.bands[cur]?.length ? mendBands(c.bands[cur]) : BANDS[cur]) || BANDS.USD; };
   // warm and cool have their own cap + start (REQUIREMENTS §10); older settings with one cap / start fill both
   const cfg = () => { const c = { ...DEF, ...LSg('moheat.kiosk.cfg', {}) };
     c.capWarm ??= c.cap; c.capCool ??= c.cap; c.startWarm = Math.min(c.startWarm ?? c.start, c.capWarm); c.startCool = Math.min(c.startCool ?? c.start, c.capCool); return c; };
@@ -163,7 +167,7 @@
   const idb = { open: () => new Promise((res, rej) => { const r = indexedDB.open('moheat-kiosk', 1); r.onupgradeneeded = () => r.result.createObjectStore('files'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }),
     async put(k, v) { const db = await idb.open(); return new Promise((res, rej) => { const t = db.transaction('files', 'readwrite'); t.objectStore('files').put(v, k); t.oncomplete = res; t.onerror = () => rej(t.error); }); },
     async get(k) { try { const db = await idb.open(); return await new Promise((res) => { const r = db.transaction('files').objectStore('files').get(k); r.onsuccess = () => res(r.result || null); r.onerror = () => res(null); }); } catch { return null; } } };
-  const K = window.MoHeatKiosk = { idb, currency, bands, BANDS, SCENES, on: flag, cfg, setCfg, stats, resetVisitor, enter, exit, visit, day, DEF, stopDevice,
+  const K = window.MoHeatKiosk = { idb, currency, bands, splitBands, BANDS, SCENES, on: flag, cfg, setCfg, stats, resetVisitor, enter, exit, visit, day, DEF, stopDevice,
     offered, num, top3, pickUrl, dnum, post, thermalOf, scales, setScales, scaleLine, get queueOn() { return Date.now() - queueSeen < 6000; } };
 
   // ================================================================ demo pages (kiosk mode on)
@@ -211,6 +215,8 @@
   .mk-vol[hidden] { display: none; } .mk-vol span { font-size: 24px; } .mk-vol input { width: clamp(120px, 14vw, 220px); height: 44px; accent-color: #ffd58a; cursor: pointer; }
   .mk-end { position: fixed; z-index: 9990; right: 14px; bottom: 82px; min-height: 52px; min-width: 52px; padding: 0 20px; border-radius: 999px; border: 2px solid rgba(255,255,255,.5);
     background: rgba(20,12,24,.85); color: #fff; font: 700 17px/1 Inter, "Noto Sans JP", "PingFang SC", sans-serif; cursor: pointer; box-shadow: 0 6px 24px rgba(0,0,0,.45); }
+  /* End + Volume sit in the middle of the top bar (empty in kiosk mode): bottom-right they covered the thermal output numbers (final4 E2E, 1920 / 1366) */
+  .mk-vol, .mk-end { top: 2px; bottom: auto; right: auto; } .mk-vol { left: 50%; transform: translateX(calc(-100% + 30px)); min-height: 52px; padding-top: 2px; padding-bottom: 2px; } .mk-end { left: calc(50% + 42px); top: 4px; }
   .mk-cut { position: fixed; z-index: 9990; left: 14px; bottom: 14px; padding: 10px 16px; border-radius: 999px; background: rgba(20,12,24,.85); color: #ffd58a; font: 700 15px/1 Inter, "Noto Sans JP", "PingFang SC", sans-serif; }
   html.mk-fade body { opacity: 0; transition: opacity 1.3s ease; }
   .mk-note { position: fixed; z-index: 9992; left: 50%; top: 70px; transform: translateX(-50%); padding: 10px 18px; border-radius: 12px; background: rgba(30,40,60,.92); color: #d6f1ff; font: 600 16px/1.3 Inter, "Noto Sans JP", "PingFang SC", sans-serif; }
@@ -286,9 +292,10 @@
   }
 
   // ---------------------------------------------------------------- idle reset
-  let last = RN();
+  let last = RN(), idleP = null;
   for (const e of ['pointerdown', 'keydown', 'touchstart', 'wheel']) addEventListener(e, () => { last = RN(); }, { capture: true, passive: true });
   RT.si(() => {
+    if (playing() !== idleP) { idleP = playing(); last = RN(); }   // start / end of the demo counts as activity: a long untouched demo (Demo03, a concert) ending on its cover is the end, not idle (it skipped the end sting)
     const idle = (RN() - last) / 1000, p = playing(), paused = !!window.MoHeatShell?.paused, pure = window.MoHeatPlay?.mode !== 'interactive';
     const limit = !p || paused ? c.idle : pure ? Infinity : c.idle * 3;
     if (idle > limit) leave(p || (visit.get() || {}).started ? 'card' : 'reset');

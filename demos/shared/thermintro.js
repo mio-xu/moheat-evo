@@ -220,6 +220,13 @@
     el.innerHTML = `<div class="mi" role="dialog" aria-live="polite"><div class="stage-a"></div><div class="dots">${STEPS.map(() => '<b></b>').join('')}</div>
       <button type="button" class="skip"></button><p class="nodev"></p></div>`;
     const root = el.firstElementChild, A = root.querySelector('.stage-a');
+    // one answer per screen: a quick double tap must not also answer the screen that replaces it (it skipped the whole RIGHT check,
+    // final4 E2E 2026-11-10). Button clicks within 350 ms of the content changing, or of the last accepted click, are ignored.
+    // (The calibration STOP listens to pointerdown on the root, so it is never held back.)
+    let shownAt = 0, clickedAt = 0;
+    new MutationObserver(() => { shownAt = performance.now(); }).observe(A, { childList: true });
+    A.addEventListener('click', (e) => { if (!e.target.closest?.('button')) return; const n = performance.now();
+      if (n - shownAt < 350 || n - clickedAt < 350) { e.stopImmediatePropagation(); e.preventDefault(); return; } clickedAt = n; }, true);
     root.querySelector('.skip').addEventListener('click', () => finish(true));
     const head = () => `<div class="head"><svg viewBox="0 0 145 100" aria-hidden="true"><ellipse cx="72.5" cy="52" rx="34" ry="40" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
       <path d="M22 44 Q22 6 72.5 6 Q123 6 123 44" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="4" stroke-linecap="round"/></svg>
