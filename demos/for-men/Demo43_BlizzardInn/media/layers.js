@@ -437,7 +437,7 @@ window.MOHEAT_LAYERS = {
     "src": "art/char_mint_ear.webp?v=a6012163",
     "w": 1700,
     "h": 1320,
-    "x": 0.66,
+    "x": 0.669,
     "y": 1.0,
     "height": 1.0,
     "box": [
@@ -604,7 +604,7 @@ window.MOHEAT_LAYERS = {
     "src": "art/char_mint_ear.webp?v=a6012163",
     "w": 1700,
     "h": 1320,
-    "x": 0.66,
+    "x": 0.669,
     "y": 1.0,
     "height": 1.0,
     "box": [
