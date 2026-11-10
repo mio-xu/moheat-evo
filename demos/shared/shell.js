@@ -473,7 +473,7 @@
     ui.pause = document.createElement('div'); ui.pause.className = 'sh-pause'; ui.pause.setAttribute('role', 'button'); ui.pause.tabIndex = -1; stage.appendChild(ui.pause);
     ui.pause.addEventListener('click', () => pause(false));
     const canvas = stage.querySelector('canvas, video');
-    if (!FILM()) canvas?.addEventListener('click', (e) => { if (e.isTrusted && plainTap(e) && playing() && !QS.has('auto') && (Play.pure || !SH.autoplay)) pause(true); });   // games in interactive mode: a tap is a move, not a pause
+    if (!FILM()) canvas?.addEventListener('click', (e) => { if (e.isTrusted && plainTap(e) && playing() && !justStarted() && !QS.has('auto') && (Play.pure || !SH.autoplay)) pause(true); });   // games in interactive mode: a tap is a move, not a pause; the 2nd tap of a double tap on Start is not a pause either (Demo28 2026-11-11)
     film(stage);
     // the demo's progress list (#steps, written by its setStep()) is the chapter list; demos without one still get it
     if (!document.getElementById('steps')) { const ol = document.createElement('ol'); ol.id = 'steps'; ol.hidden = true; ol.className = 'sh-steps'; document.body.appendChild(ol); }
