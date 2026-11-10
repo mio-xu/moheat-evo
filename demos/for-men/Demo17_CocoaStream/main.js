@@ -27,7 +27,7 @@
   let S = fresh(), run = 0;
   const STEPS = [['welcome', '閉店後のお店で', 'After closing'], ['melt', 'チョコを溶かす', 'Melting chocolate'], ['whisk', '生クリーム', 'Whipped cream'],
     ['cookie', '焼きたてクッキー', 'Fresh cookies'], ['piping', 'メッセージ', 'The message']];
-  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.2; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
+  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.5; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
 
   // ---------------------------------------------------------------- subtitles + voice
   const subJa = $('subJa'), subEn = $('subEn'), subs = $('subs');

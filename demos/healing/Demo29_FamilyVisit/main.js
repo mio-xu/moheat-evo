@@ -14,29 +14,63 @@
   const cv = $('scene'), ctx = cv.getContext('2d');
   const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
   const lerp = (a, b, k) => a + (b - a) * k;
-  // grandpa's snowball (code only): leaves the snowball in his raised hand (0.615, 0.19 of the yard picture), arcs over the faces and
-  // out past the matching side of the frame toward that ear, growing as it nears you; 0.5 s flight, shaded, motion-blurred, a few flakes
-  // behind it. Paths checked against the faces (FACE.yard): right = over his head, left = below grandma's chin, above the snowman.
-  const BALL = { 1: [[.615, .19], [.80, -.05], [1.14, .48]], '-1': [[.615, .19], [.40, .15], [-.14, .62]] }, FLIGHT = .5;
-  const trail = [];
-  function drawSnowball(t, side) {
-    const P = BALL[side]; if (!P || t < 0) return;
-    const at = (u) => { const a = (1 - u) * (1 - u), b = 2 * u * (1 - u), c = u * u; return [W * (a * P[0][0] + b * P[1][0] + c * P[2][0]), H * (a * P[0][1] + b * P[1][1] + c * P[2][1])]; };
-    const rad = (u) => 20 + 300 * u * u * u;   // grows as it comes at you
-    const u = t / FLIGHT;
-    if (u < 1 && Math.random() < .6) { const [fx, fy] = at(u); trail.push({ x: fx + (Math.random() - .5) * 20, y: fy + (Math.random() - .5) * 20, r: (2 + 3 * Math.random()) * (1 + 2 * u), life: 0 }); }
-    for (const f of trail) { f.life += 1 / 60; f.y += 30 / 60; }
-    while (trail.length && trail[0].life > .6) trail.shift();
-    for (const f of trail) { ctx.fillStyle = `rgba(255,255,255,${.8 * (1 - f.life / .6)})`; ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 7); ctx.fill(); }
-    if (u >= 1) return;
-    for (const [k, a] of [[.09, .18], [.05, .3], [0, 1]]) {   // motion blur: two faint copies a little behind
-      const v = Math.max(0, u - k), [x, y] = at(v), r = rad(v);
-      const g = ctx.createRadialGradient(x - r * .35, y - r * .4, r * .1, x, y, r);
-      g.addColorStop(0, `rgba(255,255,255,${a})`); g.addColorStop(.55, `rgba(236,243,250,${a})`); g.addColorStop(1, `rgba(150,170,195,${a})`);
-      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
-      if (k === 0) { ctx.fillStyle = 'rgba(110,130,160,.18)'; ctx.beginPath(); ctx.arc(x + r * .12, y + r * .16, r * .92, .2, Math.PI - .2); ctx.fill(); }   // shadowed underside
-    }
+  // grandpa's snowball (code only, matched to the painted one in his hand: off-white, matte, grey-lilac shading lower left, grainy
+  // rough edge). Thrown = the ball in his raised hand (1177, 212 of the yard picture) leaves it — that spot is covered with a clone of
+  // the snowy trees beside it until ~1 s after the throw (he scoops another) — and arcs out past the matching side of the frame toward
+  // that ear in 0.7 s, growing as it comes at you: right = over his head, left = below grandma's chin, above the snowman (both checked
+  // against the faces). Drawn inside the yard picture's own zoom so it starts exactly on the painted ball.
+  const BALL = { 1: [[.613, .196], [.78, -.20], [1.16, .42]], '-1': [[.613, .196], [.42, .17], [-.16, .62]] }, FLIGHT = .7, HELD = { x: 1177, y: 212, r: 56 };
+  let ballSprite = null;
+  function snowSprite() {   // 256 px, made once
+    const c = document.createElement('canvas'); c.width = c.height = 256; const g = c.getContext('2d'), R = 120, cx = 128, cy = 128;
+    g.beginPath(); for (let i = 0; i <= 64; i++) { const a = i / 64 * Math.PI * 2, r = R * (1 + .025 * Math.sin(a * 9) + .02 * Math.sin(a * 23 + 1)); g.lineTo(cx + r * Math.cos(a), cy + r * Math.sin(a)); } g.closePath();
+    const base = g.createRadialGradient(cx + 30, cy - 34, 10, cx, cy, R);
+    base.addColorStop(0, '#fdfcf9'); base.addColorStop(.55, '#eeeef0'); base.addColorStop(1, '#c9c8d6');
+    g.fillStyle = base; g.fill(); g.save(); g.clip();
+    const sh = g.createRadialGradient(cx - 60, cy + 70, 10, cx - 40, cy + 50, 150); sh.addColorStop(0, 'rgba(150,150,180,.45)'); sh.addColorStop(1, 'rgba(150,150,180,0)'); g.fillStyle = sh; g.fillRect(0, 0, 256, 256);
+    for (let i = 0; i < 900; i++) { const a = Math.random() * 7, d = R * Math.sqrt(Math.random()); g.fillStyle = Math.random() < .5 ? 'rgba(255,255,255,.55)' : 'rgba(140,140,165,.22)'; g.fillRect(cx + d * Math.cos(a), cy + d * Math.sin(a), 1 + Math.random() * 2.5, 1 + Math.random() * 2.5); }   // packed-snow grain
+    g.restore(); g.strokeStyle = 'rgba(95,95,120,.45)'; g.lineWidth = 2.2; g.stroke();
+    return c;
   }
+  const trail = [];
+  let heldPatch = null;
+  function makeHeldPatch(im) {   // the painted ball removed once: its pale, unsaturated pixels (not the orange hand / outline) replaced by the
+    const R = 62, S2 = 2 * R + 12, x0 = HELD.x - S2 / 2, y0 = HELD.y - S2 / 2, DX = -120, DY = -70;   // sky and snowy tree up-left of it (soft edge)
+    const mk = () => { const c = document.createElement('canvas'); c.width = c.height = S2; return c; };
+    const a = mk(), ag = a.getContext('2d'); ag.drawImage(im, x0, y0, S2, S2, 0, 0, S2, S2);
+    const b = mk(), bg = b.getContext('2d'); bg.filter = 'blur(2px)'; bg.drawImage(im, x0 + DX - 8, y0 + DY - 8, S2 + 16, S2 + 16, -8, -8, S2 + 16, S2 + 16);
+    const A = ag.getImageData(0, 0, S2, S2), B = bg.getImageData(0, 0, S2, S2), o = new ImageData(S2, S2);
+    for (let y = 0; y < S2; y++) for (let x = 0; x < S2; x++) {
+      const i = 4 * (y * S2 + x), mx = Math.max(A.data[i], A.data[i + 1], A.data[i + 2]), mn = Math.min(A.data[i], A.data[i + 1], A.data[i + 2]);
+      const d = Math.hypot(x - S2 / 2, y - S2 / 2), w = Math.max(0, Math.min(1, (R + 4 - d) / 6)) * ((mx - mn) / (mx + 1e-6) < .16 ? 1 : 0);
+      o.data[i] = B.data[i]; o.data[i + 1] = B.data[i + 1]; o.data[i + 2] = B.data[i + 2]; o.data[i + 3] = 255 * w;
+    }
+    const c = mk(); c.getContext('2d').putImageData(o, 0, 0); return { c, x0, y0 };
+  }
+  function hideHeld(im, t) {   // the empty hand while the ball is in the air; the ball is back in his hand ~1.6–1.9 s after the throw
+    const k = t < FLIGHT + .9 ? 1 : Math.max(0, 1 - (t - FLIGHT - .9) / .3); if (k <= 0) return;
+    try { heldPatch = heldPatch || makeHeldPatch(im); } catch { return; }
+    ctx.save(); ctx.globalAlpha *= k; ctx.drawImage(heldPatch.c, heldPatch.x0, heldPatch.y0); ctx.restore();
+  }
+
+  function drawSnowball(t, side, im) {
+    const P = BALL[side]; if (!P || t < 0) return;
+    if (im) hideHeld(im, t);
+    const at = (u) => { const a = (1 - u) * (1 - u), b = 2 * u * (1 - u), c = u * u; return [W * (a * P[0][0] + b * P[1][0] + c * P[2][0]), H * (a * P[0][1] + b * P[1][1] + c * P[2][1])]; };
+    const rad = (u) => HELD.r + 190 * Math.pow(u, 2.2), u = t / FLIGHT;
+    if (u < 1 && Math.random() < .7) { const [fx, fy] = at(u), r = rad(u); trail.push({ x: fx + (Math.random() - .5) * r, y: fy + (Math.random() - .5) * r, r: (1.5 + 2.5 * Math.random()) * (1 + 2 * u), life: 0 }); }
+    for (const f of trail) { f.life += 1 / 60; f.y += 40 / 60; }
+    while (trail.length && trail[0].life > .5) trail.shift();
+    for (const f of trail) { ctx.fillStyle = `rgba(255,255,255,${.85 * (1 - f.life / .5)})`; ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 7); ctx.fill(); }
+    if (u >= 1) return;
+    ballSprite = ballSprite || snowSprite();
+    for (const [lag, a] of [[.06, .22], [.03, .35], [0, 1]]) {   // a little motion blur: two faint copies just behind
+      const v = Math.max(0, u - lag), [x, y] = at(v), r = rad(v);
+      ctx.globalAlpha = a; ctx.drawImage(ballSprite, x - r * 256 / 240, y - r * 256 / 240, r * 2 * 256 / 240, r * 2 * 256 / 240);
+    }
+    ctx.globalAlpha = 1;
+  }
+
   const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000));
 
   // ---------------------------------------------------------------- art: one still per scene
@@ -124,7 +158,7 @@
       await say(hi ? 'p03b' : 'p03a', { az: .22, dist: .9 });
       await say('p04', { az: .3, dist: 1 });
 
-      chap = 1; S.restUntil = S.clock + 1.2;   // a short rest between scenes (guide §3 节奏)
+      chap = 1; S.restUntil = S.clock + 1.5;   // a short rest between scenes (guide §3 节奏)
       // 2 · the genkan: the door slides open, warm air from the house, grandma's hug at your left ear
       SND.fx.steps(.1, .1, 6, .4, 1, 1, true); S.outdoor = .6; wind?.set(.18, 1.5); await sleep(1.6); alive(my);
       S.view = 'genkan'; SND.fx.door(0, 1.4); S.door = 1; S.wind = .5; await sleep(.9); alive(my);
@@ -136,7 +170,7 @@
       S.hug = 0;
       await say('g03', { az: -.35, dist: .6 });
 
-      chap = 2; S.restUntil = S.clock + 1.2;   // a short rest between scenes (guide §3 节奏)
+      chap = 2; S.restUntil = S.clock + 1.5;   // a short rest between scenes (guide §3 节奏)
       // 3 · the kotatsu: the kerosene stove on your right, a steaming bowl of oshiruko held out to you
       SND.fx.door(0, 2.5); S.door = 0; S.outdoor = 0; S.wind = 0; wind?.set(0, 1); snow?.set(0, 1); await sleep(.6); alive(my);
       S.view = 'kotatsu'; const stove = SND.loop('stove'); stove?.set(.3, 1.5); S.stove = 1; await sleep(.8); alive(my);
@@ -149,21 +183,21 @@
       if (S.treat === 0) await say('p06a', { az: .35, dist: .8 }); else await say('g05b', { az: -.35, dist: .9 });
       await say('g06', { az: -.35, dist: .9 });
 
-      chap = 3; S.restUntil = S.clock + 1.2;   // a short rest between scenes (guide §3 节奏)
+      chap = 3; S.restUntil = S.clock + 1.5;   // a short rest between scenes (guide §3 节奏)
       // 4 · next morning in the snowy garden: grandpa's snowball whizzes past your right ear; you throw one back
       S.view = 'yard'; S.stove = 0; S.steam = 0; stove?.set(0, 1); S.outdoor = 1; S.wind = .5; wind?.at(-.8, 5); wind?.set(.15, 1.5); snow?.set(.2, 1.5);
       await sleep(1.2); alive(my);
       await say('p07', { az: .45, dist: 2 });
       await say('p08', { az: .45, dist: 2 });
-      S.ball = { t0: S.clock }; SND.fx.whoosh(); await sleep(1.4); S.ball = null; alive(my);
+      S.ball = { t0: S.clock }; SND.fx.whoosh(); await sleep(1.4); alive(my);   // S.ball stays: the empty hand fades back ~1.6–1.9 s after the throw (drawSnowball)
       await say('p09', { az: .45, dist: 2 });
       await action('⛄', '雪玉を投げ返す', 'Throw one back', 'なげる|投げる|投げ返す|throw|throw it back|扔回去|扔');
       SND.fx.thud(.45, 2); await sleep(.4);
       await say('p10', { az: .45, dist: 2 });
-      await sleep(.8); S.ball = { t0: S.clock, side: -1 }; SND.fx.whoosh(-1); await sleep(1.4); S.ball = null; alive(my);   // grandpa's revenge: a second snowball whizzes past your LEFT ear (cold on the left)
+      await sleep(.8); S.ball = { t0: S.clock, side: -1 }; SND.fx.whoosh(-1); await sleep(1.4); alive(my);   // grandpa's revenge: a second snowball whizzes past your LEFT ear (cold on the left)
       await say('g07', { az: -.7, dist: 6 });
 
-      chap = 4; S.restUntil = S.clock + 1.2;   // a short rest between scenes (guide §3 节奏)
+      chap = 4; S.restUntil = S.clock + 1.5;   // a short rest between scenes (guide §3 节奏)
       // 5 · night: grandma's story at your pillow (left), grandpa snoring next door (right); the quilt up to your ears
       S.view = 'futon'; S.outdoor = 0; S.wind = 0; wind?.set(0, 1.5); snow?.set(0, 1.5); const snore = SND.loop('snore'); snore?.set(.35, 2);
       await sleep(1.6); alive(my);
@@ -208,7 +242,7 @@
     add(-1.35, 'h', .25 * K.hug, '🤗');
     add(1.2, 'h', .42 * K.stove * (.92 + .08 * Math.sin(S.t * 3.1)), '🔥');
     add(0, 'h', .22 * K.steam, '♨️');
-    if (S.ball) { const u = (S.clock - S.ball.t0 - .4) / 1.2; if (u > 0 && u < 1) add(1.4 * (S.ball.side || 1), 'c', .85 * Math.sin(Math.PI * clamp(u * 1.2)), '⛄'); }   // the cold hits as the ball leaves the frame (0.4–0.5 s)
+    if (S.ball) { const u = (S.clock - S.ball.t0 - .55) / 1.2; if (u > 0 && u < 1) add(1.4 * (S.ball.side || 1), 'c', .85 * Math.sin(Math.PI * clamp(u * 1.2)), '⛄'); }   // the cold hits as the ball leaves the frame (0.55–0.7 s)
     add(-1.5, 'h', .2 * K.quilt, '🛏'); add(1.5, 'h', .2 * K.quilt, '🛏');
     return out;
   }
@@ -232,7 +266,9 @@
     if (!im) { ctx.fillStyle = '#20160f'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
     const z = 1.03 + .008 * Math.sin(t * .5) + (focusOn ? .035 * push : 0), cx = focusOn ? lerp(.5, fx, push * .5) : .5, cy = focusOn ? lerp(.5, fy, push * .5) : .5;
     ctx.save(); ctx.translate(W * cx, H * cy); ctx.scale(z, z); ctx.translate(-W * cx, -H * cy + 3 * Math.sin(t * .9));
-    ctx.drawImage(im, 0, 0, W, H); ctx.restore(); ctx.globalAlpha = 1;
+    ctx.drawImage(im, 0, 0, W, H);
+    if (view === 'yard' && S.ball) drawSnowball(S.clock - S.ball.t0, S.ball.side || 1, im);   // inside the picture's zoom: it leaves the painted ball exactly
+    ctx.restore(); ctx.globalAlpha = 1;
   }
   const flakes = Array.from({ length: 140 }, () => ({ x: Math.random() * W, y: Math.random() * H, v: 50 + Math.random() * 80, r: 1.5 + Math.random() * 3.5, p: Math.random() * 6 }));
   const steamP = Array.from({ length: 24 }, () => ({ life: 0 }));
@@ -263,7 +299,6 @@
         const g2 = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * (2 - p.life / 2)); g2.addColorStop(0, `rgba(255,255,255,${a})`); g2.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = g2; ctx.fillRect(p.x - 150, p.y - 150, 300, 300);
       }
     }
-    if (S.ball) drawSnowball(S.clock - S.ball.t0, S.ball.side || 1);
     if (S.view === 'futon') {   // the andon flicker + the quilt rising at the bottom of the frame
       const fl = .85 + .15 * Math.sin(t * 4.1) * Math.sin(t * 1.7), g = ctx.createRadialGradient(W * .06, H * .47, 30, W * .06, H * .47, 800);
       g.addColorStop(0, `rgba(255,190,110,${.12 * fl})`); g.addColorStop(1, 'rgba(255,190,110,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
