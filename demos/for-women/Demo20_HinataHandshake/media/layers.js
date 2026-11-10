@@ -342,7 +342,7 @@ window.MOHEAT_LAYERS = {
     "src": "art/char_wave.webp?v=f7eb28f7",
     "w": 1700,
     "h": 863,
-    "x": 0.5667,
+    "x": 0.5507,
     "y": 1.02,
     "height": 1.05,
     "box": [
