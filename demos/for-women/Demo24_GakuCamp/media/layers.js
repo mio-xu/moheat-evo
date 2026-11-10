@@ -438,9 +438,9 @@ window.MOHEAT_LAYERS = {
     "src": "art/char_blanket.webp?v=7fc0459e",
     "w": 1700,
     "h": 915,
-    "x": 0.4527,
+    "x": 0.4467,
     "y": 1.06,
-    "height": 1.08,
+    "height": 1.035,
     "box": [
      0,
      5,
