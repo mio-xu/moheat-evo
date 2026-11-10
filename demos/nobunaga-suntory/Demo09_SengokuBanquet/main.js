@@ -358,11 +358,14 @@ function goldDrift(t, dt) {   // gold-leaf flakes drifting in the lantern light 
 function thermalEdges(ctx, th) {
   for (const [side, c, h] of [[-1, th.Lc, th.Lh], [1, th.Rc, th.Rh]]) {
     const v = Math.max(c, h); if (v < .02) continue;
-    const col = c >= h ? '70,170,255' : '255,110,50';
     const x0 = side < 0 ? 0 : W, x1 = side < 0 ? 460 : W - 460;
-    const g = ctx.createLinearGradient(x0, 0, x1, 0);
-    g.addColorStop(0, `rgba(${col},${.34 * v})`); g.addColorStop(1, `rgba(${col},0)`);
-    ctx.fillStyle = g; ctx.fillRect(Math.min(x0, x1), 0, 460, H);
+    // cool AND heat on one ear (DUAL): warm on the top part, cool below, overlapping softly — layered they read as grey (§11.1 Demo19)
+    const bands = c > .03 && h > .03 ? [['255,110,50', h, 0, .58], ['70,170,255', c, .42, 1]] : [[c >= h ? '70,170,255' : '255,110,50', v, 0, 1]];
+    for (const [col, k, y0, y1] of bands) {
+      const g = ctx.createLinearGradient(x0, 0, x1, 0);
+      g.addColorStop(0, `rgba(${col},${.34 * k})`); g.addColorStop(1, `rgba(${col},0)`);
+      ctx.fillStyle = g; ctx.fillRect(Math.min(x0, x1), y0 * H, 460, (y1 - y0) * H);
+    }
   }
 }
 
@@ -511,11 +514,10 @@ const device = MoHeatDevice.create(
   { log: (l) => console.log('[MoHeat]', l), onConnect: () => { lastSent = ''; } },
 );
 if (!MoHeatDevice.supported) $('deviceStatus').querySelector('span').textContent = 'Web Serial needs desktop Chrome / Edge';
-function command(th) {
-  const part = (sd, c, h) => (c > OFF ? `${sd}C${Math.round(range.coolMin + c * (range.coolMax - range.coolMin))}`
-    : h > OFF ? `${sd}H${Math.round(range.heatMin + h * (range.heatMax - range.heatMin))}` : `${sd}H0`);
+function command(th) {   // DUAL (firmware 2026-11-08): each ear's cool and heat independent — media/thermal.csv is DUAL (tools/thermal/film_dual.py)
+  const c = (v) => (v > OFF ? Math.round(range.coolMin + v * (range.coolMax - range.coolMin)) : 0), h = (v) => (v > OFF ? Math.round(range.heatMin + v * (range.heatMax - range.heatMin)) : 0);
   if (Math.max(th.Lc, th.Lh, th.Rc, th.Rh) <= OFF) return 'stop';
-  return `${part('L', th.Lc, th.Lh)} ${part('R', th.Rc, th.Rh)}`;
+  return `DUAL LC${c(th.Lc)} LH${h(th.Lh)} RC${c(th.Rc)} RH${h(th.Rh)}`;
 }
 function stopOutput() { if (device.isConnected()) device.send('stop'); lastSent = 'stop'; }
 function emergencyStop() {
