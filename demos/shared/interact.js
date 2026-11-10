@@ -38,6 +38,7 @@
       { t: 74.35, kind: 'blow', what: ['お茶をふーふーして、冷ましましょう', 'Blow on the tea to cool it'] },
     ],
     Demo06_FutureWhisky: [
+      { t: 1.4, kind: 'none' },   // the opening '…Is this Azuchi Castle?' stays a subtitle: no card 1.4 s after Start (D3, 2026-11-10: three cards in the first 25 s left 61 % of it without thermal)
       { t: 131.49, kind: 'choice', what: ['「毎晩こんな酒を？」', '"This kind of drink every night?"'],   // two options instead of one line (user)
         options: ['さすがに、毎晩ではないです · Not every night!', '…毎晩、かもしれません · …Maybe every night'],
         fb: [['家康様が、くすっと笑った', 'Ieyasu chuckles'], ['信長様、うらやましそう', 'Nobunaga looks envious']] },
@@ -73,6 +74,7 @@
   const near = (t, w) => { let b = null; for (const s of subs) if (s.who === 'Y' && !used.has(s) && Math.abs(s.t0 - t) < w && (!b || Math.abs(s.t0 - t) < Math.abs(b.t0 - t))) b = s; return b; };
   const gates = [];
   for (const g of CHEER ? [] : GATES[dir]) {
+    if (g.kind === 'none') { const s = near(g.t, SNAP); if (s) used.add(s); continue; }   // a line of yours that stays a subtitle only (no card: the film keeps going)
     let sub = near(g.t, .3), snapped = false;
     if (!sub && !g.what && (g.kind === 'read' || g.kind === 'toast')) { sub = near(g.t, SNAP); snapped = !!sub; }
     if (g.kind === 'read' && !sub && !(g.what && g.what[0])) { console.warn('[interact] gate without a line dropped', dir, g.t); continue; }
