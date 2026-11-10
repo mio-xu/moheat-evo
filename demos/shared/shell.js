@@ -608,6 +608,17 @@
       loaded: () => (ready ? 1 : loadedFrac()), ready: () => ready,
     };
     SH.ui2 = A;
+    // end sting (the exhibition's 2.4 s "MoHeat Evo" sting, version B): when a demo has finished and its own cover comes back, it plays over
+    // the player once, then fades and the cover is there as before. Not on the home page's player, in exports / ?auto runs or in kiosk mode (the kiosk app plays its own).
+    const STING_URL = new URL('sting.js?v=c18bcd08', document.currentScript?.src || PAGE).href;
+    const stingOff = () => !QS.has('sting') && (EMBED || QS.has('auto') || QS.has('nosting') || (() => { try { const k = QS.get('kiosk') ?? localStorage.getItem('moheat.kiosk'); return !!k && k !== '0'; } catch { return false; } })());   // ?sting = on anyway (tests)
+    const sting = () => { const stage = document.querySelector('.stage-col .stage') || document.querySelector('.stage'); if (!stage || stingOff()) return;
+      const go = () => window.MoHeatSting?.play(stage, { intensity: A.intensity(), reduced: Play.reduced });
+      if (window.MoHeatSting) return go();
+      const s = document.createElement('script'); s.src = STING_URL; s.onload = go; document.head.appendChild(s); };   // loaded only when needed; a load failure = no sting
+    const watchEnd = () => { const i = intro(); if (!i) return; let hid = i.classList.contains('hidden');
+      new MutationObserver(() => { const h = i.classList.contains('hidden'); if (hid && !h && started) sting(); hid = h; }).observe(i, { attributes: true, attributeFilter: ['class'] }); };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watchEnd); else watchEnd();
     // films: a tap on the picture is the same one pause (not the film's own media.pause, which the bar would not know about)
     const filmTap = () => { const st = document.querySelector('.stage-col .stage') || document.querySelector('.stage'); if (!st || (!FILM() && !EMBED)) return;
       st.addEventListener('click', (e) => { if (!e.isTrusted || e.target.closest('.u2, button, a, input') || !playing() || !plainTap(e)) return; e.stopImmediatePropagation(); e.preventDefault(); pause(!paused); }, true); };
