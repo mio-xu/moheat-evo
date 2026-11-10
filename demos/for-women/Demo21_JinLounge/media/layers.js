@@ -17,7 +17,7 @@ window.MOHEAT_LAYERS = {
     "h": 954,
     "x": 0.51,
     "y": 1.02,
-    "height": 1.04,
+    "height": 1.05,
     "box": [
      0,
      0,
@@ -497,7 +497,7 @@ window.MOHEAT_LAYERS = {
     "src": "art/char_jacket.webp?v=745dff40",
     "w": 1700,
     "h": 963,
-    "x": 0.5,
+    "x": 0.519,
     "y": 1.02,
     "height": 1.02,
     "box": [
@@ -509,12 +509,12 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/jacket_eyes.webp?v=82fff82b",
+     "src": "art/jacket_eyes.webp?v=f645f633",
      "rect": [
-      611,
-      215,
-      432,
-      182
+      630,
+      219,
+      377,
+      174
      ],
      "kind": "eyes"
     },
