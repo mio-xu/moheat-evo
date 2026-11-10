@@ -628,7 +628,10 @@ function lineNow(t) {   // { id, where, e } of the line being spoken right now (
 }
 const envAt = (id, l, p) => { const e = VO.lines[id].env[l] || []; return sample(e, VO.rate, p) || 0; };
 const fired = new Set();
+let linearSub = null;
 function voiceTick(t, lastT, playing) {
+  // the home page's player (?embed): the voices are in the mix, no startLine() runs — the subtitle follows the film time instead
+  if (LINEAR && !RENDER && !COVERART) { const cur = lineNow(t), id = cur ? cur.id : null; if (id !== linearSub) { linearSub = id; if (id) showSub(id); else hideSub(); } return; }
   if (LINEAR || !playing) return;
   for (const [id, L] of Object.entries(VO.lines)) {
     if (fired.has(id)) continue;

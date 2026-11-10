@@ -401,7 +401,7 @@ main#top>.kick-hero{padding-bottom:var(--gap)}
 
 /* short phone portrait (iPhone SE, Safari with its bars): player stays 16:9 (a wider frame letterboxed the picture and, before shell.js contained the
    stage, cropped the subtitle off its bottom, 2026-11-10); the demo cards go to one compact row so the module still fits one screen */
-@media (max-width:620px) and (min-height:501px) and (max-height:760px){
+@media (max-width:620px) and (min-height:501px) and (max-height:820px){   /* to 820: 390x789 (a phone with the browser bars) was 813 px tall */
   .td-kicker{display:none}
   .td-head h3{margin-top:0}
   .td-menu .td-item{flex:0 0 206px;grid-template-columns:84px minmax(0,1fr);align-items:stretch}
