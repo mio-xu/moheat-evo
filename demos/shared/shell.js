@@ -614,7 +614,7 @@
     SH.ui2 = A;
     // end sting (the exhibition's 2.4 s "MoHeat Evo" sting, version B): when a demo has finished and its own cover comes back, it plays over
     // the player once, then fades and the cover is there as before. Not on the home page's player, in exports / ?auto runs or in kiosk mode (the kiosk app plays its own).
-    const STING_URL = new URL('sting.js?v=c18bcd08', document.currentScript?.src || PAGE).href;
+    const STING_URL = new URL('sting.js?v=0960e198', document.currentScript?.src || PAGE).href;
     const stingOff = () => !QS.has('sting') && (EMBED || QS.has('auto') || QS.has('nosting') || (() => { try { const k = QS.get('kiosk') ?? localStorage.getItem('moheat.kiosk'); return !!k && k !== '0'; } catch { return false; } })());   // ?sting = on anyway (tests)
     const sting = () => { const stage = document.querySelector('.stage-col .stage') || document.querySelector('.stage'); if (!stage || stingOff()) return;
       const go = () => window.MoHeatSting?.play(stage, { intensity: A.intensity(), reduced: Play.reduced });

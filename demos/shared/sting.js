@@ -1,7 +1,8 @@
 // End sting for every demo page (the same 2.4 s "MoHeat Evo" sting the exhibition package plays after a demo, version B).
 // shared/shell.js loads this file when a demo has finished and its own cover comes back; the sting plays over the player,
 // then fades and the cover is there as before. Picture = canvas 2D, sound = Web Audio, thermal = a short cool → warm touch
-// sent only to a connected device (through the page's own device, so 🌡 off / pause / ■ STOP still apply). A tap or a key ends it at once.
+// sent only to a connected device and only when window.MOHEAT_STING_THERMAL is true (off by default: everything stays at 0 during the sting).
+// A tap or a key ends it at once.
 (() => {
   if (window.MoHeatSting) return;
 // MoHeat Evo end sting: picture = canvas 2D only, sound = Web Audio only (no image, video or audio assets).
@@ -84,7 +85,8 @@ function stingAudio(ac, when, level) {
         if (ac && ac.state === 'running') stingAudio(ac, ac.currentTime + .12, .7);
         const k = Math.max(0, Math.min(1, o.intensity ?? 1)), cool = (f) => (f * k > .005 ? Math.round(35 + f * k * 45) : 0), heat = (f) => Math.round(f * k * 200);
         let last = '';
-        for (const [t, lc, rc, lh, rh] of CURVE) timers.push(setTimeout(() => { if (over) return;
+        send('stop');   // whatever the demo left on is off
+        if (window.MOHEAT_STING_THERMAL) for (const [t, lc, rc, lh, rh] of CURVE) timers.push(setTimeout(() => { if (over) return;   // the cool → warm touch: off unless a page turns it on (user 2026-11-10: no thermal in the sting)
           const p = [cool(lc), heat(lh), cool(rc), heat(rh)], c = p.some(Boolean) ? `DUAL LC${p[0]} LH${p[1]} RC${p[2]} RH${p[3]}` : 'stop';
           if (c !== last) { last = c; send(c); } }, t * 1000));
         timers.push(setTimeout(() => finish('done'), LEN * 1000));
