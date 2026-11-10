@@ -166,10 +166,18 @@
       // same ear, hot ↔ cold at most about once a second (user 2026-11-10: 0.3–0.5 s cannot be felt; the safety net under each demo's
       // own data, guide §3 节奏): an ear whose dominant mode (heat − cool, ±.15) would flip less than MINSW after its last change keeps
       // the new mode's channel at 0 until then — a short rest, then the new mode. Old form and DUAL alike; `stop` passes at once.
-      const MINSW = 950, dom = { L: { s: '', t: -1e9 }, R: { s: '', t: -1e9 } };
+      // And a rest between the two modes (QA 2026-11-11, Demo02: hot off → cold on 0.1 s later): a mode that starts while the other one
+      // is off but was on less than MINSW ago waits at 0 until MINSW after the other one stopped. Both on at once (DUAL) is not a switch.
+      const MINSW = 950, dom = { L: { s: '', t: -1e9 }, R: { s: '', t: -1e9 } }, lastOn = { LC: -1e9, LH: -1e9, RC: -1e9, RH: -1e9 }, isOn = {};
+      const offAll = (now) => { for (const k in isOn) if (isOn[k]) { isOn[k] = false; lastOn[k] = now; } };
       const minSwitch = (line, now) => {
         const v = {}; line.replace(/\b([LR][CH])(\d+)\b/g, (m, k, n) => { v[k] = +n; return m; });
         let wait = 0; const hold = {};
+        for (const e of ['L', 'R']) for (const [x, y] of [['C', 'H'], ['H', 'C']]) {
+          const k = e + x, o = e + y; if (!(v[k] > 0) || isOn[k] || v[o] > 0) continue;   // only a fresh start of one mode with the other off
+          const since = isOn[o] ? 0 : now - lastOn[o];
+          if (since < MINSW) { hold[k] = 1; wait = Math.max(wait, MINSW - since); }
+        }
         for (const e of ['L', 'R']) {
           const h = Math.min(1, (v[e + 'H'] || 0) / 200), c = v[e + 'C'] ? Math.max(0, v[e + 'C'] - 35) / 45 : 0, d = h - c;
           const s = d >= .15 ? 'H' : d <= -.15 ? 'C' : '', st = dom[e];
@@ -177,12 +185,14 @@
           if (st.s && now - st.t < MINSW) { hold[e + s] = 1; wait = Math.max(wait, MINSW - (now - st.t)); }
           else { st.s = s; st.t = now; }
         }
-        return { wait, out: wait ? line.replace(/\b([LR][CH])(\d+)\b/g, (m, k) => (hold[k] ? `${k}0` : m)) : line };
+        const out = wait ? line.replace(/\b([LR][CH])(\d+)\b/g, (m, k) => (hold[k] ? `${k}0` : m)) : line;
+        out.replace(/\b([LR][CH])(\d+)\b/g, (m, k, n) => { const on = +n > 0; if (isOn[k] && !on) lastOn[k] = now; if (on) lastOn[k] = now; isOn[k] = on; return m; });
+        return { wait, out };
       };
       inst.send = (line) => {
         if (!gate() && !/^stop$/i.test(line)) return undefined;
         real.ct(retry);
-        if (/^stop/i.test(line)) { ears.L.p = ears.R.p = ''; return send(line); }
+        if (/^stop/i.test(line)) { ears.L.p = ears.R.p = ''; offAll(real.now()); return send(line); }
         const now = real.now(); let { wait, out } = minSwitch(line, now);
         if (/^DUAL/i.test(line)) { ears.L.p = ears.R.p = ''; if (wait) retry = real.st(() => inst.send(line), wait + 2); return send(out); }
         out = out.replace(/\b([LR])([CH])(\d+)\b/g, (m, e, p, v) => { if (+v === 0) return m; const st = ears[e]; if (st.p && st.p !== p && now - st.t < 150) { wait = Math.max(wait, 150 - (now - st.t)); return `${e}${p}0`; } st.p = p; st.t = now; return m; });
