@@ -17,7 +17,7 @@ window.MOHEAT_LAYERS = {
     "h": 1433,
     "x": 0.4568,
     "y": 1.0,
-    "height": 0.9951,
+    "height": 0.9851,
     "box": [
      371,
      7,
@@ -98,7 +98,7 @@ window.MOHEAT_LAYERS = {
     "h": 1290,
     "x": 0.5033,
     "y": 1.0,
-    "height": 0.9931,
+    "height": 0.9831,
     "box": [
      346,
      10,
@@ -422,7 +422,7 @@ window.MOHEAT_LAYERS = {
     "h": 1426,
     "x": 0.3863,
     "y": 1.0,
-    "height": 0.9903,
+    "height": 0.9843,
     "box": [
      334,
      14,
