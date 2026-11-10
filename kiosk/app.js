@@ -83,14 +83,14 @@
   try { navigator.wakeLock?.request('screen').catch(() => {}); document.addEventListener('visibilitychange', () => { if (!document.hidden) navigator.wakeLock?.request('screen').catch(() => {}); }); } catch {}
 
   // ---------------------------------------------------------------- views
-  let view = '', viewAt = 0, tapAt = 0;
+  let view = '', tapAt = 0;
   // visitor screens: a quick double tap answers once (the second tap must not land on the screen that replaces the first, or toggle a pick
-  // back off — final4 E2E 2026-11-10). Clicks on a visitor button within 350 ms of a screen change or of the last accepted tap are ignored.
+  // back off — final4 E2E 2026-11-10). A click on a visitor button within 350 ms of the last accepted tap is ignored (a first tap on a new
+  // screen always counts: the Windows CI taps 'choose another' right as that screen appears).
   // Not the staff panel / PIN / corner, and not the guide (shared/thermintro.js has its own guard).
   document.addEventListener('click', (e) => { const b = e.target.closest?.('button'); if (!b || !b.closest('.view') || b.closest('.intro-host')) return;
-    const n = performance.now(); if (n - viewAt < 350 || n - tapAt < 350) { e.stopImmediatePropagation(); e.preventDefault(); return; } tapAt = n; }, true);
+    const n = performance.now(); if (n - tapAt < 350) { e.stopImmediatePropagation(); e.preventDefault(); return; } tapAt = n; }, true);
   function go(v) {
-    if (v !== view) viewAt = performance.now();
     view = v; $$('.view').forEach((s) => { s.hidden = s.id !== `v-${v}`; });
     K.post({ t: 'state', view: v, dir: pending || (v === 'card' ? (K.visit.get() || {}).dir : null) });
     if (v !== 'intro') K.post({ t: 'thermal', th: K.thermalOf('') });
