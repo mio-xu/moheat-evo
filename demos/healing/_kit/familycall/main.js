@@ -301,6 +301,7 @@
     ctx.font = '220px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(e, W / 2, H / 2 - 40 + 8 * Math.sin(t * 2)); ctx.textBaseline = 'alphabetic';
   }
   let flakes = [], hearts = [];
+  addEventListener('moheat:pause', (e) => { if (e.detail && S.started && (mix < 1 || S.view !== viewB)) { viewA = viewB = S.view; mix = 1; try { draw(S.t ?? 0, 0); } catch {} } });   // paused mid cross-fade: show the new view only (shell.js moheat:pause, Demo21 2026-11-11)
   function draw(t, dt) {
     if (t > blinkAt) { blinkUntil = t + .13; blinkAt = t + rnd(2.5, 5); }
     faces(t, dt);

@@ -266,6 +266,7 @@
     ctx.drawImage(im, -W / 2, -H / 2 + 4 * Math.sin(t * .9), W, H); ctx.restore(); ctx.globalAlpha = 1;
   }
   const blobs = Array.from({ length: 26 }, () => ({ x: Math.random(), y: Math.random(), r: 60 + Math.random() * 120, v: .03 + Math.random() * .05 }));
+  addEventListener('moheat:pause', (e) => { if (e.detail && S.started && (mix < 1 || S.view !== viewB)) { viewA = viewB = S.view; mix = 1; try { draw(S.t ?? 0, 0); } catch {} } });   // paused mid cross-fade: show the new view only (shell.js moheat:pause, Demo21 2026-11-11)
   function draw(t, dt) {
     if (S.view !== viewB) { viewA = viewB; viewB = S.view; mix = 0; }
     mix = Math.min(1, mix + dt / .7);
