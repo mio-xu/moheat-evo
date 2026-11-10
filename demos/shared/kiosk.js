@@ -46,7 +46,10 @@
   // field on every comma ("≤ ¥10,000" → "≤ ¥10" + "000"): a piece that starts with three digits is glued back to the one before it
   const mendBands = (a) => a.reduce((o, x) => { x = String(x).trim(); if (!x) return o; if (o.length && /^\d{3}(\D|$)/.test(x)) o[o.length - 1] += `,${x}`; else o.push(x); return o; }, []);
   const splitBands = (text) => mendBands(String(text || '').includes('|') ? String(text).split('|') : String(text || '').split(/,(?!\d{3})/));
-  const bands = (cur) => { const c = { ...DEF, ...LSg('moheat.kiosk.cfg', {}) }; return (c.bands && c.bands[cur]?.length ? mendBands(c.bands[cur]) : BANDS[cur]) || BANDS.USD; };
+  // a saved list with a piece that starts with three digits was cut by that old split (and maybe also cut short to 6 pieces): it cannot be
+  // trusted, so the default bands are used (and the staff field shows them, so the next save stores them)
+  const broken = (a) => a.some((x) => /^\s*\d{3}(\D|$)/.test(String(x)));
+  const bands = (cur) => { const c = { ...DEF, ...LSg('moheat.kiosk.cfg', {}) }, a = c.bands && c.bands[cur]; return (a?.length && !broken(a) ? mendBands(a) : BANDS[cur]) || BANDS.USD; };
   // warm and cool have their own cap + start (REQUIREMENTS §10); older settings with one cap / start fill both
   const cfg = () => { const c = { ...DEF, ...LSg('moheat.kiosk.cfg', {}) };
     c.capWarm ??= c.cap; c.capCool ??= c.cap; c.startWarm = Math.min(c.startWarm ?? c.start, c.capWarm); c.startCool = Math.min(c.startCool ?? c.start, c.capCool); return c; };
