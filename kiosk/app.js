@@ -238,7 +238,11 @@
   function startAttract() {
     const box = $('.att-slides'), ds = offered(); if (!ds.length) return;
     $('.att-tag').textContent = `${T.tag.en} · ${T.tag.ja}`; $('.att-touch').textContent = T.touch.en;
-    if (!box.children.length || box.dataset.n !== String(ds.length)) { box.dataset.n = ds.length; box.innerHTML = ds.map((d) => `<img alt="" src="${thumb(d)}" loading="lazy">`).join(''); }
+    if (!box.children.length || box.dataset.n !== String(ds.length)) { box.dataset.n = ds.length; box.innerHTML = ds.map((d) => { const c = `../demos/${d.cat}/${d.dir}/media/cover/`, set = (l) => `${c}${l}.w1280.webp 1280w, ${c}${l}.w1920.webp 1920w`;
+      // the finished cover at full size, always Japanese on standby (exhibition default; was the 480×270 menu thumbnail, blown up 4–7× on a
+      // 1080p screen). Missing → the English cover → the thumbnail.
+      return `<img alt="" src="${c}ja.w1920.webp" srcset="${set('ja')}" sizes="100vw" decoding="async" data-en="${set('en')}" data-th="${thumb(d)}"
+        onerror="if(this.dataset.en){this.srcset=this.dataset.en;this.src=this.dataset.en.split(' ')[2];this.dataset.en=''}else{this.onerror=null;this.removeAttribute('srcset');this.src=this.dataset.th}">`; }).join(''); }
     const show = () => { const im = box.children; [...im].forEach((x, j) => x.classList.toggle('on', j === attI % im.length)); attI++; };
     clearInterval(attT); show(); attT = setInterval(show, 6000);
   }
