@@ -384,12 +384,12 @@ window.MOHEAT_LAYERS = {
      },
      "patches": [
       {
-       "src": "art/ghost_white_eyes.webp?v=acbcfba1",
+       "src": "art/ghost_white_eyes.webp?v=7206118f",
        "rect": [
-        123,
-        143,
-        363,
-        215
+        113,
+        129,
+        384,
+        243
        ],
        "kind": "eyes"
       }
@@ -413,12 +413,12 @@ window.MOHEAT_LAYERS = {
      },
      "patches": [
       {
-       "src": "art/ghost_wisp_eyes.webp?v=7b129391",
+       "src": "art/ghost_wisp_eyes.webp?v=9d9aaa45",
        "rect": [
-        72,
-        477,
-        335,
-        208
+        61,
+        464,
+        357,
+        234
        ],
        "kind": "eyes"
       }
@@ -725,12 +725,12 @@ window.MOHEAT_LAYERS = {
      },
      "patches": [
       {
-       "src": "art/ghost_white_eyes.webp?v=acbcfba1",
+       "src": "art/ghost_white_eyes.webp?v=7206118f",
        "rect": [
-        123,
-        143,
-        363,
-        215
+        113,
+        129,
+        384,
+        243
        ],
        "kind": "eyes"
       }
@@ -754,12 +754,12 @@ window.MOHEAT_LAYERS = {
      },
      "patches": [
       {
-       "src": "art/ghost_wisp_eyes.webp?v=7b129391",
+       "src": "art/ghost_wisp_eyes.webp?v=9d9aaa45",
        "rect": [
-        72,
-        477,
-        335,
-        208
+        61,
+        464,
+        357,
+        234
        ],
        "kind": "eyes"
       }
@@ -1474,12 +1474,12 @@ window.MOHEAT_LAYERS = {
      },
      "patches": [
       {
-       "src": "art/ghost_white_eyes.webp?v=acbcfba1",
+       "src": "art/ghost_white_eyes.webp?v=7206118f",
        "rect": [
-        123,
-        143,
-        363,
-        215
+        113,
+        129,
+        384,
+        243
        ],
        "kind": "eyes"
       }
@@ -1503,12 +1503,12 @@ window.MOHEAT_LAYERS = {
      },
      "patches": [
       {
-       "src": "art/ghost_wisp_eyes.webp?v=7b129391",
+       "src": "art/ghost_wisp_eyes.webp?v=9d9aaa45",
        "rect": [
-        72,
-        477,
-        335,
-        208
+        61,
+        464,
+        357,
+        234
        ],
        "kind": "eyes"
       }
