@@ -1,25 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo09_SengokuBanquet/media/cover/stamp.json": "cc3bac5ded2777919d027f430c6e1160b3ac0307"
+   "demos/nobunaga-suntory/Demo09_SengokuBanquet/media/cover/stamp.json": "ff4411d0f0e20596e4bc7f2d480bdd84f29b0669"
   },
   "thumb": "ad389844ffe773b66ae313ade1e32e581952d398"
  },
  "en": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo09_SengokuBanquet/media/cover/stamp.json": "cc3bac5ded2777919d027f430c6e1160b3ac0307"
+   "demos/nobunaga-suntory/Demo09_SengokuBanquet/media/cover/stamp.json": "ff4411d0f0e20596e4bc7f2d480bdd84f29b0669"
   },
   "thumb": "ad389844ffe773b66ae313ade1e32e581952d398"
  },
  "ja": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo09_SengokuBanquet/media/cover/stamp.json": "cc3bac5ded2777919d027f430c6e1160b3ac0307"
+   "demos/nobunaga-suntory/Demo09_SengokuBanquet/media/cover/stamp.json": "ff4411d0f0e20596e4bc7f2d480bdd84f29b0669"
   },
   "thumb": "919284341961718c57abbe9a2be4274a2ae9e99d"
  },
+ "ko": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo09_SengokuBanquet/media/cover/stamp.json": "ff4411d0f0e20596e4bc7f2d480bdd84f29b0669"
+  },
+  "thumb": "d915d0fd4924a25464037022cd5a2f0dc4afab1f"
+ },
  "zh": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo09_SengokuBanquet/media/cover/stamp.json": "cc3bac5ded2777919d027f430c6e1160b3ac0307"
+   "demos/nobunaga-suntory/Demo09_SengokuBanquet/media/cover/stamp.json": "ff4411d0f0e20596e4bc7f2d480bdd84f29b0669"
   },
   "thumb": "7c2ba2e693bedb56b7a5f7689894dc978cb922f1"
  }

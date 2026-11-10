@@ -372,7 +372,7 @@ function loop() {
   const io = window.MoHeatInteract ? window.MoHeatInteract.out(th0, ix) : { th: th0, live: null }, th = io.th, live = io.live ?? playing;
   drawRadar(st, live ? th : { Lc: 0, Lh: 0, Rc: 0, Rh: 0 }, t); updateOutput(th, live); updateScene(t);
   $('time').textContent = `${fmt(t)} / ${fmt(A.duration)}`; $('playhead').style.left = `${(t / A.duration) * 100}%`;
-  $('posInfo').textContent = st ? `綾音 ${Math.round(st.az)}° · ${segAt(t).en} · ${Math.round(A.bpm * 2)} BPM` : '';
+  $('posInfo').textContent = st ? `${(window.MoHeatSub?.name || String)('綾音')} ${Math.round(st.az)}° · ${segAt(t).en} · ${Math.round(A.bpm * 2)} BPM` : '';
   requestAnimationFrame(loop);
 }
 

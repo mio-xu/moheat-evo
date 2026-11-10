@@ -589,7 +589,7 @@ function loop() {
   $('time').textContent = `${fmt(t)} / ${fmt(A.duration)}`;
   $('playhead').style.left = `${(t / A.duration) * 100}%`;
   const cs = coolAt(t);
-  $('posInfo').textContent = [...states.map((s) => `綾音 ${Math.round(s.az)}° ${s.d.toFixed(2)} m`), ...(cs.env > .05 ? [`❄ ${Math.round(cs.az)}°`] : [])].join(' · ');
+  $('posInfo').textContent = [...states.map((s) => `${(window.MoHeatSub?.name || String)('綾音')} ${Math.round(s.az)}° ${s.d.toFixed(2)} m`), ...(cs.env > .05 ? [`❄ ${Math.round(cs.az)}°`] : [])].join(' · ');
   requestAnimationFrame(loop);
 }
 

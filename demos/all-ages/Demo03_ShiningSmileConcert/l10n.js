@@ -5,7 +5,8 @@ window.MOHEAT_L10N = {
  "langs": [
   "en",
   "ja",
-  "zh"
+  "zh",
+  "ko"
  ],
  "text": {
   "zh": {
@@ -87,9 +88,43 @@ window.MOHEAT_L10N = {
    "クライマックス": "Climax",
    "カーテンコール": "Curtain call",
    "綾音 🔥": "Ayane 🔥"
+  },
+  "ko": {
+   "📣 声援": "📣 응원",
+   "👏 フレー！": "👏 파이팅!",
+   "声援ありがとう！": "응원 고마워!",
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · 바이노럴 ASMR × 온냉 햅틱",
+   "氷と炎の 星光コンサート": "얼음과 불꽃의 별빛 콘서트",
+   "Shining Smile Melody — Ice & Fire Concert": "",
+   "🔥 vocal · bass · drums → warm": "🔥 보컬 · 베이스 · 드럼 → 따뜻함",
+   "❄ bright highs · ice FX → cool": "❄ 반짝이는 고음 · 얼음 효과 → 시원함",
+   "▶ Start · 2:30": "▶ 시작 · 2:30",
+   "🎧 Left / Right check": "🎧 좌우 확인",
+   "Headphones on · connect MoHeat Evo (top right): warmth follows Ayane across the stage, cooling follows the ice": "헤드폰을 써 주세요 · 오른쪽 위에서 MoHeat Evo를 연결하면, 따뜻함은 무대 위 아야네를, 시원함은 얼음을 따라가요",
+   "綾音": "아야네",
+   "ASMR Demo · Concert": "ASMR 데모 · 콘서트",
+   "Stage · 🔥 Ayane / ❄ ice": "무대 · 🔥 아야네 / ❄ 얼음",
+   "Strength from the real song (vocal / bass / drums → warm, highs / ice FX → cool); left / right from where Ayane and the ice are on stage. One mode per ear.": "세기는 실제 노래에서 나와요 (보컬 / 베이스 / 드럼 → 따뜻함, 고음 / 얼음 효과 → 시원함). 좌우는 무대 위 아야네와 얼음의 위치로 정해져요. 한쪽 귀에는 한 번에 한 가지 모드만.",
+   "Thermal": "온냉",
+   "Mode B · music × stage position": "모드 B · 음악 × 무대 위치",
+   "Mode A · music only": "모드 A · 음악만",
+   "オープニング": "오프닝",
+   "ファーストステージ": "첫 번째 무대",
+   "氷のステージ": "얼음의 무대",
+   "氷と炎": "얼음과 불꽃",
+   "氷と炎 — 入れ替わり": "얼음과 불꽃 — 자리 바꾸기",
+   "クライマックス": "클라이맥스",
+   "カーテンコール": "커튼콜",
+   "綾音 🔥": "아야네 🔥"
   }
  },
- "names": {},
+ "names": {
+  "綾音": {
+   "en": "Ayane",
+   "zh": "绫音",
+   "ko": "아야네"
+  }
+ },
  "voice": {
   "all": {
    "👏 フレー！": [
@@ -102,6 +137,14 @@ window.MOHEAT_L10N = {
     "cheers",
     "フレー",
     "がんばれ"
+   ]
+  },
+  "ko": {
+   "👏 フレー！": [
+    "파이팅",
+    "힘내",
+    "최고",
+    "멋있어"
    ]
   }
  }

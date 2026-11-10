@@ -1,25 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo05_GifuCastle/media/cover/stamp.json": "40bb47df2db3399b4c7dbc14f8a197a815beca31"
+   "demos/nobunaga-suntory/Demo05_GifuCastle/media/cover/stamp.json": "f14e629996737879ad6534998a08463ed3bd340a"
   },
   "thumb": "5d1d2fb9951fdcb5038ade5f1d80bd2df1c7497f"
  },
  "en": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo05_GifuCastle/media/cover/stamp.json": "40bb47df2db3399b4c7dbc14f8a197a815beca31"
+   "demos/nobunaga-suntory/Demo05_GifuCastle/media/cover/stamp.json": "f14e629996737879ad6534998a08463ed3bd340a"
   },
   "thumb": "5d1d2fb9951fdcb5038ade5f1d80bd2df1c7497f"
  },
  "ja": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo05_GifuCastle/media/cover/stamp.json": "40bb47df2db3399b4c7dbc14f8a197a815beca31"
+   "demos/nobunaga-suntory/Demo05_GifuCastle/media/cover/stamp.json": "f14e629996737879ad6534998a08463ed3bd340a"
   },
   "thumb": "2c15be1ff3f0199c691312f5bb628170eae72826"
  },
+ "ko": {
+  "inputs": {
+   "demos/nobunaga-suntory/Demo05_GifuCastle/media/cover/stamp.json": "f14e629996737879ad6534998a08463ed3bd340a"
+  },
+  "thumb": "67679375a814b9adcea2060121a09826dcba66e7"
+ },
  "zh": {
   "inputs": {
-   "demos/nobunaga-suntory/Demo05_GifuCastle/media/cover/stamp.json": "40bb47df2db3399b4c7dbc14f8a197a815beca31"
+   "demos/nobunaga-suntory/Demo05_GifuCastle/media/cover/stamp.json": "f14e629996737879ad6534998a08463ed3bd340a"
   },
   "thumb": "acd00f0e0f052600c07e35fad2c43f4984e19f94"
  }

@@ -1,31 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "c090bd72ff0d1261f6fc529f637781d2e08db249"
+   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "2c654ca507b9f98a9352d5c075db8c716df38155"
   },
   "thumb": "08bb3ef9d870498b46a67edd6eeed3df1bbf626c"
  },
  "en": {
   "inputs": {
-   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "c090bd72ff0d1261f6fc529f637781d2e08db249"
+   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "2c654ca507b9f98a9352d5c075db8c716df38155"
   },
   "thumb": "08bb3ef9d870498b46a67edd6eeed3df1bbf626c"
  },
  "ja": {
   "inputs": {
-   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "c090bd72ff0d1261f6fc529f637781d2e08db249"
+   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "2c654ca507b9f98a9352d5c075db8c716df38155"
   },
   "thumb": "dc746a6ff8f2c0f89da975b913f223fc36819c93"
  },
  "ko": {
   "inputs": {
-   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "c090bd72ff0d1261f6fc529f637781d2e08db249"
+   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "2c654ca507b9f98a9352d5c075db8c716df38155"
   },
   "thumb": "9f047c1afc32bd095582aef98bf3ffde8495ed4c"
  },
  "zh": {
   "inputs": {
-   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "c090bd72ff0d1261f6fc529f637781d2e08db249"
+   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "2c654ca507b9f98a9352d5c075db8c716df38155"
   },
   "thumb": "ee02b92bc02c03fec3092838a49ca47cb5930702"
  }

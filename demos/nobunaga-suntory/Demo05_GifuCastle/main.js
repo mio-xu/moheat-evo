@@ -641,7 +641,7 @@ function loop() {
   updateSubs(t); updateScene(t);
   $('time').textContent = `${fmt(t)} / ${fmt(A.duration)}`;
   $('playhead').style.left = `${(t / A.duration) * 100}%`;
-  $('posInfo').textContent = sts.map((s) => `${A.names[s.who].ja} ${Math.round(s.az)}° ${s.d.toFixed(2)} m`).join(' · ');
+  $('posInfo').textContent = sts.map((s) => `${(window.MoHeatSub?.name || String)(A.names[s.who].ja)} ${Math.round(s.az)}° ${s.d.toFixed(2)} m`).join(' · ');
   requestAnimationFrame(loop);
 }
 
