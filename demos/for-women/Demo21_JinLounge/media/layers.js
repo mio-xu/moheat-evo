@@ -97,7 +97,7 @@ window.MOHEAT_LAYERS = {
     "src": "art/char_can.webp?v=3694f544",
     "w": 1700,
     "h": 1038,
-    "x": 0.5232,
+    "x": 0.518,
     "y": 1.02,
     "height": 1.02,
     "box": [
