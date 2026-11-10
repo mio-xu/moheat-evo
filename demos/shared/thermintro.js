@@ -174,18 +174,19 @@
         if (ac.createStereoPanner) { const p = ac.createStereoPanner(); p.pan.value = pan; g.connect(p); p.connect(ac.destination); } else g.connect(ac.destination); n.start(); } catch {}
         tapT = setTimeout(tick, 160 + Math.random() * 260); }; tick(); };
     const stopTapping = () => { clearTimeout(tapT); tapT = 0; };
-    let vEl = null, vRaf = 0;
-    const stopVoice = () => { cancelAnimationFrame(vRaf); if (vEl) { try { vEl.pause(); } catch {} vEl = null; } };
+    let vEl = null, vRaf = 0, vG = null;   // vG: the playing voice's gain, so a volume change is heard at once (not from the next clip on)
+    const stopVoice = () => { cancelAnimationFrame(vRaf); vG = null; if (vEl) { try { vEl.pause(); } catch {} vEl = null; } };
+    const setVolume = (v) => { volume = Math.max(0, Math.min(1, v)); try { if (vG && ac) vG.gain.setTargetAtTime(2.4 * volume, ac.currentTime, .015); else if (vEl) vEl.volume = volume; } catch {} };
     const near = (t) => t * t * (3 - 2 * t);   // 0 = far … 1 = right at the ear (smoothstep: she stays away, then comes in)
     let voiceDb = null, voiceRange = [0, -99];
     const voiceAt = (url, path, onEnv, onEnd) => {
       stopVoice(); try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); ac.resume?.(); } catch {}
       const a = vEl = new Audio(url); a.crossOrigin = 'anonymous'; let an = null, buf = null, pn = null, dist = null, peak = .02;
       voiceRange = [0, -99]; const RANGE = path.range ?? 30;   // dB from far to right at the ear (user: clearly quiet → clearly loud and intimate)
-      try { const src = ac.createMediaElementSource(a), g = ac.createGain(); g.gain.value = 2.4 * vol(); an = ac.createAnalyser(); an.fftSize = 1024; buf = new Float32Array(an.fftSize);
+      try { const src = ac.createMediaElementSource(a), g = vG = ac.createGain(); g.gain.value = 2.4 * vol(); an = ac.createAnalyser(); an.fftSize = 1024; buf = new Float32Array(an.fftSize);
         pn = ac.createPanner(); pn.panningModel = 'HRTF'; pn.distanceModel = 'inverse'; pn.rolloffFactor = 0;   // the panner gives the direction only; loudness = dist below
         dist = ac.createGain(); const lim = ac.createDynamicsCompressor(); lim.threshold.value = -4; lim.knee.value = 3; lim.ratio.value = 20; lim.attack.value = .003; lim.release.value = .12;   // no clipping right at the ear
-        src.connect(an); an.connect(g); g.connect(dist); dist.connect(pn); pn.connect(lim); lim.connect(ac.destination); } catch {}
+        src.connect(an); an.connect(g); g.connect(dist); dist.connect(pn); pn.connect(lim); lim.connect(ac.destination); } catch { vG = null; a.volume = vol(); }   // no Web Audio graph: the element's own volume
       const place = (t) => { if (!pn) return; const [x0, z0] = path.from, [x1, z1] = path.to, e = near(t);
         const x = x0 + (x1 - x0) * e, z = z0 + (z1 - z0) * e; if (pn.positionX) { pn.positionX.value = x; pn.positionY.value = 0; pn.positionZ.value = z; } else pn.setPosition(x, 0, z);
         voiceDb = -RANGE * (1 - e); voiceRange = [Math.min(voiceRange[0], voiceDb), Math.max(voiceRange[1], voiceDb)];
@@ -252,7 +253,7 @@
       } else if (st.id === 'volume') {   // a big slider + a soft chime every second (pictogram, readable without sound)
         A.innerHTML = `<h2>${tx('vol')}</h2><div class="vol"><svg viewBox="0 0 64 48" aria-hidden="true"><path d="M6 17h10l14-11v36L16 31H6z" fill="#fff"/><path d="M38 14q8 10 0 20M45 8q14 16 0 32" stroke="#ffd58a" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
           <input type="range" min="0" max="100" value="${Math.round(volume * 100)}" aria-label="${tx('vol')}"></div><p class="sub">${tx('volSub')}</p><div class="row"><button type="button" class="go">✓</button></div>`;
-        const r = A.querySelector('input'); r.addEventListener('input', () => { volume = +r.value / 100; o.onVolume?.(volume); clearTimeout(auto); auto = setTimeout(next, st.s * 1000); timers.push(auto); });
+        const r = A.querySelector('input'); r.addEventListener('input', () => { setVolume(+r.value / 100); o.onVolume?.(volume); clearTimeout(auto); auto = setTimeout(next, st.s * 1000); timers.push(auto); });
         A.querySelector('.go').addEventListener('click', next);
         const say = () => voiceAt(`${MEDIA}voice/koyuki_vol_${LG()}.m4a`, PATH.steady, null, () => at(900, say)); say();   // her line loops while the slider moves
         let auto = setTimeout(next, st.s * 1000); timers.push(auto);
