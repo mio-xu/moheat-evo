@@ -141,6 +141,7 @@ document.querySelectorAll('a[data-topic]').forEach((a) => a.addEventListener('cl
 contactForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const d = Object.fromEntries(new FormData(contactForm));
+  d.topic = d.topic || 'General';
   let ok = true;
   contactForm.querySelectorAll('.cf-field').forEach((f) => {
     const el = f.querySelector('input, textarea');
@@ -197,3 +198,17 @@ document.querySelectorAll('[data-play]').forEach((btn) => btn.addEventListener('
   }),{rootMargin:'120px'});
   vids.forEach(v=>{ v.muted=true; vo.observe(v); });
 })();
+
+// "Show more" blocks: open in place. Without this script the content simply stays visible.
+document.querySelectorAll('.more-btn').forEach((btn) => {
+  const box = document.getElementById(btn.getAttribute('aria-controls'));
+  const label = btn.querySelector('span');
+  const set = (open) => {
+    btn.setAttribute('aria-expanded', open);
+    box.classList.toggle('is-closed', !open);
+    label.textContent = open ? 'Show less' : btn.dataset.more;
+  };
+  btn.hidden = false;
+  set(false);
+  btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
+});

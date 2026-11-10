@@ -60,12 +60,11 @@ git add -A && git commit -m "Describe the change" && git push
 ```
 When you change `styles.css` or `script.js`, bump the `?v=` number on their tags in `index.html` so browsers (especially phones) load the new files instead of a cached copy.
 
-## Before the Kickstarter launch
-- Point the "Get notified at launch" button (`#back` section) to the live campaign URL.
+## Before publishing new media
 - Verify rights/permissions for third-party reaction videos, media screenshots and logos.
 
 ## Page order
-Hero (joint-research badge, SIGGRAPH Asia 2026 film, key points) → interactive thermal demo → voice use cases 01–04 → media use cases 05–08 + partner strip → media wall + press coverage → exhibitions → UTokyo × Suntory joint research → Kickstarter notify → contact form.
+Every section fills one screen; longer lists sit behind a "Show more" button. Hero (SIGGRAPH Asia 2026 film, "Try the demos" / "Talk to us", credentials) → how it works → exhibitions (temporary spot until Nov 16; see the EXHIBITIONS comments in `index.html` to move it back) → use cases → interactive thermal demo → media wall → press coverage → short CTA → contact form.
 
 ## Contact form
 Messages go to `moheat-evo@outlook.com` (`CONTACT_EMAIL` in `script.js`).
