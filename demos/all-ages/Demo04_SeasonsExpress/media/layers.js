@@ -27,7 +27,7 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/holo_eyes.webp?v=d3fc3305",
+     "src": "art/holo_eyes.webp?v=9e873d3a",
      "rect": [
       202,
       422,
@@ -108,7 +108,7 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/wave_eyes.webp?v=8816197b",
+     "src": "art/wave_eyes.webp?v=969e72c2",
      "rect": [
       247,
       316,
@@ -189,7 +189,7 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/ear_eyes.webp?v=b2a6ee16",
+     "src": "art/ear_eyes.webp?v=2794fcf0",
      "rect": [
       176,
       576,
