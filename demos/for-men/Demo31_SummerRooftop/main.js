@@ -356,6 +356,7 @@
   // sparkler balls in the still (1920×1080): ball 0 = hers, ball 1 = yours
   const BALL = [[837, 938], [1187, 1030]];   // the tips of the two strings in the layered sparkler still (no flame drawn in the art)
   const sparks = Array.from({ length: 60 }, () => ({ b: 0, x: 0, y: 0, vx: 0, vy: 0, life: 0 }));
+  addEventListener('moheat:pause', (e) => { if (e.detail && S.started && (mix < 1 || S.view !== viewB)) { viewA = viewB = S.view; mix = 1; try { draw(S.t ?? 0, 0); } catch {} } });   // paused mid cross-fade: show the new view only (shell.js moheat:pause, Demo21 2026-11-11)
   function draw(t, dt) {
     if (S.view !== viewB) { viewA = viewB; viewB = S.view; mix = 0; }
     clips();
