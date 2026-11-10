@@ -26,7 +26,7 @@
   let S = fresh(), run = 0;
   const STEPS = [['arrive', 'ゲーセン到着', 'At the arcade'], ['taiko', '太鼓で勝負', 'Taiko match'], ['race', 'レースゲーム', 'Racing'],
     ['crane', 'クレーンゲーム', 'Crane game'], ['booth', 'プリクラ', 'Purikura'], ['street', '帰り道', 'The way home']];
-  function setStep(i) { $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
+  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.2; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
 
   // ---------------------------------------------------------------- subtitles + voice
   const subJa = $('subJa'), subEn = $('subEn'), subs = $('subs');
@@ -204,12 +204,12 @@
   let inK = 0, coldK = 1, fanK = 0, cheekK = 0, canK = 0, fanPhase = 0;
   function update(dt) {
     S.t += dt; if (!S.started) return;
-    S.clock += dt; S.lv = SND.voiceLevel();
+    S.clock += dt; S.lv = SND.voiceLevel(); S.vlv = (S.vlv || 0) + (S.lv - (S.vlv || 0)) * (1 - Math.exp(-dt / (S.lv > (S.vlv || 0) ? .05 : .8)));   // voice warmth = the speech envelope, not each syllable (no sub-second hot ↔ cold flicker, guide §3 节奏)
     { const vt = talking ? 1 : 0; S.env += (vt - S.env) * (1 - Math.exp(-dt / (vt > S.env ? .06 : .3))); }   // talking envelope (shared/layers.js mouth)
     const ease = (cur, tgt, tau) => cur + (tgt - cur) * (1 - Math.exp(-dt / tau));
     inK = ease(inK, S.inside, 1.2); coldK = ease(coldK, S.cold, .6); cheekK = ease(cheekK, S.cheek, .5); canK = ease(canK, S.can, .25);
     // racing fans: a gusting blast whose strength follows the "speed" (two overlapping waves → uneven gusts)
-    if (S.fans) { fanPhase += dt; fanK = .55 + .45 * Math.max(0, Math.sin(fanPhase * 2.7) * .6 + Math.sin(fanPhase * 5.3 + 1) * .4); }
+    if (S.fans) { fanPhase += dt; fanK = .55 + .45 * Math.max(0, Math.sin(fanPhase * 1.6) * .6 + Math.sin(fanPhase * 2.3 + 1) * .4); }   // gusts ≥ ~1.5 s apart: each one felt (guide §3 节奏)
     else fanK = ease(fanK, 0, .35);
     S.flash = Math.max(0, S.flash - dt * 2.5);
   }
@@ -222,7 +222,7 @@
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S.started) return out;
     const P = S.pos;
-    if (talking) add(P.az, 'h', (.1 + .8 * clamp(S.lv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
+    if (talking) add(P.az, 'h', (.1 + .8 * clamp(S.vlv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
     add(-1.5, 'h', .12 * inK, '🎮'); add(1.5, 'h', .12 * inK, '🎮');
     add(-1.5, 'c', .4 * coldK, '❄️'); add(1.5, 'c', .4 * coldK, '❄️');
     if (S.gust) add(S.gust.az, 'c', .35 * S.gust.k, '🌬');
@@ -235,9 +235,10 @@
   function thermal(dt) {
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
     for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
+    const rest = S.clock < (S.restUntil || 0);   // a short rest between scenes (guide §3 节奏): every channel off for a moment, so the next scene is felt on its own
     for (const e of ['L', 'R']) for (const k of ['c', 'h']) {
-      const target = k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
-      const tau = target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
+      const target = rest ? 0 : k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
+      const tau = rest ? .15 : target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
       ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
     }
     return { th: { ...ear }, src };

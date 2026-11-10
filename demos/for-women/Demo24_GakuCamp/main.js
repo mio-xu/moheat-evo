@@ -41,7 +41,7 @@
   const fresh = () => ({ started: true, t: 0, clock: 0, view: 'live', pos: { az: 0, dist: 1 }, lv: 0, env: 0,
     fire: .32, fireBase: .32, wind: .4, shield: 0, snow: 0, blanket: 0, mug: 0, imo: 0, fade: 0, viewers: CH.viewers });
   let S = { started: false, t: 0 }, mode = 'title';   // title | live | ended
-  function setStep(i) { S.step = i; $('steps').innerHTML = CH.steps.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[0]} · <small>${s[1]}</small></li>`).join(''); }
+  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.2; S.step = i; $('steps').innerHTML = CH.steps.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[0]} · <small>${s[1]}</small></li>`).join(''); }
 
   // ---------------------------------------------------------------- subtitles + his voice
   const subJa = $('subJa'), subEn = $('subEn'), subs = $('subs');
@@ -234,6 +234,7 @@
     S.clock += dt; S.lv = SND.voiceLevel();
     const vt = talking ? clamp((S.lv - .005) / .06) : 0;   // voice envelope (attack 0.06 s, release 0.3 s)
     S.env += (vt - S.env) * (1 - Math.exp(-dt / (vt > S.env ? .06 : .3)));
+    S.henv = (S.henv || 0) + (vt - (S.henv || 0)) * (1 - Math.exp(-dt / (vt > (S.henv || 0) ? .06 : .8)));   // voice warmth: the same envelope, slower release (no sub-second hot ↔ cold flicker, guide §3 节奏)
     if (S.fire > S.fireBase) S.fire = Math.max(S.fireBase, S.fire - dt / 40);   // a fresh log burns down slowly
     if (Math.random() < dt * .5) S.viewers += Math.round(rnd(-4, 9));
     bots(dt);
@@ -242,7 +243,7 @@
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S.started) return out;
     const P = S.pos;
-    if (talking) add(P.az, 'h', (.1 + .8 * S.env) * (P.dist < .15 ? 1 : P.dist <= .3 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');   // a voice is warm
+    if (talking) add(P.az, 'h', (.1 + .8 * S.henv) * (P.dist < .15 ? 1 : P.dist <= .3 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');   // a voice is warm
     add(.9, 'h', S.fire * (1 - .5 * S.blanket), '🔥');                                                     // the campfire ~1 m to the right
     add(-1.35, 'c', S.wind * gust(S.t) * (1 - .85 * S.shield) * (1 - .9 * S.blanket), '🌬');             // lake wind, blocked by him / the blanket
     if (S.shield) add(-1.4, 'h', .2 * S.shield, '🧥');                                                    // his body right beside the mic
@@ -256,9 +257,10 @@
   function thermal(dt) {
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
     for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
+    const rest = S.clock < (S.restUntil || 0);   // a short rest between scenes (guide §3 节奏): every channel off for a moment, so the next scene is felt on its own
     for (const e of ['L', 'R']) for (const k of ['c', 'h']) {
-      const target = k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
-      const tau = target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
+      const target = rest ? 0 : k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
+      const tau = rest ? .15 : target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
       ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
     }
     return { th: { ...ear }, src };

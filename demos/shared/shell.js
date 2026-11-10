@@ -162,13 +162,30 @@
     MoHeatDevice.create = (...a) => { const inst = create(...a); const send = inst.send; devSend.add(send);
       // same ear, cold ↔ hot with one mode per ear: at least 0.15 s at zero in between (the films' rule, for every engine that sends the old form). DUAL drives cool and heat independently, so it needs none
       const ears = { L: { p: '', t: 0 }, R: { p: '', t: 0 } }; let retry = 0;
+      // same ear, hot ↔ cold at most about once a second (user 2026-11-10: 0.3–0.5 s cannot be felt; the safety net under each demo's
+      // own data, guide §3 节奏): an ear whose dominant mode (heat − cool, ±.15) would flip less than MINSW after its last change keeps
+      // the new mode's channel at 0 until then — a short rest, then the new mode. Old form and DUAL alike; `stop` passes at once.
+      const MINSW = 950, dom = { L: { s: '', t: -1e9 }, R: { s: '', t: -1e9 } };
+      const minSwitch = (line, now) => {
+        const v = {}; line.replace(/\b([LR][CH])(\d+)\b/g, (m, k, n) => { v[k] = +n; return m; });
+        let wait = 0; const hold = {};
+        for (const e of ['L', 'R']) {
+          const h = Math.min(1, (v[e + 'H'] || 0) / 200), c = v[e + 'C'] ? Math.max(0, v[e + 'C'] - 35) / 45 : 0, d = h - c;
+          const s = d >= .15 ? 'H' : d <= -.15 ? 'C' : '', st = dom[e];
+          if (!s || s === st.s) continue;
+          if (st.s && now - st.t < MINSW) { hold[e + s] = 1; wait = Math.max(wait, MINSW - (now - st.t)); }
+          else { st.s = s; st.t = now; }
+        }
+        return { wait, out: wait ? line.replace(/\b([LR][CH])(\d+)\b/g, (m, k) => (hold[k] ? `${k}0` : m)) : line };
+      };
       inst.send = (line) => {
         if (!gate() && !/^stop$/i.test(line)) return undefined;
         real.ct(retry);
-        if (/^(stop|DUAL)/i.test(line)) { ears.L.p = ears.R.p = ''; return send(line); }
-        const now = real.now(); let wait = 0;
-        const out = line.replace(/\b([LR])([CH])(\d+)\b/g, (m, e, p, v) => { if (+v === 0) return m; const st = ears[e]; if (st.p && st.p !== p && now - st.t < 150) { wait = Math.max(wait, 150 - (now - st.t)); return `${e}${p}0`; } st.p = p; st.t = now; return m; });
-        if (wait) retry = real.st(() => inst.send(line), wait + 2);   // the moment the 0.15 s are over, not later
+        if (/^stop/i.test(line)) { ears.L.p = ears.R.p = ''; return send(line); }
+        const now = real.now(); let { wait, out } = minSwitch(line, now);
+        if (/^DUAL/i.test(line)) { ears.L.p = ears.R.p = ''; if (wait) retry = real.st(() => inst.send(line), wait + 2); return send(out); }
+        out = out.replace(/\b([LR])([CH])(\d+)\b/g, (m, e, p, v) => { if (+v === 0) return m; const st = ears[e]; if (st.p && st.p !== p && now - st.t < 150) { wait = Math.max(wait, 150 - (now - st.t)); return `${e}${p}0`; } st.p = p; st.t = now; return m; });
+        if (wait) retry = real.st(() => inst.send(line), wait + 2);   // the moment the hold is over, not later
         return send(out); };
       return inst; };
   }

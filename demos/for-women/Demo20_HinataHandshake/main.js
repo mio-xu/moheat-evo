@@ -30,7 +30,7 @@
     ['queue', '列に並ぶ', 'In line'], ['hello', 'ごあいさつ', 'Say hi'], ['hands', '握手', 'The handshake'],
     ['secret', '耳元で', 'At your ear'], ['over', '時間オーバー', 'Over time'], ['bye', 'またね', 'See you'],
   ];
-  function setStep(i) { S.step = i; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
+  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.2; S.step = i; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
 
   // ---------------------------------------------------------------- subtitles
   const subJa = $('subJa'), subEn = $('subEn'), subs = $('subs');
@@ -137,7 +137,7 @@
       const b = await choice([['ち、ちがうの！', "N-no, it's not like that!"], ['…ごめんね', '…Sorry']]);
       await say(b ? 'h09b' : 'h09a');
       // time's up — but he does not let go
-      await go('v_lean_back', 'hands'); setStep(4); SND.loop('heart')?.set(.15);
+      await go('v_lean_back', 'hands'); setStep(4); SND.loop('heart')?.set(.15); setTimeout(() => { if (my === run) door(); }, 1600);   // the next fan comes in: the cold rolls past both ears again
       SND.fx.timer(); await staff('s03');
       const c = await choice([['手をはなす', 'Let go'], ['…もうちょっとだけ', '…Just a little longer']]);
       if (c === 0) { SND.fx.rustle(0, .45); S.hold = .3; await sleep(.5); SND.fx.clasp(); S.hold = 1; await say('h10a'); }
@@ -179,13 +179,14 @@
     const out = [], add = (az, k, s, icon, layer) => { if (s > .01) out.push({ az, k, s, icon, layer }); };
     if (!S.started) return out;
     const lv = talking ? clamp((S.lv - .008) * 4.5) : 0;
-    vEnv += (lv - vEnv) * (1 - Math.exp(-dt / (lv > vEnv ? .06 : .3)));
+    vEnv += (lv - vEnv) * (1 - Math.exp(-dt / (lv > vEnv ? .06 : .8)));   // slow release: voice warmth follows the phrase, not each syllable (guide §3 节奏)
     const p = POS[S.view];
     if (p.dist < .3) add(p.az, 'h', .1 + .8 * vEnv, '💬', 'voice');            // at your ear
     else if (p.dist < .6) add(0, 'h', .05 + .4 * vEnv, '💬', 'voice');        // holding your hands, face close
     else if (p.dist < 1) add(0, 'h', .3 * vEnv, '💬', 'voice');               // across the table
     if (S.breath) add(0, 'h', .65 * Math.sin(Math.min(1, S.breath) * Math.PI / 2 + (1 - S.breath) * .9), '💨', 'touch');
-    add(1.4, 'c', S.draft + .55 * S.gust, '🚪', 'env');
+    add(1.4, 'c', S.draft + .3 * S.gust, '🚪', 'env');
+    if (S.gust > .05) add(1.4 - 2.8 * Math.min(1, (1 - S.gust) * 1.6), 'c', .5 * Math.sqrt(S.gust), '🌬', 'env');   // the winter air rolls in from the doors on your right and across the hall to your left ear
     return out;
   }
   const chan = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
@@ -193,8 +194,8 @@
     const sum = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 }, src = layers(dt);
     for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum['L' + s.k] += s.s * wL; sum['R' + s.k] += s.s * wR; }
     for (const k of Object.keys(chan)) {
-      const target = Math.min(k[1] === 'h' ? .95 : 1, sum[k]);
-      chan[k] += (target - chan[k]) * (1 - Math.exp(-dt / (target > chan[k] ? .08 : .25)));
+      const rest = S.clock < (S.restUntil || 0), target = rest ? 0 : Math.min(k[1] === 'h' ? .95 : 1, sum[k]);   // rest: a short pause between scenes (guide §3 节奏)
+      chan[k] += (target - chan[k]) * (1 - Math.exp(-dt / (rest ? .15 : target > chan[k] ? .08 : .25)));
     }
     return { th: { ...chan }, src };
   }

@@ -101,7 +101,7 @@
       await say(hi ? 'p03b' : 'p03a', { az: .22, dist: .9 });
       await say('p04', { az: .3, dist: 1 });
 
-      chap = 1;
+      chap = 1; S.restUntil = S.clock + 1.2;   // a short rest between scenes (guide §3 节奏)
       // 2 · the genkan: the door slides open, warm air from the house, grandma's hug at your left ear
       SND.fx.steps(.1, .1, 6, .4, 1, 1, true); S.outdoor = .6; wind?.set(.18, 1.5); await sleep(1.6); alive(my);
       S.view = 'genkan'; SND.fx.door(0, 1.4); S.door = 1; S.wind = .5; await sleep(.9); alive(my);
@@ -113,7 +113,7 @@
       S.hug = 0;
       await say('g03', { az: -.35, dist: .6 });
 
-      chap = 2;
+      chap = 2; S.restUntil = S.clock + 1.2;   // a short rest between scenes (guide §3 节奏)
       // 3 · the kotatsu: the kerosene stove on your right, a steaming bowl of oshiruko held out to you
       SND.fx.door(0, 2.5); S.door = 0; S.outdoor = 0; S.wind = 0; wind?.set(0, 1); snow?.set(0, 1); await sleep(.6); alive(my);
       S.view = 'kotatsu'; const stove = SND.loop('stove'); stove?.set(.3, 1.5); S.stove = 1; await sleep(.8); alive(my);
@@ -126,7 +126,7 @@
       if (S.treat === 0) await say('p06a', { az: .35, dist: .8 }); else await say('g05b', { az: -.35, dist: .9 });
       await say('g06', { az: -.35, dist: .9 });
 
-      chap = 3;
+      chap = 3; S.restUntil = S.clock + 1.2;   // a short rest between scenes (guide §3 节奏)
       // 4 · next morning in the snowy garden: grandpa's snowball whizzes past your right ear; you throw one back
       S.view = 'yard'; S.stove = 0; S.steam = 0; stove?.set(0, 1); S.outdoor = 1; S.wind = .5; wind?.at(-.8, 5); wind?.set(.15, 1.5); snow?.set(.2, 1.5);
       await sleep(1.2); alive(my);
@@ -139,7 +139,7 @@
       await say('p10', { az: .45, dist: 2 });
       await say('g07', { az: -.7, dist: 6 });
 
-      chap = 4;
+      chap = 4; S.restUntil = S.clock + 1.2;   // a short rest between scenes (guide §3 节奏)
       // 5 · night: grandma's story at your pillow (left), grandpa snoring next door (right); the quilt up to your ears
       S.view = 'futon'; S.outdoor = 0; S.wind = 0; wind?.set(0, 1.5); snow?.set(0, 1.5); const snore = SND.loop('snore'); snore?.set(.35, 2);
       await sleep(1.6); alive(my);
@@ -160,7 +160,7 @@
   const K = { wind: 1, outdoor: 1, door: 0, hug: 0, stove: 0, steam: 0, quilt: 0 }, TAU = { wind: 1, outdoor: 1.5, door: .8, hug: .4, stove: 2, steam: .6, quilt: 2.5 };
   function update(dt) {
     S.t += dt; if (!S.started) return;
-    S.clock += dt; S.lv.gm = SND.voiceLevel('gm'); S.lv.gp = SND.voiceLevel('gp');
+    S.clock += dt; S.lv.gm = SND.voiceLevel('gm'); S.lv.gp = SND.voiceLevel('gp'); S.vl = S.vl || { gm: 0, gp: 0 }; for (const w of ['gm', 'gp']) S.vl[w] += (S.lv[w] - S.vl[w]) * (1 - Math.exp(-dt / (S.lv[w] > S.vl[w] ? .05 : .8)));   // voice warmth = the speech envelope, not each syllable (guide §3 节奏)
     for (const k in K) K[k] += (S[k] - K[k]) * (1 - Math.exp(-dt / TAU[k]));
   }
   // Thermal, two layers (firmware DUAL: cool and heat independent on each ear).
@@ -174,7 +174,7 @@
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S.started) return out;
     const vf = (P, lv) => (.1 + .8 * clamp(lv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1);
-    for (const w of ['gm', 'gp']) if (S.talk[w] && S.at[w]) add(S.at[w].az, 'h', vf(S.at[w], S.lv[w]), w === 'gm' ? '👵' : '👴');
+    for (const w of ['gm', 'gp']) if (S.talk[w] && S.at[w]) add(S.at[w].az, 'h', vf(S.at[w], S.vl[w]), w === 'gm' ? '👵' : '👴');
     add(-1.5, 'c', .16 * K.outdoor, '❄️'); add(1.5, 'c', .16 * K.outdoor, '❄️');
     const gust = .75 + .25 * Math.sin(S.t * .9) * Math.sin(S.t * .37);
     if (S.view === 'station' || S.view === 'genkan') add(-1.35, 'c', .4 * K.wind * gust, '🌬');
@@ -192,9 +192,10 @@
   function thermal(dt) {
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
     for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
+    const rest = S.clock < (S.restUntil || 0);   // a short rest between scenes (guide §3 节奏): every channel off for a moment, so the next scene is felt on its own
     for (const e of ['L', 'R']) for (const k of ['c', 'h']) {
-      const target = k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
-      const tau = target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
+      const target = rest ? 0 : k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
+      const tau = rest ? .15 : target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
       ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
     }
     return { th: { ...ear }, src };

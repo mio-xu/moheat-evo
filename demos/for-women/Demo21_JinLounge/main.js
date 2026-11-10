@@ -32,7 +32,7 @@
   let S = fresh(), run = 0;
   const STEPS = [['call', '楽屋に呼ばれた', 'Called to his lounge'], ['can', '冷たいいたずら', 'A cold prank'], ['look', '俺だけ見てろ', 'Look only at me'],
     ['ear', '耳元で', 'At your ear'], ['jacket', '彼のジャケット', 'His jacket']];
-  function setStep(i) { $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
+  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.2; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
 
   // ---------------------------------------------------------------- subtitles + voice
   const subJa = $('subJa'), subEn = $('subEn'), subs = $('subs');
@@ -127,7 +127,7 @@
   // ---------------------------------------------------------------- per-frame state + thermal
   function update(dt) {
     S.t += dt; if (!S.started) return;
-    S.clock += dt; S.lv = SND.voiceLevel();
+    S.clock += dt; S.lv = SND.voiceLevel(); S.vlv = (S.vlv || 0) + (S.lv - (S.vlv || 0)) * (1 - Math.exp(-dt / (S.lv > (S.vlv || 0) ? .05 : .8)));   // voice warmth = the speech envelope, not each syllable (no sub-second hot ↔ cold flicker, guide §3 节奏)
   }
   // Thermal, two layers (firmware DUAL: cool and heat independent on each ear — CLAUDE.md, 2026-11-08).
   //  · VOICE: a voice is warm. His loudness (0.1 + 0.8 × level) warms the ear he speaks at — × 1 right at your ear,
@@ -139,7 +139,9 @@
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S.started) return out;
     const P = S.pos;
-    if (talking) add(P.az, 'h', (.1 + .8 * clamp(S.lv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
+    if (talking) add(P.az, 'h', (.1 + .8 * clamp(S.vlv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
+    const ac = .2 * (1 - S.jacket) * (S.near > .6 ? .5 : 1);   // the lounge's air-conditioning ("don't stand there looking cold"), from the vent on your left; less when he is right in front of you, gone in his jacket
+    if (ac > .01) { add(-1.3, 'c', ac, '❄️'); add(1.3, 'c', .5 * ac, '❄️'); }
     if (S.can) add(1.4, 'c', .85 * S.can, '🥫');                 // the ice-cold can pressed to your right cheek
     if (S.near > .6) add(0, 'h', .2 * (S.near - .6) / .4 + .25 * S.gaze, '🖤');   // his face a hand's width from yours
     if (S.ear) add(1.4, 'h', .35 * S.ear, '🌬');                 // his breath at your right ear (on top of his voice)

@@ -29,7 +29,7 @@
   let S = fresh(), run = 0;
   const STEPS = [['counter', 'ラストオーダーのあと', 'After last orders'], ['shake', 'シェイカー', 'The shaker'], ['flame', 'あなたのためのカクテル', 'A cocktail for you'],
     ['sit', 'カウンターのこっち側', 'This side of the counter'], ['whisper', '本当の名前', 'Her real name']];
-  function setStep(i) { $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
+  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.2; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
 
   // ---------------------------------------------------------------- subtitles + voice
   const subJa = $('subJa'), subEn = $('subEn'), subs = $('subs');
@@ -111,7 +111,7 @@
       //     (cool) while her whisper warms the same ear (DUAL), and slides the glass over
       setStep(1); await go(null, 'shake'); await sleep(.2);
       await say(a ? 'l04b' : 'l04a', FRONT);
-      SND.fx.ice(); await sleep(1.1); SND.fx.shake(-.2, 16); await sleep(3); alive(my);
+      SND.fx.ice(); S.chill = 1; await sleep(1.1); SND.fx.shake(-.2, 16); await sleep(3); S.chill = 0; alive(my);   // the iced shaker in front of your face: a cool breath on both ears, then the warm whisper (cold → warm)
       await go(null, 'lean', () => { SND.fx.rustle(.3, .5); });
       SND.fx.touch(); S.shaker = 1;
       await say('l05', CHEEK_R, { gain: 1.6 });
@@ -171,13 +171,13 @@
   }
 
   // ---------------------------------------------------------------- per-frame state + thermal
-  let doorK = 0, shakerK = 0, flameK = 0, coffeeK = 0, besideK = 0, dimK = 0;
+  let chillK = 0, doorK = 0, shakerK = 0, flameK = 0, coffeeK = 0, besideK = 0, dimK = 0;
   function update(dt) {
     S.t += dt; if (!S.started) return;
-    S.clock += dt; S.lv = SND.voiceLevel();
+    S.clock += dt; S.lv = SND.voiceLevel(); S.vlv = (S.vlv || 0) + (S.lv - (S.vlv || 0)) * (1 - Math.exp(-dt / (S.lv > (S.vlv || 0) ? .05 : .8)));   // voice warmth = the speech envelope, not each syllable (no sub-second hot ↔ cold flicker, guide §3 节奏)
     { const vt = talking ? 1 : 0; S.env += (vt - S.env) * (1 - Math.exp(-dt / (vt > S.env ? .06 : .3))); }   // talking envelope (shared/layers.js mouth)
     const ease = (cur, tgt, up, down) => cur + (tgt - cur) * (1 - Math.exp(-dt / (tgt > cur ? up : down)));
-    doorK = ease(doorK, S.door, .25, .9); shakerK = ease(shakerK, S.shaker, .15, .5); flameK = ease(flameK, S.flame, .3, .4);
+    doorK = ease(doorK, S.door, .25, .9); chillK = ease(chillK, S.chill || 0, .3, .6); shakerK = ease(shakerK, S.shaker, .15, .5); flameK = ease(flameK, S.flame, .3, .4);
     coffeeK = ease(coffeeK, S.coffee, .8, 1.2); besideK = ease(besideK, S.beside, 1, 1); dimK = ease(dimK, S.dim, .6, 1);
   }
   // Thermal, two layers (firmware DUAL: cool and heat independent on each ear — CLAUDE.md, 2026-11-08).
@@ -192,8 +192,9 @@
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S.started) return out;
     const P = S.pos;
-    if (talking) add(P.az, 'h', (.1 + .8 * clamp(S.lv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
-    if (doorK > .02) add(-1.3, 'c', .45 * doorK, '🌧');
+    if (talking) add(P.az, 'h', (.1 + .8 * clamp(S.vlv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
+    if (doorK > .02) { add(-1.3, 'c', .45 * doorK, '🌧'); add(1.3, 'c', .15 * doorK, '🌧'); }   // the draft fills the room: strong on the left (the door), faint on the right
+    if (chillK > .02) add(0, 'c', .25 * chillK, '🧊');   // the frosted shaker shaken a hand's width in front of you
     if (shakerK > .02) add(1.35, 'c', .65 * shakerK, '🧊');
     if (flameK > .02) add(0, 'h', flameK * (.3 + .1 * Math.sin(S.t * 13) * Math.sin(S.t * 7.3)), '🔥');
     if (coffeeK > .02) add(0, 'h', .25 * coffeeK, '☕');
@@ -204,9 +205,10 @@
   function thermal(dt) {
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
     for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
+    const rest = S.clock < (S.restUntil || 0);   // a short rest between scenes (guide §3 节奏): every channel off for a moment, so the next scene is felt on its own
     for (const e of ['L', 'R']) for (const k of ['c', 'h']) {
-      const target = k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
-      const tau = target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
+      const target = rest ? 0 : k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
+      const tau = rest ? .15 : target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
       ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
     }
     return { th: { ...ear }, src };

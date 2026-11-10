@@ -27,7 +27,7 @@
   let S = fresh(), run = 0;
   const STEPS = [['arrive', '屋上で', 'On the roof'], ['popsicle', 'ソーダアイス', 'Soda popsicle'], ['fan', 'うちわ', 'The paper fan'],
     ['sparkler', '線香花火', 'Sparklers'], ['fireworks', '花火の夜', 'Fireworks']];
-  function setStep(i) { $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
+  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.2; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
 
   // ---------------------------------------------------------------- subtitles + voice
   const subJa = $('subJa'), subEn = $('subEn'), subs = $('subs');
@@ -232,6 +232,7 @@
       fireworks(false);
       await go('t_fireworks_whisper', 'whisper', () => { S.near = 2; SND.fx.rustle(-1.2, .2); });
       await sleep(.4);
+      breeze(1.6, 1.0, 4.5, .8).catch(() => {});   // the night wind off the sea on your right while she whispers at your left: cool right, warm left
       await say('n16', LEFT_EAR);
       fireworks(true);
       S.end = await choice([['…俺も', '…Me too'], ['…知ってた', '…I knew']]);
@@ -250,7 +251,7 @@
   let iceK = 0, fanK = 0, ballK = [0, 0], nearK = 0, leanK = 0, fanPhase = 0;
   function update(dt) {
     S.t += dt; if (!S.started) return;
-    S.clock += dt; S.lv = SND.voiceLevel();
+    S.clock += dt; S.lv = SND.voiceLevel(); S.vlv = (S.vlv || 0) + (S.lv - (S.vlv || 0)) * (1 - Math.exp(-dt / (S.lv > (S.vlv || 0) ? .05 : .8)));   // voice warmth = the speech envelope, not each syllable (no sub-second hot ↔ cold flicker, guide §3 节奏)
     { const vt = talking ? 1 : 0; S.env += (vt - S.env) * (1 - Math.exp(-dt / (vt > S.env ? .06 : .3))); }   // talking envelope (shared/layers.js mouth)
     iceK += (S.ice - iceK) * (1 - Math.exp(-dt / .25));
     for (let i = 0; i < 2; i++) ballK[i] += (S.balls[i] - ballK[i]) * (1 - Math.exp(-dt / (S.balls[i] ? .8 : .25)));
@@ -274,7 +275,7 @@
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S.started) return out;
     const P = S.pos;
-    if (talking) add(P.az, 'h', (.1 + .8 * clamp(S.lv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
+    if (talking) add(P.az, 'h', (.1 + .8 * clamp(S.vlv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
     if (S.breeze) add(S.breeze.az, 'c', .4 * S.breeze.k, '🌬');
     if (iceK > .02) add(1.3, 'c', .7 * iceK, '🍦');
     if (fanK > .02) add(-1.3, 'c', .25 + .35 * fanK, '🪭');
@@ -289,9 +290,10 @@
   function thermal(dt) {
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
     for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
+    const rest = S.clock < (S.restUntil || 0);   // a short rest between scenes (guide §3 节奏): every channel off for a moment, so the next scene is felt on its own
     for (const e of ['L', 'R']) for (const k of ['c', 'h']) {
-      const target = k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
-      const tau = target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
+      const target = rest ? 0 : k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
+      const tau = rest ? .15 : target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
       ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
     }
     return { th: { ...ear }, src };

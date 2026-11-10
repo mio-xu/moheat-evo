@@ -24,7 +24,7 @@
     ['ring', '電話が鳴ってる', 'Your phone is ringing'], ['talk', '蓮と話そう', 'Talk with Ren'], ['window', '同じ雪を見よう', 'Watch the same snow'],
     ['switch', '反対の耳で聞いて', 'Listen with your other ear'], ['secret', 'ないしょの話', 'A secret'], ['door', '玄関の向こうに', 'At your door'],
   ];
-  function setStep(i) { S.step = i; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
+  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.2; S.step = i; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
 
   // ---------------------------------------------------------------- subtitles
   const subJa = $('subJa'), subEn = $('subEn'), subs = $('subs');
@@ -162,7 +162,7 @@
     const lv = SND.voiceLevel();
     S.near += ((S.inCall ? 1 : 0) - S.near) * (1 - Math.exp(-dt / .6));
     S.doorCold = Math.max(0, S.doorCold - dt / 5);
-    S.lv = lv;
+    S.lv = lv; S.vlv = (S.vlv || 0) + (lv - (S.vlv || 0)) * (1 - Math.exp(-dt / (lv > (S.vlv || 0) ? .05 : .8)));   // voice warmth = the speech envelope, not each syllable (guide §3 节奏)
     // your voice
     if (micWait) {
       const ml = micState === 'on' ? micLevel() : 0; floor = ml < floor ? ml : floor + (ml - floor) * dt * .05;
@@ -176,28 +176,27 @@
   function sources() {
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S.started) return out;
-    if (S.inCall && S.ear) add(S.ear * 1.45, 'h', .42 * S.near + clamp(S.lv * 6) * (S.whisper ? .35 : .22), '📱');
-    if (S.windowOpen) add(1.25, 'c', .62, '❄');
+    if (S.inCall && S.ear) add(S.ear * 1.45, 'h', .42 * S.near + clamp(S.vlv * 6) * (S.whisper ? .35 : .22), '📱');
+    if (S.windowOpen) { add(1.25, 'c', .62, '❄'); add(-1.3, 'c', .18, '❄'); }   // the open window on your right; the cold fills the room, so the left ear (phone, warm) gets a little too: cool + warm on one ear (DUAL)
     if (S.doorCold > 0) add(-.4, 'c', .75 * S.doorCold, '🚪');
-    if (S.view === 'door' || S.view === 'hug') add(0, 'h', .28 + clamp(S.lv * 6) * .2, '🧑');
+    if (S.view === 'door' || S.view === 'hug') add(0, 'h', .28 + clamp(S.vlv * 6) * .2, '🧑');
     if (S.hug) add(0, 'h', .42, '🤍');
-    if (S.hug && talking) add(1.35, 'h', .45 + clamp(S.lv * 6) * .2, '💬');   // "…会いたかった" right at your right ear
+    if (S.hug && talking) add(1.35, 'h', .45 + clamp(S.vlv * 6) * .2, '💬');   // "…会いたかった" right at your right ear
     return out;
   }
-  const ear = { L: { mode: '', v: 0 }, R: { mode: '', v: 0 } };
+  // DUAL (firmware 2026-11-08, user: new and old demos use it): each ear's cool and heat are independent — the phone's warmth and the
+  // cold from the window can be on the same ear at once. A short rest at each chapter change (guide §3 节奏).
+  const ear = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
   function thermal(dt) {
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
     for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
-    const th = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
-    for (const e of ['L', 'R']) {
-      const E = ear[e], hh = Math.min(1, sum[e].h), cc = Math.min(1, sum[e].c);
-      let mode = E.mode;
-      if (!mode) mode = hh > cc ? 'h' : 'c'; else if (mode === 'h' && cc > hh + .06) mode = 'c'; else if (mode === 'c' && hh > cc + .06) mode = 'h';
-      if (mode !== E.mode) { E.v = 0; E.mode = mode; }
-      const target = mode === 'h' ? Math.min(.9, hh) : cc, tau = target > E.v ? (mode === 'h' ? .4 : .2) : .35;
-      E.v += (target - E.v) * (1 - Math.exp(-dt / tau)); th[e + mode] = E.v;
+    const rest = S.clock < (S.restUntil || 0);
+    for (const e of ['L', 'R']) for (const k of ['c', 'h']) {
+      const target = rest ? 0 : k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
+      const tau = rest ? .15 : target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
+      ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
     }
-    return { th, src };
+    return { th: { ...ear }, src };
   }
 
   // ---------------------------------------------------------------- drawing
@@ -307,9 +306,9 @@
   let lastSent = '', lastSendAt = 0, tripped = false, intensity = +store.get('asmr.intensity', 100) / 100;
   const device = MoHeatDevice.create({ select: $('portSelect'), addBtn: $('addPort'), connectBtn: $('connectBtn'), status: $('deviceStatus') }, { log: (l) => console.log('[MoHeat]', l), onConnect: () => { lastSent = ''; } });
   if (!MoHeatDevice.supported) $('deviceStatus').querySelector('span').textContent = 'Web Serial needs desktop Chrome / Edge';
-  function command(th) {
-    const part = (sd, c, h) => (c > OFF ? `${sd}C${Math.round(range.coolMin + c * (range.coolMax - range.coolMin))}` : h > OFF ? `${sd}H${Math.round(range.heatMin + h * (range.heatMax - range.heatMin))}` : `${sd}H0`);
-    return Math.max(th.Lc, th.Lh, th.Rc, th.Rh) <= OFF ? 'stop' : `${part('L', th.Lc, th.Lh)} ${part('R', th.Rc, th.Rh)}`;
+  function command(th) {   // DUAL: each ear's cool and heat set independently (firmware 2026-11-08)
+    const c = (v) => (v > OFF ? Math.round(range.coolMin + v * (range.coolMax - range.coolMin)) : 0), h = (v) => (v > OFF ? Math.round(range.heatMin + v * (range.heatMax - range.heatMin)) : 0);
+    return Math.max(th.Lc, th.Lh, th.Rc, th.Rh) <= OFF ? 'stop' : `DUAL LC${c(th.Lc)} LH${h(th.Lh)} RC${c(th.Rc)} RH${h(th.Rh)}`;
   }
   function stopOutput() { if (device.isConnected()) device.send('stop'); lastSent = 'stop'; }
   function emergencyStop() { tripped = !tripped; const b = $('estop'); if (tripped) { stopOutput(); b.textContent = '↺ Re-arm output'; b.classList.add('tripped'); } else { b.textContent = '■ STOP'; b.classList.remove('tripped'); lastSent = ''; } }

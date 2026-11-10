@@ -296,7 +296,7 @@
     if (!S || !S.started) return;
     S.t += dt; if (S.talkStart) S.clock = S.t - S.talkStart;
     for (const c of S.cast) {
-      const ch = S.ch[c]; ch.lv = SND.level(c);
+      const ch = S.ch[c]; ch.lv = SND.level(c); ch.vl = (ch.vl || 0) + (ch.lv - (ch.vl || 0)) * (1 - Math.exp(-dt / (ch.lv > (ch.vl || 0) ? .05 : .8)));   // voice warmth = the speech envelope, not each syllable (guide §3 节奏)
       if (!ch.talking && ch.exprT > 0) { ch.exprT -= dt; if (ch.exprT <= 0) ch.expr = 'base'; }
       ch.blink -= dt; if (ch.blink < -.13) ch.blink = rnd(2.5, 5);
       // picture: slide to the target box; change of kind (bust ↔ ear …) = fade out, jump, fade in
@@ -367,7 +367,7 @@
     if (!S || !S.started) return out;
     for (const c of S.cast) {
       const ch = S.ch[c], df = ch.dist <= .15 ? 1 : ch.dist <= .6 ? .85 : ch.dist <= 1.5 ? .7 : .25, front = Math.abs(Math.sin(ch.az)) < .45 && Math.cos(ch.az) > 0 ? .6 : 1;
-      if (ch.talking) { add(ch.az, 'h', (.1 + .8 * clamp(ch.lv * 8)) * df * front, c === 'N' ? '信' : '家'); if (out.length) out[out.length - 1].voice = true; }
+      if (ch.talking) { add(ch.az, 'h', (.1 + .8 * clamp(ch.vl * 8)) * df * front, c === 'N' ? '信' : '家'); if (out.length) out[out.length - 1].voice = true; }
       else if (ch.dist <= .15) add(ch.az, 'h', .15, c === 'N' ? '信' : '家');
       else add(ch.az, 'h', 0, '');
     }
