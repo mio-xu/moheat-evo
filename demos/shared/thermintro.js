@@ -204,7 +204,7 @@
     const LG = () => (['en', 'ja', 'zh'].includes(lang()) ? lang() : 'en');
     const PATH = { left: { from: [-2.2, -1.6], to: [-.16, 0], arrive: .6 }, right: { from: [2.2, -1.6], to: [.16, 0], arrive: .6 },
       acrossToRight: { from: [-1.8, -1.6], to: [.16, 0], arrive: .7 },
-      steady: { from: [-1.2, -1], to: [.16, 0], arrive: .6, range: 6 } };   // the volume line: nearly level, so the visitor sets the level they will really hear
+      steady: { from: [0, -1.2], to: [0, -.5], arrive: .6, range: 6 } };   // the volume line: in front, both ears equal and nearly level, so the visitor sets the level they will really hear
     const staffScreen = (title, hint, onRepeat) => {   // big "tell the staff" screen: staff Continue + visitor "Something's wrong" → staff hint
       A.innerHTML = `<div class="staffq"><div class="wave">👋</div><h2>${tx(title)}</h2><div class="row"><button type="button" class="go big1" data-a="go">${tx('staffGo')}</button>
         <button type="button" class="big1" data-a="wrong">${tx('wrong')}</button></div><p class="sub hint" hidden>${tx(hint)}</p><button type="button" class="replay" data-a="again" hidden>${tx('again')}</button></div>`;
@@ -290,7 +290,8 @@
           A.innerHTML = `<div class="sample ${H ? 'warm' : 'cool'}"><img src="${MEDIA}art/${who}_ear.webp" alt=""><div><p class="who">${tx(H ? 'whoH' : 'whoK')}</p>
             ${head()}<p class="line">${tx(H ? 'sampleH' : 'sampleK')}</p></div></div>`;
           // she starts away on the left and comes close to the ear; the thermal = her loudness × how close she is (a voice is warm, Koyuki's breath cool)
-          voiceAt(`${MEDIA}voice/${who}_${lg}.m4a`, H ? PATH.left : PATH.acrossToRight, (env, t) => { const e = Math.min(1, env) * t;
+          voiceAt(`${MEDIA}voice/${who}_${lg}.m4a`, H ? PATH.left : PATH.right,   // each sample stays on its own side the whole time (Koyuki = right ear, as the screen and the cool say)
+            (env, t) => { const e = Math.min(1, env) * t;
             if (H) { const h = env > .06 ? Math.round(150 * kW * e) : 0; send(`LH${h} RH0`); ears(h ? 'warm' : '', ''); }
             else { const cv = env > .06 ? Math.round(35 + 45 * kC * e) : 0; send(`LH0 RC${cv}`); ears('', cv ? 'cool' : ''); }
           }, ask);
