@@ -152,9 +152,10 @@
   function thermal(dt) {
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
     for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
+    const rest = S.clock < (S.restUntil || 0);   // a short rest between scenes (guide §3 节奏): every channel off for a moment, so the next scene is felt on its own
     for (const e of ['L', 'R']) for (const k of ['c', 'h']) {   // each of the four channels on its own (DUAL)
-      const target = k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
-      const tau = target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
+      const target = rest ? 0 : k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
+      const tau = rest ? .15 : target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
       ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
     }
     return { th: { ...ear }, src };

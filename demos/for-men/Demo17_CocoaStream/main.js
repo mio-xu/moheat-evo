@@ -208,7 +208,7 @@
     if (coldK > .02) add(0, 'c', .4 * coldK, '❄️');
     if (ovenK > .02) add(1.35, 'h', .2 * ovenK + .5 * burstK, '♨️');
     if (steamK > .02) add(0, 'h', .2 * steamK, '🍫');
-    if (puffK > .02) add(0, 'c', .5 * Math.sin(Math.PI * Math.min(1, puffK * 1.2)), '💨');
+    if (puffK > .02) add(0, 'c', .65 * Math.sin(Math.PI * Math.min(1, puffK * 1.2)), '💨');
     if (fridgeK > .02) add(-1.35, 'c', .5 * fridgeK, '🧊');
     if (cheekK > .02) add(-1.3, 'h', .3 * cheekK, '🤍');
     return out;

@@ -184,7 +184,7 @@
     add(-1.35, 'h', .25 * K.hug, '🤗');
     add(1.2, 'h', .42 * K.stove * (.92 + .08 * Math.sin(S.t * 3.1)), '🔥');
     add(0, 'h', .22 * K.steam, '♨️');
-    if (S.ball) { const u = (S.clock - S.ball.t0) / .7; if (u < 1) add(1.4, 'c', .85 * Math.sin(Math.PI * clamp(u * 1.2)), '⛄'); }
+    if (S.ball) { const u = (S.clock - S.ball.t0) / 1.2; if (u < 1) add(1.4, 'c', .85 * Math.sin(Math.PI * clamp(u * 1.2)), '⛄'); }
     add(-1.5, 'h', .2 * K.quilt, '🛏'); add(1.5, 'h', .2 * K.quilt, '🛏');
     return out;
   }

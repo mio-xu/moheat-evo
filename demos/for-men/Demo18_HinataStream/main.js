@@ -209,7 +209,7 @@
     const ease = (cur, tgt, tau) => cur + (tgt - cur) * (1 - Math.exp(-dt / tau));
     inK = ease(inK, S.inside, 1.2); coldK = ease(coldK, S.cold, .6); cheekK = ease(cheekK, S.cheek, .5); canK = ease(canK, S.can, .25);
     // racing fans: a gusting blast whose strength follows the "speed" (two overlapping waves → uneven gusts)
-    if (S.fans) { fanPhase += dt; fanK = .55 + .45 * Math.max(0, Math.sin(fanPhase * 1.6) * .6 + Math.sin(fanPhase * 2.3 + 1) * .4); }   // gusts ≥ ~1.5 s apart: each one felt (guide §3 节奏)
+    if (S.fans) { fanPhase += dt; fanK = .55 + .45 * Math.max(0, Math.sin(fanPhase * 1.1) * .6 + Math.sin(fanPhase * 1.7 + 1) * .4); }   // gusts ≥ ~1.5 s apart: each one felt (guide §3 节奏)
     else fanK = ease(fanK, 0, .35);
     S.flash = Math.max(0, S.flash - dt * 2.5);
   }
