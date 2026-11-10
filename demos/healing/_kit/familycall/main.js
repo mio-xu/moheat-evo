@@ -37,7 +37,7 @@
     ['call', 'おばあちゃんちに電話', 'Call home'], ['hello', 'おばあちゃんが出た', 'Grandma answers'], ['gp', 'おじいちゃんも', 'Grandpa too'],
     ['parcel', '荷物が届いた', 'A parcel arrives'], ['scarf', 'ばあばのマフラー', "Grandma's scarf"],
   ];
-  function setStep(i) { S.step = i; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
+  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.2; S.step = i; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
 
   // ---------------------------------------------------------------- subtitles
   const subJa = $('subJa'), subEn = $('subEn'), subs = $('subs');
@@ -252,7 +252,7 @@
     const out = [], add = (az, k, s, icon, layer) => { if (s > .01) out.push({ az, k, s, icon, layer }); };
     if (!S.started) return out;
     const lv = talking ? clamp((S.lv - .008) * 4.5) * (S.far ? .35 : 1) : 0;
-    vEnv += (lv - vEnv) * (1 - Math.exp(-dt / (lv > vEnv ? .06 : .3)));
+    vEnv += (lv - vEnv) * (1 - Math.exp(-dt / (lv > vEnv ? .06 : .8)));   // slow release: warmth follows the phrase, not each syllable (guide §3 节奏)
     if (S.inCall && S.ear && !S.speaker) add(S.ear * 1.45, 'h', .1 + .8 * vEnv, S.who === 'gp' ? '👴' : '👵', 'voice');   // the receiver itself is a little warm
     if (S.doorCold > 0) add(-1.0, 'c', .75 * S.doorCold, '🚪', 'env');
     if (S.scarf > .01) { add(-1.3, 'h', .35 * S.scarf, '🧣', 'env'); add(1.3, 'h', .35 * S.scarf, '🧣', 'env'); }
@@ -269,8 +269,8 @@
     const sum = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 }, src = layers(dt);
     for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum['L' + s.k] += s.s * wL; sum['R' + s.k] += s.s * wR; }
     for (const k of Object.keys(chan)) {
-      const target = Math.min(k[1] === 'h' ? .95 : 1, sum[k]);
-      chan[k] += (target - chan[k]) * (1 - Math.exp(-dt / (target > chan[k] ? .08 : .25)));   // the voice layer is already smoothed; keep this quick
+      const rest = S.clock < (S.restUntil || 0), target = rest ? 0 : Math.min(k[1] === 'h' ? .95 : 1, sum[k]);   // rest: a short pause at each chapter change (guide §3 节奏)
+      chan[k] += (target - chan[k]) * (1 - Math.exp(-dt / (rest ? .15 : target > chan[k] ? .08 : .25)));   // the voice layer is already smoothed; keep this quick
     }
     return { th: { ...chan }, src };
   }

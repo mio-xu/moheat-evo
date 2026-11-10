@@ -212,7 +212,7 @@
     E.placeOf = placeOf;
 
     // ---- chapters (#steps → shared/shell.js)
-    function setStep(i) { $('steps').innerHTML = D.steps.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s.ja} · <small>${s.en}</small></li>`).join(''); }
+    function setStep(i) { if (i > 0 && S?.started) S.restUntil = S.clock + 1.2; $('steps').innerHTML = D.steps.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s.ja} · <small>${s.en}</small></li>`).join(''); }
 
     // ---- positions: the plan's voice table (az in degrees, distance factor) → HRTF place (az rad, metres)
     const POS = (name) => {
@@ -458,7 +458,7 @@
       sweep: (name, kind, a0, a1, secs, lev) => pulses.push({ name, type: 'sweep', t0: S.t, kind, a0, a1, secs, lev }) });
     function update(dt) {
       S.t += dt; if (!S.started) return;
-      S.clock += dt; S.lv = A.voiceLevel();
+      S.clock += dt; S.lv = A.voiceLevel(); S.vlv = (S.vlv || 0) + (S.lv - (S.vlv || 0)) * (1 - Math.exp(-dt / (S.lv > (S.vlv || 0) ? .05 : .8)));   // voice warmth = the speech envelope, not each syllable (no sub-second hot ↔ cold flicker, guide §3 节奏)
       { const vt = talking ? 1 : 0; S.env += (vt - S.env) * (1 - Math.exp(-dt / (vt > S.env ? .06 : .3))); }
       for (const [at, set] of pend.filter((p) => p[0] <= S.t)) { applySet(set); pend = pend.filter((p) => p[0] !== at || p[1] !== set); }
       const live = {}; for (const [n, [, , lev]] of Object.entries(amb)) live[n] = lev;
@@ -485,7 +485,7 @@
       const out = [], add = (azDeg, k, s, icon) => { if (s > .01) out.push({ az: azDeg * RAD, k, s, icon }); };
       if (!S.started) return out;
       const pn = S.posName;
-      if (talking) add(VO.az?.[pn] ?? 0, cfg.voiceKind?.(S.who) === 'cool' ? 'c' : 'h', (.1 + .8 * clamp(S.lv * 8)) * (VO.distance?.[pn] ?? .28) * (pn === 'front' || pn === 'near' ? (VO.front_split ?? .5) : 1), '');
+      if (talking) add(VO.az?.[pn] ?? 0, cfg.voiceKind?.(S.who) === 'cool' ? 'c' : 'h', (.1 + .8 * clamp(S.vlv * 8)) * (VO.distance?.[pn] ?? .28) * (pn === 'front' || pn === 'near' ? (VO.front_split ?? .5) : 1), '');
       for (const [n, [kind, az, lev]] of Object.entries(amb)) add(az, kind === 'warm' ? 'h' : 'c', lev, cfg.icons?.[n] || '');
       for (const p of E.pulses) add(p.az, p.kind === 'warm' ? 'h' : 'c', p.lev, cfg.icons?.[p.name] || '');
       cfg.sources?.((az, kind, s, icon = '') => add(az, kind === 'warm' || kind === 'h' ? 'h' : 'c', s, icon), E);
@@ -495,9 +495,10 @@
     function thermal(dt) {
       const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources(); E.src = src;
       for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
+      const rest = S.clock < (S.restUntil || 0);   // a short rest at each chapter change (guide §3 节奏): every channel off for a moment, so the next scene is felt on its own
       for (const e of ['L', 'R']) for (const k of ['c', 'h']) {
-        const target = k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
-        const tau = target > cur ? (k === 'h' ? SM.warm_rise : SM.cool_rise) : (k === 'h' ? SM.warm_fall : SM.cool_fall);
+        const target = rest ? 0 : k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
+        const tau = rest ? .15 : target > cur ? (k === 'h' ? SM.warm_rise : SM.cool_rise) : (k === 'h' ? SM.warm_fall : SM.cool_fall);
         ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
       }
       return { th: { ...ear }, src };

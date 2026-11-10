@@ -27,7 +27,7 @@
   let S = fresh(), run = 0;
   const STEPS = [['greet', 'ご来店', 'Welcome'], ['earL', 'ほぐす', 'Ear massage'], ['earR', 'おみみかき', 'Ear cleaning'],
     ['earL', '反対のおみみ', 'The other ear'], ['goodnight', 'ねかしつけ', 'Goodnight']];
-  function setStep(i) { $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
+  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.2; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
 
   // ---------------------------------------------------------------- the stream overlay: LIVE badge, viewers, chat, Super Chats
   // viewers write in their own languages (the old stream rooms did the same) — the chat is ambience, not translated.
@@ -223,7 +223,7 @@
   let dampK = 0, handK = 0, towelK = 0, spoonK = 0, stoneK = 0, breathK = 0, mistK = 0, blanketK = 0, towelAge = 0;
   function update(dt) {
     S.t += dt; chatTick(dt); if (!S.started) return;
-    S.clock += dt; S.lv = SND.voiceLevel();
+    S.clock += dt; S.lv = SND.voiceLevel(); S.vlv = (S.vlv || 0) + (S.lv - (S.vlv || 0)) * (1 - Math.exp(-dt / (S.lv > (S.vlv || 0) ? .05 : .8)));   // voice warmth = the speech envelope, not each syllable (no sub-second hot ↔ cold flicker, guide §3 节奏)
     { const vt = talking ? 1 : 0; S.env += (vt - S.env) * (1 - Math.exp(-dt / (vt > S.env ? .06 : .3))); }   // talking envelope (shared/layers.js mouth)
     const ease = (cur, tgt, up, down) => cur + (tgt - cur) * (1 - Math.exp(-dt / (tgt > cur ? up : down)));
     dampK = ease(dampK, S.damp || 0, .25, .9); handK = ease(handK, S.hand, .6, 1.2); spoonK = ease(spoonK, S.spoon, .12, .5); stoneK = ease(stoneK, S.stone, 1, 1.5);
@@ -240,7 +240,7 @@
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S.started) return out;
     const P = S.pos, sd = 1.35 * S.side;
-    if (talking) add(P.az, 'h', (.1 + .8 * clamp(S.lv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
+    if (talking) add(P.az, 'h', (.1 + .8 * clamp(S.vlv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
     if (handK > .02) add(sd, 'h', .35 * handK, '🤲');
     if (towelK > .02) { add(-1.4, 'h', .6 * towelK, '♨️'); add(1.4, 'h', .6 * towelK, '♨️'); }
     if (spoonK > .02) add(sd, 'c', .6 * spoonK, '🥄');
@@ -255,9 +255,10 @@
   function thermal(dt) {   // sources → each ear's cool / heat (a source at the side reaches mostly that ear), eased like a real element
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
     for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
+    const rest = S.clock < (S.restUntil || 0);   // a short rest between scenes (guide §3 节奏): every channel off for a moment, so the next scene is felt on its own
     for (const e of ['L', 'R']) for (const k of ['c', 'h']) {
-      const target = k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
-      const tau = target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
+      const target = rest ? 0 : k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
+      const tau = rest ? .15 : target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
       ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
     }
     return { th: { ...ear }, src };

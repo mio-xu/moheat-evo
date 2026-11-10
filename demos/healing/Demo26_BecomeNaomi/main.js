@@ -26,7 +26,7 @@
   let S = fresh(), run = 0;
   const STEPS = [['ears', 'あさ・耳をすませる', 'Morning · listen'], ['sun', 'まどべのひなた', 'Sun on the windowsill'], ['fridge', 'れいぞうこ', 'The fridge'],
     ['laundry', 'ふわふわダイブ', 'The warm laundry'], ['night', 'よる・おなかのうえ', 'Night · on her chest']];
-  function setStep(i) { $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
+  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.2; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
 
   // ---------------------------------------------------------------- the cat-ear radar: where your ears point decides what you hear
   const g3 = (d) => Math.pow((1 + Math.cos(d)) / 2, 3);
@@ -212,7 +212,7 @@
   // ---------------------------------------------------------------- per-frame state + thermal
   function update(dt) {
     S.t += dt; if (!S.started) return;
-    S.clock += dt; S.lv = SND.voiceLevel(); NA.tick(dt);
+    S.clock += dt; S.lv = SND.voiceLevel(); S.vlv = (S.vlv || 0) + (S.lv - (S.vlv || 0)) * (1 - Math.exp(-dt / (S.lv > (S.vlv || 0) ? .05 : .8)));   // voice warmth = the speech envelope, not each syllable (no sub-second hot ↔ cold flicker, guide §3 节奏) NA.tick(dt);
     SND.setFocus(focusOf);
     const z = S.zoom, a = 1 - Math.exp(-dt / .5); z.k += (z.tk - z.k) * a; z.x += (z.tx - z.x) * a; z.y += (z.ty - z.y) * a;
   }
@@ -228,7 +228,7 @@
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S.started) return out;
     const P = S.pos;
-    if (talking) add(P.az, 'h', (.1 + .8 * clamp(S.lv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
+    if (talking) add(P.az, 'h', (.1 + .8 * clamp(S.vlv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
     if (S.bed) { add(-1.5, 'h', .25 * S.bed, '🛏'); add(1.5, 'h', .25 * S.bed, '🛏'); }
     if (S.glass) add(-1.4, 'c', .45 * S.glass, '🪟');
     if (S.sun > .01) { add(-1.1, 'h', .45 * S.sun, '☀'); if (S.sunAll) { add(-1.5, 'h', .15 * S.sun, '☀'); add(1.5, 'h', .3 * S.sun, '☀'); } }
@@ -245,9 +245,10 @@
   function thermal(dt) {
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
     for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
+    const rest = S.clock < (S.restUntil || 0);   // a short rest between scenes (guide §3 节奏): every channel off for a moment, so the next scene is felt on its own
     for (const e of ['L', 'R']) for (const k of ['c', 'h']) {
-      const target = k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
-      const tau = target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
+      const target = rest ? 0 : k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
+      const tau = rest ? .15 : target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
       ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
     }
     return { th: { ...ear }, src };

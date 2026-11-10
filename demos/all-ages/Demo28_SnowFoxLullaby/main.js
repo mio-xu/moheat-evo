@@ -137,7 +137,7 @@
       if (S.first === 0) { await say('k04', K_TALK, 'happy'); await koyukiTurn(my); await homuraTurn(my); }
       else { await say('h04', H_TALK, 'smug'); await homuraTurn(my); await koyukiTurn(my); }
 
-      chap = 1;
+      chap = 1; S.restUntil = S.clock + 1.2;   // a short rest between scenes (guide §3 节奏)
       // 2 · both want the same ear: Homura squeezes in next to Koyuki — cool and warm on your LEFT ear at once (DUAL)
       S.view = 'share'; SND.fx.bells(-1.2, .3); SND.fx.rustle(-1.3, .2); await sleep(.5); alive(my);
       S.hAt = L_EAR2;
@@ -147,7 +147,7 @@
       await say('h08', L_EAR2, 'whisper');
       await say('kh1', { K: L_EAR, H: L_EAR2 }, 'whisper');
 
-      chap = 2;
+      chap = 2; S.restUntil = S.clock + 1.2;   // a short rest between scenes (guide §3 节奏)
       // 3 · getting sleepy: the embers settle; who stays beside you?
       S.view = 'both'; SND.fx.rustle(1.3, .25); SND.fx.settle(); fire?.set(.3, 2); S.fire = .8; await sleep(.6); alive(my);
       S.hAt = R_EAR;
@@ -164,7 +164,7 @@
         await say('h11b', R_EAR, 'happy');
       }
 
-      chap = 3;
+      chap = 3; S.restUntil = S.clock + 1.2;   // a short rest between scenes (guide §3 节奏)
       // 4 · good night: you say it — and they both answer, one at each ear (left cool, right warm)
       await action('🌙', '「おやすみ」と言う', 'Say "Good night"', 'おやすみ|おやすみなさい|good night|night|晚安');
       S.view = 'both'; SND.fx.rustle(-1.3, .2); await sleep(.5); alive(my);
@@ -178,7 +178,7 @@
   const NEAR_VIEWS = { kear: ['K'], hear: ['H'], share: ['K', 'H'], both: ['K', 'H'] };
   function update(dt) {
     S.t += dt; if (!S.started) return;
-    S.clock += dt; S.lv.K = SND.voiceLevel('K'); S.lv.H = SND.voiceLevel('H');
+    S.clock += dt; S.lv.K = SND.voiceLevel('K'); S.lv.H = SND.voiceLevel('H'); S.vl = S.vl || { K: 0, H: 0 }; for (const w of ['K', 'H']) S.vl[w] += (S.lv[w] - S.vl[w]) * (1 - Math.exp(-dt / (S.lv[w] > S.vl[w] ? .05 : .8)));   // thermal follows the speech envelope, not each syllable (guide §3 节奏)
     fireK += (S.fire - fireK) * (1 - Math.exp(-dt / 1.5)); draftK += (S.draft - draftK) * (1 - Math.exp(-dt / 1.2));
     eyesK += (S.eyes - eyesK) * (1 - Math.exp(-dt / .35));
     const near = NEAR_VIEWS[S.view] || [];
@@ -198,8 +198,8 @@
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S.started) return out;
     const vf = (P, lv) => (.1 + .8 * clamp(lv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1);
-    if (S.talk.K && S.kAt) add(S.kAt.az, 'c', vf(S.kAt, S.lv.K), '❄️');
-    if (S.talk.H && S.hAt) add(S.hAt.az, 'h', vf(S.hAt, S.lv.H), '🦊');
+    if (S.talk.K && S.kAt) add(S.kAt.az, 'c', vf(S.kAt, S.vl.K), '❄️');
+    if (S.talk.H && S.hAt) add(S.hAt.az, 'h', vf(S.hAt, S.vl.H), '🦊');
     add(0, 'h', .14 * fireK * (.9 + .1 * Math.sin(S.t * 6.1) * Math.sin(S.t * 2.3)), '🔥');
     add(0, 'c', .12 * draftK, '🌨');
     if (S.breath) { const u = (S.clock - S.breath.t0) / S.breath.sec; add(S.breath.az, S.breath.who === 'K' ? 'c' : 'h', (S.breath.who === 'K' ? .75 : .6) * Math.sin(Math.PI * clamp(u)), S.breath.who === 'K' ? '💨' : '♨️'); }
@@ -211,9 +211,10 @@
   function thermal(dt) {
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
     for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
+    const rest = S.clock < (S.restUntil || 0);   // a short rest between scenes (guide §3 节奏): every channel off for a moment, so the next scene is felt on its own
     for (const e of ['L', 'R']) for (const k of ['c', 'h']) {
-      const target = k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
-      const tau = target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
+      const target = rest ? 0 : k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c), cur = ear[e + k];
+      const tau = rest ? .15 : target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
       ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
     }
     return { th: { ...ear }, src };
