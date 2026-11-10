@@ -92,9 +92,9 @@
     paused: ['Paused — Space or tap to resume', '一時停止中 — Space / タップで再開', '已暂停 — 按空格或点按继续'],
     loading: ['Loading…', '読み込み中…', '加载中…'], heatOn: ['Thermal on', '温冷 ON', '温冷 开'], heatOff: ['Thermal off', '温冷 OFF', '温冷 关'],
     subs: ['Subtitles', '字幕', '字幕'], off: ['off', 'オフ', '关'], motion: ['Reduce motion', '動きを減らす', '减少动态'],
-    devLost: ['Device disconnected — plug it back in and press Connect.', 'デバイスが切断されました — つなぎ直して Connect を押してください。', '设备已断开 — 请重新连接后点 Connect。'],
+    devLost: ['Device disconnected — plug the cable back in; it reconnects by itself.', 'デバイスが切断されました — ケーブルを差し直してください（自動で再接続します）。', '设备已断开 — 请重新插好数据线（会自动重新连接）。'],
     micOff: ['Microphone is off. You can tap to answer.', 'マイクがオフです。タップで答えられます。', '麦克风未开启，可以点按回答。'],
-    devErr: ['Could not open MoHeat Evo — unplug it, plug it back in and press Connect.', 'MoHeat Evo を開けませんでした — 抜き差ししてから Connect を押してください。', '无法打开 MoHeat Evo — 请重新插拔后点 Connect。'],
+    devErr: ['Could not open MoHeat Evo — unplug the cable and plug it back in; it reconnects by itself.', 'MoHeat Evo を開けませんでした — ケーブルを抜き差ししてください（自動で再接続します）。', '无法打开 MoHeat Evo — 请重新插拔数据线（会自动重新连接）。'],
     loadFail: ['Some files did not load — check the connection and reload the page.', '一部のファイルを読み込めませんでした — 接続を確かめて再読み込みしてください。', '部分文件加载失败 — 请检查网络后刷新页面。'],
   };
   const L = () => { const l = window.MoHeatSub?.lang || 'en'; return l === 'ja' ? 1 : l === 'zh' ? 2 : 0; };
@@ -300,6 +300,10 @@
   addEventListener('pointermove', (e) => { if (tapDown && Math.hypot(e.clientX - tapDown.x, e.clientY - tapDown.y) > 12) tapDown.far = true; }, true);
   const plainTap = (e) => !!tapDown && tapDown.el === e.target && !tapDown.far && real.now() - tapDown.t < 700;
   const filmHeld = () => { const f = filmEl(); return !!f && f.paused && !f.ended && playing() && !document.querySelector('.stage.ix-wait'); };
+  // a double tap on Start: the second tap must not pause what the first one started (final6 E2E) — play / pause toggles by the visitor
+  // (bar button, tap on the picture, Space / P) are ignored for 400 ms after Start; ■ STOP and automatic pauses are not
+  let startedAt = -1e9; document.addEventListener('click', (e) => { if (e.target.closest?.('#startBtn')) startedAt = real.now(); }, true);
+  const justStarted = () => real.now() - startedAt < 400;
   const pause = (on) => {
     if (on === paused || EXPORT) return;
     if (!on) autoPaused = false;
@@ -520,7 +524,7 @@
     if (EXPORT || e.metaKey || e.ctrlKey || e.altKey || /input|textarea|select/i.test(e.target.tagName) || e.target.isContentEditable) return;
     if (e.code === 'Space' && FILM() && !V2) return;   // old UI, films: their own Space = play / pause (time comes from the media element); UI v2: the one pause below
     if (e.code === 'Space' && SH.autoplay && !Play.pure) return;   // games, interactive: Space is the game's key (blow / talk); P pauses
-    if ((e.code === 'Space' || (e.code === 'KeyP' && !e.repeat)) && playing()) { e.preventDefault(); e.stopImmediatePropagation(); pause(!paused); return; }
+    if ((e.code === 'Space' || (e.code === 'KeyP' && !e.repeat)) && playing()) { e.preventDefault(); e.stopImmediatePropagation(); if (justStarted()) return; pause(!paused); return; }
     if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && !playing() && !e.repeat) { e.preventDefault(); step(e.key === 'ArrowRight' ? 1 : -1); }
   }, true);
   let sx = null, sy = 0;
@@ -581,7 +585,7 @@
       // the end cover's "With" only selects (user 2026-11-09); Start then talks with them. Nothing picked = Play again
       start: () => { if (!ready) return; const w = pickedWho && optEl('who', pickedWho); pickedWho = null; if (w) w.click(); else document.getElementById('startBtn')?.click(); },
       picked: () => !!pickedWho,
-      togglePause: () => { if (!paused && filmHeld()) filmEl().play().catch(() => {}); else pause(!paused); },
+      togglePause: () => { if (justStarted()) return; if (!paused && filmHeld()) filmEl().play().catch(() => {}); else pause(!paused); },
       // chapter labels: cover.json "chapters" (per language) > the demo's own { ja, en, zh } > its label text
       chapters: () => chapters().map((c, i) => ({ label: cover?.chapters?.[i] || (c.ja || c.zh ? { en: c.en || c.label, ja: c.ja, zh: c.zh || (c.ja && window.MoHeatSub?.tr?.(c.ja, 'zh', false)) || c.en || c.label } : c.label) })), chapter: () => chapter(), reached: () => reached,
       progress: () => { const f = film(), sc = SH.chapters; if (!f || !sc?.[0] || sc[0].t == null) return .5; const k = chapter(), t0 = sc[k]?.t ?? 0, t1 = sc[k + 1]?.t ?? DEMO_DATA.anim.duration; return Math.max(0, Math.min(1, (f.currentTime - t0) / Math.max(1, t1 - t0))); },
@@ -621,7 +625,7 @@
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watchEnd); else watchEnd();
     // films: a tap on the picture is the same one pause (not the film's own media.pause, which the bar would not know about)
     const filmTap = () => { const st = document.querySelector('.stage-col .stage') || document.querySelector('.stage'); if (!st || (!FILM() && !EMBED)) return;
-      st.addEventListener('click', (e) => { if (!e.isTrusted || e.target.closest('.u2, button, a, input') || !playing() || !plainTap(e)) return; e.stopImmediatePropagation(); e.preventDefault(); pause(!paused); }, true); };
+      st.addEventListener('click', (e) => { if (!e.isTrusted || e.target.closest('.u2, button, a, input') || !playing() || !plainTap(e) || justStarted()) return; e.stopImmediatePropagation(); e.preventDefault(); pause(!paused); }, true); };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', filmTap); else filmTap();
     // the original page layout stays (user 2026-11-09): only the player column is centred vertically when it is shorter than the side panel
     const relayout = () => dispatchEvent(new Event('resize'));

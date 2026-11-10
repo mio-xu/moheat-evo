@@ -327,8 +327,11 @@
           A.querySelector('.tapzone')?.remove(); const g = document.createElement('p'); g.className = 'sub got'; g.textContent = tx('gotIt') + (W && !only ? ` · ${tx('nextCool')}` : ''); A.appendChild(g);
           at(1600, () => (only && (!W || !only.includes('cool')) ? finish(false) : next()));   // the short pause between warm and cool, then the samples
         };
-        const onTap = (e) => { if (e.target.closest?.('.skip')) return; e.preventDefault(); e.stopPropagation(); stop('tap'); };
-        const onKey = (e) => { e.preventDefault(); stop('tap'); };
+        // the tap / key that opened this step (a double tap on the staff's Continue, or on the previous step's STOP) must not stop it:
+        // input in the first 350 ms of the step is ignored; after that STOP acts at once (safety)
+        const armedAt = performance.now() + 350;
+        const onTap = (e) => { if (e.target.closest?.('.skip')) return; e.preventDefault(); e.stopPropagation(); if (performance.now() < armedAt) return; stop('tap'); };
+        const onKey = (e) => { e.preventDefault(); if (performance.now() < armedAt) return; stop('tap'); };
         A.innerHTML = `<h2>${tx(W ? 'warmQ' : 'coolQ')}</h2>${head()}<div class="ramp${W ? '' : ' cool'}"><i></i></div><p class="tapnow">${tx('almost')}</p>
           <div class="row tapzone"><button type="button" class="go now stopbtn">■ ${tx('stop')}</button></div>`;
         ears(W ? 'warm' : '', W ? '' : 'cool');
