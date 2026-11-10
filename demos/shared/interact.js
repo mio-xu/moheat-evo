@@ -224,9 +224,34 @@
   const fired = new Set();
   let cur = null, card = null, lastT = media.currentTime || 0, lastNow = performance.now();
   const say = (g) => (g.kind === 'choice' && g.what ? g.what : g.sub ? [g.sub.ja, g.sub.en] : g.what || (g.kind === 'toast' ? ['乾杯！', 'Cheers!'] : ['', '']));   // a choice shows its question
+  // while a card waits (user 2026-11-10, D1): the surroundings stay on at ~50 % instead of stop — the film's own track at the last
+  // moment before the gate when nobody was speaking (no voice warmth), DUAL as it is, and on each ear only the mode that ear already
+  // has at the gate (no new hot ↔ cold flip). From window.DEMO_DATA (thermalCsv 20 Hz + anim.subs); no data → stop as before.
+  let TRK = null;
+  function track() {
+    if (TRK !== null) return TRK; TRK = false;
+    const D = window.DEMO_DATA, csv = D && D.thermalCsv; if (!csv) return TRK;
+    const rows = csv.trim().split('\n'), head = rows[0].split(','), ix = (k) => head.indexOf(k);
+    const c = { t: ix('time_s'), Lc: ix('L_cool'), Rc: ix('R_cool'), Lh: ix('L_heat'), Rh: ix('R_heat') }; if (Object.values(c).some((i) => i < 0)) return TRK;
+    TRK = { rows: rows.slice(1).map((r) => { const v = r.split(','); return { t: +v[c.t], Lc: +v[c.Lc], Rc: +v[c.Rc], Lh: +v[c.Lh], Rh: +v[c.Rh] }; }), subs: (D.anim && D.anim.subs) || [] };
+    return TRK;
+  }
+  function ambient(t) {
+    const T = track(); if (!T || !T.rows.length) return null;
+    const rate = T.rows.length > 1 ? 1 / (T.rows[1].t - T.rows[0].t) : 20, at = (s) => T.rows[Math.max(0, Math.min(T.rows.length - 1, Math.round(s * rate)))];
+    const quiet = (s) => !T.subs.some((x) => x.who !== 'Y' && s >= x.t0 - 1 && s <= x.t1 + .8);   // a character's voice (not your own lines) leads by ~0.6 s and fades after the line
+    let a = null; for (let s = t; s >= Math.max(0, t - 12); s -= .25) if (quiet(s)) { a = at(s); break; }
+    const now = at(t), amb = a ? { Lc: a.Lc, Rc: a.Rc, Lh: a.Lh, Rh: a.Rh } : { Lc: now.Lc, Rc: now.Rc, Lh: 0, Rh: 0 };   // no quiet moment near: the cold only (heat may be his voice)
+    for (const e of ['L', 'R']) {   // keep the ear's current mode: drop a channel that would flip it
+      const d = now[e + 'h'] - now[e + 'c'];
+      if (d >= .15) amb[e + 'c'] = Math.min(amb[e + 'c'], Math.max(0, amb[e + 'h'] - .15)); else if (d <= -.15) amb[e + 'h'] = Math.min(amb[e + 'h'], Math.max(0, amb[e + 'c'] - .15));
+    }
+    for (const k in amb) amb[k] *= .5;
+    return Math.max(amb.Lc, amb.Rc, amb.Lh, amb.Rh) > .03 ? amb : null;
+  }
   function start(g) {
     if (g.kind === 'read' && !say(g)[0]) { fired.add(g); return; }   // never a card without a sentence
-    cur = { g, t0: performance.now(), speech: 0, silence: 0, heard: false, blow: 0, b: 0, holding: false, done: false };
+    cur = { g, t0: performance.now(), speech: 0, silence: 0, heard: false, blow: 0, b: 0, holding: false, done: false, amb: g.kind === 'blow' || g.hold ? null : ambient(media.currentTime || 0) };
     fired.add(g); media.pause(); stage.classList.add('ix-wait'); document.documentElement.classList.toggle('ix-quiz', g.answer != null); render(); listen(g);   // ix-quiz: a question with a right answer, the radar / side labels must not give it away
   }
   // voice input (shared/voice.js): your line / your answer is recognised and judged
@@ -354,6 +379,7 @@
       if (!words && c.heard && c.speech >= need && c.silence > (g.kind === 'toast' ? .15 : .55) && !c.done) { c.done = true; finish(true); }
     }
     if (waited > GIVE_UP && !c.done) { c.done = true; finish(false); }
+    if (!th && !hold && c.amb) { const k = Math.min(1, waited / .4); th = { Lc: c.amb.Lc * k, Rc: c.amb.Rc * k, Lh: c.amb.Lh * k, Rh: c.amb.Rh * k }; }   // the surroundings at ~50 % while you read (D1)
     return { waiting: true, th, hold };
   }
   // thermal the player should send: your breath overrides; a held choice keeps the frozen frame's thermal; cheering adds warmth
