@@ -102,7 +102,7 @@ window.MOHEAT_LAYERS = {
     "h": 1435,
     "x": 0.5021,
     "y": 1.0,
-    "height": 0.9965,
+    "height": 0.9885,
     "box": [
      691,
      5,
@@ -272,7 +272,7 @@ window.MOHEAT_LAYERS = {
     "h": 1435,
     "x": 0.482,
     "y": 1.0,
-    "height": 0.9965,
+    "height": 0.9885,
     "box": [
      568,
      5,
@@ -849,7 +849,7 @@ window.MOHEAT_LAYERS = {
     "h": 1435,
     "x": 0.5021,
     "y": 1.0,
-    "height": 0.9965,
+    "height": 0.9885,
     "box": [
      691,
      5,
@@ -931,7 +931,7 @@ window.MOHEAT_LAYERS = {
     "h": 1435,
     "x": 0.482,
     "y": 1.0,
-    "height": 0.9965,
+    "height": 0.9885,
     "box": [
      568,
      5,
@@ -1321,7 +1321,7 @@ window.MOHEAT_LAYERS = {
       "src": "art/char_saku_base.webp?v=b1fbdda3",
       "w": 1272,
       "h": 1418,
-      "x": 0.77,
+      "x": 0.764,
       "y": 1.0,
       "height": 0.88,
       "box": [
@@ -1410,7 +1410,7 @@ window.MOHEAT_LAYERS = {
     "h": 1435,
     "x": 0.482,
     "y": 1.0,
-    "height": 0.9965,
+    "height": 0.9885,
     "box": [
      568,
      5,
@@ -1894,7 +1894,7 @@ window.MOHEAT_LAYERS = {
       "src": "art/char_saku_base.webp?v=b1fbdda3",
       "w": 1272,
       "h": 1418,
-      "x": 0.77,
+      "x": 0.764,
       "y": 1.0,
       "height": 0.88,
       "box": [
@@ -1983,7 +1983,7 @@ window.MOHEAT_LAYERS = {
     "h": 1435,
     "x": 0.5021,
     "y": 1.0,
-    "height": 0.9965,
+    "height": 0.9885,
     "box": [
      691,
      5,
@@ -2382,7 +2382,7 @@ window.MOHEAT_LAYERS = {
       "src": "art/char_saku_base.webp?v=b1fbdda3",
       "w": 1272,
       "h": 1418,
-      "x": 0.77,
+      "x": 0.764,
       "y": 1.0,
       "height": 0.88,
       "box": [
@@ -2468,7 +2468,7 @@ window.MOHEAT_LAYERS = {
     "h": 1435,
     "x": 0.5021,
     "y": 1.0,
-    "height": 0.9965,
+    "height": 0.9885,
     "box": [
      691,
      5,
@@ -2550,7 +2550,7 @@ window.MOHEAT_LAYERS = {
     "h": 1435,
     "x": 0.482,
     "y": 1.0,
-    "height": 0.9965,
+    "height": 0.9885,
     "box": [
      568,
      5,
@@ -2858,7 +2858,7 @@ window.MOHEAT_LAYERS = {
       "src": "art/char_saku_base.webp?v=b1fbdda3",
       "w": 1272,
       "h": 1418,
-      "x": 0.77,
+      "x": 0.764,
       "y": 1.0,
       "height": 0.88,
       "box": [
@@ -2944,7 +2944,7 @@ window.MOHEAT_LAYERS = {
     "h": 1435,
     "x": 0.5021,
     "y": 1.0,
-    "height": 0.9965,
+    "height": 0.9885,
     "box": [
      691,
      5,
@@ -3026,7 +3026,7 @@ window.MOHEAT_LAYERS = {
     "h": 1435,
     "x": 0.482,
     "y": 1.0,
-    "height": 0.9965,
+    "height": 0.9885,
     "box": [
      568,
      5,
@@ -3334,7 +3334,7 @@ window.MOHEAT_LAYERS = {
       "src": "art/char_saku_base.webp?v=b1fbdda3",
       "w": 1272,
       "h": 1418,
-      "x": 0.77,
+      "x": 0.764,
       "y": 1.0,
       "height": 0.88,
       "box": [
