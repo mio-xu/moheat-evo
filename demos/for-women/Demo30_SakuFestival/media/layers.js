@@ -258,9 +258,9 @@ window.MOHEAT_LAYERS = {
     "src": "art/char_breath.webp?v=4beebdd7",
     "w": 1700,
     "h": 1361,
-    "x": 0.35,
+    "x": 0.343,
     "y": 1.01,
-    "height": 1.02,
+    "height": 1.03,
     "box": [
      0,
      0,
@@ -270,12 +270,12 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/breath_eyes.webp?v=b3ef67a7",
+     "src": "art/breath_eyes.webp?v=435fbc46",
      "rect": [
-      988,
-      395,
-      489,
-      163
+      1004,
+      410,
+      460,
+      129
      ],
      "kind": "eyes"
     },
@@ -341,7 +341,7 @@ window.MOHEAT_LAYERS = {
     "h": 956,
     "x": 0.5,
     "y": 1.01,
-    "height": 1.02,
+    "height": 1.035,
     "box": [
      0,
      0,
