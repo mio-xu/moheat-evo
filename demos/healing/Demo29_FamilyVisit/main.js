@@ -14,6 +14,29 @@
   const cv = $('scene'), ctx = cv.getContext('2d');
   const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
   const lerp = (a, b, k) => a + (b - a) * k;
+  // grandpa's snowball (code only): leaves the snowball in his raised hand (0.615, 0.19 of the yard picture), arcs over the faces and
+  // out past the matching side of the frame toward that ear, growing as it nears you; 0.5 s flight, shaded, motion-blurred, a few flakes
+  // behind it. Paths checked against the faces (FACE.yard): right = over his head, left = below grandma's chin, above the snowman.
+  const BALL = { 1: [[.615, .19], [.80, -.05], [1.14, .48]], '-1': [[.615, .19], [.40, .15], [-.14, .62]] }, FLIGHT = .5;
+  const trail = [];
+  function drawSnowball(t, side) {
+    const P = BALL[side]; if (!P || t < 0) return;
+    const at = (u) => { const a = (1 - u) * (1 - u), b = 2 * u * (1 - u), c = u * u; return [W * (a * P[0][0] + b * P[1][0] + c * P[2][0]), H * (a * P[0][1] + b * P[1][1] + c * P[2][1])]; };
+    const rad = (u) => 20 + 300 * u * u * u;   // grows as it comes at you
+    const u = t / FLIGHT;
+    if (u < 1 && Math.random() < .6) { const [fx, fy] = at(u); trail.push({ x: fx + (Math.random() - .5) * 20, y: fy + (Math.random() - .5) * 20, r: (2 + 3 * Math.random()) * (1 + 2 * u), life: 0 }); }
+    for (const f of trail) { f.life += 1 / 60; f.y += 30 / 60; }
+    while (trail.length && trail[0].life > .6) trail.shift();
+    for (const f of trail) { ctx.fillStyle = `rgba(255,255,255,${.8 * (1 - f.life / .6)})`; ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 7); ctx.fill(); }
+    if (u >= 1) return;
+    for (const [k, a] of [[.09, .18], [.05, .3], [0, 1]]) {   // motion blur: two faint copies a little behind
+      const v = Math.max(0, u - k), [x, y] = at(v), r = rad(v);
+      const g = ctx.createRadialGradient(x - r * .35, y - r * .4, r * .1, x, y, r);
+      g.addColorStop(0, `rgba(255,255,255,${a})`); g.addColorStop(.55, `rgba(236,243,250,${a})`); g.addColorStop(1, `rgba(150,170,195,${a})`);
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+      if (k === 0) { ctx.fillStyle = 'rgba(110,130,160,.18)'; ctx.beginPath(); ctx.arc(x + r * .12, y + r * .16, r * .92, .2, Math.PI - .2); ctx.fill(); }   // shadowed underside
+    }
+  }
   const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000));
 
   // ---------------------------------------------------------------- art: one still per scene
@@ -185,7 +208,7 @@
     add(-1.35, 'h', .25 * K.hug, '🤗');
     add(1.2, 'h', .42 * K.stove * (.92 + .08 * Math.sin(S.t * 3.1)), '🔥');
     add(0, 'h', .22 * K.steam, '♨️');
-    if (S.ball) { const u = (S.clock - S.ball.t0) / 1.2; if (u < 1) add(1.4 * (S.ball.side || 1), 'c', .85 * Math.sin(Math.PI * clamp(u * 1.2)), '⛄'); }
+    if (S.ball) { const u = (S.clock - S.ball.t0 - .4) / 1.2; if (u > 0 && u < 1) add(1.4 * (S.ball.side || 1), 'c', .85 * Math.sin(Math.PI * clamp(u * 1.2)), '⛄'); }   // the cold hits as the ball leaves the frame (0.4–0.5 s)
     add(-1.5, 'h', .2 * K.quilt, '🛏'); add(1.5, 'h', .2 * K.quilt, '🛏');
     return out;
   }
@@ -240,10 +263,7 @@
         const g2 = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * (2 - p.life / 2)); g2.addColorStop(0, `rgba(255,255,255,${a})`); g2.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = g2; ctx.fillRect(p.x - 150, p.y - 150, 300, 300);
       }
     }
-    if (S.ball) {   // grandpa's snowball, growing as it flies past the right side of your head
-      const u = clamp((S.clock - S.ball.t0) / .6), sd = S.ball.side || 1, x = W / 2 + sd * (lerp(W * .6, W * 1.15, u * u) - W / 2), y = lerp(H * .2, H * .3, u), r = lerp(14, 220, u * u);
-      ctx.fillStyle = 'rgba(250,252,255,.95)'; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
-    }
+    if (S.ball) drawSnowball(S.clock - S.ball.t0, S.ball.side || 1);
     if (S.view === 'futon') {   // the andon flicker + the quilt rising at the bottom of the frame
       const fl = .85 + .15 * Math.sin(t * 4.1) * Math.sin(t * 1.7), g = ctx.createRadialGradient(W * .06, H * .47, 30, W * .06, H * .47, 800);
       g.addColorStop(0, `rgba(255,190,110,${.12 * fl})`); g.addColorStop(1, 'rgba(255,190,110,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
