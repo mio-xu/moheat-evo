@@ -225,7 +225,7 @@
     // (The calibration STOP listens to pointerdown on the root, so it is never held back.)
     let shownAt = 0, clickedAt = 0;
     new MutationObserver(() => { shownAt = performance.now(); }).observe(A, { childList: true });
-    A.addEventListener('click', (e) => { if (!e.target.closest?.('button')) return; const n = performance.now();
+    A.addEventListener('click', (e) => { if (!e.isTrusted || !e.target.closest?.('button')) return; const n = performance.now();   // real taps only
       if (n - shownAt < 350 || n - clickedAt < 350) { e.stopImmediatePropagation(); e.preventDefault(); return; } clickedAt = n; }, true);
     root.querySelector('.skip').addEventListener('click', () => finish(true));
     const head = () => `<div class="head"><svg viewBox="0 0 145 100" aria-hidden="true"><ellipse cx="72.5" cy="52" rx="34" ry="40" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>

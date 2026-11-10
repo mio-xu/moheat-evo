@@ -14,6 +14,7 @@
     .status.ok { color: #5fd38a; } .status.err { color: #ff9aa9; }
     .langs button[aria-pressed=true] { background: #fff; color: #17121f; }
     #host { position: fixed; inset: 0; }
+    .start[hidden] { display: none; }   /* display: flex below kept the invisible start layer over the guide: no tap reached its buttons */
     .start { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center; padding: 16px; }
     .start h1 { margin: 0; font: 800 clamp(26px, 6vmin, 60px)/1.15 var(--ff); } .start p { margin: 0; color: #cfc3dc; font-size: clamp(15px, 2.4vmin, 22px); max-width: 32em; }
     .start button { min-height: 60px; padding: 0 30px; border-radius: 999px; border: 0; background: linear-gradient(135deg, #ffd58a, #ff9f6e); color: #2a1606; font: 700 clamp(18px, 3vmin, 28px)/1 var(--ff); cursor: pointer; }
@@ -28,7 +29,7 @@
   <div id="host"></div>
   <div class="start" id="start"><h1 data-t="h"></h1><p data-t="p"></p><button type="button" id="go" data-t="go"></button></div>
   <script src="../device.js?v=374485c9"></script>
-  <script src="../demos/shared/thermintro.js?v=ad832052"></script>
+  <script src="../demos/shared/thermintro.js?v=f29e7447"></script>
   <script>
     (() => {
       const T = { h: { en: '30-second thermal intro', ja: '30 秒の温冷入門', zh: '30 秒冷热入门' },

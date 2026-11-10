@@ -86,9 +86,9 @@
   let view = '', tapAt = 0;
   // visitor screens: a quick double tap answers once (the second tap must not land on the screen that replaces the first, or toggle a pick
   // back off — final4 E2E 2026-11-10). A click on a visitor button within 350 ms of the last accepted tap is ignored (a first tap on a new
-  // screen always counts: the Windows CI taps 'choose another' right as that screen appears).
+  // screen always counts).
   // Not the staff panel / PIN / corner, and not the guide (shared/thermintro.js has its own guard).
-  document.addEventListener('click', (e) => { const b = e.target.closest?.('button'); if (!b || !b.closest('.view') || b.closest('.intro-host')) return;
+  document.addEventListener('click', (e) => { const b = e.target.closest?.('button'); if (!e.isTrusted || !b || !b.closest('.view') || b.closest('.intro-host')) return;   // real taps only (a script's click() is never a double tap)
     const n = performance.now(); if (n - tapAt < 350) { e.stopImmediatePropagation(); e.preventDefault(); return; } tapAt = n; }, true);
   function go(v) {
     view = v; $$('.view').forEach((s) => { s.hidden = s.id !== `v-${v}`; });
