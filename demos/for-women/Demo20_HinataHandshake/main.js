@@ -281,6 +281,7 @@
     ctx.restore(); ctx.globalAlpha = 1;
   }
   let snow = [];
+  addEventListener('moheat:pause', (e) => { if (e.detail && S.started && (mix < 1 || S.view !== viewB)) { viewA = viewB = S.view; mix = 1; try { draw(S.t ?? 0, 0); } catch {} } });   // paused mid cross-fade: show the new view only (shell.js moheat:pause, Demo21 2026-11-11)
   function draw(t, dt) {
     if (t > blinkAt) { blinkUntil = t + .13; blinkAt = t + rnd(2.5, 5); }
     faces(t, dt);

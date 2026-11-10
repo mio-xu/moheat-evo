@@ -251,6 +251,7 @@
     ctx.globalAlpha = 1;
   }
   const drops = Array.from({ length: 70 }, () => ({ x: Math.random() * W, y: Math.random() * H, v: 900 + Math.random() * 700, l: 20 + Math.random() * 30 }));
+  addEventListener('moheat:pause', (e) => { if (e.detail && S.started && (mix < 1 || S.view !== viewB)) { viewA = viewB = S.view; mix = 1; try { draw(S.t ?? 0, 0); } catch {} } });   // paused mid cross-fade: show the new view only (shell.js moheat:pause, Demo21 2026-11-11)
   function draw(t, dt) {
     if (S.view !== viewB) { viewA = viewB; viewB = S.view; mix = 0; }
     clips();
