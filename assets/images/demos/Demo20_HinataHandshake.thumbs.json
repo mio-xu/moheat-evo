@@ -1,25 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/for-women/Demo20_HinataHandshake/media/cover/stamp.json": "e363d43092b88e8e4a63e7e887b66c013ffb638d"
+   "demos/for-women/Demo20_HinataHandshake/media/cover/stamp.json": "0930889358275c1f685f53b62b3caeb372251657"
   },
   "thumb": "81d6febb0fac1609638ca5b3184846238b57d83c"
  },
  "en": {
   "inputs": {
-   "demos/for-women/Demo20_HinataHandshake/media/cover/stamp.json": "e363d43092b88e8e4a63e7e887b66c013ffb638d"
+   "demos/for-women/Demo20_HinataHandshake/media/cover/stamp.json": "0930889358275c1f685f53b62b3caeb372251657"
   },
   "thumb": "81d6febb0fac1609638ca5b3184846238b57d83c"
  },
  "ja": {
   "inputs": {
-   "demos/for-women/Demo20_HinataHandshake/media/cover/stamp.json": "e363d43092b88e8e4a63e7e887b66c013ffb638d"
+   "demos/for-women/Demo20_HinataHandshake/media/cover/stamp.json": "0930889358275c1f685f53b62b3caeb372251657"
   },
   "thumb": "3b2fdfe46b2ddf5a3d1bbd8a67c98de84a317e5e"
  },
+ "ko": {
+  "inputs": {
+   "demos/for-women/Demo20_HinataHandshake/media/cover/stamp.json": "0930889358275c1f685f53b62b3caeb372251657"
+  },
+  "thumb": "f1e9ad92f56dff0e21f20682ecf18509873a1102"
+ },
  "zh": {
   "inputs": {
-   "demos/for-women/Demo20_HinataHandshake/media/cover/stamp.json": "e363d43092b88e8e4a63e7e887b66c013ffb638d"
+   "demos/for-women/Demo20_HinataHandshake/media/cover/stamp.json": "0930889358275c1f685f53b62b3caeb372251657"
   },
   "thumb": "61f758a32ea573ffbc9059540e075789367a7ca8"
  }

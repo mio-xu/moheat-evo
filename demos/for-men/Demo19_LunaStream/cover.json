@@ -3,12 +3,14 @@
  "title": {
   "en": "Luna's Secret Cocktail",
   "ja": "ルナの、\nひみつのカクテル",
-  "zh": "露娜的秘密鸡尾酒"
+  "zh": "露娜的秘密鸡尾酒",
+  "ko": "루나의,\n비밀 칵테일"
  },
  "tagline": {
   "en": "After last orders in a basement bar, the late-night streamer mixes a drink just for you",
   "ja": "ラストオーダーのあとの地下のバー。深夜の配信者が、あなただけに一杯つくる",
-  "zh": "最后点单之后的地下酒吧，深夜主播只为你调一杯酒"
+  "zh": "最后点单之后的地下酒吧，深夜主播只为你调一杯酒",
+  "ko": "라스트 오더가 지난 지하 바에서, 심야 방송인이 당신만을 위해 한 잔을 만들어요"
  },
  "chips": [
   {
@@ -16,7 +18,8 @@
    "text": {
     "en": "A bar after closing",
     "ja": "閉店後のバー",
-    "zh": "打烊后的酒吧"
+    "zh": "打烊后的酒吧",
+    "ko": "문 닫은 뒤의 바"
    }
   },
   {
@@ -24,7 +27,8 @@
    "text": {
     "en": "blue flame · Irish coffee · her voice at your ear",
     "ja": "青い炎・コーヒー・耳元の声",
-    "zh": "蓝色火焰・咖啡・耳边的声音"
+    "zh": "蓝色火焰・咖啡・耳边的声音",
+    "ko": "푸른 불꽃・커피・귓가의 목소리"
    }
   },
   {
@@ -32,7 +36,8 @@
    "text": {
     "en": "iced shaker · rainy night draft",
     "ja": "冷えたシェイカー・雨の夜風",
-    "zh": "冰镇雪克杯・雨夜的风"
+    "zh": "冰镇雪克杯・雨夜的风",
+    "ko": "차가운 셰이커・비 오는 밤바람"
    }
   }
  ],

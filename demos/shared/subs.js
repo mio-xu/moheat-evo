@@ -33,7 +33,7 @@
     id: { name: 'Bahasa Indonesia', short: 'ID', bcp: 'id', speech: 'id-ID' }, vi: { name: 'Tiếng Việt', short: 'VI', bcp: 'vi', speech: 'vi-VN' },
     th: { name: 'ไทย', short: 'ไทย', bcp: 'th', speech: 'th-TH', font: 'Thonburi, "Noto Sans Thai", Tahoma, sans-serif' },
   };
-  const DEFAULT_LANGS = ['en', 'ja', 'zh'];   // what every demo offers unless its l10n.js lists "langs"
+  const DEFAULT_LANGS = ['en', 'ja', 'zh', 'ko'];   // what every demo offers unless its l10n.js lists "langs" (한국어 in every demo since 2026-11-11)
   const chain = (l) => { const out = []; for (let x = l; x && !out.includes(x); x = LANGS[x]?.fallback || (x === 'en' ? null : 'en')) out.push(x); return out; };
   /** value for language l from { en, zh, … }, following the fallback chain (zh-Hant → zh → en) */
   const pickL = (obj, l) => { if (!obj) return undefined; for (const x of chain(l)) if (obj[x] != null) return obj[x]; return undefined; };
@@ -372,7 +372,7 @@
     const me = document.currentScript?.src || [...document.scripts].map((x) => x.src).find((x) => /shared\/subs\.js/.test(x));
     if (me) { const c = document.createElement('script'); c.src = me.replace(/subs\.js(\?.*)?$/, 'l10n_common.js?v=6'); c.onload = () => { maps = {}; apply(); loaded(); }; c.onerror = loaded; document.head.appendChild(c); } else loaded();
     const s = document.createElement('script');   // relative to the page (or its <base>): the demo's own languages
-    s.src = 'l10n.js?v=4';
+    s.src = 'l10n.js?v=5';
     s.onload = () => {
       l10nDone = true; maps = {}; missing.clear(); lang = eff(); fill();
       containers().forEach((c) => delete c.dataset.msub); document.querySelectorAll('[data-mlang]').forEach((e) => { e.dataset.mlang = ''; });

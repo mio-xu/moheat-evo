@@ -1,25 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/healing/Demo29_FamilyVisit/media/cover/stamp.json": "33e1356366e2da75d09f5484094a836264f8e397"
+   "demos/healing/Demo29_FamilyVisit/media/cover/stamp.json": "db8abb60b386841355ac7326d7e032ea435c192b"
   },
   "thumb": "a87b775334ba090a36503ab41584972749ca0b7b"
  },
  "en": {
   "inputs": {
-   "demos/healing/Demo29_FamilyVisit/media/cover/stamp.json": "33e1356366e2da75d09f5484094a836264f8e397"
+   "demos/healing/Demo29_FamilyVisit/media/cover/stamp.json": "db8abb60b386841355ac7326d7e032ea435c192b"
   },
   "thumb": "a87b775334ba090a36503ab41584972749ca0b7b"
  },
  "ja": {
   "inputs": {
-   "demos/healing/Demo29_FamilyVisit/media/cover/stamp.json": "33e1356366e2da75d09f5484094a836264f8e397"
+   "demos/healing/Demo29_FamilyVisit/media/cover/stamp.json": "db8abb60b386841355ac7326d7e032ea435c192b"
   },
   "thumb": "d8c640d2eb0fc801188e5933374ecb5f66d7fd80"
  },
+ "ko": {
+  "inputs": {
+   "demos/healing/Demo29_FamilyVisit/media/cover/stamp.json": "db8abb60b386841355ac7326d7e032ea435c192b"
+  },
+  "thumb": "6971f474589c6417ba009cad8a3eaeec508dd17c"
+ },
  "zh": {
   "inputs": {
-   "demos/healing/Demo29_FamilyVisit/media/cover/stamp.json": "33e1356366e2da75d09f5484094a836264f8e397"
+   "demos/healing/Demo29_FamilyVisit/media/cover/stamp.json": "db8abb60b386841355ac7326d7e032ea435c192b"
   },
   "thumb": "e8295bd1a2a403c25fb890bcdde2294bee8767b2"
  }

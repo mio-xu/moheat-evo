@@ -1,25 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "0862fcd1694b80ecac1fc6fae3592e6abd85ef63"
+   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "1904976b53be6cbd6946787080f7782502486b45"
   },
   "thumb": "cd57df805059eae10761137364a4395ad111a1a6"
  },
  "en": {
   "inputs": {
-   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "0862fcd1694b80ecac1fc6fae3592e6abd85ef63"
+   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "1904976b53be6cbd6946787080f7782502486b45"
   },
   "thumb": "cd57df805059eae10761137364a4395ad111a1a6"
  },
  "ja": {
   "inputs": {
-   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "0862fcd1694b80ecac1fc6fae3592e6abd85ef63"
+   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "1904976b53be6cbd6946787080f7782502486b45"
   },
   "thumb": "e0503d54621b4f58dc7c8497042c8da39d6af62b"
  },
+ "ko": {
+  "inputs": {
+   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "1904976b53be6cbd6946787080f7782502486b45"
+  },
+  "thumb": "7a87d6804189257871c42b9e8254bbbc43945fee"
+ },
  "zh": {
   "inputs": {
-   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "0862fcd1694b80ecac1fc6fae3592e6abd85ef63"
+   "demos/for-men/Demo17_CocoaStream/media/cover/stamp.json": "1904976b53be6cbd6946787080f7782502486b45"
   },
   "thumb": "0a85c93575a873b2e0b992c4f13a0b78fb60f619"
  }

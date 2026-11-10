@@ -566,7 +566,7 @@
   // ---------------------------------------------------------------- UI v2: the live adapter for demos/shared/ui2.js
   if (V2) {
     // UI2_V = content hash of ui2.js + ui2.css (python3 tools/web/bump.py --auto keeps it current: cat ui2.js ui2.css | shasum, 8 hex)
-    const UI2_V = '9369150d';
+    const UI2_V = 'f0c8781f';
     const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = new URL(`ui2.css?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(css);
     let cssReady = false; const cssOk = () => { if (!cssReady) { cssReady = true; mount(); } };   // mount only once ui2.css applies: an unstyled first frame left the player column off-centre (Demo21 check_ui band 16 / 58 px under load)
     css.addEventListener('load', cssOk); css.addEventListener('error', cssOk); real.st(cssOk, 3000);
@@ -587,7 +587,7 @@
     const late = () => real.st(isReady, 5000); if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', late); else late();
     const A = {
       get cat() { return location.pathname.split('/demos/')[1]?.split('/')[0]; },
-      get cover() { return { base: COVER_BASE, langs: window.MoHeatSub?.langs || ['en', 'ja', 'zh'] }; },
+      get cover() { return { base: COVER_BASE, langs: window.MoHeatSub?.langs || ['en', 'ja', 'zh', 'ko'] }; },
       state: () => (playing() ? (paused || filmHeld() ? 'paused' : 'playing') : !ready ? 'loading' : started ? 'ended' : 'cover'),
       lang: () => window.MoHeatSub?.lang || 'en', setLang: (l) => window.MoHeatSub?.set?.(l),
       voice: () => VOICE.pref(), setVoice: (p) => VOICE.set(p), voiceLangs: VOICE.LANGS, voiceFixed: () => FILM(),   /* films have one mixed soundtrack (no per-language mix yet): the row stays, greyed */

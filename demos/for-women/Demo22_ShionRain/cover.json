@@ -3,12 +3,14 @@
  "title": {
   "en": "Until the Rain Stops",
   "ja": "雨が止むまで",
-  "zh": "直到雨停"
+  "zh": "直到雨停",
+  "ko": "비가 그칠 때까지"
  },
  "tagline": {
   "en": "A rainy night at his flat, he dries your hair",
   "ja": "雨の夜、彼の部屋で髪を乾かしてもらう",
-  "zh": "雨夜，在他家里，他为你吹干头发"
+  "zh": "雨夜，在他家里，他为你吹干头发",
+  "ko": "비 오는 밤, 그의 집에서 머리를 말려 줘요"
  },
  "chips": [
   {
@@ -16,7 +18,8 @@
    "text": {
     "en": "Shion on a rainy night",
     "ja": "雨の夜の紫苑",
-    "zh": "雨夜的紫苑"
+    "zh": "雨夜的紫苑",
+    "ko": "비 오는 밤의 시온"
    }
   },
   {
@@ -24,7 +27,8 @@
    "text": {
     "en": "hair dryer · his voice at your ear",
     "ja": "ドライヤー・耳元の声",
-    "zh": "吹风机・耳边的声音"
+    "zh": "吹风机・耳边的声音",
+    "ko": "드라이어・귓가의 목소리"
    }
   },
   {
@@ -32,7 +36,8 @@
    "text": {
     "en": "wet hair · cool air",
     "ja": "濡れた髪・冷風",
-    "zh": "湿发・冷风"
+    "zh": "湿发・冷风",
+    "ko": "젖은 머리・찬 바람"
    }
   }
  ],

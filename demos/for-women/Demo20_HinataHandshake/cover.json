@@ -3,12 +3,14 @@
  "title": {
   "en": "Just Ten More Seconds?",
   "ja": "あと10秒だけ、\nね？",
-  "zh": "再多10秒，\n好吗？"
+  "zh": "再多10秒，\n好吗？",
+  "ko": "딱 10초만 더,\n응?"
  },
  "tagline": {
   "en": "Hinata's handshake event",
   "ja": "ひなたの握手会",
-  "zh": "日向的握手会"
+  "zh": "日向的握手会",
+  "ko": "히나타의 악수회"
  },
  "chips": [
   {
@@ -16,7 +18,8 @@
    "text": {
     "en": "handshake event",
     "ja": "握手会",
-    "zh": "握手会"
+    "zh": "握手会",
+    "ko": "악수회"
    }
   },
   {
@@ -24,7 +27,8 @@
    "text": {
     "en": "whispers at your ear",
     "ja": "耳元のささやき",
-    "zh": "耳边低语"
+    "zh": "耳边低语",
+    "ko": "귓가의 속삭임"
    }
   },
   {
@@ -32,7 +36,8 @@
    "text": {
     "en": "draft from the entrance",
     "ja": "入口のすきま風",
-    "zh": "门口的穿堂风"
+    "zh": "门口的穿堂风",
+    "ko": "입구의 틈새 바람"
    }
   }
  ],

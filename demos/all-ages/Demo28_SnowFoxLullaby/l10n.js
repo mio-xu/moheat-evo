@@ -4,7 +4,8 @@ window.MOHEAT_L10N = {
  "langs": [
   "en",
   "ja",
-  "zh"
+  "zh",
+  "ko"
  ],
  "text": {
   "zh": {
@@ -110,20 +111,77 @@ window.MOHEAT_L10N = {
    "Homura · right ear": "Homura · right ear",
    "both · left ear": "both · left ear",
    "Koyuki left · Homura right": "Koyuki left · Homura right"
+  },
+  "ko": {
+   "こんばんは…。 まだ、起きてるの？": "안녕…. 아직 안 자?",
+   "はいはーい！ 夜ふかしさん、みーつけた！": "네네~! 밤샘쟁이 찾았다!",
+   "焔ちゃん、しーっ…。 この子、眠れないんだって。": "호무라, 쉿…. 이 아이, 잠이 안 온대.",
+   "じゃあ、どっちが先に寝かしつけるか、勝負だね！": "그럼 누가 먼저 재우나 승부다!",
+   "ねえ…眠れないのは、暑いから？ 寒いから？": "있잖아… 잠이 안 오는 건 더워서? 추워서?",
+   "ふふ、じゃあ、わたしの番。": "후후, 그럼 내 차례.",
+   "ほらね！ わたしの出番！": "거봐! 내 차례지!",
+   "目を閉じて…。 雪のふる音、聞こえる？": "눈을 감아…. 눈 내리는 소리, 들려?",
+   "ふぅー…。 ふふっ、ひんやり、した？": "후우…. 후훗, 시원했어?",
+   "こっちの耳は、わたしがあっためてあげる。": "이쪽 귀는 내가 따뜻하게 해 줄게.",
+   "はぁー…。 ぽかぽか、でしょ？": "하아…. 포근포근하지?",
+   "…焔ちゃん、近い。": "…호무라, 너무 가까워.",
+   "小雪こそ！ …じゃあ、半分こね。": "코유키야말로! …그럼 반씩 나누자.",
+   "ひんやり、と…": "시원하게…",
+   "ぽかぽか、で…": "포근하게…",
+   "…ちょうどいい、でしょ？": "…딱 좋지?",
+   "…眠くなってきた？ 最後は、どっちがそばにいてほしい？": "…졸려 오기 시작했어? 마지막엔 누가 곁에 있었으면 좋겠어?",
+   "ちぇー。 …じゃあ、いろりの火は、朝まで見ててあげる。": "칫. …그럼 화롯불은 아침까지 지켜봐 줄게.",
+   "…ありがとう。 朝まで、ずっとそばにいるね。": "…고마워. 아침까지 계속 곁에 있을게.",
+   "ふふ、じゃあ、わたしは戸を閉めてくるね。": "후후, 그럼 나는 문 닫고 올게.",
+   "…朝まで、ぎゅってしててあげる。": "…아침까지 꼭 안아 줄게.",
+   "おやすみなさい。": "잘 자.",
+   "…ちょっと、暑くて": "…조금, 더워서",
+   "…ちょっと、寒くて": "…조금, 추워서",
+   "目を閉じる（長押し）": "눈 감기 (길게 누르기)",
+   "右の耳を、焔に向ける": "오른쪽 귀를 호무라 쪽으로",
+   "小雪、そばにいて": "코유키, 곁에 있어 줘",
+   "焔、そばにいて": "호무라, 곁에 있어 줘",
+   "「おやすみ」と言う": "\"잘 자\"라고 말하기",
+   "ふたりの、こもりうた": "둘이서 불러 주는 자장가",
+   "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · 바이노럴 ASMR × 온냉 햅틱",
+   "A Lullaby for Two — Koyuki and Homura put you to sleep on a snowy night": "눈 내리는 밤, 코유키와 호무라가 당신을 재워 줘요",
+   "🌙 寝かしつけ勝負 · Interactive": "🌙 재우기 승부 · 인터랙티브",
+   "❄️ 小雪の声と吐息 · cool": "❄️ 코유키의 목소리와 숨결 · 시원함",
+   "🔥 焔の声と囲炉裏 · warm": "🔥 호무라의 목소리와 화로 · 따뜻함",
+   "▶ はじめる · Start": "▶ 시작",
+   "🎧 Left / Right check": "🎧 좌우 확인",
+   "Headphones on · tap, hold or say your answer · connect MoHeat Evo to feel a cool voice at one ear, a warm one at the other — and both on the same ear": "헤드폰을 써 주세요 · 탭, 길게 누르기, 또는 목소리로 대답해요 · MoHeat Evo를 연결하면 한쪽 귀엔 시원한 목소리, 다른 쪽엔 따뜻한 목소리를 — 그리고 같은 귀에서 둘 다를 느낄 수 있어요",
+   "Koyuki and Homura are original characters · voices ElevenLabs · art: ChatGPT (OpenAI), from “Whispers of Snow and Flame”": "코유키와 호무라는 오리지널 캐릭터입니다 · 목소리 ElevenLabs · 그림: ChatGPT (OpenAI), 《눈과 여우불의 소곤소곤 이야기》에서",
+   "ASMR · Snowy night": "ASMR · 눈 내리는 밤",
+   "Live (DUAL): Koyuki (snow spirit) cools the ear she speaks at, Homura warms hers, both with their loudness; their breath, the hearth in front of you and the night air from the open doors add real warmth / cold.": "실시간 (DUAL): 설녀 코유키는 말하는 쪽 귀를 시원하게, 호무라는 따뜻하게, 둘 다 목소리 크기만큼. 두 사람의 숨결, 앞에 있는 화로, 열린 문으로 들어오는 밤공기가 진짜 따뜻함 / 차가움을 더해요.",
+   "🔥 焔が、朝までぽかぽか · Homura keeps you warm till morning": "🔥 호무라가 아침까지 포근하게",
+   "❄️ 小雪が、朝までそばに · Koyuki stays by you till morning": "❄️ 코유키가 아침까지 곁에",
+   "↺ もう一度 · Play again": "↺ 다시 하기",
+   "小雪 · 焔 ElevenLabs": "코유키 · 호무라 ElevenLabs",
+   "a snowy night · your room": "눈 내리는 밤 · 당신의 방",
+   "Koyuki & Homura arrive": "코유키와 호무라가 왔어요",
+   "by the hearth": "화롯가",
+   "Koyuki · left ear": "코유키 · 왼쪽 귀",
+   "Homura · right ear": "호무라 · 오른쪽 귀",
+   "both · left ear": "둘 다 · 왼쪽 귀",
+   "Koyuki left · Homura right": "코유키 왼쪽 · 호무라 오른쪽"
   }
  },
  "names": {
   "小雪": {
    "en": "Koyuki",
-   "zh": "小雪"
+   "zh": "小雪",
+   "ko": "코유키"
   },
   "焔": {
    "en": "Homura",
-   "zh": "小焰"
+   "zh": "小焰",
+   "ko": "호무라"
   },
   "小雪・焔": {
    "en": "Koyuki & Homura",
-   "zh": "小雪・小焰"
+   "zh": "小雪・小焰",
+   "ko": "코유키・호무라"
   }
  },
  "voice": {
@@ -206,6 +264,44 @@ window.MOHEAT_L10N = {
     "night night",
     "おやすみ",
     "おやすみなさい"
+   ]
+  },
+  "ko": {
+   "…ちょっと、暑くて": [
+    "조금 더워서",
+    "더워",
+    "너무 더워",
+    "더워요"
+   ],
+   "…ちょっと、寒くて": [
+    "조금 추워서",
+    "추워",
+    "너무 추워",
+    "추워요"
+   ],
+   "右の耳を、焔に向ける": [
+    "오른쪽 귀를 호무라 쪽으로",
+    "오른쪽 귀",
+    "오른쪽",
+    "호무라 쪽으로"
+   ],
+   "小雪、そばにいて": [
+    "코유키 곁에 있어 줘",
+    "코유키",
+    "코유키야",
+    "코유키 선택"
+   ],
+   "焔、そばにいて": [
+    "호무라 곁에 있어 줘",
+    "호무라",
+    "호무라야",
+    "호무라 선택"
+   ],
+   "「おやすみ」と言う": [
+    "잘 자",
+    "잘 자요",
+    "안녕히 주무세요",
+    "굿나잇"
    ]
   }
  }

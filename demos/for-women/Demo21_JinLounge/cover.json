@@ -3,12 +3,14 @@
  "title": {
   "en": "Look Only at Me",
   "ja": "俺だけ見てろ",
-  "zh": "只准看着我"
+  "zh": "只准看着我",
+  "ko": "나만 봐"
  },
  "tagline": {
   "en": "After the show, in his VIP lounge",
   "ja": "ライブのあと、彼のVIPラウンジで",
-  "zh": "演出结束后，在他的VIP休息室"
+  "zh": "演出结束后，在他的VIP休息室",
+  "ko": "공연이 끝난 뒤, 그의 VIP 라운지에서"
  },
  "chips": [
   {
@@ -16,7 +18,8 @@
    "text": {
     "en": "Jin backstage",
     "ja": "楽屋の迅",
-    "zh": "后台的迅"
+    "zh": "后台的迅",
+    "ko": "대기실의 진"
    }
   },
   {
@@ -24,7 +27,8 @@
    "text": {
     "en": "his voice at your ear · jacket",
     "ja": "耳元の声・ジャケット",
-    "zh": "耳边的声音・外套"
+    "zh": "耳边的声音・外套",
+    "ko": "귓가의 목소리・재킷"
    }
   },
   {
@@ -32,7 +36,8 @@
    "text": {
     "en": "cold can",
     "ja": "冷たい缶",
-    "zh": "冰凉的易拉罐"
+    "zh": "冰凉的易拉罐",
+    "ko": "차가운 캔"
    }
   }
  ],

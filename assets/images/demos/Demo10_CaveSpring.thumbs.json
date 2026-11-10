@@ -1,25 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/all-ages/Demo10_CaveSpring/media/cover/stamp.json": "78f9169654f68c43a449a785a37baa59ac2a42da"
+   "demos/all-ages/Demo10_CaveSpring/media/cover/stamp.json": "c519e710983d5ed81448edada01580b683933cb0"
   },
   "thumb": "41d14d0eeeaa2ebeee0730d708c6da6865f7e081"
  },
  "en": {
   "inputs": {
-   "demos/all-ages/Demo10_CaveSpring/media/cover/stamp.json": "78f9169654f68c43a449a785a37baa59ac2a42da"
+   "demos/all-ages/Demo10_CaveSpring/media/cover/stamp.json": "c519e710983d5ed81448edada01580b683933cb0"
   },
   "thumb": "41d14d0eeeaa2ebeee0730d708c6da6865f7e081"
  },
  "ja": {
   "inputs": {
-   "demos/all-ages/Demo10_CaveSpring/media/cover/stamp.json": "78f9169654f68c43a449a785a37baa59ac2a42da"
+   "demos/all-ages/Demo10_CaveSpring/media/cover/stamp.json": "c519e710983d5ed81448edada01580b683933cb0"
   },
   "thumb": "ad951daaaf0c552c45aa36deea2b04f973ea1919"
  },
+ "ko": {
+  "inputs": {
+   "demos/all-ages/Demo10_CaveSpring/media/cover/stamp.json": "c519e710983d5ed81448edada01580b683933cb0"
+  },
+  "thumb": "e3e3b2e882ecbd3a7fe92a46b7030b2494c95479"
+ },
  "zh": {
   "inputs": {
-   "demos/all-ages/Demo10_CaveSpring/media/cover/stamp.json": "78f9169654f68c43a449a785a37baa59ac2a42da"
+   "demos/all-ages/Demo10_CaveSpring/media/cover/stamp.json": "c519e710983d5ed81448edada01580b683933cb0"
   },
   "thumb": "7ec02b42bfce317c039f2163155333671a275d12"
  }

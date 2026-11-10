@@ -1,25 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/all-ages/Demo28_SnowFoxLullaby/media/cover/stamp.json": "8da8713720ac8e1051459ced9d0c1881ec117d21"
+   "demos/all-ages/Demo28_SnowFoxLullaby/media/cover/stamp.json": "cb80b230b19e52e063ba6c6e1ab66811336b66b2"
   },
   "thumb": "bdba9914bb831ea15bc11a8649011ebf506d9245"
  },
  "en": {
   "inputs": {
-   "demos/all-ages/Demo28_SnowFoxLullaby/media/cover/stamp.json": "8da8713720ac8e1051459ced9d0c1881ec117d21"
+   "demos/all-ages/Demo28_SnowFoxLullaby/media/cover/stamp.json": "cb80b230b19e52e063ba6c6e1ab66811336b66b2"
   },
   "thumb": "bdba9914bb831ea15bc11a8649011ebf506d9245"
  },
  "ja": {
   "inputs": {
-   "demos/all-ages/Demo28_SnowFoxLullaby/media/cover/stamp.json": "8da8713720ac8e1051459ced9d0c1881ec117d21"
+   "demos/all-ages/Demo28_SnowFoxLullaby/media/cover/stamp.json": "cb80b230b19e52e063ba6c6e1ab66811336b66b2"
   },
   "thumb": "1a9569eec02f2878b0723196789d8e8221c7b436"
  },
+ "ko": {
+  "inputs": {
+   "demos/all-ages/Demo28_SnowFoxLullaby/media/cover/stamp.json": "cb80b230b19e52e063ba6c6e1ab66811336b66b2"
+  },
+  "thumb": "d9a1b1bfc710f7c4a9346c53931a97da6fab5256"
+ },
  "zh": {
   "inputs": {
-   "demos/all-ages/Demo28_SnowFoxLullaby/media/cover/stamp.json": "8da8713720ac8e1051459ced9d0c1881ec117d21"
+   "demos/all-ages/Demo28_SnowFoxLullaby/media/cover/stamp.json": "cb80b230b19e52e063ba6c6e1ab66811336b66b2"
   },
   "thumb": "4d72353187997867aafdb68c09327fe7da89ef21"
  }

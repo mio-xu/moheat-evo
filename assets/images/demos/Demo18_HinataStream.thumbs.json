@@ -1,25 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/for-men/Demo18_HinataStream/media/cover/stamp.json": "493289d61194b2194e0ee63b1e335c8e98412a38"
+   "demos/for-men/Demo18_HinataStream/media/cover/stamp.json": "4f6377862e2598a5df18d72d85db92cbbd2264db"
   },
   "thumb": "797ad89db7c44efd5eef5570d5e5b19c448e4fb3"
  },
  "en": {
   "inputs": {
-   "demos/for-men/Demo18_HinataStream/media/cover/stamp.json": "493289d61194b2194e0ee63b1e335c8e98412a38"
+   "demos/for-men/Demo18_HinataStream/media/cover/stamp.json": "4f6377862e2598a5df18d72d85db92cbbd2264db"
   },
   "thumb": "797ad89db7c44efd5eef5570d5e5b19c448e4fb3"
  },
  "ja": {
   "inputs": {
-   "demos/for-men/Demo18_HinataStream/media/cover/stamp.json": "493289d61194b2194e0ee63b1e335c8e98412a38"
+   "demos/for-men/Demo18_HinataStream/media/cover/stamp.json": "4f6377862e2598a5df18d72d85db92cbbd2264db"
   },
   "thumb": "a292ecb07960fc223980fa13c2edac2173c6945e"
  },
+ "ko": {
+  "inputs": {
+   "demos/for-men/Demo18_HinataStream/media/cover/stamp.json": "4f6377862e2598a5df18d72d85db92cbbd2264db"
+  },
+  "thumb": "1fdb6d406a85474e9298650a77a649c967f415c3"
+ },
  "zh": {
   "inputs": {
-   "demos/for-men/Demo18_HinataStream/media/cover/stamp.json": "493289d61194b2194e0ee63b1e335c8e98412a38"
+   "demos/for-men/Demo18_HinataStream/media/cover/stamp.json": "4f6377862e2598a5df18d72d85db92cbbd2264db"
   },
   "thumb": "b9a356fe4fb3b2bb73aa51480e1ae4ea3ec3c6fd"
  }

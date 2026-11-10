@@ -3,12 +3,14 @@
  "title": {
   "en": "Valentine's Eve with Cocoa",
   "ja": "ココアの、\nバレンタイン前夜",
-  "zh": "可可的情人节前夜"
+  "zh": "可可的情人节前夜",
+  "ko": "코코아의\n밸런타인 전날 밤"
  },
  "tagline": {
   "en": "Making chocolates after closing in her little sweets shop",
   "ja": "閉店後の小さなお菓子屋さんで、ふたりでチョコ作り",
-  "zh": "打烊后，在她的小甜品店里一起做巧克力"
+  "zh": "打烊后，在她的小甜品店里一起做巧克力",
+  "ko": "문 닫은 작은 과자 가게에서 둘이서 초콜릿 만들기"
  },
  "chips": [
   {
@@ -16,7 +18,8 @@
    "text": {
     "en": "Baking after closing",
     "ja": "閉店後のお菓子作り",
-    "zh": "打烊后的点心时间"
+    "zh": "打烊后的点心时间",
+    "ko": "문 닫은 뒤의 과자 만들기"
    }
   },
   {
@@ -24,7 +27,8 @@
    "text": {
     "en": "oven · steam · her voice at your ear",
     "ja": "オーブン・湯気・耳元の声",
-    "zh": "烤箱・热气・耳边的声音"
+    "zh": "烤箱・热气・耳边的声音",
+    "ko": "오븐・김・귓가의 목소리"
    }
   },
   {
@@ -32,7 +36,8 @@
    "text": {
     "en": "fridge · her fu-fu · snowy night",
     "ja": "冷蔵庫・ふーふー・雪の夜",
-    "zh": "冰箱・呼呼吹气・雪夜"
+    "zh": "冰箱・呼呼吹气・雪夜",
+    "ko": "냉장고・후후・눈 내리는 밤"
    }
   }
  ],

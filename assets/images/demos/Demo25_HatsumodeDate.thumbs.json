@@ -1,25 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/for-men/Demo25_HatsumodeDate/media/cover/stamp.json": "193502935859f9c2527965e0732fffa3a94237c9"
+   "demos/for-men/Demo25_HatsumodeDate/media/cover/stamp.json": "dfcaf75d4ea9ab7dfa2c9ef2174c0c0f374fc837"
   },
   "thumb": "546ace0e90df697b649be18c45d815e8366bd98f"
  },
  "en": {
   "inputs": {
-   "demos/for-men/Demo25_HatsumodeDate/media/cover/stamp.json": "193502935859f9c2527965e0732fffa3a94237c9"
+   "demos/for-men/Demo25_HatsumodeDate/media/cover/stamp.json": "dfcaf75d4ea9ab7dfa2c9ef2174c0c0f374fc837"
   },
   "thumb": "546ace0e90df697b649be18c45d815e8366bd98f"
  },
  "ja": {
   "inputs": {
-   "demos/for-men/Demo25_HatsumodeDate/media/cover/stamp.json": "193502935859f9c2527965e0732fffa3a94237c9"
+   "demos/for-men/Demo25_HatsumodeDate/media/cover/stamp.json": "dfcaf75d4ea9ab7dfa2c9ef2174c0c0f374fc837"
   },
   "thumb": "53fe803da11f780c9ab36776193297630da48b38"
  },
+ "ko": {
+  "inputs": {
+   "demos/for-men/Demo25_HatsumodeDate/media/cover/stamp.json": "dfcaf75d4ea9ab7dfa2c9ef2174c0c0f374fc837"
+  },
+  "thumb": "5e04e1c4e758513ea36473f59160e188e0701df9"
+ },
  "zh": {
   "inputs": {
-   "demos/for-men/Demo25_HatsumodeDate/media/cover/stamp.json": "193502935859f9c2527965e0732fffa3a94237c9"
+   "demos/for-men/Demo25_HatsumodeDate/media/cover/stamp.json": "dfcaf75d4ea9ab7dfa2c9ef2174c0c0f374fc837"
   },
   "thumb": "80e5d978d0f5860d5ef85e2f689b0e1d4aa27264"
  }

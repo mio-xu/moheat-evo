@@ -1,25 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "291364c0d478cfc74a17697c9f6e8a4b592a8471"
+   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "358adbca4946c36c99270d3ac3cff7f44e28c24e"
   },
   "thumb": "bca13e80e5f6a8d02cb2bad28a2c365838354900"
  },
  "en": {
   "inputs": {
-   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "291364c0d478cfc74a17697c9f6e8a4b592a8471"
+   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "358adbca4946c36c99270d3ac3cff7f44e28c24e"
   },
   "thumb": "bca13e80e5f6a8d02cb2bad28a2c365838354900"
  },
  "ja": {
   "inputs": {
-   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "291364c0d478cfc74a17697c9f6e8a4b592a8471"
+   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "358adbca4946c36c99270d3ac3cff7f44e28c24e"
   },
   "thumb": "d8de79bcba51724832758ef30a37e5ea99195e92"
  },
+ "ko": {
+  "inputs": {
+   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "358adbca4946c36c99270d3ac3cff7f44e28c24e"
+  },
+  "thumb": "2531b04e803cb0104837d7769485800f30be5447"
+ },
  "zh": {
   "inputs": {
-   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "291364c0d478cfc74a17697c9f6e8a4b592a8471"
+   "demos/for-men/Demo14_MintStream/media/cover/stamp.json": "358adbca4946c36c99270d3ac3cff7f44e28c24e"
   },
   "thumb": "0fec49e954a3dcabf17647981563d0a52c364ff6"
  }

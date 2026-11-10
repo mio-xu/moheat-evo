@@ -3,12 +3,14 @@
  "title": {
   "en": "Arcade Date with Hinata",
   "ja": "ひなたと、\nゲーセンデート",
-  "zh": "和日向的游戏厅约会"
+  "zh": "和日向的游戏厅约会",
+  "ko": "히나타와,\n오락실 데이트"
  },
  "tagline": {
   "en": "Taiko, racing, a crane game and purikura with the gamer girl in disguise",
   "ja": "変装したゲーマー女子と、太鼓・レース・クレーン・プリクラ",
-  "zh": "和变装的游戏少女一起：太鼓、赛车、抓娃娃、拍大头贴"
+  "zh": "和变装的游戏少女一起：太鼓、赛车、抓娃娃、拍大头贴",
+  "ko": "변장한 게이머 소녀와 태고・레이싱・인형 뽑기・스티커 사진"
  },
  "chips": [
   {
@@ -16,7 +18,8 @@
    "text": {
     "en": "A date with a gamer girl",
     "ja": "ゲーマー女子とデート",
-    "zh": "和游戏少女约会"
+    "zh": "和游戏少女约会",
+    "ko": "게이머 소녀와 데이트"
    }
   },
   {
@@ -24,7 +27,8 @@
    "text": {
     "en": "hot corn soup · her voice at your ear",
     "ja": "コーンスープ・耳元の声",
-    "zh": "玉米浓汤・耳边的声音"
+    "zh": "玉米浓汤・耳边的声音",
+    "ko": "콘수프・귓가의 목소리"
    }
   },
   {
@@ -32,7 +36,8 @@
    "text": {
     "en": "racing fans · winter night wind",
     "ja": "レースの風・冬の夜風",
-    "zh": "赛车的风・冬夜寒风"
+    "zh": "赛车的风・冬夜寒风",
+    "ko": "레이싱 바람・겨울 밤바람"
    }
   }
  ],

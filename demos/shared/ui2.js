@@ -69,7 +69,7 @@
     const pickL = (o) => (o == null ? '' : typeof o === 'string' ? o : o[lang()] ?? o.en ?? '');
     const root = document.createElement('div'); root.className = 'u2'; if (A.cat) root.dataset.cat = A.cat;
     if (matchMedia('(pointer: coarse)').matches || A.touch) root.classList.add('u2-touch');
-    const cv = A.cover || {}, LANGS0 = ['en', 'ja', 'zh'];
+    const cv = A.cover || {}, LANGS0 = ['en', 'ja', 'zh', 'ko'];
     let langs = cv.langs || LANGS0; const relang = () => { langs = A.cover?.langs || LANGS0; };   // the demo's languages are known once its l10n.js has loaded (ko): read again on every paint
     root.innerHTML = `
       <div class="u2-cover">

@@ -1,25 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "5386f732d9e747fe65cc8e0dc7453ee3d6f7570a"
+   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "92be203c8b17ee331a8648242618b41dc7fec106"
   },
   "thumb": "40f96c3333d973f96d898fe4eb9cb1139290d1b3"
  },
  "en": {
   "inputs": {
-   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "5386f732d9e747fe65cc8e0dc7453ee3d6f7570a"
+   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "92be203c8b17ee331a8648242618b41dc7fec106"
   },
   "thumb": "40f96c3333d973f96d898fe4eb9cb1139290d1b3"
  },
  "ja": {
   "inputs": {
-   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "5386f732d9e747fe65cc8e0dc7453ee3d6f7570a"
+   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "92be203c8b17ee331a8648242618b41dc7fec106"
   },
   "thumb": "1149f72abb2cfeaa99a76db42e60aac129030043"
  },
+ "ko": {
+  "inputs": {
+   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "92be203c8b17ee331a8648242618b41dc7fec106"
+  },
+  "thumb": "eafb97a1ccb82149501099890d97f7709e1438dc"
+ },
  "zh": {
   "inputs": {
-   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "5386f732d9e747fe65cc8e0dc7453ee3d6f7570a"
+   "demos/for-women/Demo12_LateCall/media/cover/stamp.json": "92be203c8b17ee331a8648242618b41dc7fec106"
   },
   "thumb": "1b648add4e7a5038581356e757c20b5a24969941"
  }

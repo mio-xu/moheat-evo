@@ -3,12 +3,14 @@
  "title": {
   "en": "Summer Festival, Just Us",
   "ja": "なつまつり、\nふたりで",
-  "zh": "夏日祭典，\n只有我们俩"
+  "zh": "夏日祭典，\n只有我们俩",
+  "ko": "여름 축제,\n우리 둘이서"
  },
  "tagline": {
   "en": "A summer night, the shrine steps and your childhood friend",
   "ja": "夏の夜、神社の石段で、幼なじみと",
-  "zh": "夏夜，神社的石阶上，和青梅竹马一起"
+  "zh": "夏夜，神社的石阶上，和青梅竹马一起",
+  "ko": "여름밤, 신사의 돌계단에서 소꿉친구와"
  },
  "chips": [
   {
@@ -16,7 +18,8 @@
    "text": {
     "en": "Saku at the summer festival",
     "ja": "夏祭りの朔",
-    "zh": "夏日祭典的朔"
+    "zh": "夏日祭典的朔",
+    "ko": "여름 축제의 사쿠"
    }
   },
   {
@@ -24,7 +27,8 @@
    "text": {
     "en": "festival heat · his voice at your ear",
     "ja": "屋台の熱気・耳元の声",
-    "zh": "小摊的热气・耳边的声音"
+    "zh": "小摊的热气・耳边的声音",
+    "ko": "노점의 열기・귓가의 목소리"
    }
   },
   {
@@ -32,7 +36,8 @@
    "text": {
     "en": "uchiwa breeze · a breath after shaved ice",
     "ja": "うちわの風・かき氷の息",
-    "zh": "团扇的风・刨冰后的气息"
+    "zh": "团扇的风・刨冰后的气息",
+    "ko": "부채 바람・빙수 먹은 숨"
    }
   }
  ],

@@ -3,12 +3,14 @@
  "title": {
   "en": "A Lullaby for Two",
   "ja": "ふたりの、\nこもりうた",
-  "zh": "两个人的摇篮曲"
+  "zh": "两个人的摇篮曲",
+  "ko": "둘이서 불러 주는\n자장가"
  },
  "tagline": {
   "en": "Koyuki and Homura put you to sleep on a snowy night",
   "ja": "雪の夜、小雪と焔があなたを寝かしつけ",
-  "zh": "雪夜里，小雪和小焰来哄你入睡"
+  "zh": "雪夜里，小雪和小焰来哄你入睡",
+  "ko": "눈 내리는 밤, 코유키와 호무라가 당신을 재워 줘요"
  },
  "chips": [
   {
@@ -16,7 +18,8 @@
    "text": {
     "en": "The bedtime contest",
     "ja": "寝かしつけ勝負",
-    "zh": "哄睡大比拼"
+    "zh": "哄睡大比拼",
+    "ko": "재우기 승부"
    }
   },
   {
@@ -24,7 +27,8 @@
    "text": {
     "en": "Koyuki's voice and breath",
     "ja": "小雪の声と吐息",
-    "zh": "小雪的声音与气息"
+    "zh": "小雪的声音与气息",
+    "ko": "코유키의 목소리와 숨결"
    }
   },
   {
@@ -32,7 +36,8 @@
    "text": {
     "en": "Homura's voice and the hearth",
     "ja": "焔の声と囲炉裏",
-    "zh": "小焰的声音与地炉"
+    "zh": "小焰的声音与地炉",
+    "ko": "호무라의 목소리와 화로"
    }
   }
  ],

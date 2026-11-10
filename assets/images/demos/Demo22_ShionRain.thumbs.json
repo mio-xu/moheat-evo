@@ -1,25 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/for-women/Demo22_ShionRain/media/cover/stamp.json": "b57abc28e5dbe4f54cfdfb824ee708d20a687aa8"
+   "demos/for-women/Demo22_ShionRain/media/cover/stamp.json": "268b2178a602eba0dcb369523fe168b54dc01a0d"
   },
   "thumb": "f94967ceba42aca9ce3fccefc3dda76319858f68"
  },
  "en": {
   "inputs": {
-   "demos/for-women/Demo22_ShionRain/media/cover/stamp.json": "b57abc28e5dbe4f54cfdfb824ee708d20a687aa8"
+   "demos/for-women/Demo22_ShionRain/media/cover/stamp.json": "268b2178a602eba0dcb369523fe168b54dc01a0d"
   },
   "thumb": "f94967ceba42aca9ce3fccefc3dda76319858f68"
  },
  "ja": {
   "inputs": {
-   "demos/for-women/Demo22_ShionRain/media/cover/stamp.json": "b57abc28e5dbe4f54cfdfb824ee708d20a687aa8"
+   "demos/for-women/Demo22_ShionRain/media/cover/stamp.json": "268b2178a602eba0dcb369523fe168b54dc01a0d"
   },
   "thumb": "8c15dfc31c10e25bf110699e23897d5484345326"
  },
+ "ko": {
+  "inputs": {
+   "demos/for-women/Demo22_ShionRain/media/cover/stamp.json": "268b2178a602eba0dcb369523fe168b54dc01a0d"
+  },
+  "thumb": "19dfe84f6f1bdfe9e9a04f7bfffb363eba0753b5"
+ },
  "zh": {
   "inputs": {
-   "demos/for-women/Demo22_ShionRain/media/cover/stamp.json": "b57abc28e5dbe4f54cfdfb824ee708d20a687aa8"
+   "demos/for-women/Demo22_ShionRain/media/cover/stamp.json": "268b2178a602eba0dcb369523fe168b54dc01a0d"
   },
   "thumb": "ae65488f2cb82014af06cf92e53ece6c0d885853"
  }

@@ -1,25 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "24fcd6ec88122de80f3dd216884e9b469f76a133"
+   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "80f0714183b42b2ef434f203be19e3b4895f6ca1"
   },
   "thumb": "a692806dc50ac28b09458934d5430f1e28120a45"
  },
  "en": {
   "inputs": {
-   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "24fcd6ec88122de80f3dd216884e9b469f76a133"
+   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "80f0714183b42b2ef434f203be19e3b4895f6ca1"
   },
   "thumb": "a692806dc50ac28b09458934d5430f1e28120a45"
  },
  "ja": {
   "inputs": {
-   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "24fcd6ec88122de80f3dd216884e9b469f76a133"
+   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "80f0714183b42b2ef434f203be19e3b4895f6ca1"
   },
   "thumb": "e1165afb072aa286404640e33fe69492b1d67ac7"
  },
+ "ko": {
+  "inputs": {
+   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "80f0714183b42b2ef434f203be19e3b4895f6ca1"
+  },
+  "thumb": "9f5c1c33b427a346908b4225949388e441bf11c9"
+ },
  "zh": {
   "inputs": {
-   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "24fcd6ec88122de80f3dd216884e9b469f76a133"
+   "demos/all-ages/Demo04_SeasonsExpress/media/cover/stamp.json": "80f0714183b42b2ef434f203be19e3b4895f6ca1"
   },
   "thumb": "5736e13190dafe689ed6b81afcccf0ca66cc9e47"
  }
