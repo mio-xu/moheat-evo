@@ -449,7 +449,7 @@
   document.addEventListener('visibilitychange', () => { hidden = document.hidden; if (hidden) { stopOutput(); SND.ctx()?.suspend(); } else { last = performance.now(); SND.ctx()?.resume(); } });
   document.addEventListener('keydown', (e) => { if (e.code === 'Escape') emergencyStop(); });
   function finish() {
-    S.started = false; run++; stopOutput(); S.fade = 0; S.fadeA = 0;   // the end fade must not stay over the cover (the loop draws the story while S.fade is set → black cover) fireworks(false); FWS.clear();
+    S.started = false; run++; stopOutput(); S.fade = 0; S.fadeA = 0; fireworks(false); FWS.clear();   // the end fade must not stay over the cover (the loop draws the story while S.fade is set → black cover)
     for (const k of ['night', 'breeze', 'sparkler']) SND.loop(k)?.stop();
     sub('', ''); actEl.classList.remove('show'); choiceEl.classList.remove('show');
     const c = $('cleared'); c.hidden = false;
