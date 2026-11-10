@@ -14,34 +14,34 @@
 //   subs() / setSubs('off'|'s'|'m'|'l') · reduced() / setReduced(b) · autohide() / setAutohide(b) · device() → { serial, connected, name }
 //   connect() · fullscreen() / toggleFullscreen() · endings() → { got, total } · openEndings() · options() → [{ key, label, items: [{ v, label, on }] }]
 //   pick(key, v) · loaded() (0–1) · ready() (Start enabled)
-// Texts: T below, one column per language (en / ja / zh; add ko = one more entry per key, nothing else changes).
+// Texts: T below, one column per language (en / ja / zh / ko; a new language = one more entry per key, nothing else changes).
 (() => {
   if (window.MoHeatUI2) return;
   const T = {
-    start: { en: 'Start', ja: 'はじめる', zh: '开始' }, again: { en: 'Play again', ja: 'もう一度', zh: '再玩一次' },
-    loading: { en: 'Loading', ja: '読み込み中', zh: '加载中' },
-    inter: { en: 'Interactive', ja: 'いっしょに参加', zh: '互动' }, pure: { en: 'Just listen', ja: 'きくだけ', zh: '纯聆听' },
-    play: { en: 'Play', ja: '再生', zh: '播放' }, pause: { en: 'Pause', ja: '一時停止', zh: '暂停' },
-    volume: { en: 'Volume', ja: '音量', zh: '音量' }, mute: { en: 'Mute', ja: 'ミュート', zh: '静音' },
-    thermal: { en: 'Thermal', ja: '温冷', zh: '温冷' }, intensity: { en: 'Intensity', ja: '強さ', zh: '强度' },
-    settings: { en: 'Settings', ja: '設定', zh: '设置' }, full: { en: 'Fullscreen', ja: '全画面', zh: '全屏' }, exitFull: { en: 'Exit fullscreen', ja: '全画面を終了', zh: '退出全屏' },
-    voice: { en: 'Voice', ja: '音声', zh: '配音' }, voiceOnly: { en: '日本語 only for now', ja: '今は日本語のみ', zh: '目前仅日语' }, jaOnly: { en: '日本語 only', ja: '日本語のみ', zh: '仅日语' }, subsOn: { en: 'Show subtitles', ja: '字幕を表示', zh: '显示字幕' },
-    language: { en: 'Language', ja: '言語', zh: '语言' }, subs: { en: 'Subtitles', ja: '字幕', zh: '字幕' }, size: { en: 'Size', ja: 'サイズ', zh: '大小' },
-    on: { en: 'On', ja: 'オン', zh: '开' }, off: { en: 'Off', ja: 'オフ', zh: '关' },
-    motion: { en: 'Reduce motion', ja: '動きを減らす', zh: '减少动态' }, motionHint: { en: 'Calmer picture, no shaking', ja: '画面の揺れをおさえる', zh: '画面更平稳，不晃动' },
-    hide: { en: 'Hide controls', ja: '操作バーを隠す', zh: '隐藏控制条' }, hideHint: { en: 'While playing, after 3 s without input', ja: '再生中、3 秒操作がないとき', zh: '播放中 3 秒无操作时' },
-    device: { en: 'MoHeat Evo', ja: 'MoHeat Evo', zh: 'MoHeat Evo' }, connect: { en: 'Connect', ja: '接続', zh: '连接' }, connected: { en: 'Connected', ja: '接続中', zh: '已连接' },
-    noSerial: { en: 'Connect from Chrome or Edge on a computer', ja: 'パソコンの Chrome / Edge から接続できます', zh: '请在电脑的 Chrome / Edge 中连接' },
-    notConn: { en: 'Not connected', ja: '未接続', zh: '未连接' }, reconnecting: { en: 'Reconnecting…', ja: '再接続中…', zh: '正在重新连接…' },
-    lost: { en: 'Disconnected — plug it back in', ja: '切断されました — 挿し直してください', zh: '已断开 — 请重新插上' }, devError: { en: 'Could not open', ja: '開けませんでした', zh: '无法打开' },
-    disconnect: { en: 'Disconnect', ja: '切断', zh: '断开' },
-    side: { en: 'Info panel', ja: '情報パネル', zh: '信息面板' }, sideHint: { en: 'Sound map and thermal meters', ja: '音の位置と温冷メーター', zh: '声音方位与温冷表' },
-    lr: { en: 'Left / right check', ja: '左右チェック', zh: '左右声道检查' }, thermo: { en: 'Thermal check', ja: '温冷チェック', zh: '温冷检查' }, run: { en: 'Test', ja: 'テスト', zh: '测试' },
-    credits: { en: 'Credits', ja: 'クレジット', zh: '制作名单' },
-    endings: { en: 'Endings', ja: 'エンディング', zh: '结局' }, chapter: { en: 'Chapter', ja: 'チャプター', zh: '章节' },
-    locked: { en: 'Not reached yet', ja: 'まだ到達していません', zh: '尚未到达' }, resume: { en: 'Resume', ja: '再開', zh: '继续' },
-    interHint: { en: 'Answer, tap and hold — by voice too', ja: '答える・タップ・長押し — 声でも', zh: '回答、点按、长按 — 也可用声音' },
-    pureHint: { en: 'Plays through by itself — no mic', ja: '操作なしで最後まで — マイクなし', zh: '自动播完 — 不用麦克风' },
+    start: { en: 'Start', ja: 'はじめる', zh: '开始', ko: '시작' }, again: { en: 'Play again', ja: 'もう一度', zh: '再玩一次', ko: '다시 하기' },
+    loading: { en: 'Loading', ja: '読み込み中', zh: '加载中', ko: '불러오는 중' },
+    inter: { en: 'Interactive', ja: 'いっしょに参加', zh: '互动', ko: '함께 참여' }, pure: { en: 'Just listen', ja: 'きくだけ', zh: '纯聆听', ko: '듣기만' },
+    play: { en: 'Play', ja: '再生', zh: '播放', ko: '재생' }, pause: { en: 'Pause', ja: '一時停止', zh: '暂停', ko: '일시정지' },
+    volume: { en: 'Volume', ja: '音量', zh: '音量', ko: '음량' }, mute: { en: 'Mute', ja: 'ミュート', zh: '静音', ko: '음소거' },
+    thermal: { en: 'Thermal', ja: '温冷', zh: '温冷', ko: '온냉' }, intensity: { en: 'Intensity', ja: '強さ', zh: '强度', ko: '세기' },
+    settings: { en: 'Settings', ja: '設定', zh: '设置', ko: '설정' }, full: { en: 'Fullscreen', ja: '全画面', zh: '全屏', ko: '전체 화면' }, exitFull: { en: 'Exit fullscreen', ja: '全画面を終了', zh: '退出全屏', ko: '전체 화면 종료' },
+    voice: { en: 'Voice', ja: '音声', zh: '配音', ko: '음성' }, voiceOnly: { en: '日本語 only for now', ja: '今は日本語のみ', zh: '目前仅日语', ko: '지금은 일본어만' }, jaOnly: { en: '日本語 only', ja: '日本語のみ', zh: '仅日语', ko: '일본어만' }, subsOn: { en: 'Show subtitles', ja: '字幕を表示', zh: '显示字幕', ko: '자막 표시' },
+    language: { en: 'Language', ja: '言語', zh: '语言', ko: '언어' }, subs: { en: 'Subtitles', ja: '字幕', zh: '字幕', ko: '자막' }, size: { en: 'Size', ja: 'サイズ', zh: '大小', ko: '크기' },
+    on: { en: 'On', ja: 'オン', zh: '开', ko: '켬' }, off: { en: 'Off', ja: 'オフ', zh: '关', ko: '끔' },
+    motion: { en: 'Reduce motion', ja: '動きを減らす', zh: '减少动态', ko: '움직임 줄이기' }, motionHint: { en: 'Calmer picture, no shaking', ja: '画面の揺れをおさえる', zh: '画面更平稳，不晃动', ko: '화면 흔들림을 줄여 차분하게' },
+    hide: { en: 'Hide controls', ja: '操作バーを隠す', zh: '隐藏控制条', ko: '컨트롤 바 숨기기' }, hideHint: { en: 'While playing, after 3 s without input', ja: '再生中、3 秒操作がないとき', zh: '播放中 3 秒无操作时', ko: '재생 중 3초 동안 조작이 없을 때' },
+    device: { en: 'MoHeat Evo', ja: 'MoHeat Evo', zh: 'MoHeat Evo', ko: 'MoHeat Evo' }, connect: { en: 'Connect', ja: '接続', zh: '连接', ko: '연결' }, connected: { en: 'Connected', ja: '接続中', zh: '已连接', ko: '연결됨' },
+    noSerial: { en: 'Connect from Chrome or Edge on a computer', ja: 'パソコンの Chrome / Edge から接続できます', zh: '请在电脑的 Chrome / Edge 中连接', ko: '컴퓨터의 Chrome / Edge에서 연결할 수 있어요' },
+    notConn: { en: 'Not connected', ja: '未接続', zh: '未连接', ko: '연결 안 됨' }, reconnecting: { en: 'Reconnecting…', ja: '再接続中…', zh: '正在重新连接…', ko: '다시 연결하는 중…' },
+    lost: { en: 'Disconnected — plug it back in', ja: '切断されました — 挿し直してください', zh: '已断开 — 请重新插上', ko: '연결이 끊겼어요 — 다시 꽂아 주세요' }, devError: { en: 'Could not open', ja: '開けませんでした', zh: '无法打开', ko: '열 수 없어요' },
+    disconnect: { en: 'Disconnect', ja: '切断', zh: '断开', ko: '연결 해제' },
+    side: { en: 'Info panel', ja: '情報パネル', zh: '信息面板', ko: '정보 패널' }, sideHint: { en: 'Sound map and thermal meters', ja: '音の位置と温冷メーター', zh: '声音方位与温冷表', ko: '소리 위치와 온냉 미터' },
+    lr: { en: 'Left / right check', ja: '左右チェック', zh: '左右声道检查', ko: '좌우 확인' }, thermo: { en: 'Thermal check', ja: '温冷チェック', zh: '温冷检查', ko: '온냉 확인' }, run: { en: 'Test', ja: 'テスト', zh: '测试', ko: '테스트' },
+    credits: { en: 'Credits', ja: 'クレジット', zh: '制作名单', ko: '크레디트' },
+    endings: { en: 'Endings', ja: 'エンディング', zh: '结局', ko: '엔딩' }, chapter: { en: 'Chapter', ja: 'チャプター', zh: '章节', ko: '챕터' },
+    locked: { en: 'Not reached yet', ja: 'まだ到達していません', zh: '尚未到达', ko: '아직 도달하지 않았어요' }, resume: { en: 'Resume', ja: '再開', zh: '继续', ko: '계속' },
+    interHint: { en: 'Answer, tap and hold — by voice too', ja: '答える・タップ・長押し — 声でも', zh: '回答、点按、长按 — 也可用声音', ko: '대답·탭·길게 누르기 — 목소리로도' },
+    pureHint: { en: 'Plays through by itself — no mic', ja: '操作なしで最後まで — マイクなし', zh: '自动播完 — 不用麦克风', ko: '조작 없이 끝까지 — 마이크 없음' },
   };
   const NAMES = { en: 'English', ja: '日本語', zh: '中文', ko: '한국어' };
   const P = (d) => `<svg viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
@@ -69,7 +69,8 @@
     const pickL = (o) => (o == null ? '' : typeof o === 'string' ? o : o[lang()] ?? o.en ?? '');
     const root = document.createElement('div'); root.className = 'u2'; if (A.cat) root.dataset.cat = A.cat;
     if (matchMedia('(pointer: coarse)').matches || A.touch) root.classList.add('u2-touch');
-    const cv = A.cover || {}, langs = cv.langs || ['en', 'ja', 'zh'];
+    const cv = A.cover || {}, LANGS0 = ['en', 'ja', 'zh'];
+    let langs = cv.langs || LANGS0; const relang = () => { langs = A.cover?.langs || LANGS0; };   // the demo's languages are known once its l10n.js has loaded (ko): read again on every paint
     root.innerHTML = `
       <div class="u2-cover">
         <img class="u2-pic" alt="" decoding="async" fetchpriority="high">
@@ -106,6 +107,7 @@
     const warm = () => langs.forEach((l) => { const u = src(l); if (!cache.has(u)) { const im = new Image(); im.decoding = 'async'; im.src = u; cache.set(u, im); } });
     const showPic = () => { if (!cv.base) return; const u = src(lang()); if (pic.getAttribute('src') !== u) pic.src = u; };
     pic.addEventListener('load', () => (window.requestIdleCallback || setTimeout)(warm), { once: true });
+    pic.addEventListener('error', () => { const u = src('en'); if (pic.getAttribute('src') !== u) pic.src = u; });   // no cover in this language (yet): the English one
 
     // ------------------------------------------------ popovers
     const pops = { vol: $('.u2-pop-vol'), heat: $('.u2-pop-heat'), set: $('.u2-set'), opt: $('.u2-pop-opt') }, owners = { vol: $('.u2-opt-vol'), heat: $('.u2-heat'), set: $('.u2-gear'), opt: null };
@@ -137,7 +139,7 @@
       if (k === 'set') {
         const d = A.device?.() || {}, sv = A.subs?.() ?? 'm';
         pops.set.innerHTML = `<h3>${t('settings')}</h3>
-          <div class="u2-line"><span>${t('subs')}</span><span class="u2-seg" role="group">${langs.map((l) => `<button type="button" data-lang="${l}" aria-pressed="${l === lang()}">${NAMES[l] || l}</button>`).join('')}</span></div>
+          <div class="u2-line u2-line-wrap"><span>${t('subs')}</span><span class="u2-seg" role="group">${langs.map((l) => `<button type="button" data-lang="${l}" aria-pressed="${l === lang()}">${NAMES[l] || l}</button>`).join('')}</span></div>
           ${A.voice ? `<div class="u2-line u2-line-wrap"><span>${t('voice')}</span><span class="u2-seg" role="group">${(A.voiceLangs || []).map((v) => `<button type="button" data-voice="${v}" aria-pressed="${v === (A.voiceFixed?.() ? 'ja' : A.voice())}" ${A.voiceFixed?.() ? 'disabled' : ''}>${NAMES[v] || v}</button>`).join('')}</span>${A.voiceFixed?.() ? `<span class="u2-note">${t('voiceOnly')}</span>` : ''}</div>` : ''}
           <div class="u2-line"><span>${t('subsOn')}</span>${sw(sv !== 'off', 'subs')}</div>
           <div class="u2-line"><span>${t('size')}</span><span class="u2-seg" role="group">${['s', 'm', 'l'].map((s) => `<button type="button" data-size="${s}" aria-pressed="${sv === s}" ${sv === 'off' ? 'disabled' : ''}>${s.toUpperCase()}</button>`).join('')}</span></div>
@@ -203,7 +205,7 @@
     // paint runs every tick: rewriting a button's content between press and release loses the click (a press on the old <span>, the release on a new one), so only real changes are written
     const H = (el) => ({ set innerHTML(v) { if (el.__h !== v) { el.__h = v; el.innerHTML = v; } } });
     const paint = () => {
-      const st = A.state?.() || 'cover', L = lang(); root.dataset.state = st; root.lang = L;
+      relang(); const st = A.state?.() || 'cover', L = lang(); root.dataset.state = st; root.lang = L;
       root.classList.toggle('u2-autohide', !!A.autohide?.()); under.classList.toggle('u2-autohide', !!A.autohide?.()); under.dataset.state = st;
       showPic();
       // cover controls

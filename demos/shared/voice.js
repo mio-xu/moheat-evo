@@ -1,5 +1,5 @@
 // MoHeatVoice — answer by VOICE in every demo with dialogue (DEMO_DESIGN_GUIDE §2.1, user 2026-11-08).
-// The browser's speech recognition (Web Speech API) in the subtitle language (shared/subs.js: en-US default / ja-JP / zh-CN; ?vlang= overrides)
+// The browser's speech recognition (Web Speech API) in the subtitle language (shared/subs.js: en-US default / ja-JP / zh-CN / ko-KR; ?vlang= overrides)
 // listens only while it is your turn, and the words you say are matched against the answers on screen:
 //   · auto mode: any visible answer button — .ch (choices) · .act-btn (actions, not the press-and-hold ones) · .chip-c (chat /
 //     gift chips) · #micGate button ("say …" gates) · [data-voice] — is picked by saying it; the button is then clicked, so the
@@ -21,8 +21,8 @@
   const OFF = QS.has('cover') || QS.has('render') || QS.has('auto');
   // listening language = the subtitle language (shared/subs.js: EN default / 日本語 / 中文; user 2026-11-08), ?vlang= overrides
   const subLang = () => { if (window.MoHeatSub) return window.MoHeatSub.lang; try { return sessionStorage.getItem('moheat.sublang') || 'en'; } catch { return 'en'; } };
-  const LANG = () => QS.get('vlang') || window.MoHeatSub?.speech?.() || ({ ja: 'ja-JP', zh: 'zh-CN' })[subLang()] || 'en-US';   // codes: LANGS in subs.js
-  const T = (ja, en, zh) => (window.MoHeatSub ? window.MoHeatSub.pick({ ja, en, zh }) : ({ ja, en, zh })[subLang()]) || en;   // pill texts; other languages fall back via subs.js
+  const LANG = () => QS.get('vlang') || window.MoHeatSub?.speech?.() || ({ ja: 'ja-JP', zh: 'zh-CN', ko: 'ko-KR' })[subLang()] || 'en-US';   // codes: LANGS in subs.js
+  const T = (ja, en, zh, ko) => (window.MoHeatSub ? window.MoHeatSub.pick({ ja, en, zh, ko }) : ({ ja, en, zh, ko })[subLang()]) || en;   // pill texts; other languages fall back via subs.js
   const store = { get: (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : v === '1'; } catch { return d; } },
     set: (k, v) => { try { localStorage.setItem(k, v ? '1' : '0'); } catch {} } };
   let enabled = store.get('moheat.voice', true);
@@ -68,7 +68,8 @@
     thanks: 'thank', yeah: 'yes', yep: 'yes', okay: 'yes', ok: 'yes', sure: 'yes', hi: 'hello', hey: 'hello', bye: 'goodbye', night: 'goodnight', love: 'like', adore: 'like', beautiful: 'pretty', lovely: 'pretty', cute: 'pretty', stay: 'remain', more: 'longer' };
   // words that say nothing about WHICH answer: they alone can never pick one ("hello what is this" must not choose "What contract?"). An answer made only of them still matches itself.
   const GEN_EN = new Set("what who where when why how which whats hello hi hey um uh hmm oh ah well you your we our they them there here this that these those it its is are was were be do does did not no don't i'm im it's that's can could would will please a an the to of and or so just i me my".split(' '));
-  const GEN_CJK = ['什么', '这个', '那个', '这是', '那是', '怎么', '为什么', '哪里', '哪个', '吗', '呢', '啊', '嗯', 'これ', 'それ', 'あれ', 'なに', 'なん', '何', 'どれ', 'どこ', 'だれ', '誰', 'いつ', 'どう', 'ねえ', 'あの', 'えっと'];
+  const GEN_CJK = ['什么', '这个', '那个', '这是', '那是', '怎么', '为什么', '哪里', '哪个', '吗', '呢', '啊', '嗯', 'これ', 'それ', 'あれ', 'なに', 'なん', '何', 'どれ', 'どこ', 'だれ', '誰', 'いつ', 'どう', 'ねえ', 'あの', 'えっと',
+    '뭐야', '뭐지', '무엇', '무슨', '이거', '그거', '저거', '이게', '그게', '어디', '누구', '언제', '어떻게', '어느', '저기요'];   // ko: whole words only (one syllable such as 아 / 어 sits inside real words)
   const strip = (t) => { let s = String(t || '').toLowerCase().replace(/[a-z']+/g, (w) => (GEN_EN.has(w) ? ' ' : w)); for (const g of GEN_CJK) s = s.split(g).join(' '); return s; };
   const stem = (w) => { w = w.replace(/'s$/, ''); w = WSYN[w] || w; if (w.length > 4) w = w.replace(/(ing|ed|es|s)$/, ''); return WSYN[w] || w; };
   const words = (t) => (String(t || '').toLowerCase().match(/[a-z']+/g) || []).filter((w) => !STOP.has(w)).map(stem);
@@ -80,8 +81,9 @@
   const ORD = [/(^|[^0-9])1(番|ばん|つめ|つ目|個目|st)|一番目|一つ目|ひとつめ|いちばんめ|最初|さいしょ|first|ファースト|^いち$|^one$/,
     /(^|[^0-9])2(番|ばん|つめ|つ目|個目|nd)|二番|二つ目|ふたつめ|にばんめ|second|^に$|^two$/,
     /(^|[^0-9])3(番|ばん|つめ|つ目|個目|rd)|三番|三つ目|みっつめ|third/, /(^|[^0-9])4(番|ばん|つめ|つ目|個目|th)|四番|四つ目|よっつめ|fourth/];
-  const YES = /^(はい|うん|ええ|おっけ|ok|okay|yes|yeah|yep|sure|alright|letsgo|いいよ|よし|go|いく|いこう|了解|りょうかい|お願い|おねがい|好|行|嗯|对|是|可以|没问题|走|来吧|开始)/;
+  const YES = /^(はい|うん|ええ|おっけ|ok|okay|yes|yeah|yep|sure|alright|letsgo|いいよ|よし|go|いく|いこう|了解|りょうかい|お願い|おねがい|好|行|嗯|对|是|可以|没问题|走|来吧|开始|네|예|응|좋아|그래|오케이|알았어|알겠어|가자|시작)/;
   const ORD_ZH = [/第一|一号|选一|^一$/, /第二|二号|选二|^二$/, /第三|三号|选三|^三$/, /第四|四号|选四|^四$/];
+  const ORD_KO = [/첫번째|첫째|1번|^하나$/, /두번째|둘째|2번|^둘$/, /세번째|셋째|3번|^셋$/, /네번째|넷째|4번|^넷$/];
 
   // ---------------------------------------------------------------- pill (status + what was heard), anchored above the answers
   const css = document.createElement('style');
@@ -164,8 +166,8 @@
   function stopRec() { if (rec && recOn) { try { rec.abort(); } catch {} } }
 
   // ---------------------------------------------------------------- a listening session = one "your turn"
-  const hint = (s) => (s.single ? T('🎙 声でもOK', '🎙 Or say it', '🎙 也可以直接说') : T('🎙 声で答えてOK', '🎙 Answer by voice', '🎙 可以用说的回答'));
-  function idle() { if (sess) showPill(active() ? '' : 'off', active() ? hint(sess) : T('🎙 OFF · タップで声入力', '🎙 OFF · Tap for voice', '🎙 OFF · 点击开启语音'), sess.anchor()); }
+  const hint = (s) => (s.single ? T('🎙 声でもOK', '🎙 Or say it', '🎙 也可以直接说', '🎙 말로 해도 돼요') : T('🎙 声で答えてOK', '🎙 Answer by voice', '🎙 可以用说的回答', '🎙 목소리로 대답해도 돼요'));
+  function idle() { if (sess) showPill(active() ? '' : 'off', active() ? hint(sess) : T('🎙 OFF · タップで声入力', '🎙 OFF · Tap for voice', '🎙 OFF · 点击开启语音', '🎙 OFF · 탭하면 음성 입력'), sess.anchor()); }
   function begin(o) {
     end();
     sess = { ...o, preps: o.phrases.map((ph, i) => { const l = expand(ph).filter(Boolean).map(prep), real = l.filter((x) => !x.gen);
@@ -201,7 +203,7 @@
     if (s.strict) { if (final && s1 >= .6 && s1 - s2 >= .15) pick = i1; }   // controls that are always on screen (a camera dock, Hint): room talk must not press them
     else if (s.single) { if (s1 >= (final ? .28 : .6) || (final && YES.test(norm(heard)))) pick = 0; }
     else if (final ? (s1 >= .25 && s1 - s2 >= .08 && s1 >= 1.3 * s2) : (s1 >= .6 && s1 - s2 >= .25)) pick = i1;
-    if (pick < 0 && final && !s.single && !s.strict) { const o = [ORD, ORD_ZH].map((L) => L.findIndex((re, k) => k < sc.length && alts.some((a) => re.test(norm(a))))).find((x) => x >= 0); if (o >= 0) pick = o; }
+    if (pick < 0 && final && !s.single && !s.strict) { const o = [ORD, ORD_ZH, ORD_KO].map((L) => L.findIndex((re, k) => k < sc.length && alts.some((a) => re.test(norm(a))))).find((x) => x >= 0); if (o >= 0) pick = o; }
     if (pick < 0 && final && !s.single && !s.strict && s1 >= .25 && s2 >= .8 * s1 && s.uniq?.length === sc.length) {   // too close: the words that differ decide
       const hg = new Set(alts.flatMap((a) => grams(norm(a)))), u = s.uniq.map((U) => [...U].filter((x) => hg.has(x)).length);
       const o = u.map((v, i) => [v, i]).sort((a, b) => b[0] - a[0]);
@@ -212,7 +214,7 @@
       if (s.single && !s.strict && s.lenient !== false && (s.fails >= 2 || s1 >= .2) && norm(heard).length <= 24) pick = 0;   // a long unrelated remark never counts as the answer
     }
     if (pick >= 0) { hit(pick, heard); return; }
-    showPill(final ? 'retry' : '', final ? `🤔「${heard}」 ${T('もう一度', 'Try again', '再说一次')}` : `「${heard}」`, s.anchor());
+    showPill(final ? 'retry' : '', final ? `🤔「${heard}」 ${T('もう一度', 'Try again', '再说一次', '다시 한번')}` : `「${heard}」`, s.anchor());
   }
   function hit(i, heard) {
     const s = sess; s.done = true; stopRec();

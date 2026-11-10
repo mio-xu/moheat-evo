@@ -1,4 +1,4 @@
-// MoHeatSub — one display language for every demo (user 2026-11-08): English (default) / 日本語 / 简体中文.
+// MoHeatSub — one display language for every demo (user 2026-11-08): English (default) / 日本語 / 简体中文 / 한국어 (2026-11-11).
 // ADDING A LANGUAGE (user: keep it easy): 1) one entry in LANGS below (name, button label, speech-recognition code, font, fallback),
 // 2) text.<code> (+ voice.<code>) in each demo's l10n.js — tools/l10n/ extracts the strings and reports what is missing,
 // 3) add the code to DEFAULT_LANGS (all demos) or to "langs" in one demo's l10n.js. Nothing else in the code needs to change.
@@ -47,21 +47,20 @@
   const L10N = () => window.MOHEAT_L10N || {};
   const langs = () => { const l = (L10N().langs || DEFAULT_LANGS).filter((x) => LANGS[x]); return l.includes('en') ? l : ['en', ...l]; };
   let pref = QS.get('sub') || load() || 'en';   // what the viewer chose (any demo)
-  const eff = () => (pref === 'off' || langs().includes(pref) ? pref : 'en');   // what this demo can show
+  let l10nDone = false;   // until the demo's l10n.js has arrived its "langs" are unknown: keep the viewer's language (no English flash of a ko cover)
+  const eff = () => (pref === 'off' || langs().includes(pref) || (!l10nDone && LANGS[pref]) ? pref : 'en');   // what this demo can show
   let lang = eff();
   const root = document.documentElement;
 
   // ---------------------------------------------------------------- translations
-  const NAMES = { 信長: { en: 'Nobunaga', zh: '信长', 'zh-Hant': '信長' }, 家康: { en: 'Ieyasu', zh: '家康' }, あなた: { en: 'You', zh: '你' } };
+  const NAMES = { 信長: { en: 'Nobunaga', zh: '信长', 'zh-Hant': '信長', ko: '노부나가' }, 家康: { en: 'Ieyasu', zh: '家康', ko: '이에야스' }, あなた: { en: 'You', zh: '你', ko: '나' } };
   const norm = (s) => String(s || '').replace(/\s+/g, ' ').trim();
   let maps = {};
   function map(l) {   // normalized "page text" → text in language l
     if (maps[l]) return maps[l];
     const m = maps[l] = new Map();
-    if (l === 'zh') {
-      for (const s of window.DEMO_DATA?.anim?.subs || []) if (s.zh && s.ja) m.set(norm(s.ja), s.zh);
-      for (const [k, v] of Object.entries(window.MOHEAT_ZH || {})) if (v) m.set(norm(k), v);   // older subs_zh.js format
-    }
+    if (l !== 'ja' && l !== 'en') for (const s of window.DEMO_DATA?.anim?.subs || []) if (s[l] && s.ja) m.set(norm(s.ja), s[l]);   // film subtitles may carry their own { zh, ko, … }
+    if (l === 'zh') for (const [k, v] of Object.entries(window.MOHEAT_ZH || {})) if (v) m.set(norm(k), v);   // older subs_zh.js format
     for (const src of [window.MOHEAT_L10N_COMMON?.text?.[l], L10N().text?.[l]])   // shared/l10n_common.js (page chrome) then the demo's own l10n.js
       for (const [k, v] of Object.entries(src || {})) if (typeof v === 'string') { m.set(norm(k), v); const ns = k.replace(/\s/g, ''); if (!m.has(ns)) m.set(ns, v); }
     return m;
@@ -114,20 +113,20 @@
   // "日本語 · English" in one element (interact.js cards, some buttons) → the chosen part; both kept in data-voice for voice.js
   const SPLIT = '.ix-card .ix-tag, .ix-card .ix-how, .ix-card .ix-gauge b, .ix-btn, .ch, .act-btn, .chip-c, #micGate button, .intro .ix-toggle span, .pick > p > small, .stage button:not(.opt):not(.msub-btn), .stage :is(em, span, small, b, p, label, div, li):not(.one)';   // any leaf on the stage written "日本語 · English"
   const UI = {   // interact.js (Demo 1–9) texts: ja → { en, zh, … }
-    'スキップ': { en: 'Skip', zh: '跳过', 'zh-Hant': '跳過' }, 'あなたの番': { en: 'Your turn', zh: '轮到你了', 'zh-Hant': '輪到你了' }, '感じてみて': { en: 'Feel it', zh: '感受一下' },
-    'あなたのセリフ': { en: 'Your line', zh: '你的台词' }, '耳で感じて、選んでね': { en: 'Feel it on your ears, then choose', zh: '用耳朵感受，然后选择' },
-    '声に出して読んでください': { en: 'Read it aloud', zh: '请大声读出来' }, '声に出して言ってみて': { en: 'Say it aloud', zh: '试着说出来' },
-    'マイクを許可してください': { en: 'Allow the microphone (or tap to continue)', zh: '请允许使用麦克风（或点击继续）' },
-    '声に出して言ったら、タップ': { en: 'Say it aloud, then tap', zh: '说出来之后点一下' }, '言いました': { en: 'Said it', zh: '说完了' }, '熱い': { en: 'HOT', zh: '烫' },
-    'マイクに「ふーっ」と息を吹きかけて': { en: 'Blow into the mic — feel the cool on both ears', zh: '对着麦克风"呼——"地吹气，感受双耳的凉意' },
-    'ボタンを長押しして「ふーっ」': { en: 'Press and hold to blow', zh: '长按按钮"呼——"地吹' }, 'ふーっ': { en: 'Blow', zh: '呼——' },
-    '声に出して乾杯！ または グラスをタップ': { en: 'Say it — or tap the glass', zh: '大声说"干杯！"，或点一下酒杯' }, 'グラスをタップして乾杯！': { en: 'Tap the glass to toast', zh: '点一下酒杯干杯！' },
-    '乾杯！': { en: 'Cheers!', zh: '干杯！' }, '拍手！': { en: 'Applause!', zh: '鼓掌！' }, 'あなたも参加する': { en: 'Interactive — answer & play along', zh: '参与互动 — 回答并一起玩' },
-    '声援で参加する': { en: 'Cheer along (mic or tap)', zh: '一起应援（麦克风或点击）' },
-    '相手': { en: 'With', zh: '对象' }, '場所': { en: 'Where', zh: '地点' }, 'あなたの言葉': { en: 'You speak', zh: '你的语言' },   // Demo23 pickers
-    '正解！': { en: 'Correct!', zh: '答对了！' }, 'ざんねん…': { en: 'Not quite — listen!', zh: '可惜……再听听！' }, 'ちょうどいい！': { en: 'Just right!', zh: '刚刚好！' },
-    'いいね！': { en: 'Nice!', zh: '很好！' }, 'ありがとう〜！': { en: 'Thank you~!', zh: '谢谢～！' },   // interact.js feedback pops
-    'ヒント': { en: 'Hint', zh: '提示' }, '着信': { en: 'Incoming call', zh: '来电' }, '出る': { en: 'Answer', zh: '接听' }, 'かける': { en: 'Call', zh: '拨打' }, 'なかよし': { en: 'bond', zh: '亲密度' },
+    'スキップ': { en: 'Skip', zh: '跳过', 'zh-Hant': '跳過', ko: '건너뛰기' }, 'あなたの番': { en: 'Your turn', zh: '轮到你了', 'zh-Hant': '輪到你了', ko: '당신 차례' }, '感じてみて': { en: 'Feel it', zh: '感受一下', ko: '느껴 보세요' },
+    'あなたのセリフ': { en: 'Your line', zh: '你的台词', ko: '당신의 대사' }, '耳で感じて、選んでね': { en: 'Feel it on your ears, then choose', zh: '用耳朵感受，然后选择', ko: '귀로 느끼고 골라 주세요' },
+    '声に出して読んでください': { en: 'Read it aloud', zh: '请大声读出来', ko: '소리 내어 읽어 주세요' }, '声に出して言ってみて': { en: 'Say it aloud', zh: '试着说出来', ko: '소리 내어 말해 보세요' },
+    'マイクを許可してください': { en: 'Allow the microphone (or tap to continue)', zh: '请允许使用麦克风（或点击继续）', ko: '마이크를 허용해 주세요 (또는 탭해서 계속)' },
+    '声に出して言ったら、タップ': { en: 'Say it aloud, then tap', zh: '说出来之后点一下', ko: '소리 내어 말한 뒤 탭하세요' }, '言いました': { en: 'Said it', zh: '说完了', ko: '말했어요' }, '熱い': { en: 'HOT', zh: '烫', ko: '뜨거워' },
+    'マイクに「ふーっ」と息を吹きかけて': { en: 'Blow into the mic — feel the cool on both ears', zh: '对着麦克风"呼——"地吹气，感受双耳的凉意', ko: '마이크에 "후—" 하고 바람을 불어 보세요 — 양쪽 귀가 시원해져요' },
+    'ボタンを長押しして「ふーっ」': { en: 'Press and hold to blow', zh: '长按按钮"呼——"地吹', ko: '버튼을 길게 눌러 "후—"' }, 'ふーっ': { en: 'Blow', zh: '呼——', ko: '후—' },
+    '声に出して乾杯！ または グラスをタップ': { en: 'Say it — or tap the glass', zh: '大声说"干杯！"，或点一下酒杯', ko: '"건배!" 하고 말하거나 잔을 탭하세요' }, 'グラスをタップして乾杯！': { en: 'Tap the glass to toast', zh: '点一下酒杯干杯！', ko: '잔을 탭해서 건배!' },
+    '乾杯！': { en: 'Cheers!', zh: '干杯！', ko: '건배!' }, '拍手！': { en: 'Applause!', zh: '鼓掌！', ko: '박수!' }, 'あなたも参加する': { en: 'Interactive — answer & play along', zh: '参与互动 — 回答并一起玩', ko: '함께 참여 — 대답하고 같이 놀기' },
+    '声援で参加する': { en: 'Cheer along (mic or tap)', zh: '一起应援（麦克风或点击）', ko: '함께 응원하기 (마이크 또는 탭)' },
+    '相手': { en: 'With', zh: '对象', ko: '상대' }, '場所': { en: 'Where', zh: '地点', ko: '장소' }, 'あなたの言葉': { en: 'You speak', zh: '你的语言', ko: '당신의 언어' },   // Demo23 pickers
+    '正解！': { en: 'Correct!', zh: '答对了！', ko: '정답!' }, 'ざんねん…': { en: 'Not quite — listen!', zh: '可惜……再听听！', ko: '아쉬워요… 다시 들어 보세요!' }, 'ちょうどいい！': { en: 'Just right!', zh: '刚刚好！', ko: '딱 좋아요!' },
+    'いいね！': { en: 'Nice!', zh: '很好！', ko: '좋아요!' }, 'ありがとう〜！': { en: 'Thank you~!', zh: '谢谢～！', ko: '고마워~!' },   // interact.js feedback pops
+    'ヒント': { en: 'Hint', zh: '提示', ko: '힌트' }, '着信': { en: 'Incoming call', zh: '来电', ko: '수신 전화' }, '出る': { en: 'Answer', zh: '接听', ko: '받기' }, 'かける': { en: 'Call', zh: '拨打', ko: '걸기' }, 'なかよし': { en: 'bond', zh: '亲密度', ko: '친밀도' },
     'もう一度': { en: 'Play again', zh: '再玩一次', 'zh-Hant': '再玩一次', ko: '다시 하기', es: 'Jugar de nuevo', fr: 'Rejouer', de: 'Nochmal', pt: 'Jogar de novo', id: 'Main lagi', th: 'เล่นอีกครั้ง', vi: 'Chơi lại' },
   };
   function pickSplit(t) {   // "↺ 日本語 · English" written by the demo at run time (e.g. the replay button) → the chosen language, or null
@@ -160,9 +159,9 @@
     el.dataset.mlang = lang; el.dataset.mshown = v; el.textContent = v;
   }
   const CHIP = /^(🎙 参加|📣 声援)モード (ON|OFF)$/;   // interact.js's stage chip
-  const CHIP_T = { en: ['🎙 Interactive', '📣 Cheer'], zh: ['🎙 互动模式', '📣 应援模式'], 'zh-Hant': ['🎙 互動模式', '📣 應援模式'] };
+  const CHIP_T = { en: ['🎙 Interactive', '📣 Cheer'], zh: ['🎙 互动模式', '📣 应援模式'], 'zh-Hant': ['🎙 互動模式', '📣 應援模式'], ko: ['🎙 참여 모드', '📣 응원 모드'] };
   function chip(el) {
-    const m = CHIP.exec(el.textContent.replace(/^(🎙 Interactive|📣 Cheer|🎙 互动模式|📣 应援模式|🎙 互動模式|📣 應援模式) (ON|OFF)$/, (s, a, b) => `${a.startsWith('📣') ? '📣 声援' : '🎙 参加'}モード ${b}`));
+    const m = CHIP.exec(el.textContent.replace(/^(🎙 Interactive|📣 Cheer|🎙 互动模式|📣 应援模式|🎙 互動模式|📣 應援模式|🎙 참여 모드|📣 응원 모드) (ON|OFF)$/, (s, a, b) => `${a.startsWith('📣') ? '📣 声援' : '🎙 参加'}モード ${b}`));
     if (!m) return;
     const t = lang === 'ja' ? null : pickL(CHIP_T, lang), v = t ? `${t[m[1].startsWith('📣') ? 1 : 0]} ${m[2]}` : `${m[1]}モード ${m[2]}`;
     if (el.textContent !== v) el.textContent = v;
@@ -269,7 +268,7 @@
   }
 
   // speaker labels that a demo's CSS writes as .ja::before (Demo20 staff, Demo15/16 grandma / grandpa): the same label on .one, translated
-  const WHO = { staff: { en: 'Staff', zh: '工作人员', 'zh-Hant': '工作人員', ko: '스태프' }, gm: { en: 'Grandma', zh: '奶奶' }, gp: { en: 'Grandpa', zh: '爷爷' } };
+  const WHO = { staff: { en: 'Staff', zh: '工作人员', 'zh-Hant': '工作人員', ko: '스태프' }, gm: { en: 'Grandma', zh: '奶奶', ko: '할머니' }, gp: { en: 'Grandpa', zh: '爷爷', ko: '할아버지' } };
   const whoCss = () => Object.entries(WHO).map(([w, t]) => Object.keys(LANGS).filter((l) => l !== 'ja')
     .map((l) => `html.msub.msub-${l} .subs[data-who="${w}"] .one::before { content: "${pickL(t, l)}  "; }`).join(' ')).join('\n  ');
   const fontCss = () => Object.entries(LANGS).filter(([, i]) => i.font).map(([l, i]) => `html.msub-${l} :is(.one, [data-mlang="${l}"]) { font-family: ${i.font} !important; }`).join('\n  ');
@@ -280,6 +279,7 @@
   html.msub #subs .line > .one { display: block; }
   ${fontCss()}
   html.msub-off #subs { display: none !important; }
+  html.msub-ko body { word-break: keep-all; overflow-wrap: break-word; }   /* Korean wraps between words, not inside one ("세기" broke into 세 / 기) */
   ${whoCss()}
   .msub-hud { position: absolute; top: 1.2cqw; right: 1.2cqw; z-index: 6; display: flex; gap: .6cqw; align-items: center; }
   .msub-hud .ix-chip { position: static !important; }   /* Demo 1–9: interact.js's 参加モード chip sits next to the 🌐 language button */
@@ -302,7 +302,7 @@
 
   // ---------------------------------------------------------------- controls: the 🌐 language button on the stage (each tap = next language)
   let btn = null, sel = null;
-  const options = (withOff) => [...langs(), ...(withOff ? ['off'] : [])].map((l) => `<option value="${l}">${l === 'off' ? 'Off' : LANGS[l]?.name || l}</option>`).join('');
+  const options = (withOff) => [...new Set([...langs(), ...(LANGS[lang] ? [lang] : [])]), ...(withOff ? ['off'] : [])].map((l) => `<option value="${l}">${l === 'off' ? 'Off' : LANGS[l]?.name || l}</option>`).join('');
   function button() {
     const wrap = btn = document.createElement('button');
     btn.type = 'button'; btn.className = 'msub-btn'; btn.title = 'Language · 言語 · 语言 — tap for the next one';
@@ -326,7 +326,7 @@
     row.innerHTML = langs().map((l) => `<button type="button" class="msub-lang" data-l="${l}" lang="${LANGS[l]?.bcp || l}">${LANGS[l]?.name || l}</button>`).join('');
     row.querySelectorAll('button').forEach((b) => b.addEventListener('click', (e) => { e.stopPropagation(); set(b.dataset.l); }));
   }
-  function select() { sel = document.getElementById('subMode'); if (sel) sel.addEventListener('change', () => set(sel.value)); }   // Demo 1–9 side panel
+  function select() { sel = document.getElementById('subMode'); if (sel) sel.addEventListener('change', (e) => { if (e.isTrusted) set(sel.value); }); }   // Demo 1–9 side panel; only the viewer's own change (our own change events tell the demo to re-render: before l10n.js lists ko they carried 'en' and overwrote the choice, 2026-11-11)
   function fill() {
     fillRow();
     if (sel) sel.innerHTML = options(true);
@@ -370,15 +370,15 @@
     if (sel) { sel.value = lang; sel.dispatchEvent(new Event('change')); }   // the demo drops its old ja + en mode
     apply();
     const me = document.currentScript?.src || [...document.scripts].map((x) => x.src).find((x) => /shared\/subs\.js/.test(x));
-    if (me) { const c = document.createElement('script'); c.src = me.replace(/subs\.js(\?.*)?$/, 'l10n_common.js?v=5'); c.onload = () => { maps = {}; apply(); loaded(); }; c.onerror = loaded; document.head.appendChild(c); } else loaded();
+    if (me) { const c = document.createElement('script'); c.src = me.replace(/subs\.js(\?.*)?$/, 'l10n_common.js?v=6'); c.onload = () => { maps = {}; apply(); loaded(); }; c.onerror = loaded; document.head.appendChild(c); } else loaded();
     const s = document.createElement('script');   // relative to the page (or its <base>): the demo's own languages
-    s.src = 'l10n.js?v=3';
+    s.src = 'l10n.js?v=4';
     s.onload = () => {
-      maps = {}; missing.clear(); lang = eff(); fill();
+      l10nDone = true; maps = {}; missing.clear(); lang = eff(); fill();
       containers().forEach((c) => delete c.dataset.msub); document.querySelectorAll('[data-mlang]').forEach((e) => { e.dataset.mlang = ''; });
       apply(); loaded();
     };
-    s.onerror = loaded;   // a demo without l10n.js: the page text is all there is
+    s.onerror = () => { l10nDone = true; if (lang !== eff()) { lang = eff(); fill(); apply(); } loaded(); };   // a demo without l10n.js: the page text is all there is
     document.head.appendChild(s);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();

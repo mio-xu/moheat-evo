@@ -17,6 +17,12 @@
   },
   "thumb": "dc746a6ff8f2c0f89da975b913f223fc36819c93"
  },
+ "ko": {
+  "inputs": {
+   "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "c090bd72ff0d1261f6fc529f637781d2e08db249"
+  },
+  "thumb": "9f047c1afc32bd095582aef98bf3ffde8495ed4c"
+ },
  "zh": {
   "inputs": {
    "demos/all-ages/Demo01_SnowFoxfire/media/cover/stamp.json": "c090bd72ff0d1261f6fc529f637781d2e08db249"

@@ -685,7 +685,7 @@ function loop() {
   updateSubs(t); updateScene(t);
   $('time').textContent = `${fmt(t)} / ${fmt(A.duration)}`;
   $('playhead').style.left = `${(t / A.duration) * 100}%`;
-  const near = states.filter((s) => s.alpha > .05).map((s) => `${s.who === 'K' ? '小雪' : '焔'} ${Math.round(s.az)}° ${s.d.toFixed(2)} m`);
+  const near = states.filter((s) => s.alpha > .05).map((s) => `${(window.MoHeatSub?.name || String)(s.who === 'K' ? '小雪' : '焔')} ${Math.round(s.az)}° ${s.d.toFixed(2)} m`);
   $('posInfo').textContent = near.join(' · ');
   requestAnimationFrame(loop);
 }

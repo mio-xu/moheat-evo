@@ -11,14 +11,14 @@
   if (['cover', 'render', 'auto'].some((k) => QS.has(k))) return;
   const STEP_S = 4;
   const STEPS = [
-    { cmd: 'LH120 RH0', ear: 'l', kind: 'warm', t: { en: 'Left · warm', ja: '左 · あたたかい', zh: '左耳 · 暖' } },
-    { cmd: 'LH0 RH120', ear: 'r', kind: 'warm', t: { en: 'Right · warm', ja: '右 · あたたかい', zh: '右耳 · 暖' } },
-    { cmd: 'LC60 RH0', ear: 'l', kind: 'cool', t: { en: 'Left · cool', ja: '左 · つめたい', zh: '左耳 · 凉' } },
-    { cmd: 'LH0 RC60', ear: 'r', kind: 'cool', t: { en: 'Right · cool', ja: '右 · つめたい', zh: '右耳 · 凉' } },
+    { cmd: 'LH120 RH0', ear: 'l', kind: 'warm', t: { en: 'Left · warm', ja: '左 · あたたかい', zh: '左耳 · 暖', ko: '왼쪽 · 따뜻함' } },
+    { cmd: 'LH0 RH120', ear: 'r', kind: 'warm', t: { en: 'Right · warm', ja: '右 · あたたかい', zh: '右耳 · 暖', ko: '오른쪽 · 따뜻함' } },
+    { cmd: 'LC60 RH0', ear: 'l', kind: 'cool', t: { en: 'Left · cool', ja: '左 · つめたい', zh: '左耳 · 凉', ko: '왼쪽 · 시원함' } },
+    { cmd: 'LH0 RC60', ear: 'r', kind: 'cool', t: { en: 'Right · cool', ja: '右 · つめたい', zh: '右耳 · 凉', ko: '오른쪽 · 시원함' } },
   ];
-  const TXT = { btn: { en: '🌡 Thermal check', ja: '🌡 温冷チェック', zh: '🌡 温冷检查' }, stop: { en: '■ Stop check', ja: '■ チェック終了', zh: '■ 停止检查' },
-    need: { en: 'Connect MoHeat Evo first (top right)', ja: '先に MoHeat Evo をつないでください（右上）', zh: '请先连接 MoHeat Evo（右上角）' },
-    done: { en: '✓ All four channels checked', ja: '✓ 4 チャンネルのチェック完了', zh: '✓ 四个通道检查完毕' } };
+  const TXT = { btn: { en: '🌡 Thermal check', ja: '🌡 温冷チェック', zh: '🌡 温冷检查', ko: '🌡 온냉 확인' }, stop: { en: '■ Stop check', ja: '■ チェック終了', zh: '■ 停止检查', ko: '■ 확인 끝내기' },
+    need: { en: 'Connect MoHeat Evo first (top right)', ja: '先に MoHeat Evo をつないでください（右上）', zh: '请先连接 MoHeat Evo（右上角）', ko: '먼저 MoHeat Evo를 연결해 주세요 (오른쪽 위)' },
+    done: { en: '✓ All four channels checked', ja: '✓ 4 チャンネルのチェック完了', zh: '✓ 四个通道检查完毕', ko: '✓ 4개 채널 확인 완료' } };
   const T = (o) => (window.MoHeatSub ? window.MoHeatSub.pick(o) : o.en) || o.en;
   const css = document.createElement('style');
   css.textContent = `.mtc-note { display: block; margin-top: .5cqw; font: 600 clamp(10px, 1cqw, 14px)/1.3 Inter, "Noto Sans JP", "PingFang SC", sans-serif; color: #ffd58a; text-align: center; }

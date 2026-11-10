@@ -7,56 +7,56 @@
   //   cast: the main character(s), '+'-joined (same character → shown next to each other) · featured: true → always in "Try these first"
   //   new: true → a NEW badge. Checked by tools/web/check_nav.py (fields, series / part, folders, thumbnails).
   const DEMOS = [
-    { cat: 'all-ages', dir: 'Demo01_SnowFoxfire', ja: '雪と狐火のひそひそ話', en: 'Whispers of Snow and Flame', zh: '雪与狐火的悄悄话', series: 'snowfox', part: 1, cast: 'koyuki+homura', group: 0 },
-    { cat: 'all-ages', dir: 'Demo28_SnowFoxLullaby', ja: 'ふたりの、こもりうた', en: 'A Lullaby for Two', zh: '两个人的摇篮曲', series: 'snowfox', part: 2, cast: 'koyuki+homura', group: 0 },
-    { cat: 'all-ages', dir: 'Demo02_FanMeeting', ja: 'キミだけのスペシャルファンミーティング', en: 'Your Special Fan Meeting', zh: '只属于你的特别见面会', series: 'ayane', part: 1, cast: 'ayane', group: 0 },
-    { cat: 'all-ages', dir: 'Demo03_ShiningSmileConcert', ja: '氷と炎の星光コンサート', en: 'Ice & Fire Concert', zh: '冰与火的星光演唱会', series: 'ayane', part: 2, cast: 'ayane', group: 0 },
-    { cat: 'all-ages', dir: 'Demo04_SeasonsExpress', ja: '季節が、暴走する。', en: 'The Runaway Seasons Express', zh: '四季失控的魔法列车', cast: 'train', group: 0 },
-    { cat: 'all-ages', dir: 'Demo47_GhostLantern', ja: 'ひやっと！おばけやしきの ちょうちんばん', en: 'Lantern Keeper of the Spooky House', zh: '鬼屋提灯值日生', cast: 'bonchan+yurari', new: true, group: 0 },
-    { cat: 'all-ages', dir: 'Demo48_AnimalOnsen', ja: 'ゆけむり どうぶつおんせん', en: 'Steamy Animal Hot Spring', zh: '蒸汽腾腾的动物温泉', cast: 'yuzujii', new: true, group: 0 },
-    { cat: 'all-ages', dir: 'Demo10_CaveSpring', ja: '火をともして、ひみつの泉へ', en: 'Kindle the Fire, Find the Hidden Spring', zh: '点燃火光，寻找秘密之泉', cast: 'kohaku', group: 0 },
-    { cat: 'healing', dir: 'Demo11_Naomi', ja: 'ナオミと、ふわふわの一日', en: 'A Fluffy Day with Naomi', zh: '和直美的毛茸茸一天', series: 'naomi', part: 1, cast: 'naomi', group: 1 },
-    { cat: 'healing', dir: 'Demo13_NaomiCam', ja: 'ナオミ、いまなにしてる？', en: "What's Naomi Up To? · Pet Cam", zh: '直美，你在干嘛呀？', series: 'naomi', part: 2, cast: 'naomi', group: 1 },
-    { cat: 'healing', dir: 'Demo26_BecomeNaomi', ja: 'ねこになった日', en: 'The Day I Became Naomi', zh: '变成猫咪的那一天', series: 'naomi', part: 3, cast: 'naomi', group: 1 },
-    { cat: 'healing', dir: 'Demo49_NaomiSummer', ja: 'なつやすみ、ナオミと せんぷうき', en: 'Summer Fan Days with Naomi', zh: '暑假，娜奥米和电风扇', cast: 'naomi', new: true, group: 1 },
-    { cat: 'healing', dir: 'Demo15_FamilyCall', ja: 'もしもし、おばあちゃん？', en: 'Hello, Grandma? · A Call Home, Part 1', zh: '喂，奶奶吗？', series: 'family', part: 1, cast: 'hana+gen', group: 1 },
-    { cat: 'healing', dir: 'Demo16_FamilyCall2', ja: 'じいちゃんの、ゆきだるま', en: "Grandpa's Little Snowman · A Call Home, Part 2", zh: '爷爷的小雪人', series: 'family', part: 2, cast: 'hana+gen', group: 1 },
-    { cat: 'healing', dir: 'Demo29_FamilyVisit', ja: 'ただいま、じいちゃん・ばあちゃん', en: 'Home for New Year', zh: '爷爷奶奶，我回来了', series: 'family', part: 3, cast: 'hana+gen', group: 1 },
-    { cat: 'healing', dir: 'Demo50_WatermelonSummer', ja: 'なつやすみ、じいちゃんちの すいかわり', en: "Summer at Grandpa's: Watermelon Split", zh: '暑假，爷爷家的劈西瓜', cast: 'grandma+grandpa', new: true, group: 1 },
-    { cat: 'for-men', dir: 'Demo14_MintStream', ja: 'ミントの、おみみ専門店', en: "Mint's Ear Salon", zh: '薄荷的耳朵专门店', series: 'stream', cast: 'mint', group: 2 },
-    { cat: 'for-men', dir: 'Demo17_CocoaStream', ja: 'ココアの、バレンタイン前夜', en: "Valentine's Eve with Cocoa", zh: '可可的情人节前夜', series: 'stream', cast: 'cocoa', group: 2 },
-    { cat: 'for-men', dir: 'Demo18_HinataStream', ja: 'ひなたと、ゲーセンデート', en: 'Arcade Date with Hinata', zh: '和日向的游戏厅约会', series: 'stream', cast: 'hinata', group: 2 },
-    { cat: 'for-men', dir: 'Demo19_LunaStream', ja: 'ルナの、ひみつのカクテル', en: "Luna's Secret Cocktail", zh: '露娜的秘密鸡尾酒', series: 'stream', cast: 'luna', group: 2 },
-    { cat: 'for-men', dir: 'Demo25_HatsumodeDate', ja: 'はじめての、初詣デート', en: 'My First Hatsumode', zh: '第一次的新年参拜约会', cast: 'tsubaki', group: 2 },
-    { cat: 'for-men', dir: 'Demo31_SummerRooftop', ja: 'なつの、おくじょうで', en: 'Up on the Summer Roof', zh: '夏日，屋顶上', cast: 'nagisa', group: 2 },
-    { cat: 'for-men', dir: 'Demo43_BlizzardInn', ja: '白嶺の峠、ひと晩の宿', en: 'One Night at the White-Ridge Inn', zh: '白岭山口，一夜客栈', cast: 'mint+hinata+nagisa', new: true, group: 2 },
-    { cat: 'for-men', dir: 'Demo44_MagicAcademy', ja: 'まちがい召喚と、まほう学院の三人', en: 'Summoned by Mistake', zh: '错误召唤：魔法学院的三人', cast: 'tsubaki+cocoa+luna', new: true, group: 2 },
-    { cat: 'for-women', dir: 'Demo12_LateCall', ja: 'もしもし、きこえる？', en: 'Can You Hear Me?', zh: '喂，听得到吗？', cast: 'ren', group: 3 },
-    { cat: 'for-women', dir: 'Demo20_HinataHandshake', ja: 'あと10秒だけ、ね？', en: 'Just Ten More Seconds?', zh: '再多10秒，好吗？', cast: 'hinata_m', group: 3 },
-    { cat: 'for-women', dir: 'Demo21_JinLounge', ja: '俺だけ見てろ', en: 'Look Only at Me', zh: '只准看着我', cast: 'jin', group: 3 },
-    { cat: 'for-women', dir: 'Demo22_ShionRain', ja: '雨が止むまで', en: 'Until the Rain Stops', zh: '直到雨停', cast: 'shion', group: 3 },
-    { cat: 'for-women', dir: 'Demo24_GakuCamp', ja: 'ガクの、焚き火キャンプ配信', en: "Gaku's Campfire Stream", zh: '岳的篝火露营直播', cast: 'gaku', group: 3 },
-    { cat: 'for-women', dir: 'Demo30_SakuFestival', ja: 'なつまつり、ふたりで', en: 'Summer Festival, Just Us', zh: '夏日祭典，只有我们俩', cast: 'saku', group: 3 },
-    { cat: 'for-women', dir: 'Demo45_CelestialPalace', ja: 'てんにょ様は、未来から', en: 'A Celestial from the Future', zh: '来自未来的天女', cast: 'jin+shion+saku', new: true, group: 3 },
-    { cat: 'for-women', dir: 'Demo46_DragonContract', ja: '竜の王と、エルフの王と、小悪魔', en: 'The Dragon King, the Elf King and the Little Devil', zh: '龙王、精灵王与小恶魔', cast: 'hinata_m+gaku+ren', new: true, group: 3 },
-    { cat: 'nobunaga-suntory', dir: 'Demo05_GifuCastle', ja: '信長の岐阜城へようこそ', en: "Welcome to Nobunaga's Gifu Castle", zh: '欢迎来到信长的岐阜城', series: 'nobunaga', part: 1, cast: 'nobunaga+ieyasu', group: 4 },
-    { cat: 'nobunaga-suntory', dir: 'Demo06_FutureWhisky', ja: '未来の酒と、安土の夜', en: 'Future Whisky at Azuchi', zh: '未来之酒与安土之夜', series: 'nobunaga', part: 2, cast: 'nobunaga+ieyasu', group: 4 },
-    { cat: 'nobunaga-suntory', dir: 'Demo07_KyotoIzakaya', ja: '信長と家康、京都の居酒屋へ', en: 'Two Warlords in a Kyoto Izakaya', zh: '信长与家康，京都居酒屋之夜', series: 'nobunaga', part: 3, cast: 'nobunaga+ieyasu', group: 4 },
-    { cat: 'nobunaga-suntory', dir: 'Demo08_YamazakiDistillery', ja: '信長と家康、山崎蒸溜所へ', en: 'Two Warlords at the Yamazaki Distillery', zh: '信长与家康，探访山崎蒸馏所', series: 'nobunaga', part: 4, cast: 'nobunaga+ieyasu', group: 4 },
-    { cat: 'nobunaga-suntory', dir: 'Demo09_SengokuBanquet', ja: '安土最後の酒宴', en: 'The Last Banquet at Azuchi', zh: '安土最后的酒宴', series: 'nobunaga', part: 5, cast: 'nobunaga+ieyasu', group: 4 },
-    { cat: 'nobunaga-suntory', dir: 'Demo23_NobunagaTalk', ja: '信長と、語らう', en: 'Talk with Nobunaga', zh: '与信长对谈', series: 'talk', cast: 'nobunaga', group: 4 },
-    { cat: 'nobunaga-suntory', dir: 'Demo41_IeyasuTalk', ja: '家康と、語らう', en: 'Talk with Ieyasu', zh: '与家康对谈', series: 'talk', cast: 'ieyasu', group: 4 },
-    { cat: 'nobunaga-suntory', dir: 'Demo42_SengokuRoundtable', ja: '信長と家康の、座談会', en: 'Round Table with Nobunaga & Ieyasu', zh: '信长与家康的座谈会', series: 'talk', cast: 'nobunaga+ieyasu', group: 4 },
+    { cat: 'all-ages', dir: 'Demo01_SnowFoxfire', ja: '雪と狐火のひそひそ話', en: 'Whispers of Snow and Flame', zh: '雪与狐火的悄悄话', ko: '눈과 여우불의 소곤소곤 이야기', series: 'snowfox', part: 1, cast: 'koyuki+homura', group: 0 },
+    { cat: 'all-ages', dir: 'Demo28_SnowFoxLullaby', ja: 'ふたりの、こもりうた', en: 'A Lullaby for Two', zh: '两个人的摇篮曲', ko: '둘이서 불러 주는 자장가', series: 'snowfox', part: 2, cast: 'koyuki+homura', group: 0 },
+    { cat: 'all-ages', dir: 'Demo02_FanMeeting', ja: 'キミだけのスペシャルファンミーティング', en: 'Your Special Fan Meeting', zh: '只属于你的特别见面会', ko: '너만을 위한 스페셜 팬미팅', series: 'ayane', part: 1, cast: 'ayane', group: 0 },
+    { cat: 'all-ages', dir: 'Demo03_ShiningSmileConcert', ja: '氷と炎の星光コンサート', en: 'Ice & Fire Concert', zh: '冰与火的星光演唱会', ko: '얼음과 불꽃의 별빛 콘서트', series: 'ayane', part: 2, cast: 'ayane', group: 0 },
+    { cat: 'all-ages', dir: 'Demo04_SeasonsExpress', ja: '季節が、暴走する。', en: 'The Runaway Seasons Express', zh: '四季失控的魔法列车', ko: '계절이 폭주한다.', cast: 'train', group: 0 },
+    { cat: 'all-ages', dir: 'Demo47_GhostLantern', ja: 'ひやっと！おばけやしきの ちょうちんばん', en: 'Lantern Keeper of the Spooky House', zh: '鬼屋提灯值日生', ko: '오싹! 유령의 집 등불 당번', cast: 'bonchan+yurari', new: true, group: 0 },
+    { cat: 'all-ages', dir: 'Demo48_AnimalOnsen', ja: 'ゆけむり どうぶつおんせん', en: 'Steamy Animal Hot Spring', zh: '蒸汽腾腾的动物温泉', ko: '모락모락 동물 온천', cast: 'yuzujii', new: true, group: 0 },
+    { cat: 'all-ages', dir: 'Demo10_CaveSpring', ja: '火をともして、ひみつの泉へ', en: 'Kindle the Fire, Find the Hidden Spring', zh: '点燃火光，寻找秘密之泉', ko: '불을 밝혀, 비밀의 샘으로', cast: 'kohaku', group: 0 },
+    { cat: 'healing', dir: 'Demo11_Naomi', ja: 'ナオミと、ふわふわの一日', en: 'A Fluffy Day with Naomi', zh: '和直美的毛茸茸一天', ko: '나오미와 보송보송한 하루', series: 'naomi', part: 1, cast: 'naomi', group: 1 },
+    { cat: 'healing', dir: 'Demo13_NaomiCam', ja: 'ナオミ、いまなにしてる？', en: "What's Naomi Up To? · Pet Cam", zh: '直美，你在干嘛呀？', ko: '나오미, 지금 뭐 해?', series: 'naomi', part: 2, cast: 'naomi', group: 1 },
+    { cat: 'healing', dir: 'Demo26_BecomeNaomi', ja: 'ねこになった日', en: 'The Day I Became Naomi', zh: '变成猫咪的那一天', ko: '고양이가 된 날', series: 'naomi', part: 3, cast: 'naomi', group: 1 },
+    { cat: 'healing', dir: 'Demo49_NaomiSummer', ja: 'なつやすみ、ナオミと せんぷうき', en: 'Summer Fan Days with Naomi', zh: '暑假，娜奥米和电风扇', ko: '여름방학, 나오미와 선풍기', cast: 'naomi', new: true, group: 1 },
+    { cat: 'healing', dir: 'Demo15_FamilyCall', ja: 'もしもし、おばあちゃん？', en: 'Hello, Grandma? · A Call Home, Part 1', zh: '喂，奶奶吗？', ko: '여보세요, 할머니?', series: 'family', part: 1, cast: 'hana+gen', group: 1 },
+    { cat: 'healing', dir: 'Demo16_FamilyCall2', ja: 'じいちゃんの、ゆきだるま', en: "Grandpa's Little Snowman · A Call Home, Part 2", zh: '爷爷的小雪人', ko: '할아버지의 눈사람', series: 'family', part: 2, cast: 'hana+gen', group: 1 },
+    { cat: 'healing', dir: 'Demo29_FamilyVisit', ja: 'ただいま、じいちゃん・ばあちゃん', en: 'Home for New Year', zh: '爷爷奶奶，我回来了', ko: '할아버지, 할머니, 저 왔어요', series: 'family', part: 3, cast: 'hana+gen', group: 1 },
+    { cat: 'healing', dir: 'Demo50_WatermelonSummer', ja: 'なつやすみ、じいちゃんちの すいかわり', en: "Summer at Grandpa's: Watermelon Split", zh: '暑假，爷爷家的劈西瓜', ko: '여름방학, 할아버지 댁 수박 깨기', cast: 'grandma+grandpa', new: true, group: 1 },
+    { cat: 'for-men', dir: 'Demo14_MintStream', ja: 'ミントの、おみみ専門店', en: "Mint's Ear Salon", zh: '薄荷的耳朵专门店', ko: '민트의 귀 전문점', series: 'stream', cast: 'mint', group: 2 },
+    { cat: 'for-men', dir: 'Demo17_CocoaStream', ja: 'ココアの、バレンタイン前夜', en: "Valentine's Eve with Cocoa", zh: '可可的情人节前夜', ko: '코코아의 밸런타인 전날 밤', series: 'stream', cast: 'cocoa', group: 2 },
+    { cat: 'for-men', dir: 'Demo18_HinataStream', ja: 'ひなたと、ゲーセンデート', en: 'Arcade Date with Hinata', zh: '和日向的游戏厅约会', ko: '히나타와 오락실 데이트', series: 'stream', cast: 'hinata', group: 2 },
+    { cat: 'for-men', dir: 'Demo19_LunaStream', ja: 'ルナの、ひみつのカクテル', en: "Luna's Secret Cocktail", zh: '露娜的秘密鸡尾酒', ko: '루나의 비밀 칵테일', series: 'stream', cast: 'luna', group: 2 },
+    { cat: 'for-men', dir: 'Demo25_HatsumodeDate', ja: 'はじめての、初詣デート', en: 'My First Hatsumode', zh: '第一次的新年参拜约会', ko: '처음 함께하는 새해 참배 데이트', cast: 'tsubaki', group: 2 },
+    { cat: 'for-men', dir: 'Demo31_SummerRooftop', ja: 'なつの、おくじょうで', en: 'Up on the Summer Roof', zh: '夏日，屋顶上', ko: '여름, 옥상에서', cast: 'nagisa', group: 2 },
+    { cat: 'for-men', dir: 'Demo43_BlizzardInn', ja: '白嶺の峠、ひと晩の宿', en: 'One Night at the White-Ridge Inn', zh: '白岭山口，一夜客栈', ko: '하쿠레이 고개, 하룻밤의 여관', cast: 'mint+hinata+nagisa', new: true, group: 2 },
+    { cat: 'for-men', dir: 'Demo44_MagicAcademy', ja: 'まちがい召喚と、まほう学院の三人', en: 'Summoned by Mistake', zh: '错误召唤：魔法学院的三人', ko: '잘못된 소환과 마법 학원의 세 사람', cast: 'tsubaki+cocoa+luna', new: true, group: 2 },
+    { cat: 'for-women', dir: 'Demo12_LateCall', ja: 'もしもし、きこえる？', en: 'Can You Hear Me?', zh: '喂，听得到吗？', ko: '여보세요, 들려?', cast: 'ren', group: 3 },
+    { cat: 'for-women', dir: 'Demo20_HinataHandshake', ja: 'あと10秒だけ、ね？', en: 'Just Ten More Seconds?', zh: '再多10秒，好吗？', ko: '딱 10초만 더, 응?', cast: 'hinata_m', group: 3 },
+    { cat: 'for-women', dir: 'Demo21_JinLounge', ja: '俺だけ見てろ', en: 'Look Only at Me', zh: '只准看着我', ko: '나만 봐', cast: 'jin', group: 3 },
+    { cat: 'for-women', dir: 'Demo22_ShionRain', ja: '雨が止むまで', en: 'Until the Rain Stops', zh: '直到雨停', ko: '비가 그칠 때까지', cast: 'shion', group: 3 },
+    { cat: 'for-women', dir: 'Demo24_GakuCamp', ja: 'ガクの、焚き火キャンプ配信', en: "Gaku's Campfire Stream", zh: '岳的篝火露营直播', ko: '가쿠의 모닥불 캠핑 방송', cast: 'gaku', group: 3 },
+    { cat: 'for-women', dir: 'Demo30_SakuFestival', ja: 'なつまつり、ふたりで', en: 'Summer Festival, Just Us', zh: '夏日祭典，只有我们俩', ko: '여름 축제, 우리 둘이서', cast: 'saku', group: 3 },
+    { cat: 'for-women', dir: 'Demo45_CelestialPalace', ja: 'てんにょ様は、未来から', en: 'A Celestial from the Future', zh: '来自未来的天女', ko: '선녀님은 미래에서', cast: 'jin+shion+saku', new: true, group: 3 },
+    { cat: 'for-women', dir: 'Demo46_DragonContract', ja: '竜の王と、エルフの王と、小悪魔', en: 'The Dragon King, the Elf King and the Little Devil', zh: '龙王、精灵王与小恶魔', ko: '용왕과 엘프 왕과 작은 악마', cast: 'hinata_m+gaku+ren', new: true, group: 3 },
+    { cat: 'nobunaga-suntory', dir: 'Demo05_GifuCastle', ja: '信長の岐阜城へようこそ', en: "Welcome to Nobunaga's Gifu Castle", zh: '欢迎来到信长的岐阜城', ko: '노부나가의 기후성에 어서 오세요', series: 'nobunaga', part: 1, cast: 'nobunaga+ieyasu', group: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo06_FutureWhisky', ja: '未来の酒と、安土の夜', en: 'Future Whisky at Azuchi', zh: '未来之酒与安土之夜', ko: '미래의 술과 아즈치의 밤', series: 'nobunaga', part: 2, cast: 'nobunaga+ieyasu', group: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo07_KyotoIzakaya', ja: '信長と家康、京都の居酒屋へ', en: 'Two Warlords in a Kyoto Izakaya', zh: '信长与家康，京都居酒屋之夜', ko: '노부나가와 이에야스, 교토의 이자카야로', series: 'nobunaga', part: 3, cast: 'nobunaga+ieyasu', group: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo08_YamazakiDistillery', ja: '信長と家康、山崎蒸溜所へ', en: 'Two Warlords at the Yamazaki Distillery', zh: '信长与家康，探访山崎蒸馏所', ko: '노부나가와 이에야스, 야마자키 증류소로', series: 'nobunaga', part: 4, cast: 'nobunaga+ieyasu', group: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo09_SengokuBanquet', ja: '安土最後の酒宴', en: 'The Last Banquet at Azuchi', zh: '安土最后的酒宴', ko: '아즈치의 마지막 연회', series: 'nobunaga', part: 5, cast: 'nobunaga+ieyasu', group: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo23_NobunagaTalk', ja: '信長と、語らう', en: 'Talk with Nobunaga', zh: '与信长对谈', ko: '노부나가와 이야기하다', series: 'talk', cast: 'nobunaga', group: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo41_IeyasuTalk', ja: '家康と、語らう', en: 'Talk with Ieyasu', zh: '与家康对谈', ko: '이에야스와 이야기하다', series: 'talk', cast: 'ieyasu', group: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo42_SengokuRoundtable', ja: '信長と家康の、座談会', en: 'Round Table with Nobunaga & Ieyasu', zh: '信长与家康的座谈会', ko: '노부나가와 이에야스의 좌담회', series: 'talk', cast: 'nobunaga+ieyasu', group: 4 },
   ];
   // ---------------------------------------------------------------- the displayed order (user 2026-11-08: 菜单按类别 → 系列自动排序; guide §7.3 2d)
   // category (all ages → healing → for him → for her → Nobunaga) → series stay together, parts in order → series / single demos by the
   // thermal-use score (推荐度 = how fully the thermal feedback is used: tools/qa/thermal_score.py, best first) → demos with the same main
   // character next to each other → folder number. "Try these first" = featured + the top 3 by score. ‹ ›, swipes and the "n / N" follow it.
   const SERIES = {
-    snowfox: { ja: '小雪と焔', en: 'Koyuki & Homura', zh: '小雪与焰' }, ayane: { ja: '星乃綾音', en: 'Hoshino Ayane', zh: '星乃绫音' },
-    naomi: { ja: 'ナオミ', en: 'Naomi', zh: '直美' }, family: { ja: 'じいちゃん・ばあちゃん', en: 'Grandma & Grandpa', zh: '爷爷奶奶' },
-    stream: { ja: '配信ルーム', en: 'Live streams', zh: '直播间' }, nobunaga: { ja: '信長と家康 · 全5話', en: 'Nobunaga & Ieyasu · 5 episodes', zh: '信长与家康 · 共5集' },
-    talk: { ja: '語らう', en: 'Talk with them', zh: '对谈' },
+    snowfox: { ja: '小雪と焔', en: 'Koyuki & Homura', zh: '小雪与焰', ko: '코유키와 호무라' }, ayane: { ja: '星乃綾音', en: 'Hoshino Ayane', zh: '星乃绫音', ko: '호시노 아야네' },
+    naomi: { ja: 'ナオミ', en: 'Naomi', zh: '直美', ko: '나오미' }, family: { ja: 'じいちゃん・ばあちゃん', en: 'Grandma & Grandpa', zh: '爷爷奶奶', ko: '할아버지·할머니' },
+    stream: { ja: '配信ルーム', en: 'Live streams', zh: '直播间', ko: '라이브 방송' }, nobunaga: { ja: '信長と家康 · 全5話', en: 'Nobunaga & Ieyasu · 5 episodes', zh: '信长与家康 · 共5集', ko: '노부나가와 이에야스 · 전 5화' },
+    talk: { ja: '語らう', en: 'Talk with them', zh: '对谈', ko: '이야기 나누기' },
   };
   const HEAT = {"Demo01_SnowFoxfire":85,"Demo02_FanMeeting":85,"Demo03_ShiningSmileConcert":85,"Demo04_SeasonsExpress":84,"Demo05_GifuCastle":80,"Demo06_FutureWhisky":75,"Demo07_KyotoIzakaya":83,"Demo08_YamazakiDistillery":83,"Demo09_SengokuBanquet":82,"Demo10_CaveSpring":84,"Demo11_Naomi":69,"Demo12_LateCall":0,"Demo13_NaomiCam":75,"Demo14_MintStream":69,"Demo15_FamilyCall":69,"Demo16_FamilyCall2":83,"Demo17_CocoaStream":80,"Demo18_HinataStream":83,"Demo19_LunaStream":79,"Demo20_HinataHandshake":83,"Demo21_JinLounge":75,"Demo22_ShionRain":86,"Demo23_NobunagaTalk":72,"Demo24_GakuCamp":85,"Demo25_HatsumodeDate":87,"Demo26_BecomeNaomi":81,"Demo28_SnowFoxLullaby":84,"Demo29_FamilyVisit":83,"Demo30_SakuFestival":91,"Demo31_SummerRooftop":85,"Demo41_IeyasuTalk":69,"Demo42_SengokuRoundtable":70,"Demo43_BlizzardInn":83,"Demo44_MagicAcademy":98,"Demo45_CelestialPalace":92,"Demo46_DragonContract":90,"Demo47_GhostLantern":99,"Demo48_AnimalOnsen":99,"Demo49_NaomiSummer":99,"Demo50_WatermelonSummer":94};   // thermal-use score 0–100 per folder — ONE line, written by tools/qa/thermal_score.py (tools/qa/thermal_scores.json)
   { const CATS = ['all-ages', 'healing', 'for-men', 'for-women', 'nobunaga-suntory'], num = (d) => +((d.dir.match(/^Demo(\d+)/) || [])[1] || 999), sc = (d) => HEAT[d.dir] || 0;
@@ -99,7 +99,7 @@
     const me = document.currentScript?.src; if (me && k && k !== '0' && !qs.has('cover') && !qs.has('render') && !qs.has('embed')) { const s = document.createElement('script'); s.src = me.replace(/nav\.js(\?.*)?$/, 'kiosk.js?v=a71c2660'); s.async = false; document.head.appendChild(s); } }
   { const me = document.currentScript?.src;   // subtitle language EN / 日本語 / 中文 (also in ?embed): shared/subs.js next to this file
     const shot = qs.has('cover') && qs.has('sub');   // per-language thumbnail export (tools/web/thumbs.py): only the display language
-    if (me && !window.MoHeatSub && (shot || (!qs.has('cover') && !qs.has('render')))) for (const f of shot ? ['subs.js?v=bd87416d'] : ['subs.js?v=bd87416d', 'fullscreen.js?v=4', 'guide.js?v=49f2b868', 'thermocheck.js?v=2']) {   // display language + ⛶ fullscreen + first-visit guide + 🌡 thermal check (tools/web/bump.py updates these numbers)
+    if (me && !window.MoHeatSub && (shot || (!qs.has('cover') && !qs.has('render')))) for (const f of shot ? ['subs.js?v=f4ea9857'] : ['subs.js?v=f4ea9857', 'fullscreen.js?v=4', 'guide.js?v=f24ab074', 'thermocheck.js?v=600bf6fe']) {   // display language + ⛶ fullscreen + first-visit guide + 🌡 thermal check (tools/web/bump.py updates these numbers)
       const s = document.createElement('script'); s.src = me.replace(/nav\.js(\?.*)?$/, f); s.async = false; document.head.appendChild(s); } 
     else if (!window.MoHeatSub) document.documentElement.classList.add('l10n-ready'); }   // no subs.js (?cover / ?render): the cover text shows as is (series.css hides it until l10n-ready)
   if (qs.has('embed') || qs.has('cover') || qs.has('render')) return;
@@ -136,7 +136,7 @@
   // compact top bar (≤ 1100 px, series.css): 🎛 opens the side panel as a drawer when it has no room under the player; 🔌 opens the device controls
   // (port / Add / Connect, only in browsers with Web Serial) as a small menu instead of a second row
   const T3 = (o) => { const l = window.MoHeatSub?.lang || 'en'; return o[l] || o.en; };
-  const PANEL = { en: 'Sound map, thermal output & settings', ja: '音の位置・温冷・設定', zh: '声音位置、冷热输出和设置' }, DEV = { en: 'Connect MoHeat Evo', ja: 'MoHeat Evo をつなぐ', zh: '连接 MoHeat Evo' };
+  const PANEL = { en: 'Sound map, thermal output & settings', ja: '音の位置・温冷・設定', zh: '声音位置、冷热输出和设置', ko: '소리 위치·온냉 출력·설정' }, DEV = { en: 'Connect MoHeat Evo', ja: 'MoHeat Evo をつなぐ', zh: '连接 MoHeat Evo', ko: 'MoHeat Evo 연결' };
   const mini = (cls, icon, tip, onTap) => { const b = document.createElement('button'); b.type = 'button'; b.className = `btn sm ${cls}`; b.textContent = icon;
     const lab = () => { b.title = T3(tip); b.setAttribute('aria-label', T3(tip)); }; lab(); addEventListener('moheat:sublang', lab);
     b.addEventListener('click', (e) => { e.stopPropagation(); onTap(); }); const stop = document.getElementById('estop'); stop ? stop.before(b) : bar.appendChild(b); return b; };
@@ -191,12 +191,12 @@
   // the switcher shows ONE language, the display language of shared/subs.js (user: it showed Japanese + small English)
   const LG = () => window.MoHeatSub?.lang || (() => { try { return sessionStorage.getItem('moheat.sublang'); } catch { return null; } })() || 'en';
   const pickT = (o) => { const l = LG(); return o[l] || (l === 'zh-Hant' && o.zh) || o.en; };
-  const TITLE = (d) => pickT({ ja: d.ja, en: d.en, zh: d.zh });
-  const GZH = ['全年龄', '治愈', '男性向', '女性向', '信长系列'];
-  const GT = (gi) => { const [ja, en] = GROUPS[gi].split(' · '); return pickT({ ja, en, zh: GZH[gi] }); };
-  const W = { all: { ja: 'すべて', en: 'All', zh: '全部' }, now: { ja: '再生中', en: 'Now playing', zh: '正在播放' }, heat: { ja: '温冷', en: 'Thermal', zh: '温冷' }, ep: { ja: '第', en: 'Ep ', zh: '第' },
-    demos: { ja: 'デモ', en: 'Demos', zh: '演示' }, rec: { ja: '★ おすすめ', en: '★ Recommended', zh: '★ 推荐', ko: '★ 추천' }, top: { ja: 'まずはこれから · 温冷をいちばん感じられる3本', en: 'Try these first · the most thermal feedback', zh: '推荐先体验 · 冷热反馈最丰富的3个' }, credits: { ja: '権利表記', en: 'Credits', zh: '版权与署名' },
-    rights: { ja: '声・イラスト・音楽・商標', en: 'voices, art, music, trademarks', zh: '配音、美术、音乐、商标' }, prev: { ja: '前へ', en: 'Previous', zh: '上一个' }, next: { ja: '次へ', en: 'Next', zh: '下一个' } };
+  const TITLE = (d) => pickT({ ja: d.ja, en: d.en, zh: d.zh, ko: d.ko });
+  const GZH = ['全年龄', '治愈', '男性向', '女性向', '信长系列'], GKO = ['전체 이용가', '힐링', '남성향', '여성향', '노부나가 시리즈'];
+  const GT = (gi) => { const [ja, en] = GROUPS[gi].split(' · '); return pickT({ ja, en, zh: GZH[gi], ko: GKO[gi] }); };
+  const W = { all: { ja: 'すべて', en: 'All', zh: '全部', ko: '전체' }, now: { ja: '再生中', en: 'Now playing', zh: '正在播放', ko: '재생 중' }, heat: { ja: '温冷', en: 'Thermal', zh: '温冷', ko: '온냉' }, ep: { ja: '第', en: 'Ep ', zh: '第', ko: '제' },
+    demos: { ja: 'デモ', en: 'Demos', zh: '演示', ko: '데모' }, rec: { ja: '★ おすすめ', en: '★ Recommended', zh: '★ 推荐', ko: '★ 추천' }, top: { ja: 'まずはこれから · 温冷をいちばん感じられる3本', en: 'Try these first · the most thermal feedback', zh: '推荐先体验 · 冷热反馈最丰富的3个', ko: '먼저 이것부터 · 온냉을 가장 잘 느낄 수 있는 3편' }, credits: { ja: '権利表記', en: 'Credits', zh: '版权与署名', ko: '크레디트' },
+    rights: { ja: '声・イラスト・音楽・商標', en: 'voices, art, music, trademarks', zh: '配音、美术、音乐、商标', ko: '목소리·그림·음악·상표' }, prev: { ja: '前へ', en: 'Previous', zh: '上一个', ko: '이전' }, next: { ja: '次へ', en: 'Next', zh: '下一个', ko: '다음' } };
   const nav = document.createElement('nav'); nav.className = 'dnav'; nav.setAttribute('aria-label', 'Choose another demo');
   const prev = DEMOS[cur - 1], next = DEMOS[cur + 1];
   nav.innerHTML = `<a class="dn-step" href="${prev ? href(prev) : '#'}" title="${prev ? 'Previous: ' + prev.en : ''}" aria-label="Previous demo" ${prev ? '' : 'aria-disabled="true"'}>‹</a>`
@@ -222,7 +222,7 @@
       r.querySelectorAll('[data-w]').forEach((e) => { e.textContent = pickT(W[e.dataset.w]); });
       r.querySelectorAll('[data-gt]').forEach((e) => { e.textContent = GT(+e.dataset.gt); });
       r.querySelectorAll('[data-d]').forEach((e) => { e.textContent = TITLE(DEMOS[+e.dataset.d]); }); r.querySelectorAll('[data-heat]').forEach((e) => { e.textContent = `${pickT(W.heat)} ${e.dataset.heat}`; });
-      r.querySelectorAll('[data-part]').forEach((e) => { const l = LG(), [n, of] = e.dataset.part.split('/'); e.textContent = l === 'en' ? `Part ${n} / ${of}` : l === 'ja' ? `第${n}話 / 全${of}話` : `第${n}集 / 共${of}集`; });
+      r.querySelectorAll('[data-part]').forEach((e) => { const l = LG(), [n, of] = e.dataset.part.split('/'); e.textContent = l === 'en' ? `Part ${n} / ${of}` : l === 'ja' ? `第${n}話 / 全${of}話` : l === 'ko' ? `${n}화 / 전 ${of}화` : `第${n}集 / 共${of}集`; });
     }
     // thumbnails in the display language (assets/images/demos/<dir>.<lang>.jpg from tools/web/thumbs.py; missing → <dir>.jpg)
     panel.querySelectorAll('img[data-t]').forEach((im) => { const i = +im.dataset.t, src = thumb(i, LG()); if (im.dataset.l === LG()) return; im.dataset.l = LG(); im.onerror = () => { im.onerror = null; im.src = thumb(i); }; im.src = src; });

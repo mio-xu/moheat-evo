@@ -43,7 +43,7 @@
     document.documentElement.classList.add('ui2');
     const lang0 = (() => { try { return QS.get('sub') || localStorage.getItem('moheat.sublang') || 'en'; } catch { return 'en'; } })();
     const w = Math.min(innerWidth, 1920), sz = w < 820 ? 'c1200' : w * (devicePixelRatio || 1) > 1500 ? 'w1920' : 'w1280';
-    const pl = document.createElement('link'); pl.rel = 'preload'; pl.as = 'image'; pl.href = `${COVER_BASE}${['en', 'ja', 'zh'].includes(lang0) ? lang0 : 'en'}.${sz}.webp`; pl.fetchPriority = 'high';
+    const pl = document.createElement('link'); pl.rel = 'preload'; pl.as = 'image'; pl.href = `${COVER_BASE}${['en', 'ja', 'zh', 'ko'].includes(lang0) ? lang0 : 'en'}.${sz}.webp`; pl.fetchPriority = 'high';
     document.head.appendChild(pl);
     const hide = document.createElement('style'); hide.id = 'moheat-ui2-early';   // nothing old shows, not even for one frame (the old cover HTML, the 🌐 ⛶ corner…)
     hide.textContent = `html.ui2 .stage .intro { visibility: hidden !important; pointer-events: none !important; }
@@ -85,19 +85,19 @@
       },
     };
   })();
-  const T = {   // shell texts: en / ja / zh (ko: add a column — subs.js LANGS decides which ones are offered)
-    pure: ['Just listen', 'きくだけ', '纯聆听'], inter: ['Interactive', 'いっしょに参加', '互动'],
-    pureHint: ['plays through by itself · no mic', '操作なしで最後まで · マイクなし', '无需操作，自动播完 · 不用麦克风'],
-    interHint: ['answer, tap and hold · voice too', '答える・タップ・長押し · 声でも', '回答、点按、长按 · 也可用声音'],
-    paused: ['Paused — Space or tap to resume', '一時停止中 — Space / タップで再開', '已暂停 — 按空格或点按继续'],
-    loading: ['Loading…', '読み込み中…', '加载中…'], heatOn: ['Thermal on', '温冷 ON', '温冷 开'], heatOff: ['Thermal off', '温冷 OFF', '温冷 关'],
-    subs: ['Subtitles', '字幕', '字幕'], off: ['off', 'オフ', '关'], motion: ['Reduce motion', '動きを減らす', '减少动态'],
-    devLost: ['Device disconnected — plug the cable back in; it reconnects by itself.', 'デバイスが切断されました — ケーブルを差し直してください（自動で再接続します）。', '设备已断开 — 请重新插好数据线（会自动重新连接）。'],
-    micOff: ['Microphone is off. You can tap to answer.', 'マイクがオフです。タップで答えられます。', '麦克风未开启，可以点按回答。'],
-    devErr: ['Could not open MoHeat Evo — unplug the cable and plug it back in; it reconnects by itself.', 'MoHeat Evo を開けませんでした — ケーブルを抜き差ししてください（自動で再接続します）。', '无法打开 MoHeat Evo — 请重新插拔数据线（会自动重新连接）。'],
-    loadFail: ['Some files did not load — check the connection and reload the page.', '一部のファイルを読み込めませんでした — 接続を確かめて再読み込みしてください。', '部分文件加载失败 — 请检查网络后刷新页面。'],
+  const T = {   // shell texts: en / ja / zh / ko (a new language: add a column + IDX — subs.js LANGS decides which ones are offered)
+    pure: ['Just listen', 'きくだけ', '纯聆听', '듣기만'], inter: ['Interactive', 'いっしょに参加', '互动', '함께 참여'],
+    pureHint: ['plays through by itself · no mic', '操作なしで最後まで · マイクなし', '无需操作，自动播完 · 不用麦克风', '조작 없이 끝까지 재생 · 마이크 없음'],
+    interHint: ['answer, tap and hold · voice too', '答える・タップ・長押し · 声でも', '回答、点按、长按 · 也可用声音', '대답·탭·길게 누르기 · 목소리로도'],
+    paused: ['Paused — Space or tap to resume', '一時停止中 — Space / タップで再開', '已暂停 — 按空格或点按继续', '일시정지됨 — Space 또는 탭으로 계속'],
+    loading: ['Loading…', '読み込み中…', '加载中…', '불러오는 중…'], heatOn: ['Thermal on', '温冷 ON', '温冷 开', '온냉 켬'], heatOff: ['Thermal off', '温冷 OFF', '温冷 关', '온냉 끔'],
+    subs: ['Subtitles', '字幕', '字幕', '자막'], off: ['off', 'オフ', '关', '끔'], motion: ['Reduce motion', '動きを減らす', '减少动态', '움직임 줄이기'],
+    devLost: ['Device disconnected — plug the cable back in; it reconnects by itself.', 'デバイスが切断されました — ケーブルを差し直してください（自動で再接続します）。', '设备已断开 — 请重新插好数据线（会自动重新连接）。', '기기 연결이 끊겼어요 — 케이블을 다시 꽂으면 자동으로 다시 연결돼요.'],
+    micOff: ['Microphone is off. You can tap to answer.', 'マイクがオフです。タップで答えられます。', '麦克风未开启，可以点按回答。', '마이크가 꺼져 있어요. 탭해서 대답할 수 있어요.'],
+    devErr: ['Could not open MoHeat Evo — unplug the cable and plug it back in; it reconnects by itself.', 'MoHeat Evo を開けませんでした — ケーブルを抜き差ししてください（自動で再接続します）。', '无法打开 MoHeat Evo — 请重新插拔数据线（会自动重新连接）。', 'MoHeat Evo를 열 수 없어요 — 케이블을 뺐다가 다시 꽂아 주세요. 자동으로 다시 연결돼요.'],
+    loadFail: ['Some files did not load — check the connection and reload the page.', '一部のファイルを読み込めませんでした — 接続を確かめて再読み込みしてください。', '部分文件加载失败 — 请检查网络后刷新页面。', '일부 파일을 불러오지 못했어요 — 연결을 확인하고 페이지를 새로 고쳐 주세요.'],
   };
-  const L = () => { const l = window.MoHeatSub?.lang || 'en'; return l === 'ja' ? 1 : l === 'zh' ? 2 : 0; };
+  const IDX = { en: 0, ja: 1, zh: 2, ko: 3 }, L = () => IDX[window.MoHeatSub?.lang] || 0;
   const t = (k) => T[k][L()] || T[k][0];
 
   // ---------------------------------------------------------------- the clock: pause freezes time for the demo
@@ -566,7 +566,7 @@
   // ---------------------------------------------------------------- UI v2: the live adapter for demos/shared/ui2.js
   if (V2) {
     // UI2_V = content hash of ui2.js + ui2.css (python3 tools/web/bump.py --auto keeps it current: cat ui2.js ui2.css | shasum, 8 hex)
-    const UI2_V = '0550fb66';
+    const UI2_V = '9369150d';
     const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = new URL(`ui2.css?v=${UI2_V}`, document.currentScript?.src || PAGE).href; document.head.appendChild(css);
     let cssReady = false; const cssOk = () => { if (!cssReady) { cssReady = true; mount(); } };   // mount only once ui2.css applies: an unstyled first frame left the player column off-centre (Demo21 check_ui band 16 / 58 px under load)
     css.addEventListener('load', cssOk); css.addEventListener('error', cssOk); real.st(cssOk, 3000);
@@ -597,7 +597,7 @@
       picked: () => !!pickedWho,
       togglePause: () => { if (justStarted()) return; if (!paused && filmHeld()) filmEl().play().catch(() => {}); else pause(!paused); },
       // chapter labels: cover.json "chapters" (per language) > the demo's own { ja, en, zh } > its label text
-      chapters: () => chapters().map((c, i) => ({ label: cover?.chapters?.[i] || (c.ja || c.zh ? { en: c.en || c.label, ja: c.ja, zh: c.zh || (c.ja && window.MoHeatSub?.tr?.(c.ja, 'zh', false)) || c.en || c.label } : c.label) })), chapter: () => chapter(), reached: () => reached,
+      chapters: () => chapters().map((c, i) => ({ label: cover?.chapters?.[i] || (c.ja || c.zh ? { en: c.en || c.label, ja: c.ja, zh: c.zh || (c.ja && window.MoHeatSub?.tr?.(c.ja, 'zh', false)) || c.en || c.label, ko: c.ko || (c.ja && window.MoHeatSub?.tr?.(c.ja, 'ko', false)) || c.en || c.label } : c.label) })), chapter: () => chapter(), reached: () => reached,
       progress: () => { const f = film(), sc = SH.chapters; if (!f || !sc?.[0] || sc[0].t == null) return .5; const k = chapter(), t0 = sc[k]?.t ?? 0, t1 = sc[k + 1]?.t ?? DEMO_DATA.anim.duration; return Math.max(0, Math.min(1, (f.currentTime - t0) / Math.max(1, t1 - t0))); },
       seek: (i) => seek(i),
       volume: () => vol, setVolume,
