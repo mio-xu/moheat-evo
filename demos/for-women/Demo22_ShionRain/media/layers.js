@@ -271,12 +271,12 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/dryerR_eyes.webp?v=a3f720b7",
+     "src": "art/dryerR_eyes.webp?v=e944eaca",
      "rect": [
-      653,
-      148,
-      291,
-      150
+      644,
+      142,
+      308,
+      162
      ],
      "kind": "eyes"
     },
