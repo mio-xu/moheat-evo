@@ -191,6 +191,7 @@
     if (!src) { ctx.fillStyle = '#1a0f14'; ctx.globalAlpha = alpha; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
     ctx.globalAlpha = alpha; ctx.drawImage(src, 0, 0, W, H); ctx.globalAlpha = 1;
   }
+  addEventListener('moheat:pause', (e) => { if (e.detail && S.started && (mix < 1 || S.view !== viewB)) { viewA = viewB = S.view; mix = 1; try { draw(S.t, 0); } catch {} } });   // paused mid cross-fade: show the new view only (shell.js)
   function draw(t, dt) {
     if (S.view !== viewB) { viewA = viewB; viewB = S.view; mix = 0; }
     clips();

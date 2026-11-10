@@ -325,6 +325,7 @@
       media.forEach((m) => m.play().catch(() => {})); media.clear(); if (filmHeld()) filmEl().play().catch(() => {}); window.MoHeatShell_resumeFrames?.(); arm();
       if (lost.length) real.st(() => { if (!paused && lost.some((c) => c.state !== 'running' && c.state !== 'closed')) pause(true); }, 1500); }   // it did not come back: show the big play again, never a silent stuck state
     document.documentElement.classList.toggle('shell-paused', paused); paint();
+    dispatchEvent(new CustomEvent('moheat:pause', { detail: paused }));   // engines finish a running view cross-fade at once (a frozen half-fade showed two faces, Demo21 2026-11-11)
   };
   // leaving the page, or a phone call / Siri (user 2026-11-09, iPhone: back from another app the voice was gone and the demo looked frozen, since iOS leaves the context
   // 'interrupted', its resume() needs a tap and the voice's end event never comes): pause the same way as ⏸, thermal off; on return the same pause → play sequence runs by itself, and only if the context still isn't running does the big tap-to-continue appear (pause() below).
