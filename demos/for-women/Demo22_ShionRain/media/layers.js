@@ -94,12 +94,12 @@ window.MOHEAT_LAYERS = {
     "zoom": 1.15
    },
    "char": {
-    "src": "art/char_towel.webp?v=fc7193ae",
+    "src": "art/char_towel.webp?v=7fa18a5a",
     "w": 1700,
     "h": 956,
     "x": 0.5,
     "y": 1.02,
-    "height": 1.02,
+    "height": 1.045,
     "box": [
      0,
      0,
