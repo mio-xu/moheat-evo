@@ -257,9 +257,11 @@
         const say = () => voiceAt(`${MEDIA}voice/koyuki_vol_${LG()}.m4a`, PATH.steady, null, () => at(900, say)); say();   // her line loops while the slider moves
         let auto = setTimeout(next, st.s * 1000); timers.push(auto);
       } else if (st.id === 'lr') {   // L / R check: Homura comes in on the LEFT, Koyuki on the RIGHT (their voices, the visitor's language)
-        let side = 'L';
+        let side = 'L', gen = 0;
         const ask = (turn) => {
-          const L = side === 'L', say = () => voiceAt(`${MEDIA}voice/${L ? 'homura' : 'koyuki'}_lr_${LG()}.m4a`, L ? PATH.left : PATH.right, null, () => at(1200, say));
+          // one voice loop at a time: a repeat of the previous side's line still waiting in its 1.2 s gap must not play after the switch
+          // (it played Homura on the LEFT under "And now on the RIGHT?" and cut Koyuki off — exhibition report 2026-11-10)
+          const my = ++gen, L = side === 'L', say = () => { if (my === gen) voiceAt(`${MEDIA}voice/${L ? 'homura' : 'koyuki'}_lr_${LG()}.m4a`, L ? PATH.left : PATH.right, null, () => at(1200, say)); };
           A.innerHTML = `<h2>${tx(L ? 'lrL' : 'lrR')}</h2>${PHONES}<p class="sub">${turn ? `↻ ${tx('turn')}` : tx('lrSub')}</p>
             <div class="row"><button type="button" class="go big1" data-a="y">${tx('yes')}</button><button type="button" class="big1" data-a="n">${tx('no')}</button></div>`;
           A.querySelector(`.phones .${L ? 'l' : 'r'}`)?.classList.add('sound');
