@@ -3,7 +3,8 @@ window.MOHEAT_L10N = {
  "langs": [
   "en",
   "ja",
-  "zh"
+  "zh",
+  "ko"
  ],
  "text": {
   "zh": {
@@ -60,16 +61,65 @@ window.MOHEAT_L10N = {
    "Live (DUAL): voices at your ear warm it with their loudness; in the midsummer heat grandma's well-water towel cools the left of your neck, the cold melon on your right cheek is the coldest moment, and at dusk her fan and her voice reach the same left ear together.": "Live (DUAL): voices at your ear warm it with their loudness; in the midsummer heat grandma's well-water towel cools the left of your neck, the cold melon on your right cheek is the coldest moment, and at dusk her fan and her voice reach the same left ear together.",
    "Voices ElevenLabs · art OpenAI gpt-image · layered stills": "Voices ElevenLabs · art OpenAI gpt-image · layered stills",
    "ASMR · Healing": "ASMR · Healing"
+  },
+  "ko": {
+   "よう来たねえ！ あつかったじゃろ。 ほれ、つめたかろう？": "잘 왔구나! 더웠제. 자, 시원하재?",
+   "井戸水で しぼった てぬぐいよ。 くびすじ、ひやしときんさい。": "우물물로 짠 수건이란다. 목덜미에 대고 식히거라.",
+   "わっはっは！ 来たか来たか！ じいちゃんはのう、川で すいか 冷やしとるんじゃ！": "와하하! 왔구나, 왔어! 할아버지는 말이다, 냇물에 수박 담가 놨다!",
+   "よいしょお！ ほれ、見てみい、この でっかいの！": "영차! 자, 봐라, 이 커다란 거!",
+   "どうじゃ、つめたいじゃろ！ ほっぺに ぴたーっと！": "어떠냐, 차갑제! 볼에 착~!",
+   "これ、じいちゃん。 びっくりしよるがね。": "아이고, 영감. 애 놀라잖아요.",
+   "よーし、すいかわりじゃ！ てぬぐいで 目かくし しての。": "좋다, 수박 깨기다! 수건으로 눈을 가리고 말이다.",
+   "もうちょい みぎじゃ！ みぎ、みぎ！": "조금만 더 오른쪽이다! 오른쪽, 오른쪽!",
+   "ひだりよ〜。 ばあちゃんの ほうじゃけえ〜。": "왼쪽이란다~. 할머니 쪽이야~.",
+   "まっすぐじゃ！ そこじゃ、ふりおろせえ！": "똑바로다! 거기다, 내리쳐라!",
+   "わっはっは！ おしい、おしい！ もういっかいじゃ！": "와하하! 아깝다, 아까워! 한 번 더다!",
+   "パカーッと いったのう！ ようやった！": "쩍 하고 갈라졌구나! 잘했다!",
+   "さあさ、たべんさい。 たねは にわに とばしてええけえね。": "자자, 먹거라. 씨는 마당에 퉤 뱉어도 된단다.",
+   "たね とばしなら、じいちゃんは 村いちばんじゃ！": "씨 멀리 뱉기라면 할아버지가 마을에서 일등이지!",
+   "…ほれ、あおいであげようね。 ぱたぱた。": "…자, 부채질해 주마. 팔랑팔랑.",
+   "…じいちゃんはね、わかいころ、すいかわりで 一回も 当たらんかったんよ。 …ないしょじゃけえね。": "…할아버지는 말이다, 젊을 때 수박 깨기에서 한 번도 못 맞혔단다. …비밀이다.",
+   "ばあさん、なんか いうたか！": "할멈, 뭐라 했소!",
+   "なーんも。 ふふふ。": "아~무것도. 호호호.",
+   "…ほれ、見てみい。 ほたるじゃ。": "…자, 봐라. 반딧불이다.",
+   "てのひらで そーっと つつんでみい。 …つぶさんようにの。": "손바닥으로 살~짝 감싸 보거라. …터뜨리지 않게.",
+   "かやの なかは すずしいよ。 せんぷうき、まわしとくけえね。": "모기장 안은 시원하단다. 선풍기 틀어 둘게.",
+   "…ええ ゆめ みんさいよ。 おやすみ。": "…좋은 꿈 꾸거라. 잘 자.",
+   "…あしたも あそぼうな。 おやすみ。": "…내일도 놀자꾸나. 잘 자.",
+   "バス停": "버스 정류장",
+   "ただいま！": "다녀왔습니다!",
+   "あつ〜い！": "더워~!",
+   "小川": "시냇물",
+   "すいかわり": "수박 깨기",
+   "ふりおろす（長押し）": "내리치기 (길게 누르기)",
+   "縁側の夕方": "툇마루의 저녁",
+   "「ありがとう」": "\"고마워요\"",
+   "夜の田んぼ": "밤의 논",
+   "ほたるを つつむ（長押し）": "반딧불이 감싸기 (길게 누르기)",
+   "夏休みの日記に書くね": "방학 일기에 쓸게요",
+   "あしたも遊ぼう": "내일도 놀아요",
+   "ばあちゃん": "할머니",
+   "じいちゃん": "할아버지",
+   "ばあちゃん・じいちゃん ElevenLabs": "할머니・할아버지 ElevenLabs",
+   "Live (DUAL): voices at your ear warm it with their loudness; in the midsummer heat grandma's well-water towel cools the left of your neck, the cold melon on your right cheek is the coldest moment, and at dusk her fan and her voice reach the same left ear together.": "실시간 (DUAL): 귓가의 목소리는 크기만큼 따뜻해요. 한여름 더위 속에서 할머니의 우물물 수건이 목 왼쪽을 식히고, 오른쪽 볼에 닿는 차가운 수박이 가장 시원한 순간이에요. 해 질 녘에는 할머니의 부채 바람과 목소리가 함께 왼쪽 귀에 닿아요.",
+   "Voices ElevenLabs · art OpenAI gpt-image · layered stills": "목소리 ElevenLabs · 그림 OpenAI gpt-image · 레이어 스틸",
+   "ASMR · Healing": "ASMR · 힐링",
+   "ばあちゃんに答えてみよう": "할머니에게 대답해 보자",
+   "じいちゃんに答えてみよう": "할아버지에게 대답해 보자",
+   "みんな": "모두",
+   "あなた": "나"
   }
  },
  "names": {
   "ばあちゃん": {
    "en": "Grandma",
-   "zh": "奶奶"
+   "zh": "奶奶",
+   "ko": "할머니"
   },
   "じいちゃん": {
    "en": "Grandpa",
-   "zh": "爷爷"
+   "zh": "爷爷",
+   "ko": "할아버지"
   }
  },
  "voice": {
@@ -108,6 +158,38 @@ window.MOHEAT_L10N = {
     "play tomorrow",
     "tomorrow",
     "あした"
+   ]
+  },
+  "ko": {
+   "ただいま！": [
+    "다녀왔습니다",
+    "왔어요",
+    "저 왔어요",
+    "다녀왔어요"
+   ],
+   "あつ〜い！": [
+    "더워",
+    "너무 더워",
+    "덥다",
+    "더워요"
+   ],
+   "「ありがとう」": [
+    "고마워요",
+    "고맙습니다",
+    "감사합니다",
+    "고마워"
+   ],
+   "夏休みの日記に書くね": [
+    "방학 일기에 쓸게요",
+    "일기에 쓸게요",
+    "일기",
+    "일기에 쓸래요"
+   ],
+   "あしたも遊ぼう": [
+    "내일도 놀아요",
+    "내일도 놀자",
+    "내일 또 놀아요",
+    "내일도"
    ]
   }
  }

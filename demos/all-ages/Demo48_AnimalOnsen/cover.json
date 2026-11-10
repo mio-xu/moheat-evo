@@ -4,12 +4,14 @@
  "title": {
   "en": "Steamy Animal\nHot Spring",
   "ja": "ゆけむり\nどうぶつおんせん",
-  "zh": "蒸汽腾腾的\n动物温泉"
+  "zh": "蒸汽腾腾的\n动物温泉",
+  "ko": "모락모락\n동물 온천"
  },
  "tagline": {
   "en": "Mix hot and cold with your ears, for every guest",
   "ja": "みみで おんどを あわせる おてつだい",
-  "zh": "用耳朵调水温，招待每位客人"
+  "zh": "用耳朵调水温，招待每位客人",
+  "ko": "귀로 온도를 맞추는 온천 도우미"
  },
  "chips": [
   {
@@ -17,7 +19,8 @@
    "text": {
     "en": "A game for everyone",
     "ja": "みんなの ゲーム",
-    "zh": "大家都能玩的游戏"
+    "zh": "大家都能玩的游戏",
+    "ko": "모두의 게임"
    }
   },
   {
@@ -25,7 +28,8 @@
    "text": {
     "en": "hot pipe on the left · steam",
     "ja": "ひだりの あつい おゆ・ゆげ",
-    "zh": "左边的热水・蒸汽"
+    "zh": "左边的热水・蒸汽",
+    "ko": "왼쪽의 뜨거운 물・김"
    }
   },
   {
@@ -33,7 +37,8 @@
    "text": {
     "en": "cold pipe on the right · rain",
     "ja": "みぎの つめたい みず・あめ",
-    "zh": "右边的冷水・雨"
+    "zh": "右边的冷水・雨",
+    "ko": "오른쪽의 차가운 물・비"
    }
   }
  ],
@@ -43,27 +48,32 @@
   {
    "en": "Opening",
    "ja": "開店",
-   "zh": "开店"
+   "zh": "开店",
+   "ko": "개점"
   },
   {
    "en": "The penguin",
    "ja": "ペンギン",
-   "zh": "企鹅"
+   "zh": "企鹅",
+   "ko": "펭귄"
   },
   {
    "en": "The monkey family",
    "ja": "おさる親子",
-   "zh": "猴子母子"
+   "zh": "猴子母子",
+   "ko": "원숭이 모녀"
   },
   {
    "en": "Autumn rain",
    "ja": "秋の雨",
-   "zh": "秋雨"
+   "zh": "秋雨",
+   "ko": "가을비"
   },
   {
    "en": "Your turn",
    "ja": "じぶんの番",
-   "zh": "轮到你"
+   "zh": "轮到你",
+   "ko": "내 차례"
   }
  ]
 }

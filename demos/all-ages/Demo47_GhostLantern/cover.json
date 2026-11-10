@@ -4,12 +4,14 @@
  "title": {
   "en": "Lantern Keeper of\nthe Spooky House",
   "ja": "ひやっと！\nおばけやしきの\nちょうちんばん",
-  "zh": "鬼屋提灯值日生"
+  "zh": "鬼屋提灯值日生",
+  "ko": "오싹!\n유령의 집\n등불 당번"
  },
  "tagline": {
   "en": "Feel the ghost coming with your ears, turn the warm lantern",
   "ja": "おばけは みみで わかる。あったかい ちょうちんを むけよう",
-  "zh": "用耳朵感觉鬼来了，转动温暖的灯笼"
+  "zh": "用耳朵感觉鬼来了，转动温暖的灯笼",
+  "ko": "유령은 귀로 알아차려요. 따뜻한 초롱을 돌려 봐요"
  },
  "chips": [
   {
@@ -17,7 +19,8 @@
    "text": {
     "en": "A game for everyone",
     "ja": "みんなの ゲーム",
-    "zh": "大家都能玩的游戏"
+    "zh": "大家都能玩的游戏",
+    "ko": "모두의 게임"
    }
   },
   {
@@ -25,7 +28,8 @@
    "text": {
     "en": "the candle in your lantern",
     "ja": "ちょうちんの ろうそく",
-    "zh": "灯笼里的蜡烛"
+    "zh": "灯笼里的蜡烛",
+    "ko": "초롱 속 촛불"
    }
   },
   {
@@ -33,7 +37,8 @@
    "text": {
     "en": "ghosts chill the ear on their side",
     "ja": "おばけが くるほうの みみが ひんやり",
-    "zh": "鬼来的那一侧耳朵变凉"
+    "zh": "鬼来的那一侧耳朵变凉",
+    "ko": "유령이 오는 쪽 귀가 오싹"
    }
   }
  ],
@@ -43,27 +48,32 @@
   {
    "en": "At the gate",
    "ja": "門の前",
-   "zh": "大门前"
+   "zh": "大门前",
+   "ko": "대문 앞"
   },
   {
    "en": "The corridor",
    "ja": "ろうか",
-   "zh": "走廊"
+   "zh": "走廊",
+   "ko": "복도"
   },
   {
    "en": "The tatami room",
    "ja": "和室",
-   "zh": "和室"
+   "zh": "和室",
+   "ko": "다다미방"
   },
   {
    "en": "The dark storehouse",
    "ja": "土蔵",
-   "zh": "土仓"
+   "zh": "土仓",
+   "ko": "흙 창고"
   },
   {
    "en": "Yurari",
    "ja": "ゆらり",
-   "zh": "悠悠"
+   "zh": "悠悠",
+   "ko": "유라리"
   }
  ]
 }

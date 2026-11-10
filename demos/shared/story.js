@@ -609,7 +609,10 @@
       const n = performance.now(); if (cmd !== lastSent && n - lastSendAt >= SEND_INTERVAL) { device.send(cmd); lastSent = cmd; lastSendAt = n; }
     }
     const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
-    const where = () => { if (!S.started) return ''; const P = D.places?.[S.place]; if (S.mode === 'talk' && P) return P.en; const st = S.step; return (cfg.where?.(S) || (st ? st.en : '')) + (/_ear$/.test(S.posName) && talking ? ` · at your ${S.posName.startsWith('left') ? 'left' : 'right'} ear` : ''); };
+    // the place label in the sound-map card, in the subtitle language (2026-11-11: it was English in every language); English stays as before
+    const LOC = (o) => { if (!o) return ''; const l = window.MoHeatSub?.lang || 'en'; return l === 'en' || l === 'off' ? o.en : l === 'ja' ? (o.ja || o.en) : (o[l] || (o.ja && window.MoHeatSub.tr(o.ja, l, false)) || o.en); };
+    const EAR = { left: { en: 'at your left ear', ja: '左の耳もと', zh: '在你左耳边', ko: '왼쪽 귀 옆' }, right: { en: 'at your right ear', ja: '右の耳もと', zh: '在你右耳边', ko: '오른쪽 귀 옆' } };
+    const where = () => { if (!S.started) return ''; const P = D.places?.[S.place]; if (S.mode === 'talk' && P) return LOC(P); const st = S.step; return (cfg.where?.(S) || (st ? LOC(st) : '')) + (/_ear$/.test(S.posName) && talking ? ` · ${LOC(EAR[S.posName.startsWith('left') ? 'left' : 'right'])}` : ''); };
 
     // ---- loop / start / end
     let last = performance.now(), hidden = false;

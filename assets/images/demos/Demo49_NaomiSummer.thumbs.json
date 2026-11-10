@@ -1,26 +1,32 @@
 {
  "base": {
   "inputs": {
-   "demos/healing/Demo49_NaomiSummer/media/cover/stamp.json": "9ef335f8f325ec6e2e1bbde702b67dfaaddaf319"
+   "demos/healing/Demo49_NaomiSummer/media/cover/stamp.json": "a9c7467878e3c7b5eebec8ea58b5edfe3153f7b3"
   },
-  "thumb": "2dbbe0126111028892296b9ef256373886e10298"
+  "thumb": "bbf0789e1d22165585b422fa6c500fcce5f28f42"
  },
  "en": {
   "inputs": {
-   "demos/healing/Demo49_NaomiSummer/media/cover/stamp.json": "9ef335f8f325ec6e2e1bbde702b67dfaaddaf319"
+   "demos/healing/Demo49_NaomiSummer/media/cover/stamp.json": "a9c7467878e3c7b5eebec8ea58b5edfe3153f7b3"
   },
-  "thumb": "2dbbe0126111028892296b9ef256373886e10298"
+  "thumb": "bbf0789e1d22165585b422fa6c500fcce5f28f42"
  },
  "ja": {
   "inputs": {
-   "demos/healing/Demo49_NaomiSummer/media/cover/stamp.json": "9ef335f8f325ec6e2e1bbde702b67dfaaddaf319"
+   "demos/healing/Demo49_NaomiSummer/media/cover/stamp.json": "a9c7467878e3c7b5eebec8ea58b5edfe3153f7b3"
   },
-  "thumb": "e2e69b1e96dbe5000743fbd22d0a7c61869731d9"
+  "thumb": "de7295d0211ecbb701a90b8747a772e1143a4e38"
+ },
+ "ko": {
+  "inputs": {
+   "demos/healing/Demo49_NaomiSummer/media/cover/stamp.json": "a9c7467878e3c7b5eebec8ea58b5edfe3153f7b3"
+  },
+  "thumb": "b9fc0d5f30e603ed499c1c0c968624d1930909be"
  },
  "zh": {
   "inputs": {
-   "demos/healing/Demo49_NaomiSummer/media/cover/stamp.json": "9ef335f8f325ec6e2e1bbde702b67dfaaddaf319"
+   "demos/healing/Demo49_NaomiSummer/media/cover/stamp.json": "a9c7467878e3c7b5eebec8ea58b5edfe3153f7b3"
   },
-  "thumb": "5ad46e24e9113054b05d70c26b7e57d2c0232d27"
+  "thumb": "c7c219a70bf6ad9d27db070e581b34885f7908ec"
  }
 }

@@ -3,12 +3,14 @@
  "title": {
   "en": "Summer at Grandpa's:\nWatermelon Split",
   "ja": "なつやすみ、\nじいちゃんちの\nすいかわり",
-  "zh": "暑假，\n爷爷家的劈西瓜"
+  "zh": "暑假，\n爷爷家的劈西瓜",
+  "ko": "여름방학,\n할아버지 댁\n수박 깨기"
  },
  "tagline": {
   "en": "One long summer day with grandma and grandpa",
   "ja": "じいちゃん、ばあちゃんと過ごす夏の一日",
-  "zh": "和爷爷奶奶一起的夏日一天"
+  "zh": "和爷爷奶奶一起的夏日一天",
+  "ko": "할아버지, 할머니와 보내는 여름의 하루"
  },
  "chips": [
   {
@@ -16,7 +18,8 @@
    "text": {
     "en": "A summer in the countryside",
     "ja": "いなかの夏やすみ",
-    "zh": "乡下的暑假"
+    "zh": "乡下的暑假",
+    "ko": "시골의 여름방학"
    }
   },
   {
@@ -24,7 +27,8 @@
    "text": {
     "en": "midsummer heat · their voices",
     "ja": "真夏の熱気・ふたりの声",
-    "zh": "盛夏热气・两位老人的声音"
+    "zh": "盛夏热气・两位老人的声音",
+    "ko": "한여름 열기・두 분의 목소리"
    }
   },
   {
@@ -32,7 +36,8 @@
    "text": {
     "en": "river melon · well-water towel · fan",
     "ja": "川のすいか・井戸水の手ぬぐい・うちわ",
-    "zh": "河水西瓜・井水毛巾・团扇"
+    "zh": "河水西瓜・井水毛巾・团扇",
+    "ko": "냇물 수박・우물물 수건・부채"
    }
   }
  ],
@@ -42,27 +47,32 @@
   {
    "en": "The bus stop",
    "ja": "バス停",
-   "zh": "公交站"
+   "zh": "公交站",
+   "ko": "버스 정류장"
   },
   {
    "en": "The stream",
    "ja": "小川",
-   "zh": "小河"
+   "zh": "小河",
+   "ko": "시냇물"
   },
   {
    "en": "Watermelon split",
    "ja": "すいかわり",
-   "zh": "劈西瓜"
+   "zh": "劈西瓜",
+   "ko": "수박 깨기"
   },
   {
    "en": "Evening on the veranda",
    "ja": "縁側の夕方",
-   "zh": "傍晚的檐廊"
+   "zh": "傍晚的檐廊",
+   "ko": "툇마루의 저녁"
   },
   {
    "en": "Rice fields at night",
    "ja": "夜の田んぼ",
-   "zh": "夜晚的稻田"
+   "zh": "夜晚的稻田",
+   "ko": "밤의 논"
   }
  ]
 }

@@ -1,25 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/all-ages/Demo47_GhostLantern/media/cover/stamp.json": "6f74d7b25f19316b99c433a55553afabf7180f53"
+   "demos/all-ages/Demo47_GhostLantern/media/cover/stamp.json": "f4e34aa2d8b8bee7b6165ac9c5e53d522ab42361"
   },
   "thumb": "7d06652ec3afedb210b96a19b3587600672dec97"
  },
  "en": {
   "inputs": {
-   "demos/all-ages/Demo47_GhostLantern/media/cover/stamp.json": "6f74d7b25f19316b99c433a55553afabf7180f53"
+   "demos/all-ages/Demo47_GhostLantern/media/cover/stamp.json": "f4e34aa2d8b8bee7b6165ac9c5e53d522ab42361"
   },
   "thumb": "7d06652ec3afedb210b96a19b3587600672dec97"
  },
  "ja": {
   "inputs": {
-   "demos/all-ages/Demo47_GhostLantern/media/cover/stamp.json": "6f74d7b25f19316b99c433a55553afabf7180f53"
+   "demos/all-ages/Demo47_GhostLantern/media/cover/stamp.json": "f4e34aa2d8b8bee7b6165ac9c5e53d522ab42361"
   },
   "thumb": "60a5febd9e77244fd3a5e36fea5b414058798680"
  },
+ "ko": {
+  "inputs": {
+   "demos/all-ages/Demo47_GhostLantern/media/cover/stamp.json": "f4e34aa2d8b8bee7b6165ac9c5e53d522ab42361"
+  },
+  "thumb": "d0dcde6e93f8e20a03e8b719b52c81ac5f6385f1"
+ },
  "zh": {
   "inputs": {
-   "demos/all-ages/Demo47_GhostLantern/media/cover/stamp.json": "6f74d7b25f19316b99c433a55553afabf7180f53"
+   "demos/all-ages/Demo47_GhostLantern/media/cover/stamp.json": "f4e34aa2d8b8bee7b6165ac9c5e53d522ab42361"
   },
   "thumb": "5fa6f9a1986bdc599361eeb559602dc4b5fe9e0e"
  }

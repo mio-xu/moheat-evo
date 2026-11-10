@@ -1,26 +1,32 @@
 {
  "base": {
   "inputs": {
-   "demos/for-women/Demo45_CelestialPalace/media/cover/stamp.json": "64e1e9ed095a8eef3144305c8cff1965ff613913"
+   "demos/for-women/Demo45_CelestialPalace/media/cover/stamp.json": "8b6fc0f73fa9292eb6da9b233077e3b11da0a415"
   },
-  "thumb": "805db4820b76248dd7c40ab422cecd09e29d1349"
+  "thumb": "7b826c41f07858df332f45112a81425af26a338e"
  },
  "en": {
   "inputs": {
-   "demos/for-women/Demo45_CelestialPalace/media/cover/stamp.json": "64e1e9ed095a8eef3144305c8cff1965ff613913"
+   "demos/for-women/Demo45_CelestialPalace/media/cover/stamp.json": "8b6fc0f73fa9292eb6da9b233077e3b11da0a415"
   },
-  "thumb": "805db4820b76248dd7c40ab422cecd09e29d1349"
+  "thumb": "7b826c41f07858df332f45112a81425af26a338e"
  },
  "ja": {
   "inputs": {
-   "demos/for-women/Demo45_CelestialPalace/media/cover/stamp.json": "64e1e9ed095a8eef3144305c8cff1965ff613913"
+   "demos/for-women/Demo45_CelestialPalace/media/cover/stamp.json": "8b6fc0f73fa9292eb6da9b233077e3b11da0a415"
   },
-  "thumb": "eeea024e259bfb9e5ced1c5645139904e4e7529a"
+  "thumb": "8deed081dbcd81589b2398aaa192468834dd9f20"
+ },
+ "ko": {
+  "inputs": {
+   "demos/for-women/Demo45_CelestialPalace/media/cover/stamp.json": "8b6fc0f73fa9292eb6da9b233077e3b11da0a415"
+  },
+  "thumb": "1dd2afb362e24183d67c76678099465f302d1f1b"
  },
  "zh": {
   "inputs": {
-   "demos/for-women/Demo45_CelestialPalace/media/cover/stamp.json": "64e1e9ed095a8eef3144305c8cff1965ff613913"
+   "demos/for-women/Demo45_CelestialPalace/media/cover/stamp.json": "8b6fc0f73fa9292eb6da9b233077e3b11da0a415"
   },
-  "thumb": "2b3d310542c85c77c933c25d1ef82f5f21dd75fe"
+  "thumb": "cb74f4fbd25069ebf043d49a6b582c311d0a11d0"
  }
 }

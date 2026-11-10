@@ -16,11 +16,31 @@
   const QS = new URLSearchParams(location.search);
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   const ZH = { 'あなたの番 — 声で話すか、入力してください': '轮到你了 — 用声音说，或者打字', '話しかけてください': '跟她们说点什么吧', 'ここに入力して Enter': '在这里输入，按 Enter', '▶ 続ける': '▶ 继续', 'マイクが使えません — 入力してください': '麦克风不可用 — 请打字' };
-  const T = (ja, en) => (window.MoHeatSub ? window.MoHeatSub.pick({ ja, en, zh: ZH[ja] || window.MoHeatSub.tr(ja, 'zh', false) || undefined }) : en) || en;
+  const KO = { 'あなたの番 — 声で話すか、入力してください': '당신 차례 — 목소리로 말하거나 입력해 주세요', '話しかけてください': '말을 걸어 보세요', 'ここに入力して Enter': '여기에 입력하고 Enter', '▶ 続ける': '▶ 계속', 'マイクが使えません — 入力してください': '마이크를 쓸 수 없어요 — 입력해 주세요' };
+  const T = (ja, en) => (window.MoHeatSub ? window.MoHeatSub.pick({ ja, en, zh: ZH[ja] || window.MoHeatSub.tr(ja, 'zh', false) || undefined, ko: KO[ja] || window.MoHeatSub.tr(ja, 'ko', false) || undefined }) : en) || en;
 
   // ---------------------------------------------------------------- scripted brain helpers
   const rx = new Map();
+  // 한국어 (2026-11-11): Korean words for the topic keys the demos use (ja / en / zh live in each demo's data); a demo can add its own
+  // in l10n.js "topics": { ko: { <key>: 'regex' } }. Single syllables that sit inside other words (해 / 달 / 별 / 눈 / 문 / 차) are written with a particle.
+  const KO_TOPICS = {
+    leave: '돌아가|집에 가|집에 갈|가야 해|갈래', thanks: '고마|감사|땡큐', name: '이름|누구야|누구세요|누구예요',
+    future: '미래|스마트폰|핸드폰|휴대폰|인터넷|컴퓨터|자동차|전철|기차|비행기|게임기|유행',
+    game: '게임|내기|주사위|승부|놀자|놀이', magic: '마법|마녀|빗자루|소환|연금|주문|지팡이',
+    food: '밥|먹|맛있|배고|음식|코코아|달콤|단 거|과자|케이크|초콜릿|홍차|녹차|차 마|쿠키|수프|국물|전골|만두|스콘|과일|열매',
+    sleep: '졸려|졸리|잠|자고 싶|피곤|꿈', cold: '추워|춥|차가|얼음|바람|눈이|눈보라|따뜻|더워|뜨거|시원',
+    praise: '귀여|예뻐|예쁘|아름다|멋있|멋지|잘생|대단|좋아해|사랑|최고',
+    no: '^(아니|아뇨|노)|아니야|아니요|없어|싫어|안 보여|못 봤', yes: '^(네|예|응|그래|맞아|좋아)|물론|진짜|정말|있어|보여',
+    wind: '바람|눈보라|하늘|높아|높이|빨라|빠르|빗자루|망토|모피', pot: '김이|화로|숯|불이|불 |냄비', cure: '뜸|박하|연고|약|귀',
+    door: '문을|문이|문 |보초|망보|밤', sun: '해가|해님|햇|아침|일출|태양|눈부|문을|문이',
+    circle: '마법진|빛|화로|돌', lab: '화덕|가마|냄비|불이|불 |얼음 창고|김이|연금', tower: '벽난로|창문|별이|별빛|별을|달이|달빛|얼음|차 ',
+    dawn: '해가|해님|햇|아침|일출|태양|눈부|빛|마법진|책|문을|고리', pond: '연못|얼음|연꽃|달이|달빛',
+    room: '불이|불 |숯|화로|창문|병풍|용이|용 ', stars: '별이|별빛|별을|별자리|별똥|바람|향|토끼|하늘',
+    hall: '회랑|기둥|횃불|불빛|그림자|자객', study: '책|서재|벽난로|창문|계약', valley: '용이|용 |용의|드래곤|날개|바람|봉화|불이', lake: '호수|얼음|노래|별이|별빛|오로라',
+  };
+  const koOf = (k) => [KO_TOPICS[k], window.MOHEAT_L10N?.topics?.ko?.[k]].filter(Boolean).join('|');
   function topic(said, topics, opt = {}) {
+    if (said && window.MoHeatSub?.lang === 'ko') topics = topics.map(([k, re]) => { const x = koOf(k); return [k, x ? `${re}|${x}` : re]; });
     if (!said) return 'silence';
     const yn = opt.yn_only || ['yes', 'no'];
     const order = opt.yn ? [...topics.filter(([k]) => yn.includes(k)), ...topics.filter(([k]) => !yn.includes(k))] : topics.filter(([k]) => !yn.includes(k));

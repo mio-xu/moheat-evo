@@ -1,26 +1,32 @@
 {
  "base": {
   "inputs": {
-   "demos/all-ages/Demo48_AnimalOnsen/media/cover/stamp.json": "83cfd759da3aa547bfbd91c56d6649f6df62defb"
+   "demos/all-ages/Demo48_AnimalOnsen/media/cover/stamp.json": "99dec6c97f201cef6dbe6c7caee53b761984e8c4"
   },
-  "thumb": "60909a984cecaa744500ae3bd4496c99588f5c9d"
+  "thumb": "31a4b4a8b5b088cc32663d3d18b42e596adf6fad"
  },
  "en": {
   "inputs": {
-   "demos/all-ages/Demo48_AnimalOnsen/media/cover/stamp.json": "83cfd759da3aa547bfbd91c56d6649f6df62defb"
+   "demos/all-ages/Demo48_AnimalOnsen/media/cover/stamp.json": "99dec6c97f201cef6dbe6c7caee53b761984e8c4"
   },
-  "thumb": "60909a984cecaa744500ae3bd4496c99588f5c9d"
+  "thumb": "31a4b4a8b5b088cc32663d3d18b42e596adf6fad"
  },
  "ja": {
   "inputs": {
-   "demos/all-ages/Demo48_AnimalOnsen/media/cover/stamp.json": "83cfd759da3aa547bfbd91c56d6649f6df62defb"
+   "demos/all-ages/Demo48_AnimalOnsen/media/cover/stamp.json": "99dec6c97f201cef6dbe6c7caee53b761984e8c4"
   },
-  "thumb": "dffbea744ea61459cc73e817b7fb0f3b68d8be81"
+  "thumb": "acb57eac5f104b74fcb4ae18b0a02a0537906059"
+ },
+ "ko": {
+  "inputs": {
+   "demos/all-ages/Demo48_AnimalOnsen/media/cover/stamp.json": "99dec6c97f201cef6dbe6c7caee53b761984e8c4"
+  },
+  "thumb": "62af93c7a2e6042658067c06e23829922251ea55"
  },
  "zh": {
   "inputs": {
-   "demos/all-ages/Demo48_AnimalOnsen/media/cover/stamp.json": "83cfd759da3aa547bfbd91c56d6649f6df62defb"
+   "demos/all-ages/Demo48_AnimalOnsen/media/cover/stamp.json": "99dec6c97f201cef6dbe6c7caee53b761984e8c4"
   },
-  "thumb": "1f5d93475f9219863b3fdb4cdbc2d8cccb3c3481"
+  "thumb": "2fe6d31f51a8752b255e3fdc735b7dfbd0cf180d"
  }
 }

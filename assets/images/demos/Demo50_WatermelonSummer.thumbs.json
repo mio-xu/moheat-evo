@@ -1,25 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/healing/Demo50_WatermelonSummer/media/cover/stamp.json": "e211019e9b3ab7be262970658aacf982f19ca3d8"
+   "demos/healing/Demo50_WatermelonSummer/media/cover/stamp.json": "a9618e857747e7a06990dcd1282ac77a56d35eb5"
   },
   "thumb": "c440b9cba6a4e600f681cd5c95276f635aae4266"
  },
  "en": {
   "inputs": {
-   "demos/healing/Demo50_WatermelonSummer/media/cover/stamp.json": "e211019e9b3ab7be262970658aacf982f19ca3d8"
+   "demos/healing/Demo50_WatermelonSummer/media/cover/stamp.json": "a9618e857747e7a06990dcd1282ac77a56d35eb5"
   },
   "thumb": "c440b9cba6a4e600f681cd5c95276f635aae4266"
  },
  "ja": {
   "inputs": {
-   "demos/healing/Demo50_WatermelonSummer/media/cover/stamp.json": "e211019e9b3ab7be262970658aacf982f19ca3d8"
+   "demos/healing/Demo50_WatermelonSummer/media/cover/stamp.json": "a9618e857747e7a06990dcd1282ac77a56d35eb5"
   },
   "thumb": "210aca4b73e4c9dc0295dba10265f33c6d38ea1b"
  },
+ "ko": {
+  "inputs": {
+   "demos/healing/Demo50_WatermelonSummer/media/cover/stamp.json": "a9618e857747e7a06990dcd1282ac77a56d35eb5"
+  },
+  "thumb": "61c2443d76e20942d7041891231ef4081b7f4cf0"
+ },
  "zh": {
   "inputs": {
-   "demos/healing/Demo50_WatermelonSummer/media/cover/stamp.json": "e211019e9b3ab7be262970658aacf982f19ca3d8"
+   "demos/healing/Demo50_WatermelonSummer/media/cover/stamp.json": "a9618e857747e7a06990dcd1282ac77a56d35eb5"
   },
   "thumb": "9136b394c08cdee06ca5e8a731e3299eb2049b0f"
  }
