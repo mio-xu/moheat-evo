@@ -368,7 +368,7 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/shion_ear_eyes.webp?v=49ab351e",
+     "src": "art/shion_ear_eyes.webp?v=8f8e6494",
      "rect": [
       396,
       299,
@@ -696,7 +696,7 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/shion_ear_eyes.webp?v=49ab351e",
+     "src": "art/shion_ear_eyes.webp?v=8f8e6494",
      "rect": [
       396,
       299,
@@ -1024,7 +1024,7 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/shion_ear_eyes.webp?v=49ab351e",
+     "src": "art/shion_ear_eyes.webp?v=8f8e6494",
      "rect": [
       396,
       299,
@@ -1506,7 +1506,7 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/shion_ear_eyes.webp?v=49ab351e",
+     "src": "art/shion_ear_eyes.webp?v=8f8e6494",
      "rect": [
       396,
       299,
@@ -2643,7 +2643,7 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/shion_ear_eyes.webp?v=49ab351e",
+     "src": "art/shion_ear_eyes.webp?v=8f8e6494",
      "rect": [
       396,
       299,
