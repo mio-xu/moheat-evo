@@ -94,7 +94,7 @@ window.MOHEAT_LAYERS = {
     "zoom": 1.15
    },
    "char": {
-    "src": "art/char_towel.webp?v=af023107",
+    "src": "art/char_towel.webp?v=fc7193ae",
     "w": 1700,
     "h": 956,
     "x": 0.5,
@@ -256,7 +256,7 @@ window.MOHEAT_LAYERS = {
     ]
    },
    "char": {
-    "src": "art/char_dryerR.webp?v=cfdf2ce9",
+    "src": "art/char_dryerR.webp?v=7ea1b9c7",
     "w": 1700,
     "h": 954,
     "x": 0.502,
