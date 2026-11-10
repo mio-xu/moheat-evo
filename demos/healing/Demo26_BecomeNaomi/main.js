@@ -212,7 +212,8 @@
   // ---------------------------------------------------------------- per-frame state + thermal
   function update(dt) {
     S.t += dt; if (!S.started) return;
-    S.clock += dt; S.lv = SND.voiceLevel(); S.vlv = (S.vlv || 0) + (S.lv - (S.vlv || 0)) * (1 - Math.exp(-dt / (S.lv > (S.vlv || 0) ? .05 : .8)));   // voice warmth = the speech envelope, not each syllable (no sub-second hot ↔ cold flicker, guide §3 节奏) NA.tick(dt);
+    S.clock += dt; S.lv = SND.voiceLevel(); S.vlv = (S.vlv || 0) + (S.lv - (S.vlv || 0)) * (1 - Math.exp(-dt / (S.lv > (S.vlv || 0) ? .05 : .8)));   // voice warmth = the speech envelope, not each syllable (no sub-second hot ↔ cold flicker, guide §3 节奏)
+    NA.tick(dt);
     SND.setFocus(focusOf);
     const z = S.zoom, a = 1 - Math.exp(-dt / .5); z.k += (z.tk - z.k) * a; z.x += (z.tx - z.x) * a; z.y += (z.ty - z.y) * a;
   }

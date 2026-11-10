@@ -190,7 +190,7 @@
     const ease = (cur, tgt, up, down) => cur + (tgt - cur) * (1 - Math.exp(-dt / (tgt > cur ? up : down)));
     coldK = ease(coldK, S.cold, .3, 1.2); ovenK = ease(ovenK, S.oven, 2, 2); burstK = ease(burstK, S.ovenBurst, .25, 1.4);
     steamK = ease(steamK, S.steam, .8, 1); fridgeK = ease(fridgeK, S.fridge, .2, .6); cheekK = ease(cheekK, S.cheek, .5, .8);
-    puffK = Math.max(0, puffK - dt * .8);   // a puff lasts ~1.2 s: long enough to be felt as cool after the warm steam (guide §3 节奏) if (S.puff) { puffK = 1; S.puff = 0; }
+    puffK = Math.max(0, puffK - dt * .8); if (S.puff) { puffK = 1; S.puff = 0; }   // a puff lasts ~1.2 s: long enough to be felt as cool after the warm steam (guide §3 节奏)
   }
   // Thermal, two layers (firmware DUAL: cool and heat independent on each ear — CLAUDE.md, 2026-11-08).
   //  · VOICE: a voice is warm. Her loudness (0.1 + 0.8 × level) warms the ear she speaks at — × 1 right at your ear, × 0.6 within
