@@ -28,12 +28,12 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/yuzujii_base_eyes.webp?v=88b142b4",
+     "src": "art/yuzujii_base_eyes.webp?v=2cbe64d2",
      "rect": [
-      74,
-      349,
-      466,
-      114
+      39,
+      324,
+      552,
+      164
      ],
      "kind": "eyes"
     },
@@ -110,12 +110,12 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/penguin_bath_eyes.webp?v=1e085f29",
+     "src": "art/penguin_bath_eyes.webp?v=cc57764e",
      "rect": [
-      192,
-      340,
-      569,
-      266
+      172,
+      320,
+      609,
+      306
      ],
      "kind": "eyes"
     },
@@ -183,12 +183,12 @@ window.MOHEAT_LAYERS = {
      },
      "patches": [
       {
-       "src": "art/yuzujii_base_eyes.webp?v=88b142b4",
+       "src": "art/yuzujii_base_eyes.webp?v=2cbe64d2",
        "rect": [
-        74,
-        349,
-        466,
-        114
+        39,
+        324,
+        552,
+        164
        ],
        "kind": "eyes"
       },
@@ -267,12 +267,12 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/monkey_mum_pail_eyes.webp?v=715a6b37",
+     "src": "art/monkey_mum_pail_eyes.webp?v=d45ede79",
      "rect": [
-      266,
-      292,
-      434,
-      239
+      233,
+      259,
+      500,
+      302
      ],
      "kind": "eyes"
     },
@@ -340,12 +340,12 @@ window.MOHEAT_LAYERS = {
      },
      "patches": [
       {
-       "src": "art/monkey_kid_pail_eyes.webp?v=6b7b62dd",
+       "src": "art/monkey_kid_pail_eyes.webp?v=4cbc8400",
        "rect": [
-        42,
-        183,
-        312,
-        218
+        20,
+        158,
+        365,
+        268
        ],
        "kind": "eyes"
       }
@@ -380,12 +380,12 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/yuzujii_base_eyes.webp?v=88b142b4",
+     "src": "art/yuzujii_base_eyes.webp?v=2cbe64d2",
      "rect": [
-      74,
-      349,
-      466,
-      114
+      39,
+      324,
+      552,
+      164
      ],
      "kind": "eyes"
     },
@@ -462,12 +462,12 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/fox_bath_eyes.webp?v=230c1721",
+     "src": "art/fox_bath_eyes.webp?v=e059a7a8",
      "rect": [
-      144,
-      369,
-      489,
-      266
+      111,
+      337,
+      558,
+      328
      ],
      "kind": "eyes"
     },
@@ -535,12 +535,12 @@ window.MOHEAT_LAYERS = {
      },
      "patches": [
       {
-       "src": "art/yuzujii_base_eyes.webp?v=88b142b4",
+       "src": "art/yuzujii_base_eyes.webp?v=2cbe64d2",
        "rect": [
-        74,
-        349,
-        466,
-        114
+        39,
+        324,
+        552,
+        164
        ],
        "kind": "eyes"
       },
@@ -619,12 +619,12 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/yuzujii_bath_eyes.webp?v=88b142b4",
+     "src": "art/yuzujii_bath_eyes.webp?v=2cbe64d2",
      "rect": [
-      58,
-      349,
-      466,
-      114
+      23,
+      324,
+      552,
+      164
      ],
      "kind": "eyes"
     },
@@ -701,12 +701,12 @@ window.MOHEAT_LAYERS = {
    },
    "patches": [
     {
-     "src": "art/yuzujii_bath_eyes.webp?v=88b142b4",
+     "src": "art/yuzujii_bath_eyes.webp?v=2cbe64d2",
      "rect": [
-      58,
-      349,
-      466,
-      114
+      23,
+      324,
+      552,
+      164
      ],
      "kind": "eyes"
     },
@@ -774,12 +774,12 @@ window.MOHEAT_LAYERS = {
      },
      "patches": [
       {
-       "src": "art/fox_bath_eyes.webp?v=230c1721",
+       "src": "art/fox_bath_eyes.webp?v=e059a7a8",
        "rect": [
-        144,
-        369,
-        489,
-        266
+        111,
+        337,
+        558,
+        328
        ],
        "kind": "eyes"
       },
@@ -847,12 +847,12 @@ window.MOHEAT_LAYERS = {
      },
      "patches": [
       {
-       "src": "art/penguin_bath_eyes.webp?v=1e085f29",
+       "src": "art/penguin_bath_eyes.webp?v=cc57764e",
        "rect": [
-        192,
-        340,
-        569,
-        266
+        172,
+        320,
+        609,
+        306
        ],
        "kind": "eyes"
       },
@@ -920,12 +920,12 @@ window.MOHEAT_LAYERS = {
      },
      "patches": [
       {
-       "src": "art/monkey_mum_pail_eyes.webp?v=715a6b37",
+       "src": "art/monkey_mum_pail_eyes.webp?v=d45ede79",
        "rect": [
-        266,
-        292,
-        434,
-        239
+        233,
+        259,
+        500,
+        302
        ],
        "kind": "eyes"
       },
@@ -993,12 +993,12 @@ window.MOHEAT_LAYERS = {
      },
      "patches": [
       {
-       "src": "art/monkey_kid_pail_eyes.webp?v=6b7b62dd",
+       "src": "art/monkey_kid_pail_eyes.webp?v=4cbc8400",
        "rect": [
-        42,
-        183,
-        312,
-        218
+        20,
+        158,
+        365,
+        268
        ],
        "kind": "eyes"
       }
