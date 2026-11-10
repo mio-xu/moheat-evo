@@ -180,7 +180,7 @@ window.MOHEAT_LAYERS = {
     "h": 954,
     "x": 0.502,
     "y": 1.02,
-    "height": 1.04,
+    "height": 1.065,
     "box": [
      364,
      0,
@@ -261,7 +261,7 @@ window.MOHEAT_LAYERS = {
     "h": 954,
     "x": 0.502,
     "y": 1.02,
-    "height": 1.04,
+    "height": 1.065,
     "box": [
      364,
      0,
@@ -423,7 +423,7 @@ window.MOHEAT_LAYERS = {
     "src": "art/char_whisper.webp?v=256453d2",
     "w": 1700,
     "h": 961,
-    "x": 0.5,
+    "x": 0.505,
     "y": 1.02,
     "height": 1.06,
     "box": [
