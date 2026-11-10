@@ -287,6 +287,7 @@
     return out;
   }
   const ear = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
+  const modeOn = {}, modeLast = { Lc: -9, Lh: -9, Rc: -9, Rh: -9 };
   function thermal(dt) {
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
     for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
@@ -296,6 +297,11 @@
       const tau = rest ? .15 : target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
       ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
     }
+    for (const e of ['L', 'R']) for (const [k, o] of [['c', 'h'], ['h', 'c']]) {   // a 1 s rest between the two modes on one ear (both on = DUAL is fine)
+      const K = e + k, O = e + o;
+      if (ear[K] > OFF && !modeOn[K] && ear[O] <= OFF && performance.now() / 1000 - modeLast[O] < 1.15) ear[K] = 0;
+    }
+    for (const K in ear) { modeOn[K] = ear[K] > OFF; if (modeOn[K]) modeLast[K] = performance.now() / 1000; }
     return { th: { ...ear }, src };
   }
 
