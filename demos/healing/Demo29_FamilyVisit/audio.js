@@ -120,10 +120,10 @@ window.FVAudio = (() => {
     // the wooden sliding door (genkan) rolling open in front of you
     door: (az = 0, dist = 1.5) => shot(az, dist, .3, (o, t) => { const s = noiseSrc(), f = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 300, Q: 1.2 }), g = ac.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.6, t + .15); g.gain.linearRampToValueAtTime(.45, t + .8); g.gain.linearRampToValueAtTime(0, t + 1); s.connect(f).connect(g).connect(o); s.stop(t + 1.1); burst(o, .05, .6, 900, 'bandpass', 2, 1); }, 2),
     // grandpa's snowball whizzing past your right ear (front → behind on the right)
-    whoosh: () => { if (!ac) return; const { g, p } = chain(.5, 3, .05); const t = ac.currentTime, s = noiseSrc(), f = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 900, Q: 1 }), a = ac.createGain();
+    whoosh: (side = 1) => { if (!ac) return; const { g, p } = chain(.5 * side, 3, .05); const t = ac.currentTime, s = noiseSrc(), f = new BiquadFilterNode(ac, { type: 'bandpass', frequency: 900, Q: 1 }), a = ac.createGain();
       a.gain.setValueAtTime(0, t); a.gain.linearRampToValueAtTime(.9, t + .35); a.gain.linearRampToValueAtTime(0, t + .6); f.frequency.setValueAtTime(600, t); f.frequency.linearRampToValueAtTime(1800, t + .35);
-      s.connect(f).connect(a).connect(g); s.stop(t + .7); for (let i = 0; i <= 12; i++) setTimeout(() => place(p, .5 + i * .2, Math.max(.25, 3 - i * .3), .02), i * 50); setTimeout(() => { g.disconnect(); p.disconnect(); }, 2000);
-      setTimeout(() => shot(2.6, 3, .3, (o) => burst(o, .12, .7, 500, 'lowpass', .7), .4), 650); },   // it lands in the snow behind you
+      s.connect(f).connect(a).connect(g); s.stop(t + .7); for (let i = 0; i <= 12; i++) setTimeout(() => place(p, side * (.5 + i * .2), Math.max(.25, 3 - i * .3), .02), i * 50); setTimeout(() => { g.disconnect(); p.disconnect(); }, 2000);
+      setTimeout(() => shot(2.6 * side, 3, .3, (o) => burst(o, .12, .7, 500, 'lowpass', .7), .4), 650); },   // it lands in the snow behind you
     // your snowball hits grandpa
     thud: (az = .5, dist = 2) => shot(az, dist, .25, (o) => { burst(o, .1, .9, 600, 'lowpass', .7); burst(o, .06, .4, 2200, 'bandpass', 1.2, .01); }, .5),
     // blowing on the hot bowl (you): soft breath

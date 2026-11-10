@@ -137,9 +137,9 @@
 
       // 3 · the fridge on your left (a cold breath on the left ear), then she whisks with you from behind — at your right ear
       setStep(2);
-      SND.fx.fridgeOpen(-1.35); S.fridge = 1; await sleep(.6);
-      await say('c07', LEFT);
-      SND.fx.fridgeClose(-1.35); S.fridge = 0;
+      SND.fx.fridgeOpen(-1.35); S.fridge = 1; await sleep(2); alive(my);      // beat 1: the open fridge (left of the picture) — cold on your left ear alone
+      SND.fx.fridgeClose(-1.35); S.fridge = 0; await sleep(1); alive(my);       // shut; the cold fades
+      await say('c07', LEFT);                                                   // beat 2: "Brr…!" at your left — her voice warms the same ear (cold → warm, ≥ 1 s apart)
       await go(null, 'whisk', () => { SND.fx.rustle(1.6, .25); });
       await say('c08', RIGHT_EAR);
       await whiskHold(6, () => { if (my === run) say('c09x', RIGHT_EAR).catch(() => {}); });
@@ -190,7 +190,7 @@
     const ease = (cur, tgt, up, down) => cur + (tgt - cur) * (1 - Math.exp(-dt / (tgt > cur ? up : down)));
     coldK = ease(coldK, S.cold, .3, 1.2); ovenK = ease(ovenK, S.oven, 2, 2); burstK = ease(burstK, S.ovenBurst, .25, 1.4);
     steamK = ease(steamK, S.steam, .8, 1); fridgeK = ease(fridgeK, S.fridge, .2, .6); cheekK = ease(cheekK, S.cheek, .5, .8);
-    puffK = Math.max(0, puffK - dt * .8); if (S.puff) { puffK = 1; S.puff = 0; }   // a puff lasts ~1.2 s: long enough to be felt as cool after the warm steam (guide §3 节奏)
+    puffK = Math.max(0, puffK - dt * .6); if (S.puff) { puffK = 1; S.puff = 0; }   // a puff lasts ~1.6 s: long enough to be felt as cool after the warm steam (guide §3 节奏)
   }
   // Thermal, two layers (firmware DUAL: cool and heat independent on each ear — CLAUDE.md, 2026-11-08).
   //  · VOICE: a voice is warm. Her loudness (0.1 + 0.8 × level) warms the ear she speaks at — × 1 right at your ear, × 0.6 within
@@ -204,11 +204,11 @@
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S.started) return out;
     const P = S.pos;
-    if (talking) add(P.az, 'h', (.1 + .8 * clamp(S.vlv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
+    if (talking) add(P.az, 'h', (1 - Math.min(1, puffK * 1.5)) * (.1 + .8 * clamp(S.vlv * 8)) * (P.dist < .15 ? 1 : P.dist <= .5 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');
     if (coldK > .02) add(0, 'c', .4 * coldK, '❄️');
     if (ovenK > .02) add(1.35, 'h', .2 * ovenK + .5 * burstK, '♨️');
     if (steamK > .02) add(0, 'h', .2 * steamK, '🍫');
-    if (puffK > .02) add(0, 'c', .65 * Math.sin(Math.PI * Math.min(1, puffK * 1.2)), '💨');
+    if (puffK > .02) add(0, 'c', .65 * Math.min(1, puffK * 2), '💨');   // the two fu-fu are one cool breath (a second puff keeps it up instead of restarting it)
     if (fridgeK > .02) add(-1.35, 'c', .5 * fridgeK, '🧊');
     if (cheekK > .02) add(-1.3, 'h', .3 * cheekK, '🤍');
     return out;

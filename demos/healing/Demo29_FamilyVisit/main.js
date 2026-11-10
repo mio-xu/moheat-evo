@@ -137,6 +137,7 @@
       await action('⛄', '雪玉を投げ返す', 'Throw one back', 'なげる|投げる|投げ返す|throw|throw it back|扔回去|扔');
       SND.fx.thud(.45, 2); await sleep(.4);
       await say('p10', { az: .45, dist: 2 });
+      await sleep(.8); S.ball = { t0: S.clock, side: -1 }; SND.fx.whoosh(-1); await sleep(1.4); S.ball = null; alive(my);   // grandpa's revenge: a second snowball whizzes past your LEFT ear (cold on the left)
       await say('g07', { az: -.7, dist: 6 });
 
       chap = 4; S.restUntil = S.clock + 1.2;   // a short rest between scenes (guide §3 节奏)
@@ -184,7 +185,7 @@
     add(-1.35, 'h', .25 * K.hug, '🤗');
     add(1.2, 'h', .42 * K.stove * (.92 + .08 * Math.sin(S.t * 3.1)), '🔥');
     add(0, 'h', .22 * K.steam, '♨️');
-    if (S.ball) { const u = (S.clock - S.ball.t0) / 1.2; if (u < 1) add(1.4, 'c', .85 * Math.sin(Math.PI * clamp(u * 1.2)), '⛄'); }
+    if (S.ball) { const u = (S.clock - S.ball.t0) / 1.2; if (u < 1) add(1.4 * (S.ball.side || 1), 'c', .85 * Math.sin(Math.PI * clamp(u * 1.2)), '⛄'); }
     add(-1.5, 'h', .2 * K.quilt, '🛏'); add(1.5, 'h', .2 * K.quilt, '🛏');
     return out;
   }
@@ -240,7 +241,7 @@
       }
     }
     if (S.ball) {   // grandpa's snowball, growing as it flies past the right side of your head
-      const u = clamp((S.clock - S.ball.t0) / .6), x = lerp(W * .6, W * 1.15, u * u), y = lerp(H * .2, H * .3, u), r = lerp(14, 220, u * u);
+      const u = clamp((S.clock - S.ball.t0) / .6), sd = S.ball.side || 1, x = W / 2 + sd * (lerp(W * .6, W * 1.15, u * u) - W / 2), y = lerp(H * .2, H * .3, u), r = lerp(14, 220, u * u);
       ctx.fillStyle = 'rgba(250,252,255,.95)'; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
     }
     if (S.view === 'futon') {   // the andon flicker + the quilt rising at the bottom of the frame
