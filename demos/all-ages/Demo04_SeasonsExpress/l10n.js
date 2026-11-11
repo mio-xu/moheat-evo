@@ -80,7 +80,9 @@ window.MOHEAT_L10N = {
    "ASMR · Seasons Express": "ASMR · 사계절 마법 열차"
   }
  },
- "names": {},
+ "names": {
+  "車掌": { "en": "Conductor", "zh": "列车长", "ko": "차장" }
+ },
  "voice": {
   "all": {
    "❄ ひだりの窓（氷）": [

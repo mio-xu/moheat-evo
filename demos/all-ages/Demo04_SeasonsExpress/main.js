@@ -383,9 +383,13 @@ function drawHolo(c, t, tv, th) {
   c.globalAlpha = flick; c.fillStyle = 'rgba(14,70,96,.92)'; c.fillRect(SCR.x, SCR.y, SCR.w, SCR.h);
   const ln = lineNow(t), holo = ln && ln.where === 'holo';
   let gx = 0; if (chaosOn(t) && hash(Math.floor(tv * 14)) > .75) gx = (hash(Math.floor(tv * 14) + 3) - .5) * 30;
-  if (holo && FIG.holo) {
-    drawFig(c, 'holo', SCR.x + SCR.w / 2, SCR.y + SCR.h * 1.9, SCR.h * 2.3, { talk: ln.e, alpha: .95 * Math.max(.75, flick), tv });   // a big bust: the face fills the screen
-  } else {   // between announcements: the season and where it is warm / cool (icons only: no language needed)
+  // the conductor stays on the hologram for the whole ride (critic 2026-11-11: she was only there while speaking, so most frames had
+  // no one in them); she leaves it only while she is in person (aisle / your ear). Between lines: listening, a small season icon in the corner
+  const away = (ln && ln.where !== 'holo') || AISLE.some((ap) => t >= ap.t0 - .2 && t <= ap.t1 + .2) || (t >= A.silence[0] && t < A.silence[1] + .5);
+  if (FIG.holo && !away) {
+    drawFig(c, 'holo', SCR.x + SCR.w / 2, SCR.y + SCR.h * 1.9, SCR.h * 2.3, { talk: holo ? ln.e : 0, alpha: (holo ? .95 : .82) * Math.max(.75, flick), tv });   // a big bust: the face fills the screen
+    if (!holo) { c.textAlign = 'center'; c.textBaseline = 'middle'; c.globalAlpha = .9 * flick; c.font = `${Math.round(SCR.h * .2)}px "Apple Color Emoji","Noto Color Emoji",sans-serif`; c.fillText(ICON[segAt(t).key] || '🚂', SCR.x + SCR.h * .18, SCR.y + SCR.h * .18); c.globalAlpha = flick; }
+  } else {   // she is away (in person): the season and where it is warm / cool (icons only: no language needed)
     const seg = segAt(t).key, sl = sideColour(th, 'L'), sr = sideColour(th, 'R');
     c.textAlign = 'center'; c.textBaseline = 'middle';
     c.font = `${Math.round(SCR.h * .5)}px "Apple Color Emoji","Noto Color Emoji",sans-serif`; c.fillText(ICON[seg] || '🚂', SCR.x + SCR.w / 2 + gx, SCR.y + SCR.h * .5);
@@ -644,7 +648,7 @@ function voiceSeek(t) {   // after a jump: re-arm the lines ahead, stop the one 
 }
 // subtitles: the shown line in ja + en (shared/subs.js picks the language; zh from l10n.js)
 const subsEl = $('subs');
-function showSub(id) { const L = VO.lines[id]; if (!subsEl) return; subsEl.innerHTML = `<div class="line"><span class="ja">${L.text.ja}</span><span class="en">${L.text.en}</span></div>`; subsEl.classList.add('show'); }
+function showSub(id) { const L = VO.lines[id]; if (!subsEl) return; subsEl.innerHTML = `<div class="line"><span class="ja"><span class="who A">車掌</span>${L.text.ja}</span><span class="en"><span class="who A">Conductor</span>${L.text.en}</span></div>`; subsEl.classList.add('show'); }   // speaker name (critic 2026-11-11); zh / ko from l10n.js names
 function hideSub() { if (subsEl) { subsEl.innerHTML = ''; subsEl.classList.remove('show'); } }
 
 // ---------------------------------------------------------------- gates (interactive default; shared/shell.js answers them in pure mode)
