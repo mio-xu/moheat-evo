@@ -27,11 +27,11 @@
   const E = ME.create({
     ns: 'TSUBAKI', sound: SND, lines: LINES, state: () => S,
     reset() { S = fresh(); fireK = cupK = stoleK = nearK = 0; coldK = 1; },
-    steps: STEPS, place: PLACE,
+    steps: STEPS, place: PLACE, restSec: 1.5,   // a 1.5 s all-off rest at each new chapter (as Demo12 / 14 / 17 / 18 / 19)
     views: ['torii', 'stall', 'amazake', 'fire', 'close', 'pray', 'omikuji', 'stole'], src: (n) => `media/art/tsubaki_${n}.jpg?v=2`, blank: '#140d14', clips: CLIP_NAMES,
     zoomExtra: (view) => (view === 'close' ? .03 * clamp(nearK - 1, 0, .4) / .4 : 0),   // pressed against you by the crowd: a slow push-in
     radar: { text: '#a38f97', ear: '#3a2830', head: '#4a3540' },
-    thermal: { modeGuard: 0 },   // as before the engine (no same-ear 1 s guard in this demo's own thermal(); shell.js guards the device line)
+    thermal: { modeGuard: 0, timing: true },   // the per-ear timing rules of shared/story.js (QA thermal-timing-live, 2026-11-11)
     autoPick: () => (Math.random() < .5 ? 0 : 1),   // ?auto answers at random (this demo's own rule)
     talkEnv: false,
     sources, update, draw, story,
