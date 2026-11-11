@@ -226,7 +226,9 @@ function drawAyane(st, t) {
     ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(0, 0, hw, 0, 7); ctx.fill(); ctx.restore();
   }
   const sway = (Math.sin(t * 2.2) * 12 - clamp(st.vel * .3, -40, 40)) * st.s;
-  for (const [layer, a] of [[fig.prev, 1 - fade], [fig.cur, fig.prev && fade < 1 ? fade : 1]]) {
+  // the new pose is always fully opaque and the old one fades out ON TOP (critic 2026-11-11: two poses at 50 % each read as a see-through
+  // Ayane, and a pause mid-fade froze it); paused → only the new pose
+  for (const [layer, a] of [[fig.cur, 1], [fig.prev, media.paused ? 0 : 1 - fade]]) {
     if (!layer || a <= .01 || !ok(layer.lk.img)) continue;
     const L = layout(layer.lk, st);
     drawWarped(IMG[layer.lk.img], st.x, L.pivotX, st.y, L.top, L.k, layer.lk.flip, st.alpha * a, clamp(st.vel / 900, -.12, .12), sway, .01 * Math.sin(t * 2) + st.mouth * .008);
