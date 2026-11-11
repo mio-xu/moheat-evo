@@ -5,6 +5,14 @@
 .btn.primary { background: linear-gradient(135deg, #d9702b, #ffc060); }
 .subs .who.wB { color: #ffd08a; } .subs .who.wY { color: #d6dcff; }
 #lanternCtl .ch { min-width: 11cqw; min-height: 44px; }
+/* each button where it points (critic 2026-11-11: the row sat on Bon-chan's body): Left / Right at the side edges, Behind at the top,
+   Go away! under Right — nothing over Bon-chan in the middle. Just listen: no buttons (the lantern turns by itself, its glow shows where). */
+#lanternCtl { top: 0; right: 0; bottom: 0; left: 0; width: auto; height: auto; max-width: none; transform: none; display: block; pointer-events: none; }
+#lanternCtl.show { transform: none; pointer-events: none; }
+#lanternCtl .ch { position: absolute; pointer-events: auto; }
+#lanternCtl [data-k=left] { left: 2.5cqw; top: 46%; } #lanternCtl [data-k=right] { right: 2.5cqw; top: 46%; }
+#lanternCtl [data-k=up] { left: 50%; top: 2.5cqw; transform: translateX(-50%); } #lanternCtl [data-k=shoo] { right: 2.5cqw; top: calc(46% + 44px + 2cqw); }
+html[data-playmode=pure] #lanternCtl { display: none; }
 #sweets { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
 .sweet { position: absolute; width: max(44px, 5cqw); aspect-ratio: 1; margin: -2.5cqw 0 0 -2.5cqw; border-radius: 50%; border: 0; cursor: pointer; pointer-events: auto;
   background: radial-gradient(circle at 35% 30%, #fff5d0 0 10%, #ffb060 34%, #e0553b 72%); box-shadow: 0 0 1.4cqw rgba(255,180,90,.8); animation: sw-bob 1.2s ease-in-out infinite; touch-action: none; }
