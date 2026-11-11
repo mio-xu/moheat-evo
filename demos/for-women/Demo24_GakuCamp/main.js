@@ -41,7 +41,7 @@
   const fresh = () => ({ started: true, t: 0, clock: 0, view: 'live', pos: { az: 0, dist: 1 }, lv: 0, env: 0,
     fire: .32, fireBase: .32, wind: .4, shield: 0, snow: 0, blanket: 0, mug: 0, imo: 0, fade: 0, viewers: CH.viewers });
   let S = { started: false, t: 0 }, mode = 'title';   // title | live | ended
-  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.2; S.step = i; $('steps').innerHTML = CH.steps.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[0]} · <small>${s[1]}</small></li>`).join(''); }
+  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.5; S.step = i; $('steps').innerHTML = CH.steps.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[0]} · <small>${s[1]}</small></li>`).join(''); }
 
   // ---------------------------------------------------------------- subtitles + his voice
   const subJa = $('subJa'), subEn = $('subEn'), subs = $('subs');
@@ -135,6 +135,10 @@
     react(['照れてる', '無自覚かわいい', 'はーい焚き火見ます🔥'], 3);
     const hi = await comment('ガクにあいさつしよう', 'Say hi to Gaku', [['はじめまして！', 'First time here!'], ['こんばんは〜', 'Good evening~']]);
     await sleep(.6); await say(hi ? 'g04b' : 'g04a');
+    // snow slides off the pine branch over the fire on your RIGHT: a cold spray on the right ear for a moment (the fire warms it again)
+    await sleep(.8); SND.fx.cloth(1.3, 1.4, .9); S.clump = S.clock;
+    for (let i = 0; i < 90; i++) parts.push({ k: 'n', x: W * rnd(.56, .72), y: -rnd(10, 300), vx: rnd(-20, 20), vy: rnd(180, 340), r: rnd(2.5, 7), life: 0, max: 6 });   // the pines right of him, left of the chat column
+    react(['雪落ちた！', 'わっ', '右つめた', '❄❄'], 2); await sleep(2.6); guard(my);
 
     // the campfire (right ear warm), the lake wind (left ear cool). Every cut is a go(transition, view): with video it waits for the
     // current loop to end, plays the 4 s transition, then continues; `onStart` times the sounds to the transition (stills: at once).
@@ -150,6 +154,8 @@
     const cold = await comment('ガクにこたえよう', 'Answer Gaku', [['さむい…', "I'm cold…"], ['あったかい', "I'm warm"]]);
     await sleep(.6); await say(cold ? 'g08b' : 'g08a');
     react(['左から風の音', 'ひだり寒い…', 'wind 🌬'], 3);
+    // a strong gust off the lake sweeps across you, left → right, and blows the fire's warmth away for a moment (the embers streak sideways)
+    await sleep(.6); S.sweep = S.clock; lakeLoop?.set(.6); setTimeout(() => lakeLoop?.set(S.wind > .4 ? .32 : .2), 2600); await sleep(3); guard(my);
 
     // the windbreak: he sits down on your left — left cool fades, his voice warms it
     setStep(2); await say('g09', .3);
@@ -244,7 +250,11 @@
     if (!S.started) return out;
     const P = S.pos;
     if (talking) add(P.az, 'h', (.1 + .8 * S.henv) * (P.dist < .15 ? 1 : P.dist <= .3 ? .6 : .28) * (Math.abs(P.az) < .5 ? .5 : 1), '💬');   // a voice is warm
-    add(.9, 'h', S.fire * (1 - .5 * S.blanket), '🔥');                                                     // the campfire ~1 m to the right
+    const env = (t0, dur) => (t0 == null ? 0 : Math.max(0, Math.sin(Math.PI * Math.min(1, (S.clock - t0) / dur))) * (S.clock - t0 < dur ? 1 : 0));
+    const sw = env(S.sweep, 2.6), cl = env(S.clump, 2.2);
+    add(.9, 'h', S.fire * (1 - .5 * S.blanket) * (1 - .55 * sw), '🔥');                               // (the gust blows its warmth away for a moment)
+    if (sw > .01) add(-1.4 + 2.8 * Math.min(1, (S.clock - S.sweep) / 2.6), 'c', .6 * sw, '🌬');       // the lake gust sweeping left → right
+    if (cl > .01) add(1.35, 'c', .55 * cl, '❄');                                                       // snow off the pine on your right                                                     // the campfire ~1 m to the right
     add(-1.35, 'c', S.wind * gust(S.t) * (1 - .85 * S.shield) * (1 - .9 * S.blanket), '🌬');             // lake wind, blocked by him / the blanket
     if (S.shield) add(-1.4, 'h', .2 * S.shield, '🧥');                                                    // his body right beside the mic
     if (S.snow) { add(-1.5, 'c', .12 * S.snow * (1 - S.blanket), '❄'); add(1.5, 'c', .12 * S.snow * (1 - S.blanket), '❄'); }
@@ -254,6 +264,7 @@
     return out;
   }
   const ear = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
+  const chOn = {}, chLast = { Lc: -9, Lh: -9, Rc: -9, Rh: -9 }, dom = { L: { s: '', t: -9 }, R: { s: '', t: -9 } };
   function thermal(dt) {
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
     for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
@@ -263,6 +274,19 @@
       const tau = rest ? .15 : target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
       ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
     }
+    // timing on each ear (guide §3 节奏, as shared/story.js): a channel that stopped does not come back for ~1 s, a mode does not start within
+    // 1.5 s of the other mode on that ear (both on = DUAL is fine; a fading other mode ≤ .1 is not), the dominant mode flips at most once per 1.5 s
+    const nowS = performance.now() / 1000;
+    for (const K in ear) {
+      const O = K[0] + (K[1] === 'c' ? 'h' : 'c');
+      if (ear[K] > .03 && !chOn[K] && (nowS - chLast[K] < 1.1 || (ear[O] <= .1 && nowS - chLast[O] < 1.5))) ear[K] = 0;
+    }
+    for (const e of ['L', 'R']) {
+      const h = ear[e + 'h'], c = ear[e + 'c'], s = h - c >= .12 ? 'H' : c - h >= .12 ? 'C' : '', st = dom[e];
+      if (!s || s === st.s) continue;
+      if (st.s && nowS - st.t < 1.5) { if (s === 'H') ear[e + 'h'] = c + .1; else ear[e + 'c'] = h + .1; } else { st.s = s; st.t = nowS; }
+    }
+    for (const K in ear) { chOn[K] = ear[K] > .03; if (chOn[K]) chLast[K] = nowS; }
     return { th: { ...ear }, src };
   }
 
@@ -337,10 +361,11 @@
     const sp = st && (LIVE() && window.MoHeatLayers.toFrame ? window.MoHeatLayers.toFrame('gaku_' + S.view, st[0] * W, st[1] * H) : [st[0] * W, st[1] * H]);
     const zc = /left|whisper|coffee|imo|blanket/.test(S.view) ? 1.025 : 1.012;
     if (st && (S.mug || S.imo) && Math.random() < dt * 9) parts.push({ k: 's', view: S.view, x: W / 2 + (sp[0] - W / 2) * zc + rnd(-50, 50), y: H / 2 + (sp[1] - H / 2) * zc, vx: rnd(-10, 10), vy: rnd(-55, -30), r: rnd(18, 34), life: 0, max: rnd(2, 3) });
+    if (S.sweep != null && S.clock - S.sweep < 2.2) for (let i = 0; i < 3; i++) parts.push({ k: 'n', x: rnd(-60, W * .3), y: rnd(H * .1, H * .95), vx: rnd(500, 850), vy: rnd(-20, 40), r: rnd(1.5, 4), life: 0, max: 2.5 });   // the gust lifts powder snow off the shore and drives it across the frame
     if (S.snow && Math.random() < dt * 40) parts.push({ k: 'n', x: rnd(0, W), y: -10, vx: rnd(-20, 10), vy: rnd(50, 110), r: rnd(1.5, 4), life: 0, max: 14 });
     // physics: the lake wind blows from your LEFT (→ right in the picture). Embers: the fire's lift fades (drag), the wind takes them;
     // steam: rises slower as it cools and drifts; snow: falls at its terminal speed, eases into the wind, flutters.
-    const windX = 70 * S.wind * gust(t);
+    const windX = 70 * S.wind * gust(t) + (S.sweep != null && S.clock - S.sweep < 2.6 ? 260 * Math.sin(Math.PI * (S.clock - S.sweep) / 2.6) : 0);   // + the gust
     for (const p of parts) {
       p.life += dt;
       if (p.k === 'k') { p.vy *= Math.exp(-dt * .9); p.vx += (windX - p.vx) * Math.min(1, dt * 1.2); }
