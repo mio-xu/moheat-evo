@@ -81,13 +81,15 @@
   }
   const BEDS = { gate: [['festival', 'night', -.8, 5, .25]], hall: [['room', 'room', 0, 4, .24]], room: [['room', 'room', 0, 4, .22], ['night', 'night', .9, 5, .18]], kura: [['room', 'room', 0, 3, .3]], yurari: [['night', 'night', 0, 5, .2]] };
   // the air of each place (real, visible): summer night outside; the old house is chilly (ghosts), the andon lamp and the draught have sides, the storehouse is cold
-  const AIR = { gate: { night: ['warm', 0, .12], breeze: ['cool', -40, .16] }, hall: { draught: ['cool', 0, .2] }, room: { draught: ['cool', -70, .22], andon: ['warm', 75, .2] }, kura: { cellar: ['cool', 0, .28] }, yurari: { night: ['warm', 0, .12], chill: ['cool', -60, .2] } };
+  // (critic 2026-11-11: at rest you feel only the lantern, the same on both ears; cold comes only from the side a ghost — or the false-alarm
+  // draught — comes from. The places' own air is gone from the thermal; the sounds stay. Yurari's chill is her, a ghost, on your left.)
+  const AIR = { yurari: { chill: ['cool', -60, .2] } };
   const air = (E, id) => { for (const n of ['night', 'breeze', 'draught', 'andon', 'cellar', 'chill']) E.amb(n, 'cool', 0, 0); for (const [n, [k, az, l]] of Object.entries(AIR[id] || {})) E.amb(n, k, az, l); };
   const beds = (E, k) => { const want = BEDS[k] || [], names = new Set(want.map((b) => b[0])); for (const [n, L] of Object.entries(E.A.loops)) if (n.startsWith('bg:') && !names.has(n.slice(3))) L.set(0, .6); for (const [n, kind, az, d, g] of want) { const L = E.A.loop('bg:' + n, kind, az, d); L?.at(az, d, .4); L?.set(g, .9); } };
   const API = S.run({
     ns: 'LANTERN', data: { ...Lines, steps: Lines.stages.map((s) => ({ id: s.id, ja: s.ja, en: s.en, zh: s.zh, beats: [] })) }, voice: window.LANTERN_VOICE, bg: '#100f1e', firstView: 'gate_B',
     preload: ['gate_B', 'gate_ghost', 'hall_B', 'hall_ghosts', 'hall_hit', 'room_B', 'room_behind', 'kura_B', 'kura_win', 'yurari_far', 'yurari_ear', 'yurari_happy', 'finale'],
-    plan: { events: {}, smoothing: {}, voice: { az: { near: 0, left: -60, left_ear: -90, right_ear: 90 }, distance: { near: .6, left: .28, left_ear: 1, right_ear: 1 }, front_split: 1 } },
+    plan: { events: {}, smoothing: {}, voice: { az: { near: 0, left: -60, left_ear: -90, right_ear: 90 }, distance: { near: .15, left: .28, left_ear: 1, right_ear: 1 }, front_split: 1 } },   // Bon-chan is the lantern itself: his voice adds only a little to its warmth
     voiceKind: (w) => (w === 'Y' ? 'cool' : 'warm'),       // Yurari is chilly (special setting, y02)
     script: game,
     onBegin: (E) => { E0 = E; Object.assign(G, { aim: null, cur: null, hearts: 3, shooed: 0, sweets: 0, touched: 0, ctl: false, dark: false, fw: 0 }); ctl.classList.remove('show'); },
@@ -95,7 +97,7 @@
     endText: () => (G.shooed ? `おばけを ${G.shooed} ひき おいはらった · ${G.shooed} ghosts chased away` : ''),
     sources(add, E) {
       const c = G.cur; if (c && !c.flee) add(c.az, 'cool', .55 * clamp(c.k));
-      add(G.aim === 'left' ? -90 : G.aim === 'right' ? 90 : G.aim === 'up' ? 0 : 60, 'warm', G.aim === 'up' ? .4 : G.aim ? .5 : .3);   // the candle in your right hand; turned or held up when you aim it
+      add(G.aim === 'left' ? -90 : G.aim === 'right' ? 90 : 0, 'warm', G.aim === 'up' ? .45 : G.aim ? .6 : .35);   // the candle lantern held in front of you (both ears the same); turned to a side or held up when you aim it at a ghost
     },
     update(dt, E) {
       const c = G.cur; if (!c) return;
@@ -135,7 +137,7 @@
   if (window.MoHeatShell) window.MoHeatShell.autoplay = (H2) => {
     const sw = document.querySelector('#sweets .sweet');
     if (sw) { H2.run(() => H2.tap(sw)); return true; }
-    if (G.ctl) { const c = G.cur, want = c && (c.side === 'behind' ? 'up' : c.side), b = c && !c.flee && G.aim !== want && c.k > .2 ? ctl.querySelector(`[data-k="${want}"]`) : null; if (b) { H2.run(() => H2.tap(b)); } return true; }
+    if (G.ctl) { const c = G.cur, want = c && (c.side === 'behind' ? 'up' : c.side); if (c && !c.flee && G.aim !== want && c.k > .5 && (G.shooed + G.touched) % 5 !== 2) aim(want); return true; }   // the buttons are hidden in Just listen: the lantern turns by itself (its glow shows it), once the ghost's cold is clearly felt (k .5 ≈ cold .27, ~1.7 s); every 5th ghost gets through, as in the engine's own autoplay
     return false;
   };
 })();
