@@ -44,9 +44,9 @@
     { cat: 'nobunaga-suntory', dir: 'Demo07_KyotoIzakaya', ja: '信長と家康、京都の居酒屋へ', en: 'Two Warlords in a Kyoto Izakaya', zh: '信长与家康，京都居酒屋之夜', ko: '노부나가와 이에야스, 교토의 이자카야로', series: 'nobunaga', part: 3, cast: 'nobunaga+ieyasu', group: 4 },
     { cat: 'nobunaga-suntory', dir: 'Demo08_YamazakiDistillery', ja: '信長と家康、山崎蒸溜所へ', en: 'Two Warlords at the Yamazaki Distillery', zh: '信长与家康，探访山崎蒸馏所', ko: '노부나가와 이에야스, 야마자키 증류소로', series: 'nobunaga', part: 4, cast: 'nobunaga+ieyasu', group: 4 },
     { cat: 'nobunaga-suntory', dir: 'Demo09_SengokuBanquet', ja: '安土最後の酒宴', en: 'The Last Banquet at Azuchi', zh: '安土最后的酒宴', ko: '아즈치의 마지막 연회', series: 'nobunaga', part: 5, cast: 'nobunaga+ieyasu', group: 4 },
-    { cat: 'nobunaga-suntory', dir: 'Demo23_NobunagaTalk', ja: '信長と、語らう', en: 'Talk with Nobunaga', zh: '与信长对谈', ko: '노부나가와 이야기하다', series: 'talk', cast: 'nobunaga', group: 4 },
-    { cat: 'nobunaga-suntory', dir: 'Demo41_IeyasuTalk', ja: '家康と、語らう', en: 'Talk with Ieyasu', zh: '与家康对谈', ko: '이에야스와 이야기하다', series: 'talk', cast: 'ieyasu', group: 4 },
-    { cat: 'nobunaga-suntory', dir: 'Demo42_SengokuRoundtable', ja: '信長と家康の、座談会', en: 'Round Table with Nobunaga & Ieyasu', zh: '信长与家康的座谈会', ko: '노부나가와 이에야스의 좌담회', series: 'talk', cast: 'nobunaga+ieyasu', group: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo23_NobunagaTalk', ja: '信長と、語らう', en: 'Talk with Nobunaga', zh: '与信长对谈', ko: '노부나가와 이야기하다', series: 'talk', part: 1, cast: 'nobunaga', group: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo41_IeyasuTalk', ja: '家康と、語らう', en: 'Talk with Ieyasu', zh: '与家康对谈', ko: '이에야스와 이야기하다', series: 'talk', part: 2, cast: 'ieyasu', group: 4 },
+    { cat: 'nobunaga-suntory', dir: 'Demo42_SengokuRoundtable', ja: '信長と家康の、座談会', en: 'Round Table with Nobunaga & Ieyasu', zh: '信长与家康的座谈会', ko: '노부나가와 이에야스의 좌담회', series: 'talk', part: 3, cast: 'nobunaga+ieyasu', group: 4 },
   ];
   // ---------------------------------------------------------------- the displayed order (user 2026-11-08: 菜单按类别 → 系列自动排序; guide §7.3 2d)
   // category (all ages → healing → for him → for her → Nobunaga) → series stay together, parts in order → series / single demos by the
@@ -68,7 +68,8 @@
         u.sort((a, b) => (a.part || 99) - (b.part || 99) || sc(b) - sc(a) || num(a) - num(b));
         u.score = Math.max(...u.map(sc)); u.num = Math.min(...u.map(num)); u.cast = new Set(u.flatMap((d) => (d.cast || d.dir).split('+')));
       }
-      const rest = units.sort((a, b) => b.score - a.score || a.num - b.num);
+      const AFTER = { talk: 1 };   // story order beats the score: the Nobunaga films (Ep 1–5) first, then Talk → Talk → Round table (user 2026-11-11)
+      const rest = units.sort((a, b) => (AFTER[a[0].series] || 0) - (AFTER[b[0].series] || 0) || b.score - a.score || a.num - b.num);
       while (rest.length) {   // same main character next to each other: a unit pulls the next ones that share a character
         const u = rest.shift(); out.push(...u);
         for (let k = 0; k < rest.length; k++) if ([...rest[k].cast].some((c) => u.cast.has(c))) { out.push(...rest[k]); rest.splice(k--, 1); }
