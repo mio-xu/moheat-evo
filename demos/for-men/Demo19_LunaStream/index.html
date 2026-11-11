@@ -81,13 +81,21 @@
 
   <script src="../../../device.js?v=56168264"></script>
   <script src="lines.js?v=1"></script>
-  <script src="audio.js?v=50134dee"></script>
+  <script src="../../shared/engine/core.js?v=5246c5ad"></script>
+  <script src="../../shared/engine/audio.js?v=9c404633"></script>
+  <script src="audio.js?v=90ac0be6"></script>
   <!-- layered art (DEMO_DESIGN_GUIDE §6 standard, as Demo27): shared/layers.js draws the live composite wherever main.js draws a still -->
   <script>window.MoHeatLayers = { level: () => window.LUNA?.S?.env || 0, raw: () => window.LUNA?.S?.lv || 0, current: () => window.LUNA?.S?.view || 'counter' };</script>
   <script src="media/layers.js?v=85e4c973"></script>
   <script src="../../shared/layers.js?v=f71de857"></script>
   <script src="../../shared/shell.js?v=5de72a85"></script>
-  <script src="main.js?v=ee6021f7"></script>
+  <!-- the engine (demos/shared/engine, docs/engine): main.js holds only this demo's story, sounds' timing, thermal sources and overlays -->
+  <script src="../../shared/engine/thermal.js?v=f97083a3"></script>
+  <script src="../../shared/engine/panel.js?v=2db7767e"></script>
+  <script src="../../shared/engine/stage.js?v=5ba6bc87"></script>
+  <script src="../../shared/engine/play.js?v=9b9784a9"></script>
+  <script src="../../shared/engine/app.js?v=7141367b"></script>
+  <script src="main.js?v=7cfe271d"></script>
   <script src="../../shared/voice.js?v=193765ef"></script>
   <script src="../../shared/nav.js?v=c9297b83"></script>
 </body>
