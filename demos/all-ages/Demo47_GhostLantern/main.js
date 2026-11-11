@@ -11,7 +11,7 @@
   const stage = document.getElementById('stage');
   // the three lantern buttons + 「あっちいけ〜！」 (say it): plain text, one row above the subtitles; judged by shared/voice.js
   const ctl = document.createElement('div'); ctl.id = 'lanternCtl'; ctl.className = 'choices';
-  ctl.innerHTML = [['left', 'ひだり', 'Left', 'ひだり|左|left|左边'], ['up', 'うしろ', 'Behind', 'うしろ|後ろ|たかく|上|behind|back|up|后面|上面'], ['right', 'みぎ', 'Right', 'みぎ|右|right|右边'], ['shoo', 'あっちいけ！', 'Go away!', 'あっちいけ|go away|shoo|走开']]
+  ctl.innerHTML = [['left', 'ひだり', 'Left', 'ひだり|左|left|左边|왼쪽|왼'], ['up', 'うしろ', 'Behind', 'うしろ|後ろ|たかく|上|behind|back|up|后面|上面|뒤|뒤쪽|위'], ['right', 'みぎ', 'Right', 'みぎ|右|right|右边|오른쪽|오른'], ['shoo', 'あっちいけ！', 'Go away!', 'あっちいけ|go away|shoo|走开|저리 가|저리가']]
     .map(([k, ja, en, v]) => `<button class="ch" data-k="${k}" data-voice="${v}"><b>${ja}</b><span>${en}</span></button>`).join('');
   stage.appendChild(ctl);
   function aim(k) {
@@ -122,7 +122,7 @@
       if (E.S.mode === 'story' && G.ctl) for (let i = 0; i < 3; i++) { const x = 70 + i * 62, y = 74; ctx.save(); ctx.fillStyle = i < G.hearts ? '#ff7a8f' : 'rgba(255,255,255,.22)'; ctx.translate(x, y); ctx.scale(1.15, 1.15); ctx.beginPath(); ctx.moveTo(0, 12); ctx.bezierCurveTo(-24, -8, -12, -24, 0, -12); ctx.bezierCurveTo(12, -24, 24, -8, 0, 12); ctx.fill(); ctx.restore(); }
     },
   });
-  for (const [ja, z] of [['ひだり', '左'], ['うしろ', '后面'], ['みぎ', '右'], ['あっちいけ！', '走开！']]) API.E.zh(ja, z);
+  for (const [ja, z] of [['ひだり', '左边'], ['うしろ', '后面'], ['みぎ', '右边'], ['あっちいけ！', '走开！']]) API.E.zh(ja, z);
   for (let n = 1; n <= 30; n++) API.E.zh(`おばけを ${n} ひき おいはらった`, `赶走了 ${n} 只鬼`);
   let fwT = 0;
   function fireworks(E, dt) {

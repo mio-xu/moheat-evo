@@ -51,9 +51,9 @@ window.MOHEAT_L10N = {
    "Live (DUAL): a ghost chills the ear on its side before you see it; turn the warm lantern that way and it flees. From behind, both ears go cold; in the dark storehouse your ears are all you have. Yurari whispers cold.": "实时（DUAL）：鬼靠近时，它那一侧的耳朵先变凉；把温暖的灯笼转向那边，鬼就逃走了。从背后来时两只耳朵一起变凉，黑暗的土仓里全靠耳朵判断方向；悠悠的耳语是凉的。",
    "Original characters · voices ElevenLabs · art OpenAI gpt-image · layered stills": "原创角色 · 配音 ElevenLabs · 美术 OpenAI gpt-image · 分层静帧",
    "ASMR · Game": "ASMR · 游戏",
-   "ひだり": "左",
+   "ひだり": "左边",
    "うしろ": "后面",
-   "みぎ": "右",
+   "みぎ": "右边",
    "あっちいけ！": "走开！"
   },
   "ja": {
