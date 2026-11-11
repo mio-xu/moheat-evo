@@ -92,7 +92,7 @@ const readOutput = () => {
     e.cup.style.filter = a ? `drop-shadow(0 0 ${4 + a / 8}px rgba(${rgb},${.4 + a / 160}))` : '';
   });
   const cmd = doc && doc.getElementById('cmd');
-  tdCmd.textContent = cmd ? cmd.textContent : 'stop';
+  const c = cmd ? cmd.textContent.trim() : ''; tdCmd.textContent = !c || /^stop$/i.test(c) ? 'Idle' : c;   // "stop" means nothing is on: say so in words
   requestAnimationFrame(readOutput);
 };
 readOutput();
@@ -212,3 +212,16 @@ document.querySelectorAll('.more-btn').forEach((btn) => {
   set(false);
   btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
 });
+
+// the hero film: our own big play button on a text-free poster; the browser controls only once it plays (QA 2026-11-11)
+(() => {
+  const box = document.querySelector('.campaign-video'), v = box?.querySelector('video'), b = box?.querySelector('.film-play');
+  if (!v || !b) return;
+  b.addEventListener('click', () => { v.controls = true; box.classList.add('is-playing'); v.play().catch(() => {}); });
+  v.addEventListener('play', () => { v.controls = true; box.classList.add('is-playing'); });
+})();
+// the fixed bar: see-through over the hero, a solid blurred bar once the page scrolls (no dark smear over light sections)
+(() => {
+  const bar = document.querySelector('.nav-wrap'); if (!bar) return;
+  const on = () => bar.classList.toggle('is-scrolled', scrollY > 24); addEventListener('scroll', on, { passive: true }); on();
+})();
