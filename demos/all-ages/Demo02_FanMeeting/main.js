@@ -51,7 +51,7 @@ const IMG = {};
 for (const f of ART) { const im = new Image(); im.src = `media/art/${f}.webp`; IMG[`art.${f}`] = im; }
 const ok = (key) => IMG[key] && IMG[key].complete && IMG[key].naturalWidth > 0;
 const FACING_R = new Set(['A_pose_side', 'A_pose_run', 'A_pose_fan', 'A_pose_whisper', 'A_pose_peek', 'A_ear', 'A_ear_blow', 'A_ear_fan', 'A_ear_happy']);
-const PROP_POSES = new Set(['fan', 'drink', 'dance', 'bow', 'bye', 'wave', 'peek']);   // always shown full-body (prop / gesture)
+const PROP_POSES = new Set(['fan', 'drink', 'dance', 'bow', 'bye', 'wave']);   // always shown full-body (prop / gesture); 'peek' left out: the stage has no pillar / curtain, so she held a thin white line mid-stage (critic 2026-11-11) — that cue uses the front pose
 const xOf = (az) => W / 2 + Math.sin(rad(clamp(az, -118, 118))) * W * .43 + (Math.abs(az) > 90 ? Math.sign(az) * (Math.abs(az) - 90) * 9 : 0);
 const PAL = { A: { glow: '255,150,210' } };
 
