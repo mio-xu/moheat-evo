@@ -346,20 +346,17 @@ let SEAM_CV = null;
 function drawSeam(c, s, t, tv) {   // the gap between the two cabins: a soft, wide frosted-air seam (no hard pole), ice light left, fire light right
   if (s < .5) return;
   const k = s / SPLIT, x0 = W / 2 - s - 110, x1 = W / 2 + s + 110;
-  c.save(); c.beginPath(); c.rect(W / 2 - s - 1, 0, 2 * s + 2, H); c.clip();   // through the gap: the tunnel walls rush past (motion-blurred)
-  c.filter = 'blur(5px)';
-  for (const [img, xa, xb] of [['tunnel_ice_wall', W / 2 - s - 1, W / 2], ['tunnel_lava_wall', W / 2, W / 2 + s + 1]]) {
-    if (!ok(img)) continue; const off = (posAt(tv) * V * 1.5) % 1024;
-    c.save(); c.beginPath(); c.rect(xa, 0, xb - xa, H); c.clip();
-    for (let y = -off * 1.05; y < H; y += 1024 * 1.05) c.drawImage(IMG[img], 300, 0, 300, 1024, xa - 40, y, (xb - xa) + 80, 1024 * 1.05);
-    c.restore();
-  }
-  c.filter = 'none'; c.fillStyle = 'rgba(12,8,22,.45)'; c.fillRect(W / 2 - s - 1, 0, 2 * s + 2, H); c.restore();   // a dim gap, lit by the walls
+  // no hole between the cabins (critic 2026-11-11: it read as a blue divider pole): the car's own middle strip fills the gap, and a soft
+  // band of light (ice blue left, fire orange right, white in the middle) glows over it, fading out ±(gap + 140 px) and at ceiling / floor
+  const gx0 = W / 2 - s - 1, gw = 2 * s + 2; c.drawImage(car, gx0, 0, gw, H, gx0, 0, gw, H);
+  { c.save(); c.globalCompositeOperation = 'screen'; const R = s + 140, lg = c.createLinearGradient(W / 2 - R, 0, W / 2 + R, 0);
+    lg.addColorStop(0, 'rgba(120,190,255,0)'); lg.addColorStop(.38, `rgba(150,205,255,${.3 * k})`); lg.addColorStop(.5, `rgba(235,240,255,${.38 * k})`); lg.addColorStop(.62, `rgba(255,170,100,${.3 * k})`); lg.addColorStop(1, 'rgba(255,150,80,0)');
+    c.fillStyle = lg; c.fillRect(W / 2 - R, 0, 2 * R, H); c.restore(); }
   const sc = SEAM_CV || (SEAM_CV = document.createElement('canvas')); sc.width = Math.ceil(x1 - x0); sc.height = 270; const q = sc.getContext('2d');
   c.save();
   const g = q.createLinearGradient(0, 0, sc.width, 0);
-  g.addColorStop(0, 'rgba(150,215,255,0)'); g.addColorStop(.32, `rgba(170,225,255,${.22 * k})`); g.addColorStop(.5, `rgba(240,238,255,${.16 * k})`);
-  g.addColorStop(.68, `rgba(255,175,110,${.22 * k})`); g.addColorStop(1, 'rgba(255,160,90,0)');
+  g.addColorStop(0, 'rgba(150,215,255,0)'); g.addColorStop(.36, `rgba(170,225,255,${.34 * k})`); g.addColorStop(.5, `rgba(250,246,255,${.42 * k})`);
+  g.addColorStop(.64, `rgba(255,175,110,${.34 * k})`); g.addColorStop(1, 'rgba(255,160,90,0)');   // a bright band of light over the gap's edges (no seam)
   q.fillStyle = g; q.fillRect(0, 0, sc.width, sc.height);
   const v = q.createLinearGradient(0, 0, 0, sc.height); v.addColorStop(0, 'rgba(0,0,0,.6)'); v.addColorStop(.25, 'rgba(0,0,0,0)'); v.addColorStop(.8, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.5)');
   q.globalCompositeOperation = 'destination-out'; q.fillStyle = v; q.fillRect(0, 0, sc.width, sc.height);   // the glow fades out at the ceiling and the floor
