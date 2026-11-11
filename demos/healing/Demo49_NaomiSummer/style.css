@@ -3,3 +3,5 @@
 .bar { background: #120f0a; }
 .brand span { color: #e8c88f; }
 .btn.primary { background: linear-gradient(135deg, #8a6a3e, #f0c070); }
+/* the answer buttons (and the Just-listen hand that taps them) stay at the lower left, off Naomi's face: she lies in the middle of every view (critic 2026-11-11) */
+#act.act { left: 15%; }

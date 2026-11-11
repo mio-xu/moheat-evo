@@ -121,7 +121,8 @@
   if (window.MoHeatShell) window.MoHeatShell.autoplay = (H2) => {
     const cv = document.getElementById('scene'), r = E0?.S?.started && rect(E0.S.view); if (!r) return false;
     const btn = () => document.querySelector('#act .act-btn:not(.hold)');
-    if (gate && btn()) { const cx = (r[0] + r[2]) / 2, w = (r[2] - r[0]) * .32, cy = r[1] + (r[3] - r[1]) * .4; H2.run(async () => { await H2.drag(cv, [0, 1, 2, 3, 4, 5, 6].map((i) => [cx + (i % 2 ? w : -w), cy + (i % 3) * .01]), 3.2); if (gate) btn()?.click(); }); return true; }
+    // the hand strokes her back / side, never her face (critic 2026-11-11: the circle sat on her eye): the gate's own back point, else the rear of her body
+    if (gate && btn()) { const back = gate.hx < .6, cx = back ? gate.hx : r[0] + (r[2] - r[0]) * .78, cy = back ? gate.hy : r[1] + (r[3] - r[1]) * .72, w = (r[2] - r[0]) * (back ? .12 : .08); H2.run(async () => { await H2.drag(cv, [0, 1, 2, 3, 4, 5, 6].map((i) => [cx + (i % 2 ? w : -w), cy + (i % 3) * .01]), 3.2); if (gate) btn()?.click(); }); return true; }
     if (E0.S.view === 'day_bat' && btn()) { H2.run(async () => { await H2.drag(cv, [[.72, .34], [.8, .42], [.72, .36], [.82, .4]], 1.4); }); return true; }
     return false;
   };
