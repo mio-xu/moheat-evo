@@ -37,7 +37,7 @@
     disconnect: { en: 'Disconnect', ja: '切断', zh: '断开', ko: '연결 해제' },
     side: { en: 'Info panel', ja: '情報パネル', zh: '信息面板', ko: '정보 패널' }, sideHint: { en: 'Sound map and thermal meters', ja: '音の位置と温冷メーター', zh: '声音方位与温冷表', ko: '소리 위치와 온냉 미터' },
     lr: { en: 'Left / right check', ja: '左右チェック', zh: '左右声道检查', ko: '좌우 확인' }, thermo: { en: 'Thermal check', ja: '温冷チェック', zh: '温冷检查', ko: '온냉 확인' }, run: { en: 'Test', ja: 'テスト', zh: '测试', ko: '테스트' },
-    credits: { en: 'Credits', ja: 'クレジット', zh: '制作名单', ko: '크레디트' },
+    credits: { en: 'Credits', ja: 'クレジット', zh: '制作名单', ko: '크레디트' }, open: { en: 'Open', ja: '開く', zh: '打开', ko: '열기' },
     endings: { en: 'Endings', ja: 'エンディング', zh: '结局', ko: '엔딩' }, chapter: { en: 'Chapter', ja: 'チャプター', zh: '章节', ko: '챕터' },
     locked: { en: 'Not reached yet', ja: 'まだ到達していません', zh: '尚未到达', ko: '아직 도달하지 않았어요' }, resume: { en: 'Resume', ja: '再開', zh: '继续', ko: '계속' },
     interHint: { en: 'Answer, tap and hold — by voice too', ja: '答える・タップ・長押し — 声でも', zh: '回答、点按、长按 — 也可用声音', ko: '대답·탭·길게 누르기 — 목소리로도' },
@@ -150,7 +150,7 @@
             ${d.serial === false ? '' : `<button type="button" class="u2-btn2" data-k="connect">${t(d.connected ? 'disconnect' : 'connect')}</button>`}</div>
           <div class="u2-line"><span>${t('lr')}</span><button type="button" class="u2-btn2" data-k="lr">${t('run')}</button></div>
           <div class="u2-line"><span>${t('thermo')}</span><button type="button" class="u2-btn2" data-k="thermo" ${d.connected ? '' : 'disabled'}>${t('run')}</button></div>
-          ${A.creditsUrl ? `<div class="u2-line"><span>${t('credits')}</span><a class="u2-btn2" href="${esc(A.creditsUrl)}" target="_blank" rel="noopener">↗</a></div>` : ''}`;
+          ${A.creditsUrl ? `<div class="u2-line"><span>${t('credits')}</span><a class="u2-btn2" href="${esc(A.creditsUrl)}" target="_blank" rel="noopener">${t('open')}</a></div>` : ''}`;
       }
       if (k === 'opt') { const o = [...(A.options?.() || []), ...selectors()].find((x) => x.key === optKey); if (!o) return;
         pops.opt.innerHTML = `<h3>${esc(pickL(o.label))}</h3><div class="u2-chips u2-wrap">${o.items.map((it) =>

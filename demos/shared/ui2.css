@@ -128,6 +128,7 @@ html.ui2.mfs .u2-bar { border-radius: 0; height: calc(clamp(44px, 4.2vw, 64px) +
 .u2-heat-range::-webkit-slider-runnable-track { background: linear-gradient(90deg, var(--u2-cool), var(--u2-warm)); opacity: .9; }
 .u2-val { min-width: 3.2em; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
 .u2-btn2 { height: 36px; padding: 0 .9em; border-radius: 8px; border: 1px solid var(--u2-line); background: rgba(255, 255, 255, .1); font-weight: 600; font-size: var(--u2-fs-s); white-space: nowrap; }
+a.u2-btn2 { display: inline-flex; align-items: center; color: inherit; text-decoration: none; box-sizing: border-box; }   /* Credits: the same button as Test (a bare link showed a blue underlined ↗ on phones) */
 .u2-dot { width: 9px; height: 9px; border-radius: 50%; background: #8a8496; display: inline-block; margin-right: .45em; }
 .u2-dot.ok { background: #6fe39a; }
 .u2-set { width: clamp(280px, 28cqw, 400px); max-height: calc(100cqw * 9 / 16 - 2cqw); overflow-y: auto; scrollbar-width: thin; }

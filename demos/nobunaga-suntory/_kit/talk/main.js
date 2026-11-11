@@ -281,7 +281,7 @@
   if (window.MoHeatShell) {
     MoHeatShell.chapters = [{ label: 'Greeting', ja: 'ごあいさつ', en: 'Greeting', zh: '问候', ko: '인사' }, { label: 'Talk', ja: '語らい', en: 'Talk', zh: '对谈', ko: '이야기' }, { label: 'Farewell', ja: 'おわかれ', en: 'Farewell', zh: '告别', ko: '작별' }];
     MoHeatShell.current = () => (!S ? 0 : S.closing || S.done || S.phase === 'end' ? 2 : S.talkStart || S.silent || logEl.querySelector('li.you') ? 1 : S.phase === 'listen' ? 1 : 0);
-    MoHeatShell.seek = (i) => { if (i === 2) $('endBtn').click(); };
+    MoHeatShell.seek = (i) => { if (i === 2) $('endBtn').click(); else if (i < MoHeatShell.current()) $('startBtn').click(); };   // back = start again from the greeting (coordinator 2026-11-11: a simple restart)
   }
   $('endBtn').addEventListener('click', () => {   // you leave: they say goodbye if they can, otherwise stop at once
     if (!S || S.done) return;
