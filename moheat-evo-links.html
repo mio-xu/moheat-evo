@@ -74,15 +74,16 @@ footer p { margin: 0; }
   .col2 { justify-content: center; gap: 10px; }
 }
 @media (min-width: 900px) and (min-height: 600px) {
-  .wrap { max-width: 1180px; min-height: 0; padding-top: 20px; padding-bottom: 20px; }
+  .wrap { max-width: 1100px; min-height: 0; padding-top: 20px; padding-bottom: 20px; }   /* desktop: wide enough, text no smaller than 14 px (critic 2026-11-11) */
   .cols { grid-template-columns: 1.3fr 1fr; align-items: center; gap: 44px; } .col { gap: 14px; } .col2 { gap: 18px; }
   .devices { flex: none; }
   .devices figure { aspect-ratio: 1; }
-  h1 { font-size: 52px; } .intro { font-size: 17px; }
+  h1 { font-size: clamp(44px, 4vw, 60px); } .intro { font-size: clamp(16px, 1.3vw, 19px); }
+  .devices figcaption { font-size: clamp(13.5px, 1vw, 15px); } .devices b { font-size: clamp(16px, 1.25vw, 18px); }
   .langs button { padding: 0 13px; font-size: 14px; }
-  .rule { padding: 11px 12px; gap: 4px; } .rule svg { width: 26px; height: 26px; } .rule b { font-size: 15px; } .rule span { font-size: 13px; }
-  .links a { min-height: 56px; font-size: 15px; } .links a:nth-child(-n+2) { font-size: 16px; }
-  .collab { font-size: 15px; } footer { font-size: 12.5px; }
+  .rule { padding: 11px 12px; gap: 4px; } .rule svg { width: 26px; height: 26px; } .rule b { font-size: clamp(15px, 1.2vw, 17px); } .rule span { font-size: clamp(14px, 1vw, 15px); }
+  .links a { min-height: 56px; font-size: clamp(15px, 1.15vw, 17px); } .links a:nth-child(-n+2) { font-size: clamp(16px, 1.25vw, 18px); }
+  .collab { font-size: clamp(15px, 1.15vw, 17px); } footer { font-size: clamp(14px, 1vw, 15px); }
 }
 </style>
 </head>
@@ -118,8 +119,8 @@ footer p { margin: 0; }
       intro: 'Non-contact thermal headphones: warmth and coolness around your ears, in sync with music, stories and games.',
       warm: 'Warmth', warmS: 'LED light', cool: 'Coolness', coolS: 'Ethanol mist',
       alt1: 'Inside the MoHeat Evo ear cup, its LEDs lit', alt2: 'Inside the MoHeat Evo ear cup, a fine mist rising from the nozzle',
-      r1: 'Please try it', r1s: 'when staff are here',
-      r2: 'Please do not touch', r2s: 'when no staff are here',
+      r1: 'Try it', r1s: 'when staff are present',
+      r2: 'Please do not touch', r2s: 'when no staff are present',
       r3: 'Photos OK', r3s: 'Sharing welcome',
       site: 'Project site', demo: 'Try the demos', li: 'LinkedIn', me: 'Personal site', mail: 'Email',
       collab: 'Want to create with temperature? Creators, companies and researchers are welcome to get in touch.',
@@ -145,7 +146,7 @@ footer p { margin: 0; }
       r1: '欢迎体验', r1s: '有工作人员时',
       r2: '请勿触摸', r2s: '没有工作人员时',
       r3: '可以拍照', r3s: '欢迎分享',
-      site: '项目网站', demo: '体验 Demo', li: 'LinkedIn', me: '个人网站', mail: '邮箱',
+      site: '项目网站', demo: '体验演示', li: 'LinkedIn', me: '个人网站', mail: '邮箱',
       collab: '欢迎内容创作者、企业和研究机构与我们合作，一起创作带有温度的内容。',
       by: 'XU Jiayi（许佳祎），东京大学 先端研 稻见・门内研究室',
       joint: '与三得利全球创新中心的联合研究',
