@@ -151,6 +151,8 @@
     <text x="110" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#ffd479">MoHeat Evo</text></svg></div>`;
   const MEDIA = (() => { try { return new URL('../../kiosk/media/', document.currentScript.src).href; } catch { return '../kiosk/media/'; } })();
 
+  // visitor option "warm only (no mist)" (kiosk start screen): device.js sends no cool at all; the guide leaves the cool steps out
+  const WO = () => { try { return localStorage.getItem('moheat.warmOnly') === '1'; } catch { return false; } };
   function mount(el, o = {}) {
     if (!document.getElementById('mi-css')) { const st = document.createElement('style'); st.id = 'mi-css'; st.textContent = css; document.head.appendChild(st); }
     const send = (line) => { try { o.send?.(line); } catch {} log.push(line); };
@@ -243,6 +245,7 @@
     };
     function show(n) {
       clear(); i = n; if (i >= STEPS.length) return finish(false);
+      if (WO() && (STEPS[i].id === 'cool' || STEPS[i].id === 'ksample')) return show(i + 1);   // warm only (no mist): no cool calibration, no cool sample
       const st = STEPS[i]; paintChrome(); root.dataset.step = st.id;
       document.documentElement.dataset.tint = { warm: 'warm', hsample: 'warm', cool: 'cool', ksample: 'cool' }[st.id] || '';   // kiosk theme B leans warm / cool
       const next = () => show(i + 1);
@@ -285,7 +288,7 @@
         A.innerHTML = `<h2>${tx('fit')}</h2>${FIT}<p class="sub">${tx('fitSub')}</p><div class="row"><button type="button" class="go big1">${tx('staffGo')}</button></div>`;
         A.querySelector('.go').addEventListener('click', next);
       } else if (st.id === 'check') {   // left warm, right warm, left cool, right cool, ~2 s each
-        const seq = [['l', 'warm', `LH${H()} RH0`], ['r', 'warm', `LH0 RH${H()}`], ['l', 'cool', `LC${C()} RH0`], ['r', 'cool', `LH0 RC${C()}`]];
+        const seq = [['l', 'warm', `LH${H()} RH0`], ['r', 'warm', `LH0 RH${H()}`], ['l', 'cool', `LC${C()} RH0`], ['r', 'cool', `LH0 RC${C()}`]].filter((x) => !(WO() && x[1] === 'cool'));
         A.innerHTML = `<h2>${tx('check')}</h2>${head()}<p class="tapnow chk"></p>${o.connected && !o.connected() ? `<p class="devmiss">⚠ ${tx('devMissing')}</p>` : ''}`;
         seq.forEach(([side, kind, cmd], k) => at(k * 2000, () => { send(cmd); ears(side === 'l' ? kind : '', side === 'r' ? kind : '');
           const c = A.querySelector('.chk'); c.textContent = tx('chk')[k]; c.dataset.kind = kind; document.documentElement.dataset.tint = kind; }));

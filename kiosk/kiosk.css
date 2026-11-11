@@ -182,3 +182,10 @@ table.stat th { color: var(--dim); font-weight: 600; } table.stat td.n { text-al
 .qdot.on { background: #c98a2e; } .qdot.flash { box-shadow: 0 0 0 10px rgba(255, 212, 121, .4); }
 .thanks-qr { width: clamp(150px, 22vmin, 240px); background: #fff; border-radius: 14px; padding: 8px; } .thanks-qr svg { display: block; width: 100%; height: auto; }
 @media (prefers-reduced-motion: reduce) { .endpic .lift { animation: none; } }
+/* standby (2026-11-11, photos from a 4:3 screen): the "MoHeat Evo · touch to start" copy is a compact band at the very bottom (it sat on the
+   lantern character's face); on screens narrower than 3:2 the whole cover is shown from the TOP, so the band sits in the free space below it */
+.att-copy { padding: 1.4vh 3vw 1.8vh !important; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; column-gap: 2.4vw; row-gap: .3vh; background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.84) 42%) !important; text-align: center; }
+.att-copy .logo { font-size: clamp(22px, 3.6vh, 40px) !important; margin: 0 !important; line-height: 1.1; }
+.att-copy .att-tag { order: 3; flex-basis: 100%; margin: 0; font-size: clamp(12px, 1.7vh, 18px); opacity: .8; }
+.att-copy .att-touch { font-size: clamp(16px, 2.6vh, 28px); }
+@media (max-aspect-ratio: 3/2) { .att-slides img { object-position: 50% 0 !important; } }

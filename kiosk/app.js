@@ -100,7 +100,8 @@
     if (v === 'menu') renderMenu();
     document.documentElement.dataset.view = v; last = Date.now(); signs();
   }
-  function newVisitor() { pending = null; try { sessionStorage.removeItem('moheat.kiosk.session'); } catch {} K.resetVisitor(); cfg = K.cfg(); document.documentElement.lang = lang(); paint(); }
+  function newVisitor() { pending = null; try { if ((JSON.parse(sessionStorage.getItem('moheat.kiosk.session')) || {}).n > 0) K.wipeSet?.(true); } catch {}   // a visitor played a demo → wipe the headphones before the next one (kiosk.js card)
+    try { sessionStorage.removeItem('moheat.kiosk.session'); } catch {} K.resetVisitor(); cfg = K.cfg(); document.documentElement.lang = lang(); paint(); }
   function reset(toAttract = false) { send('stop'); newVisitor(); go(toAttract ? 'attract' : 'welcome'); }
 
   const volGet = () => { try { const v = JSON.parse(localStorage.getItem('moheat.volume')); return v == null ? .7 : Math.min(1, v > 1 ? v / 100 : +v); } catch { return .7; } };   // 0–1, shared with shell.js
@@ -123,14 +124,16 @@
 
   // menu: the demos staff offer (default all), thumbnails in the display language
   // numbers = position in the offered list (the same numbers on the phone pick page, its QR carries the list: no server)
-  const offered = () => K.offered(D.DEMOS), num = (d) => K.num(D.DEMOS, d), top3 = () => K.top3(D.DEMOS), pickUrl = () => K.pickUrl(D.DEMOS);
+  const woOn = () => { try { return localStorage.getItem('moheat.warmOnly') === '1'; } catch { return false; } }, woPick = () => cfg.warmPick || 'Demo49_NaomiSummer';   // the recommended warm-only demo (one setting: swap the folder name)
+  const woFirst = (list) => (woOn() ? [...list.filter((d) => d.dir === woPick()), ...list.filter((d) => d.dir !== woPick())] : list);
+  const offered = () => woFirst(K.offered(D.DEMOS)), num = (d) => K.num(D.DEMOS, d), top3 = () => { const t = K.top3(D.DEMOS); if (!woOn()) return t; const pk = K.offered(D.DEMOS).find((d) => d.dir === woPick()); return pk ? [pk, ...t.filter((d) => d.dir !== pk.dir)].slice(0, Math.max(3, t.length)) : t; }, pickUrl = () => K.pickUrl(D.DEMOS);
   const title = (d) => d[lang()] || d.en;
   const pitch = (d) => { const p = (window.MOHEAT_PITCH || {})[d.dir]; return p ? { line: p[lang()] || p.en, hot: p.hot ? p.hot[lang()] || p.hot.en : '' } : { line: '', hot: '' }; };
   const thumb = (d, l) => `../assets/images/demos/${d.dir}${l ? '.' + l : ''}.jpg`;
   // the picture without the cover's own title (the tile prints the title; the titled cover thumbnail was cropped): assets/images/demos/art/
   // (the homepage menu uses the same); the titled thumbnail if it is missing (not cached offline yet)
   const img = (d) => `<img alt="" src="../assets/images/demos/art/${d.dir}.webp" onerror="this.onerror=null;this.src='${thumb(d, lang())}'">`;
-  const tile = (d, big) => { const p = pitch(d); return `<button type="button" data-dir="${d.dir}"><span class="no">${num(d)}</span>${img(d)}<b>${title(d)}</b>${big && p.line ? `<small>${p.line}</small>` : ''}${big && p.hot ? `<em>${p.hot}</em>` : ''}</button>`; };
+  const tile = (d, big) => { const p = pitch(d); return `<button type="button" data-dir="${d.dir}"><span class="no">${num(d)}</span>${woOn() && d.dir === woPick() ? `<i class="wo-rec">${({ ja: 'おすすめ：あたたかさだけ', en: 'Recommended: warm only', zh: '推荐：只要温热', ko: '추천: 따뜻함만' })[lang()] || 'おすすめ：あたたかさだけ'}</i>` : ''}${img(d)}<b>${title(d)}</b>${big && p.line ? `<small>${p.line}</small>` : ''}${big && p.hot ? `<em>${p.hot}</em>` : ''}</button>`; };
   function renderRec() { $('.rec-row').innerHTML = top3().map((d) => tile(d, true)).join('');
     $('.nums-row').innerHTML = offered().map((d) => `<button type="button" data-dir="${d.dir}" title="${title(d).replace(/"/g, '&quot;')}">${num(d)}</button>`).join(''); qr($('#qq .qr'), pickUrl()); }
   function renderMenu() {
@@ -312,8 +315,25 @@
   // staff break (kiosk/break.js): covers loop silently, notice in 4 languages, taps / keys ignored, thermal stopped; out = corner + password + opening checklist
   if (window.MoHeatBreak) MoHeatBreak.init({ go, send, reset: () => reset(false), checkPin: (v) => v === String(cfg.pin), beforeEnter: () => { saveStaff(); $('#staff').hidden = true; } });
   // ■ STOP + staff button on every screen of the start page (start · guide · card · standby · break): demos/shared/kiosk.js controls()
+  // the headphone wipe reminder needs cfg.hygiene: on once for every booth (a setting saved before 2026-11-11 had it off); staff can still turn it off
+  try { if (!localStorage.getItem('moheat.kiosk.hygV')) { K.setCfg({ hygiene: true }); cfg = K.cfg(); localStorage.setItem('moheat.kiosk.hygV', '1'); } } catch {}
   K.controls?.({ lang: () => document.documentElement.lang || 'ja', stop: () => { send('stop'); if (view === 'intro') { try { intro?.stop?.(); } catch {} reset(false); } send('stop'); },
     staff: () => { if (window.MoHeatBreak?.active()) return MoHeatBreak.askPin(); if (!$('#staff').hidden || !$('#pinBox').hidden) return; if (view !== 'welcome') reset(false); askPin(); } });
+  // visitor option "warm only (no mist)" on the start screen (some visitors dislike the alcohol mist): device.js zeroes every cool value,
+  // the guide leaves out the cool steps, the menu shows the recommended warm-only demo first; cleared for the next visitor (kiosk.js)
+  { const WOL = { ja: 'あたたかさだけ（ミストなし）', en: 'Warm only (no mist)', zh: '只要温热（不喷雾）', ko: '따뜻함만 (미스트 없음)' };
+    const st = document.createElement('style'); st.textContent = `.wo-toggle { display: inline-flex; align-items: center; gap: 14px; min-height: 64px; padding: 0 26px; border-radius: 999px; border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.07);
+      -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); color: #f4efe6; font: 600 clamp(17px, 2.2vh, 22px)/1.2 Inter, "Noto Sans JP", "PingFang SC", "Apple SD Gothic Neo", sans-serif; cursor: pointer; touch-action: manipulation; margin: 1.2vh auto 0; }
+      .wo-toggle i { width: 30px; height: 30px; border-radius: 9px; border: 2px solid rgba(255,255,255,.7); flex: 0 0 auto; position: relative; }
+      .wo-toggle[aria-pressed="true"] { background: rgba(255,170,110,.18); border-color: #ffb36b; } .wo-toggle[aria-pressed="true"] i { background: #ffb36b; border-color: #ffb36b; }
+      .wo-toggle[aria-pressed="true"] i::after { content: ""; position: absolute; left: 9px; top: 3px; width: 8px; height: 15px; border: solid #2a1606; border-width: 0 4px 4px 0; transform: rotate(45deg); }
+      .menu-grid button, .menu-top button, .rec-row button { position: relative; } .wo-rec { position: absolute; z-index: 2; left: 10px; top: 10px; padding: 6px 12px; border-radius: 999px; background: #ffb36b; color: #2a1606; font: 700 clamp(13px, 1.6vh, 17px)/1 Inter, "Noto Sans JP", sans-serif; font-style: normal; }`;
+    document.head.appendChild(st);
+    const b = document.createElement('button'); b.type = 'button'; b.id = 'warmOnly'; b.className = 'wo-toggle';
+    const paintWO = () => { b.setAttribute('aria-pressed', woOn()); b.innerHTML = `<i aria-hidden="true"></i><span>${WOL[lang()] || WOL.ja}</span>`; };
+    b.addEventListener('click', (e) => { e.stopPropagation(); try { woOn() ? localStorage.removeItem('moheat.warmOnly') : localStorage.setItem('moheat.warmOnly', '1'); } catch {} if (woOn()) send('stop'); paintWO(); try { renderMenu(); renderRec(); } catch {} });
+    const at = $('#v-welcome .langs'); if (at) { at.after(b); paintWO(); new MutationObserver(paintWO).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+      addEventListener('storage', (e) => { if (e.key === 'moheat.warmOnly') paintWO(); }); setInterval(() => { if (b.getAttribute('aria-pressed') !== String(woOn())) paintWO(); }, 1000); } }
   // full screen: the package starts Chrome with --kiosk; if the window is not full screen (started by hand, or staff left it), the next tap on the
   // standby / start screen asks for it again (the browser only allows it from a tap)
   addEventListener('pointerdown', () => { if ((view === 'attract' || view === 'welcome') && !document.fullscreenElement && screen.height - innerHeight > 4 && $('#staff').hidden) document.documentElement.requestFullscreen?.().catch(() => {}); }, true);

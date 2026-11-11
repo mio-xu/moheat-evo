@@ -22,7 +22,7 @@
   if (QS.get('kiosk') === '1') { try { localStorage.setItem('moheat.kiosk', '1'); } catch {} }
 
   // ---------------------------------------------------------------- staff settings
-  const DEF = { lang: 'en', cap: 80, start: 50, idle: 60, demos: null, pin: '0000', site: 'https://moheat-evo.github.io/', newsUrl: '', langs: ['en', 'ja', 'zh'], currency: 'auto', bands: {}, cut: 'full', hygiene: false, pickUrl: '',
+  const DEF = { lang: 'en', cap: 80, start: 50, idle: 60, demos: null, pin: '0000', site: 'https://moheat-evo.github.io/', newsUrl: '', langs: ['en', 'ja', 'zh'], currency: 'auto', bands: {}, cut: 'full', hygiene: true, pickUrl: '',
     // queue screen (window 2): 'live' (attract + thermal view) | 'promo' (looping video + QR badge) | 'alt' (switch every altMin minutes)
     queue: true, maxDemos: 0, maxMin: 0,   // queue on = the visit ends after one demo (staff: long-press the tiny dot bottom-left or key Q)
     queueMode: 'promo', altMin: 3, promoSrc: '', promoSound: false, promoNow: true, qrSize: 'l', qrCorner: 'br' };
@@ -137,6 +137,7 @@
   // mode: interactive is the default (user 2026-11-08; pure = the option, taps always work)
   function resetVisitor() {
     const c = cfg(); stopDevice();
+    try { localStorage.removeItem('moheat.warmOnly'); } catch {}   // "warm only (no mist)" is one visitor's choice
     LSs('moheat.mode', 'interactive'); LSs('moheat.heat', true); LSs('moheat.intensity', 100); LSs('moheat.warmScale', c.startWarm / 100); LSs('moheat.coolScale', c.startCool / 100); LSs('moheat.subs', 'm'); LSs('moheat.reduce', false);
     LSs('moheat.volume', .7);   // 0–1, the same scale as shell.js
     try { localStorage.setItem('moheat.guide', 'done'); } catch {}   // the kiosk intro replaces the page tour
@@ -179,22 +180,30 @@
   const mistGet = () => { try { return JSON.parse(localStorage.getItem(MIST_K)) || { n: 0, due: false }; } catch { return { n: 0, due: false }; } };
   const mistSet = (v) => { try { localStorage.setItem(MIST_K, JSON.stringify(v)); } catch {} mistPaint(); };
   const mistEvery = () => Math.max(1, Math.min(20, Math.round(+cfg().mistEvery || 3)));
+  // + the headphone wipe (user 2026-11-11, needs cfg.hygiene, on by default): after every visitor who played a demo, before the next one —
+  // a SOFT gate: Start still works, the card stays until staff tap Done. When both are due, one card lists both and one Done clears both.
+  const WIPE_K = 'moheat.kiosk.wipe', WTX = { ja: '次の方の前に、アルコール綿でヘッドホン（イヤーパッド・バンド）を拭いてください', en: 'Before the next visitor, wipe the headphones (ear pads and band) with an alcohol wipe',
+    zh: '下一位体验前，请用酒精棉擦拭耳机（耳垫和头梁）', ko: '다음 분 전에 알코올 솜으로 헤드폰(이어패드·밴드)을 닦아 주세요' }, WB = { ja: '拭きました', en: 'Done', zh: '已擦拭', ko: '닦았어요' }, BOTH = { ja: 'どちらも済みました', en: 'Both done', zh: '都完成了', ko: '둘 다 했어요' };
+  const wipeDue = () => { try { return !!cfg().hygiene && localStorage.getItem(WIPE_K) === '1'; } catch { return false; } };
+  const wipeSet = (on) => { try { on ? localStorage.setItem(WIPE_K, '1') : localStorage.removeItem(WIPE_K); } catch {} mistPaint(); };
   let mistEl = null;
   function mistPaint() {
-    if (!document.body) return; const m = mistGet();
-    if (!m.due) { if (mistEl) mistEl.hidden = true; return; }
+    if (!document.body) return; const m = mistGet(), w = wipeDue();
+    if (!m.due && !w) { if (mistEl) mistEl.hidden = true; return; }
     if (!mistEl) { const st = document.createElement('style'); st.textContent = `
-      .mk-mist { position: fixed; z-index: 2147482998; left: 10px; top: 86px; width: min(380px, 80vw); padding: 14px 16px; border-radius: 20px; border: 1px solid rgba(255,255,255,.22); background: rgba(24,20,30,.8);
+      .mk-mist { position: fixed; z-index: 2147482998; left: 10px; top: 86px; width: min(400px, 80vw); padding: 14px 16px; border-radius: 20px; border: 1px solid rgba(255,255,255,.22); background: rgba(24,20,30,.82);
         -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); color: #f4efe6; font: 600 17px/1.4 Inter, "Noto Sans JP", "PingFang SC", "Apple SD Gothic Neo", sans-serif; box-shadow: 0 8px 28px rgba(0,0,0,.4); }
-      .mk-mist[hidden] { display: none; } .mk-mist p { margin: 0 0 4px; } .mk-mist small { display: block; margin-bottom: 10px; opacity: .65; font-size: 13px; font-weight: 500; }
-      .mk-mist button { width: 100%; min-height: 64px; border-radius: 999px; border: 0; background: #f4efe6; color: #161214; font: 700 20px/1 Inter, "Noto Sans JP", "PingFang SC", sans-serif; cursor: pointer; touch-action: manipulation; }`;
+      .mk-mist[hidden] { display: none; } .mk-mist p { margin: 0 0 4px; } .mk-mist p + p { margin-top: 10px; } .mk-mist small { display: block; margin-bottom: 4px; opacity: .65; font-size: 13px; font-weight: 500; }
+      .mk-mist button { width: 100%; min-height: 64px; margin-top: 8px; border-radius: 999px; border: 0; background: #f4efe6; color: #161214; font: 700 20px/1 Inter, "Noto Sans JP", "PingFang SC", sans-serif; cursor: pointer; touch-action: manipulation; }`;
       document.head.appendChild(st); mistEl = document.createElement('div'); mistEl.className = 'mk-mist'; mistEl.setAttribute('role', 'status'); document.body.appendChild(mistEl);
-      mistEl.addEventListener('click', (e) => { e.stopPropagation(); if (e.target.closest('button')) mistSet({ n: 0, due: false }); }); }
+      mistEl.addEventListener('click', (e) => { e.stopPropagation(); if (!e.target.closest('button')) return; if (mistGet().due) mistSet({ n: 0, due: false }); wipeSet(false); }); }
     let l = 'ja'; try { l = localStorage.getItem('moheat.staff.lang') || 'ja'; } catch {} if (!MTX[l]) l = 'ja';
-    const n = mistEvery(); mistEl.innerHTML = `<p>${MTX[l].t(n)}</p>${l !== 'en' ? `<small>${MTX.en.t(n)}</small>` : ''}<button type="button" class="mk-mist-ok">${MTX[l].b}</button>`; mistEl.hidden = false;
+    const n = mistEvery(), en = l !== 'en', items = [...(w ? [[WTX[l], WTX.en]] : []), ...(m.due ? [[MTX[l].t(n), MTX.en.t(n)]] : [])];
+    mistEl.innerHTML = items.map(([a, b]) => `<p>${a}</p>${en ? `<small>${b}</small>` : ''}`).join('') + `<button type="button" class="mk-mist-ok">${items.length > 1 ? BOTH[l] : w ? WB[l] : MTX[l].b}</button>`;
+    mistEl.dataset.items = (w ? 'wipe ' : '') + (m.due ? 'mist' : ''); mistEl.hidden = false;
   }
   const mistCount = () => { const m = mistGet(); m.n = (m.n || 0) + 1; if (m.n >= mistEvery()) m.due = true; mistSet(m); };
-  addEventListener('storage', (e) => { if (e.key === MIST_K || e.key === 'moheat.kiosk.cfg') mistPaint(); });
+  addEventListener('storage', (e) => { if (e.key === MIST_K || e.key === WIPE_K || e.key === 'moheat.kiosk.cfg') mistPaint(); });
   // ================================================================ always-there controls (exhibition, user 2026-11-11): ■ STOP + staff button
   // ■ STOP (top right, red, ≥ 64 px, visitors may use it): on PRESS (pointerdown — no waiting for the click) every warm / cool output goes off
   // and the demo pauses; the same function as the demo's own ■ STOP (whose bar button is hidden in kiosk mode, so there is one STOP only).
@@ -248,8 +257,16 @@
     lab(); addEventListener('moheat:sublang', lab); setInterval(paint, 1000);
     document.body.append(s, note, f);
     mistPaint();
+    // the demo's ⚙ panel (UI v2) gets the visitor's "warm only (no mist)" switch while the kiosk runs (device.js zeroes every cool value)
+    const WOL = { ja: 'あたたかさだけ（ミストなし）', en: 'Warm only (no mist)', zh: '只要温热（不喷雾）', ko: '따뜻함만 (미스트 없음)' }, OO = { ja: ['オン', 'オフ'], en: ['On', 'Off'], zh: ['开', '关'], ko: ['켜기', '끄기'] };
+    const woOn = () => { try { return localStorage.getItem('moheat.warmOnly') === '1'; } catch { return false; } };
+    const woRow = () => { const set = document.querySelector('.u2-set'); if (!set || set.querySelector('.mk-wo')) return; const l = (o.lang?.() || 'ja'), k = WOL[l] ? l : 'ja';
+      const r = document.createElement('div'); r.className = 'u2-line mk-wo'; r.innerHTML = `<span>${WOL[k]}</span><button type="button" class="u2-btn2" aria-pressed="${woOn()}">${OO[k][woOn() ? 0 : 1]}</button>`;
+      r.querySelector('button').addEventListener('click', (e) => { e.stopPropagation(); const on = !woOn(); try { on ? localStorage.setItem('moheat.warmOnly', '1') : localStorage.removeItem('moheat.warmOnly'); } catch {} if (on) stopDevice(); const b = e.currentTarget; b.setAttribute('aria-pressed', on); b.textContent = OO[k][on ? 0 : 1]; });
+      set.prepend(r); };
+    new MutationObserver(woRow).observe(document.body, { childList: true, subtree: true });
   }
-  const K = window.MoHeatKiosk = { controls, mistCount, mistPaint, mistEvery, idb, currency, bands, splitBands, BANDS, SCENES, on: flag, cfg, setCfg, stats, resetVisitor, enter, exit, visit, day, DEF, stopDevice,
+  const K = window.MoHeatKiosk = { controls, mistCount, mistPaint, mistEvery, wipeSet, idb, currency, bands, splitBands, BANDS, SCENES, on: flag, cfg, setCfg, stats, resetVisitor, enter, exit, visit, day, DEF, stopDevice,
     offered, num, top3, pickUrl, dnum, post, thermalOf, scales, setScales, scaleLine, get queueOn() { return Date.now() - queueSeen < 6000; } };
 
   // ================================================================ demo pages (kiosk mode on)

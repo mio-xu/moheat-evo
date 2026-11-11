@@ -142,6 +142,12 @@ window.MoHeatDevice = (() => {
     return inst;
   }
 
-  const api = { create, supported, current: null, state: { state: 'off', connected: false, name: '', error: '' } };
+  // visitor option "warm only (no mist)" (exhibition, user 2026-11-11): some visitors dislike the alcohol mist. While localStorage
+  // 'moheat.warmOnly' is '1' every cool value is 0 at this one send point (old form LC50 → LC0, DUAL LC / RC → 0; heat, stop and the
+  // 1 s rules untouched). The kiosk clears it for the next visitor; the staff device test (devtest.html) always sends what it is told.
+  const warmOnly = () => { try { return localStorage.getItem('moheat.warmOnly') === '1' && !/devtest\.html$/.test(location.pathname); } catch { return false; } };
+  const coolOff = (line) => (warmOnly() ? String(line).replace(/\b([LR])C\d+/g, '$1C0') : line);
+  const createWO = (ui, hooks) => { const inst = create(ui, hooks), send = inst.send; inst.send = (line) => send.call(inst, coolOff(line)); api.current = inst; return inst; };
+  const api = { create: createWO, warmOnly, supported, current: null, state: { state: 'off', connected: false, name: '', error: '' } };
   return api;
 })();
