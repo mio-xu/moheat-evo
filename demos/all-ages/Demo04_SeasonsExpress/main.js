@@ -793,8 +793,8 @@ function frame(t, dt, thOut) {
 // ---------------------------------------------------------------- thermal: the DUAL CSV + interactions + the conductor's voice in person
 function thermalOut(t) {
   let th = thermalAt(t + offsetMs / 1000);
-  if (gate.cur && gate.cur.id === 'tea') {   // the winter cold stays (×.6), the cup under your chin warms both ears: cool + warm together
-    th = { Lc: th.Lc * .6, Rc: th.Rc * .6, Lh: Math.max(th.Lh, .36 * smooth(teaLift)), Rh: Math.max(th.Rh, .36 * smooth(teaLift)) };
+  if (gate.cur && gate.cur.id === 'tea') {   // the winter cold stays (×.6); only the steam of the cup you lift toward your face is felt, faintly (critic 2026-11-11: a cup in the hand does not heat the ears — was .36 both): ≤ .2, the cup is on your left
+    th = { Lc: th.Lc * .6, Rc: th.Rc * .6, Lh: Math.max(th.Lh, .2 * smooth(teaLift)), Rh: Math.max(th.Rh, .12 * smooth(teaLift)) };
   } else if (gate.cur) th = { Lc: th.Lc * .5, Rc: th.Rc * .5, Lh: th.Lh * .5, Rh: th.Rh * .5 };   // waiting: the scene lingers, softer
   if (win.side && t >= 66 && t < T_TUNNEL[1]) {   // the window you opened: a real draft, stronger on that side
     const k = smooth((t - 66) / 1.2), up = (v) => Math.min(.95, v * (1 + .3 * k)), dn = (v) => v * (1 - .15 * k);
