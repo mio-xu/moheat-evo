@@ -68,7 +68,7 @@
     bubble.classList.add('show'); clearTimeout(bubbleTimer); bubbleTimer = setTimeout(() => bubble.classList.remove('show'), ms);
   }
   function setStep(id) { S.step = id; S.st = 0; renderGoal(); renderSteps(); }
-  const goalTag = () => { const P = window.MoHeatSub?.pick; const t = S.done ? { ja: 'おやすみ', en: 'Good night', zh: '晚安' } : { ja: 'ナオミ', en: 'Naomi', zh: '直美' }; return P ? P(t) : t.en; };
+  const goalTag = () => { const P = window.MoHeatSub?.pick; const t = S.done ? { ja: 'おやすみ', en: 'Good night', zh: '晚安' } : { ja: 'ナオミ', en: 'Naomi', zh: 'Naomi' }; return P ? P(t) : t.en; };
   addEventListener('moheat:sublang', () => { if (S?.started) renderGoal(); });
   function renderGoal() {
     const s = STEPS.find((x) => x[0] === S.step);
@@ -87,7 +87,7 @@
 
   // action widget (bottom right): "call" button for the call step, "blow" for the food
   let holding = false, keyHold = false, callTap = false;
-  const ab = $('blowBtn'), BLOW_WORDS = ab.dataset.voice, CALL_WORDS = 'ナオミ|なおみ|naomi|おいで|call|come|直美|娜奥米|过来';
+  const ab = $('blowBtn'), BLOW_WORDS = ab.dataset.voice, CALL_WORDS = 'ナオミ|なおみ|naomi|おいで|call|come|直美|娜奥米|娜欧米|纳欧米|过来';   // zh speech recognition may write Naomi in characters
   ab.addEventListener('pointerdown', (e) => { e.preventDefault(); holding = true; ab.classList.add('holding'); if (S.step === 'call') callTap = true; });
   for (const ev of ['pointerup', 'pointerleave', 'pointercancel']) ab.addEventListener(ev, () => { holding = false; ab.classList.remove('holding'); });
   $('micBars').innerHTML = '<i></i>'.repeat(6);

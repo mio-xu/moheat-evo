@@ -72,7 +72,7 @@
     // 5 night: she climbs onto your shoulder, purring at your left ear; the fan on low passes your right
     E.setStep(4); E.S.step = D.steps[4]; purr(false); G.rainD = 0; E.amb('rain', 'cool', -80, 0); E.S.fade = 1; await E.sleep(1); E.alive(my); E.S.fade = 0; E.S.view = 'night_shoulder'; beds(E, 'night');
     E.amb('heat_L', 'warm', -80, .08); E.amb('heat_R', 'warm', 80, .08); E.amb('naomi', 'warm', -90, .5); G.fan = .55; G.fanLow = 1; E.A.loop('fan', 'fan', .9, 1.5)?.set(.18, 1); await E.sleep(1); purr(true, -1.35); await E.sleep(14); E.alive(my);
-    await E.action('', '「おやすみ、ナオミ」', '"Good night, Naomi"', 20, 'おやすみ|ナオミ|なおみ|good night|goodnight|晚安|娜奥米'); E.alive(my); mw('trill', -1.2, .3); E.S.view = 'night_pancake'; await E.sleep(3); E.alive(my); purr(false); E.S.fade = 1; await E.sleep(2.4);
+    await E.action('', '「おやすみ、ナオミ」', '"Good night, Naomi"', 20, 'おやすみ|ナオミ|なおみ|good night|goodnight|晚安|娜奥米|娜欧米|纳欧米|直美'); E.alive(my); mw('trill', -1.2, .3); E.S.view = 'night_pancake'; await E.sleep(3); E.alive(my); purr(false); E.S.fade = 1; await E.sleep(2.4);
   }
   const BEDS = { day: [['cicada', 'cicada', -.7, 5, .35], ['bird', 'night', -.8, 6, .05]], rain: [['rain', 'rain', -1, 2.6, .5], ['wind', 'wind', -1, 3, .08]], night: [['insect', 'night', -.6, 4, .4]] };
   const beds = (E, k) => { const want = BEDS[k] || [], names = new Set(want.map((b) => b[0])); for (const [n, L] of Object.entries(E.A.loops)) if (n.startsWith('bg:') && !names.has(n.slice(3))) L.set(0, .6); for (const [n, kind, az, d, g] of want) { const L = E.A.loop('bg:' + n, kind, az, d); L?.at(az, d, .4); L?.set(g, .9); } };
@@ -116,7 +116,7 @@
       if (Sx.view === 'night_shoulder') { E.edge('left', '255,180,110', .28, .25); E.edge('right', '120,170,240', .22 + .1 * Math.sin(G.fanT * 1.57), .2); }
     },
   });
-  for (const [ja, z] of [['なでる', '摸摸背'], ['あごを なでる', '摸下巴'], ['リボンをゆらす', '晃动飘带'], ['せんぷうきを つける', '打开电风扇'], ['くびふり', '让风扇转头'], ['こおりの びんを おく', '放下冰水瓶'], ['あおぐ', '扇扇子'], ['すこし あけておく', '开着一点'], ['まどを しめる', '关上窗'], ['なでる（長押し）', '抚摸（长按）'], ['「おやすみ、ナオミ」', '「晚安，娜奥米」'], ['ナオミ', '娜奥米']]) API.E.zh(ja, z);
+  for (const [ja, z] of [['なでる', '摸摸背'], ['あごを なでる', '摸下巴'], ['リボンをゆらす', '晃动飘带'], ['せんぷうきを つける', '打开电风扇'], ['くびふり', '让风扇转头'], ['こおりの びんを おく', '放下冰水瓶'], ['あおぐ', '扇扇子'], ['すこし あけておく', '开着一点'], ['まどを しめる', '关上窗'], ['なでる（長押し）', '抚摸（长按）'], ['「おやすみ、ナオミ」', '「晚安，Naomi」'], ['ナオミ', 'Naomi']]) API.E.zh(ja, z);
   // just-listen mode (shared/shell.js): the visible hand strokes her and wiggles the streamer (the same pointer path as a finger); buttons otherwise
   if (window.MoHeatShell) window.MoHeatShell.autoplay = (H2) => {
     const cv = document.getElementById('scene'), r = E0?.S?.started && rect(E0.S.view); if (!r) return false;

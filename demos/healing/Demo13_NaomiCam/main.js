@@ -78,7 +78,7 @@
     $('pushTime').textContent = simTime().slice(0, 5); pushEl.classList.add('show'); clearTimeout(pushTimer); pushTimer = setTimeout(() => pushEl.classList.remove('show'), ms);
   }
   function setStep(id) { if (id !== 'cool') CA.fan(0); S.step = id; S.st = 0; renderGoal(); renderSteps(); dockUI(); }
-  const goalTag = () => { const P = window.MoHeatSub?.pick; const t = S.done ? { ja: 'おかえり', en: 'Welcome home', zh: '欢迎回家' } : { ja: 'ナオミカメラ', en: 'Naomi Cam', zh: '直美摄像头' }; return P ? P(t) : t.en; };
+  const goalTag = () => { const P = window.MoHeatSub?.pick; const t = S.done ? { ja: 'おかえり', en: 'Welcome home', zh: '欢迎回家' } : { ja: 'ナオミカメラ', en: 'Naomi Cam', zh: 'Naomi 摄像头' }; return P ? P(t) : t.en; };
   addEventListener('moheat:sublang', () => { if (S?.started) renderGoal(); });
   function renderGoal() {
     const s = STEPS.find((x) => x[0] === S.step) || ['connect', '接続中…', 'Connecting…'];

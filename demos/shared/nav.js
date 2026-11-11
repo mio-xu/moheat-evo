@@ -15,10 +15,10 @@
     { cat: 'all-ages', dir: 'Demo47_GhostLantern', ja: 'ひやっと！おばけやしきの ちょうちんばん', en: 'Lantern Keeper of the Spooky House', zh: '鬼屋提灯值日生', ko: '오싹! 유령의 집 등불 당번', cast: 'bonchan+yurari', new: true, group: 0 },
     { cat: 'all-ages', dir: 'Demo48_AnimalOnsen', ja: 'ゆけむり どうぶつおんせん', en: 'Steamy Animal Hot Spring', zh: '蒸汽腾腾的动物温泉', ko: '모락모락 동물 온천', cast: 'yuzujii', new: true, group: 0 },
     { cat: 'all-ages', dir: 'Demo10_CaveSpring', ja: '火をともして、ひみつの泉へ', en: 'Kindle the Fire, Find the Hidden Spring', zh: '点燃火光，寻找秘密之泉', ko: '불을 밝혀, 비밀의 샘으로', cast: 'kohaku', group: 0 },
-    { cat: 'healing', dir: 'Demo11_Naomi', ja: 'ナオミと、ふわふわの一日', en: 'A Fluffy Day with Naomi', zh: '和直美的毛茸茸一天', ko: '나오미와 보송보송한 하루', series: 'naomi', part: 1, cast: 'naomi', group: 1 },
-    { cat: 'healing', dir: 'Demo13_NaomiCam', ja: 'ナオミ、いまなにしてる？', en: "What's Naomi Up To? · Pet Cam", zh: '直美，你在干嘛呀？', ko: '나오미, 지금 뭐 해?', series: 'naomi', part: 2, cast: 'naomi', group: 1 },
+    { cat: 'healing', dir: 'Demo11_Naomi', ja: 'ナオミと、ふわふわの一日', en: 'A Fluffy Day with Naomi', zh: '和 Naomi 的毛茸茸一天', ko: '나오미와 보송보송한 하루', series: 'naomi', part: 1, cast: 'naomi', group: 1 },
+    { cat: 'healing', dir: 'Demo13_NaomiCam', ja: 'ナオミ、いまなにしてる？', en: "What's Naomi Up To? · Pet Cam", zh: 'Naomi，你在干嘛呀？', ko: '나오미, 지금 뭐 해?', series: 'naomi', part: 2, cast: 'naomi', group: 1 },
     { cat: 'healing', dir: 'Demo26_BecomeNaomi', ja: 'ねこになった日', en: 'The Day I Became Naomi', zh: '变成猫咪的那一天', ko: '고양이가 된 날', series: 'naomi', part: 3, cast: 'naomi', group: 1 },
-    { cat: 'healing', dir: 'Demo49_NaomiSummer', ja: 'なつやすみ、ナオミと せんぷうき', en: 'Summer Fan Days with Naomi', zh: '暑假，娜奥米和电风扇', ko: '여름방학, 나오미와 선풍기', cast: 'naomi', new: true, group: 1 },
+    { cat: 'healing', dir: 'Demo49_NaomiSummer', ja: 'なつやすみ、ナオミと せんぷうき', en: 'Summer Fan Days with Naomi', zh: '暑假，Naomi 和电风扇', ko: '여름방학, 나오미와 선풍기', cast: 'naomi', new: true, group: 1 },
     { cat: 'healing', dir: 'Demo15_FamilyCall', ja: 'もしもし、おばあちゃん？', en: 'Hello, Grandma? · A Call Home, Part 1', zh: '喂，奶奶吗？', ko: '여보세요, 할머니?', series: 'family', part: 1, cast: 'hana+gen', group: 1 },
     { cat: 'healing', dir: 'Demo16_FamilyCall2', ja: 'じいちゃんの、ゆきだるま', en: "Grandpa's Little Snowman · A Call Home, Part 2", zh: '爷爷的小雪人', ko: '할아버지의 눈사람', series: 'family', part: 2, cast: 'hana+gen', group: 1 },
     { cat: 'healing', dir: 'Demo29_FamilyVisit', ja: 'ただいま、じいちゃん・ばあちゃん', en: 'Home for New Year', zh: '爷爷奶奶，我回来了', ko: '할아버지, 할머니, 저 왔어요', series: 'family', part: 3, cast: 'hana+gen', group: 1 },
@@ -54,7 +54,7 @@
   // character next to each other → folder number. "Try these first" = featured + the top 3 by score. ‹ ›, swipes and the "n / N" follow it.
   const SERIES = {
     snowfox: { ja: '小雪と焔', en: 'Koyuki & Homura', zh: '小雪与焰', ko: '코유키와 호무라' }, ayane: { ja: '星乃綾音', en: 'Hoshino Ayane', zh: '星乃绫音', ko: '호시노 아야네' },
-    naomi: { ja: 'ナオミ', en: 'Naomi', zh: '直美', ko: '나오미' }, family: { ja: 'じいちゃん・ばあちゃん', en: 'Grandma & Grandpa', zh: '爷爷奶奶', ko: '할아버지·할머니' },
+    naomi: { ja: 'ナオミ', en: 'Naomi', zh: 'Naomi', ko: '나오미' }, family: { ja: 'じいちゃん・ばあちゃん', en: 'Grandma & Grandpa', zh: '爷爷奶奶', ko: '할아버지·할머니' },
     stream: { ja: '配信ルーム', en: 'Live streams', zh: '直播间', ko: '라이브 방송' }, nobunaga: { ja: '信長と家康 · 全5話', en: 'Nobunaga & Ieyasu · 5 episodes', zh: '信长与家康 · 共5集', ko: '노부나가와 이에야스 · 전 5화' },
     talk: { ja: '語らう', en: 'Talk with them', zh: '对谈', ko: '이야기 나누기' },
   };
@@ -99,7 +99,7 @@
     const me = document.currentScript?.src; if (me && k && k !== '0' && !qs.has('cover') && !qs.has('render') && !qs.has('embed')) { const s = document.createElement('script'); s.src = me.replace(/nav\.js(\?.*)?$/, 'kiosk.js?v=a71c2660'); s.async = false; document.head.appendChild(s); } }
   { const me = document.currentScript?.src;   // subtitle language EN / 日本語 / 中文 (also in ?embed): shared/subs.js next to this file
     const shot = qs.has('cover') && qs.has('sub');   // per-language thumbnail export (tools/web/thumbs.py): only the display language
-    if (me && !window.MoHeatSub && (shot || (!qs.has('cover') && !qs.has('render')))) for (const f of shot ? ['subs.js?v=08ca2992'] : ['subs.js?v=08ca2992', 'fullscreen.js?v=4', 'guide.js?v=61ef48f9', 'thermocheck.js?v=600bf6fe']) {   // display language + ⛶ fullscreen + first-visit guide + 🌡 thermal check (tools/web/bump.py updates these numbers)
+    if (me && !window.MoHeatSub && (shot || (!qs.has('cover') && !qs.has('render')))) for (const f of shot ? ['subs.js?v=4e4e3f27'] : ['subs.js?v=4e4e3f27', 'fullscreen.js?v=4', 'guide.js?v=61ef48f9', 'thermocheck.js?v=600bf6fe']) {   // display language + ⛶ fullscreen + first-visit guide + 🌡 thermal check (tools/web/bump.py updates these numbers)
       const s = document.createElement('script'); s.src = me.replace(/nav\.js(\?.*)?$/, f); s.async = false; document.head.appendChild(s); } 
     else if (!window.MoHeatSub) document.documentElement.classList.add('l10n-ready'); }   // no subs.js (?cover / ?render): the cover text shows as is (series.css hides it until l10n-ready)
   if (qs.has('embed') || qs.has('cover') || qs.has('render')) return;

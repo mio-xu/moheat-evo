@@ -370,9 +370,9 @@
     if (sel) { sel.value = lang; sel.dispatchEvent(new Event('change')); }   // the demo drops its old ja + en mode
     apply();
     const me = document.currentScript?.src || [...document.scripts].map((x) => x.src).find((x) => /shared\/subs\.js/.test(x));
-    if (me) { const c = document.createElement('script'); c.src = me.replace(/subs\.js(\?.*)?$/, 'l10n_common.js?v=6'); c.onload = () => { maps = {}; apply(); loaded(); }; c.onerror = loaded; document.head.appendChild(c); } else loaded();
+    if (me) { const c = document.createElement('script'); c.src = me.replace(/subs\.js(\?.*)?$/, 'l10n_common.js?v=7cb97342'); c.onload = () => { maps = {}; apply(); loaded(); }; c.onerror = loaded; document.head.appendChild(c); } else loaded();
     const s = document.createElement('script');   // relative to the page (or its <base>): the demo's own languages
-    s.src = 'l10n.js?v=5';
+    s.src = 'l10n.js?v=6';   // bump when demo l10n.js files change for everyone (2026-11-11: Naomi's zh name → Naomi)
     s.onload = () => {
       l10nDone = true; maps = {}; missing.clear(); lang = eff(); fill();
       containers().forEach((c) => delete c.dataset.msub); document.querySelectorAll('[data-mlang]').forEach((e) => { e.dataset.mlang = ''; });

@@ -10,7 +10,7 @@ window.MOHEAT_L10N = {
  ],
  "text": {
   "zh": {
-   "ナオミ〜？ おはよう。": "直美〜？早上好。",
+   "ナオミ〜？ おはよう。": "Naomi〜？早上好。",
    "ごはんだよ〜。ほら、おいで。": "吃饭啦〜。来，过来。",
    "あったかいね、なおちゃん。ひなたぼっこ？": "好暖和呀，小直。在晒太阳吗？",
    "あ、お日さま、逃げちゃったね。": "啊，太阳跑掉了呢。",
@@ -18,13 +18,13 @@ window.MOHEAT_L10N = {
    "ふふ、のぞいてもなにもないよ。はい、閉めまーす。": "呵呵，往里看也什么都没有哦。好，关上啦〜。",
    "もう、くすぐったい。…あとでね。": "真是的，好痒。…待会儿哦。",
    "よいしょ。…ハンガー、取ってこよ。": "嘿咻。…去拿衣架吧。",
-   "あれ？ ナオミ？ どこ行ったの？": "咦？直美？跑哪儿去了？",
+   "あれ？ ナオミ？ どこ行ったの？": "咦？Naomi？跑哪儿去了？",
    "…みーつけた。": "…找——到了。",
    "もう、あったかいとこ知ってるんだから。": "真是的，就知道哪里暖和。",
    "今日もいっぱい遊んだね。": "今天也玩了好多呢。",
    "ふふ、ふみふみしてる。くすぐったいよ。": "呵呵，在踩奶呢。好痒哦。",
    "…もう寝ちゃうの？ じゃあ、わたしも。": "…已经要睡了吗？那我也睡吧。",
-   "おやすみ、ナオミ。": "晚安，直美。",
+   "おやすみ、ナオミ。": "晚安，Naomi。",
    "🐾 にゃ": "🐾 喵",
    "にゃ": "喵",
    "あさ・耳をすませる": "早晨・竖起耳朵",
@@ -58,7 +58,7 @@ window.MOHEAT_L10N = {
    "MoHeat Evo · Binaural ASMR × Thermal Haptics": "MoHeat Evo · 双耳ASMR × 冷热触感",
    "ねこになった日": "变成猫咪的那一天",
    "The Day I Became Naomi — a winter Saturday through a cat's ears": "用猫的耳朵度过冬日的周六",
-   "🐈 ナオミになる · Interactive": "🐈 变成直美 · 互动",
+   "🐈 ナオミになる · Interactive": "🐈 变成 Naomi · 互动",
    "☀ ひだまり・洗濯もの · warm": "☀ 阳光・晾晒的衣物 · 温暖",
    "❄️ 窓ガラス・冷蔵庫 · cool": "❄️ 窗玻璃・冰箱 · 清凉",
    "▶ はじめる · Start": "▶ 开始",
@@ -66,7 +66,7 @@ window.MOHEAT_L10N = {
    "Headphones on · you are the cat: drag the two ear dials to turn your ears, tap / hold to play · connect MoHeat Evo to feel the cold glass, the sun, the fridge air and the warm laundry": "请戴上耳机 · 你就是猫：拖动两个耳朵转盘来转动耳朵，点按 / 长按来玩耍 · 连接 MoHeat Evo，感受冰凉的玻璃、阳光、冰箱的冷气和温暖的衣物",
    "👂 耳をうごかして、台所の音をさがす Drag the ear dials to find the sound from the kitchen": "👂 转动耳朵，寻找厨房传来的声音",
    "☀ ひだまりをタップ Tap the patch of sunlight to hop into it": "☀ 点击那片阳光",
-   "ASMR Game · be Naomi": "ASMR 游戏 · 变成直美",
+   "ASMR Game · be Naomi": "ASMR 游戏 · 变成 Naomi",
    "cat bed · morning": "猫窝 · 早晨",
    "windowsill · winter sun": "窗台 · 冬日阳光",
    "kitchen · open fridge": "厨房 · 打开的冰箱",
@@ -205,7 +205,7 @@ window.MOHEAT_L10N = {
  "names": {
   "ナオミ": {
    "en": "Naomi",
-   "zh": "直美",
+   "zh": "Naomi",
    "ko": "나오미"
   },
   "飼い主": {
