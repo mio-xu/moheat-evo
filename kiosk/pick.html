@@ -55,7 +55,9 @@
       yours: { en: 'Your pick', ja: 'あなたの番号', zh: '你选的号码', ko: '고른 번호' }, show: { en: 'At the machine, tap this number.', ja: '順番が来たら、この番号をタップしてください。', zh: '轮到你时，在机器上点这个号码。', ko: '차례가 되면 기계에서 이 번호를 눌러 주세요.' },
       back: { en: '← Choose another', ja: '← ほかを選ぶ', zh: '← 重新选择', ko: '← 다시 고르기' }, privacy: { en: 'Nothing is stored or sent. MoHeat Evo · thermal headphones', ja: '何も保存・送信しません。MoHeat Evo · 温冷ヘッドホン', zh: '不保存、不发送任何信息。MoHeat Evo · 冷热耳机', ko: '아무것도 저장하거나 보내지 않아요. MoHeat Evo · 온냉 헤드폰' } };
     const P = (d) => (window.MOHEAT_PITCH || {})[d.dir] || {};
-    const img = (d) => `../assets/images/demos/${d.dir}.${l}.jpg`, img0 = (d) => `../assets/images/demos/${d.dir}.jpg`;
+    // the picture without the cover title (a card already prints the title; the cover's own title was cropped): the menu's art
+    // thumbnails (assets/images/demos/art/, the homepage uses them too); the old titled thumbnail if one is missing
+    const img = (d) => `../assets/images/demos/art/${d.dir}.webp`, img0 = (d) => `../assets/images/demos/${d.dir}.${l}.jpg`;
     const card = (d) => { const p = P(d), n = list.indexOf(d) + 1; return `<button class="d" data-n="${n}"><span class="no">${n}</span><img src="${img(d)}" onerror="this.onerror=null;this.src='${img0(d)}'" alt="" loading="lazy"><div><b>${d[l] || d.en}</b>${p[l] || p.en ? `<small>${p[l] || p.en}</small>` : ''}${p.hot ? `<em>${p.hot[l] || p.hot.en}</em>` : ''}</div></button>`; };
     let picked = 0;
     const paint = () => {

@@ -127,7 +127,9 @@
   const title = (d) => d[lang()] || d.en;
   const pitch = (d) => { const p = (window.MOHEAT_PITCH || {})[d.dir]; return p ? { line: p[lang()] || p.en, hot: p.hot ? p.hot[lang()] || p.hot.en : '' } : { line: '', hot: '' }; };
   const thumb = (d, l) => `../assets/images/demos/${d.dir}${l ? '.' + l : ''}.jpg`;
-  const img = (d) => `<img alt="" src="${thumb(d, lang())}" onerror="this.onerror=null;this.src='${thumb(d)}'">`;
+  // the picture without the cover's own title (the tile prints the title; the titled cover thumbnail was cropped): assets/images/demos/art/
+  // (the homepage menu uses the same); the titled thumbnail if it is missing (not cached offline yet)
+  const img = (d) => `<img alt="" src="../assets/images/demos/art/${d.dir}.webp" onerror="this.onerror=null;this.src='${thumb(d, lang())}'">`;
   const tile = (d, big) => { const p = pitch(d); return `<button type="button" data-dir="${d.dir}"><span class="no">${num(d)}</span>${img(d)}<b>${title(d)}</b>${big && p.line ? `<small>${p.line}</small>` : ''}${big && p.hot ? `<em>${p.hot}</em>` : ''}</button>`; };
   function renderRec() { $('.rec-row').innerHTML = top3().map((d) => tile(d, true)).join('');
     $('.nums-row').innerHTML = offered().map((d) => `<button type="button" data-dir="${d.dir}" title="${title(d).replace(/"/g, '&quot;')}">${num(d)}</button>`).join(''); qr($('#qq .qr'), pickUrl()); }
