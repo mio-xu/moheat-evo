@@ -17,3 +17,4 @@ html[data-playmode=pure] #lanternCtl { display: none; }
 .sweet { position: absolute; width: max(44px, 5cqw); aspect-ratio: 1; margin: -2.5cqw 0 0 -2.5cqw; border-radius: 50%; border: 0; cursor: pointer; pointer-events: auto;
   background: radial-gradient(circle at 35% 30%, #fff5d0 0 10%, #ffb060 34%, #e0553b 72%); box-shadow: 0 0 1.4cqw rgba(255,180,90,.8); animation: sw-bob 1.2s ease-in-out infinite; touch-action: none; }
 @keyframes sw-bob { 50% { transform: translateY(-.5cqw); } }
+#lanternCtl:not(.show) .ch { pointer-events: none; visibility: hidden; }   /* hidden lantern buttons must not catch taps meant for the answers on phones (2026-11-11) */
