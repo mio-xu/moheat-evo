@@ -39,7 +39,7 @@
   let S = fresh(), run = 0;
   const STEPS = [['pass', '吹雪の峠', 'The blizzard pass'], ['hall', '宿・火鍋', 'Hotpot at the inn'], ['room', '女医の手当て', "The doctor's care"],
     ['door', '夜番', 'Night watch'], ['trio', '夜明けの峠', 'Dawn on the pass']];
-  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.2; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
+  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.5; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
 
   // ---------------------------------------------------------------- subtitles + voice
   const subJa = $('subJa'), subEn = $('subEn'), subWho = $('subWho'), subs = $('subs');
@@ -151,6 +151,7 @@
       await say('h01', POS.front);
       await say('n08', POS.left);
       await say('h02', POS.front);
+      await sleep(1.2); alive(my); wind?.at(-1.3, 2.5); wind?.set(.4, .2); S.draft = 1; await sleep(2.4); S.draft = 0; wind?.set(.05, 1); await sleep(.8); alive(my);   // a gust rattles the big window on your LEFT: its draft slips through the gaps (left cool, before the hotpot)
       S.pot = 1; pot?.set(.45, 1); SND.fx.bowl(); await sleep(1); alive(my);
       S.view = 'dice'; await sleep(.4);
       await say('h03', POS.front);
@@ -167,6 +168,7 @@
       await talkWindow('H', POS.front, false, ['ひなたに答えてみよう（何でも）', 'Answer Hinata (anything)']);
       await say('n09', POS.left);
       SND.fx.boards(.2, 1.3, 4, 1.6);
+      await sleep(1.2); wind?.at(-1.3, 2.5); wind?.set(.45, .2); S.draft = 1; await sleep(2.4); S.draft = 0; wind?.set(.05, 1); await sleep(1.2); alive(my);   // the blizzard rattles the big window on your LEFT again: its draft on the left ear
       await say('h08', { az: 1.1, dist: 2.2 });
       S.fade = 1; await sleep(1.2); alive(my);
 
@@ -320,14 +322,14 @@
   }
 
   // ---------------------------------------------------------------- per-frame state + thermal
-  const K = {}; for (const k of ['cape', 'pot', 'brazier', 'bowl', 'moxa', 'balm', 'blow', 'lamp', 'door', 'guard', 'sun', 'snow', 'hands', 'stone', 'coat']) K[k] = 0;
+  const K = {}; for (const k of ['cape', 'pot', 'brazier', 'bowl', 'moxa', 'balm', 'blow', 'lamp', 'door', 'guard', 'sun', 'snow', 'hands', 'stone', 'coat', 'draft']) K[k] = 0;
   let gustT = 0, gustAz = -1.4, gustS = 0;
   function update(dt) {
     S.t += dt; if (!S.started) return;
     S.clock += dt; S.lv = SND.voiceLevel(); S.vlv = (S.vlv || 0) + (S.lv - (S.vlv || 0)) * (1 - Math.exp(-dt / (S.lv > (S.vlv || 0) ? .05 : .8)));   // voice warmth = the speech envelope, not each syllable (no sub-second hot ↔ cold flicker, guide §3 节奏)
     { const vt = talking ? 1 : 0; S.env += (vt - S.env) * (1 - Math.exp(-dt / (vt > S.env ? .06 : .3))); }   // talking envelope (layers.js mouth)
     const ease = (cur, tgt, up, down) => cur + (tgt - cur) * (1 - Math.exp(-dt / (tgt > cur ? up : down)));
-    const tau = { cape: [.6, .6], pot: [.8, 1], brazier: [1, 1], bowl: [.3, .8], moxa: [.25, .3], balm: [.2, .9], blow: [.12, .5], lamp: [1, 1], door: [.15, .6], guard: [.5, .8], sun: [2, 1], snow: [1, 1], hands: [.4, .8], stone: [.25, .9], coat: [.6, .6] };
+    const tau = { cape: [.6, .6], pot: [.8, 1], brazier: [1, 1], bowl: [.3, .8], moxa: [.25, .3], balm: [.2, .9], blow: [.12, .5], lamp: [1, 1], door: [.15, .6], guard: [.5, .8], sun: [2, 1], snow: [1, 1], hands: [.4, .8], stone: [.25, .9], coat: [.6, .6], draft: [.25, .6] };
     for (const k in K) K[k] = ease(K[k], S[k] || 0, ...tau[k]);
     // blizzard gusts on the pass / through the door: a gust sweeps from your left to your right in ~2.5 s, every 4–6 s
     gustT -= dt;
@@ -359,6 +361,7 @@
     if (K.balm > .02) add(1.4, 'c', .45 * K.balm, '🌿');
     if (K.blow > .02) add(1.35, 'c', .85 * K.blow, '💨');
     if (K.lamp > .02) add(-1.1, 'h', .1 * K.lamp, '🏮');
+    if (K.draft > .02) add(-1.35, 'c', .5 * K.draft, '🪟');         // the big window on the left: a gust's draft through the gaps
     if (K.door > .02) add(-1.25, 'c', (.65 - .5 * K.guard) * K.door * (.85 + .15 * gustS) * (1 - .5 * K.coat), '🌬');
     if (K.guard > .02) add(-1.3, 'h', .18 * K.guard, '🧡');
     if (K.sun > .02) add(0, 'h', .15 * K.sun, '🌅');
@@ -367,6 +370,7 @@
     return out;
   }
   const ear = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
+  const chOn = {}, chLast = { Lc: -9, Lh: -9, Rc: -9, Rh: -9 }, dom = { L: { s: '', t: -9 }, R: { s: '', t: -9 } };
   function thermal(dt) {
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
     for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
@@ -376,6 +380,19 @@
       const tau = rest ? .15 : target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
       ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
     }
+    // timing on each ear (guide §3 节奏, as shared/story.js): a channel that stopped does not come back for ~1 s, a mode does not start within
+    // 1.5 s of the other mode on that ear (both on = DUAL is fine; a fading other mode ≤ .1 is not), the dominant mode flips at most once per 1.5 s
+    const nowS = performance.now() / 1000;
+    for (const K in ear) {
+      const O = K[0] + (K[1] === 'c' ? 'h' : 'c');
+      if (ear[K] > .03 && !chOn[K] && (nowS - chLast[K] < 1.1 || (ear[O] <= .1 && nowS - chLast[O] < 1.5))) ear[K] = 0;
+    }
+    for (const e of ['L', 'R']) {
+      const h = ear[e + 'h'], c = ear[e + 'c'], s = h - c >= .12 ? 'H' : c - h >= .12 ? 'C' : '', st = dom[e];
+      if (!s || s === st.s) continue;
+      if (st.s && nowS - st.t < 1.5) { if (s === 'H') ear[e + 'h'] = c + .1; else ear[e + 'c'] = h + .1; } else { st.s = s; st.t = nowS; }
+    }
+    for (const K in ear) { chOn[K] = ear[K] > .03; if (chOn[K]) chLast[K] = nowS; }
     return { th: { ...ear }, src };
   }
 
@@ -437,6 +454,10 @@
     drawPuffs(dt);
     const wind = pl === 'pass' ? .35 + .5 * gustS : pl === 'door' ? .25 + .55 * K.door * (1 - .4 * K.guard) : .05;
     drawSnow(dt, t, (pl === 'pass' || pl === 'dawn') ? K.snow : pl === 'door' ? .7 * K.door : 0, wind);
+    if (K.draft > .02 && pl === 'hall') {   // the gust at the big window on the left: snow swirls against the panes, a cold blue draught spills in
+      ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W * .3, H * .78); ctx.clip(); drawSnow(dt, t, .9 * K.draft, .9); ctx.restore();
+      const g = ctx.createLinearGradient(0, 0, W * .45, 0); g.addColorStop(0, `rgba(90,140,230,${.28 * K.draft})`); g.addColorStop(1, 'rgba(90,140,230,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W * .45, H);
+    }
     if (K.door > .02 && pl === 'door') { const g = ctx.createLinearGradient(0, 0, W * .4, 0); g.addColorStop(0, `rgba(90,140,230,${.25 * K.door})`); g.addColorStop(1, 'rgba(90,140,230,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W * .4, H); }
     if (K.sun > .02 && pl === 'dawn') { const g = ctx.createRadialGradient(W * .62, H * .3, 0, W * .62, H * .3, W * .5); g.addColorStop(0, `rgba(255,200,130,${.16 * K.sun})`); g.addColorStop(1, 'rgba(255,200,130,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
     S.whiteA = (S.whiteA || 0) + ((S.white ? 1 : 0) - (S.whiteA || 0)) * Math.min(1, dt * 1.6);
