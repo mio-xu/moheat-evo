@@ -62,12 +62,12 @@ window.LANTERN_LINES = {
   ],
   "b12": [
    "…あれ？ いまの は、かぜ と ふうりん だけ かも。 わらいごえ、した？",
-   "…Huh? That might have been just the draught and the wind chime. Did you hear giggling?",
+   "…Huh? That might have been just the draft and the wind chime. Did you hear giggling?",
    "B"
   ],
   "b13": [
    "せいかい！ ただの すきまかぜ でした〜！",
-   "Right! Just a draught~!",
+   "Right! Just a draft~!",
    "B"
   ],
   "b14": [
