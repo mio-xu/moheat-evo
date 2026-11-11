@@ -213,13 +213,6 @@ document.querySelectorAll('.more-btn').forEach((btn) => {
   btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
 });
 
-// the hero film: our own big play button on a text-free poster; the browser controls only once it plays (QA 2026-11-11)
-(() => {
-  const box = document.querySelector('.campaign-video'), v = box?.querySelector('video'), b = box?.querySelector('.film-play');
-  if (!v || !b) return;
-  b.addEventListener('click', () => { v.controls = true; box.classList.add('is-playing'); v.play().catch(() => {}); });
-  v.addEventListener('play', () => { v.controls = true; box.classList.add('is-playing'); });
-})();
 // the fixed bar: see-through over the hero, a solid blurred bar once the page scrolls (no dark smear over light sections)
 (() => {
   const bar = document.querySelector('.nav-wrap'); if (!bar) return;
