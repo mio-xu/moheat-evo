@@ -29,7 +29,7 @@
   let S = fresh(), run = 0;
   const STEPS = [['counter', 'ラストオーダーのあと', 'After last orders'], ['shake', 'シェイカー', 'The shaker'], ['flame', 'あなたのためのカクテル', 'A cocktail for you'],
     ['sit', 'カウンターのこっち側', 'This side of the counter'], ['whisper', '本当の名前', 'Her real name']];
-  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.2; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
+  function setStep(i) { if (i > 0 && S.started) S.restUntil = S.clock + 1.5; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
 
   // ---------------------------------------------------------------- subtitles + voice
   const subJa = $('subJa'), subEn = $('subEn'), subs = $('subs');
@@ -202,7 +202,7 @@
     return out;
   }
   const ear = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
-  const modeOn = {}, modeLast = { Lc: -9, Lh: -9, Rc: -9, Rh: -9 };
+  const chOn = {}, chLast = { Lc: -9, Lh: -9, Rc: -9, Rh: -9 }, dom = { L: { s: '', t: -9 }, R: { s: '', t: -9 } };
   function thermal(dt) {
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
     for (const s of src) { const sn = Math.sin(s.az), wL = clamp(1 - 1.2 * Math.max(0, sn)), wR = clamp(1 - 1.2 * Math.max(0, -sn)); sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR; }
@@ -212,11 +212,19 @@
       const tau = rest ? .15 : target > cur ? (k === 'h' ? .4 : .2) : (k === 'h' ? .5 : .35);
       ear[e + k] = cur + (target - cur) * (1 - Math.exp(-dt / tau));
     }
-    for (const e of ['L', 'R']) for (const [k, o] of [['c', 'h'], ['h', 'c']]) {   // a 1 s rest between the two modes on one ear (both on = DUAL is fine)
-      const K = e + k, O = e + o;
-      if (ear[K] > OFF && !modeOn[K] && ear[O] <= OFF && performance.now() / 1000 - modeLast[O] < 1.15) ear[K] = 0;
+    // timing on each ear (guide §3 节奏, as shared/story.js): a channel that stopped does not come back for ~1 s, a mode does not start within
+    // 1.5 s of the other mode on that ear (both on = DUAL is fine; a fading other mode ≤ .1 is not), the dominant mode flips at most once per 1.5 s
+    const nowS = performance.now() / 1000;
+    for (const K in ear) {
+      const O = K[0] + (K[1] === 'c' ? 'h' : 'c');
+      if (ear[K] > .03 && !chOn[K] && (nowS - chLast[K] < 1.1 || (ear[O] <= .1 && nowS - chLast[O] < 1.5))) ear[K] = 0;
     }
-    for (const K in ear) { modeOn[K] = ear[K] > OFF; if (modeOn[K]) modeLast[K] = performance.now() / 1000; }
+    for (const e of ['L', 'R']) {
+      const h = ear[e + 'h'], c = ear[e + 'c'], s = h - c >= .12 ? 'H' : c - h >= .12 ? 'C' : '', st = dom[e];
+      if (!s || s === st.s) continue;
+      if (st.s && nowS - st.t < 1.5) { if (s === 'H') ear[e + 'h'] = c + .1; else ear[e + 'c'] = h + .1; } else { st.s = s; st.t = nowS; }
+    }
+    for (const K in ear) { chOn[K] = ear[K] > .03; if (chOn[K]) chLast[K] = nowS; }
     return { th: { ...ear }, src };
   }
 
