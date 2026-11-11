@@ -72,11 +72,12 @@
     preload: ['open_Y', 'pen_P', 'mon_M', 'rain_Y', 'rain_F', 'end_Y', 'end_all'],
     plan: { events: {}, smoothing: {}, voice: { az: { near: 0 }, distance: { near: .6 }, front_split: .5 } },
     script: game,
+    voiceKind: (w) => (w === 'P' ? 'cool' : 'warm'),   // Pen the penguin is chilly (a penguin who wants almost-cold water): his voice is cool, not warm
     onBegin: (E) => { E0 = E; Object.assign(G, { T: .5, TL: .5, TR: .5, two: false, hot: 0, cold: 0, hotOn: 0, coldOn: 0, rain: 0, ctl: false }); val.classList.remove('show'); },
     onFinish: () => showCtl(false),
     sources(add) {
       const h = Math.min(.6, G.hotV || 0), c = Math.min(.6, G.coldV || 0);
-      const gust = Math.min(1, ((E0?.pulses || []).find((p) => p.name === '@gust')?.lev || 0) / .4); add(-80, 'warm', (.36 + .55 * h) * (1 - .95 * gust)); add(80, 'cool', .3 + .55 * c);   // the pipes always run a little: steam on your left, spray on your right; open = stronger; a gust blows the steam off your left ear for a moment
+      const gust = Math.min(1, ((E0?.pulses || []).find((p) => p.name === '@gust')?.lev || 0) / .4); add(-80, 'warm', (.36 + .55 * h) * (1 - .95 * gust)); if (c > .01) add(80, 'cool', .55 * c);   // the hot pipe's steam is always there on the left; the cold pipe is cold on your right only while it runs (critic 2026-11-11) on your left, spray on your right; open = stronger; a gust blows the steam off your left ear for a moment
       if (G.two) { add(-60, 'warm', .7 * G.TL); add(60, 'warm', .3 * G.TR); return; }
       if (G.T >= .5) add(0, 'warm', (G.T - .5) * 1.2); else add(0, 'cool', (.5 - G.T) * .9);
     },
@@ -91,7 +92,7 @@
           else if (G.target) { G.hotOn = G.T < G.target[0] + .03 ? 1 : 0; G.coldOn = G.T > G.target[1] - .03 ? 1 : 0; }
         }
       }
-      if (E.S.started) { G.gust = (G.gust ?? 4) - dt; if (G.gust <= 0) { G.gust = rnd(6, 8.5); E.pulse('@gust', 'cool', -80, .72, .14, .45, .3); E.fx.gust(-1.45, -.4, 1); } }   // an autumn mountain gust from the left: cold across the steam for a moment
+      if (E.S.started) { G.gust = (G.gust ?? 4) - dt; if (G.gust <= 0) { G.gust = rnd(6, 8.5); E.pulse('@gust', 'cool', -80, G.two || G.T >= .5 ? .72 : Math.max(.18, .72 - (.5 - G.T) * 1.8), .14, .45, .3);   /* a cool pool already chills both ears: the gust adds less, so the left stays ≤ ~.75 (penguin / rain, coordinator 2026-11-11) */ E.fx.gust(-1.45, -.4, 1); } }   // an autumn mountain gust from the left: cold across the steam for a moment
       const y = G.hotV > .02 ? E.A.loop('hotpipe', 'water', -1.2, 1.8) : null; y?.set(G.hotV * .5, .2); const z = G.coldV > .02 ? E.A.loop('coldpipe', 'water', 1.2, 1.8) : null; z?.set(G.coldV * .5, .2);
     },
     draw(E, dt) {
