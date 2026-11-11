@@ -4,6 +4,7 @@
 //   o.state()   → S (S.view, S.started, S.t)       o.run() → the story run token        o.draw(t, dt) → the demo's whole draw (pause fix)
 //   o.ctx       the #scene 2D context               o.views [names]   o.src(name) → still URL   o.blank  fill colour without a still
 //   o.clips     clip names: v_<view> loops + t_<from>_<to> transitions (media/video/<name>.mp4?v=1; ?stills / ?cover = none)
+//   o.drawView(view, alpha, t, isNew) / o.onViewChange() / o.beforeViews(t, dt): a demo's own still staging (default: the engine's)
 //   o.fade      cross-fade seconds (.6)          o.zoomExtra(view) → extra still zoom (a push-in, Demo25 'close'; 0)
 // Returns { IMG, artReady, draw(t, dt) (cross-fade + clips, call first in the demo's draw), drawView(view, alpha, t), go(name, view,
 // onStart) → Promise, live() (shared/layers.js draws), zoom(t) → { z, dy } (the still's breathing drift, for overlays), mix(), viewA / viewB
@@ -69,13 +70,15 @@
     }
     function draw(t, dt) {
       const S = o.state();
-      if (S.view !== viewB) { viewA = viewB; viewB = S.view; mix = 0; }
+      if (S.view !== viewB) { viewA = viewB; viewB = S.view; mix = 0; o.onViewChange?.(); }
       clips();
       mix = Math.min(1, mix + dt / FADE);
-      if (mix < 1) drawView(viewA, 1, t);
-      drawView(viewB, mix < 1 ? mix : 1, t);
+      o.beforeViews?.(t, dt);
+      const dv = o.drawView || drawView;   // o.drawView(view, alpha, t, isNew): a demo's own still staging (Demo28 / 29: push-in toward the speaker)
+      if (mix < 1) dv(viewA, 1, t, false);
+      dv(viewB, mix < 1 ? mix : 1, t, true);
     }
-    addEventListener('moheat:pause', (e) => { const S = o.state(); if (e.detail && S.started && (mix < 1 || S.view !== viewB)) { viewA = viewB = S.view; mix = 1; try { o.draw(S.t ?? 0, 0); } catch {} } });   // paused mid cross-fade: show the new view only (shell.js moheat:pause, Demo21 2026-11-11)
+    if (o.pauseFix !== false) addEventListener('moheat:pause', (e) => { const S = o.state(); if (e.detail && S.started && (mix < 1 || S.view !== viewB)) { viewA = viewB = S.view; mix = 1; try { o.draw(S.t ?? 0, 0); } catch {} } });   // paused mid cross-fade: show the new view only (shell.js moheat:pause, Demo21 2026-11-11)
     function reset(view) { viewA = viewB = view; mix = 1; cur = null; pending = null; }
     return { IMG, artReady, draw, drawView, go, live: LIVE, zoom, mix: () => mix, get viewA() { return viewA; }, get viewB() { return viewB; }, reset, CLIP };
   };

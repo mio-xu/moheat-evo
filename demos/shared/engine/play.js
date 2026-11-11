@@ -17,11 +17,12 @@
     const sayGain = o.sayGain || ((where) => (where.dist < .2 ? 1.8 : 1.45));
     const autoPick = o.autoPick || (() => (ALT ? 1 : 0));
     const subJa = $('subJa'), subEn = $('subEn'), subs = $('subs');
-    function sub(ja, en) { subJa.textContent = ja || ''; subEn.textContent = en || ''; subs.classList.toggle('show', !!ja); }
+    function sub(ja, en, muffled) { subJa.textContent = ja || ''; subEn.textContent = en || ''; subs.classList.toggle('show', !!ja); if (o.muffled) subs.classList.toggle('muffled', !!muffled); }
     let talking = 0;
     async function say(id, where = { az: 0, dist: .8 }, opt = {}) {
       const my = o.run(); const [ja, en] = opt.sub || LINES[id]; o.state().pos = where;
-      sub(ja, en); talking++;
+      if (opt.muffled && o.muffled) sub(o.muffled[0], o.muffled[1], true); else sub(ja, en);   // o.muffled: the subtitle when a line is drowned out (Demo30)
+      talking++;
       await SND.say(id, where, opt.gain ?? sayGain(where));
       talking--; if (my !== o.run()) throw new Error('stopped');
       await sleep(GAP); sub('', '');
@@ -38,9 +39,10 @@
         const tm = setTimeout(() => done(0), timeout * 1000), au = AUTO ? setTimeout(() => done(autoPick(opts)), (o.autoAfter ?? 1.2) * 1000) : 0;
       });
     }
-    function action(icon, ja, en, timeout = 20) {
+    function action(icon, ja, en, a4, a5) {   // (icon, ja, en, timeout) or (icon, ja, en, voice, timeout): voice = what to say (shared/voice.js)
+      const voice = typeof a4 === 'string' ? a4 : '', timeout = a5 ?? (typeof a4 === 'number' ? a4 : 20);
       return new Promise((res) => {
-        actEl.innerHTML = `<button class="act-btn"><i>${icon}</i><b>${ja}</b><span>${en}</span></button>`; actEl.classList.add('show');
+        actEl.innerHTML = `<button class="act-btn"${voice ? ` data-voice="${voice}"` : ''}><i>${icon}</i><b>${ja}</b><span>${en}</span></button>`; actEl.classList.add('show');
         const done = () => { clearTimeout(tm); clearTimeout(au); actEl.classList.remove('show'); actEl.innerHTML = ''; res(); };
         actEl.querySelector('button').addEventListener('click', done); const tm = setTimeout(done, timeout * 1000), au = AUTO ? setTimeout(done, (o.actionAutoAfter ?? .9) * 1000) : 0;
       });
@@ -56,7 +58,7 @@
         const kd = key(true), ku = key(false); addEventListener('keydown', kd); addEventListener('keyup', ku);
         const tick = () => {
           const n = performance.now(), dt = (n - last) / 1000; last = n;
-          if (down || AUTO || n - t0 > 18000) k = Math.min(1, k + dt / sec); onTick?.(down || AUTO, k); bar.style.width = `${k * 100}%`;
+          if (down || AUTO || n - t0 > 18000) k = Math.min(1, k + dt / sec); onTick?.(down || AUTO || (o.holdTickAll && n - t0 > 18000), k); bar.style.width = `${k * 100}%`;
           if (k >= 1) { removeEventListener('keydown', kd); removeEventListener('keyup', ku); actEl.classList.remove('show'); actEl.innerHTML = ''; res(); return; }
           requestAnimationFrame(tick);
         };

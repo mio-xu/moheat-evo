@@ -1,5 +1,7 @@
 // shared/engine/audio.js — MoHeatEngine.audio(opt, build): the Web Audio base every own-engine demo copied into its audio.js.
 //   window.HTAudio = MoHeatEngine.audio({ verbSec: 1.6, verbGain: .16 }, (B) => ({ loop(kind) {…}, fx: {…} }));
+//   opt: verbSec · verbGain · verbPow (reverb tail) · master · toneFloor (where tone() decays to: .0005; .001 in Demo28–30) ·
+//        speakers ['a', 'b'] (a meter per voice; say(id, who, where, gain), voiceLevel(who)) · voiceQuery ('?v=1' on voice files)
 // B (for the demo's own sounds): B.ac (getter, null before init) · panner(az, dist) · place(p, az, dist, tc) · chain(az, dist, send)
 // → { g, p } · noiseSrc() · shot(az, dist, send, build(out, t), len) · burst(out, dur, amp, f, type, q, at) · swell(…) ·
 // tone(out, f, dur, amp, at, type, attack) · rnd · loops (registry) · makeLoop(kind, g, p, lp, nodes) → the usual { g, p, lp, set,
@@ -11,7 +13,7 @@
   const ME = window.MoHeatEngine = window.MoHeatEngine || {};
   if (ME.audio) return;
   ME.audio = (opt = {}, build = null) => {
-    const VERB_SEC = opt.verbSec ?? 1.2, VERB_GAIN = opt.verbGain ?? .16, VERB_POW = opt.verbPow ?? 4, MASTER = opt.master ?? .95;
+    const VERB_SEC = opt.verbSec ?? 1.2, VERB_GAIN = opt.verbGain ?? .16, VERB_POW = opt.verbPow ?? 4, MASTER = opt.master ?? .95, TONE_FLOOR = opt.toneFloor ?? .0005;
     let ac = null, master = null, dry = null, verb = null, noise = null, muted = false;
     const rnd = (a, b) => a + Math.random() * (b - a);
     const voices = {};
@@ -20,6 +22,8 @@
     const VIDS = new Set(), VK = (id) => (VIDS.add(id), window.MoHeatVoice ? MoHeatVoice.key(id) : id);
     addEventListener('moheat:voicelang', () => loadVoices([...VIDS]));
     let level = 0, an = null, abuf = null;
+    const SPK = opt.speakers || null, meter = {}, lvl = {};   // speakers: one loudness meter per voice (two-voice demos: say(id, who, where, gain), voiceLevel(who))
+    if (SPK) for (const w of SPK) lvl[w] = 0;
 
     function init() {
       if (ac) { if (ac.state === 'suspended') ac.resume(); return ac; }
@@ -34,7 +38,8 @@
       verb.buffer = b;
       noise = ac.createBuffer(1, ac.sampleRate * 3, ac.sampleRate);
       const d = noise.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
-      an = ac.createAnalyser(); an.fftSize = 512; abuf = new Float32Array(512);
+      if (SPK) for (const w of SPK) { const a = ac.createAnalyser(); a.fftSize = 512; meter[w] = { an: a, buf: new Float32Array(512) }; }
+      else { an = ac.createAnalyser(); an.fftSize = 512; abuf = new Float32Array(512); }
       return ac;
     }
     function panner(az, dist) { const p = new PannerNode(ac, { panningModel: 'HRTF', distanceModel: 'inverse', refDistance: .5, rolloffFactor: .7 }); place(p, az, dist, 0); return p; }
@@ -58,28 +63,30 @@
     }
     function tone(out, f, dur, amp, at = 0, type = 'sine', attack = .006) {
       const o = new OscillatorNode(ac, { frequency: f, type }), g = ac.createGain(), t = ac.currentTime + at;
-      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(amp, t + attack); g.gain.exponentialRampToValueAtTime(.0005, t + dur);
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(amp, t + attack); g.gain.exponentialRampToValueAtTime(TONE_FLOOR, t + dur);
       o.connect(g).connect(out); o.start(t); o.stop(t + dur + .02);
     }
 
     // ---------------------------------------------------------------- voices
     function loadVoices(ids) {
       if (!ac) return;
-      for (const id of ids) for (const k of [VK(id)]) if (!voices[k]) voices[k] = VF(id, 'media/voice/', '').then((r) => { if (!r.ok) throw 0; return r.arrayBuffer(); }).then((b) => ac.decodeAudioData(b)).then((buf) => (voices[k] = buf)).catch(() => (voices[k] = null));
+      for (const id of ids) for (const k of [VK(id)]) if (!voices[k]) voices[k] = VF(id, 'media/voice/', opt.voiceQuery || '').then((r) => { if (!r.ok) throw 0; return r.arrayBuffer(); }).then((b) => ac.decodeAudioData(b)).then((buf) => (voices[k] = buf)).catch(() => (voices[k] = null));
     }
-    function say(id, where = { az: 0, dist: .8 }, gain = 1.4) {   // → Promise, resolves when the line ends (no file yet: a pause)
+    function say(id, ...a) {   // (id, where, gain) or with speakers (id, who, where, gain) → Promise, resolves when the line ends (no file yet: a pause)
+      const who = SPK ? a.shift() : null, where = a[0] ?? { az: 0, dist: .8 }, gain = a[1] ?? 1.4;
       return new Promise(async (res) => {
         if (voices[VK(id)] === undefined) loadVoices([id]);   // not loaded in this voice language yet
         if (voices[VK(id)] instanceof Promise) await voices[VK(id)];
         const buf = voices[VK(id)]; if (!ac || !buf) return setTimeout(res, 2200);
         const s = ac.createBufferSource(); s.buffer = buf; const g = ac.createGain(); g.gain.value = gain;
         const c = chain(where.az, where.dist, where.dist < .3 ? .03 : .15);
-        s.connect(g); g.connect(c.g); g.connect(an);
+        s.connect(g); g.connect(c.g); g.connect(SPK ? meter[who].an : an);
         setTimeout(() => { c.g.disconnect(); c.p.disconnect(); }, (buf.duration + 2) * 1000);
         s.onended = () => res(); s.start();
       });
     }
-    function voiceLevel() {
+    function voiceLevel(who) {
+      if (SPK) { const m = meter[who]; if (!m) return 0; m.an.getFloatTimeDomainData(m.buf); let s = 0; for (let i = 0; i < m.buf.length; i++) s += m.buf[i] * m.buf[i]; const v = Math.sqrt(s / m.buf.length); lvl[who] += (v - lvl[who]) * .35; return lvl[who]; }
       if (!an) return 0;
       an.getFloatTimeDomainData(abuf); let s = 0; for (let i = 0; i < abuf.length; i++) s += abuf[i] * abuf[i];
       const v = Math.sqrt(s / abuf.length); level += (v - level) * .35; return level;

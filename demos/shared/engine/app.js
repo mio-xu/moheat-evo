@@ -26,14 +26,14 @@
     const cv = $('scene'), ctx = cv.getContext('2d');
     let run = 0;
     const E = { get S() { return St(); }, get run() { return run; }, W: 1920, H: 1080, ctx, sound: SND, sleep: ME.sleep, clamp };
-    E.stage = ME.stage({ ctx, state: St, run: () => run, draw: (t, dt) => draw(t, dt), views: cfg.views, src: cfg.src, blank: cfg.blank, clips: cfg.clips, fade: cfg.fade, zoomExtra: cfg.zoomExtra });
-    E.panel = ME.panel({ clock: () => St().clock, colors: cfg.radar, range: cfg.range, log: cfg.log });
+    E.stage = ME.stage({ ctx, state: St, run: () => run, draw: (t, dt) => draw(t, dt), views: cfg.views, src: cfg.src, blank: cfg.blank, clips: cfg.clips, fade: cfg.fade, zoomExtra: cfg.zoomExtra, drawView: cfg.drawView, onViewChange: cfg.onViewChange, beforeViews: cfg.beforeViews, pauseFix: cfg.pauseFix });
+    E.panel = ME.panel({ clock: () => St().clock, colors: cfg.radar, range: cfg.range, log: cfg.log, logView: cfg.logView ? () => St().view : null });
     E.thermal = ME.thermal({ sources: () => cfg.sources(), rest: () => St().clock < (St().restUntil || 0), off: E.panel.OFF, ...(cfg.thermal || {}) });
-    const P = ME.play({ lines: LINES, sound: SND, state: St, run: () => run, sayGain: cfg.sayGain, autoPick: cfg.autoPick, subGap: cfg.subGap, autoAfter: cfg.autoAfter, actionAutoAfter: cfg.actionAutoAfter });
+    const P = ME.play({ lines: LINES, sound: SND, state: St, run: () => run, sayGain: cfg.sayGain, autoPick: cfg.autoPick, subGap: cfg.subGap, autoAfter: cfg.autoAfter, actionAutoAfter: cfg.actionAutoAfter, muffled: cfg.muffled, holdTickAll: cfg.holdTickAll });
     Object.assign(E, { sub: P.sub, say: P.say, talking: P.talking, alive: P.alive, choice: P.choice, action: P.action, hold: P.hold, stillHold: P.stillHold, go: E.stage.go });
 
     const STEPS = cfg.steps || [];
-    function setStep(i) { const S = St(); if (i > 0 && S.started) S.restUntil = S.clock + (cfg.restSec ?? 1.2); $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
+    function setStep(i) { const S = St(); if (i > 0 && S.started) S.restUntil = S.clock + (cfg.restSec ?? 1.2); const el = $('steps'); if (el) el.innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
     E.setStep = setStep;
 
     function update(dt) {
@@ -47,15 +47,17 @@
     function draw(t, dt) { if (cfg.draw) cfg.draw(t, dt); else E.stage.draw(t, dt); }
 
     let last = performance.now(), hidden = false;
+    const ckEl = $('clock'), posEl = $('posInfo');
     function loop() {
       const n = performance.now(), dt = clamp((n - last) / 1000, 0, .05); last = n;
       if (!hidden) {
         const S = St();
         update(dt);
-        if (S.started || S.fade) draw(S.t, dt); else cfg.drawCover?.();   // UI v2: the cover is the finished image (media/cover/, tools/web/covers.py)
+        cfg.beforeDraw?.();   // Demo28: back to the main canvas context
+        if (S.started || S.fade) draw(S.t, dt); else cfg.drawCover?.(S.t, dt);   // UI v2: the cover is the finished image (media/cover/, tools/web/covers.py)
         const { th, src } = E.thermal(dt); E.panel.output(th, S.started); E.panel.radar(S.started ? src : [], th);
-        $('clock').textContent = fmt(S.clock);
-        $('posInfo').textContent = S.started ? (cfg.place || {})[S.view] ?? '' : '';
+        if (ckEl) ckEl.textContent = fmt(S.clock);   // pages without #clock / #posInfo (Demo28–30) skip it
+        if (posEl) posEl.textContent = S.started ? (cfg.place || {})[S.view] ?? '' : '';
       }
       requestAnimationFrame(loop);
     }
@@ -68,31 +70,32 @@
     }
     function finish() {
       const S = St();
-      S.started = false; run++; E.panel.stopOutput(); S.fade = 0; S.fadeA = 0;   // the end fade must not stay over the cover (the loop draws the story while S.fade is set → black cover)
+      S.started = false; run++; E.panel.stopOutput(); if (!cfg.keepFade) { S.fade = 0; S.fadeA = 0; }   // keepFade: Demo28 / 29 left the end fade (drawn under the cover)   // the end fade must not stay over the cover (the loop draws the story while S.fade is set → black cover)
       cfg.onFinish?.();
       P.sub('', ''); P.actEl.classList.remove('show'); P.choiceEl.classList.remove('show');
       const c = $('cleared'); c.hidden = false;
       c.textContent = cfg.endText ? cfg.endText(S) : '';
       $('startBtn').textContent = '↺ もう一度 · Play again'; $('intro').classList.remove('hidden');
-      window[NS].done = true;
+      if ('done' in window[NS]) window[NS].done = true;
     }
     function start() {
-      SND.init(); SND.loadVoices(Object.keys(LINES));
+      SND.init(); SND.loadVoices(cfg.voiceIds ? cfg.voiceIds() : Object.keys(LINES));   // voiceIds: when the files are not one per line id (Demo28's duets)
       cfg.reset();
+      if (cfg.resetLog) E.panel.log.length = 0;   // a fresh ?auto command log per run (Demo28–30)
       const S = St(); S.started = true; E.stage.reset(S.view); $('cleared').hidden = true;
-      $('intro').classList.add('hidden'); window[NS].done = false;
+      $('intro').classList.add('hidden'); if ('done' in window[NS]) window[NS].done = false;
       story();
     }
-    E.finish = finish; E.start = start;
+    E.finish = finish; E.start = start; E.halt = () => { run++; };   // halt: stop the running story (test hooks such as peek)
 
     E.boot = () => {
       $('startBtn').addEventListener('click', start);
       $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
       $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
-      const api = { get S() { return St(); }, thermal: () => E.thermal(.05), both: E.panel.both, log: E.panel.log, done: false };
+      const api = cfg.nsApi ? cfg.nsApi(E) : { get S() { return St(); }, thermal: () => E.thermal(.05), both: E.panel.both, log: E.panel.log, done: false };   // nsApi: a demo whose test hook had another shape
       window[NS] = Object.defineProperties(api, Object.getOwnPropertyDescriptors(cfg.api || {}));   // keeps getters (Demo18's crane)
       setStep(0);
-      if (QS.has('cover')) { document.body.classList.add('cover-only'); E.stage.artReady.then(() => cfg.drawCover?.()); return; }
+      if (QS.has('cover')) { document.body.classList.add('cover-only'); (cfg.artReady || E.stage.artReady).then(() => cfg.drawCover?.(0, 0)); return; }
       if (QS.has('autoplay') || AUTO) { const ac = SND.init(); if (ac.state === 'running') start(); else ac.resume().then(() => { if (ac.state === 'running' && !St().started) start(); }).catch(() => {}); }
       requestAnimationFrame(loop);
     };
