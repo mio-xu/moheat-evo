@@ -3,7 +3,7 @@
 // gate: four candles, one true flame (warm) and three foxfires (cold) — feel which is which, blow out the foxfires
 // tunnel: two forks — follow the water sound / cool air; spring: blow out your candle and the water lights up.
 // Every fire, draught and water sound is a heat / cool source at its own direction (the same direction as its HRTF sound);
-// your breath cools both ears. Per ear only the stronger mode is sent (firmware: one mode per ear).
+// Kohaku's voice is mildly warm; your breath cools your mouth, not your ears. DUAL: cool and heat are sent together on each ear.
 (() => {
   const $ = (id) => document.getElementById(id);
   const QS = new URLSearchParams(location.search);
@@ -338,8 +338,10 @@
       if (h.lit) add(.55, 'h', .15, '🕯');
     }
     if (S.scene === 'gate') {
-      const c = g.cands[g.focus];
-      if (c && c.lit > .5 && g.wrong <= 0) add(AZ(c.x, 1.6), c.fox ? 'c' : 'h', .82 * clamp((g.focusT || 0) / .35) * (1 - c.out * .6), c.fox ? '🦊' : '🔥');
+      // every lit candle is felt at its own place (DUAL showcase, critic 2026-11-11: this chapter was 'stop'): foxfire cool, the real flame warm;
+      // the one you are feeling (focus) much stronger, so walking along them moves cool / warm across your ears
+      g.cands.forEach((c, i) => { if (c.lit <= .5 || g.wrong > 0) return; const f = i === g.focus ? .62 * clamp((g.focusT || 0) / .35) : .12;
+        add(clamp(AZ(c.x, 2.6), -1.5, 1.5), c.fox ? 'c' : 'h', Math.max(.12, f) * (1 - c.out * .6), c.fox ? '🦊' : '🔥'); });   // spread wide: the candles stand close together in the picture
       if (g.opening) add(0, 'c', .8 * Math.max(.35, 1 - (S.t - g.openAt) / 6), '🌬');
     }
     if (S.scene === 'tunnel') {
@@ -354,11 +356,13 @@
       if (!sp.out) add(.55, 'h', .16, '🕯');
     }
     for (const q of pulses) add(q.az, q.k, q.s * Math.min(1, q.age / .08) * (1 - q.age / q.dur), q.k === 'c' ? '💧' : '✨');
-    if (breath > .03) add(0, 'c', .6 * breath, '🌬');
+    // (your breath cools your mouth, not your ears: no ear cold from blowing — critic 2026-11-11, it made both ears cold over a growing fire)
+    if (talking > 0 && bubble.classList.contains('show')) { const [fx] = foxPos(); add(AZ(fx), 'h', .18, '🦊'); }   // Kohaku's voice near you is mildly warm
     return out;
   }
-  // per ear: sum heat and cool separately, keep the stronger one (with a little hysteresis), smooth
-  const ear = { L: { mode: '', v: 0 }, R: { mode: '', v: 0 } };
+  // per ear: heat and cool each smoothed on their own and sent together (DUAL, firmware 2026-11-08): a cool foxfire on one side and a warm
+  // flame on the other, or a draught and the hearth on the same ear, are both felt. Fast flips on one ear are spaced ≥ 0.95 s by shell.js.
+  const ear = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } };
   function thermal(dt) {
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
     for (const s of src) {
@@ -366,16 +370,10 @@
       sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR;
     }
     const th = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
-    for (const e of ['L', 'R']) {
-      const E = ear[e], hh = Math.min(1, sum[e].h), cc = Math.min(1, sum[e].c);
-      let mode = E.mode;
-      if (!mode) mode = hh > cc ? 'h' : 'c';
-      else if (mode === 'h' && cc > hh + .06) mode = 'c'; else if (mode === 'c' && hh > cc + .06) mode = 'h';
-      if (mode !== E.mode) { E.v = 0; E.mode = mode; }                     // switching mode: the other channel goes to 0 first
-      const target = mode === 'h' ? Math.min(.9, hh) : cc;
-      const tau = target > E.v ? (mode === 'h' ? .35 : .18) : .3;
-      E.v += (target - E.v) * (1 - Math.exp(-dt / tau));
-      th[e + mode] = E.v;
+    for (const e of ['L', 'R']) for (const k of ['h', 'c']) {
+      const E = ear[e], target = k === 'h' ? Math.min(.9, sum[e].h) : Math.min(S.scene === 'spring' ? .75 : 1, sum[e].c);   // the long spring ending: ≤ .75 cold (was ~1.0 on both ears for 20 s)
+      const tau = target > E[k] ? (k === 'h' ? .35 : .18) : .5;   // slow release: no stop-and-restart flicker
+      E[k] += (target - E[k]) * (1 - Math.exp(-dt / tau)); th[e + k] = E[k] > .03 ? E[k] : 0;
     }
     return { th, src };
   }
@@ -558,8 +556,8 @@
   const device = MoHeatDevice.create({ select: $('portSelect'), addBtn: $('addPort'), connectBtn: $('connectBtn'), status: $('deviceStatus') }, { log: (l) => console.log('[MoHeat]', l), onConnect: () => { lastSent = ''; } });
   if (!MoHeatDevice.supported) $('deviceStatus').querySelector('span').textContent = 'Web Serial needs desktop Chrome / Edge';
   function command(th) {
-    const part = (sd, c, h) => (c > OFF ? `${sd}C${Math.round(range.coolMin + c * (range.coolMax - range.coolMin))}` : h > OFF ? `${sd}H${Math.round(range.heatMin + h * (range.heatMax - range.heatMin))}` : `${sd}H0`);
-    return Math.max(th.Lc, th.Lh, th.Rc, th.Rh) <= OFF ? 'stop' : `${part('L', th.Lc, th.Lh)} ${part('R', th.Rc, th.Rh)}`;
+    const C = (v) => (v > OFF ? Math.round(range.coolMin + v * (range.coolMax - range.coolMin)) : 0), Hh = (v) => (v > OFF ? Math.round(range.heatMin + v * (range.heatMax - range.heatMin)) : 0);
+    return Math.max(th.Lc, th.Lh, th.Rc, th.Rh) <= OFF ? 'stop' : `DUAL LC${C(th.Lc)} LH${Hh(th.Lh)} RC${C(th.Rc)} RH${Hh(th.Rh)}`;   // cool and heat together on each ear
   }
   function stopOutput() { if (device.isConnected()) device.send('stop'); lastSent = 'stop'; }
   function emergencyStop() { tripped = !tripped; const b = $('estop'); if (tripped) { stopOutput(); b.textContent = '↺ Re-arm output'; b.classList.add('tripped'); } else { b.textContent = '■ STOP'; b.classList.remove('tripped'); lastSent = ''; } }
@@ -570,7 +568,7 @@
   let conflicts = 0;
   function output(th, live) {
     const sc = Object.fromEntries(Object.entries(th).map(([k, v]) => [k, live && !tripped ? v * intensity : 0]));
-    if ((sc.Lc > OFF && sc.Lh > OFF) || (sc.Rc > OFF && sc.Rh > OFF)) conflicts++;          // must stay 0
+    // (DUAL since 2026-11-11: cool + heat on the same ear is allowed, so 'conflicts' stays 0 by definition)
     for (const [k, [bar, val]] of Object.entries(meterEls)) { bar.style.width = `${sc[k] * 100}%`; val.textContent = Math.round(sc[k] * 100); }
     const cmd = command(sc); $('cmd').textContent = cmd;
     for (const [e, el] of [['L', $('glowL')], ['R', $('glowR')]]) {
