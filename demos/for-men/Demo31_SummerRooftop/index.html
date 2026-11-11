@@ -80,15 +80,23 @@
   </main>
 
   <script src="../../../device.js?v=374485c9"></script>
+  <script src="../../shared/engine/core.js?v=5246c5ad"></script>
+  <script src="../../shared/engine/audio.js?v=3d925519"></script>
   <script src="lines.js?v=1"></script>
-  <script src="audio.js?v=12e68e3e"></script>
+  <script src="audio.js?v=f79c7c44"></script>
   <!-- layered art (DEMO_DESIGN_GUIDE §6 standard, as Demo27): shared/layers.js draws the live composite wherever main.js draws a still -->
   <script>window.MoHeatLayers = { level: () => window.NAGISA?.S?.env || 0, raw: () => window.NAGISA?.S?.lv || 0, current: () => window.NAGISA?.S?.view || 'arrive' };</script>
   <script src="media/layers.js?v=ec6f31b3"></script>
   <script src="../../shared/layers.js?v=f71de857"></script>
   <script src="../../shared/fireworks.js?v=5"></script>
   <script src="../../shared/shell.js?v=fa09317e"></script>
-  <script src="main.js?v=695a1ae5"></script>
+  <!-- the engine (demos/shared/engine, docs/engine): main.js holds only this demo's story, sounds' timing, thermal sources and overlays -->
+  <script src="../../shared/engine/thermal.js?v=63eb195a"></script>
+  <script src="../../shared/engine/panel.js?v=2e939012"></script>
+  <script src="../../shared/engine/stage.js?v=4d6229ed"></script>
+  <script src="../../shared/engine/play.js?v=a6552ac3"></script>
+  <script src="../../shared/engine/app.js?v=58e0c548"></script>
+  <script src="main.js?v=dfadde96"></script>
   <script src="../../shared/voice.js?v=193765ef"></script>
   <script src="../../shared/nav.js?v=a9c4edbc"></script>
 </body>
