@@ -168,13 +168,16 @@
       // the new mode's channel at 0 until then — a short rest, then the new mode. Old form and DUAL alike; `stop` passes at once.
       // And a rest between the two modes (QA 2026-11-11, Demo02: hot off → cold on 0.1 s later): a mode that starts while the other one
       // is off but was on less than MINSW ago waits at 0 until MINSW after the other one stopped. Both on at once (DUAL) is not a switch.
+      // The same rules for pages without this shell (private live/ pages): shared/thermguard.js — keep the two in step.
       const MINSW = 950, dom = { L: { s: '', t: -1e9 }, R: { s: '', t: -1e9 } }, lastOn = { LC: -1e9, LH: -1e9, RC: -1e9, RH: -1e9 }, isOn = {};
       const offAll = (now) => { for (const k in isOn) if (isOn[k]) { isOn[k] = false; lastOn[k] = now; } };
       const minSwitch = (line, now) => {
         const v = {}; line.replace(/\b([LR][CH])(\d+)\b/g, (m, k, n) => { v[k] = +n; return m; });
         let wait = 0; const hold = {};
         for (const e of ['L', 'R']) for (const [x, y] of [['C', 'H'], ['H', 'C']]) {
-          const k = e + x, o = e + y; if (!(v[k] > 0) || isOn[k] || v[o] > 0) continue;   // only a fresh start of one mode with the other off
+          const k = e + x, o = e + y; if (!(v[k] > 0) || isOn[k]) continue;   // a fresh start of one mode
+          if (now - lastOn[k] < MINSW) { hold[k] = 1; wait = Math.max(wait, MINSW - (now - lastOn[k])); continue; }   // the same mode back < MINSW after it stopped = a stutter (QA 2026-11-11, Demo50)
+          if (v[o] > 0) continue;   // with the other one on too = DUAL
           const since = isOn[o] ? 0 : now - lastOn[o];
           if (since < MINSW) { hold[k] = 1; wait = Math.max(wait, MINSW - since); }
         }
