@@ -3,7 +3,8 @@
 // day: call her name (mic or button) → she answers from the cat tower and walks over → teaser wand → blow on her warm food
 // afternoon: poke her (she never gets angry) → she rolls over → rub her belly · night: rain on the window, she sleeps on your lap.
 // Every sound is placed with HRTF; her body, purr and breath are warm sources at her direction, her nose / the feather's wind /
-// the rain / your breath are cool ones. Per ear only the stronger mode is sent (firmware: one mode per ear).
+// the rain are cool ones. Ears feel her only where she really is: close to that ear / against your cheek (critic 2026-11-11: a hand
+// stroking her head or tummy does not warm your ears); your breath cools your mouth, not your ears. DUAL: cool and warm per ear at once.
 (() => {
   const $ = (id) => document.getElementById(id);
   const QS = new URLSearchParams(location.search);
@@ -210,7 +211,7 @@
     else if (S.step === 'call') callTap = true;
   }
   function poke() {
-    S.pokes++; N.squish = .16; SND.fx.poke(AZ(N.x)); pulse(AZ(N.x), 'h', .35, .5); renderGoal();
+    S.pokes++; N.squish = .16; SND.fx.poke(AZ(N.x)); renderGoal();   // (a poke is felt in your finger: no ear warmth)
     if (S.pokes === 1) { setTimeout(() => say('tiny', '…にゃ？', '…mew?'), 250); toast('…おこらない。やさしい子', "…She doesn't get angry. Such a gentle girl.", 2600); }
     else if (S.pokes === 2) setTimeout(() => say('ask', 'にゃう…？', 'Mrr…?'), 250);
     else if (S.pokes >= 3) {
@@ -286,7 +287,7 @@
         S.rub += dt; const r = S.rub;
         const side = r < 2 ? -1 : r < 4 ? 1 : 0, k = side ? Math.sin(Math.PI * clamp(((r % 2) - .1) / 1.8)) : 0;
         N.x = 960 + side * 380 * k; N.tilt = -side * .2 * k; N.face = 'happy'; N.faceUntil = S.t + .3;
-        if ((r - dt < .2 && r >= .2) || (r - dt < 2.2 && r >= 2.2)) { const az = r < 2 ? -1.2 : 1.2; SND.fx.rub(az, .26); pulse(az, 'h', .9, 1.8); }
+        if ((r - dt < .2 && r >= .2) || (r - dt < 2.2 && r >= 2.2)) { const az = r < 2 ? -1.2 : 1.2; SND.fx.rub(az, .26); pulse(az, 'h', .6, 1.8); }   // her cheek against yours: warm on that side
         if (r - dt < 4.3 && r >= 4.3) { heart(); say('trill', 'ごろごろ…', '*purr purr*', 'happy'); }
         if (r > 5.6) go('day', () => { S.rub = -1; setStep('call'); N.show = true; N.tilt = 0; N.purrT = 0; setPose('loaf', 1540, 735, .5); N.near = .1; hint(); });
       }
@@ -311,7 +312,7 @@
         N.jump = Math.sin(Math.PI * clamp(k)) * 170;
         if (N.pounceT - dt < .38 && N.pounceT >= .38) {
           if (Math.abs(wand.fx - N.x) < 230 && wand.fy < N.y - 250) {
-            S.catches++; renderGoal(); SND.fx.bell(AZ(wand.fx), .9); sparkle(wand.fx, wand.fy, 10); pulse(AZ(N.x), 'h', .5, .8);
+            S.catches++; renderGoal(); SND.fx.bell(AZ(wand.fx), .9); sparkle(wand.fx, wand.fy, 10);
             if (S.catches < 3) mew(['つかまえた！', 'もういっかい！'][S.catches - 1], ['Got it!', 'Again!'][S.catches - 1], 1200);
           }
         }
@@ -393,20 +394,23 @@
     const out = [], add = (az, k, s, icon) => { if (s > .01) out.push({ az, k, s, icon }); };
     if (!S.started) return out;
     const az = N.show ? AZ(N.x) : (N.az ?? -1);
-    const body = (N.cool > 0 ? .15 : 1) * N.near;
-    if (S.step !== 'sleep') add(az, 'h', .42 * body, '🐈');
-    else add(.25, 'h', .5 + .08 * Math.sin(S.t * 2.4), '🐈');                     // asleep on your lap, a little to the right
-    add(az, 'h', .3 * N.purr * N.near, '💗');
+    // her warmth reaches an ear only when she is right at your face (close-up / asleep on your lap at your chin): mild, on her side;
+    // her purr adds a little on her side. Stroking with your hand is felt in the hand, not the ears.
+    const face = N.pose === 'close' ? clamp((N.near - .8) / .2) : 0;
+    if (S.step !== 'sleep') add(az, 'h', .22 * face * (N.cool > 0 ? .3 : 1), '🐈');
+    else add(.25, 'h', .3 + .05 * Math.sin(S.t * 2.4), '🐈');                     // asleep on your lap, a little to the right, close to your chin
+    add(az, 'h', .14 * N.purr * Math.max(face, S.step === 'sleep' ? 1 : 0), '💗');
     if (S.bg === 'morning' && S.step !== 'wake') add(-1.15, 'c', .14, '🪟');
     if (S.bg === 'night') add(-1.15, 'c', .26, '🌧');
+    if (S.bg === 'day') add(-.55, 'h', .15, '☀');                                      // the afternoon sun through the window on the left (visible in the picture)
     if (S.step === 'play') add(AZ(wand.fx), 'c', clamp(wand.speed / 2200) * .55, '🪶');
-    if (S.step === 'feed' && S.food > 0) add(0, 'h', .5 * S.food, '🍲');
+    if (S.step === 'feed' && S.food > 0) add(0, 'h', .14 * S.food, '🍲');           // only the bowl's faint steam reaches your face
     for (const q of pulses) add(q.az, q.k, q.s * Math.min(1, q.age / .08) * (1 - q.age / q.dur), q.k === 'c' ? '👃' : '✨');
-    if (breath > .03) add(0, 'c', .6 * breath, '🌬');
     return out;
   }
-  // per ear: sum heat and cool separately, keep the stronger one (with a little hysteresis), smooth
-  const ear = { L: { mode: '', v: 0 }, R: { mode: '', v: 0 } };
+  // per ear: heat and cool each smoothed on their own and sent together (DUAL): the cold nose on your left while the room is warm,
+  // the rain on the left window while she sleeps warm on your right. Fast flips on one ear are spaced ≥ 0.95 s by shell.js.
+  const ear = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } };
   function thermal(dt) {
     const sum = { L: { h: 0, c: 0 }, R: { h: 0, c: 0 } }, src = sources();
     for (const s of src) {
@@ -414,17 +418,10 @@
       sum.L[s.k] += s.s * wL; sum.R[s.k] += s.s * wR;
     }
     const th = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
-    for (const e of ['L', 'R']) {
-      const E = ear[e], hh = Math.min(1, sum[e].h), cc = Math.min(1, sum[e].c);
-      let mode = E.mode;
-      if (!mode) mode = hh > cc ? 'h' : 'c';
-      else if (!MoHeatDwell.may(E, dt)) { /* keep the current direction */ }
-      else if (mode === 'h' && cc > hh + .06) mode = 'c'; else if (mode === 'c' && hh > cc + .06) mode = 'h';
-      if (mode !== E.mode) { E.v = 0; E.mode = mode; E.held = 0; }
-      const target = mode === 'h' ? Math.min(.9, hh) : cc;
-      const tau = target > E.v ? (mode === 'h' ? .35 : .18) : .3;
-      E.v += (target - E.v) * (1 - Math.exp(-dt / tau));
-      th[e + mode] = E.v;
+    for (const e of ['L', 'R']) for (const k of ['h', 'c']) {
+      const E = ear[e], target = k === 'h' ? Math.min(.9, sum[e].h) : Math.min(1, sum[e].c);
+      const tau = target > E[k] ? (k === 'h' ? .35 : .15) : .5;   // slow release: no stop-and-restart flicker
+      E[k] += (target - E[k]) * (1 - Math.exp(-dt / tau)); th[e + k] = E[k] > .03 ? E[k] : 0;
     }
     return { th, src };
   }
@@ -548,8 +545,8 @@
   const device = MoHeatDevice.create({ select: $('portSelect'), addBtn: $('addPort'), connectBtn: $('connectBtn'), status: $('deviceStatus') }, { log: (l) => console.log('[MoHeat]', l), onConnect: () => { lastSent = ''; } });
   if (!MoHeatDevice.supported) $('deviceStatus').querySelector('span').textContent = 'Web Serial needs desktop Chrome / Edge';
   function command(th) {
-    const part = (sd, c, h) => (c > OFF ? `${sd}C${Math.round(range.coolMin + c * (range.coolMax - range.coolMin))}` : h > OFF ? `${sd}H${Math.round(range.heatMin + h * (range.heatMax - range.heatMin))}` : `${sd}H0`);
-    return Math.max(th.Lc, th.Lh, th.Rc, th.Rh) <= OFF ? 'stop' : `${part('L', th.Lc, th.Lh)} ${part('R', th.Rc, th.Rh)}`;
+    const C = (v) => (v > OFF ? Math.round(range.coolMin + v * (range.coolMax - range.coolMin)) : 0), Hh = (v) => (v > OFF ? Math.round(range.heatMin + v * (range.heatMax - range.heatMin)) : 0);
+    return Math.max(th.Lc, th.Lh, th.Rc, th.Rh) <= OFF ? 'stop' : `DUAL LC${C(th.Lc)} LH${Hh(th.Lh)} RC${C(th.Rc)} RH${Hh(th.Rh)}`;   // cool and heat together on each ear
   }
   function stopOutput() { if (device.isConnected()) device.send('stop'); lastSent = 'stop'; }
   function emergencyStop() { tripped = !tripped; const b = $('estop'); if (tripped) { stopOutput(); b.textContent = '↺ Re-arm output'; b.classList.add('tripped'); } else { b.textContent = '■ STOP'; b.classList.remove('tripped'); lastSent = ''; } }
@@ -560,7 +557,7 @@
   let conflicts = 0;
   function output(th, live) {
     const sc = Object.fromEntries(Object.entries(th).map(([k, v]) => [k, live && !tripped ? v * intensity : 0]));
-    if ((sc.Lc > OFF && sc.Lh > OFF) || (sc.Rc > OFF && sc.Rh > OFF)) conflicts++;          // must stay 0
+    // (DUAL since 2026-11-11: cool + heat on the same ear is allowed, 'conflicts' stays 0)
     for (const [k, [bar, val]] of Object.entries(meterEls)) { bar.style.width = `${sc[k] * 100}%`; val.textContent = Math.round(sc[k] * 100); }
     const cmd = command(sc); $('cmd').textContent = cmd;
     for (const [e, el] of [['L', $('glowL')], ['R', $('glowR')]]) {
