@@ -169,6 +169,9 @@
     // the demo's l10n.js (names) arrives after this runs (shared/subs.js loads it): read it when needed
     const nm = (who, l) => (l === 'ja' ? NAME[who] : ((window.MOHEAT_L10N || {}).names?.[NAME[who]] || {})[l]) || NAME[who] || who;
     const PURE = () => !!(window.MoHeatPlay && window.MoHeatPlay.pure) || QS.has('sample');
+    // heat only (cfg.heatOnly, or <html data-warm-only>: a warm-only demo for visitors who dislike the cooling mist, Demo51): every cool
+    // source is dropped, the command always says LC0 / RC0, and the side panel hides the two cool rows (tools/qa/check_demo.py: warm-only)
+    const HEAT_ONLY = !!cfg.heatOnly || document.documentElement.hasAttribute('data-warm-only');
 
     // ---- texts the engine writes on the page get their 中文 here (data has zh: steps, answers, places; names from l10n names)
     // (the demo's l10n.js is loaded later by shared/subs.js and replaces window.MOHEAT_L10N: these strings are merged into it then)
@@ -482,7 +485,7 @@
     //  · VOICE: warm. (0.1 + 0.8 × loudness) × the plan's distance factor at the speaker's position, × front_split in front / near.
     //  · AMBIENT: the plan's sources (set / pulse / sweep) — every one a real thing next to your ears, visible on screen.
     function sources() {
-      const out = [], add = (azDeg, k, s, icon) => { if (s > .01) out.push({ az: azDeg * RAD, k, s, icon }); };
+      const out = [], add = (azDeg, k, s, icon) => { if (s > .01 && !(HEAT_ONLY && k === 'c')) out.push({ az: azDeg * RAD, k, s, icon }); };
       if (!S.started) return out;
       const pn = S.posName;
       if (talking) add(VO.az?.[pn] ?? 0, cfg.voiceKind?.(S.who) === 'cool' ? 'c' : 'h', (.1 + .8 * clamp(S.vlv * 8)) * (VO.distance?.[pn] ?? .28) * (pn === 'front' || pn === 'near' ? (VO.front_split ?? .5) : 1), '');
@@ -600,7 +603,7 @@
     const device = window.MoHeatDevice.create({ select: $('portSelect'), addBtn: $('addPort'), connectBtn: $('connectBtn'), status: $('deviceStatus') }, { log: (l) => console.log('[MoHeat]', l), onConnect: () => { lastSent = ''; } });
     if (!window.MoHeatDevice.supported) $('deviceStatus').querySelector('span').textContent = 'Web Serial needs desktop Chrome / Edge';
     function command(th) {   // DUAL: each ear's cool and heat set independently (firmware 2026-11-08)
-      const c = (v) => (v > OFF ? Math.round(range.coolMin + v * (range.coolMax - range.coolMin)) : 0), h = (v) => (v > OFF ? Math.round(range.heatMin + v * (range.heatMax - range.heatMin)) : 0);
+      const c = (v) => (v > OFF && !HEAT_ONLY ? Math.round(range.coolMin + v * (range.coolMax - range.coolMin)) : 0), h = (v) => (v > OFF ? Math.round(range.heatMin + v * (range.heatMax - range.heatMin)) : 0);
       return Math.max(th.Lc, th.Lh, th.Rc, th.Rh) <= OFF ? 'stop' : `DUAL LC${c(th.Lc)} LH${h(th.Lh)} RC${c(th.Rc)} RH${h(th.Rh)}`;
     }
     function stopOutput() { if (device.isConnected()) device.send('stop'); lastSent = 'stop'; }
@@ -609,6 +612,7 @@
     $('intensity').value = Math.round(intensity * 100); $('intensityVal').textContent = `${Math.round(intensity * 100)}%`;
     $('intensity').addEventListener('input', (e) => { intensity = +e.target.value / 100; $('intensityVal').textContent = `${e.target.value}%`; store.set('asmr.intensity', +e.target.value); });
     const meterEls = Object.fromEntries(['Lc', 'Lh', 'Rc', 'Rh'].map((k) => [k, [$(`m${k}`), $(`v${k}`)]]));
+    if (HEAT_ONLY) for (const k of ['Lc', 'Rc']) { const r = meterEls[k][0]?.closest('.meter-row'); if (r) r.hidden = true; }
     let both = 0; const cmdLog = [];
     function output(th, live) {
       const sc = Object.fromEntries(Object.entries(th).map(([k, v]) => [k, live && !tripped ? v * intensity : 0]));
