@@ -20,6 +20,7 @@
 <body>
   <main>
     <div class="noprint"><select id="day"></select> <button onclick="print()">Print / Save as PDF</button> <button id="dl">Download HTML</button></div>
+    <div id="ckClose"></div>
     <h1>MoHeat Evo · kiosk report <span id="date"></span></h1>
     <p class="note">Anonymous counts stored only in this browser (no personal data). Generated <span id="gen"></span>.</p>
     <div class="kpi" id="kpi"></div>
@@ -33,6 +34,8 @@
   <script>window.MOHEAT_NAV_DATA_ONLY = true;</script>
   <script src="../demos/shared/nav.js?v=c9297b83"></script>
   <script src="../demos/shared/kiosk.js?v=a71c2660"></script>
+  <script src="checklist.js?v=0"></script>
+  <script>MoHeatChecklist.panel(document.getElementById('ckClose'), 'close');</script>
   <script>
   (() => {
     const K = window.MoHeatKiosk, D = window.MoHeatDemos.DEMOS, raw = JSON.parse(K.stats.json());

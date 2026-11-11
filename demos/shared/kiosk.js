@@ -170,7 +170,86 @@
   const idb = { open: () => new Promise((res, rej) => { const r = indexedDB.open('moheat-kiosk', 1); r.onupgradeneeded = () => r.result.createObjectStore('files'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }),
     async put(k, v) { const db = await idb.open(); return new Promise((res, rej) => { const t = db.transaction('files', 'readwrite'); t.objectStore('files').put(v, k); t.oncomplete = res; t.onerror = () => rej(t.error); }); },
     async get(k) { try { const db = await idb.open(); return await new Promise((res) => { const r = db.transaction('files').objectStore('files').get(k); r.onsuccess = () => res(r.result || null); r.onerror = () => res(null); }); } catch { return null; } } };
-  const K = window.MoHeatKiosk = { idb, currency, bands, splitBands, BANDS, SCENES, on: flag, cfg, setCfg, stats, resetVisitor, enter, exit, visit, day, DEF, stopDevice,
+  // ================================================================ cooling-mist refill reminder (user 2026-11-11): after every N visitor
+  // experiences (a demo played and back on the start page; N = cfg.mistEvery, default 3, staff panel − / +) a quiet staff card top left,
+  // under the staff button: "check / refill the mist liquid" + a big 補充しました button that resets the count. Persists across reloads.
+  const MIST_K = 'moheat.kiosk.mist', MTX = {
+    ja: { t: (n) => `冷却ミストの液を確認・補充してください（${n} 名体験ごと）`, b: '補充しました' }, en: { t: (n) => `Please check / refill the cooling-mist liquid (every ${n} visitors)`, b: 'Done' },
+    zh: { t: (n) => `请检查并补充冷却雾的液体（每 ${n} 位体验后）`, b: '已补充' }, ko: { t: (n) => `냉각 미스트 액을 확인·보충해 주세요 (${n}명 체험마다)`, b: '보충했어요' } };
+  const mistGet = () => { try { return JSON.parse(localStorage.getItem(MIST_K)) || { n: 0, due: false }; } catch { return { n: 0, due: false }; } };
+  const mistSet = (v) => { try { localStorage.setItem(MIST_K, JSON.stringify(v)); } catch {} mistPaint(); };
+  const mistEvery = () => Math.max(1, Math.min(20, Math.round(+cfg().mistEvery || 3)));
+  let mistEl = null;
+  function mistPaint() {
+    if (!document.body) return; const m = mistGet();
+    if (!m.due) { if (mistEl) mistEl.hidden = true; return; }
+    if (!mistEl) { const st = document.createElement('style'); st.textContent = `
+      .mk-mist { position: fixed; z-index: 2147482998; left: 10px; top: 86px; width: min(380px, 80vw); padding: 14px 16px; border-radius: 20px; border: 1px solid rgba(255,255,255,.22); background: rgba(24,20,30,.8);
+        -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); color: #f4efe6; font: 600 17px/1.4 Inter, "Noto Sans JP", "PingFang SC", "Apple SD Gothic Neo", sans-serif; box-shadow: 0 8px 28px rgba(0,0,0,.4); }
+      .mk-mist[hidden] { display: none; } .mk-mist p { margin: 0 0 4px; } .mk-mist small { display: block; margin-bottom: 10px; opacity: .65; font-size: 13px; font-weight: 500; }
+      .mk-mist button { width: 100%; min-height: 64px; border-radius: 999px; border: 0; background: #f4efe6; color: #161214; font: 700 20px/1 Inter, "Noto Sans JP", "PingFang SC", sans-serif; cursor: pointer; touch-action: manipulation; }`;
+      document.head.appendChild(st); mistEl = document.createElement('div'); mistEl.className = 'mk-mist'; mistEl.setAttribute('role', 'status'); document.body.appendChild(mistEl);
+      mistEl.addEventListener('click', (e) => { e.stopPropagation(); if (e.target.closest('button')) mistSet({ n: 0, due: false }); }); }
+    let l = 'ja'; try { l = localStorage.getItem('moheat.staff.lang') || 'ja'; } catch {} if (!MTX[l]) l = 'ja';
+    const n = mistEvery(); mistEl.innerHTML = `<p>${MTX[l].t(n)}</p>${l !== 'en' ? `<small>${MTX.en.t(n)}</small>` : ''}<button type="button" class="mk-mist-ok">${MTX[l].b}</button>`; mistEl.hidden = false;
+  }
+  const mistCount = () => { const m = mistGet(); m.n = (m.n || 0) + 1; if (m.n >= mistEvery()) m.due = true; mistSet(m); };
+  addEventListener('storage', (e) => { if (e.key === MIST_K || e.key === 'moheat.kiosk.cfg') mistPaint(); });
+  // ================================================================ always-there controls (exhibition, user 2026-11-11): ■ STOP + staff button
+  // ■ STOP (top right, red, ≥ 64 px, visitors may use it): on PRESS (pointerdown — no waiting for the click) every warm / cool output goes off
+  // and the demo pauses; the same function as the demo's own ■ STOP (whose bar button is hidden in kiosk mode, so there is one STOP only).
+  // After a stop on a demo page it reads "↺ 再開" (re-arm, the demo's own behaviour); taps in the first 1.5 s after a stop never re-arm.
+  // Staff (top left, small, low contrast, a drawn gear — no emoji in the kiosk texts, check_symbols.py): press and HOLD 1.5 s (a ring fills) → password keypad → staff screen. 5 quick taps still work.
+  //   controls({ stop(), rearm?(), tripped?(), staff(), lang() })   — kiosk/app.js (start · guide · card · standby · break) and the demo pages below.
+  const CTX = { stop: { ja: '停止', en: 'Stop', zh: '停止', ko: '정지' }, stopped: { ja: '温冷を止めました', en: 'Warm & cool stopped', zh: '冷热已停止', ko: '온냉을 멈췄어요' },
+    rearm: { ja: '温冷を再開', en: 'Resume warm & cool', zh: '恢复冷热', ko: '온냉 다시 켜기' }, staff: { ja: 'スタッフ', en: 'Staff', zh: '工作人员', ko: '스태프' } };
+  function controls(o) {
+    if (document.querySelector('.mk-stop')) return;
+    const st = document.createElement('style'); st.textContent = `
+    .mk-stop { position: fixed; z-index: 2147483000; right: 14px; top: 14px; min-width: 120px; min-height: 64px; padding: 6px 18px; border-radius: 18px; border: 2px solid rgba(255,255,255,.7); background: #d92c2c; color: #fff;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; box-shadow: 0 6px 24px rgba(0,0,0,.45); cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none;
+      font-family: Inter, "Noto Sans JP", "PingFang SC", "Apple SD Gothic Neo", sans-serif; }
+    .mk-stop b { font: 800 22px/1 Inter, "Noto Sans JP", "PingFang SC", "Apple SD Gothic Neo", sans-serif; letter-spacing: .04em; } .mk-stop small { font: 700 14px/1 Inter, "Noto Sans JP", "PingFang SC", "Apple SD Gothic Neo", sans-serif; opacity: .9; }
+    .mk-stop:active, .mk-stop.hit { background: #ff3b3b; transform: scale(.97); }
+    .mk-stop.armed { background: #3a2a2e; border-color: #ff7a7a; } .mk-stop.armed b { font-size: 18px; }
+    .mk-stop-note { position: fixed; z-index: 2147483000; right: 14px; top: 86px; padding: 10px 16px; border-radius: 14px; background: rgba(20,12,24,.92); color: #fff; font: 700 17px/1.2 Inter, "Noto Sans JP", sans-serif; box-shadow: 0 6px 24px rgba(0,0,0,.45); }
+    .mk-stop-note[hidden] { display: none; }
+    .mk-staff { position: fixed; z-index: 2147482999; left: 10px; top: 10px; width: 64px; height: 64px; border-radius: 50%; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.05); color: rgba(255,255,255,.38);
+      display: grid; place-items: center; padding: 0; cursor: pointer; touch-action: none; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+      font: 600 11px/1.1 Inter, "Noto Sans JP", sans-serif; --p: 0; }
+    .mk-staff::before { content: ""; position: absolute; inset: -3px; border-radius: 50%; background: conic-gradient(rgba(255,255,255,.85) calc(var(--p) * 1turn), transparent 0); -webkit-mask: radial-gradient(circle, transparent 29px, #000 30px); mask: radial-gradient(circle, transparent 29px, #000 30px); }
+    .mk-staff i { font-style: normal; display: flex; justify-content: center; line-height: 0; } .mk-staff span { display: block; text-align: center; margin-top: 2px; }
+    .mk-staff.holding { color: rgba(255,255,255,.85); background: rgba(255,255,255,.12); }
+    .estop { display: none !important; }
+    header.bar { padding-right: 150px !important; }   /* the demo's top bar keeps its own items clear of ■ STOP */
+    .panel.staff > header { padding-right: 150px; }`;
+    document.head.appendChild(st);
+    const L = () => { const l = o.lang?.() || 'ja'; return CTX.stop[l] ? l : 'ja'; }, t = (k) => CTX[k][L()];
+    const s = document.createElement('button'); s.type = 'button'; s.className = 'mk-stop'; s.setAttribute('aria-label', 'STOP');
+    const note = document.createElement('div'); note.className = 'mk-stop-note'; note.hidden = true; note.setAttribute('role', 'status');
+    let at = 0, noteT = 0;
+    const paint = () => { const armed = !!o.tripped?.() && Date.now() - at > 1500; s.classList.toggle('armed', armed); s.innerHTML = armed ? `<b>↺</b><small>${t('rearm')}</small>` : `<b>■ STOP</b><small>${t('stop')}</small>`; };
+    const press = () => { const armed = s.classList.contains('armed');
+      if (armed && Date.now() - at > 1500) { o.rearm?.(); paint(); return; }
+      at = Date.now(); o.stop(); s.classList.add('hit'); setTimeout(() => s.classList.remove('hit'), 180);
+      note.textContent = t('stopped'); note.hidden = false; clearTimeout(noteT); noteT = setTimeout(() => { note.hidden = true; paint(); }, 2500); paint(); };
+    let viaPointer = 0;
+    s.addEventListener('pointerdown', (e) => { if (e.button > 0) return; viaPointer = Date.now(); e.preventDefault(); press(); });
+    s.addEventListener('click', (e) => { e.stopPropagation(); if (Date.now() - viaPointer > 800) press(); });   // keyboard / assistive tech: no pointerdown
+    const f = document.createElement('button'); f.type = 'button'; f.className = 'mk-staff'; f.setAttribute('aria-label', 'Staff');
+    const lab = () => { f.innerHTML = `<i><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.8 1.8M16.7 16.7l1.8 1.8M5.5 18.5l1.8-1.8M16.7 7.3l1.8-1.8"/></svg></i><span>${t('staff')}</span>`; paint(); };
+    let raf = 0, t0 = 0, taps = [];
+    const stopHold = () => { cancelAnimationFrame(raf); raf = 0; f.classList.remove('holding'); f.style.setProperty('--p', 0); };
+    f.addEventListener('pointerdown', (e) => { e.preventDefault(); try { f.setPointerCapture(e.pointerId); } catch {} t0 = performance.now(); f.classList.add('holding');
+      const step = () => { const p = Math.min(1, (performance.now() - t0) / 1500); f.style.setProperty('--p', p); if (p >= 1) { stopHold(); o.staff(); return; } raf = requestAnimationFrame(step); }; raf = requestAnimationFrame(step); });
+    for (const ev of ['pointerup', 'pointercancel', 'lostpointercapture']) f.addEventListener(ev, () => { if (raf) stopHold(); });
+    f.addEventListener('click', (e) => { e.stopPropagation(); const n = Date.now(); taps = taps.filter((x) => n - x < 3000).concat(n); if (taps.length >= 5) { taps = []; o.staff(); } });   // backup: 5 quick taps
+    f.addEventListener('contextmenu', (e) => e.preventDefault()); s.addEventListener('contextmenu', (e) => e.preventDefault());
+    lab(); addEventListener('moheat:sublang', lab); setInterval(paint, 1000);
+    document.body.append(s, note, f);
+    mistPaint();
+  }
+  const K = window.MoHeatKiosk = { controls, mistCount, mistPaint, mistEvery, idb, currency, bands, splitBands, BANDS, SCENES, on: flag, cfg, setCfg, stats, resetVisitor, enter, exit, visit, day, DEF, stopDevice,
     offered, num, top3, pickUrl, dnum, post, thermalOf, scales, setScales, scaleLine, get queueOn() { return Date.now() - queueSeen < 6000; } };
 
   // ================================================================ demo pages (kiosk mode on)
@@ -242,6 +321,9 @@
     RT.si(() => { vb.hidden = !!document.querySelector('.u2 [data-k=vol]'); }, 1000);
     const corner = document.createElement('div'); corner.className = 'mk-corner'; corner.setAttribute('aria-hidden', 'true'); document.body.appendChild(corner);
     let taps = []; corner.addEventListener('click', () => { const n = Date.now(); taps = taps.filter((t) => n - t < 3000).concat(n); if (taps.length >= 5) leave('staff'); });
+    // ■ STOP + staff button (always there): STOP = the demo's own ■ STOP (trip + pause) and a direct device stop; staff → start page → password
+    const est = () => document.getElementById('estop');
+    controls({ lang: L, stop: () => { stopDevice(); const b = est(); if (b && !b.classList.contains('tripped')) b.click(); else try { window.MoHeatShell?.pause?.(true); } catch {} stopDevice(); }, tripped: () => !!est()?.classList.contains('tripped'), rearm: () => est()?.click(), staff: () => leave('staff') });
     // intensity cap on the page's slider (the shell already restored the visitor's level)
     const inten = document.getElementById('intensity');
     // the caps live in the two scales (scaleLine below); the page slider is a master the visitor may lower

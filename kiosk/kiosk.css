@@ -73,6 +73,12 @@ button.link { background: none; border: 0; color: var(--dim); font: 600 clamp(14
 .att-touch { margin: 0; font: 800 clamp(18px, 3.4vmin, 34px)/1.4 var(--ff); color: var(--gold); animation: blink 2.2s ease-in-out infinite; }
 @keyframes blink { 50% { opacity: .45; } }
 @media (prefers-reduced-motion: reduce) { .att-slides img.on, .att-touch { animation: none; } }
+/* standby on screens that are not 16:9 (16:10, 5:4, scaled): the cover still fills the screen (cover), cut on the RIGHT, where the picture continues —
+   the title and its chips sit on the left of every finished cover (user 2026-11-11: no bars, title + characters kept) */
+.att-slides img { object-position: 6% 50%; }
+/* much narrower than 16:9 (5:4, 4:3): cropping would cut the character off → the whole cover, centred, over a blurred, darker copy of itself (no black bars) */
+@media (max-aspect-ratio: 3/2) { .att-slides img { object-fit: contain; object-position: 50% 50%; transform-origin: 50% 50%; }
+  .att-slides::before { content: ""; position: absolute; inset: -60px; background: inherit; background-size: cover; background-position: center; filter: blur(32px) brightness(.5); } }
 
 /* staff */
 .corner { position: fixed; left: 0; top: 0; width: 64px; height: 64px; z-index: 50; }
@@ -88,7 +94,7 @@ button.link { background: none; border: 0; color: var(--dim); font: 600 clamp(14
 .panel .row { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0; }
 .panel input, .panel select { background: #0f0c15; color: #fff; border: 1px solid rgba(255,255,255,.25); border-radius: 8px; min-height: 36px; padding: 0 8px; font: inherit; }
 .panel label { display: flex; align-items: center; gap: 8px; margin: 6px 0; } .panel label input[type=url] { flex: 1; }
-.pin { width: min(340px, 100%); text-align: center; } .pin input { width: 100%; font-size: 26px; text-align: center; letter-spacing: .3em; margin-bottom: 8px; } .pin .row { justify-content: center; }
+.pin { width: min(380px, 100%); text-align: center; } .pin .row button { flex: 1; min-height: 64px; } .pin input { width: 100%; font-size: 26px; text-align: center; letter-spacing: .3em; margin-bottom: 8px; } .pin .row { justify-content: center; }
 .err { color: #ff9aa9; min-height: 1.2em; margin: 0 0 6px; }
 .staff { width: min(1180px, 100%); max-height: calc(100dvh - 32px); overflow: auto; }
 .staff header { display: flex; justify-content: space-between; align-items: center; }

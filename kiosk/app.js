@@ -197,7 +197,7 @@
   const sess = { get: () => { try { return JSON.parse(sessionStorage.getItem('moheat.kiosk.session')) || { n: 0, t0: Date.now() }; } catch { return { n: 0, t0: Date.now() }; } },
     set: (v) => { try { sessionStorage.setItem('moheat.kiosk.session', JSON.stringify(v)); } catch {} } };
   function afterDemo() {
-    const se = sess.get(); se.n++; sess.set(se); cfg = K.cfg();
+    const se = sess.get(); se.n++; sess.set(se); K.mistCount?.(); cfg = K.cfg();   // mistCount: one more experience for the mist refill reminder
     const over = (cfg.maxDemos && se.n >= cfg.maxDemos) || (cfg.maxMin && Date.now() - se.t0 > cfg.maxMin * 60000);
     if (!cfg.queue && !over) { go('more'); $('#v-more .rec-row').innerHTML = top3().map((d) => tile(d, true)).join(''); paint(); } else endSeq();
   }
@@ -248,6 +248,8 @@
     const show = () => { const im = box.children; [...im].forEach((x, j) => x.classList.toggle('on', j === attI % im.length)); attI++; };
     clearInterval(attT); show(); attT = setInterval(show, 6000);
   }
+  // the blurred backdrop behind a cover shown whole on a narrow screen (kiosk.css .att-slides::before) follows the cover on screen
+  new MutationObserver(() => { const on = $('.att-slides img.on'); if (on) $('.att-slides').style.backgroundImage = `url("${on.currentSrc || on.src}")`; }).observe($('.att-slides'), { subtree: true, attributes: true, attributeFilter: ['class'] });
   function stopAttract() { clearInterval(attT); attT = 0; }
   $('#v-attract').addEventListener('click', () => reset(false));
 
@@ -303,6 +305,23 @@
   const tryPin = () => { if ($('#pin').value === String(cfg.pin)) { $('#pinBox').hidden = true; openStaff(); } else { $('#pinErr').textContent = 'Wrong PIN'; $('#pin').value = ''; } };
   $('#pinOk').addEventListener('click', tryPin); $('#pin').addEventListener('keydown', (e) => { if (e.key === 'Enter') tryPin(); });
   $('#pinCancel').addEventListener('click', () => { $('#pinBox').hidden = true; if (location.hash === '#staff') reset(); });
+  // touch only at the booth (no keyboard): an on-screen keypad under the PIN (OK = its ✓ key), − / + and a keypad pop-up for the staff panel's numbers (kiosk/numpad.js)
+  if (window.MoHeatNumpad) { MoHeatNumpad.inline($('#pin'), { okBtn: $('#pinOk') }); MoHeatNumpad.steppers($('#staff')); }
+  // operator checklists (kiosk/checklist.js): before the first visitor of the day (LED 26 V, mist tube) and at the end of the day (LED off, mist off + tube out)
+  if (window.MoHeatChecklist) { MoHeatChecklist.guard($('#staffClose'), 'open'); MoHeatChecklist.guard($('#exitKiosk'), 'close'); }
+  // staff break (kiosk/break.js): covers loop silently, notice in 4 languages, taps / keys ignored, thermal stopped; out = corner + password + opening checklist
+  if (window.MoHeatBreak) MoHeatBreak.init({ go, send, reset: () => reset(false), checkPin: (v) => v === String(cfg.pin), beforeEnter: () => { saveStaff(); $('#staff').hidden = true; } });
+  // ■ STOP + staff button on every screen of the start page (start · guide · card · standby · break): demos/shared/kiosk.js controls()
+  K.controls?.({ lang: () => document.documentElement.lang || 'ja', stop: () => { send('stop'); if (view === 'intro') { try { intro?.stop?.(); } catch {} reset(false); } send('stop'); },
+    staff: () => { if (window.MoHeatBreak?.active()) return MoHeatBreak.askPin(); if (!$('#staff').hidden || !$('#pinBox').hidden) return; if (view !== 'welcome') reset(false); askPin(); } });
+  // full screen: the package starts Chrome with --kiosk; if the window is not full screen (started by hand, or staff left it), the next tap on the
+  // standby / start screen asks for it again (the browser only allows it from a tap)
+  addEventListener('pointerdown', () => { if ((view === 'attract' || view === 'welcome') && !document.fullscreenElement && screen.height - innerHeight > 4 && $('#staff').hidden) document.documentElement.requestFullscreen?.().catch(() => {}); }, true);
+  // staff setting: the mist refill reminder every N experiences (− / + and the keypad, like the other numbers)
+  { const lab = $('#sIdle')?.closest('label'); if (lab && !$('#sMist')) { const l = document.createElement('label'); l.innerHTML = '冷却ミスト補充の通知 / Mist refill reminder: <input type="number" id="sMist" min="1" max="20" step="1" /> 名ごと / visitors'; lab.after(l);
+      $('#sMist').addEventListener('change', (e) => { e.stopPropagation(); K.setCfg({ mistEvery: Math.max(1, Math.min(20, Math.round(+e.target.value) || 3)) }); K.mistPaint?.(); });
+      new MutationObserver(() => { if (!$('#staff').hidden) $('#sMist').value = K.mistEvery?.() || 3; }).observe($('#staff'), { attributes: true, attributeFilter: ['hidden'] }); $('#sMist').value = K.mistEvery?.() || 3;
+      window.MoHeatNumpad?.steppers($('#staff')); } }
   let statWhich = 'today';
   function openStaff() {
     send('stop'); cfg = K.cfg(); $('#staff').hidden = false;
