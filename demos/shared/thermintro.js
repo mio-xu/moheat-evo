@@ -64,7 +64,7 @@
     fitSub: { en: 'The earbuds carry the sound; MoHeat Evo brings warm and cool to each ear.', ja: '音はイヤホンから、温かさと冷たさは MoHeat Evo から届きます。', zh: '声音来自入耳式耳机，冷和热来自 MoHeat Evo。' },
     check: { en: 'Output check', ja: '出力チェック', zh: '输出检查' },
     chk: { en: ['Left · warm', 'Right · warm', 'Left · cool', 'Right · cool'], ja: ['左 · あたたかい', '右 · あたたかい', '左 · つめたい', '右 · つめたい'], zh: ['左 · 暖', '右 · 暖', '左 · 凉', '右 · 凉'] },
-    devMissing: { en: 'MoHeat Evo is not connected — staff: 5 taps top-left → Device → Connect', ja: 'MoHeat Evo が未接続です — スタッフ：左上を 5 回タップ → Device → Connect', zh: 'MoHeat Evo 未连接 — 工作人员：左上角连点 5 次 → Device → Connect' },
+    devMissing: { en: 'MoHeat Evo is not connected — staff: press and hold Staff (top left) → Device → Connect', ja: 'MoHeat Evo が未接続です — スタッフ：左上の「スタッフ」を長押し → Device → Connect', zh: 'MoHeat Evo 未连接 — 工作人员：长按左上角「工作人员」→ Device → Connect' },
     nextCool: { en: 'Next: cool', ja: 'つぎは冷たさ', zh: '接下来：凉' },
     levelSub: { en: 'You can change it any time during the demo.', ja: 'デモの途中でもいつでも変えられます。', zh: '体验中也可以随时调整。' },
     softer: { en: 'Softer', ja: '弱く', zh: '弱一点' }, ok: { en: 'Just right', ja: 'ちょうどいい', zh: '刚刚好' }, stronger: { en: 'Stronger', ja: '強く', zh: '强一点' },

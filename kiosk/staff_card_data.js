@@ -6,7 +6,7 @@
   const CARD = {
     zh: {
       lang: 'zh-CN', name: '中文', title: '展示速查卡',
-      head: [['网址', `\`${URL}\``], ['工作人员面板', '左上角连点 **5 次** → PIN（初始 `0000`，请马上修改，不要写在这张卡上）。Demo 进行中打开面板会结束当前体验。']],
+      head: [['网址', `\`${URL}\``], ['工作人员面板', '**长按**左上角的 **工作人员** 按钮约 1.5 秒 → PIN（初始 `0000`，请马上修改，不要写在这张卡上）。Demo 进行中打开面板会结束当前体验。']],
       sections: [
         { h: '开机（约 5 分钟）', steps: [
           '电脑接电源；**关闭睡眠、屏保、通知**（macOS 终端：`caffeinate -dis &`）。',
@@ -42,7 +42,7 @@
     },
     ja: {
       lang: 'ja', name: '日本語', title: 'スタッフ用クイックガイド',
-      head: [['URL', `\`${URL}\``], ['スタッフパネル', '画面左上を **5 回連続タップ** → PIN（初期値 `0000`。すぐに変更し、このカードには書かないでください）。体験中に開くと、その体験は終了します。']],
+      head: [['URL', `\`${URL}\``], ['スタッフパネル', '画面左上の **スタッフ** ボタンを **約 1.5 秒長押し** → PIN（初期値 `0000`。すぐに変更し、このカードには書かないでください）。体験中に開くと、その体験は終了します。']],
       sections: [
         { h: '起動（約 5 分）', steps: [
           'PC を電源につなぎ、**スリープ・スクリーンセーバー・通知をオフ**にします（macOS のターミナル：`caffeinate -dis &`）。',
@@ -78,7 +78,7 @@
     },
     en: {
       lang: 'en', name: 'English', title: 'Staff quick guide',
-      head: [['URL', `\`${URL}\``], ['Staff panel', '**5 quick taps** in the top-left corner → PIN (first `0000`: change it at once and do not write it on this card). Opening it during a demo ends that visit.']],
+      head: [['URL', `\`${URL}\``], ['Staff panel', '**Press and hold** the **Staff** button (top left) for about 1.5 s → PIN (first `0000`: change it at once and do not write it on this card). Opening it during a demo ends that visit.']],
       sections: [
         { h: 'Start-up (about 5 min)', steps: [
           'Plug in the computer; **turn off sleep, screen saver and notifications** (macOS Terminal: `caffeinate -dis &`).',

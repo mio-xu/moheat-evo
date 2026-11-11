@@ -1,6 +1,6 @@
 // MoHeat Evo exhibition (kiosk) app — kiosk/index.html (DEMO_DESIGN_GUIDE §7.4, staff guide docs/kiosk.md).
 // attract (idle, thermal off) → welcome (language, pictograms) → 30 s intro (shared/thermintro.js) → menu → demo page (shared/kiosk.js)
-// → #card (rating, buy?, price band, favourite moment, comment, QR) → reset → welcome. Staff: 5 taps top-left + PIN.
+// → #card (rating, buy?, price band, favourite moment, comment, QR) → reset → welcome. Staff: long-press the Staff button top-left + PIN.
 // Routes (hash): #welcome (default) · #attract · #card · #staff · #reset. Storage + stats: shared/kiosk.js (MoHeatKiosk).
 (() => {
   const K = window.MoHeatKiosk, D = window.MoHeatDemos || { DEMOS: [] }, S = window.MoHeatSigns;
@@ -301,7 +301,7 @@
   addEventListener('keydown', (e) => { if (S.attended() || e.key === 's' || e.key === 'S' || !$('#staff').hidden || !$('#pinBox').hidden) return; e.stopImmediatePropagation(); e.preventDefault(); }, true);
   addEventListener('storage', (e) => { if (e.key === 'moheat.kiosk.cfg') { const was = $('#msAway').hidden; applyStaff(was); } });
   S.ensure(); setInterval(() => S.ensure(), 60000);
-  // ---------------------------------------------------------------- staff: 5 taps top-left + PIN
+  // ---------------------------------------------------------------- staff: Staff long-press top-left (+ the quick-tap corner) + PIN
   let taps = [];
   $('#corner').addEventListener('click', () => { const n = Date.now(); taps = taps.filter((x) => n - x < 3000).concat(n); if (taps.length >= 5) { taps = []; askPin(); } });
   function askPin() { $('#pinBox').hidden = false; $('#pin').value = ''; $('#pinErr').textContent = ''; setTimeout(() => $('#pin').focus(), 50); }
