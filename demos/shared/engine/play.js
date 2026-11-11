@@ -31,7 +31,7 @@
     const choiceEl = $('choices'), actEl = $('act');
     function choice(opts, timeout = 20) {
       return new Promise((res) => {
-        choiceEl.innerHTML = opts.map((op, i) => `<button class="ch" data-i="${i}"><b>${op[0]}</b><span>${op[1]}</span></button>`).join('');
+        choiceEl.innerHTML = opts.map((op, i) => `<button class="ch" data-i="${i}"${op[2] ? ` data-voice="${op[2]}"` : ''}><b>${op[0]}</b><span>${op[1]}</span></button>`).join('');   // op[2]: what to say (shared/voice.js)
         choiceEl.classList.add('show');
         const done = (i) => { clearTimeout(tm); clearTimeout(au); choiceEl.classList.remove('show'); choiceEl.innerHTML = ''; res(i); };
         choiceEl.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => done(+b.dataset.i)));

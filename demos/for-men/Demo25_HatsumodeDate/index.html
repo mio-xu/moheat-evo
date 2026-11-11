@@ -81,13 +81,21 @@
 
   <script src="../../../device.js?v=56168264"></script>
   <script src="lines.js?v=d500bdf1"></script>
-  <script src="audio.js?v=d73c6036"></script>
+  <script src="../../shared/engine/core.js?v=5246c5ad"></script>
+  <script src="../../shared/engine/audio.js?v=3d925519"></script>
+  <script src="audio.js?v=0a1d8c9f"></script>
   <!-- story / sound / thermal code (unchanged since the first version); shared/layers.js draws the layered art in place of its stills -->
   <script src="media/layers.js?v=e42420a0"></script>
   <script>MOHEAT_LAYERS.skipVideo = 'media/video/';</script>
   <script src="../../shared/layers.js?v=f71de857"></script>
   <script src="../../shared/shell.js?v=d0851dc9"></script>
-  <script src="main.js?v=8c166cd7"></script>
+  <!-- the engine (demos/shared/engine, docs/engine): main.js holds only this demo's story, sounds' timing, thermal sources and overlays -->
+  <script src="../../shared/engine/thermal.js?v=f97083a3"></script>
+  <script src="../../shared/engine/panel.js?v=2e939012"></script>
+  <script src="../../shared/engine/stage.js?v=6d908cc5"></script>
+  <script src="../../shared/engine/play.js?v=2c348215"></script>
+  <script src="../../shared/engine/app.js?v=f9c7cb3e"></script>
+  <script src="main.js?v=2245d0c7"></script>
   <script src="../../shared/voice.js?v=193765ef"></script>
   <script src="../../shared/nav.js?v=c9297b83"></script>
 </body>

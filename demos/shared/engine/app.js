@@ -7,9 +7,9 @@
 //   const E = MoHeatEngine.create({
 //     ns: 'NAGISA', sound: window.HTAudio, lines: window.NAGISA_LINES,
 //     state: () => S, reset() { S = fresh(); /* the demo's own smoothed values */ },     // reset() runs on Start
-//     steps: [[view, ja, en], …], place: { view: 'where you are' },                     // #steps chapters, #posInfo text
+//     steps: [[view, ja, en], …], place: { view: 'where you are' }, restSec: 1.2,       // #steps chapters (+ all-off rest at each new one), #posInfo text
 //     views: ['arrive', …], src: (v) => `media/art/x_${v}.jpg?v=1`, blank: '#0d1630', clips: [],   // stage.js
-//     radar: { text, ear, head },  thermal: { modeGuard, cap, tau, spread },  sayGain(where),  autoPick(opts),
+//     radar: { text, ear, head },  thermal: { modeGuard, cap, tau, spread },  sayGain(where),  autoPick(opts),  zoomExtra(view),
 //     sources() {…}, update(dt) {…}, draw(t, dt) { E.stage.draw(t, dt); /* overlays */ },
 //     story: async (my) => { …; E.finish(); }, onFinish() {}, endText: (S) => 'cover line',
 //     api: { … extra test hooks on window[ns] } });
@@ -26,14 +26,14 @@
     const cv = $('scene'), ctx = cv.getContext('2d');
     let run = 0;
     const E = { get S() { return St(); }, get run() { return run; }, W: 1920, H: 1080, ctx, sound: SND, sleep: ME.sleep, clamp };
-    E.stage = ME.stage({ ctx, state: St, run: () => run, draw: (t, dt) => draw(t, dt), views: cfg.views, src: cfg.src, blank: cfg.blank, clips: cfg.clips, fade: cfg.fade });
+    E.stage = ME.stage({ ctx, state: St, run: () => run, draw: (t, dt) => draw(t, dt), views: cfg.views, src: cfg.src, blank: cfg.blank, clips: cfg.clips, fade: cfg.fade, zoomExtra: cfg.zoomExtra });
     E.panel = ME.panel({ clock: () => St().clock, colors: cfg.radar, range: cfg.range, log: cfg.log });
     E.thermal = ME.thermal({ sources: () => cfg.sources(), rest: () => St().clock < (St().restUntil || 0), off: E.panel.OFF, ...(cfg.thermal || {}) });
-    const P = ME.play({ lines: LINES, sound: SND, state: St, run: () => run, sayGain: cfg.sayGain, autoPick: cfg.autoPick, subGap: cfg.subGap });
+    const P = ME.play({ lines: LINES, sound: SND, state: St, run: () => run, sayGain: cfg.sayGain, autoPick: cfg.autoPick, subGap: cfg.subGap, autoAfter: cfg.autoAfter, actionAutoAfter: cfg.actionAutoAfter });
     Object.assign(E, { sub: P.sub, say: P.say, talking: P.talking, alive: P.alive, choice: P.choice, action: P.action, hold: P.hold, stillHold: P.stillHold, go: E.stage.go });
 
     const STEPS = cfg.steps || [];
-    function setStep(i) { const S = St(); if (i > 0 && S.started) S.restUntil = S.clock + 1.2; $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
+    function setStep(i) { const S = St(); if (i > 0 && S.started) S.restUntil = S.clock + (cfg.restSec ?? 1.2); $('steps').innerHTML = STEPS.map((s, k) => `<li class="${k < i ? 'done' : k === i ? 'now' : ''}">${s[1]} · <small>${s[2]}</small></li>`).join(''); }
     E.setStep = setStep;
 
     function update(dt) {
@@ -90,7 +90,7 @@
       $('lrBtn').addEventListener('click', () => { SND.lrCheck(); const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; }, 1900); });
       $('soundBtn').addEventListener('click', (e) => { SND.setMuted(!SND.isMuted()); e.target.textContent = SND.isMuted() ? '🔇' : '🔊'; });
       const api = { get S() { return St(); }, thermal: () => E.thermal(.05), both: E.panel.both, log: E.panel.log, done: false };
-      window[NS] = Object.assign(api, cfg.api || {});
+      window[NS] = Object.defineProperties(api, Object.getOwnPropertyDescriptors(cfg.api || {}));   // keeps getters (Demo18's crane)
       setStep(0);
       if (QS.has('cover')) { document.body.classList.add('cover-only'); E.stage.artReady.then(() => cfg.drawCover?.()); return; }
       if (QS.has('autoplay') || AUTO) { const ac = SND.init(); if (ac.state === 'running') start(); else ac.resume().then(() => { if (ac.state === 'running' && !St().started) start(); }).catch(() => {}); }

@@ -4,9 +4,10 @@
 //   o.state()   → S (S.view, S.started, S.t)       o.run() → the story run token        o.draw(t, dt) → the demo's whole draw (pause fix)
 //   o.ctx       the #scene 2D context               o.views [names]   o.src(name) → still URL   o.blank  fill colour without a still
 //   o.clips     clip names: v_<view> loops + t_<from>_<to> transitions (media/video/<name>.mp4?v=1; ?stills / ?cover = none)
-//   o.fade      cross-fade seconds (.6)
+//   o.fade      cross-fade seconds (.6)          o.zoomExtra(view) → extra still zoom (a push-in, Demo25 'close'; 0)
 // Returns { IMG, artReady, draw(t, dt) (cross-fade + clips, call first in the demo's draw), drawView(view, alpha, t), go(name, view,
-// onStart) → Promise, live() (shared/layers.js draws), zoom(t) → { z, dy } (the still's breathing drift, for overlays), mix(),
+// onStart) → Promise, live() (shared/layers.js draws), zoom(t) → { z, dy } (the still's breathing drift, for overlays), mix(), viewA / viewB
+// (the cross-fade pair: B = the view fading in),
 // reset() (on start), CLIP }.
 (() => {
   const ME = window.MoHeatEngine = window.MoHeatEngine || {};
@@ -58,7 +59,7 @@
       const im = IMG[view];
       ctx.globalAlpha = alpha;
       if (!im) { ctx.fillStyle = o.blank || '#000'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; return; }
-      const z = exact ? 1 : 1.02 + (LIVE() ? 0 : .008 * Math.sin(t * 1.1)), dh = W * im.height / im.width;
+      const z = exact ? 1 : 1.02 + (LIVE() ? 0 : .008 * Math.sin(t * 1.1)) + (o.zoomExtra ? o.zoomExtra(view) : 0), dh = W * im.height / im.width;
       ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.drawImage(im, -W / 2, -dh / 2 + (exact || LIVE() ? 0 : 4 * Math.sin(t * .9)), W, dh); ctx.restore();
       ctx.globalAlpha = 1;
     }
@@ -76,6 +77,6 @@
     }
     addEventListener('moheat:pause', (e) => { const S = o.state(); if (e.detail && S.started && (mix < 1 || S.view !== viewB)) { viewA = viewB = S.view; mix = 1; try { o.draw(S.t ?? 0, 0); } catch {} } });   // paused mid cross-fade: show the new view only (shell.js moheat:pause, Demo21 2026-11-11)
     function reset(view) { viewA = viewB = view; mix = 1; cur = null; pending = null; }
-    return { IMG, artReady, draw, drawView, go, live: LIVE, zoom, mix: () => mix, reset, CLIP };
+    return { IMG, artReady, draw, drawView, go, live: LIVE, zoom, mix: () => mix, get viewA() { return viewA; }, get viewB() { return viewB; }, reset, CLIP };
   };
 })();
