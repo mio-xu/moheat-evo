@@ -115,6 +115,7 @@
   .mi .sample .line { margin: 0; font: 600 clamp(18px, 3vmin, 30px)/1.45 var(--ff); color: #fff; text-align: center; }
   .mi .sample .head { width: min(30vmin, 260px); } .mi .replay { background: none; border: 0; color: #cfc3dc; text-decoration: underline; min-height: 48px; }
   .mi button.picked { box-shadow: 0 0 0 5px rgba(255, 213, 138, .5); transform: scale(1.04); }
+  .mi .stage-a > * { margin-left: auto; margin-right: auto; }   /* fixed-width pictures and the sub line sit in the middle (they were left of centre: critic 2026-11-11) */
   .mi .phones { position: relative; width: min(40vmin, 340px); } .mi .phones svg { width: 100%; display: block; }
   .mi .phones span { position: absolute; top: 52%; width: 24%; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; }
   .mi .phones .l { left: 22%; } .mi .phones .r { left: 78%; }
