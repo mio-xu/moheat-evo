@@ -33,7 +33,7 @@
 </head>
 <body>
   <div class="kb-flow" aria-hidden="true"></div>
-  <header><div class="logo">MoHeat <span>Evo</span></div><p data-t="intro"></p><div class="langs"><button data-l="en">English</button><button data-l="ja">日本語</button><button data-l="zh">中文</button></div></header>
+  <header><div class="logo">MoHeat <span>Evo</span></div><p data-t="intro"></p><div class="langs"><button data-l="en">English</button><button data-l="ja">日本語</button><button data-l="zh">中文</button><button data-l="ko">한국어</button></div></header>
   <main id="list"></main>
   <footer data-t="privacy"></footer>
   <section class="pick" id="pick" hidden></section>
@@ -49,11 +49,11 @@
     const byNo = (n) => all.find((d) => +((d.dir.match(/^Demo(\d+)/) || [])[1]) === +n);
     const list = (Q.get('o') ? Q.get('o').split('.').map(byNo).filter(Boolean) : all);
     const top = (Q.get('top') || '').split('.').map(byNo).filter((d) => d && list.includes(d));
-    const nav = navigator.language || 'en'; let l = ['en', 'ja', 'zh'].includes(Q.get('l')) ? Q.get('l') : nav.startsWith('ja') ? 'ja' : nav.startsWith('zh') ? 'zh' : 'en';
-    const T = { intro: { en: 'Choose your story while you wait — then tap the same number at the machine.', ja: '待っている間に物語を選んで、順番が来たら同じ番号をタップ。', zh: '排队时先选好故事，轮到你时在机器上点同样的号码。' },
-      top: { en: 'Try these first', ja: 'まずはこちら', zh: '推荐先体验' }, all: { en: 'All stories', ja: 'すべての物語', zh: '全部故事' },
-      yours: { en: 'Your pick', ja: 'あなたの番号', zh: '你选的号码' }, show: { en: 'At the machine, tap this number.', ja: '順番が来たら、この番号をタップしてください。', zh: '轮到你时，在机器上点这个号码。' },
-      back: { en: '← Choose another', ja: '← ほかを選ぶ', zh: '← 重新选择' }, privacy: { en: 'Nothing is stored or sent. MoHeat Evo · thermal headphones', ja: '何も保存・送信しません。MoHeat Evo · 温冷ヘッドホン', zh: '不保存、不发送任何信息。MoHeat Evo · 冷热耳机' } };
+    const nav = navigator.language || 'en'; let l = ['en', 'ja', 'zh', 'ko'].includes(Q.get('l')) ? Q.get('l') : nav.startsWith('ja') ? 'ja' : nav.startsWith('zh') ? 'zh' : nav.startsWith('ko') ? 'ko' : 'en';
+    const T = { intro: { en: 'Choose your story while you wait — then tap the same number at the machine.', ja: '待っている間に物語を選んで、順番が来たら同じ番号をタップ。', zh: '排队时先选好故事，轮到你时在机器上点同样的号码。', ko: '기다리는 동안 이야기를 골라 두세요. 차례가 되면 기계에서 같은 번호를 누르면 돼요.' },
+      top: { en: 'Try these first', ja: 'まずはこちら', zh: '推荐先体验', ko: '먼저 해 보세요' }, all: { en: 'All stories', ja: 'すべての物語', zh: '全部故事', ko: '모든 이야기' },
+      yours: { en: 'Your pick', ja: 'あなたの番号', zh: '你选的号码', ko: '고른 번호' }, show: { en: 'At the machine, tap this number.', ja: '順番が来たら、この番号をタップしてください。', zh: '轮到你时，在机器上点这个号码。', ko: '차례가 되면 기계에서 이 번호를 눌러 주세요.' },
+      back: { en: '← Choose another', ja: '← ほかを選ぶ', zh: '← 重新选择', ko: '← 다시 고르기' }, privacy: { en: 'Nothing is stored or sent. MoHeat Evo · thermal headphones', ja: '何も保存・送信しません。MoHeat Evo · 温冷ヘッドホン', zh: '不保存、不发送任何信息。MoHeat Evo · 冷热耳机', ko: '아무것도 저장하거나 보내지 않아요. MoHeat Evo · 온냉 헤드폰' } };
     const P = (d) => (window.MOHEAT_PITCH || {})[d.dir] || {};
     const img = (d) => `../assets/images/demos/${d.dir}.${l}.jpg`, img0 = (d) => `../assets/images/demos/${d.dir}.jpg`;
     const card = (d) => { const p = P(d), n = list.indexOf(d) + 1; return `<button class="d" data-n="${n}"><span class="no">${n}</span><img src="${img(d)}" onerror="this.onerror=null;this.src='${img0(d)}'" alt="" loading="lazy"><div><b>${d[l] || d.en}</b>${p[l] || p.en ? `<small>${p[l] || p.en}</small>` : ''}${p.hot ? `<em>${p.hot[l] || p.hot.en}</em>` : ''}</div></button>`; };
