@@ -97,7 +97,7 @@
   if (window.MOHEAT_NAV_DATA_ONLY) return;
   const qs = new URLSearchParams(location.search);
   { let k = qs.get('kiosk'); try { k = k ?? localStorage.getItem('moheat.kiosk'); } catch {}   // exhibition mode (shared/kiosk.js, guide §7.4): only when on
-    const me = document.currentScript?.src; if (me && k && k !== '0' && !qs.has('cover') && !qs.has('render') && !qs.has('embed')) { const s = document.createElement('script'); s.src = me.replace(/nav\.js(\?.*)?$/, 'kiosk.js?v=a71c2660'); s.async = false; document.head.appendChild(s); } }
+    const me = document.currentScript?.src; if (me && k && k !== '0' && !qs.has('cover') && !qs.has('render') && !qs.has('embed')) { const s = document.createElement('script'); s.src = me.replace(/nav\.js(\?.*)?$/, 'kiosk.js?v=938b667b'); s.async = false; document.head.appendChild(s); } }
   { const me = document.currentScript?.src;   // subtitle language EN / 日本語 / 中文 (also in ?embed): shared/subs.js next to this file
     const shot = qs.has('cover') && qs.has('sub');   // per-language thumbnail export (tools/web/thumbs.py): only the display language
     if (me && !window.MoHeatSub && (shot || (!qs.has('cover') && !qs.has('render')))) for (const f of shot ? ['subs.js?v=4e4e3f27'] : ['subs.js?v=4e4e3f27', 'fullscreen.js?v=4', 'guide.js?v=13ca6e7d', 'thermocheck.js?v=600bf6fe']) {   // display language + ⛶ fullscreen + first-visit guide + 🌡 thermal check (tools/web/bump.py updates these numbers)
