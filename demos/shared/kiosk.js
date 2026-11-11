@@ -341,6 +341,37 @@
     // ■ STOP + staff button (always there): STOP = the demo's own ■ STOP (trip + pause) and a direct device stop; staff → start page → password
     const est = () => document.getElementById('estop');
     controls({ lang: L, stop: () => { stopDevice(); const b = est(); if (b && !b.classList.contains('tripped')) b.click(); else try { window.MoHeatShell?.pause?.(true); } catch {} stopDevice(); }, tripped: () => !!est()?.classList.contains('tripped'), rearm: () => est()?.click(), staff: () => leave('staff') });
+    // full-screen demo (user 2026-11-11): the picture alone fills the screen under the top bar; the side panel (sounds around you, warm /
+    // cool output, intensity) is a drawer opened by the デバイス出力 button left of ■ STOP, closed again by it or a tap outside; hidden on every page load
+    if (document.querySelector('aside.side')) {
+      document.documentElement.classList.add('mk-full');
+      const fs = document.createElement('style'); fs.textContent = `
+      html.mk-full .layout { display: block !important; max-width: none !important; grid-template-columns: none !important; }
+      html.mk-full .stage-col { width: 100% !important; max-width: none !important; }
+      html.mk-full body:not(.cover-only) .stage { width: min(100%, calc((100dvh - var(--fit-bar, 0px) - var(--fit-pad, 0px) - var(--fit-below, 0px) - 8px) * 16 / 9)) !important; margin-left: auto !important; margin-right: auto !important; }
+      html.mk-full aside.side { display: flex !important; flex-direction: column; gap: 10px; position: fixed !important; z-index: 2147482990; top: 0; right: 0; bottom: 0; left: auto !important; width: min(440px, 92vw) !important; max-width: none !important;
+        height: auto !important; margin: 0 !important; overflow: auto; padding: 92px 14px 14px; background: rgba(14,12,20,.95); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: -12px 0 40px rgba(0,0,0,.5);
+        transform: translateX(105%); visibility: hidden; transition: transform .25s ease, visibility 0s linear .25s; }
+      html.mk-full.mk-side-open aside.side { transform: none; visibility: visible; transition: transform .25s ease; }
+      html.mk-full aside.side > .card { flex: none; }
+      html.mk-full header.bar { padding-right: 330px !important; }
+      html.mk-full .bar .mside-btn { display: none !important; }
+      .mk-out { position: fixed; z-index: 2147482999; right: 148px; top: 14px; min-height: 64px; min-width: 64px; padding: 0 16px; display: inline-flex; align-items: center; gap: 10px; border-radius: 18px;
+        border: 1px solid rgba(255,255,255,.3); background: rgba(20,16,26,.82); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); color: #f4efe6; cursor: pointer; touch-action: manipulation;
+        font: 700 16px/1.1 Inter, "Noto Sans JP", "PingFang SC", "Apple SD Gothic Neo", sans-serif; }
+      .mk-out[aria-pressed="true"] { background: #f4efe6; color: #161214; }
+      .mk-out svg { flex: 0 0 auto; }`;
+      document.head.appendChild(fs);
+      const OUT = { ja: 'デバイス出力', en: 'Output', zh: '设备输出', ko: '출력' };
+      const ob = document.createElement('button'); ob.type = 'button'; ob.className = 'mk-out';
+      const paintOut = () => { const on = document.documentElement.classList.contains('mk-side-open'); ob.setAttribute('aria-pressed', on);
+        ob.innerHTML = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 20V12M10 20V6M15 20V10M20 20V4"/></svg><span>${OUT[L()] || OUT.ja}</span>`; };
+      const setOut = (on) => { const r = document.documentElement; r.classList.toggle('mk-side-open', on); r.classList.toggle('side-open', on && r.classList.contains('lay-drawer')); paintOut(); dispatchEvent(new Event('resize')); };
+      ob.addEventListener('click', (e) => { e.stopPropagation(); setOut(!document.documentElement.classList.contains('mk-side-open')); });
+      document.addEventListener('click', (e) => { if (document.documentElement.classList.contains('mk-side-open') && !e.target.closest('aside.side, .mk-out')) setOut(false); }, true);
+      paintOut(); addEventListener('moheat:sublang', paintOut); document.body.appendChild(ob);
+      setTimeout(() => dispatchEvent(new Event('resize')), 50);
+    }
     // intensity cap on the page's slider (the shell already restored the visitor's level)
     const inten = document.getElementById('intensity');
     // the caps live in the two scales (scaleLine below); the page slider is a master the visitor may lower
