@@ -28,6 +28,7 @@
     .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; }
     table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 760px; }
     th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+    tr.cat th { background: #1b1316; color: #ffab93; text-align: left; } td small { color: #a99da0; font-size: 12px; }
     th { font: 700 11px Inter, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #efc1b6; background: #120d0f; }
     tr:last-child td { border-bottom: 0; }
     td:first-child { font-weight: 600; white-space: nowrap; }
@@ -45,10 +46,10 @@
     <div class="grid">
       <div class="card"><b>キャラクター · Characters</b><p>ナオミ（実在の猫）と歴史上の人物を除き、登場人物はすべてオリジナルです。実在の人物・既存作品とは関係ありません。</p><p class="en">All characters are original, except Naomi (a real cat) and the historical figures. They are not based on real people or existing works.</p></div>
       <div class="card"><b>声 · Voices</b><p>ElevenLabs（Voice Design で作成した声、eleven_v4）。</p><p class="en">Generated with ElevenLabs (voices made with Voice Design, model eleven_v4).</p></div>
-      <div class="card"><b>画像・映像 · Images and video</b><p>Seedance（GPT Image 2 による画像生成、Seedance 2.0 / 2.5 による動画生成）、ChatGPT / OpenAI の画像生成、一部はコードで描画。</p><p class="en">Generated with Seedance (GPT Image 2 images, Seedance 2.0 / 2.5 video) and ChatGPT / OpenAI image generation; some art is drawn in code.</p></div>
-      <div class="card"><b>効果音・環境音 · Sound effects</b><p>デモ 3 の楽曲を除き、効果音・環境音・BGM はすべてプログラムで合成しています（雨、風、心拍、琴のフレーズなど）。</p><p class="en">Apart from Demo 3's song, every sound effect, ambience and music phrase is synthesized (rain, wind, heartbeat, koto phrases …).</p></div>
+      <div class="card"><b>画像・映像 · Images and video</b><p>GPT Image 2（Seedance 経由）による画像生成、Seedance 2.0 / 2.5 による動画生成、ChatGPT / OpenAI の画像生成。一部はコードで描画しています。</p><p class="en">Images: GPT Image 2 (via Seedance) and ChatGPT / OpenAI image generation; video: Seedance 2.0 / 2.5; some art is drawn in code.</p></div>
+      <div class="card"><b>効果音・環境音 · Sound effects</b><p>「氷と炎の星光コンサート」の楽曲（Pixabay）と「キミだけのスペシャルファンミーティング」の歌（ElevenLabs Music）を除き、効果音・環境音・BGM はすべてプログラムで合成しています（雨、風、心拍、琴のフレーズなど）。</p><p class="en">Apart from the song in “Ice &amp; Fire Concert” (Pixabay) and the song in “Your Special Fan Meeting” (ElevenLabs Music), every sound effect, ambience and music phrase is synthesized (rain, wind, heartbeat, koto phrases …).</p></div>
       <div class="card"><b>フォント · Fonts</b><p>Inter、Manrope、Noto Sans JP、Zen Maru Gothic、JetBrains Mono ほか（Google Fonts、SIL Open Font License 1.1）。</p><p class="en">Inter, Manrope, Noto Sans JP, Zen Maru Gothic, JetBrains Mono and others via Google Fonts, under the SIL Open Font License 1.1.</p></div>
-      <div class="card"><b>音楽 · Music</b><p>「Shining Smile Melody – Jpop」ZTMusic（<a href="https://pixabay.com/music/pop-shining-smile-melody-jpop-203898/" rel="noopener">Pixabay</a>、Pixabay Content License）。デモ 3 で 150 秒に編集して使用。</p><p class="en">"Shining Smile Melody – Jpop" by ZTMusic (Pixabay Content License), edited to 150 s for Demo 3.</p></div>
+      <div class="card"><b>音楽 · Music</b><p>「Shining Smile Melody – Jpop」ZTMusic（<a href="https://pixabay.com/music/pop-shining-smile-melody-jpop-203898/" rel="noopener">Pixabay</a>、Pixabay Content License）。「氷と炎の星光コンサート」で 150 秒に編集して使用。</p><p class="en">"Shining Smile Melody – Jpop" by ZTMusic (Pixabay Content License), edited to 150 s for “Ice &amp; Fire Concert”.</p></div>
     </div>
 
     <h2>商標・実在の人物 · Trademarks and real people</h2>
@@ -56,47 +57,52 @@
       <div class="card"><b>サントリー · Suntory</b><p>「サントリー」「山崎」「響」「白州」の名称とボトルのデザインは、サントリーホールディングス株式会社の商標・意匠です。信長シリーズは東京大学 × サントリーの共同研究のデモとして制作しています。</p><p class="en">Suntory, Yamazaki, Hibiki and Hakushu (names and bottle designs) are trademarks of Suntory Holdings Limited. The Nobunaga series is a demo of the joint research project of The University of Tokyo and Suntory.</p></div>
       <div class="card"><b>歴史上の人物 · Historical figures</b><p>織田信長・徳川家康は創作上のキャラクターとして描いています。台詞・出来事はフィクションです。</p><p class="en">Oda Nobunaga and Tokugawa Ieyasu appear as fictional characters; their lines and the events are fiction.</p></div>
       <div class="card"><b>お酒 · Alcohol</b><p>お酒は20歳になってから。飲酒運転は法律で禁止されています。</p><p class="en">For adults 20 and over only. Never drink and drive.</p></div>
-      <div class="card"><b>ナオミ · Naomi</b><p>ナオミは制作者の飼い猫です。絵は本人の写真をもとに Seedance で生成しました。</p><p class="en">Naomi is the project owner's own cat; her art was generated with Seedance from her photos.</p></div>
+      <div class="card"><b>ナオミ · Naomi</b><p>ナオミは制作者の飼い猫です。絵は本人の写真をもとに GPT Image 2（Seedance 経由）で生成しました。</p><p class="en">Naomi is the project owner's own cat; her art was generated with GPT Image 2 (via Seedance) from her photos.</p></div>
     </div>
 
     <h2>デモごとのクレジット <small>Per demo</small></h2>
     <div class="table-wrap"><table>
       <thead><tr><th>Demo</th><th>声 · Voice</th><th>画像・映像 · Art / video</th><th>音 · Sound</th><th>注記 · Notes</th></tr></thead>
       <tbody>
-        <tr><td>雪と狐火のひそひそ話</td><td>ElevenLabs</td><td>ChatGPT (OpenAI)</td><td>Synthesized</td><td>Original characters</td></tr>
-        <tr><td>ふたりの、こもりうた</td><td>ElevenLabs</td><td>ChatGPT (OpenAI), reused from 雪と狐火のひそひそ話 · code</td><td>Synthesized</td><td>Original characters</td></tr>
-        <tr><td>キミだけのスペシャルファンミーティング</td><td>ElevenLabs (talk and song)</td><td>ChatGPT (OpenAI)</td><td>Synthesized · original lyrics</td><td>Original character</td></tr>
-        <tr><td>氷と炎の星光コンサート</td><td>—</td><td>ChatGPT (OpenAI), based on Demo 2's design</td><td>“Shining Smile Melody – Jpop”, ZTMusic (Pixabay)</td><td>Pixabay Content License</td></tr>
-        <tr><td>季節が暴走する魔法の列車</td><td>ElevenLabs</td><td>OpenAI gpt-image-2, layered (transforming carriage, conductor), scenery: OpenAI image generation (Codex), code</td><td>Synthesized</td><td>Original character</td></tr>
-        <tr><td>火をともして、ひみつの泉へ</td><td>ElevenLabs</td><td>Seedance (GPT Image 2), code</td><td>Synthesized</td><td>Original character</td></tr>
-        <tr><td>ナオミと、ふわふわの一日 · ナオミ、いまなにしてる？</td><td>—</td><td>Seedance (GPT Image 2), from photos</td><td>Synthesized</td><td>Naomi is a real cat</td></tr>
-        <tr><td>ねこになった日</td><td>ElevenLabs (the owner)</td><td>Seedance (GPT Image 2), in the style of Naomi's earlier demos</td><td>Synthesized</td><td>Naomi is a real cat; the owner is an original character</td></tr>
-        <tr><td>もしもし、おばあちゃん？ · じいちゃんの、ゆきだるま</td><td>ElevenLabs</td><td>Seedance (GPT Image 2)</td><td>Synthesized</td><td>Original characters</td></tr>
-        <tr><td>ただいま、じいちゃん・ばあちゃん</td><td>ElevenLabs</td><td>Seedance (GPT Image 2), in the style of the earlier family calls</td><td>Synthesized</td><td>Original characters</td></tr>
-        <tr><td>ミントの、おみみ専門店</td><td>ElevenLabs</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original character</td></tr>
-        <tr><td>ルナの、ひみつのカクテル</td><td>ElevenLabs</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original character</td></tr>
-        <tr><td>ココアの、バレンタイン前夜</td><td>ElevenLabs</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original character</td></tr>
-        <tr><td>ひなたと、ゲーセンデート</td><td>ElevenLabs</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original character</td></tr>
-        <tr><td>もしもし、きこえる？</td><td>ElevenLabs</td><td>Seedance (GPT Image 2, video)</td><td>Synthesized</td><td>Original character</td></tr>
-        <tr><td>あと10秒だけ、ね？</td><td>ElevenLabs</td><td>Seedance (GPT Image 2, Seedance 2.5 video)</td><td>Synthesized</td><td>Original character</td></tr>
-        <tr><td>俺だけ見てろ</td><td>ElevenLabs</td><td>Seedance (GPT Image 2, Seedance 2.0 video)</td><td>Synthesized</td><td>Original character</td></tr>
-        <tr><td>雨が止むまで</td><td>ElevenLabs</td><td>Seedance (GPT Image 2, Seedance 2.5 video)</td><td>Synthesized</td><td>Original character</td></tr>
-        <tr><td>はじめての、初詣デート</td><td>ElevenLabs</td><td>Seedance (GPT Image 2, Seedance 2.5 video)</td><td>Synthesized</td><td>Original character</td></tr>
-        <tr><td>なつの、おくじょうで</td><td>ElevenLabs</td><td>Seedance (GPT Image 2) · OpenAI gpt-image-2, layered; fireworks in code</td><td>Synthesized</td><td>Original character</td></tr>
-        <tr><td>白嶺の峠、ひと晩の宿</td><td>ElevenLabs (scripted; live AI talk only on a private server)</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original characters (special versions)</td></tr>
-        <tr><td>まちがい召喚と、まほう学院の三人</td><td>ElevenLabs (scripted; live AI talk only on a private server)</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original characters (special versions)</td></tr>
-        <tr><td>なつやすみ、じいちゃんちの すいかわり</td><td>ElevenLabs</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original characters</td></tr>
-        <tr><td>なつやすみ、ナオミと せんぷうき</td><td>Synthesized sounds</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>A real cat</td></tr>
-        <tr><td>ゆけむり どうぶつおんせん</td><td>ElevenLabs</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original characters</td></tr>
-        <tr><td>ひやっと！おばけやしきの ちょうちんばん</td><td>ElevenLabs</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original characters</td></tr>
-        <tr><td>竜の王と、エルフの王と、小悪魔</td><td>ElevenLabs (scripted; live AI talk only on a private server)</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original characters (special versions)</td></tr>
-        <tr><td>てんにょ様は、未来から</td><td>ElevenLabs (scripted; live AI talk only on a private server)</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original characters (special versions)</td></tr>
-        <tr><td>ガクの、焚き火キャンプ配信</td><td>ElevenLabs</td><td>Seedance (GPT Image 2)</td><td>Synthesized</td><td>Original character</td></tr>
-        <tr><td>なつまつり、ふたりで</td><td>ElevenLabs</td><td>Seedance (GPT Image 2)</td><td>Synthesized</td><td>Original character</td></tr>
-        <tr><td>信長シリーズ 第1〜5話</td><td>ElevenLabs</td><td>ChatGPT (OpenAI); whisky artwork provided by the project owner</td><td>Synthesized (koto phrases, SFX)</td><td>Historical figures as fiction · Suntory trademarks (Ep. 2, 4) · 20+ (Ep. 2–5)</td></tr>
-        <tr><td>信長と、語らう</td><td>ElevenLabs (pre-rendered script)</td><td>ChatGPT (OpenAI), reused from 信長シリーズ</td><td>Synthesized</td><td>Historical figures as fiction · scripted preview of a live AI talk</td></tr>
-        <tr><td>家康と、語らう</td><td>ElevenLabs (pre-rendered script)</td><td>ChatGPT (OpenAI), reused from 信長シリーズ</td><td>Synthesized</td><td>Historical figures as fiction · scripted preview of a live AI talk</td></tr>
-        <tr><td>信長と家康の、座談会</td><td>ElevenLabs (pre-rendered script)</td><td>ChatGPT (OpenAI), reused from 信長シリーズ</td><td>Synthesized</td><td>Historical figures as fiction · scripted preview of a live AI talk</td></tr>
+        <tr class="cat"><th colspan="5">全年齢 · All ages</th></tr>
+        <tr><td>ひやっと！おばけやしきの ちょうちんばん<br><small lang="en">Lantern Keeper of the Spooky House</small></td><td>ElevenLabs</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original characters</td></tr>
+        <tr><td>ゆけむり どうぶつおんせん<br><small lang="en">Steamy Animal Hot Spring</small></td><td>ElevenLabs</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original characters</td></tr>
+        <tr><td>季節が暴走する魔法の列車<br><small lang="en">The Runaway Seasons Express</small></td><td>ElevenLabs</td><td>OpenAI gpt-image-2, layered (transforming carriage, conductor), scenery: OpenAI image generation (Codex), code</td><td>Synthesized</td><td>Original character</td></tr>
+        <tr><td>キミだけのスペシャルファンミーティング<br><small lang="en">Your Special Fan Meeting</small></td><td>ElevenLabs (talk)</td><td>ChatGPT (OpenAI)</td><td>Song: ElevenLabs Music (original lyrics) · SFX synthesized</td><td>Original character</td></tr>
+        <tr><td>氷と炎の星光コンサート<br><small lang="en">Ice &amp; Fire Concert</small></td><td>—</td><td>ChatGPT (OpenAI), based on the design of “Your Special Fan Meeting”</td><td>“Shining Smile Melody – Jpop”, ZTMusic (Pixabay)</td><td>Pixabay Content License</td></tr>
+        <tr><td>雪と狐火のひそひそ話<br><small lang="en">Whispers of Snow and Flame</small></td><td>ElevenLabs</td><td>ChatGPT (OpenAI)</td><td>Synthesized</td><td>Original characters</td></tr>
+        <tr><td>ふたりの、こもりうた<br><small lang="en">A Lullaby for Two</small></td><td>ElevenLabs</td><td>ChatGPT (OpenAI), reused from 雪と狐火のひそひそ話 · code</td><td>Synthesized</td><td>Original characters</td></tr>
+        <tr><td>火をともして、ひみつの泉へ<br><small lang="en">Kindle the Fire, Find the Hidden Spring</small></td><td>ElevenLabs</td><td>GPT Image 2 (via Seedance), code</td><td>Synthesized</td><td>Original character</td></tr>
+        <tr class="cat"><th colspan="5">癒し · Healing</th></tr>
+        <tr><td>なつやすみ、ナオミと せんぷうき<br><small lang="en">Summer Fan Days with Naomi</small></td><td>Synthesized sounds</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>A real cat</td></tr>
+        <tr><td>ナオミと、ふわふわの一日 · ナオミ、いまなにしてる？<br><small lang="en">A Fluffy Day with Naomi · What's Naomi Up To? · Pet Cam</small></td><td>—</td><td>GPT Image 2 (via Seedance), from photos</td><td>Synthesized</td><td>Naomi is a real cat</td></tr>
+        <tr><td>ねこになった日<br><small lang="en">The Day I Became Naomi</small></td><td>ElevenLabs (the owner character's voice)</td><td>GPT Image 2 (via Seedance), in the style of Naomi's earlier demos</td><td>Synthesized</td><td>Naomi is a real cat; the owner is an original character</td></tr>
+        <tr><td>なつやすみ、じいちゃんちの すいかわり<br><small lang="en">Summer at Grandpa's: Watermelon Split</small></td><td>ElevenLabs</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original characters</td></tr>
+        <tr><td>もしもし、おばあちゃん？ · じいちゃんの、ゆきだるま<br><small lang="en">Hello, Grandma? · A Call Home, Part 1 · Grandpa's Little Snowman · A Call Home, Part 2</small></td><td>ElevenLabs</td><td>GPT Image 2 (via Seedance)</td><td>Synthesized</td><td>Original characters</td></tr>
+        <tr><td>ただいま、じいちゃん・ばあちゃん<br><small lang="en">Home for New Year</small></td><td>ElevenLabs</td><td>GPT Image 2 (via Seedance), in the style of the earlier family calls</td><td>Synthesized</td><td>Original characters</td></tr>
+        <tr class="cat"><th colspan="5">男性向け · For him</th></tr>
+        <tr><td>まちがい召喚と、まほう学院の三人<br><small lang="en">Summoned by Mistake</small></td><td>ElevenLabs (scripted; live AI talk only on a private server)</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original characters (special versions)</td></tr>
+        <tr><td>はじめての、初詣デート<br><small lang="en">My First Hatsumode</small></td><td>ElevenLabs</td><td>GPT Image 2 (via Seedance), Seedance 2.5 video</td><td>Synthesized</td><td>Original character</td></tr>
+        <tr><td>ひなたと、ゲーセンデート<br><small lang="en">Arcade Date with Hinata</small></td><td>ElevenLabs</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original character</td></tr>
+        <tr><td>ミントの、おみみ専門店<br><small lang="en">Mint's Ear Salon</small></td><td>ElevenLabs</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original character</td></tr>
+        <tr><td>ルナの、ひみつのカクテル<br><small lang="en">Luna's Secret Cocktail</small></td><td>ElevenLabs</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original character</td></tr>
+        <tr><td>ココアの、バレンタイン前夜<br><small lang="en">Valentine's Eve with Cocoa</small></td><td>ElevenLabs</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original character</td></tr>
+        <tr><td>白嶺の峠、ひと晩の宿<br><small lang="en">One Night at the White-Ridge Inn</small></td><td>ElevenLabs (scripted; live AI talk only on a private server)</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original characters (special versions)</td></tr>
+        <tr><td>なつの、おくじょうで<br><small lang="en">Up on the Summer Roof</small></td><td>ElevenLabs</td><td>GPT Image 2 (via Seedance) · OpenAI gpt-image-2, layered; fireworks in code</td><td>Synthesized</td><td>Original character</td></tr>
+        <tr class="cat"><th colspan="5">女性向け · For her</th></tr>
+        <tr><td>竜の王と、エルフの王と、小悪魔<br><small lang="en">The Dragon King, the Elf King and the Little Devil</small></td><td>ElevenLabs (scripted; live AI talk only on a private server)</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original characters (special versions)</td></tr>
+        <tr><td>ガクの、焚き火キャンプ配信<br><small lang="en">Gaku's Campfire Stream</small></td><td>ElevenLabs</td><td>GPT Image 2 (via Seedance)</td><td>Synthesized</td><td>Original character</td></tr>
+        <tr><td>あと10秒だけ、ね？<br><small lang="en">Just Ten More Seconds?</small></td><td>ElevenLabs</td><td>GPT Image 2 (via Seedance), Seedance 2.5 video</td><td>Synthesized</td><td>Original character</td></tr>
+        <tr><td>もしもし、きこえる？<br><small lang="en">Can You Hear Me?</small></td><td>ElevenLabs</td><td>GPT Image 2 (via Seedance), Seedance video</td><td>Synthesized</td><td>Original character</td></tr>
+        <tr><td>てんにょ様は、未来から<br><small lang="en">A Celestial from the Future</small></td><td>ElevenLabs (scripted; live AI talk only on a private server)</td><td>OpenAI gpt-image-2, layered</td><td>Synthesized</td><td>Original characters (special versions)</td></tr>
+        <tr><td>なつまつり、ふたりで<br><small lang="en">Summer Festival, Just Us</small></td><td>ElevenLabs</td><td>GPT Image 2 (via Seedance)</td><td>Synthesized</td><td>Original character</td></tr>
+        <tr><td>雨が止むまで<br><small lang="en">Until the Rain Stops</small></td><td>ElevenLabs</td><td>GPT Image 2 (via Seedance), Seedance 2.5 video</td><td>Synthesized</td><td>Original character</td></tr>
+        <tr><td>俺だけ見てろ<br><small lang="en">Look Only at Me</small></td><td>ElevenLabs</td><td>GPT Image 2 (via Seedance), Seedance 2.0 video</td><td>Synthesized</td><td>Original character</td></tr>
+        <tr class="cat"><th colspan="5">信長シリーズ · Nobunaga Series</th></tr>
+        <tr><td>信長シリーズ 第1〜5話<br><small lang="en">Nobunaga Series, episodes 1–5</small></td><td>ElevenLabs</td><td>ChatGPT (OpenAI); whisky artwork provided by the project owner</td><td>Synthesized (koto phrases, SFX)</td><td>Historical figures as fiction · Suntory trademarks (Ep. 2, 4) · 20+ (Ep. 2–5)</td></tr>
+        <tr><td>信長と、語らう<br><small lang="en">Talk with Nobunaga</small></td><td>ElevenLabs (pre-rendered script)</td><td>ChatGPT (OpenAI), reused from 信長シリーズ</td><td>Synthesized</td><td>Historical figures as fiction · scripted preview of a live AI talk</td></tr>
+        <tr><td>家康と、語らう<br><small lang="en">Talk with Ieyasu</small></td><td>ElevenLabs (pre-rendered script)</td><td>ChatGPT (OpenAI), reused from 信長シリーズ</td><td>Synthesized</td><td>Historical figures as fiction · scripted preview of a live AI talk</td></tr>
+        <tr><td>信長と家康の、座談会<br><small lang="en">Round Table with Nobunaga &amp; Ieyasu</small></td><td>ElevenLabs (pre-rendered script)</td><td>ChatGPT (OpenAI), reused from 信長シリーズ</td><td>Synthesized</td><td>Historical figures as fiction · scripted preview of a live AI talk</td></tr>
       </tbody>
     </table></div>
 
