@@ -164,12 +164,13 @@ function drawParts(ctx) {
   for (const q of parts) {
     const k = q.life / q.max, a = Math.sin(Math.PI * Math.min(1, k * 1.2)) * q.a * fxFade;
     if (q.kind === 'frost' || q.kind === 'haze') {
+      ctx.globalCompositeOperation = 'source-over';   // soft mist that layers like mist: additive blending piled up into a hard white disc
       const fa = q.a * Math.min(1, k * 2.6) * Math.pow(1 - k, 1.3) * fxFade;
       ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(Math.atan2(q.vy, q.vx)); ctx.scale(1.9, 1);
       const g = ctx.createRadialGradient(0, 0, 0, 0, 0, q.size);
-      if (q.kind === 'frost') { g.addColorStop(0, `rgba(228,242,255,${fa * .42})`); g.addColorStop(.6, `rgba(200,228,255,${fa * .16})`); g.addColorStop(1, 'rgba(190,225,255,0)'); }
-      else { g.addColorStop(0, `rgba(255,222,190,${fa * .4})`); g.addColorStop(.6, `rgba(255,180,140,${fa * .16})`); g.addColorStop(1, 'rgba(255,170,120,0)'); }
-      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, q.size, 0, 7); ctx.fill(); ctx.restore();
+      if (q.kind === 'frost') { g.addColorStop(0, `rgba(228,242,255,${fa * .24})`); g.addColorStop(.6, `rgba(200,228,255,${fa * .09})`); g.addColorStop(1, 'rgba(190,225,255,0)'); }
+      else { g.addColorStop(0, `rgba(255,222,190,${fa * .3})`); g.addColorStop(.6, `rgba(255,180,140,${fa * .11})`); g.addColorStop(1, 'rgba(255,170,120,0)'); }
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, q.size, 0, 7); ctx.fill(); ctx.restore(); ctx.globalCompositeOperation = 'lighter';
     } else if (q.kind === 'glint') {
       ctx.fillStyle = `rgba(240,250,255,${a})`; ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(q.rot);
       ctx.beginPath(); for (let i = 0; i < 4; i++) { ctx.rotate(Math.PI / 2); ctx.lineTo(0, q.size); ctx.lineTo(q.size * .2, q.size * .2); } ctx.fill(); ctx.restore();
@@ -403,13 +404,14 @@ function emit(st, t, dt) {
     // breath follows the loudness of the character's own breath track; drifts toward the ear on that side
     const env = A.chars[st.who].breath ? sample(A.chars[st.who].breath, A.fps, t) : .7;
     const cold = st.who === 'K', side = Math.sin(rad(st.az));
-    const n = env > .04 ? Math.ceil(dt * 150 * env) : 0;
+    const live = parts.reduce((k, q) => k + (q.who === st.who && (q.kind === 'frost' || q.kind === 'haze')), 0);
+    const n = env > .04 && st.alpha > .05 ? Math.min(Math.ceil(dt * 60 * env * st.alpha), Math.max(0, 14 - live)) : 0;   // at most 14 puffs alive per breath: 150 / s piled up into a hard white disc over Koyuki's face ('Good night', critic 2026-11-11)
     for (let i = 0; i < n; i++) {
       const sp = (160 + 260 * env) * Math.max(.5, st.s) * (.7 + Math.random() * .6);
       const vx = (side * .9 + (Math.random() - .5) * .55) * sp, vy = ((cold ? .12 : -.18) + (Math.random() - .5) * .35) * sp;
-      const off = 22 * st.s / Math.max(1, Math.hypot(vx, vy));   // start just past the lips, so no fog piles up on the face
-      spawn({ kind: cold ? 'frost' : 'haze', x: mx + vx * off + (Math.random() - .5) * 6 * st.s, y: my + vy * off, vx, vy, size: 7 * st.s, grow: (cold ? 120 : 105) * st.s,
-              life: 0, max: .9 + Math.random() * .7, a: .25 + .5 * env, seed: Math.random() * 6.3 });
+      const off = 70 * st.s / Math.max(1, Math.hypot(vx, vy));   // start well past the lips, so the mist never sits on the face
+      spawn({ who: st.who, kind: cold ? 'frost' : 'haze', x: mx + vx * off + (Math.random() - .5) * 6 * st.s, y: my + vy * off, vx, vy, size: 7 * st.s, grow: (cold ? 75 : 70) * st.s,
+              life: 0, max: .9 + Math.random() * .7, a: (.2 + .35 * env) * st.alpha, seed: Math.random() * 6.3 });
       if (cold && Math.random() < .08 * env) spawn({ kind: 'glint', x: mx, y: my, vx: vx * 1.1, vy: vy + (Math.random() - .5) * 60, size: 3 + Math.random() * 4, rot: Math.random() * 3, spin: 2, life: 0, max: .9, a: .9 });
     }
   }
