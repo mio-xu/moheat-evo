@@ -4,7 +4,7 @@ window.KOHAKU_LINES = {
   "intro1": ["こんばんは！ ぼく、きつねのコハク", "Good evening! I'm Kohaku, a fox"],
   "intro2": ["さむいね…。まずは火をおこそう", "Brr, it's cold… Let's make a fire first"],
   "intro3": ["燃やすものと、火打ち石をさがして！", "Find something to burn, and a flint!"],
-  "window": ["すきま風、つめたいね…", "That draught is cold…"],
+  "window": ["すきま風、つめたいね…", "That draft is cold…"],
   "straw": ["かれ草、ゲット！", "Dry straw — got it!"],
   "flint": ["火打ち石だ！", "It's a flint!"],
   "empty": ["からっぽ…", "Empty…"],
