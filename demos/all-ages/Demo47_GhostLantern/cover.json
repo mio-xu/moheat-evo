@@ -8,10 +8,10 @@
   "ko": "오싹!\n유령의 집\n등불 당번"
  },
  "tagline": {
-  "en": "Feel the ghost coming with your ears, turn the warm lantern",
-  "ja": "おばけは みみで わかる。あったかい ちょうちんを むけよう",
-  "zh": "用耳朵感觉鬼来了，转动温暖的灯笼",
-  "ko": "유령은 귀로 알아차려요. 따뜻한 초롱을 돌려 봐요"
+  "en": "Feel ghosts coming. Turn the lantern!",
+  "ja": "おばけは みみで わかる。ちょうちんを むけよう",
+  "zh": "用耳朵感觉鬼来了，转动灯笼",
+  "ko": "귀로 유령을 느끼고, 초롱을 돌려요"
  },
  "chips": [
   {
@@ -67,7 +67,7 @@
    "en": "The dark storehouse",
    "ja": "土蔵",
    "zh": "土仓",
-   "ko": "흙 창고"
+   "ko": "곳간"
   },
   {
    "en": "Yurari",
