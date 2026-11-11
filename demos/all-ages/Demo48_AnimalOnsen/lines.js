@@ -29,7 +29,7 @@ window.ONSEN_LINES = {
   ],
   "y05": [
    "おきゃくさんの すきな おんどに、ゆっくり あわせておくれ。 みみで、かんじるんじゃ。",
-   "Match each guest's favourite temperature, slowly. Feel it with your ears.",
+   "Match each guest's favorite temperature, slowly. Feel it with your ears.",
    "Y"
   ],
   "p01": [

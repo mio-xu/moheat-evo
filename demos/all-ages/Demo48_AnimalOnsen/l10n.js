@@ -125,7 +125,7 @@ window.MOHEAT_L10N = {
    "ko": "펜"
   },
   "おさる": {
-   "en": "Monkey mum",
+   "en": "Monkey mom",
    "zh": "猴妈妈",
    "ko": "원숭이 엄마"
   },
