@@ -7,3 +7,7 @@
 #valves { display: flex; gap: 1.6cqw; }
 #valves .ch { min-width: 15cqw; min-height: 44px; touch-action: none; }
 #valves .ch.on { background: rgba(var(--st-on), .75); transform: scale(.97); }
+/* "A little hotter / cooler" (ch.5) covered Yuzu-jii's face (critic 2026-11-11): hotter by the left tub (the hot pipe side), cooler by the right */
+#choices { left: 0; right: 0; transform: translateY(.6cqw); justify-content: space-between; padding: 0 9cqw; }
+#choices.show { transform: none; }
+#choices { flex-direction: row; }   /* phones too: the two stay beside the tubs */
