@@ -10,7 +10,7 @@
   if (['embed', 'cover', 'render', 'auto', 'autoplay'].some((k) => QS.has(k))) return;
   const KEY = 'moheat.guide';
   const STEPS = [
-    { sel: null, en: 'Welcome! Put on headphones: you will hear the story in 3D and, with MoHeat Evo, feel warmth and coolness on each ear. Choose your language (it is remembered on every demo), then a 30-second tour.',
+    { sel: null, en: 'Welcome! Put on headphones: you will hear the story in 3D and, with MoHeat Evo, feel warmth and coolness on each ear. Choose your language (we’ll remember it for every demo), then a 30-second tour.',
       ja: 'ようこそ！ヘッドホンをつけてください。立体音響で物語を聴き、MoHeat Evo をつなぐと左右の耳で温かさ・冷たさを感じられます。言語を選ぶと全デモで記憶されます。そのあと 30 秒で画面の使い方をご紹介します。',
       zh: '欢迎！请戴上耳机：你会听到立体声的故事，连接 MoHeat Evo 后还能在左右耳感受到冷和热。先选择语言（所有 Demo 都会记住），再用 30 秒介绍一下界面。', ko: '환영해요! 헤드폰을 써 주세요. 입체 음향으로 이야기를 듣고, MoHeat Evo를 연결하면 양쪽 귀로 따뜻함과 시원함을 느낄 수 있어요. 먼저 언어를 고르면 모든 데모에서 기억해요. 그다음 30초 동안 화면 사용법을 소개할게요.' },
     { sel: 'header .device, #connectBtn, .mdev-btn', en: 'Connect MoHeat Evo here (desktop Chrome / Edge, USB or Bluetooth). Without it you can still watch and listen.',
@@ -52,11 +52,11 @@
   .mg-tip button.mg-go { background: linear-gradient(135deg, #ffd58a, #ff9f6e); color: #2a1606; border: 0; margin-left: auto; }
   .mg-tip button.mg-skip { border: 0; color: #b8a9c9; padding-left: 0; }
   .mg-help { min-width: 30px; }
-  .mg-langs { display: flex; gap: 6px; margin: -4px 0 12px; } .mg-langs button.on { background: #f5eefb; color: #17121f; border-color: transparent; }
+  .mg-langs { display: flex; flex-wrap: wrap; gap: 6px; margin: -4px 0 12px; } .mg-langs button { white-space: nowrap; } .mg-langs button.on { background: #f5eefb; color: #17121f; border-color: transparent; }
   .mg-tip { max-height: calc(100dvh - 16px); overflow-y: auto; box-sizing: border-box; }
   @media (max-width: 1100px), (pointer: coarse) {   /* touch: every button 44 px tall (user: the guide must be tappable on phones) */
     .mg-tip button { min-height: 44px; padding: 0 16px; font-size: 14px; } .mg-tip button.mg-skip { padding: 0 12px 0 4px; }
-    .mg-langs button { flex: 1 1 0; padding: 0 6px; } }
+    .mg-langs button { flex: 1 0 auto; padding: 0 10px; } }
   @media (max-height: 500px) { .mg-tip { padding: 10px 14px 8px; } .mg-tip p { margin-bottom: 8px; } .mg-tip .mg-n { margin-bottom: 2px; } }`;
   document.head.appendChild(css);
 

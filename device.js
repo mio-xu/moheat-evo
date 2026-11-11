@@ -34,7 +34,7 @@ window.MoHeatDevice = (() => {
       ports = await navigator.serial.getPorts();
       ui.select.innerHTML = '';
       if (!ports.length) {
-        ui.select.add(new Option('No authorized device — click “+ Add”', ''));
+        ui.select.add(new Option('No device — + Add', ''));
         ui.select.disabled = true;
       } else {
         ports.forEach((p, i) => ui.select.add(new Option(portLabel(p, i) + (p === port ? ' — connected' : ''), i)));
