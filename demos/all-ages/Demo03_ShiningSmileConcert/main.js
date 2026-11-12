@@ -1,4 +1,8 @@
-// Shining Smile Melody — Ice & Fire Concert (MoHeat Evo Demo 3). Built on Demo 2's player.
+// EXHIBITION 120 s cut (kiosk only, 2026-11-11): whispered intro → the song cut to ≈ 79 s → whispered thank-you (+ a read gate, ix.js).
+// 2026-11-13 (user): sound, picture and temperature come from ONE energy analysis of the song (scripts/energy.py → media/energy.js +
+// the thermal track): warm energy (low + mid), sparkle (highs over the body), the mix's L / R balance, transients. The stage FX
+// below (stage layers, colour temperature, LED wall, beams, the light sweep, snow / ice, flames, flash + confetti) read those curves. Based on:
+// Ice & Fire Concert (MoHeat Evo Demo 3; song: the original 「きらきら こおりとほのお / Sparkling Ice & Fire」). Built on Demo 2's player.
 // Clock = the edited song. Stage state, Ayane's dance (beat-synced poses), the LED wall, glow sticks, particles and the
 // 4-channel thermal track (Mode B: music energy × stage positions; Mode A: music only) all follow that one timeline.
 'use strict';
@@ -19,7 +23,7 @@ const parseCsv = (txt) => {
   for (const l of lines.slice(1)) l.split(',').forEach((v, i) => cols[head[i]].push(head[i] === 'command' ? v : +v));
   return { rate: 20, Lc: cols.L_cool, Rc: cols.R_cool, Lh: cols.L_heat, Rh: cols.R_heat };
 };
-const MODES = { B: parseCsv(D.thermalCsv), A: parseCsv(D.thermalCsvA) };
+const MODES = { B: parseCsv(D.thermalCsv), A: parseCsv(D.thermalCsvA) };   // B = each ear from its own channel, A = the same on the mono mix
 let TH = MODES.B;
 const sample = (arr, rate, t) => {
   const x = clamp(t * rate, 0, arr.length - 1), i = Math.floor(x), f = x - i;
@@ -45,6 +49,19 @@ const beatPhase = (t) => {   // 0 at each beat, rising to 1 just before the next
 const poseAt = (t) => { let p = A.poses[0][1]; for (const [pt, name] of A.poses) { if (pt <= t) p = name; else break; } return p; };
 const coolCueAt = (t) => A.coolCues.find((c) => t >= c.t && t <= c.t + c.dur) || null;
 const coolAzAt = (t) => wrapAz(A.cool.az, t);
+const EN = window.ENERGY || { rate: 25, warm: [0], spark: [0], bal: [0], low: [0], mid: [0], high: [0], trans: [], drops: [] };
+const en = (k, t) => sample(EN[k], EN.rate, t);
+const ICE = '150,215,255', FIRE = '255,140,60', PINK = '255,120,210';
+// the song's title on the stage screen, in the chosen language (D11: our own song 「きらきら こおりとほのお」, not the old licensed title)
+const SONG_TITLE = () => ({ ja: 'きらきら こおりとほのお', zh: '闪闪发光的冰与火', ko: '반짝반짝 얼음과 불꽃' }[window.MoHeatSub?.lang] || 'Sparkling Ice & Fire');
+const tempAt = (t) => clamp(en('warm', t) * 1.2 - en('spark', t) * .9, -1, 1);   // + warm-dominant, − icy
+const tempCol = (t, alt = PINK) => { const k = tempAt(t); return k > .15 ? FIRE : k < -.15 ? ICE : alt; };
+let flash = 0, transI = 0, lastFxT = -1;   // (kept for the LED pulse) and the next hit to fire
+// per-side stage state = exactly what each ear feels (scripts/energy.py builds the thermal track FROM these, user 2026-11-13):
+// side 'L' / 'R' → { h: warm 0..1, c: cool 0..1 }. Ice / snow / icy light only where c > 0, fire / warm beams only where h > 0.
+const sideAt = (e, t) => ({ h: en(e + 'h', t), c: en(e + 'c', t) });
+const inSong = (t) => t >= EN.song[0] && t < EN.song[1];
+const hitFx = { L: { w: 0, c: 0 }, R: { w: 0, c: 0 } };   // decaying hit flashes per side
 
 // ---------------------------------------------------------------- art
 const ART = new Set(D.art || []);
@@ -71,51 +88,41 @@ function stageMix(t) {
 }
 function drawStage(ctx, t, shift) {
   const { BH, oy } = stageGeom(), ox = -40 + clamp(shift, -40, 40);
-  const mix = stageMix(t), bp = beatPhase(t), energy = feat('heat_drive', t), hi = feat('high_n', t);
-  const layers = [['base', 'concert_stage_base', false], ['ice', 'concert_stage_ice', false], ['warm', 'concert_stage_warm', false], ['split', 'concert_stage_split', false], ['splitM', 'concert_stage_split', true]];
-  let first = true;
-  for (const [k, img, mirror] of layers) {
-    const a = mix[k]; if (a < .01 || !ok(img)) continue;
-    ctx.save(); ctx.globalAlpha = first ? 1 : a; first = false;
-    if (mirror) { ctx.translate(W, 0); ctx.scale(-1, 1); ctx.drawImage(IMG[img], W - ox - BW, oy, BW, BH); }
-    else ctx.drawImage(IMG[img], ox, oy, BW, BH);
+  const S = { L: sideAt('L', t), R: sideAt('R', t) }, song = inSong(t), bp = beatPhase(t);
+  const act = song ? Math.max(S.L.h, S.L.c, S.R.h, S.R.c) : 0;   // how much is going on (0 = calm stage)
+  if (ok('concert_stage_base')) ctx.drawImage(IMG.concert_stage_base, ox, oy, BW, BH);
+  // each half of the stage takes the warm-lit or the icy version of the set, exactly as much as that ear is warm / cool
+  for (const [e, x0] of [['L', 0], ['R', W / 2]]) {
+    ctx.save(); ctx.beginPath(); ctx.rect(x0, 0, W / 2, H); ctx.clip();
+    if (song && S[e].h > .02 && ok('concert_stage_warm')) { ctx.globalAlpha = clamp(S[e].h * 1.1, 0, 1); ctx.drawImage(IMG.concert_stage_warm, ox, oy, BW, BH); }
+    if (song && S[e].c > .02 && ok('concert_stage_ice')) { ctx.globalAlpha = clamp(S[e].c * 1.15, 0, 1); ctx.drawImage(IMG.concert_stage_ice, ox, oy, BW, BH); }
     ctx.restore();
   }
-  // LED wall: spectrum bars + pulse in the state colours
+  if (act < .25) { ctx.fillStyle = `rgba(10,6,22,${.38 * (1 - act / .25)})`; ctx.fillRect(0, 0, W, H); }   // both ears neutral → a calmer, darker stage
+  // LED wall: the left half of the bars in the left ear's colour, the right half in the right ear's
   const sx = ox + .195 * BW, sy = oy + .245 * BH, sw = .61 * BW, sh = .32 * BH;
-  const iceCol = '120,210,255', warmCol = '255,150,60', pink = '255,120,210';
-  const colAt = (u) => (mix.split > .5 ? (u < .5 ? iceCol : warmCol) : mix.splitM > .5 ? (u < .5 ? warmCol : iceCol) : mix.ice > .5 ? iceCol : pink);
+  const colOf = (e) => (S[e].c > S[e].h && S[e].c > .05 ? ICE : S[e].h > .05 ? FIRE : PINK);
   ctx.save(); ctx.beginPath(); ctx.rect(sx, sy, sw, sh); ctx.clip();
-  ctx.fillStyle = `rgba(20,8,40,.55)`; ctx.fillRect(sx, sy, sw, sh);
+  ctx.fillStyle = 'rgba(16,8,34,.6)'; ctx.fillRect(sx, sy, sw, sh);
   const nb = 32;
   for (let i = 0; i < nb; i++) {
-    const u = (i + .5) / nb, ph = Math.sin(t * 3 + i * .7) * .5 + .5;
-    const v = clamp((i < nb * .3 ? feat('bass_n', t) : i < nb * .7 ? feat('vocal_n', t) : hi) * (.55 + .45 * ph) + bp.on * .25, 0, 1);
-    const bh = v * sh * .9, x = sx + u * sw;
-    const g = ctx.createLinearGradient(0, sy + sh, 0, sy + sh - bh);
-    g.addColorStop(0, `rgba(${colAt(u)},.9)`); g.addColorStop(1, `rgba(255,255,255,.85)`);
+    const u = (i + .5) / nb, e = u < .5 ? 'L' : 'R', band = i % 3 === 0 ? 'low' : i % 3 === 1 ? 'mid' : 'high';
+    const v = clamp(en(band, t - (i % 4) * .03) * (.35 + .65 * Math.max(S[e].h, S[e].c)) * (.75 + .25 * Math.sin(t * 5 + i)), 0, 1), bh = v * sh * .92, x = sx + u * sw;
+    const g = ctx.createLinearGradient(0, sy + sh, 0, sy + sh - bh); g.addColorStop(0, `rgba(${colOf(e)},.92)`); g.addColorStop(1, 'rgba(255,255,255,.85)');
     ctx.fillStyle = g; ctx.fillRect(x - sw / nb * .35, sy + sh - bh, sw / nb * .7, bh);
   }
-  ctx.globalCompositeOperation = 'lighter';
-  const pulse = ctx.createRadialGradient(sx + sw / 2, sy + sh / 2, 10, sx + sw / 2, sy + sh / 2, sw * .6);
-  pulse.addColorStop(0, `rgba(${colAt(.5)},${.25 * bp.on + .1 * energy})`); pulse.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = pulse; ctx.fillRect(sx, sy, sw, sh);
-  ctx.font = `800 ${Math.round(sh * .16)}px "Zen Maru Gothic", sans-serif`; ctx.textAlign = 'center'; ctx.fillStyle = `rgba(255,255,255,${.35 + .4 * bp.on})`;
-  ctx.fillText('Shining Smile Melody', sx + sw / 2, sy + sh * .28);
+  ctx.font = `800 ${Math.round(sh * .16)}px "Zen Maru Gothic", sans-serif`; ctx.textAlign = 'center'; ctx.fillStyle = `rgba(255,255,255,${.3 + .5 * act})`;
+  ctx.fillText(SONG_TITLE(), sx + sw / 2, sy + sh * .28);
   ctx.restore();
-  for (const [x0] of [[.035], [.865]]) {   // side screens: Ayane-coloured pulse
-    ctx.fillStyle = `rgba(${pink},${.15 + .45 * bp.on})`; ctx.fillRect(ox + x0 * BW, oy + .33 * BH, .1 * BW, .11 * BH);
-  }
-  // spotlight beams on the beat
+  // beams: the left three belong to the left ear, the right three to the right ear (warm orange / icy white-blue / dim)
   ctx.save(); ctx.globalCompositeOperation = 'lighter';
   for (let i = 0; i < 6; i++) {
-    const bx = ox + (.24 + i * .104) * BW, by = oy + .1 * BH, ang = Math.sin(t * (.5 + i * .11) + i * 1.3) * .5;
-    const a = (.08 + .22 * energy + .25 * bp.on * (i % 2 === bp.i % 2 ? 1 : .3));
-    const col = colAt(i / 5);
-    const g = ctx.createLinearGradient(bx, by, bx + Math.sin(ang) * 820, by + 820);
-    g.addColorStop(0, `rgba(${col},${a})`); g.addColorStop(1, `rgba(${col},0)`);
+    const e = i < 3 ? 'L' : 'R', v = song ? Math.max(S[e].h, S[e].c) : 0, col = colOf(e);
+    const bx = ox + (.24 + i * .104) * BW, by = oy + .1 * BH, ang = Math.sin(t * (.5 + i * .11) + i * 1.3) * .22 + (e === 'L' ? .18 : -.18);
+    const a = .02 + .55 * v + .35 * hitFx[e].w + .1 * bp.on * v;
+    const g = ctx.createLinearGradient(bx, by, bx + Math.sin(ang) * 820, by + 820); g.addColorStop(0, `rgba(${col},${a})`); g.addColorStop(1, `rgba(${col},0)`);
     ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(bx - 10, by); ctx.lineTo(bx + 10, by);
-    ctx.lineTo(bx + Math.sin(ang) * 820 + 150, by + 820); ctx.lineTo(bx + Math.sin(ang) * 820 - 150, by + 820); ctx.fill();
+    ctx.lineTo(bx + Math.sin(ang) * 820 + 170, by + 820); ctx.lineTo(bx + Math.sin(ang) * 820 - 170, by + 820); ctx.fill();
   }
   ctx.restore();
 }
@@ -123,19 +130,18 @@ function drawStage(ctx, t, shift) {
 // audience silhouettes + glow sticks waving on the beat, coloured by the stage state
 const STICKS = Array.from({ length: 46 }, (_, i) => ({ u: (i + hash(i) * .8) / 46, h: hash(i + 7), ph: hash(i + 3) * 6.28 }));
 function drawAudience(ctx, t) {
-  const mix = stageMix(t), bp = beatPhase(t);
-  const ah = (W + 80) / 1536 * 512 * .62, top = H - ah;                         // silhouettes fill the bottom ~25 %
+  const bp = beatPhase(t), S = { L: sideAt('L', t), R: sideAt('R', t) }, song = inSong(t);
+  const ah = (W + 80) / 1536 * 512 * .62, top = H - ah;
   if (ok('audience_fg')) ctx.drawImage(IMG.audience_fg, -40, top, W + 80, ah);
-  const ay = top + ah * .52;                                                      // glow sticks raised above the heads
+  const ay = top + ah * .52;   // glow sticks: each half in its ear's colour; they swing harder the more that side is going on
   ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.lineCap = 'round';
   for (const s of STICKS) {
-    const sideIce = mix.split > .5 ? s.u < .5 : mix.splitM > .5 ? s.u >= .5 : mix.ice > .5;
-    const sideWarm = mix.split > .5 ? s.u >= .5 : mix.splitM > .5 ? s.u < .5 : false;
-    const col = sideIce ? '110,220,255' : sideWarm ? '255,160,60' : s.h > .5 ? '255,120,210' : '140,160,255';
-    const x = s.u * W, y = ay + s.h * 40, sw = Math.sin((bp.i + bp.p) * Math.PI + s.ph * .2) * .55;
+    const e = s.u < .5 ? 'L' : 'R', v = song ? Math.max(S[e].h, S[e].c) : 0;
+    const c = S[e].c > S[e].h && S[e].c > .05 ? ICE : S[e].h > .05 ? FIRE : s.h > .5 ? PINK : '140,160,255';
+    const x = s.u * W, y = ay + s.h * 40, sw = Math.sin((bp.i + bp.p) * Math.PI + s.ph * .2) * (.15 + .6 * v);
     const x2 = x + Math.sin(sw) * 60, y2 = y - Math.cos(sw) * 60;
-    ctx.strokeStyle = `rgba(${col},.95)`; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2, y2); ctx.stroke();
-    ctx.strokeStyle = `rgba(${col},.25)`; ctx.lineWidth = 26; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2, y2); ctx.stroke();
+    ctx.strokeStyle = `rgba(${c},${.45 + .5 * v})`; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2, y2); ctx.stroke();
+    ctx.strokeStyle = `rgba(${c},${.08 + .25 * v})`; ctx.lineWidth = 26; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2, y2); ctx.stroke();
   }
   ctx.restore();
 }
@@ -150,25 +156,40 @@ function updateParts(dt) {
 function drawParts(ctx) {
   for (const q of parts) {
     const k = q.life / q.max, a = Math.sin(Math.PI * Math.min(1, k * 1.3)) * q.a;
+    if (q.rect) { ctx.save(); ctx.globalAlpha = a; ctx.translate(q.x, q.y); ctx.rotate(q.rot); ctx.fillStyle = q.rect; ctx.fillRect(-q.size / 2, -q.size / 4, q.size, q.size / 2); ctx.restore(); continue; }
     if (!ok(q.img)) continue;
     ctx.save(); ctx.globalAlpha = a; if (q.add) ctx.globalCompositeOperation = 'lighter';
     ctx.translate(q.x, q.y); ctx.rotate(q.rot); ctx.drawImage(IMG[q.img], -q.size / 2, -q.size / 2, q.size, q.size); ctx.restore();
   }
 }
 function emitFx(t, dt, st) {
-  const mix = stageMix(t), hi = feat('high_n', t), en = feat('heat_drive', t), bp = beatPhase(t);
-  const iceAmt = mix.ice + .5 * (mix.split + mix.splitM), warmAmt = mix.warm + .5 * (mix.split + mix.splitM);
-  const iceX = () => (mix.split > .5 ? Math.random() * W * .45 : mix.splitM > .5 ? W * .55 + Math.random() * W * .45 : Math.random() * W);
-  const warmX = () => (mix.split > .5 ? W * .55 + Math.random() * W * .45 : mix.splitM > .5 ? Math.random() * W * .45 : Math.random() * W);
-  if (Math.random() < dt * 30 * iceAmt * (.3 + hi)) spawn({ img: Math.random() < .5 ? 'fx_snowflake' : 'fx_ice_crystal', x: iceX(), y: -40, vx: (Math.random() - .5) * 60, vy: 120 + Math.random() * 120, size: 30 + Math.random() * 50, rot: Math.random() * 6, spin: (Math.random() - .5) * 2, life: 0, max: 5, a: .9, add: true });
-  if (Math.random() < dt * 14 * warmAmt * (.3 + en)) spawn({ img: 'fx_flame', x: warmX(), y: H * .62 + Math.random() * 60, vx: (Math.random() - .5) * 40, vy: -140 - Math.random() * 80, size: 50 + Math.random() * 60, rot: 0, life: 0, max: 1.2, a: .9, add: true });
-  const cue = coolCueAt(t);   // the moving ice burst/sweep (same position data as the cooling)
-  if (cue && Math.random() < dt * 40) {
-    const x = xOf(coolAzAt(t)) + (Math.random() - .5) * 160;
-    spawn({ img: Math.random() < .6 ? 'fx_ice_crystal' : 'fx_snowflake', x, y: 300 + Math.random() * 380, vx: (Math.random() - .5) * 120, vy: -40 + Math.random() * 80, size: 50 + Math.random() * 60, rot: Math.random() * 6, spin: 1.5, life: 0, max: 1.4, a: 1, add: true });
+  const song = inSong(t), S = { L: sideAt('L', t), R: sideAt('R', t) };
+  const half = (e) => (e === 'L' ? Math.random() * W * .5 : W * .5 + Math.random() * W * .5);
+  for (const e of ['L', 'R']) {
+    if (!song) continue;
+    // ice / snow fill the cool half (only there), flames rise only in the warm half
+    if (S[e].c > .05 && Math.random() < dt * 70 * S[e].c) spawn({ img: Math.random() < .5 ? 'fx_snowflake' : 'fx_ice_crystal', x: half(e), y: -40, vx: (Math.random() - .5) * 50, vy: 150 + Math.random() * 120, size: 34 + Math.random() * 56, rot: Math.random() * 6, spin: (Math.random() - .5) * 2, life: 0, max: 4.5, a: .95, add: true, side: e });
+    if (S[e].h > .2 && Math.random() < dt * 34 * (S[e].h - .2)) spawn({ img: 'fx_flame', x: half(e), y: H * .6 + Math.random() * 80, vx: (Math.random() - .5) * 40, vy: -170 - Math.random() * 90, size: 56 + Math.random() * 80 * S[e].h, rot: 0, life: 0, max: 1.2, a: .95, add: true, side: e });
   }
-  if (bp.on > .95 && Math.random() < .55) spawn({ img: 'fx_star', x: W * .2 + Math.random() * W * .6, y: 200 + Math.random() * 200, vx: 0, vy: 20, size: 40 + Math.random() * 40, rot: 0, spin: 2, life: 0, max: .9, a: .9, add: true });
-  if (st && feat('vocal_n', t) > .55 && Math.random() < dt * 4) spawn({ img: Math.random() < .5 ? 'fx_note' : 'fx_heart', x: st.x + (Math.random() - .5) * 240 * st.s, y: st.y - 140 * st.s, vx: (Math.random() - .5) * 50, vy: -100 - Math.random() * 60, size: 50 + Math.random() * 30, rot: (Math.random() - .5) * .5, life: 0, max: 2, a: 1 });
+  // a side that stops being cool / warm loses its ice / flames at once (nothing icy on a warm side, nothing fiery on a cool side)
+  parts = parts.filter((q) => !q.side || (q.img === 'fx_flame' ? S[q.side].h > .03 : q.img === 'fx_snowflake' || q.img === 'fx_ice_crystal' ? S[q.side].c > .02 || q.life < .2 : true));
+  // the hits = the thermal pulses (same list, same frame): warm → flash + sparks + confetti on that half; cool → a frost burst there
+  if (t < lastFxT - .05 || t > lastFxT + 1) { transI = EN.hits.findIndex((x) => x[0] >= t); if (transI < 0) transI = EN.hits.length; }
+  lastFxT = t;
+  while (transI < EN.hits.length && EN.hits[transI][0] <= t) {
+    const [, e, kind, s] = EN.hits[transI++], cx = e === 'L' ? W * .25 : W * .75;
+    if (kind === 'w') {
+      hitFx[e].w = Math.max(hitFx[e].w, s);
+      for (let i = 0; i < Math.round(16 + 30 * s); i++) spawn({ rect: ['#ffd23f', '#ff8a3d', '#ff6fb5', '#ffffff'][i % 4], x: cx + (Math.random() - .5) * W * .45, y: -20 - Math.random() * 100, vx: (Math.random() - .5) * 100, vy: 130 + Math.random() * 160, g: 40, size: 14 + Math.random() * 14, rot: Math.random() * 6, spin: (Math.random() - .5) * 8, life: 0, max: 3, a: 1 });
+      for (let i = 0; i < 8; i++) spawn({ img: 'fx_star', x: cx + (Math.random() - .5) * W * .4, y: 180 + Math.random() * 300, vx: (Math.random() - .5) * 60, vy: -30, size: 44 + Math.random() * 40, rot: 0, spin: 2, life: 0, max: .9, a: 1, add: true });
+    } else {
+      hitFx[e].c = Math.max(hitFx[e].c, s);
+      for (let i = 0; i < 26; i++) { const a = Math.random() * 6.28, v = 200 + Math.random() * 380; spawn({ img: 'fx_ice_crystal', x: cx, y: H * .45, vx: Math.cos(a) * v * .9, vy: Math.sin(a) * v * .6, size: 40 + Math.random() * 60, rot: Math.random() * 6, spin: 2, life: 0, max: 1.3, a: 1, add: true, side: e }); }
+    }
+  }
+  for (const e of ['L', 'R']) { hitFx[e].w = Math.max(0, hitFx[e].w - dt * 1.8); hitFx[e].c = Math.max(0, hitFx[e].c - dt * 1.5); }
+  flash = Math.max(hitFx.L.w, hitFx.R.w);
+  if (st && en('mid', t) > .6 && Math.random() < dt * 3) spawn({ img: Math.random() < .5 ? 'fx_note' : 'fx_heart', x: st.x + (Math.random() - .5) * 240 * st.s, y: st.y - 140 * st.s, vx: (Math.random() - .5) * 50, vy: -100 - Math.random() * 60, size: 50 + Math.random() * 30, rot: (Math.random() - .5) * .5, life: 0, max: 2, a: 1 });
 }
 
 // ---------------------------------------------------------------- Ayane
@@ -193,7 +214,7 @@ function charState(t) {
   if (t < A.present.A[0]) return null;
   const az = azAt(t), d = dAt(t), v = azAt(t + .1) - azAt(t - .1), vel = clamp(v / .2, -150, 150);
   const s = clamp(.9 * Math.pow(1 / d, .55), .3, 1.6), near = clamp((1.4 - d) / 1.1, 0, 1), bp = beatPhase(t);
-  const bounce = t > 11 && t < 128.6 ? Math.pow(1 - bp.p, 3) * 16 * s : Math.sin(t * 1.6) * 5 * s;
+  const bounce = t > A.song[0] && t < A.song[1] - 11 ? Math.pow(1 - bp.p, 3) * 16 * s : Math.sin(t * 1.6) * 5 * s;
   return { az, d, vel, s, near, x: xOf(az), y: lerp(HORIZON, 560, near) - bounce, alpha: clamp((t - A.present.A[0]) / .6, 0, 1),
            mouth: clamp(A.chars.A.mouth[Math.round(t * A.fps)] || 0, 0, 1), blink: blinkAmt(t), bp };
 }
@@ -238,25 +259,34 @@ function drawAyane(st, t) {
 // ---------------------------------------------------------------- frame
 const cv = $('scene'), ctx = cv.getContext('2d');
 let camYaw = 0, lastT = 0, lastFrame = performance.now();
-function thermalEdges(ctx, th) {
-  for (const [side, c, h] of [[-1, th.Lc, th.Lh], [1, th.Rc, th.Rh]]) {
-    const v = Math.max(c, h); if (v < .02) continue;
-    const col = c >= h ? '70,170,255' : '255,110,50', x0 = side < 0 ? 0 : W, x1 = side < 0 ? 480 : W - 480;
-    const g = ctx.createLinearGradient(x0, 0, x1, 0); g.addColorStop(0, `rgba(${col},${.34 * v})`); g.addColorStop(1, `rgba(${col},0)`);
-    ctx.fillStyle = g; ctx.fillRect(Math.min(x0, x1), 0, 480, H);
+function thermalEdges(ctx, t) {   // the side glow on each stage edge = that ear's temperature (orange warm / icy blue cool), on the picture's clock
+  for (const [e, side] of [['L', -1], ['R', 1]]) {
+    const S = sideAt(e, t), v = Math.max(S.c, S.h), hw = hitFx[e];
+    const x0 = side < 0 ? 0 : W, x1 = side < 0 ? 620 : W - 620;
+    if (v > .02) {
+      const col = S.c >= S.h ? '90,185,255' : '255,120,45';
+      const g = ctx.createLinearGradient(x0, 0, x1, 0); g.addColorStop(0, `rgba(${col},${.62 * v})`); g.addColorStop(1, `rgba(${col},0)`);
+      ctx.fillStyle = g; ctx.fillRect(Math.min(x0, x1), 0, 620, H);
+    }
+    for (const [k, col] of [['w', '255,235,200'], ['c', '200,235,255']]) if (hw[k] > .01) {   // the hit flash on that half
+      const g = ctx.createRadialGradient(side < 0 ? W * .25 : W * .75, H * .45, 30, side < 0 ? W * .25 : W * .75, H * .45, W * .4);
+      g.addColorStop(0, `rgba(${col},${.5 * hw[k]})`); g.addColorStop(1, `rgba(${col},0)`);
+      ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = g; ctx.fillRect(side < 0 ? 0 : W / 2, 0, W / 2, H); ctx.restore();
+    }
   }
 }
 function frame(t, dt) {
   const st = charState(t);
   camYaw += ((st ? clamp(st.az, -40, 40) * .12 : 0) - camYaw) * clamp(dt * 1.2, 0, 1);
   drawStage(ctx, t, -camYaw * 6);
+  { const dim = t < A.song[0] ? .5 * clamp((A.song[0] - .6 - t) / 1.2, 0, 1) : .32 * clamp((t - A.song[1] - .5) / 1.5, 0, 1); if (dim > .005) { ctx.fillStyle = `rgba(8,4,18,${dim})`; ctx.fillRect(0, 0, W, H); } }   // the house lights: down before / after the song
   const front = st && st.d < 1.2;
   if (st && !front) { ctx.save(); ctx.translate(-camYaw * 8, 0); drawAyane(st, t); ctx.restore(); }
   drawAudience(ctx, t);
   if (st && front) { ctx.save(); ctx.translate(-camYaw * 8, 0); drawAyane(st, t); ctx.restore(); }
   emitFx(t, dt, st); updateParts(dt); drawParts(ctx);
   const th = thermalAt(t + offsetMs / 1000);
-  thermalEdges(ctx, th);
+  thermalEdges(ctx, t);
   return { st, th };
 }
 
@@ -278,8 +308,8 @@ function drawRadar(st, th, t) {
     const r = 44 + (R - 44) * clamp(Math.log(d / .3) / Math.log(5 / .3), 0, 1), x = cx + Math.sin(rad(az)) * r, y = cy - Math.cos(rad(az)) * r;
     c.fillStyle = col; c.beginPath(); c.arc(x, y, r0, 0, 7); c.fill(); c.fillStyle = '#fff'; c.font = '600 20px "Noto Sans JP"'; c.fillText(label, x, y - r0 - 6);
   };
-  if (st) dot(st.az, st.d, '#ff8cc6', '綾音 🔥', 13 + st.mouth * 6);
-  if (coolCueAt(t)) dot(coolAzAt(t), 1.2, '#7cc4ff', '❄', 12);
+  if (st) dot(st.az, st.d, '#ff8cc6', '綾音 ', 13 + st.mouth * 6);
+  if (coolCueAt(t)) dot(coolAzAt(t), 1.2, '#7cc4ff', '', 12);
 }
 const tl = $('timeline'), tlctx = tl.getContext('2d');
 function drawTimeline() {
@@ -327,8 +357,16 @@ $('lrBtn').addEventListener('click', () => {
     o.frequency.value = pan < 0 ? f : f * 1.25; o.connect(g).connect(p).connect(ac.destination);
     const t0 = ac.currentTime + at + d; g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(.25, t0 + .01); g.gain.exponentialRampToValueAtTime(.001, t0 + .5); o.start(t0); o.stop(t0 + .55);
   } });
-  const b = $('lrBtn'); b.textContent = '🎧 Left…'; setTimeout(() => { b.textContent = '🎧 …Right'; }, 900); setTimeout(() => { b.textContent = '🎧 Left / Right check'; ac.close(); }, 1900);
+  const b = $('lrBtn'); b.textContent = 'Left…'; setTimeout(() => { b.textContent = '…Right'; }, 900); setTimeout(() => { b.textContent = 'Left / Right check'; ac.close(); }, 1900);
 });
+// whispered lines (exhibition cut): #subs .line > .ja / .en — shared/subs.js shows the chosen language
+const subsEl = $('subs'); let subKey = '';
+const escH = (x) => x.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
+function updateSubs(t) {
+  const act = (A.subs || []).filter((s) => t >= s.t0 && t < s.t1).slice(-1), key = act.map((s) => s.t0).join('|');
+  if (key === subKey) return; subKey = key;
+  subsEl.innerHTML = act.map((s) => `<div class="line"><div class="ja"><span class="who A">綾音</span>${escH(s.ja)}</div><div class="en">${escH(s.en)}</div></div>`).join('');
+}
 const sceneEl = $('sceneTitle'); let segIdx = -1, segTimer = 0;
 function updateScene(t) {
   const i = A.segments.indexOf(segAt(t));
@@ -372,7 +410,7 @@ function loop() {
   const playing = (!media.paused && !media.ended) || previewT != null;
   const { st, th: th0 } = frame(t, playing || ix ? dt : 0);
   const io = window.MoHeatInteract ? window.MoHeatInteract.out(th0, ix) : { th: th0, live: null }, th = io.th, live = io.live ?? playing;
-  drawRadar(st, live ? th : { Lc: 0, Lh: 0, Rc: 0, Rh: 0 }, t); updateOutput(th, live); updateScene(t);
+  drawRadar(st, live ? th : { Lc: 0, Lh: 0, Rc: 0, Rh: 0 }, t); updateOutput(th, live); updateScene(t); updateSubs(t);
   $('time').textContent = `${fmt(t)} / ${fmt(A.duration)}`; $('playhead').style.left = `${(t / A.duration) * 100}%`;
   $('posInfo').textContent = st ? `${(window.MoHeatSub?.name || String)('綾音')} ${Math.round(st.az)}° · ${segAt(t).en} · ${Math.round(A.bpm * 2)} BPM` : '';
   requestAnimationFrame(loop);
@@ -395,9 +433,9 @@ async function renderAll() {
       ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; ctx.font = '700 38px "Zen Maru Gothic", sans-serif'; ctx.fillText(`${si + 1}　${s.ja}`, 96, 106);
       ctx.fillStyle = '#e6d6ef'; ctx.font = '500 24px Inter, sans-serif'; ctx.fillText(s.en, 96, 140); ctx.globalAlpha = 1;
     }
-    if (t > 144) {   // end credit
-      ctx.globalAlpha = clamp((t - 144) / 1, 0, 1); ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.font = '600 30px Inter, sans-serif';
-      ctx.fillText('Music: Shining Smile Melody — ZTMusic (Pixabay)', W / 2, H - 70); ctx.globalAlpha = 1;
+    if (t > A.duration - 6) {   // end credit
+      ctx.globalAlpha = clamp((t - (A.duration - 6)) / 1, 0, 1); ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.font = '600 30px Inter, sans-serif';
+      ctx.fillText(({ ja: '音楽：オリジナル曲（ElevenLabs Music）', zh: '音乐：原创歌曲（ElevenLabs Music）', ko: '음악: 오리지널 곡 (ElevenLabs Music)' })[window.MoHeatSub?.lang] || 'Music: original song (ElevenLabs Music)', W / 2, H - 70); ctx.globalAlpha = 1;
     }
     const blob = await new Promise((r) => cv.toBlob(r, 'image/jpeg', .92));
     await fetch(`/frame/${String(i).padStart(5, '0')}.jpg`, { method: 'PUT', body: blob });
