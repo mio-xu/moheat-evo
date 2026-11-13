@@ -312,7 +312,11 @@
   addEventListener('pointerdown', (e) => { tapDown = { el: e.target, x: e.clientX, y: e.clientY, t: real.now(), far: false }; }, true);
   addEventListener('pointermove', (e) => { if (tapDown && Math.hypot(e.clientX - tapDown.x, e.clientY - tapDown.y) > 12) tapDown.far = true; }, true);
   const plainTap = (e) => !!tapDown && tapDown.el === e.target && !tapDown.far && real.now() - tapDown.t < 700;
-  const filmHeld = () => { const f = filmEl(); return !!f && f.paused && !f.ended && playing() && !document.querySelector('.stage.ix-wait'); };
+  // an answer tap ends the gate's wait (.ix-wait goes) a moment before the film really plays again (phones: play() takes ~0.5–2 s): that gap is
+  // not a pause — without the grace the big ▶ flashed and the film "paused, then played by itself" after every button (user 2026-11-13)
+  let ixSeen = -1e9;
+  const filmHeld = () => { const f = filmEl(); if (document.querySelector('.stage.ix-wait')) { ixSeen = real.now(); return false; }
+    return !!f && f.paused && !f.ended && playing() && real.now() - ixSeen > 2500; };
   // a double tap on Start: the second tap must not pause what the first one started (final6 E2E) — play / pause toggles by the visitor
   // (bar button, tap on the picture, Space / P) are ignored for 400 ms after Start; ■ STOP and automatic pauses are not
   let startedAt = -1e9; document.addEventListener('click', (e) => { if (e.target.closest?.('#startBtn')) startedAt = real.now(); }, true);
