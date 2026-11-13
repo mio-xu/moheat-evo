@@ -24,14 +24,6 @@
       { t: 129.95, kind: 'read', tag: '✨ いっしょに · Together', how: ['ふたりと一緒に、唱えてみて', 'Chant it with them'], what: ['雪と焔の、ないしょの魔法！', 'Our secret magic of snow and flame!'] },
       { t: 144.8, kind: 'read', what: ['うん、また遊ぼう！ おやすみ。', "Let's play again! Good night."] },
     ],
-    Demo02_FanMeeting: [
-      { t: 8.95, kind: 'read', what: ['うん、来たよ！', "Yep, I'm here!"] },
-      { t: 60.1, kind: 'read', what: ['すずしい〜！', 'So cool~!'] },
-      { t: 80.85, kind: 'choice', what: ['綾音は、どっちから話しかける？', 'Which side will Ayane talk from?'], options: LR, answer: 1 },
-      { t: 129.6, kind: 'toast', icon: '👏', btn: '👏 拍手！', what: ['さいこう！', 'That was amazing!'], how: ['拍手するか、「さいこう！」と言ってみて · Clap, cheer — or tap', '拍手ボタンをタップ · Tap to applaud'], done: 'ありがとう〜！', doneEn: 'Thank you~!' },
-      { t: 143.9, kind: 'read', what: ['うん、やくそく！', 'Yes — I promise!'] },
-    ],
-    Demo03_ShiningSmileConcert: 'cheer',
     // Demo 5–9: every line of yours (subtitle who 'Y') becomes a read gate automatically, from the subtitle data; list only toasts /
     // blows / choices here, at the time of their line (tools/qa/check_gates.js warns when a time no longer meets a line).
     Demo05_GifuCastle: [

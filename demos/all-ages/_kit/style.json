@@ -19,8 +19,11 @@
    "id": "fairy",
    "demos": [
     "Demo01_SnowFoxfire",
-    "Demo02_FanMeeting",
-    "Demo03_ShiningSmileConcert",
+    "Demo02_FanMeeting_v2",
+    "Demo03_ShiningSmileRemake",
+    "Demo63_AyaneDivaRock",
+    "Demo64_AyaneDivaWafu",
+    "Demo65_AyaneDivaBallad",
     "Demo04_SeasonsExpress",
     "Demo10_CaveSpring",
     "Demo28_SnowFoxLullaby",
@@ -29,7 +32,6 @@
    ],
    "anchor": [
     "Demo01_SnowFoxfire",
-    "Demo03_ShiningSmileConcert",
     "Demo10_CaveSpring"
    ],
    "look": "cute Japanese 2D, pastel cel shading, chibi idols / fairies, 2–3 heads tall, big eyes; NOT ukiyo-e / gold leaf",
@@ -42,29 +44,27 @@
    "sound": "music-box / bells, soft synth pads, playful foley",
    "anchor_images": [
     "demos/all-ages/Demo01_SnowFoxfire/media/cover.jpg",
-    "demos/all-ages/Demo03_ShiningSmileConcert/media/cover.jpg",
-    "demos/all-ages/Demo03_ShiningSmileConcert/media/art/concert_stage_split.webp",
     "demos/all-ages/Demo10_CaveSpring/media/cover.jpg",
     "demos/all-ages/Demo10_CaveSpring/media/art/bg_hut_fire.webp"
    ],
    "anchor_stats": {
-    "sat": 0.5543,
+    "sat": 0.5568,
     "light": 0.3432,
-    "contrast": 0.2113,
-    "lines": 0.1646,
+    "contrast": 0.2019,
+    "lines": 0.094,
     "hue": [
-     0.2118,
-     0.0252,
+     0.2746,
+     0.0264,
      0.0,
      0.0,
      0.0,
      0.0,
-     0.0484,
-     0.3284,
-     0.1684,
-     0.0362,
-     0.0782,
-     0.1034
+     0.0606,
+     0.3355,
+     0.1297,
+     0.0378,
+     0.0391,
+     0.0962
     ]
    }
   }
