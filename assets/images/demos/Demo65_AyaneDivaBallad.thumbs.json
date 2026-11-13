@@ -1,0 +1,32 @@
+{
+ "base": {
+  "inputs": {
+   "demos/all-ages/Demo65_AyaneDivaBallad/media/cover/stamp.json": "d92013681c318266e29b57988e82c85022134933"
+  },
+  "thumb": "b67f50bf733eeee2de210a0b9505a0966255fcab"
+ },
+ "en": {
+  "inputs": {
+   "demos/all-ages/Demo65_AyaneDivaBallad/media/cover/stamp.json": "d92013681c318266e29b57988e82c85022134933"
+  },
+  "thumb": "b67f50bf733eeee2de210a0b9505a0966255fcab"
+ },
+ "ja": {
+  "inputs": {
+   "demos/all-ages/Demo65_AyaneDivaBallad/media/cover/stamp.json": "d92013681c318266e29b57988e82c85022134933"
+  },
+  "thumb": "74989fccdefa8018ba997dacd35529d007f11cde"
+ },
+ "ko": {
+  "inputs": {
+   "demos/all-ages/Demo65_AyaneDivaBallad/media/cover/stamp.json": "d92013681c318266e29b57988e82c85022134933"
+  },
+  "thumb": "e4ee93ef6d740aedfa01e09d932bc2e3c52d4d08"
+ },
+ "zh": {
+  "inputs": {
+   "demos/all-ages/Demo65_AyaneDivaBallad/media/cover/stamp.json": "d92013681c318266e29b57988e82c85022134933"
+  },
+  "thumb": "34d09c67d283985adc535c4c3c8c188c3e0e2d92"
+ }
+}

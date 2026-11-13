@@ -1,0 +1,32 @@
+{
+ "base": {
+  "inputs": {
+   "demos/all-ages/Demo64_AyaneDivaWafu/media/cover/stamp.json": "aff08a97c1af983d927b8b45c8552b0e7e69a8e8"
+  },
+  "thumb": "5fc51c07574b5ac12bfe58524b9fe28fcb1ac42f"
+ },
+ "en": {
+  "inputs": {
+   "demos/all-ages/Demo64_AyaneDivaWafu/media/cover/stamp.json": "aff08a97c1af983d927b8b45c8552b0e7e69a8e8"
+  },
+  "thumb": "5fc51c07574b5ac12bfe58524b9fe28fcb1ac42f"
+ },
+ "ja": {
+  "inputs": {
+   "demos/all-ages/Demo64_AyaneDivaWafu/media/cover/stamp.json": "aff08a97c1af983d927b8b45c8552b0e7e69a8e8"
+  },
+  "thumb": "0b6256616dbbec3e9414979dd9af1f8ef07a142d"
+ },
+ "ko": {
+  "inputs": {
+   "demos/all-ages/Demo64_AyaneDivaWafu/media/cover/stamp.json": "aff08a97c1af983d927b8b45c8552b0e7e69a8e8"
+  },
+  "thumb": "c03b7f98c7aa8bd57a96f629df308444338aa163"
+ },
+ "zh": {
+  "inputs": {
+   "demos/all-ages/Demo64_AyaneDivaWafu/media/cover/stamp.json": "aff08a97c1af983d927b8b45c8552b0e7e69a8e8"
+  },
+  "thumb": "579f263bf181b6c7cfaaba4b3c47201b986f0d82"
+ }
+}

@@ -64,7 +64,7 @@ window.MOHEAT_L10N = {
    "綾音 ElevenLabs": "绫音 ElevenLabs",
    "ASMR · Fan meeting": "ASMR · 见面会",
    "Live DUAL: Ayane's voice warms the ear she is at (strongest at the ear); the stage spotlights warm you a little; the ice-cold soda or her uchiwa breeze cools one ear while she whispers into the other.": "实时 DUAL：绫音在哪只耳朵边说话，哪只耳朵就暖（贴耳最强）；舞台灯光让你微微发暖；冰汽水或她扇的风让一只耳朵变凉，同时她在另一只耳朵边说悄悄话。",
-   "Ayane is an original character · voice ElevenLabs · art: layered stills (Seedance / OpenAI gpt-image)": "绫音是原创角色 · 配音 ElevenLabs · 美术：分层静帧（Seedance / OpenAI gpt-image）",
+   "Ayane is an original character · voice ElevenLabs · art: LivLiv character model, stage art OpenAI gpt-image": "绫音是原创角色 · 配音 ElevenLabs · 美术：LivLiv 角色模型，舞台图 OpenAI gpt-image",
    "綾音": "绫音"
   },
   "ko": {
@@ -124,18 +124,18 @@ window.MOHEAT_L10N = {
    "綾音 ElevenLabs": "아야네 ElevenLabs",
    "ASMR · Fan meeting": "ASMR · 팬미팅",
    "Live DUAL: Ayane's voice warms the ear she is at (strongest at the ear); the stage spotlights warm you a little; the ice-cold soda or her uchiwa breeze cools one ear while she whispers into the other.": "실시간 DUAL: 아야네가 말하는 쪽 귀가 따뜻해져요(귀 바로 옆이 가장 강함). 무대 조명이 살짝 따뜻하고, 차가운 소다나 부채 바람이 한쪽 귀를 식히는 동안 그녀는 다른 쪽 귀에 속삭여요.",
-   "Ayane is an original character · voice ElevenLabs · art: layered stills (Seedance / OpenAI gpt-image)": "아야네는 오리지널 캐릭터 · 목소리 ElevenLabs · 그림: 레이어 정지화 (Seedance / OpenAI gpt-image)",
+   "Ayane is an original character · voice ElevenLabs · art: LivLiv character model, stage art OpenAI gpt-image": "아야네는 오리지널 캐릭터 · 목소리 ElevenLabs · 그림: LivLiv 캐릭터 모델, 무대 그림 OpenAI gpt-image",
    "綾音": "아야네"
   },
   "ja": {
    "ASMR · Fan meeting": "ASMR · ファンミーティング",
    "Live DUAL: Ayane's voice warms the ear she is at (strongest at the ear); the stage spotlights warm you a little; the ice-cold soda or her uchiwa breeze cools one ear while she whispers into the other.": "リアルタイム DUAL：綾音が話している側の耳があたたかくなります（耳もとがいちばん強い）。ステージのライトで少しあたたかく、冷たいソーダやうちわの風が片耳を冷やすあいだ、彼女はもう片方の耳にささやきます。",
-   "Ayane is an original character · voice ElevenLabs · art: layered stills (Seedance / OpenAI gpt-image)": "綾音はオリジナルキャラクター · 声 ElevenLabs · 絵：レイヤー静止画（Seedance / OpenAI gpt-image）"
+   "Ayane is an original character · voice ElevenLabs · art: LivLiv character model, stage art OpenAI gpt-image": "綾音はオリジナルキャラクター · 声 ElevenLabs · 絵：LivLiv キャラクターモデル、舞台画 OpenAI gpt-image"
   },
   "en": {
    "ASMR · Fan meeting": "ASMR · Fan meeting",
    "Live DUAL: Ayane's voice warms the ear she is at (strongest at the ear); the stage spotlights warm you a little; the ice-cold soda or her uchiwa breeze cools one ear while she whispers into the other.": "Live DUAL: Ayane's voice warms the ear she is at (strongest at the ear); the stage spotlights warm you a little; the ice-cold soda or her uchiwa breeze cools one ear while she whispers into the other.",
-   "Ayane is an original character · voice ElevenLabs · art: layered stills (Seedance / OpenAI gpt-image)": "Ayane is an original character · voice ElevenLabs · art: layered stills (Seedance / OpenAI gpt-image)"
+   "Ayane is an original character · voice ElevenLabs · art: LivLiv character model, stage art OpenAI gpt-image": "Ayane is an original character · voice ElevenLabs · art: LivLiv character model, stage art OpenAI gpt-image"
   }
  },
  "names": {
