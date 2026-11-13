@@ -1,0 +1,32 @@
+{
+ "base": {
+  "inputs": {
+   "demos/all-ages/Demo02_FanMeeting_v2/media/cover/stamp.json": "73b1851bfca995bdc7e31e53312a9c3c7f0df608"
+  },
+  "thumb": "f052eca84ccd9c431bcfec00fa4de1af029e0630"
+ },
+ "en": {
+  "inputs": {
+   "demos/all-ages/Demo02_FanMeeting_v2/media/cover/stamp.json": "73b1851bfca995bdc7e31e53312a9c3c7f0df608"
+  },
+  "thumb": "f052eca84ccd9c431bcfec00fa4de1af029e0630"
+ },
+ "ja": {
+  "inputs": {
+   "demos/all-ages/Demo02_FanMeeting_v2/media/cover/stamp.json": "73b1851bfca995bdc7e31e53312a9c3c7f0df608"
+  },
+  "thumb": "0e24da5f0176f679c16a86e05085236c485f6d67"
+ },
+ "ko": {
+  "inputs": {
+   "demos/all-ages/Demo02_FanMeeting_v2/media/cover/stamp.json": "73b1851bfca995bdc7e31e53312a9c3c7f0df608"
+  },
+  "thumb": "196f825fefaedeb878ca057dbc326aaba5870f08"
+ },
+ "zh": {
+  "inputs": {
+   "demos/all-ages/Demo02_FanMeeting_v2/media/cover/stamp.json": "73b1851bfca995bdc7e31e53312a9c3c7f0df608"
+  },
+  "thumb": "3b0c7f5b0570b0bd89370a5f35f60ca12faa1bd3"
+ }
+}

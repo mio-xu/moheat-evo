@@ -1,0 +1,32 @@
+{
+ "base": {
+  "inputs": {
+   "demos/all-ages/Demo03_ShiningSmileRemake/media/cover/stamp.json": "aba3397e94a8caf1317071f534aec40f1ca324f1"
+  },
+  "thumb": "2f9609134fa82a2a8cf2d19195d058c7a2d095f3"
+ },
+ "en": {
+  "inputs": {
+   "demos/all-ages/Demo03_ShiningSmileRemake/media/cover/stamp.json": "aba3397e94a8caf1317071f534aec40f1ca324f1"
+  },
+  "thumb": "2f9609134fa82a2a8cf2d19195d058c7a2d095f3"
+ },
+ "ja": {
+  "inputs": {
+   "demos/all-ages/Demo03_ShiningSmileRemake/media/cover/stamp.json": "aba3397e94a8caf1317071f534aec40f1ca324f1"
+  },
+  "thumb": "298471fc301e7de203555cc6a0b929b4368814ed"
+ },
+ "ko": {
+  "inputs": {
+   "demos/all-ages/Demo03_ShiningSmileRemake/media/cover/stamp.json": "aba3397e94a8caf1317071f534aec40f1ca324f1"
+  },
+  "thumb": "685e5caa845c9333283923f6868b2e8b9d91f5ef"
+ },
+ "zh": {
+  "inputs": {
+   "demos/all-ages/Demo03_ShiningSmileRemake/media/cover/stamp.json": "aba3397e94a8caf1317071f534aec40f1ca324f1"
+  },
+  "thumb": "7e4137808cab2d71eaebaf5ce67b11c76a2a42b8"
+ }
+}

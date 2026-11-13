@@ -1,0 +1,9 @@
+/* キミだけのスペシャルファンミーティング — palette only (layout: ../../shared/story.css). Sweet pink / cream. */
+:root { --bg: #24161f; --panel: #2c1c27; --panel-2: #3a2533; --line: #66475a; --gold: #ffd0e0; --st-hi: 255, 190, 215; --st-on: 226, 110, 160; --st-sub: 28, 14, 24; --st-bar: linear-gradient(90deg, #ff9fc4, #ffd8b0); }
+.bar { background: #1a0f17; }
+.brand span { color: #ffadd0; }
+.btn.primary { background: linear-gradient(135deg, #e0679a, #ffb98a); }
+.subs .who.wA { color: #ffbfd8; }
+
+/* LL staging: the LivLiv player's own canvas stays hidden (same box as #scene); story_ll.js copies it into #scene under the FX */
+.stage > canvas#ll { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; background: transparent; }

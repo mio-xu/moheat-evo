@@ -1,0 +1,101 @@
+{
+ "_note": "UI v2 cover data: edit, then python3 tools/web/covers.py Demo63_AyaneDivaRock",
+ "title": {
+  "en": "Storm Heart",
+  "ja": "ストーム・\nハート",
+  "zh": "风暴之心",
+  "ko": "스톰 하트"
+ },
+ "tagline": {
+  "en": "Ayane Diva ② — a rooftop live in the storm, ear by ear",
+  "ja": "綾音ディーバ ② 嵐の屋上ライブを 左右の耳で",
+  "zh": "绫音歌姬 ② — 用左右耳感受暴风雨中的屋顶演唱会",
+  "ko": "아야네 디바 ② — 폭풍 속 옥상 라이브를 양쪽 귀로"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "amps · drums · her voice",
+    "ja": "アンプ・ドラム・歌声",
+    "zh": "音箱・鼓・歌声",
+    "ko": "앰프・드럼・목소리"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "rain · lightning · cymbals",
+    "ja": "雨・雷・シンバル",
+    "zh": "雨・闪电・镲片",
+    "ko": "비・번개・심벌"
+   }
+  }
+ ],
+ "tone": "8 8 24",
+ "chapters": [
+  {
+   "ja": "開演前",
+   "en": "Before the show",
+   "zh": "开演前",
+   "ko": "공연 전"
+  },
+  {
+   "ja": "イントロ",
+   "en": "Intro",
+   "zh": "前奏",
+   "ko": "인트로"
+  },
+  {
+   "ja": "Aメロ",
+   "en": "Verse",
+   "zh": "主歌",
+   "ko": "벌스"
+  },
+  {
+   "ja": "Bメロ",
+   "en": "Pre-chorus",
+   "zh": "导歌",
+   "ko": "프리코러스"
+  },
+  {
+   "ja": "サビ",
+   "en": "Chorus",
+   "zh": "副歌",
+   "ko": "코러스"
+  },
+  {
+   "ja": "ブリッジ",
+   "en": "Bridge",
+   "zh": "桥段",
+   "ko": "브리지"
+  },
+  {
+   "ja": "ラストサビ",
+   "en": "Final chorus",
+   "zh": "最后的副歌",
+   "ko": "마지막 코러스"
+  },
+  {
+   "ja": "アウトロ",
+   "en": "Outro",
+   "zh": "尾奏",
+   "ko": "아웃트로"
+  },
+  {
+   "ja": "ありがとう",
+   "en": "Thank you",
+   "zh": "谢谢你",
+   "ko": "고마워"
+  }
+ ],
+ "faces": {
+  "eye": [
+   72,
+   34
+  ],
+  "face": 24,
+  "duo": false,
+  "_why": "LivLiv render composed to these 2b numbers (compose.py)"
+ }
+}

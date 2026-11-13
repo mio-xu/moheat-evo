@@ -1,0 +1,89 @@
+{
+ "_note": "UI v2 cover data: edit, then python3 tools/web/covers.py Demo65_AyaneDivaBallad",
+ "title": {
+  "en": "Snow by\nthe Window",
+  "ja": "まどべの\nゆき",
+  "zh": "窗边的雪",
+  "ko": "창가의 눈"
+ },
+ "tagline": {
+  "en": "Ayane Diva ③ Ballad — a fireplace and the snow, ear by ear",
+  "ja": "綾音ディーバ ③ バラード — 暖炉と雪を 左右の耳で",
+  "zh": "绫音歌姬 ③ 抒情 — 用左右耳感受壁炉与雪",
+  "ko": "아야네 디바 ③ 발라드 — 벽난로와 눈을 양쪽 귀로"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "piano · strings · fireplace",
+    "ja": "ピアノ・弦・暖炉",
+    "zh": "钢琴・弦乐・壁炉",
+    "ko": "피아노・현악기・벽난로"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "bells · snow by the window",
+    "ja": "ベル・窓辺の雪",
+    "zh": "钟声・窗边的雪",
+    "ko": "벨・창가의 눈"
+   }
+  }
+ ],
+ "tone": "10 8 16",
+ "chapters": [
+  {
+   "ja": "開演前",
+   "en": "Before the show",
+   "zh": "开演前",
+   "ko": "공연 전"
+  },
+  {
+   "ja": "前奏",
+   "en": "Intro",
+   "zh": "前奏",
+   "ko": "전주"
+  },
+  {
+   "ja": "Aメロ",
+   "en": "Verse 1",
+   "zh": "主歌",
+   "ko": "벌스 1"
+  },
+  {
+   "ja": "Bメロ",
+   "en": "Verse 2",
+   "zh": "第二段主歌",
+   "ko": "벌스 2"
+  },
+  {
+   "ja": "サビ",
+   "en": "Peak chorus",
+   "zh": "副歌",
+   "ko": "코러스"
+  },
+  {
+   "ja": "エンディング",
+   "en": "Ending",
+   "zh": "尾声",
+   "ko": "엔딩"
+  },
+  {
+   "ja": "ありがとう",
+   "en": "Thank you",
+   "zh": "谢谢你",
+   "ko": "고마워"
+  }
+ ],
+ "faces": {
+  "eye": [
+   72,
+   34
+  ],
+  "face": 24,
+  "duo": false,
+  "_why": "LivLiv render composed by cover_options/scripts/compose.py: eye-line centre and face box are known exactly (2b numbers, %)"
+ }
+}

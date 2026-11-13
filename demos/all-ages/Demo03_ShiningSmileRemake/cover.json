@@ -1,0 +1,95 @@
+{
+ "_note": "UI v2 cover data: edit, then python3 tools/web/covers.py Demo03_ShiningSmileRemake",
+ "title": {
+  "en": "Sparkling\nIce & Fire",
+  "ja": "きらきら\nこおりとほのお",
+  "zh": "闪闪发光的\n冰与火",
+  "ko": "반짝반짝\n얼음과 불꽃"
+ },
+ "tagline": {
+  "en": "Ayane Diva ① — an ice & fire concert, ear by ear",
+  "ja": "綾音ディーバ ① 氷と炎のコンサートを 左右の耳で",
+  "zh": "绫音歌姬 ① — 用左右耳感受冰与火的演唱会",
+  "ko": "아야네 디바 ① — 얼음과 불꽃의 콘서트를 양쪽 귀로"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "bass · beat · her voice",
+    "ja": "低音・ビート・歌声",
+    "zh": "低音・节拍・歌声",
+    "ko": "저음・비트・목소리"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "sparkling highs · snow",
+    "ja": "きらめく高音・雪",
+    "zh": "闪亮高音・雪",
+    "ko": "반짝이는 고음・눈"
+   }
+  }
+ ],
+ "tone": "8 10 20",
+ "chapters": [
+  {
+   "ja": "開演前",
+   "en": "Before the show",
+   "zh": "开演前",
+   "ko": "공연 전"
+  },
+  {
+   "ja": "オープニング",
+   "en": "Opening",
+   "zh": "开场",
+   "ko": "오프닝"
+  },
+  {
+   "ja": "氷のステージ",
+   "en": "Ice stage",
+   "zh": "冰之舞台",
+   "ko": "얼음 무대"
+  },
+  {
+   "ja": "氷と炎",
+   "en": "Ice & Fire",
+   "zh": "冰与火",
+   "ko": "얼음과 불꽃"
+  },
+  {
+   "ja": "入れ替わり",
+   "en": "The swap",
+   "zh": "交换",
+   "ko": "자리 바꾸기"
+  },
+  {
+   "ja": "クライマックス",
+   "en": "Climax",
+   "zh": "高潮",
+   "ko": "클라이맥스"
+  },
+  {
+   "ja": "カーテンコール",
+   "en": "Curtain call",
+   "zh": "谢幕",
+   "ko": "커튼콜"
+  },
+  {
+   "ja": "ありがとう",
+   "en": "Thank you",
+   "zh": "谢谢你",
+   "ko": "고마워"
+  }
+ ],
+ "faces": {
+  "eye": [
+   72,
+   34
+  ],
+  "face": 24,
+  "duo": false,
+  "_why": "LivLiv render composed by cover_options/scripts/compose.py: eye-line centre and face box are known exactly (2b numbers, %)"
+ }
+}

@@ -1,0 +1,90 @@
+{
+ "_note": "UI v2 cover data: edit, then python3 tools/web/covers.py Demo02_FanMeeting_v2 (art = media/cover/art.webp: hall plate + Ayane)",
+ "title": {
+  "en": "Your Special\nFan Meeting",
+  "ja": "キミだけの\nスペシャル\nファンミーティング",
+  "zh": "只属于你的\n特别见面会",
+  "ko": "너만을 위한\n스페셜 팬미팅"
+ },
+ "tagline": {
+  "en": "Ayane leans in and whispers — one ear at a time",
+  "ja": "綾音が、片耳ずつ ないしょ話",
+  "zh": "绫音凑到耳边，一只耳朵一只耳朵地说悄悄话",
+  "ko": "아야네가 한쪽 귀씩 속삭여요"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "her whisper at your ear",
+    "ja": "耳もとの ささやき",
+    "zh": "耳边的悄悄话",
+    "ko": "귓가의 속삭임"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "ice-cold soda · uchiwa breeze",
+    "ja": "キンキンのソーダ・うちわの風",
+    "zh": "冰汽水・扇子的风",
+    "ko": "차가운 소다・부채 바람"
+   }
+  }
+ ],
+ "tone": "64 30 52",
+ "options": [],
+ "chapters": [
+  {
+   "ja": "ようこそ",
+   "en": "Welcome",
+   "zh": "欢迎",
+   "ko": "어서 와"
+  },
+  {
+   "ja": "握手",
+   "en": "Handshake",
+   "zh": "握手",
+   "ko": "악수"
+  },
+  {
+   "ja": "ないしょ話",
+   "en": "A secret",
+   "zh": "悄悄话",
+   "ko": "비밀 이야기"
+  },
+  {
+   "ja": "ひんやりタイム",
+   "en": "Cool down",
+   "zh": "清凉时间",
+   "ko": "시원한 시간"
+  },
+  {
+   "ja": "ツーショット",
+   "en": "A photo together",
+   "zh": "合影",
+   "ko": "투샷"
+  },
+  {
+   "ja": "プレゼント",
+   "en": "A present",
+   "zh": "礼物",
+   "ko": "선물"
+  },
+  {
+   "ja": "またね",
+   "en": "See you",
+   "zh": "下次见",
+   "ko": "또 봐"
+  }
+ ],
+ "faces": {
+  "eye": [
+   72,
+   34
+  ],
+  "face": 24,
+  "duo": false,
+  "_why": "LivLiv render composed to these 2b numbers (compose.py)"
+ }
+}

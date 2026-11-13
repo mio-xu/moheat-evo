@@ -9,8 +9,8 @@
   const DEMOS = [
     { cat: 'all-ages', dir: 'Demo01_SnowFoxfire', ja: '雪と狐火のひそひそ話', en: 'Whispers of Snow and Flame', zh: '雪与狐火的悄悄话', ko: '눈과 여우불의 소곤소곤 이야기', series: 'snowfox', part: 1, cast: 'koyuki+homura', group: 0 },
     { cat: 'all-ages', dir: 'Demo28_SnowFoxLullaby', ja: 'ふたりの、こもりうた', en: 'A Lullaby for Two', zh: '两个人的摇篮曲', ko: '둘이서 불러 주는 자장가', series: 'snowfox', part: 2, cast: 'koyuki+homura', group: 0 },
-    { cat: 'all-ages', dir: 'Demo02_FanMeeting', ja: 'キミだけのスペシャルファンミーティング', en: 'Your Special Fan Meeting', zh: '只属于你的特别见面会', ko: '너만을 위한 스페셜 팬미팅', series: 'ayane', part: 1, cast: 'ayane', group: 0 },
-    { cat: 'all-ages', dir: 'Demo03_ShiningSmileConcert', ja: '氷と炎の星光コンサート', en: 'Ice & Fire Concert', zh: '冰与火的星光演唱会', ko: '얼음과 불꽃의 별빛 콘서트', series: 'ayane', part: 2, cast: 'ayane', group: 0 },
+    { cat: 'all-ages', dir: 'Demo02_FanMeeting_v2', ja: 'キミだけのスペシャルファンミーティング', en: 'Your Special Fan Meeting', zh: '只属于你的特别见面会', ko: '너만을 위한 스페셜 팬미팅', series: 'ayane', part: 1, cast: 'ayane', group: 0 },
+    { cat: 'all-ages', dir: 'Demo03_ShiningSmileRemake', ja: '氷と炎の星光コンサート', en: 'Ice & Fire Concert', zh: '冰与火的星光演唱会', ko: '얼음과 불꽃의 별빛 콘서트', series: 'ayane', part: 2, cast: 'ayane', group: 0 },
     { cat: 'all-ages', dir: 'Demo04_SeasonsExpress', ja: '季節が、暴走する。', en: 'The Runaway Seasons Express', zh: '四季失控的魔法列车', ko: '계절이 폭주한다.', cast: 'train', group: 0 },
     { cat: 'all-ages', dir: 'Demo47_GhostLantern', ja: 'ひやっと！おばけやしきの ちょうちんばん', en: 'Lantern Keeper of the Spooky House', zh: '鬼屋提灯值日生', ko: '오싹! 유령의 집 등불 당번', cast: 'bonchan+yurari', new: true, group: 0 },
     { cat: 'all-ages', dir: 'Demo48_AnimalOnsen', ja: 'ゆけむり どうぶつおんせん', en: 'Steamy Animal Hot Spring', zh: '蒸汽腾腾的动物温泉', ko: '모락모락 동물 온천', cast: 'yuzujii', new: true, group: 0 },
@@ -58,7 +58,7 @@
     stream: { ja: '配信ルーム', en: 'Live streams', zh: '直播间', ko: '라이브 방송' }, nobunaga: { ja: '信長と家康 · 全5話', en: 'Nobunaga & Ieyasu · 5 episodes', zh: '信长与家康 · 共5集', ko: '노부나가와 이에야스 · 전 5화' },
     talk: { ja: '語らう', en: 'Talk with them', zh: '对谈', ko: '이야기 나누기' },
   };
-  const HEAT = {"Demo01_SnowFoxfire":85,"Demo02_FanMeeting":85,"Demo03_ShiningSmileConcert":85,"Demo04_SeasonsExpress":84,"Demo05_GifuCastle":80,"Demo06_FutureWhisky":75,"Demo07_KyotoIzakaya":83,"Demo08_YamazakiDistillery":83,"Demo09_SengokuBanquet":82,"Demo10_CaveSpring":84,"Demo11_Naomi":69,"Demo12_LateCall":0,"Demo13_NaomiCam":75,"Demo14_MintStream":69,"Demo15_FamilyCall":69,"Demo16_FamilyCall2":83,"Demo17_CocoaStream":80,"Demo18_HinataStream":83,"Demo19_LunaStream":79,"Demo20_HinataHandshake":83,"Demo21_JinLounge":75,"Demo22_ShionRain":86,"Demo23_NobunagaTalk":72,"Demo24_GakuCamp":85,"Demo25_HatsumodeDate":87,"Demo26_BecomeNaomi":81,"Demo28_SnowFoxLullaby":84,"Demo29_FamilyVisit":83,"Demo30_SakuFestival":91,"Demo31_SummerRooftop":85,"Demo41_IeyasuTalk":69,"Demo42_SengokuRoundtable":70,"Demo43_BlizzardInn":83,"Demo44_MagicAcademy":98,"Demo45_CelestialPalace":92,"Demo46_DragonContract":90,"Demo47_GhostLantern":99,"Demo48_AnimalOnsen":99,"Demo49_NaomiSummer":99,"Demo50_WatermelonSummer":94};   // thermal-use score 0–100 per folder — ONE line, written by tools/qa/thermal_score.py (tools/qa/thermal_scores.json)
+  const HEAT = {"Demo01_SnowFoxfire":85,"Demo02_FanMeeting_v2":85,"Demo03_ShiningSmileRemake":85,"Demo04_SeasonsExpress":84,"Demo05_GifuCastle":80,"Demo06_FutureWhisky":75,"Demo07_KyotoIzakaya":83,"Demo08_YamazakiDistillery":83,"Demo09_SengokuBanquet":82,"Demo10_CaveSpring":84,"Demo11_Naomi":69,"Demo12_LateCall":0,"Demo13_NaomiCam":75,"Demo14_MintStream":69,"Demo15_FamilyCall":69,"Demo16_FamilyCall2":83,"Demo17_CocoaStream":80,"Demo18_HinataStream":83,"Demo19_LunaStream":79,"Demo20_HinataHandshake":83,"Demo21_JinLounge":75,"Demo22_ShionRain":86,"Demo23_NobunagaTalk":72,"Demo24_GakuCamp":85,"Demo25_HatsumodeDate":87,"Demo26_BecomeNaomi":81,"Demo28_SnowFoxLullaby":84,"Demo29_FamilyVisit":83,"Demo30_SakuFestival":91,"Demo31_SummerRooftop":85,"Demo41_IeyasuTalk":69,"Demo42_SengokuRoundtable":70,"Demo43_BlizzardInn":83,"Demo44_MagicAcademy":98,"Demo45_CelestialPalace":92,"Demo46_DragonContract":90,"Demo47_GhostLantern":99,"Demo48_AnimalOnsen":99,"Demo49_NaomiSummer":99,"Demo50_WatermelonSummer":94};   // thermal-use score 0–100 per folder — ONE line, written by tools/qa/thermal_score.py (tools/qa/thermal_scores.json)
   { const CATS = ['all-ages', 'healing', 'for-men', 'for-women', 'nobunaga-suntory'], num = (d) => +((d.dir.match(/^Demo(\d+)/) || [])[1] || 999), sc = (d) => HEAT[d.dir] || 0;
     const out = [];
     for (const cat of CATS) {
@@ -83,7 +83,7 @@
   // rights notes shown under each demo's cover credits (full pages only); the full list is the site's credits.html
   const HIST = 'Oda Nobunaga and Tokugawa Ieyasu are portrayed as fictional characters', ADULT = 'お酒は20歳になってから · 20+ only';
   const RIGHTS = {
-    Demo01_SnowFoxfire: 'Art: ChatGPT (OpenAI) · original characters', Demo02_FanMeeting: 'Art: ChatGPT (OpenAI) · original character and song',
+    Demo01_SnowFoxfire: 'Art: ChatGPT (OpenAI) · original characters', Demo02_FanMeeting_v2: 'Art: ChatGPT (OpenAI) · original character and song',
     Demo05_GifuCastle: `${HIST} · art: ChatGPT (OpenAI)`,
     Demo06_FutureWhisky: `${HIST} · Suntory, Yamazaki, Hibiki and Hakushu (names and bottle designs) are trademarks of Suntory Holdings Limited · ${ADULT}`,
     Demo07_KyotoIzakaya: `${HIST} · art: ChatGPT (OpenAI) · ${ADULT}`,

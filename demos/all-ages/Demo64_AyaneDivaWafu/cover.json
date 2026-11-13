@@ -1,0 +1,95 @@
+{
+ "_note": "UI v2 cover data: edit, then python3 tools/web/covers.py Demo64_AyaneDivaWafu",
+ "title": {
+  "en": "Summer Night\nMatsuri",
+  "ja": "なつよい\nまつり",
+  "zh": "夏宵祭",
+  "ko": "여름밤\n마츠리"
+ },
+ "tagline": {
+  "en": "Ayane Diva ④ Wafu — taiko and wind chimes, ear by ear",
+  "ja": "綾音ディーバ ④ 和風 — 太鼓と風鈴を 左右の耳で",
+  "zh": "绫音歌姬 ④ 和风 — 用左右耳感受太鼓与风铃",
+  "ko": "아야네 디바 ④ 와후 — 태고와 풍경을 양쪽 귀로"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "taiko · lanterns · her voice",
+    "ja": "太鼓・ちょうちん・歌声",
+    "zh": "太鼓・灯笼・歌声",
+    "ko": "태고・등롱・목소리"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "koto · wind chimes · night breeze",
+    "ja": "琴・風鈴・夜風",
+    "zh": "琴・风铃・夜风",
+    "ko": "고토・풍경・밤바람"
+   }
+  }
+ ],
+ "tone": "14 8 18",
+ "chapters": [
+  {
+   "ja": "開演前",
+   "en": "Before the show",
+   "zh": "开演前",
+   "ko": "공연 전"
+  },
+  {
+   "ja": "前奏",
+   "en": "Intro",
+   "zh": "前奏",
+   "ko": "전주"
+  },
+  {
+   "ja": "Aメロ",
+   "en": "Verse",
+   "zh": "主歌",
+   "ko": "벌스"
+  },
+  {
+   "ja": "Bメロ",
+   "en": "Pre-chorus",
+   "zh": "导歌",
+   "ko": "프리코러스"
+  },
+  {
+   "ja": "ブレイク",
+   "en": "Break",
+   "zh": "间奏",
+   "ko": "브레이크"
+  },
+  {
+   "ja": "サビ・はなび",
+   "en": "Chorus · fireworks",
+   "zh": "副歌・烟花",
+   "ko": "코러스・불꽃"
+  },
+  {
+   "ja": "アウトロ",
+   "en": "Outro",
+   "zh": "尾奏",
+   "ko": "아웃트로"
+  },
+  {
+   "ja": "ありがとう",
+   "en": "Thank you",
+   "zh": "谢谢你",
+   "ko": "고마워"
+  }
+ ],
+ "faces": {
+  "eye": [
+   72,
+   34
+  ],
+  "face": 24,
+  "duo": false,
+  "_why": "LivLiv render composed by cover_options/scripts/compose.py: eye-line centre and face box are known exactly (2b numbers, %)"
+ }
+}
