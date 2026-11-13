@@ -157,6 +157,8 @@ void main(){
   const blinkLog = [];
   addEventListener('pointermove', (e) => { tx = (e.clientX / innerWidth - .5) * 2; ty = (e.clientY / innerHeight - .5) * 2; }, { passive: true });
   addEventListener('deviceorientation', (e) => { if (e.gamma == null) return; tx = Math.max(-1, Math.min(1, e.gamma / 25)); ty = Math.max(-1, Math.min(1, (e.beta - 45) / 25)); });
+  let dl = 0, dlPrev = 0, dlSince = -9, ampEnv = 0, quietAt = 0;   // mouth SETS (mouth_lv): the smoothed driver below
+  const HAS_SET = Object.values(D.views).some((v) => [v, ...(v.more || [])].some((f) => (f.patches || []).some((p) => p.kind === 'mouth_lv')));
   let lastT = 0, t = 0, frameT = -1, flick = 1, env = 0, mouth = 0, mouthOpen = false, mouthHold = 0, talk = 0, lastTgt = 0, lastV = 0, peak = .012, openedAt = 0, lvl = 1, lvlHold = 0, vAvg = .02, blinkUntil = 0, nextBlink = 2;
   function step(now) {
     t = now / 1000; const dt = Math.min(.05, t - lastT || .016); lastT = t;
@@ -180,6 +182,22 @@ void main(){
     if (tgt > .05 && v > 0) vAvg += (v - vAvg) * (1 - Math.exp(-dt / 3));
     if (mouthOpen && t >= lvlHold) { const amp = v > 0 ? v / Math.max(vAvg, 1e-4) : tgt * 1.6, want = amp > 2.1 ? 3 : amp > 1.1 ? 2 : 1;
       if (want !== lvl) { lvl = want; lvlHold = t + .08; } }
+    // mouth SETS (2026-11-13, user: "the mouth switches too fast, the closed line and the open mouth flip back and forth"): a smoothed
+    // loudness (attack 40 ms / release 140 ms), hysteresis (down thresholds ~15 % under the up ones), one level step at a time held
+    // ≥ 165 ms (≤ 6 changes / s), a 70 ms cross-fade of the two neighbouring blocks; inside a phrase the mouth never closes (level ≥ 1),
+    // the closed line only after 250 ms of real silence. Single open / closed patches ("mouth") keep the flap above.
+    if (HAS_SET) {
+      const amp = tgt > .05 ? (v > 0 ? v / Math.max(vAvg, 1e-4) : tgt * 1.6) : 0;
+      ampEnv += (amp - ampEnv) * (1 - Math.exp(-dt / (amp > ampEnv ? .04 : .14)));
+      if (tgt > .05) quietAt = null; else if (quietAt == null) quietAt = t;
+      const silent = quietAt != null && t - quietAt >= .25;
+      let want = dl;
+      if (dl === 0) { if (!silent && tgt > .05) want = 1; }
+      else if (silent) want = dl - 1;
+      else if (dl < 3 && ampEnv > (dl === 1 ? 1.1 : 2.1)) want = dl + 1;
+      else if (dl > 1 && ampEnv < (dl === 2 ? .95 : 1.85)) want = dl - 1;
+      if (want !== dl && t - dlSince >= .165) { dlPrev = dl; dl = want; dlSince = t; }
+    }
     lastTgt = tgt; lastV = v / peak;
     talk += (tgt - talk) * (1 - Math.exp(-dt / .12));   // smooth: drives the talking bob only
     // a view cut ends a blink and holds the next one ≥ 0.7 s (the cross-fade): eyes never close in the frame of a cut
@@ -219,13 +237,18 @@ void main(){
       // 'source-atop' clips every patch to the character's own alpha (no patch pixels on the background / beyond the jaw or hair).
       // kind 'mouth_quiet' = a closed-mouth patch for a pose drawn mid-laugh / mid-word: shown while she / he is NOT talking.
       cx2.globalCompositeOperation = 'source-atop';
+      // a mouth set: the previous block, then the current one fading in over 70 ms (neighbouring levels of one mouth: no second line)
+      const cur = me ? Math.min(dl, g.nLv) : 0, prv = me ? Math.min(dlPrev, g.nLv) : 0, fa = me ? Math.min(1, (t - dlSince) / .07) : 1;
       for (const p of g.order) {
-        const a = p.kind === 'mouth_lv' ? (p.level === (me && mouthOpen ? Math.min(lvl, g.nLv) : 0) ? 1 : 0)   // one block of the set, always
-          : p.kind === 'mouth' ? (me ? mouth : 0) : p.kind === 'mouth_quiet' ? 1 - (me ? mouth : 0) : (blink ? 1 : 0);
+        if (p.kind === 'mouth_lv') continue;
+        const a = p.kind === 'mouth' ? (me ? mouth : 0) : p.kind === 'mouth_quiet' ? 1 - (me ? mouth : 0) : (blink ? 1 : 0);
         if (a > .01) { cx2.globalAlpha = a; cx2.drawImage(p.im, p.rect[0], p.rect[1], p.rect[2], p.rect[3]); cx2.globalAlpha = 1; }
       }
+      const blk = (lv_) => g.order.find((p) => p.kind === 'mouth_lv' && (p.level || 0) === lv_);
+      if (fa < 1 && prv !== cur && blk(prv)) cx2.drawImage(blk(prv).im, ...blk(prv).rect);
+      if (blk(cur)) { cx2.globalAlpha = fa < 1 && prv !== cur ? fa : 1; cx2.drawImage(blk(cur).im, ...blk(cur).rect); cx2.globalAlpha = 1; }
       cx2.globalCompositeOperation = 'source-over';
-      shown.push([g.who, me && mouthOpen && g.ps.some((p) => /^mouth/.test(p.kind) && p.kind !== 'mouth_quiet') ? 1 : 0]);
+      shown.push([g.who, me && (g.nLv ? dl > 0 : mouthOpen && g.ps.some((p) => /^mouth/.test(p.kind) && p.kind !== 'mouth_quiet')) ? 1 : 0]);
       upload(chrTex, cc);
       [o.bgT, o.depT || o.bgT, chrTex].forEach((tx_, k) => { gl.activeTexture(gl.TEXTURE0 + k); gl.bindTexture(gl.TEXTURE_2D, tx_); });
       gl.uniform2f(U.off, ...off);
@@ -268,7 +291,7 @@ void main(){
   API.motion = () => { const o = L[byView[API.current()]]; return { t, liveT, blink: blinkOn(), blinks: blinkLog.slice(), breath: breathY, phase: bph, flick,
     view: API.current(), stem: byView[API.current()], rect: o?.rect, neck: o?.neck, edge: o?.edge, live: o?.live, draw: lastDraw }; };   // tests
   API.state = () => { const st = byView[API.current()], F = lastFigs && lastFigs.stem === st && lastFigs.many ? lastFigs : null; return {
-    mouth: F ? (F.figs.some((x) => x[1]) ? 1 : 0) : mouth, open: mouthOpen, speaker: API.speaker(), figs: F ? F.figs : null, level: mouthOpen ? lvl : 0, tgt: lastTgt, rel: lastV, env, blink: t < blinkUntil, view: API.current(), stem: byView[API.current()],
+    mouth: F ? (F.figs.some((x) => x[1]) ? 1 : 0) : HAS_SET ? (dl > 0 ? 1 : 0) : mouth, open: HAS_SET ? dl > 0 : mouthOpen, speaker: API.speaker(), figs: F ? F.figs : null, level: HAS_SET ? dl : mouthOpen ? lvl : 0, tgt: lastTgt, rel: lastV, env, blink: t < blinkUntil, view: API.current(), stem: byView[API.current()],
     patches: (D.views[byView[API.current()]]?.patches || []).map((p) => p.kind) }; };   // tests (tools/art/check_mouth.js); figs = [[who, open], …] in multi-character views
 
   // ---------------------------------------------------------------- the hook: a known still → its live composite (same place / size)
