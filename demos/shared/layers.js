@@ -157,7 +157,7 @@ void main(){
   const blinkLog = [];
   addEventListener('pointermove', (e) => { tx = (e.clientX / innerWidth - .5) * 2; ty = (e.clientY / innerHeight - .5) * 2; }, { passive: true });
   addEventListener('deviceorientation', (e) => { if (e.gamma == null) return; tx = Math.max(-1, Math.min(1, e.gamma / 25)); ty = Math.max(-1, Math.min(1, (e.beta - 45) / 25)); });
-  let dl = 0, dlPrev = 0, dlSince = -9, ampEnv = 0, quietAt = 0;   // mouth SETS (mouth_lv): the smoothed driver below
+  let dl = 0, dlPrev = 0, dlSince = -9, ampEnv = 0, quietAt = 0, nf = .01, openSince = 0;   // mouth SETS (mouth_lv): the smoothed driver below
   const HAS_SET = Object.values(D.views).some((v) => [v, ...(v.more || [])].some((f) => (f.patches || []).some((p) => p.kind === 'mouth_lv')));
   let lastT = 0, t = 0, frameT = -1, flick = 1, env = 0, mouth = 0, mouthOpen = false, mouthHold = 0, talk = 0, lastTgt = 0, lastV = 0, peak = .012, openedAt = 0, lvl = 1, lvlHold = 0, vAvg = .02, blinkUntil = 0, nextBlink = 2;
   function step(now) {
@@ -184,19 +184,22 @@ void main(){
       if (want !== lvl) { lvl = want; lvlHold = t + .08; } }
     // mouth SETS (2026-11-13, user: "the mouth switches too fast, the closed line and the open mouth flip back and forth"): a smoothed
     // loudness (attack 40 ms / release 140 ms), hysteresis (down thresholds ~15 % under the up ones), one level step at a time held
-    // ≥ 165 ms (≤ 6 changes / s), a 70 ms cross-fade of the two neighbouring blocks; inside a phrase the mouth never closes (level ≥ 1),
-    // the closed line only after 250 ms of real silence. Single open / closed patches ("mouth") keep the flap above.
+    // ≥ 165 ms (≤ 6 changes / s), a 70 ms cross-fade of the two neighbouring blocks; inside a phrase the mouth stays at least slightly open,
+    // and closes at once in real silence (0.1 s), in a gap ≥ 250 ms under the voice's own noise floor, or for a breath after 1.1 s open. Single open / closed patches ("mouth") keep the flap above.
     if (HAS_SET) {
-      const amp = tgt > .05 ? (v > 0 ? v / Math.max(vAvg, 1e-4) : tgt * 1.6) : 0;
+      // a gate on THIS voice's own noise floor (a slow lower envelope of the raw level ×2): reverb tails / a noisy stem are silence
+      if (v > 0) nf = v < nf ? v : nf + (v - nf) * (1 - Math.exp(-dt / 6));
+      const voiced = tgt > .05 && (v <= 0 || v > Math.max(nf * 2, nf + .002));
+      const amp = voiced ? (v > 0 ? v / Math.max(vAvg, 1e-4) : tgt * 1.6) : 0;
       ampEnv += (amp - ampEnv) * (1 - Math.exp(-dt / (amp > ampEnv ? .04 : .14)));
-      if (tgt > .05) quietAt = null; else if (quietAt == null) quietAt = t;
-      const silent = quietAt != null && t - quietAt >= .25;
+      if (voiced) quietAt = null; else if (quietAt == null) quietAt = t;
+      const quiet = quietAt == null ? 0 : t - quietAt;
       let want = dl;
-      if (dl === 0) { if (!silent && tgt > .05) want = 1; }
-      else if (silent) want = dl - 1;
+      if (dl === 0) { if (voiced && t - dlSince >= .12) want = 1; }   // open via the small level
+      else if ((tgt <= .001 && quiet >= .1) || quiet >= .25 || t - openSince > 1.1) want = 0;   // real silence / a gap ≥ 250 ms / a breath after 1.1 s open: close now
       else if (dl < 3 && ampEnv > (dl === 1 ? 1.1 : 2.1)) want = dl + 1;
       else if (dl > 1 && ampEnv < (dl === 2 ? .95 : 1.85)) want = dl - 1;
-      if (want !== dl && t - dlSince >= .165) { dlPrev = dl; dl = want; dlSince = t; }
+      if (want !== dl && (want === 0 || t - dlSince >= .165)) { if (dl === 0) openSince = t; dlPrev = dl; dl = want; dlSince = t; }
     }
     lastTgt = tgt; lastV = v / peak;
     talk += (tgt - talk) * (1 - Math.exp(-dt / .12));   // smooth: drives the talking bob only
