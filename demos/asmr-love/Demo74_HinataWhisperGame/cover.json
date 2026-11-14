@@ -1,0 +1,62 @@
+{
+ "_note": "UI v2 cover data: edit, then python3 tools/web/covers.py <this folder> (art = media/cover/art.webp: scene plate + Hinata, 2b numbers)",
+ "title": {
+  "en": "The Little Devil's\nWhisper Game",
+  "ja": "こあくまの\nないしょばなし",
+  "zh": "小恶魔的\n悄悄话",
+  "ko": "작은 악마의\n귓속말 게임"
+ },
+ "tagline": {
+  "en": "Which ear will he sneak up on? A whisper is warm, a fuu is cool — tap fast",
+  "ja": "どっちの耳にくる？ ささやきは あたたかく、ふーっは ひんやり。すばやくタップ",
+  "zh": "他会偷袭哪只耳朵？悄悄话是暖的，吹气是凉的——快点点",
+  "ko": "어느 쪽 귀로 올까? 속삭임은 따뜻하게, 후— 는 시원하게. 빨리 탭"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "whispers",
+    "ja": "ささやき",
+    "zh": "悄悄话",
+    "ko": "속삭임"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "a teasing fuu",
+    "ja": "いたずらの ふーっ",
+    "zh": "捉弄的吹气",
+    "ko": "장난스러운 후—"
+   }
+  }
+ ],
+ "tone": "14 10 30",
+ "series": {
+  "en": "Hinata · 2 / 3",
+  "ja": "ひなた · 2 / 3",
+  "zh": "日向 · 第2集 / 共3集",
+  "ko": "히나타 · 2 / 3"
+ },
+ "chapters": [
+  {
+   "ja": "ルール",
+   "en": "The rules",
+   "zh": "规则",
+   "ko": "규칙"
+  },
+  {
+   "ja": "ゲーム",
+   "en": "The game",
+   "zh": "游戏",
+   "ko": "게임"
+  },
+  {
+   "ja": "おやすみ",
+   "en": "Good night",
+   "zh": "晚安",
+   "ko": "잘 자"
+  }
+ ]
+}

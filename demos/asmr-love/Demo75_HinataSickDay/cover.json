@@ -1,0 +1,68 @@
+{
+ "_note": "UI v2 cover data: edit, then python3 tools/web/covers.py <this folder> (art = media/cover/art.webp: scene plate + Hinata, 2b numbers)",
+ "title": {
+  "en": "Hinata on\na Sick Day",
+  "ja": "ねつの日の、\nひなた",
+  "zh": "生病时，\n他来照顾你",
+  "ko": "열나는 날의\n히나타"
+ },
+ "tagline": {
+  "en": "You have a fever. Hinata sneaks over with a cold towel and warm porridge",
+  "ja": "熱を出したきみのもとへ、ひなたが こっそり。冷たいタオルと あったかいおかゆ",
+  "zh": "你发烧了，日向偷偷跑来——冰毛巾和热乎乎的粥",
+  "ko": "열이 난 너에게 히나타가 몰래 와요 — 차가운 수건과 따뜻한 죽"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "porridge · his voice",
+    "ja": "おかゆ・声",
+    "zh": "粥・他的声音",
+    "ko": "죽・목소리"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "a cold towel",
+    "ja": "冷たいタオル",
+    "zh": "冰毛巾",
+    "ko": "차가운 수건"
+   }
+  }
+ ],
+ "tone": "14 10 30",
+ "series": {
+  "en": "Hinata · 3 / 3",
+  "ja": "ひなた · 3 / 3",
+  "zh": "日向 · 第3集 / 共3集",
+  "ko": "히나타 · 3 / 3"
+ },
+ "chapters": [
+  {
+   "ja": "おみまい",
+   "en": "He drops by",
+   "zh": "探病",
+   "ko": "병문안"
+  },
+  {
+   "ja": "おかゆ",
+   "en": "Porridge",
+   "zh": "粥",
+   "ko": "죽"
+  },
+  {
+   "ja": "手をつないで",
+   "en": "Holding hands",
+   "zh": "牵着手",
+   "ko": "손 잡고"
+  },
+  {
+   "ja": "おやすみ",
+   "en": "Good night",
+   "zh": "晚安",
+   "ko": "잘 자"
+  }
+ ]
+}

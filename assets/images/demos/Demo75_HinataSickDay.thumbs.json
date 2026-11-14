@@ -1,0 +1,32 @@
+{
+ "base": {
+  "inputs": {
+   "demos/asmr-love/Demo75_HinataSickDay/media/cover/stamp.json": "2c7c3f6ca1caed89c3108f9b54ba213efa1edb66"
+  },
+  "thumb": "05d11f96f5583a3c98fbf769fe51fa097b66c5e4"
+ },
+ "en": {
+  "inputs": {
+   "demos/asmr-love/Demo75_HinataSickDay/media/cover/stamp.json": "2c7c3f6ca1caed89c3108f9b54ba213efa1edb66"
+  },
+  "thumb": "05d11f96f5583a3c98fbf769fe51fa097b66c5e4"
+ },
+ "ja": {
+  "inputs": {
+   "demos/asmr-love/Demo75_HinataSickDay/media/cover/stamp.json": "2c7c3f6ca1caed89c3108f9b54ba213efa1edb66"
+  },
+  "thumb": "de023f4994b0a3accfdbd3088fb9bc66d3cafa9e"
+ },
+ "ko": {
+  "inputs": {
+   "demos/asmr-love/Demo75_HinataSickDay/media/cover/stamp.json": "2c7c3f6ca1caed89c3108f9b54ba213efa1edb66"
+  },
+  "thumb": "37f526e10cc43fdc6b8c129a6ac2a44db8a963d5"
+ },
+ "zh": {
+  "inputs": {
+   "demos/asmr-love/Demo75_HinataSickDay/media/cover/stamp.json": "2c7c3f6ca1caed89c3108f9b54ba213efa1edb66"
+  },
+  "thumb": "28fbcd531739fd0f7c9e05bb4cd5bd9ecd572b6d"
+ }
+}

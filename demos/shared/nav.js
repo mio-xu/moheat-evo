@@ -21,6 +21,9 @@
     { cat: 'idol', dir: 'Demo68_HibikiDivaCrown', ja: 'こおりの おうかん', en: 'Crown of Ice', zh: '冰之王冠', ko: '얼음 왕관', series: 'hibiki', part: 3, cast: 'hibiki', new: true, group: 5 },
     { cat: 'idol', dir: 'Demo69_HibikiDivaSnow', ja: 'ゆきあかり', en: 'Snowlight', zh: '雪光', ko: '눈빛', series: 'hibiki', part: 4, cast: 'hibiki', new: true, group: 5 },
     { cat: 'idol', dir: 'Demo70_HibikiDivaBench', ja: 'ひだまりの ベンチ', en: 'The Sunny Bench', zh: '向阳的长椅', ko: '양지바른 벤치', series: 'hibiki', part: 5, cast: 'hibiki', new: true, group: 5 },
+    { cat: 'asmr-love', dir: 'Demo73_HinataSnowWalk', ja: 'ゆきの帰り道', en: 'Snowy Walk Home', zh: '雪夜送你回家', ko: '눈 오는 귀갓길', series: 'hinata', part: 1, cast: 'hinata_m', new: true, group: 6 },
+    { cat: 'asmr-love', dir: 'Demo74_HinataWhisperGame', ja: 'こあくまの ないしょばなし', en: "The Little Devil's Whisper Game", zh: '小恶魔的悄悄话', ko: '작은 악마의 귓속말 게임', series: 'hinata', part: 2, cast: 'hinata_m', new: true, group: 6 },
+    { cat: 'asmr-love', dir: 'Demo75_HinataSickDay', ja: 'ねつの日の、ひなた', en: 'Hinata on a Sick Day', zh: '生病时，他来照顾你', ko: '열나는 날의 히나타', series: 'hinata', part: 3, cast: 'hinata_m', new: true, group: 6 },
     { cat: 'all-ages', dir: 'Demo04_SeasonsExpress', ja: '季節が、暴走する。', en: 'The Runaway Seasons Express', zh: '四季失控的魔法列车', ko: '계절이 폭주한다.', cast: 'train', group: 0 },
     { cat: 'all-ages', dir: 'Demo47_GhostLantern', ja: 'ひやっと！おばけやしきの ちょうちんばん', en: 'Lantern Keeper of the Spooky House', zh: '鬼屋提灯值日生', ko: '오싹! 유령의 집 등불 당번', cast: 'bonchan+yurari', new: true, group: 0 },
     { cat: 'all-ages', dir: 'Demo48_AnimalOnsen', ja: 'ゆけむり どうぶつおんせん', en: 'Steamy Animal Hot Spring', zh: '蒸汽腾腾的动物温泉', ko: '모락모락 동물 온천', cast: 'yuzujii', new: true, group: 0 },
@@ -66,10 +69,10 @@
     snowfox: { ja: '小雪と焔', en: 'Koyuki & Homura', zh: '小雪与焰', ko: '코유키와 호무라' }, ayane: { ja: '星乃綾音', en: 'Hoshino Ayane', zh: '星乃绫音', ko: '호시노 아야네' }, hibiki: { ja: '響', en: 'Hibiki', zh: '响', ko: '히비키' },
     naomi: { ja: 'ナオミ', en: 'Naomi', zh: 'Naomi', ko: '나오미' }, family: { ja: 'じいちゃん・ばあちゃん', en: 'Grandma & Grandpa', zh: '爷爷奶奶', ko: '할아버지·할머니' },
     stream: { ja: '配信ルーム', en: 'Live streams', zh: '直播间', ko: '라이브 방송' }, nobunaga: { ja: '信長と家康 · 全5話', en: 'Nobunaga & Ieyasu · 5 episodes', zh: '信长与家康 · 共5集', ko: '노부나가와 이에야스 · 전 5화' },
-    talk: { ja: '語らう', en: 'Talk with them', zh: '对谈', ko: '이야기 나누기' },
+    talk: { ja: '語らう', en: 'Talk with them', zh: '对谈', ko: '이야기 나누기' }, hinata: { ja: 'ひなた', en: 'Hinata', zh: '日向', ko: '히나타' },
   };
   const HEAT = {"Demo01_SnowFoxfire":85,"Demo02_FanMeeting_v2":85,"Demo03_ShiningSmileRemake":85,"Demo04_SeasonsExpress":84,"Demo05_GifuCastle":80,"Demo06_FutureWhisky":75,"Demo07_KyotoIzakaya":83,"Demo08_YamazakiDistillery":83,"Demo09_SengokuBanquet":82,"Demo10_CaveSpring":84,"Demo11_Naomi":69,"Demo12_LateCall":0,"Demo13_NaomiCam":75,"Demo14_MintStream":69,"Demo15_FamilyCall":69,"Demo16_FamilyCall2":83,"Demo17_CocoaStream":80,"Demo18_HinataStream":83,"Demo19_LunaStream":79,"Demo20_HinataHandshake":83,"Demo21_JinLounge":75,"Demo22_ShionRain":86,"Demo23_NobunagaTalk":72,"Demo24_GakuCamp":85,"Demo25_HatsumodeDate":87,"Demo26_BecomeNaomi":81,"Demo28_SnowFoxLullaby":84,"Demo29_FamilyVisit":83,"Demo30_SakuFestival":91,"Demo31_SummerRooftop":85,"Demo41_IeyasuTalk":69,"Demo42_SengokuRoundtable":70,"Demo43_BlizzardInn":83,"Demo44_MagicAcademy":98,"Demo45_CelestialPalace":92,"Demo46_DragonContract":90,"Demo47_GhostLantern":99,"Demo48_AnimalOnsen":99,"Demo49_NaomiSummer":99,"Demo50_WatermelonSummer":94};   // thermal-use score 0–100 per folder — ONE line, written by tools/qa/thermal_score.py (tools/qa/thermal_scores.json)
-  { const CATS = ['all-ages', 'healing', 'for-men', 'for-women', 'nobunaga-suntory', 'idol'], num = (d) => +((d.dir.match(/^Demo(\d+)/) || [])[1] || 999), sc = (d) => HEAT[d.dir] || 0;
+  { const CATS = ['all-ages', 'healing', 'for-men', 'for-women', 'nobunaga-suntory', 'idol', 'asmr-love'], num = (d) => +((d.dir.match(/^Demo(\d+)/) || [])[1] || 999), sc = (d) => HEAT[d.dir] || 0;
     const out = [];
     for (const cat of CATS) {
       const units = [], ser = {};
@@ -102,7 +105,7 @@
     Demo23_NobunagaTalk: `${HIST} · art: ChatGPT (OpenAI)`,
     Demo41_IeyasuTalk: `${HIST} · art: ChatGPT (OpenAI)`, Demo42_SengokuRoundtable: `${HIST} · art: ChatGPT (OpenAI)`,
   };
-  const GROUPS = ['全年齢 · All ages', '癒し · Healing', '男性向け · For him', '女性向け · For her', '信長シリーズ · Nobunaga Series', 'アイドル・ミュージック · Idol Music'];   // numbers are the list order
+  const GROUPS = ['全年齢 · All ages', '癒し · Healing', '男性向け · For him', '女性向け · For her', '信長シリーズ · Nobunaga Series', 'アイドル・ミュージック · Idol Music', 'ASMR・恋愛 · ASMR & Romance'];   // numbers are the list order
   window.MoHeatDemos = { DEMOS, GROUPS };   // the demo list for other pages (kiosk/: menu, attract loop, summary); MOHEAT_NAV_DATA_ONLY = data only, no UI
   if (window.MOHEAT_NAV_DATA_ONLY) return;
   const qs = new URLSearchParams(location.search);
@@ -203,7 +206,7 @@
   const LG = () => window.MoHeatSub?.lang || (() => { try { return sessionStorage.getItem('moheat.sublang'); } catch { return null; } })() || 'en';
   const pickT = (o) => { const l = LG(); return o[l] || (l === 'zh-Hant' && o.zh) || o.en; };
   const TITLE = (d) => pickT({ ja: d.ja, en: d.en, zh: d.zh, ko: d.ko });
-  const GZH = ['全年龄', '治愈', '男性向', '女性向', '信长系列', '偶像音乐'], GKO = ['전체 이용가', '힐링', '남성향', '여성향', '노부나가 시리즈', '아이돌 뮤직'];
+  const GZH = ['全年龄', '治愈', '男性向', '女性向', '信长系列', '偶像音乐', 'ASMR · 恋爱'], GKO = ['전체 이용가', '힐링', '남성향', '여성향', '노부나가 시리즈', '아이돌 뮤직', 'ASMR · 연애'];
   const GT = (gi) => { const [ja, en] = GROUPS[gi].split(' · '); return pickT({ ja, en, zh: GZH[gi], ko: GKO[gi] }); };
   const W = { all: { ja: 'すべて', en: 'All', zh: '全部', ko: '전체' }, now: { ja: '再生中', en: 'Now playing', zh: '正在播放', ko: '재생 중' }, heat: { ja: '温冷', en: 'Thermal', zh: '温冷', ko: '온냉' }, ep: { ja: '第', en: 'Ep ', zh: '第', ko: '제' },
     demos: { ja: 'デモ', en: 'Demos', zh: '演示', ko: '데모' }, rec: { ja: '★ おすすめ', en: '★ Recommended', zh: '★ 推荐', ko: '★ 추천' }, top: { ja: 'まずはこれから · 温冷をいちばん感じられる3本', en: 'Try these first · the most thermal feedback', zh: '推荐先体验 · 冷热反馈最丰富的3个', ko: '먼저 이것부터 · 온냉을 가장 잘 느낄 수 있는 3편' }, credits: { ja: '権利表記', en: 'Credits', zh: '版权与署名', ko: '크레디트' },
