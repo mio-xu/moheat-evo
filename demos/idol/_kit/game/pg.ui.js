@@ -59,7 +59,13 @@
     },
     toast(text, ms = 1800) { const t = PG.$('toast'); t.textContent = text; t.classList.add('on'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), ms); },
     /** A number that floats up. i = position in a batch (two columns). */
-    pop(text, i = 0, color = '') { const p = document.createElement('div'); p.className = 'pop'; p.textContent = text; if (color) p.style.color = color; p.style.left = `${22 + (i % 2) * 34}%`; p.style.top = `${34 + Math.floor(i / 2) * 6}%`; p.style.animationDelay = `${i * .12}s`; fx.append(p); setTimeout(() => p.remove(), 1700 + i * 120); },
+    pop(text, i = 0, color = '') { const p = document.createElement('div'); p.className = 'pop'; p.textContent = text; if (color) p.style.color = color;
+      // a LivLiv character on screen: the numbers float up beside her face, never over it (pg.ll.js sets the face zone --llfx / --llfy / --llfr)
+      const st = PG.app.style, cx = parseFloat(st.getPropertyValue('--llfx')), fy = parseFloat(st.getPropertyValue('--llfy')), fr = parseFloat(st.getPropertyValue('--llfr')), W = PG.app.clientWidth, H = PG.app.clientHeight;
+      if (PG.app.classList.contains('llFace') && fr > 0 && W) {
+        const side = i % 2 ? 1 : -1, x = cx + side * fr * 1.25, y = fy + fr * (.9 + Math.floor(i / 2) * .5);   // left / right of the face, from the chin down
+        p.style.left = `${PG.clamp(x / W * 100, 2, 98)}%`; p.style.top = `${PG.clamp(y / H * 100, 8, 70)}%`; p.style.translate = side < 0 ? '-100% 0' : '0 0';   // (translate, not transform: the rise animation owns transform)
+      } else { p.style.left = `${22 + (i % 2) * 34}%`; p.style.top = `${34 + Math.floor(i / 2) * 6}%`; } p.style.animationDelay = `${i * .12}s`; fx.append(p); setTimeout(() => p.remove(), 1700 + i * 120); },
     /** A sparkle at frame pixels (x, y), or at a pointer event. */
     spark(x, y) { if (x && x.clientX != null) { const r = PG.app.getBoundingClientRect(); y = x.clientY - r.top; x = x.clientX - r.left; } const s = document.createElement('i'); s.className = 'spark'; s.style.left = `${x}px`; s.style.top = `${y}px`; fx.append(s); setTimeout(() => s.remove(), 720); },
 

@@ -1,7 +1,7 @@
 // Prince Diary — how Hibiki acts in this story (2026-11-14). Same shape as diva-diary/game/story_ll.js; who he is = ../../packs/hibiki/pack.js.
 window.STORY_LL = {
   layersAt: {},
-  propAt: { radio: { src: 'art/props/radio_mic.webp', h: 3.1, dy: .8, dx: 0 } },
+  propAt: { radio: 'radio_mic' },   // the character pack's own prop (packs/<name>/pack.js props)
   lessonSeq: { vocal: ['x_practice_score', 'x_clasp', 'x_practice_score', 'x_heart'], dance: ['x_practice_dance', 'x_point', 'x_raise', 'x_wave'] },
   lines: {
     e0_0: { face: 'smile', act: 'hop' }, e0_1: { face: 'gentle' }, e0_2: { face: 'serious', act: 'nod', at: 1.6 }, e0_3: { face: 'shy' },

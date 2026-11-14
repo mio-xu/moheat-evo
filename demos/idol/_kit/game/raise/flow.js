@@ -34,13 +34,15 @@
   const still = (set, outfit, pose, extra) => { const o = set && set.outfits[outfit]; return o && (o[[pose, ...extra].join('+')] || o[pose] || o.x_idle || o.base || Object.values(o)[0]); };
   const stillShow = (set, e, cam) => { if (e) return stage.pose(e, PG.ll.stillLay(e, cam, set.fig)); };
   let stillPose = null;
+  // a scene prop: a name = the character pack's own prop (in that character's style), an object = the story's own picture
+  const propOf = (p) => (!p ? null : typeof p === 'string' ? (CP.props && CP.props[p] ? { ...CP.props[p], src: packUrl(CP.props[p].src) } : null) : p);
   async function llDay(name, o = {}) {
     const P = poseOf(name), L = (o.line && (SL.lines || {})[o.line]) || {}, o2 = P[0] || outfit, ear = name === 'earL' || name === 'earR' ? name : null;
     const extra = Object.entries(CP.layers || {}).filter(([k, v]) => ((SL.layersAt || {})[here] || []).includes(k) && (!v.outfits || v.outfits.includes(o2))).map(([, v]) => v.expr);
     const pose = L.pose || P[1] || (PG.ll.ok !== false ? PG.ll.pose : stillPose) || 'x_idle';
     // framing: ear lines push in; the first line in a new place and the full-figure poses show all of her; other talk = medium shot (eased by PG.ll)
     const cam = o.cam || ear || (((RULES.talk || {}).fullFirstLineInPlace !== false && here !== llSeen) || FULL_POSES.includes(pose) ? 'full' : 'talk'); if (!o.cam) llSeen = here;
-    if (useLL() && await PG.ll.show(packUrl(CP.models[o2]), { pose, face: 'face' in L ? L.face : P[2], cam: CAMS[cam], extra, prop: (SL.propAt || {})[here] || null, offsets: CP.poseOffset || {} })) { outfit = o2; return true; }
+    if (useLL() && await PG.ll.show(packUrl(CP.models[o2]), { pose, face: 'face' in L ? L.face : P[2], cam: CAMS[cam], extra, prop: propOf((SL.propAt || {})[here]), offsets: CP.poseOffset || {} })) { outfit = o2; return true; }
     outfit = o2; stillPose = pose; await stillShow(CST, still(CST, o2, pose, extra), CAMS[cam]); return true;
   }
   // the stage outfit of a song (the ending lines after the concert): push-in at the ear, otherwise a close bust view
