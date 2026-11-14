@@ -1,7 +1,7 @@
 // PG audio — everything the player hears besides a game's own song files:
 //   PG.sfx.<name>()          small synthesized sounds (no files): tap · next · pick · confirm · up · heart · perfect · good · miss · whoosh · fanfare
 //   PG.bgm.play(url, vol, [a, b])  background music: gapless loop (between a and b s of the file), cross-fades when the track changes, same url = keeps playing · PG.bgm.stop()
-//   PG.voice.play(url)       one voice line at a time (stops the one before), lowers the music while it speaks → Promise (ended / stopped)
+//   PG.voice.play(url[, { ear, dist }])  one voice line at a time (placed at an ear / in front when given) (stops the one before), lowers the music while it speaks → Promise (ended / stopped)
 //   PG.voice.stop() · PG.voice.playing · PG.voice.level (0..1, how loud she is right now)
 // Volumes (0..1, saved, sliders in ⚙): PG.vol.bgm / PG.vol.voice / PG.vol.sfx — set with PG.setVol(kind, v).
 // Phones: sound starts only after the first touch (PG.audioOn, called by the engine on every touch); on iPhones the audio session is
@@ -86,8 +86,28 @@
 
   // ---------------------------------------------------------------- voice lines
   let vo = null, voDone = null, an = null, anBuf = null, env = 0, envAt = 0;
-  // the voice goes through an analyser, so the game knows how loud she is right now (her warmth on the ears follows it)
-  const wire = () => { if (an || !ac || !vo) return; try { const src = ac.createMediaElementSource(vo); an = ac.createAnalyser(); an.fftSize = 1024; anBuf = new Float32Array(an.fftSize); src.connect(an); an.connect(ac.destination); } catch { an = null; } };
+  // the voice goes through an analyser, so the game knows how loud she is right now (her warmth on the ears follows it), then either
+  // straight out (default, as before) or through a placer: PG.voice.play(url, { ear, dist }) = an ASMR line at your left / right ear or in
+  // front, near or far (HRTF). ear 'L' | 'R' | 'C' | 'L>R' (moves over the line); dist 'close' | 'mid' | 'far'. Numbers: PG_RULES.voice.
+  let dryG = null, panG = null, pan = null;
+  const VP = () => Object.assign({ at: { close: .25, mid: 1, far: 2.5 }, gain: { close: 1.6, mid: 1.25, far: 1 }, ref: 1, rolloff: .6 }, (window.PG_RULES || {}).voice || {});
+  const wire = () => { if (an || !ac || !vo) return; try { const src = ac.createMediaElementSource(vo); an = ac.createAnalyser(); an.fftSize = 1024; anBuf = new Float32Array(an.fftSize); src.connect(an);
+      dryG = ac.createGain(); an.connect(dryG); dryG.connect(ac.destination); } catch { an = null; return; }
+    try {   // the placer on its own: a browser without it keeps the dry path (the voice must never go silent)
+      const v = VP(); pan = ac.createPanner(); Object.assign(pan, { panningModel: 'HRTF', distanceModel: 'inverse', refDistance: v.ref, rolloffFactor: v.rolloff });
+      panG = ac.createGain(); panG.gain.value = 0; an.connect(panG); panG.connect(pan); pan.connect(ac.destination); } catch { pan = null; } };
+  const spot = (e, r) => (e === 'L' ? [-r, 0, 0] : e === 'R' ? [r, 0, 0] : [0, 0, -r]);   // listener at 0, facing -z
+  function placeVoice(o, a) {
+    if (!pan || !dryG) return;
+    const placed = !!(o && (o.ear || o.dist)), v = VP(), now = ac.currentTime;
+    dryG.gain.setValueAtTime(placed ? 0 : 1, now); panG.gain.setValueAtTime(placed ? (v.gain[o.dist || 'mid'] ?? 1) : 0, now);
+    if (!placed) return;
+    const r = v.at[o.dist || 'mid'] ?? 1, [e0, e1] = String(o.ear || 'C').split('>'), p0 = spot(e0, r), p1 = spot(e1 || e0, r);
+    const setP = (p, t, ramp) => ['positionX', 'positionY', 'positionZ'].forEach((k, i) => { const ap = pan[k]; if (!ap) return; if (ramp) ap.linearRampToValueAtTime(p[i], t); else { ap.cancelScheduledValues(t); ap.setValueAtTime(p[i], t); } });
+    if (!pan.positionX) { pan.setPosition(...p0); return; }   // old Safari: no ramp
+    setP(p0, now, false);
+    if (e1 && e1 !== e0) { const go = () => { const d = isFinite(a.duration) ? a.duration : 2; setP(p0, ac.currentTime, false); setP(p1, ac.currentTime + d, true); }; if (a.readyState >= 1) go(); else a.addEventListener('loadedmetadata', go, { once: true }); }
+  }
   PG.voice = {
     get playing() { return !!vo && !vo.paused && !vo.ended; },
     /** 0..1: how loud the voice is now (fast up, slow down over about half a second, so the pauses between syllables do not flicker). */
@@ -96,11 +116,12 @@
       an.getFloatTimeDomainData(anBuf); let q = 0; for (let i = 0; i < anBuf.length; i++) q += anBuf[i] * anBuf[i];
       const now = performance.now(), v = PG.clamp(Math.sqrt(q / anBuf.length) / .1, 0, 1); env = Math.max(v, env * Math.pow(.25, (now - envAt) / 500)); envAt = now; return env;
     },
-    play(url) {
+    /** o (optional): { ear: 'L' | 'R' | 'C' | 'L>R' …, dist: 'close' | 'mid' | 'far' } places the line around you; no o = as before (straight out). */
+    play(url, o) {
       PG.voice.stop(); if (PG.AUTO || !url) return Promise.resolve();
       return new Promise((done) => {
         const a = vo = vo || new Audio(); let over = false; const end = () => { if (over) return; over = true; bgm.duck(false); if (voDone === end) voDone = null; done(); };
-        wire(); voDone = end; a.onended = end; a.onerror = end; a.src = url; a.volume = PG.vol.voice; bgm.duck(true); a.play().catch(end);
+        wire(); voDone = end; a.onended = end; a.onerror = end; a.src = url; a.volume = PG.vol.voice; placeVoice(o, a); bgm.duck(true); a.play().catch(end);
       });
     },
     stop() { if (vo) { try { vo.pause(); } catch {} } if (voDone) voDone(); },

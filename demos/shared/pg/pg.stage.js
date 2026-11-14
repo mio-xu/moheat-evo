@@ -35,7 +35,7 @@
       const next = plates[plateI ^= 1], prev = plates[plateI ^ 1];
       if (next.dataset.src !== src) { next.style.backgroundImage = `url("${src}")`; next.dataset.src = src; }
       next.style.backgroundPosition = `${x}% 50%`; next.classList.add('on'); prev.classList.remove('on');
-      const p = PG.$('place'); clearTimeout(placeTimer); p.classList.remove('on');
+      const p = PG.$('place'); clearTimeout(placeTimer); if (!p) return; p.classList.remove('on');   // (stage-only mount: no caption)
       if (label) { p.textContent = label; requestAnimationFrame(() => p.classList.add('on')); placeTimer = setTimeout(() => p.classList.remove('on'), 3200); }
     },
     /** Show a character entry. lay: { h: height in % of the frame height, b: bottom %, x: centre % (default 50), fade: soft lower edge } — for a

@@ -15,7 +15,7 @@
     { cat: 'idol', dir: 'Demo65_AyaneDivaBallad', ja: 'まどべの ゆき', en: 'Snow by the Window', zh: '窗边的雪', ko: '창가의 눈', series: 'ayane', part: 4, cast: 'ayane', new: true, group: 5 },
     { cat: 'idol', dir: 'Demo64_AyaneDivaWafu', ja: 'なつよい まつり', en: 'Summer Night Matsuri', zh: '夏宵祭', ko: '여름밤 마츠리', series: 'ayane', part: 5, cast: 'ayane', new: true, group: 5 },
     { cat: 'idol', dir: 'games/diva-diary', kind: 'game', ja: '歌姫プロデュース · ゲーム', en: 'Diva Diary · Game', zh: '歌姬养成日记 · 游戏', ko: '디바 다이어리 · 게임', series: 'ayane', part: 6, cast: 'ayane', new: true, group: 5 },
-    { cat: 'idol', dir: 'games/hibiki-diary', kind: 'game', ja: 'プリンス・プロデュース · ゲーム', en: 'Prince Diary · Game', zh: '王子养成日记 · 游戏', ko: '프린스 다이어리 · 게임', cast: 'hibiki', new: true, group: 5 },
+    { cat: 'idol', dir: 'games/hibiki-diary', kind: 'game', ja: 'プリンス・プロデュース · ゲーム', en: 'Prince Diary · Game', zh: '王子养成日记 · 游戏', ko: '프린스 다이어리 · 게임', series: 'hibiki', part: 6, cast: 'hibiki', new: true, group: 5 },
     { cat: 'idol', dir: 'Demo66_HibikiFanMeeting', ja: '響の、きみだけのファンミーティング', en: "Hibiki's Fan Meeting", zh: '响的专属见面会', ko: '히비키의 팬미팅', series: 'hibiki', part: 1, cast: 'hibiki', new: true, group: 5 },
     { cat: 'idol', dir: 'Demo67_HibikiDivaParade', ja: 'ほしふる パレード', en: 'Starfall Parade', zh: '星落游行', ko: '별이 쏟아지는 퍼레이드', series: 'hibiki', part: 2, cast: 'hibiki', new: true, group: 5 },
     { cat: 'idol', dir: 'Demo68_HibikiDivaCrown', ja: 'こおりの おうかん', en: 'Crown of Ice', zh: '冰之王冠', ko: '얼음 왕관', series: 'hibiki', part: 3, cast: 'hibiki', new: true, group: 5 },

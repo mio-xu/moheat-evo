@@ -24,7 +24,9 @@
   const S = { pose: 'x_idle', prev: null, dropAt: 0, bounceAt: -1, hopAt: -1, face: null, extra: [], cam: null, cur: { x: .5, y: .3, fh: .1, ok: false }, offsets: {}, off: 0, act: null, actUntil: 0, exprKey: '', mS: 0, shown: false };
   const L = { K: 2, UX: 1000, UY: 1000, C0: { x: 0, y: 0 }, cal: true, pr: 2 };
 
-  const fig = (top, bot, x = .5) => { const fh = (bot - top) * FIG.face.h / (FIG.bottom - FIG.top); return { x, y: top + (FIG.face.y - FIG.top) / FIG.face.h * fh, fh }; };
+  const fig = (top, bot, x = .5, off = 0) => { const fh = (bot - top) * FIG.face.h / (FIG.bottom + off - FIG.top); return { x, y: top + (FIG.face.y + off - FIG.top) / FIG.face.h * fh, fh, fit: [top, bot] }; };
+  // a whole-figure cam with a pose offset (a seated pose sits lower: pack / song poseOffset, model px): the frame takes in head … lowered feet, so
+  // the seated figure keeps its feet in the picture whatever the camera (the pages anchor the floor higher; one offset number serves both)
   const camOf = (c) => (!c ? null : c.p || c.w ? (PG.wide ? c.w || c.p : c.p || c.w) : c);
   const twoFrames = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
   async function calibrate() {   // model px per CSS px at zoom 1 (K) and CSS px per unit of view.x / view.y at this canvas size
@@ -54,7 +56,7 @@
     const now = performance.now(), dt = Math.min(.1, (now - lastNow) / 1000); lastNow = now;
     const D = driver ? driver(now, dt) || {} : {};
     if (D.pose) setPose(D.pose);
-    const face = 'face' in D ? EX(D.face) : S.face, cam = camOf(D.cam || S.cam) || fig(.15, .9);
+    const face = 'face' in D ? EX(D.face) : S.face; let cam = camOf(D.cam || S.cam) || fig(.15, .9);   // let: a fig cam takes in a pose offset below
     const e = { [S.pose]: 1 }; if (S.prev && now < S.dropAt) e[S.prev] = 1; if (face) e[face] = 1; for (const x of S.extra) e[x] = 1;
     const key = Object.entries(e).map(([k]) => k).sort().join(','); if (key !== S.exprKey) { S.exprKey = key; p.expr = e; }
     if (S.act && now > S.actUntil) actEnd();
@@ -69,13 +71,14 @@
     f.params.eyeLOpen = f.params.eyeROpen = Math.min(f.params.eyeLOpen ?? 1, blink());
     // camera: eases toward the target (a model change / first show snaps)
     const C = S.cur;
+    S.off += ((S.offsets[S.pose] || 0) - S.off) * (1 - Math.exp(-dt / RL.camEase));   // eases with the pose switch
+    if (cam.fit && S.off > .5) cam = fig(cam.fit[0], cam.fit[1], cam.x, S.off);
     if (!C.ok) { Object.assign(C, cam, { ok: true }); }
     else { const k = 1 - Math.exp(-dt / RL.camEase); C.x += (cam.x - C.x) * k; C.y += (cam.y - C.y) * k; C.fh *= Math.pow(cam.fh / C.fh, k); }
     let s = D.sq || 1, dip = 0, hop = D.hopPx || 0;
     if (S.bounceAt >= 0) { const b = (now - S.bounceAt) / RL.bounce; if (b >= 1) S.bounceAt = -1; else { s *= 1 + .03 * Math.sin(Math.PI * b); dip = 6 * Math.sin(2 * Math.PI * b); } }
     if (S.hopAt >= 0) { const b = (now - S.hopAt) / 420; if (b >= 1) S.hopAt = -1; else hop += RL.hopTap * Math.sin(Math.PI * b); }
-    S.off += ((S.offsets[S.pose] || 0) - S.off) * (1 - Math.exp(-dt / RL.camEase));   // eases with the pose switch
-    const cw = cv.clientWidth, ch = cv.clientHeight, Z = (C.fh * ch / FIG.face.h) * L.K * s, oy = S.off * C.fh / FIG.face.h;
+    const cw = cv.clientWidth, ch = cv.clientHeight, Z = (C.fh * ch / FIG.face.h) * L.K * s, oy = 0;   // a fig cam takes the offset in (above); a face cam follows the face
     const v = place(FIG.face, (C.x - .5) * cw, (C.y + oy - .5) * ch, Z); v.y += (hop - dip) / L.UY;
     Object.assign(p.view, v);
     // the face on screen (CSS px in the frame): particles keep out of it (pg.css #fxcv / #fx mask), the UI steps aside in a close-up, a scene prop sits under the chin
@@ -144,8 +147,9 @@
     preload(url) { blob(url).catch(() => {}); },
     /** Without WebGL2: where a fallback still (tools/still_tool.py entry { w, h, y0, y1, cx }, model px) goes for this camera, as a PG.stage.pose layout. */
     stillLay(e, cam, fig, off = 0) {
-      const c = camOf(cam), F = fig || FIG, u = c.fh / F.face.h, W = PG.app.clientWidth || 1, H = PG.app.clientHeight || 1;
-      const top = c.y + (e.y0 + off - F.face.y) * u, bot = c.y + (e.y1 + off - F.face.y) * u;
+      let c = camOf(cam); const F = fig || FIG, W = PG.app.clientWidth || 1, H = PG.app.clientHeight || 1;
+      if (c.fit && off) { const [t0, b0] = c.fit, fh = (b0 - t0) * F.face.h / (F.bottom + off - F.top); c = { x: c.x, fh, y: t0 + (F.face.y + off - F.top) / F.face.h * fh }; } else off = 0;   // same as the live view: a fig cam takes the offset in
+      const u = c.fh / F.face.h, top = c.y + (e.y0 + off - F.face.y) * u, bot = c.y + (e.y1 + off - F.face.y) * u;
       return { h: +((bot - top) * 100).toFixed(2), b: +((1 - bot) * 100).toFixed(2), x: +((c.x * W + (e.cx - F.face.x) * u * H) / W * 100).toFixed(2) };
     },
     debug: () => ({ model, pose: S.pose, face: S.face, expr: S.exprKey, act: S.act, cam: { ...S.cur }, shown: S.shown, cal: L.cal, mouth: +S.mS.toFixed(2), on: !!cv && cv.classList.contains('on') }),

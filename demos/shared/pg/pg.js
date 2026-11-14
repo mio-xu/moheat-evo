@@ -125,19 +125,21 @@
   /** Build the frame inside <main id="app">. o: { id (save namespace), langs, text (extra engine texts), onReset() } */
   PG.mount = (o = {}) => {
     const app = PG.app = $('app'); PG.id = o.id || 'pg'; if (o.langs) PG.langs = o.langs; Object.assign(TEXT, o.text || {});
-    app.insertAdjacentHTML('afterbegin', FRAME_BACK); app.insertAdjacentHTML('beforeend', FRAME_FRONT);
+    app.insertAdjacentHTML('afterbegin', FRAME_BACK); if (!o.stage) app.insertAdjacentHTML('beforeend', FRAME_FRONT);   // stage: true = the picture layers only (a site page whose UI v2 shell owns the bar, ⚙ and the device ids)
     const n = (navigator.language || 'en').toLowerCase(), guess = PG.langs.find((k) => n.startsWith(k)) || 'en';
     lang = PG.langs.includes(Q.get('lang')) ? Q.get('lang') : PG.store.get('lang', null) || guess;
     // iPhones ignore touch-action for the page bounce and pinch: stop the page itself from moving (the settings panel may still scroll)
     const still = (e) => { if (!e.target.closest || !e.target.closest('.panel')) e.preventDefault(); };
     document.addEventListener('touchmove', still, { passive: false }); document.addEventListener('gesturestart', (e) => e.preventDefault()); document.addEventListener('dblclick', (e) => e.preventDefault());
     app.addEventListener('contextmenu', (e) => { if (!e.target.closest('input, select')) e.preventDefault(); });   // long press / right click: no browser menu over the game
-    $('btnClose').onclick = () => { $('gear').hidden = true; };
-    $('gear').addEventListener('pointerdown', (e) => { if (e.target === $('gear')) $('gear').hidden = true; });
-    $('btnReset').onclick = () => { $('gear').hidden = true; o.onReset && o.onReset(); };
-    PG.openSettings = () => { $('gear').hidden = false; };
+    if (!o.stage) {
+      $('btnClose').onclick = () => { $('gear').hidden = true; };
+      $('gear').addEventListener('pointerdown', (e) => { if (e.target === $('gear')) $('gear').hidden = true; });
+      $('btnReset').onclick = () => { $('gear').hidden = true; o.onReset && o.onReset(); };
+    }
+    PG.openSettings = () => { if ($('gear')) $('gear').hidden = false; };
     skin = SKINS.includes(Q.get('skin')) ? Q.get('skin') : PG.store.get('skin', null) || o.skin || 'glass'; SKINS.forEach((n) => document.documentElement.classList.toggle('skin-' + n, n === skin));
-    PG.audioInit(); PG.fx.init(); PG.Therm.init(); PG.stage.init(); PG.ui.init(); if (PG.rhythm) PG.rhythm.init();
+    PG.stageOnly = !!o.stage; PG.audioInit(); PG.fx.init(); PG.Therm.init(); PG.stage.init(); PG.ui.init(); if (PG.rhythm && $('rhythm')) PG.rhythm.init();
     paint(); dispatchEvent(new CustomEvent('pg:lang', { detail: lang }));
   };
 })();

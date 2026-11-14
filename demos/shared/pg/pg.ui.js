@@ -13,15 +13,16 @@
       // keyboard (desktop): Space / Enter = tap to go on, or the main button on screen; 1–9 = a choice; Esc = close ⚙
       addEventListener('keydown', (ev) => {
         if (ev.defaultPrevented || ev.target.closest?.('input, select, textarea')) return;
-        if (ev.key === 'Escape' && !PG.$('gear').hidden) { PG.$('gear').hidden = true; return; }
-        if (!PG.$('gear').hidden || (PG.rhythm && PG.rhythm.active)) return;
+        const gear = PG.$('gear') || { hidden: true };
+        if (ev.key === 'Escape' && !gear.hidden) { gear.hidden = true; return; }
+        if (!gear.hidden || (PG.rhythm && PG.rhythm.active)) return;
         if (ev.key === ' ' || ev.key === 'Enter') {
           if (ev.repeat) { ev.preventDefault(); return; }
           if (PG.ui.onTap) { ev.preventDefault(); PG.ui.onTap(ev); return; }
           const go = [...PG.app.querySelectorAll('.go:not(:disabled)')].find((b) => b.offsetParent && !b.closest('[hidden], #gear')); if (go) { ev.preventDefault(); go.click(); }
           return;
         }
-        if (/^[1-9]$/.test(ev.key) && !PG.$('choices').hidden) { const b = PG.$('choices').children[+ev.key - 1]; if (b) { ev.preventDefault(); b.click(); } }
+        if (/^[1-9]$/.test(ev.key) && PG.$('choices') && !PG.$('choices').hidden) { const b = PG.$('choices').children[+ev.key - 1]; if (b) { ev.preventDefault(); b.click(); } }
       });
     },
     /** A game adds its own bottom sheets (ids) so that only one is ever shown. */
