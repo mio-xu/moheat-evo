@@ -99,6 +99,8 @@
   const PG = root.PG; if (!PG) return;
 
   // ------------------------------------------------------------------ browser part
+  // "Just listen" (site pages: MoHeatPlay.pure): the story plays itself — default answers, holds held, game sides answered (QA n3 / n4)
+  const PURE = () => !!(root.MoHeatPlay && root.MoHeatPlay.pure) && !(root.PG && root.PG.AUTO);
   const $ = (id) => document.getElementById(id), sleep = (s) => new Promise((r) => setTimeout(r, s * 1000));
   const T = (o) => { if (!o) return ''; const l = (root.MoHeatSub && root.MoHeatSub.lang) || PG.lang || 'en'; return o[l] || o.en || o.ja || ''; };
 
@@ -184,9 +186,10 @@
       const btn = box.querySelector('.holdBtn'), on = (e) => { e.preventDefault(); down = 1; btn.classList.add('on'); }, off = () => { down = 0; btn.classList.remove('on'); };
       btn.addEventListener('pointerdown', on); addEventListener('pointerup', off); addEventListener('pointercancel', off);
       const iv = setInterval(() => {
-        const now = performance.now(), dt = now - last; last = now; if (down || PG.AUTO) held += dt;
+        const now = performance.now(), dt = now - last; last = now; const auto = PG.AUTO || (PURE() && now - t0 > (RULES().pureWait ?? 1.6) * 1000);   // listen-only: held after the natural pause
+        if (auto && !down) btn.classList.add('on'); if (down || auto) held += dt;
         const lbl = T(ask.button || { zh: '按住，牵手', ja: 'おして、手をにぎる', en: 'Press and hold his hand', ko: '꾹 눌러 손 잡기' }), sp = box.querySelector('span'); if (sp.textContent !== lbl) { sp.textContent = lbl; box.querySelector('p').textContent = T(ask.hint || { zh: '按住不放，他会靠近你', ja: 'はなさずにいると、すぐそばに来てくれる', en: 'Keep holding — he leans in close', ko: '계속 잡고 있으면 그가 다가와요' }); }   // follows a language switch (QA m4)
-        lv += ((down || PG.AUTO ? cap : 0) - lv) * Math.min(1, dt / 900); PG.Therm.source('hold', lv > .02 ? { [side + 'h']: lv } : null);
+        lv += ((down || auto ? cap : 0) - lv) * Math.min(1, dt / 900); PG.Therm.source('hold', lv > .02 ? { [side + 'h']: lv } : null);
         ring.style.setProperty('--p', Math.min(1, held / need));
         if (held >= need) end = 'held'; else if (now - t0 > (ask.timeout || 20) * 1000) end = 'let';
         if (end) { clearInterval(iv); removeEventListener('pointerup', off); removeEventListener('pointercancel', off); box.classList.add('done');
@@ -199,7 +202,7 @@
   async function breathAsk(ask, S, opts, ui) {
     const m = ask.mode === 'cool' ? 'c' : 'h', cap = Math.min(ask.level ?? .6, ((root.PG_RULES || {}).thermal || {})[m === 'c' ? 'capCool' : 'capWarm'] ?? .7);
     let stream = null, an = null, buf = null;
-    if (!PG.AUTO) try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); const ac = (PG.audioCtx && PG.audioCtx()) || new AudioContext(); const src = ac.createMediaStreamSource(stream); an = ac.createAnalyser(); an.fftSize = 1024; buf = new Float32Array(an.fftSize); src.connect(an); } catch { stream = null; }
+    if (!PG.AUTO && !PURE()) try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); const ac = (PG.audioCtx && PG.audioCtx()) || new AudioContext(); const src = ac.createMediaStreamSource(stream); an = ac.createAnalyser(); an.fftSize = 1024; buf = new Float32Array(an.fftSize); src.connect(an); } catch { stream = null; }
     if (!an) { const r = await holdAsk({ ...ask, secs: ask.secs || 4, level: cap }, S, opts, ui); return r === 'held' ? 'done' : 'skip'; }
     const box = document.createElement('div'); box.className = 'holdAsk breath'; box.innerHTML = '<button type="button" class="holdBtn"><i></i><span>🎤</span></button><p></p>';
     box.querySelector('p').textContent = T(ask.hint || { zh: '对着麦克风呼气', ja: 'マイクに息をはいて', en: 'Breathe into the mic', ko: '마이크에 숨을 내쉬어요' }); PG.app.appendChild(box);
@@ -338,7 +341,7 @@
           await PG.voice.play(url(b.clip), { ear: b.ear, dist: b.dist }); ui.sub(null);
         }
         const until = performance.now() + (G.answer ?? 2.5) * 1000; while (!answer && performance.now() < until) await sleep(.05);
-        if (PG.AUTO && !answer) answer = { side: r.ear, secs: .7 };
+        if ((PG.AUTO || PURE()) && !answer) answer = { side: r.ear, secs: .7 };   // test runs / listen-only: the right side, in time
       } finally { fd.stop(); PG.app.removeEventListener('pointerdown', zone); if (behindBtn) behindBtn.remove(); }
       const ok = answer && answer.side === r.ear, pts = !ok ? 0 : (G.points || [[.8, 3], [1.5, 2], [2.5, 1]]).find(([s]) => answer.secs < s)?.[1] || 0;
       score.push(pts); if (answer) PG.fx.burst(ok ? 'star' : 'spark', answer.side === 'L' ? 18 : answer.side === 'R' ? 82 : 50, 55, ok ? 4 + pts * 3 : 4);   // felt at the ear you tapped
