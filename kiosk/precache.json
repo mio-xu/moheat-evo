@@ -820,9 +820,6 @@
 "demos/all-ages/Demo01_SnowFoxfire/media/mix.m4a",
 "demos/all-ages/Demo01_SnowFoxfire/style.css"
 ],
-"Demo02_FanMeeting": [
-"demos/all-ages/Demo02_FanMeeting/index.html"
-],
 "Demo02_FanMeeting_v2": [
 "assets/images/demos/Demo02_FanMeeting_v2.en.jpg",
 "assets/images/demos/Demo02_FanMeeting_v2.ja.jpg",
@@ -831,7 +828,6 @@
 "assets/images/demos/Demo02_FanMeeting_v2.thumbs.json",
 "assets/images/demos/Demo02_FanMeeting_v2.zh.jpg",
 "assets/images/demos/art/Demo02_FanMeeting_v2.webp",
-"demos/all-ages/Demo02_FanMeeting_v2/index.html",
 "demos/idol/Demo02_FanMeeting_v2/cover.json",
 "demos/idol/Demo02_FanMeeting_v2/index.html",
 "demos/idol/Demo02_FanMeeting_v2/l10n.js",
@@ -934,9 +930,6 @@
 "demos/idol/Demo02_FanMeeting_v2/media/vowel.js",
 "demos/idol/Demo02_FanMeeting_v2/style.css"
 ],
-"Demo03_ShiningSmileConcert": [
-"demos/all-ages/Demo03_ShiningSmileConcert/index.html"
-],
 "Demo03_ShiningSmileRemake": [
 "assets/images/demos/Demo03_ShiningSmileRemake.en.jpg",
 "assets/images/demos/Demo03_ShiningSmileRemake.ja.jpg",
@@ -945,7 +938,6 @@
 "assets/images/demos/Demo03_ShiningSmileRemake.thumbs.json",
 "assets/images/demos/Demo03_ShiningSmileRemake.zh.jpg",
 "assets/images/demos/art/Demo03_ShiningSmileRemake.webp",
-"demos/all-ages/Demo03_ShiningSmileRemake/index.html",
 "demos/idol/Demo03_ShiningSmileRemake/cover.json",
 "demos/idol/Demo03_ShiningSmileRemake/index.html",
 "demos/idol/Demo03_ShiningSmileRemake/l10n.js",
@@ -5354,7 +5346,6 @@
 "assets/images/demos/Demo63_AyaneDivaRock.thumbs.json",
 "assets/images/demos/Demo63_AyaneDivaRock.zh.jpg",
 "assets/images/demos/art/Demo63_AyaneDivaRock.webp",
-"demos/all-ages/Demo63_AyaneDivaRock/index.html",
 "demos/idol/Demo63_AyaneDivaRock/cover.json",
 "demos/idol/Demo63_AyaneDivaRock/index.html",
 "demos/idol/Demo63_AyaneDivaRock/l10n.js",
@@ -5388,7 +5379,6 @@
 "assets/images/demos/Demo64_AyaneDivaWafu.thumbs.json",
 "assets/images/demos/Demo64_AyaneDivaWafu.zh.jpg",
 "assets/images/demos/art/Demo64_AyaneDivaWafu.webp",
-"demos/all-ages/Demo64_AyaneDivaWafu/index.html",
 "demos/idol/Demo64_AyaneDivaWafu/cover.json",
 "demos/idol/Demo64_AyaneDivaWafu/index.html",
 "demos/idol/Demo64_AyaneDivaWafu/l10n.js",
@@ -5422,7 +5412,6 @@
 "assets/images/demos/Demo65_AyaneDivaBallad.thumbs.json",
 "assets/images/demos/Demo65_AyaneDivaBallad.zh.jpg",
 "assets/images/demos/art/Demo65_AyaneDivaBallad.webp",
-"demos/all-ages/Demo65_AyaneDivaBallad/index.html",
 "demos/idol/Demo65_AyaneDivaBallad/cover.json",
 "demos/idol/Demo65_AyaneDivaBallad/index.html",
 "demos/idol/Demo65_AyaneDivaBallad/l10n.js",
