@@ -19,8 +19,13 @@
   const trip = (on) => { PG.Therm.halt(on); if (on) { try { window.MoHeatDevice?.current?.send?.('stop'); } catch {} }
     estop.classList.toggle('tripped', on); estop.textContent = on ? '↺ Re-arm output' : '■ STOP'; };
   // output off at the TOUCH (no 0.75 s of warm / cool after pressing on a phone); the tripped state at the click, after shell.js has paused
-  estop?.addEventListener('pointerdown', (e) => { if (e.button === 0 && !estop.classList.contains('tripped')) { PG.Therm.halt(true); try { window.MoHeatDevice?.current?.send?.('stop'); } catch {} } });
-  estop?.addEventListener('click', () => trip(!estop.classList.contains('tripped')));
+  // A press that never becomes a click (the finger slides off, QA n2) still completes the STOP 0.8 s later — safety first: tripped + paused.
+  // A long press that does end in a click does not toggle it back (done = this press already tripped it).
+  let pending = 0, done = false;
+  estop?.addEventListener('pointerdown', (e) => { if (e.button !== 0 || estop.classList.contains('tripped')) return;
+    PG.Therm.halt(true); try { window.MoHeatDevice?.current?.send?.('stop'); } catch {}
+    clearTimeout(pending); done = false; pending = setTimeout(() => { if (estop.classList.contains('tripped')) return; trip(true); done = true; window.MoHeatShell?.pause?.(true); }, 800); });
+  estop?.addEventListener('click', () => { clearTimeout(pending); if (done) { done = false; return; } trip(!estop.classList.contains('tripped')); });
   addEventListener('keydown', (e) => { if (e.key === 'Escape' && estop) { e.preventDefault(); trip(!estop.classList.contains('tripped')); } });
   // warm only (the visitor's choice: device.js MoHeatDevice.warmOnly(), or <html data-warm-only>): the engine drops every cool for the
   // device AND the picture (edge glow, meters) — QA m5; the two cool meter rows are hidden like on the other demos
