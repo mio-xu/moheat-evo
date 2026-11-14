@@ -1,7 +1,8 @@
 // PG_RULES — the ONE place for the rules every game follows (2026-11-14, user: "修改引擎规定，就可以一键修改"). Change a number here and every game
 // (diva-diary, hibiki-diary, …) changes with it; no game repeats these. Read by the engine in the browser (window.PG_RULES)
 // and by the builder in node / python (tools/new_game.py reads the JSON between the RULES markers).
-// Cameras: face centre x / y + face height fh, fractions of the frame; p = phone portrait, w = wide (phone landscape AND desktop: one layout).
+// presets: per genre (GAME_SETUP.genre) values merged over these (engine/raise/flow.js); thermal.safety = the ASMR scheduler (flip off ≥ flipOff s,
+// caps, warm-only, onMax s on → rest s off). Cameras: face centre x / y + face height fh, fractions of the frame; p = phone portrait, w = wide (phone landscape AND desktop: one layout).
 (function (root) {
   const RULES = /*RULES*/{
     "model": { "texLimit": 67108864, "texTarget": 0.975 },
@@ -23,7 +24,15 @@
       "close": { "p": { "dx": 0.1, "y": 0.4, "fh": 0.2 }, "w": { "dx": 0.1, "y": 0.45, "fh": 0.3 } } },
     "layout": { "uWide": 0.86, "minAspect": 1.7778, "maxAspect": 2.2 },
     "keys": { "L": "f", "R": "j" },
-    "ending": { "wideDir": "wide", "card": { "portrait": [1080, 1440], "wide": [1920, 1080] }, "panel": 0.58 }
+    "ending": { "wideDir": "wide", "card": { "portrait": [1080, 1440], "wide": [1920, 1080] }, "panel": 0.58 },
+    "thermal": { "safety": false, "flipOff": 1.2, "gap": 0.4, "capWarm": 0.8, "capCool": 0.7, "warmOnly": false, "onMax": 120, "rest": 10,
+      "voice": { "close": 0.55, "mid": 0.25, "far": 0.08, "both": 0.8, "rise": 0.05, "fall": 0.8 }, "breath": { "haa": 0.6, "fuu": 0.65, "blow": 0.65 },
+      "ambientMax": 0.3 },
+    "presets": {
+      "idol": {},
+      "asmr-love": { "thermal": { "safety": true }, "talk": { "fullFirstLineInPlace": false, "fullPoses": [] },
+        "dist": { "close": "ear", "mid": "talk", "far": "full" } }
+    }
   }/*RULES*/;
   root.PG_RULES = RULES;
   if (typeof module !== 'undefined') module.exports = RULES;
