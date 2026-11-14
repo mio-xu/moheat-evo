@@ -9,11 +9,11 @@
   const DEMOS = [
     { cat: 'all-ages', dir: 'Demo01_SnowFoxfire', ja: '雪と狐火のひそひそ話', en: 'Whispers of Snow and Flame', zh: '雪与狐火的悄悄话', ko: '눈과 여우불의 소곤소곤 이야기', series: 'snowfox', part: 1, cast: 'koyuki+homura', group: 0 },
     { cat: 'all-ages', dir: 'Demo28_SnowFoxLullaby', ja: 'ふたりの、こもりうた', en: 'A Lullaby for Two', zh: '两个人的摇篮曲', ko: '둘이서 불러 주는 자장가', series: 'snowfox', part: 2, cast: 'koyuki+homura', group: 0 },
-    { cat: 'all-ages', dir: 'Demo02_FanMeeting_v2', ja: 'キミだけのスペシャルファンミーティング', en: 'Your Special Fan Meeting', zh: '只属于你的特别见面会', ko: '너만을 위한 스페셜 팬미팅', series: 'ayane', part: 1, cast: 'ayane', group: 0 },
-    { cat: 'all-ages', dir: 'Demo03_ShiningSmileRemake', ja: '氷と炎の星光コンサート', en: 'Ice & Fire Concert', zh: '冰与火的星光演唱会', ko: '얼음과 불꽃의 별빛 콘서트', series: 'ayane', part: 2, cast: 'ayane', group: 0 },
-    { cat: 'all-ages', dir: 'Demo63_AyaneDivaRock', ja: 'ストーム・ハート', en: 'Storm Heart', zh: '风暴之心', ko: '스톰 하트', series: 'ayane', part: 3, cast: 'ayane', new: true, group: 0 },
-    { cat: 'all-ages', dir: 'Demo65_AyaneDivaBallad', ja: 'まどべの ゆき', en: 'Snow by the Window', zh: '窗边的雪', ko: '창가의 눈', series: 'ayane', part: 4, cast: 'ayane', new: true, group: 0 },
-    { cat: 'all-ages', dir: 'Demo64_AyaneDivaWafu', ja: 'なつよい まつり', en: 'Summer Night Matsuri', zh: '夏宵祭', ko: '여름밤 마츠리', series: 'ayane', part: 5, cast: 'ayane', new: true, group: 0 },
+    { cat: 'idol', dir: 'Demo02_FanMeeting_v2', ja: 'キミだけのスペシャルファンミーティング', en: 'Your Special Fan Meeting', zh: '只属于你的特别见面会', ko: '너만을 위한 스페셜 팬미팅', series: 'ayane', part: 1, cast: 'ayane', group: 5 },
+    { cat: 'idol', dir: 'Demo03_ShiningSmileRemake', ja: '氷と炎の星光コンサート', en: 'Ice & Fire Concert', zh: '冰与火的星光演唱会', ko: '얼음과 불꽃의 별빛 콘서트', series: 'ayane', part: 2, cast: 'ayane', group: 5 },
+    { cat: 'idol', dir: 'Demo63_AyaneDivaRock', ja: 'ストーム・ハート', en: 'Storm Heart', zh: '风暴之心', ko: '스톰 하트', series: 'ayane', part: 3, cast: 'ayane', new: true, group: 5 },
+    { cat: 'idol', dir: 'Demo65_AyaneDivaBallad', ja: 'まどべの ゆき', en: 'Snow by the Window', zh: '窗边的雪', ko: '창가의 눈', series: 'ayane', part: 4, cast: 'ayane', new: true, group: 5 },
+    { cat: 'idol', dir: 'Demo64_AyaneDivaWafu', ja: 'なつよい まつり', en: 'Summer Night Matsuri', zh: '夏宵祭', ko: '여름밤 마츠리', series: 'ayane', part: 5, cast: 'ayane', new: true, group: 5 },
     { cat: 'all-ages', dir: 'Demo04_SeasonsExpress', ja: '季節が、暴走する。', en: 'The Runaway Seasons Express', zh: '四季失控的魔法列车', ko: '계절이 폭주한다.', cast: 'train', group: 0 },
     { cat: 'all-ages', dir: 'Demo47_GhostLantern', ja: 'ひやっと！おばけやしきの ちょうちんばん', en: 'Lantern Keeper of the Spooky House', zh: '鬼屋提灯值日生', ko: '오싹! 유령의 집 등불 당번', cast: 'bonchan+yurari', new: true, group: 0 },
     { cat: 'all-ages', dir: 'Demo48_AnimalOnsen', ja: 'ゆけむり どうぶつおんせん', en: 'Steamy Animal Hot Spring', zh: '蒸汽腾腾的动物温泉', ko: '모락모락 동물 온천', cast: 'yuzujii', new: true, group: 0 },
@@ -62,7 +62,7 @@
     talk: { ja: '語らう', en: 'Talk with them', zh: '对谈', ko: '이야기 나누기' },
   };
   const HEAT = {"Demo01_SnowFoxfire":85,"Demo02_FanMeeting_v2":85,"Demo03_ShiningSmileRemake":85,"Demo04_SeasonsExpress":84,"Demo05_GifuCastle":80,"Demo06_FutureWhisky":75,"Demo07_KyotoIzakaya":83,"Demo08_YamazakiDistillery":83,"Demo09_SengokuBanquet":82,"Demo10_CaveSpring":84,"Demo11_Naomi":69,"Demo12_LateCall":0,"Demo13_NaomiCam":75,"Demo14_MintStream":69,"Demo15_FamilyCall":69,"Demo16_FamilyCall2":83,"Demo17_CocoaStream":80,"Demo18_HinataStream":83,"Demo19_LunaStream":79,"Demo20_HinataHandshake":83,"Demo21_JinLounge":75,"Demo22_ShionRain":86,"Demo23_NobunagaTalk":72,"Demo24_GakuCamp":85,"Demo25_HatsumodeDate":87,"Demo26_BecomeNaomi":81,"Demo28_SnowFoxLullaby":84,"Demo29_FamilyVisit":83,"Demo30_SakuFestival":91,"Demo31_SummerRooftop":85,"Demo41_IeyasuTalk":69,"Demo42_SengokuRoundtable":70,"Demo43_BlizzardInn":83,"Demo44_MagicAcademy":98,"Demo45_CelestialPalace":92,"Demo46_DragonContract":90,"Demo47_GhostLantern":99,"Demo48_AnimalOnsen":99,"Demo49_NaomiSummer":99,"Demo50_WatermelonSummer":94};   // thermal-use score 0–100 per folder — ONE line, written by tools/qa/thermal_score.py (tools/qa/thermal_scores.json)
-  { const CATS = ['all-ages', 'healing', 'for-men', 'for-women', 'nobunaga-suntory'], num = (d) => +((d.dir.match(/^Demo(\d+)/) || [])[1] || 999), sc = (d) => HEAT[d.dir] || 0;
+  { const CATS = ['all-ages', 'healing', 'for-men', 'for-women', 'nobunaga-suntory', 'idol'], num = (d) => +((d.dir.match(/^Demo(\d+)/) || [])[1] || 999), sc = (d) => HEAT[d.dir] || 0;
     const out = [];
     for (const cat of CATS) {
       const units = [], ser = {};
@@ -95,7 +95,7 @@
     Demo23_NobunagaTalk: `${HIST} · art: ChatGPT (OpenAI)`,
     Demo41_IeyasuTalk: `${HIST} · art: ChatGPT (OpenAI)`, Demo42_SengokuRoundtable: `${HIST} · art: ChatGPT (OpenAI)`,
   };
-  const GROUPS = ['全年齢 · All ages', '癒し · Healing', '男性向け · For him', '女性向け · For her', '信長シリーズ · Nobunaga Series'];   // numbers are the list order
+  const GROUPS = ['全年齢 · All ages', '癒し · Healing', '男性向け · For him', '女性向け · For her', '信長シリーズ · Nobunaga Series', 'アイドル・ミュージック · Idol Music'];   // numbers are the list order
   window.MoHeatDemos = { DEMOS, GROUPS };   // the demo list for other pages (kiosk/: menu, attract loop, summary); MOHEAT_NAV_DATA_ONLY = data only, no UI
   if (window.MOHEAT_NAV_DATA_ONLY) return;
   const qs = new URLSearchParams(location.search);
@@ -196,7 +196,7 @@
   const LG = () => window.MoHeatSub?.lang || (() => { try { return sessionStorage.getItem('moheat.sublang'); } catch { return null; } })() || 'en';
   const pickT = (o) => { const l = LG(); return o[l] || (l === 'zh-Hant' && o.zh) || o.en; };
   const TITLE = (d) => pickT({ ja: d.ja, en: d.en, zh: d.zh, ko: d.ko });
-  const GZH = ['全年龄', '治愈', '男性向', '女性向', '信长系列'], GKO = ['전체 이용가', '힐링', '남성향', '여성향', '노부나가 시리즈'];
+  const GZH = ['全年龄', '治愈', '男性向', '女性向', '信长系列', '偶像音乐'], GKO = ['전체 이용가', '힐링', '남성향', '여성향', '노부나가 시리즈', '아이돌 뮤직'];
   const GT = (gi) => { const [ja, en] = GROUPS[gi].split(' · '); return pickT({ ja, en, zh: GZH[gi], ko: GKO[gi] }); };
   const W = { all: { ja: 'すべて', en: 'All', zh: '全部', ko: '전체' }, now: { ja: '再生中', en: 'Now playing', zh: '正在播放', ko: '재생 중' }, heat: { ja: '温冷', en: 'Thermal', zh: '温冷', ko: '온냉' }, ep: { ja: '第', en: 'Ep ', zh: '第', ko: '제' },
     demos: { ja: 'デモ', en: 'Demos', zh: '演示', ko: '데모' }, rec: { ja: '★ おすすめ', en: '★ Recommended', zh: '★ 推荐', ko: '★ 추천' }, top: { ja: 'まずはこれから · 温冷をいちばん感じられる3本', en: 'Try these first · the most thermal feedback', zh: '推荐先体验 · 冷热反馈最丰富的3个', ko: '먼저 이것부터 · 온냉을 가장 잘 느낄 수 있는 3편' }, credits: { ja: '権利表記', en: 'Credits', zh: '版权与署名', ko: '크레디트' },
@@ -210,7 +210,7 @@
   addEventListener('load', () => (window.requestIdleCallback || ((f) => setTimeout(f, 1500)))(() => { if (navigator.connection?.saveData) return;
     for (const d of [next, prev]) if (d) for (const u of [href(d), `${href(d)}media/cover/${window.MoHeatSub?.lang || 'en'}.${innerWidth < 820 ? 'c1200' : 'w1280'}.webp`]) { const l = document.createElement('link'); l.rel = 'prefetch'; l.href = u; document.head.appendChild(l); } }), { once: true });
   const panel = document.createElement('div'); panel.className = 'dn-panel'; panel.hidden = true;
-  const span = (gi) => { const n = DEMOS.map((d, i) => (d.group === gi ? i + 1 : 0)).filter(Boolean); return gi < 4 ? (n.length > 1 ? ` · ${n[0]}–${n[n.length - 1]}` : ` · ${n[0]}`) : ''; };
+  const span = (gi) => { const n = DEMOS.map((d, i) => (d.group === gi ? i + 1 : 0)).filter(Boolean); return gi !== 4 ? (n.length > 1 ? ` · ${n[0]}–${n[n.length - 1]}` : ` · ${n[0]}`) : ''; };
   const count = (gi) => DEMOS.filter((d) => d.group === gi).length;   // level 1: category tabs (+ "all"); level 2: that category's demos
   const card = (d, i, top) => { const of = d.part ? DEMOS.filter((x) => x.series === d.series && x.part).length : 0;   // one menu card
     return `<a class="dn-card${i === cur ? ' is-cur' : ''}" href="${href(d)}"><img src="${thumb(i)}" data-t="${i}" alt="" loading="lazy"><span><em>${top && HEAT[d.dir] ? `<s data-heat="${HEAT[d.dir]}"></s> · ` : ''}Demo ${i + 1}${d.part && of > 1 ? ` · <span data-part="${d.part}/${of}"></span>` : ''}${d.new ? '<i>NEW</i>' : ''}</em><b data-d="${i}"></b>${i === cur ? '<small class="dn-now" data-w="now"></small>' : ''}</span></a>`; };

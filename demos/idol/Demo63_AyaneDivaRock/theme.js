@@ -5,13 +5,13 @@ window.DIVA_THEME = {
   cool: { style: 'storm', at: { L: [.2, .4], R: [.85, .35] }, wash: '80,140,255', washK: .34 },   // driving rain, gusts, lightning
   hits: { w: 'flame', c: 'lightning' },
 };
-// LL staging (2026-11-14): Ayane = the LivLiv rock model (media/ayane_rock.livliv) through ../_kit/diva/ll/diva_ll.js. The drawn guitar poses
+// LL staging (2026-11-14): Ayane = the LivLiv rock model (../_kit/characters/ayane/models/rock.livliv) through ../_kit/diva/ll/diva_ll.js. The drawn guitar poses
 // sing (fist + guitar) / point (+ guitar) / jump (+ guitar) → GTR below: the model's guitar poses when it has them (REPLACE_PLAN extras
 // guitar_strum / guitar_point / guitar_jump), else the closest library poses (sing / point / cheer).
 (() => {
   const GTR = { strum: 'x_guitar_strum', point: 'x_guitar_point', jump: 'x_guitar_jump' };   // the model's guitar poses (MODELS.md 2026-11-14; page copy without x_sing / x_cheer, scripts/trim_model.py)
   window.DIVA_THEME.ll = {
-    model: 'media/ayane_rock.livliv?v=2', beat0: 13.912, range: .6,   // first downbeat (s), 160 bpm
+    model: '../_kit/characters/ayane/models/rock.livliv?v=dd3153a1', beat0: 13.912, range: .6,   // first downbeat (s), 160 bpm
     fig: { top: 563, bottom: 3535, raiseTop: 276,
       half: { x_idle: 520, x_sing: 655, x_wave: 627, x_cheer: 728, x_raise: 787, x_heart: 455, x_point: 482, x_clasp: 448, x_bow: 443, x_shy: 437, x_guitar_strum: 923, x_guitar_point: 797, x_guitar_jump: 883 } },
     // verses / pre-chorus: mostly guitar, a heart / wave in between; chorus + final chorus: guitar jump, point at you, fist up (raise)

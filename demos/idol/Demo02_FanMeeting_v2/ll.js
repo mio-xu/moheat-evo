@@ -4,7 +4,7 @@
 (() => {
   const POSE = { hands: 'x_hands', fan: 'x_fan', drink: 'x_drink', gift: 'x_gift' };   // the model's prop poses (MODELS.md 2026-11-14; page copy without x_write / x_sing / x_cheer / x_raise, scripts/trim_model.py)
   window.STORY_LL = {
-    ns: 'AFM', model: 'media/ayane_casual.livliv?v=2',
+    ns: 'AFM', model: '../_kit/characters/ayane/models/casual.livliv?v=0747d170',
     fig: { top: 563, bottom: 3423 },
     cams: { full: { x: .26, y: .33, fh: .06 }, half: { x: .5, y: .25, fh: .17 }, push: { x: .5, y: .42, fh: .3 },
       earL: { x: .34, y: .47, fh: .34 }, earR: { x: .66, y: .47, fh: .34 }, photo: { x: .62, y: .36, fh: .22 } },

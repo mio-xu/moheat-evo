@@ -1,31 +1,31 @@
 {
  "base": {
   "inputs": {
-   "demos/all-ages/Demo63_AyaneDivaRock/media/cover/stamp.json": "60f032762b9b0d350fcc5171259363fb1e55e7e9"
+   "demos/idol/Demo63_AyaneDivaRock/media/cover/stamp.json": "60f032762b9b0d350fcc5171259363fb1e55e7e9"
   },
   "thumb": "74bc1b512985214d0efdba4136f220aa30f5240b"
  },
  "en": {
   "inputs": {
-   "demos/all-ages/Demo63_AyaneDivaRock/media/cover/stamp.json": "60f032762b9b0d350fcc5171259363fb1e55e7e9"
+   "demos/idol/Demo63_AyaneDivaRock/media/cover/stamp.json": "60f032762b9b0d350fcc5171259363fb1e55e7e9"
   },
   "thumb": "74bc1b512985214d0efdba4136f220aa30f5240b"
  },
  "ja": {
   "inputs": {
-   "demos/all-ages/Demo63_AyaneDivaRock/media/cover/stamp.json": "60f032762b9b0d350fcc5171259363fb1e55e7e9"
+   "demos/idol/Demo63_AyaneDivaRock/media/cover/stamp.json": "60f032762b9b0d350fcc5171259363fb1e55e7e9"
   },
   "thumb": "3671b9546137f7b60807f3db9972e240f446fb78"
  },
  "ko": {
   "inputs": {
-   "demos/all-ages/Demo63_AyaneDivaRock/media/cover/stamp.json": "60f032762b9b0d350fcc5171259363fb1e55e7e9"
+   "demos/idol/Demo63_AyaneDivaRock/media/cover/stamp.json": "60f032762b9b0d350fcc5171259363fb1e55e7e9"
   },
   "thumb": "6f4efcfd31d7841d391a2b5a35b2950d27070236"
  },
  "zh": {
   "inputs": {
-   "demos/all-ages/Demo63_AyaneDivaRock/media/cover/stamp.json": "60f032762b9b0d350fcc5171259363fb1e55e7e9"
+   "demos/idol/Demo63_AyaneDivaRock/media/cover/stamp.json": "60f032762b9b0d350fcc5171259363fb1e55e7e9"
   },
   "thumb": "f3e1fbb0233acf155e32765192729685755ac433"
  }

@@ -5,10 +5,10 @@ window.DIVA_THEME = {
   cool: { style: 'chime', at: { L: [.2, .4], R: [.92, .33] }, wash: '110,190,255', washK: 0.4 },       // night breeze · the wind chimes (right)
   hits: { w: 'firework', c: 'chime' },
 };
-// LL staging (2026-11-14): Ayane = the LivLiv festival model (media/ayane_festival.livliv) through ../_kit/diva/ll/diva_ll.js. The drawn poses
+// LL staging (2026-11-14): Ayane = the LivLiv festival model (../_kit/characters/ayane/models/festival.livliv) through ../_kit/diva/ll/diva_ll.js. The drawn poses
 // hold (suzu bell at the chest) / shake (bell raised high) → library poses: hold → cheer, shake → raise (to draw later: bell_hold, bell_shake).
 window.DIVA_THEME.ll = {
-  model: 'media/ayane_festival.livliv?v=1', beat0: 13.297, range: .6,   // first downbeat (s)
+  model: '../_kit/characters/ayane/models/festival.livliv?v=9d14d4c8', beat0: 13.297, range: .6,   // first downbeat (s)
   fig: { top: 563, bottom: 3458, raiseTop: 340,
     half: { x_idle: 530, x_sing: 675, x_wave: 608, x_cheer: 560, x_raise: 746, x_heart: 560, x_point: 630, x_clasp: 531, x_bow: 427, x_shy: 463 } },
   seq: ['x_sing', 'x_wave', 'x_sing', 'x_heart', 'x_point', 'x_wave'], chorusKeys: ['chorus'], chorus: ['x_sing', 'x_wave', 'x_cheer', 'x_heart'],

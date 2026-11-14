@@ -6,10 +6,10 @@ window.DIVA_THEME = {
           box: { L: [.03, .04, .2, .66] } },                                                                                    // snow past the window (left)
   hits: { w: 'flare', c: 'snow' },
 };
-// LL staging (2026-11-14): Ayane = the LivLiv gown model (media/ayane_gown.livliv) through ../_kit/diva/ll/diva_ll.js. The drawn poses
+// LL staging (2026-11-14): Ayane = the LivLiv gown model (../_kit/characters/ayane/models/gown.livliv) through ../_kit/diva/ll/diva_ll.js. The drawn poses
 // sing (hands clasped) / open (arms wide) / reach (hand toward you) → library poses: open → raise / wave (in turn), reach → point (to draw later: open, reach).
 window.DIVA_THEME.ll = {
-  model: 'media/ayane_gown.livliv?v=1', beat0: 15.095, range: .6, hop: .75,   // first downbeat (s)
+  model: '../_kit/characters/ayane/models/gown.livliv?v=aed1c6dc', beat0: 15.095, range: .6, hop: .75,   // first downbeat (s)
   fig: { top: 563, bottom: 3500, raiseTop: 273,
     half: { x_idle: 555, x_sing: 650, x_wave: 705, x_cheer: 645, x_raise: 710, x_heart: 570, x_point: 607, x_clasp: 607, x_bow: 493, x_shy: 682 } },
   seq: ['x_sing', 'x_clasp', 'x_sing', 'x_heart', 'x_sing', 'x_wave'], chorusKeys: ['peak'], chorus: ['x_sing', 'x_heart', 'x_raise', 'x_clasp'],

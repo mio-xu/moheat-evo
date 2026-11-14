@@ -7,5 +7,5 @@ window.DIVA_THEME = {
 };
 // LL staging (2026-11-14): Ayane = the LivLiv idol model through the kit driver ../_kit/diva/ll/diva_ll.js (idol defaults built in; the page's
 // own copy diva_ll.js + livliv/ are no longer loaded). acts = LivLiv built-in actions (+ an automatic look toward the ear on each whisper line).
-window.DIVA_THEME.ll = { model: 'media/ayane_idol.livliv?v=2', beat0: 14.375,
+window.DIVA_THEME.ll = { model: '../_kit/characters/ayane/models/idol.livliv?v=2fde8335', beat0: 14.375,
   acts: [[2.6, 'hop'], [4.9, 'nod'], [11.0, 'nod'], [49.6, 'shy'], [52.4, 'hop'], [104.0, 'nod'], [108.2, 'tilt'], [111.6, 'shy'], [112.9, 'tilt'], [114.8, 'nod']] };
