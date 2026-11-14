@@ -24,7 +24,11 @@
       "close": { "p": { "dx": 0.1, "y": 0.4, "fh": 0.2 }, "w": { "dx": 0.1, "y": 0.45, "fh": 0.3 } } },
     "layout": { "uWide": 0.86, "minAspect": 1.7778, "maxAspect": 2.2 },
     "keys": { "L": "f", "R": "j" },
-    "story": { "gap": 0.6, "rate": 20, "pureWait": 1.6, "breathSecs": 1.2,
+    "story": { "gazeFront": ["close"],
+      "director": { "on": false, "quiet": 2, "camEvery": 3, "midCams": ["talk", "bust"],
+        "faceMood": { "smirk": "tease", "wink": "tease", "gentle": "tender", "shy": "tender", "worried": "worried", "smile": "happy", "surprise": "happy" },
+        "acts": { "tease": ["tilt", "hop", "nod"], "tender": ["nod", "tilt", "shy"], "worried": ["tilt", "nod"], "happy": ["hop", "nod", "tilt"] },
+        "poses": { "tease": ["heart", "idle"], "tender": ["idle", "offer", "shy"], "worried": ["idle", "offer"], "happy": ["cheer", "wave", "heart"] } }, "gap": 0.6, "rate": 20, "pureWait": 1.6, "breathSecs": 1.2,
       "game": { "answer": 2.5, "between": 0.8, "points": [[0.8, 3], [1.5, 2], [2.5, 1]] },
       "anchors": { "user_neck": { "pov": "bottom", "show": 18, "fade": 80, "opacity": 0.65 },
         "user_ear_L": { "pov": "left", "show": 14, "fade": 80, "opacity": 0.6 }, "user_ear_R": { "pov": "right", "show": 14, "fade": 80, "opacity": 0.6 },
@@ -34,9 +38,10 @@
     "thermal": { "safety": false, "flipOff": 1.2, "gap": 0.4, "capWarm": 0.8, "capCool": 0.7, "warmOnly": false, "onMax": 120, "rest": 10,
       "voice": { "close": 0.55, "mid": 0.25, "far": 0.08, "both": 0.8, "rise": 0.05, "fall": 0.8 }, "breath": { "haa": 0.6, "fuu": 0.65, "blow": 0.65 },
       "ambientMax": 0.3 },
+    "music": { "vol": 0.42, "night": 0.16, "closeOff": false },
     "presets": {
       "idol": {},
-      "asmr-love": { "thermal": { "safety": true }, "talk": { "fullFirstLineInPlace": false, "fullPoses": [] },
+      "asmr-love": { "story": { "director": { "on": true } }, "thermal": { "safety": true }, "music": { "closeOff": true }, "avoidPoseTags": ["pointAtViewer"], "ll": { "mouth": { "closeMax": 0.55 }, "idleBreath": 0.5 }, "talk": { "fullFirstLineInPlace": false, "fullPoses": [] },
         "dist": { "close": "ear", "mid": "talk", "far": "full" } }
     }
   }/*RULES*/;

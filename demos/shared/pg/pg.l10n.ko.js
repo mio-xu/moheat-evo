@@ -1,7 +1,7 @@
 // Korean for the engine's own texts. A language that is not written inside the { zh, ja, en } objects is added like this:
 //   PG.addL10n('ko', { 'English text exactly as written': '한국어' })   — PG.T() looks the English text up; missing = English is shown.
 PG.addL10n('ko', {
-  'Settings': '설정', 'MoHeat Evo thermal headphones': '온냉 헤드폰 MoHeat Evo', 'Strength': '세기', 'Close': '닫기', 'Delete save, back to title': '저장 삭제 후 타이틀로',
+  'Settings': '설정', 'MoHeat Evo thermal headphones': '온냉 헤드폰 MoHeat Evo', 'Strength': '세기', 'Warm only (no cooling)': '따뜻함만 (냉각 없음)', 'Stop all warm / cool': '온냉 모두 정지', 'Warm / cool stopped · press again to resume': '온냉을 멈췄어요 · 다시 누르면 재개', 'Close': '닫기', 'Delete save, back to title': '저장 삭제 후 타이틀로',
   'Connecting needs desktop Chrome / Edge. On phones the screen edges show warm and cool.': '연결은 PC의 Chrome / Edge가 필요합니다. 스마트폰에서는 화면 양옆의 색으로 따뜻함과 시원함을 보여 줍니다.',
   'Please hold your phone upright': '휴대폰을 세로로 들어 주세요', 'Tap when the rings meet!': '원이 겹칠 때 탭!',
   'Look': '화면 스타일', 'Glass': '글라스', 'Cream': '크림', 'Sound': '사운드', 'Music': '음악', 'Voice': '음성', 'Effects': '효과음', 'Sound delay (rhythm games)': '소리 지연 (리듬 게임)', 'Tap to set': '탭으로 맞추기',

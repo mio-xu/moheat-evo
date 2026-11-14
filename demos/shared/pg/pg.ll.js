@@ -41,9 +41,12 @@
   }
   const place = (P, X, Y, Z) => ({ x: (X - (P.x - L.C0.x) * Z / L.K) / L.UX, y: -(Y - (P.y - L.C0.y) * Z / L.K) / L.UY, zoom: Z });
   let blinkAt = performance.now() + 2500;
+  const IB = () => (((window.PG_RULES || {}).ll || {}).idleBreath || 0) * (PG.store.get('motion', true) ? 1 : 0);   // the player can switch idle motion off (store 'motion')
   function blink() { const n = performance.now(); if (n > blinkAt + 140) blinkAt = n + RL.blink[0] + Math.random() * RL.blink[1]; const k = (n - blinkAt) / 140; return k < 0 || k > 1 ? 1 : Math.abs(1 - 2 * k); }
-  function act(id, secs) {
-    if (!p || !id || id === 'away') return; if (S.act) actEnd();
+  function act(id, secs, force) {
+    if (!p || !id || id === 'away') return;
+    if (id.startsWith('look') && !force && ((window.CHAR_PACK || {}).gaze || {}).mode === 'front') return;   // a front-gaze character (pack gaze) looks at you: no glance away unless a story beat asks (gaze: 'side')
+    if (S.act) actEnd();
     S.act = id; p.parameterProfile = {};
     try { if (id === 'lookL' || id === 'lookR') { p.idle = true; p.lookAt((id === 'lookL' ? -1 : 1) * RL.lookK, 0); } else p.act(id); } catch (e) { console.warn('[LivLiv act]', id, e); }
     S.actUntil = performance.now() + 1000 * (secs || (id.startsWith('look') ? RL.lookSecs : RL.actSecs));
@@ -64,10 +67,11 @@
     let m = 0;
     if (D.mouth != null) m = D.mouth;
     else if (PG.stage.talking) m = PG.voice.playing ? clamp((PG.voice.level - RL.mouth.floor) / RL.mouth.span) : PG.AUTO ? 0 : .35 + .3 * Math.sin(now / 70);
+    if (S.close && RL.mouth.closeMax != null) m = Math.min(m, RL.mouth.closeMax);   // a close-up (whisper distance) never opens wide: a soft mouth, not a grin
     S.mS += (m - S.mS) * (m > S.mS ? .6 : .3);
     const vowel = .35 * Math.sin(now / 160);
     if (S.act) Object.assign(f.params, { mouthOpen: S.mS, vowel });
-    else Object.assign(f.params, { angleX: 0, angleY: D.nod || 0, angleZ: 0, bodyX: 0, bodyZ: 0, breath: 0, eyeBallX: 0, eyeBallY: 0, mouthOpen: S.mS, vowel });
+    else Object.assign(f.params, { angleX: 0, angleY: D.nod || 0, angleZ: 0, bodyX: 0, bodyZ: 0, breath: IB() ? (Math.sin(now / 1700) * .5 + .5) * IB() : 0, eyeBallX: 0, eyeBallY: 0, mouthOpen: S.mS, vowel });   // breath: a slow idle breath when the genre allows it (rules ll.idleBreath; the head is not moved)
     f.params.eyeLOpen = f.params.eyeROpen = Math.min(f.params.eyeLOpen ?? 1, blink());
     // camera: eases toward the target (a model change / first show snaps)
     const C = S.cur;
@@ -125,7 +129,7 @@
     if ('prop' in o) { S.prop = o.prop || null; if (propEl) { if (S.prop) { if (propEl.getAttribute('src') !== S.prop.src) propEl.src = S.prop.src; } propEl.classList.toggle('on', !!S.prop && S.shown); } }
     if (o.cam) { S.cam = o.cam; if (o.cut) S.cur.ok = false; }
     if ('offsets' in o) S.offsets = o.offsets || {};   // per-pose vertical offset (model px, + = down): a seated pose sits lower (pack poseOffset)
-    if (o.act) setTimeout(() => act(o.act, o.secs), (o.at ?? .25) * 1000);
+    if (o.act) setTimeout(() => act(o.act, o.secs, o.force), (o.at ?? .25) * 1000);
   }
   const stageHide = PG.stage.hide.bind(PG.stage), stagePose = PG.stage.pose.bind(PG.stage), stageHop = PG.stage.hop.bind(PG.stage);
 

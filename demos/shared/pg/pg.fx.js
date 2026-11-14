@@ -1,6 +1,7 @@
 // PG.fx — light and particles on one canvas over the picture (under the dialogue sheets): what makes a still scene feel alive.
 //   PG.fx.ambient('petals')        the air of a place, runs until changed (null = none)
-//       petals · snow · dust (warm motes in a light beam) · fireflies · rain · sparkle · embers
+//       petals · snow · snow_light · snow_heavy · dust (warm motes in a light beam) · fireflies · rain · sparkle · embers · steam (warm air rising) · drops (cool water)
+//   PG.fx.light('lamp' | 'morning' | 'night' | null)   the light of the place over the picture: a warm lamp that flickers softly, morning sun, night blue
 //   PG.fx.burst('star', 50, 40, 14)   a short burst at x %, y % of the frame: star · heart · note · confetti · spark
 //   PG.fx.flash('#fff', 260)       a soft full-screen flash (scene change, perfect hit)
 //   PG.fx.rays(true | false)       slow stage light rays behind the character
@@ -16,6 +17,10 @@
     fireflies: { n: 16, shape: 'glow', col: ['220,255,150', '255,240,150'], size: [.9, 1.7], vy: [-.012, .012], vx: [-.02, .02], sway: .05, a: [.1, .95], twinkle: .7 },
     rain:      { n: 70, shape: 'streak', col: ['200,220,255'], size: [.18, .3], vy: [1.1, 1.6], vx: [-.16, -.1], sway: 0, a: [.2, .5] },
     sparkle:   { n: 20, shape: 'star', col: ['255,255,255', '255,240,200'], size: [.8, 2], vy: [-.006, .006], vx: [-.004, .004], sway: 0, a: [0, .9], twinkle: 1.6 },
+    snow_light: { n: 18, shape: 'dot', col: ['255,255,255'], size: [.4, 1.2], vy: [.03, .07], vx: [-.01, .01], sway: .02, a: [.4, .9] },
+    snow_heavy: { n: 110, shape: 'dot', col: ['255,255,255'], size: [.5, 1.8], vy: [.08, .17], vx: [-.04, .01], sway: .03, a: [.5, 1] },
+    steam:     { n: 14, shape: 'glow', col: ['255,255,255', '255,245,235'], size: [2.2, 4.5], vy: [-.05, -.02], vx: [-.006, .006], sway: .02, a: [.04, .22], twinkle: .5 },
+    drops:     { n: 22, shape: 'dot', col: ['190,225,255', '220,240,255'], size: [.35, .8], vy: [.12, .22], vx: [0, 0], sway: 0, a: [.35, .8] },
     embers:    { n: 22, shape: 'glow', col: ['255,170,80', '255,210,120'], size: [.5, 1.2], vy: [-.09, -.03], vx: [-.015, .02], sway: .03, a: [.2, .9], twinkle: 2.4 },
   };
   const BURST = { star: ['255,255,255', '255,236,170'], heart: ['255,130,170', '255,180,205'], note: ['255,255,255'], confetti: ['255,120,160', '255,210,90', '140,200,255', '190,150,255', '255,255,255'], spark: ['255,255,255', '255,225,240'] };
@@ -65,5 +70,9 @@
     },
     flash(color = '#fff', ms = 260, strength = .7) { if (!flashEl) return; flashEl.style.transition = 'none'; flashEl.style.background = color; flashEl.style.opacity = still ? strength * .4 : strength; void flashEl.offsetWidth; flashEl.style.transition = `opacity ${ms}ms ease-out`; flashEl.style.opacity = 0; },
     rays(on) { if (raysEl) raysEl.classList.toggle('on', !!on && !still); },
+    light(kind) {
+      let el = PG.$('pglight'); if (!el) { el = document.createElement('div'); el.id = 'pglight'; const sh = PG.$('shade'); if (sh) sh.after(el); else return; }
+      el.className = kind ? 'on ' + kind : '';
+    },
   };
 })();

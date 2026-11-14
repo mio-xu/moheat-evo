@@ -19,7 +19,8 @@
   // Engine texts (settings, tap game). A game may add or replace keys: PG.mount({ text: { ... } }).
   const TEXT = {
     settings: { zh: '设置', ja: '設定', en: 'Settings' }, device: { zh: '冷热耳机 MoHeat Evo', ja: '温冷ヘッドホン MoHeat Evo', en: 'MoHeat Evo thermal headphones' },
-    intensity: { zh: '强度', ja: '強さ', en: 'Strength' }, close: { zh: '关闭', ja: 'とじる', en: 'Close' }, reset: { zh: '删除存档，回到标题', ja: 'セーブを消してタイトルへ', en: 'Delete save, back to title' },
+    intensity: { zh: '强度', ja: '強さ', en: 'Strength' }, warmOnly: { zh: '只用温热（不制冷）', ja: 'あたたかさだけ（冷やさない）', en: 'Warm only (no cooling)' },
+    stop: { zh: '温感全部停止', ja: '温冷をすべて止める', en: 'Stop all warm / cool' }, stopped: { zh: '温感已停止 · 再点一次恢复', ja: '温冷を止めました · もう一度押すと再開', en: 'Warm / cool stopped · press again to resume' }, close: { zh: '关闭', ja: 'とじる', en: 'Close' }, reset: { zh: '删除存档，回到标题', ja: 'セーブを消してタイトルへ', en: 'Delete save, back to title' },
     devNote: { zh: '连接需要电脑版 Chrome / Edge。手机上以画面两侧的颜色显示冷热。', ja: '接続は PC の Chrome / Edge が必要です。スマホでは画面の左右の色で表示します。', en: 'Connecting needs desktop Chrome / Edge. On phones the screen edges show warm and cool.' },
     rotate: { zh: '请竖着拿手机', ja: 'スマホを縦にしてください', en: 'Please hold your phone upright' },
     tap: { zh: '圆环重合时点一下！', ja: '輪がかさなったらタップ！', en: 'Tap when the rings meet!' },
@@ -61,6 +62,7 @@
       <div class="dev"><select id="portSelect"></select><button type="button" id="addPort">+</button><button type="button" id="connectBtn" disabled>Connect</button></div>
       <p class="status" id="deviceStatus"><span>Not connected</span></p>
       <label class="rowl"><span data-pg="intensity"></span><input type="range" id="intensity" min="0" max="100" step="5" value="100" /><b id="intensityVal">100%</b></label>
+      <label class="rowl asmrOnly"><span data-pg="warmOnly"></span><input type="checkbox" id="warmOnly" /></label>
       <p class="fine" data-pg="devNote"></p>
       <h3 data-pg="delay"></h3>
       <label class="rowl"><button type="button" class="mini" id="btnCalib" data-pg="calib"></button><input type="range" id="offset" min="-100" max="400" step="5" value="0" /><b id="offsetVal">0 ms</b></label>
@@ -138,6 +140,10 @@
       $('btnReset').onclick = () => { $('gear').hidden = true; o.onReset && o.onReset(); };
     }
     PG.openSettings = () => { if ($('gear')) $('gear').hidden = false; };
+    // the safety genres (rules.thermal.safety, e.g. asmr-love): warm-only setting in ⚙ + a ■ STOP button always on screen (#btnStop in the game page)
+    const TR = (window.PG_RULES || {}).thermal || {}; app.classList.toggle('asmr', !!TR.safety);
+    if ($('warmOnly')) { TR.warmOnly = !!PG.store.get('warmOnly', TR.warmOnly || false); $('warmOnly').checked = TR.warmOnly; $('warmOnly').onchange = (e) => { TR.warmOnly = e.target.checked; PG.store.set('warmOnly', TR.warmOnly); }; }
+    if ($('btnStop')) { $('btnStop').hidden = !TR.safety; $('btnStop').onclick = () => { PG.Therm.halt(!PG.Therm.halted); $('btnStop').classList.toggle('on', PG.Therm.halted); if (PG.Therm.halted) PG.ui.toast(PG.t('stopped'), 2400); }; }
     skin = SKINS.includes(Q.get('skin')) ? Q.get('skin') : PG.store.get('skin', null) || o.skin || 'glass'; SKINS.forEach((n) => document.documentElement.classList.toggle('skin-' + n, n === skin));
     PG.stageOnly = !!o.stage; PG.audioInit(); PG.fx.init(); PG.Therm.init(); PG.stage.init(); PG.ui.init(); if (PG.rhythm && $('rhythm')) PG.rhythm.init();
     paint(); dispatchEvent(new CustomEvent('pg:lang', { detail: lang }));

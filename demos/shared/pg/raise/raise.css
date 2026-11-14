@@ -7,7 +7,8 @@
 .therm { display: flex; gap: calc(1 * var(--u)); } .therm i { width: calc(3.4 * var(--u)); height: calc(3.4 * var(--u)); border-radius: 50%; background: rgba(255, 255, 255, .28); border: calc(.3 * var(--u)) solid rgba(255, 255, 255, .7); transition: background .3s; }
 #btnGear { width: calc(9 * var(--u)); height: calc(9 * var(--u)); border-radius: 50%; background: rgba(30, 15, 40, .5); color: #fff; font-size: calc(4.6 * var(--u)); }
 .bars { display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(1.2 * var(--u)) calc(2.4 * var(--u)); margin-top: calc(1.6 * var(--u)); }
-.bar { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: calc(1.2 * var(--u)); font-size: calc(3 * var(--u)); }
+.bar > span { white-space: nowrap; }   /* a long name (ja いきぴったり) stays on one line; the bar gets shorter */
+.bar { display: grid; grid-template-columns: auto minmax(calc(6 * var(--u)), 1fr) auto; align-items: center; gap: calc(1.2 * var(--u)); font-size: calc(3 * var(--u)); }
 .bar u { text-decoration: none; height: calc(1.5 * var(--u)); border-radius: calc(1 * var(--u)); background: rgba(255, 255, 255, .28); overflow: hidden; }
 .bar u i { display: block; height: 100%; width: 0; background: #fff; border-radius: calc(1 * var(--u)); transition: width .5s ease; }
 .bar em { font-style: normal; font-variant-numeric: tabular-nums; min-width: calc(5 * var(--u)); text-align: right; }
@@ -123,3 +124,8 @@ html.keys .card.picked::before { display: none; }   /* the pick count sits in th
   html:not(.portrait) #cg.wideArt img { object-fit: cover; }
   html:not(.portrait) #cg.wideArt::before { display: none; }
 }
+
+/* ■ STOP (safety genres): always on screen next to ⚙, red while stopped */
+#btnStop { width: calc(9 * var(--u)); height: calc(9 * var(--u)); border-radius: 50%; background: rgba(30, 15, 40, .5); color: #fff; font-size: calc(3.6 * var(--u)); margin-right: calc(1.6 * var(--u)); }
+#btnStop.on { background: #c0392b; }
+#app:not(.asmr) .asmrOnly { display: none; }

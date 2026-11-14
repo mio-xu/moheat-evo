@@ -6,10 +6,14 @@
 //   the concert = a song pack (window[GAME_SETUP.live], made by engine/pg.live.js). Cameras / timings / layout / keys: engine/rules.js.
 // Screens: title → (week: [chapter card] → plan → 3 activities (lessons = rhythm parts of the chapter's song) → story beat [→ small stage]) × N
 //          → concert (a part of the other songs + the main song) → ending → result card.
-// Debug: ?ending=q2&rank=A&secret (ending picture + result card) · ?auto (plays itself; &acts=vocal,dance… &pick=0 &grade=perfect &hold=choice|tap|live) · ?week=5&main=q3&card (jump ahead; card = show the chapter card) · ?live=q1…q4&t=50&mode=watch (concert only) · ?lang=zh|ja|en
+// Debug: ?night=H1&inv=scarf (asmr-love: one night alone) · ?ending=q2&rank=A&secret (ending picture + result card) · ?auto (plays itself; &acts=vocal,dance… &pick=0 &grade=perfect &hold=choice|tap|live) · ?week=5&main=q3&card (jump ahead; card = show the chapter card) · ?live=q1…q4&t=50&mode=watch (concert only) · ?lang=zh|ja|en
 // PG_READY: a published page may fetch its song data first (the kit's songs/<id>/timeline.json); locally it is not set.
 (window.PG_READY || Promise.resolve()).then(() => {
   const PG = window.PG, G = window.DP_GAME, R = G.rules, SET = window.GAME_SETUP || {}, Live = (SET.live && window[SET.live]) || null;
+  // the genre's preset (engine/rules.js presets[genre]: e.g. asmr-love = thermal safety scheduler on, talk camera, dist → camera) over the rules, before anything reads them
+  { const RU = window.PG_RULES || {}, pre = (RU.presets || {})[SET.genre || G.GENRE];
+    const deep = (a, b) => { for (const [k, v] of Object.entries(b || {})) { if (v && typeof v === 'object' && !Array.isArray(v) && a[k] && typeof a[k] === 'object') deep(a[k], v); else a[k] = v; } return a; };
+    if (pre) deep(RU, pre); }
   const CP = window.CHAR_PACK || null, SL = window.STORY_LL || {}, RULES = window.PG_RULES || {}, DIR = Object.assign({ scenes: 'art/scenes', cg: 'art/cg', voice: 'audio/voice' }, SET.dirs || {});
   const HOME = Object.assign({ scene: Object.keys(G.SCENES)[0], pose: 'front' }, SET.home || {}), TITLE = Object.assign({ scene: HOME.scene, x: 50, amb: {}, pose: HOME.pose, fx: 'petals', bgm: 'day' }, SET.title || {});
   if (CP && CP.colours) { const st = document.documentElement.style; if (CP.colours.accent) st.setProperty('--accent', CP.colours.accent); if (CP.colours.accent2) st.setProperty('--accent2', CP.colours.accent2); if (CP.colours.go) st.setProperty('--go', CP.colours.go); }
@@ -52,18 +56,18 @@
     await stillShow(SST, still(SST, LLS[q].model, pose, []), cam); return true;
   }
   const day = async (name, lay, o = {}) => { if (CP && CP.poses[name]) await llDay(name, o); };
-  const BGM = window.DP_BGM || {}, music = (name, vol = .42) => { const m = BGM[name]; if (m) PG.bgm.play(m.src, vol, [m.a, m.b]); };
+  const BGM = window.DP_BGM || {}, music = (name, vol = (RULES.music || {}).vol ?? .42) => { if (name === 'none') return PG.bgm.stop(1); const m = BGM[name]; if (m) PG.bgm.play(m.src, vol, [m.a, m.b]); };   // 'none' = silence (an explicit choice)
   let here = null;   // the place on screen: a change gets a whoosh and a soft flash; each place has its music and its air
   const scene = (key) => { const s = G.SCENES[key]; if (here !== key) { if (here) { sfx.whoosh(); fx.flash('#fff', 320, .35); } here = key; }
     stage.place(`${DIR.scenes}/${key}.webp`, s.x, T(s.name)); Therm.ambient(s.amb); fx.ambient(s.fx); fx.rays(s.rays); music(s.bgm); };
   // voice files (tools/voice.py): audio/voice/ja/<id>.m4a — Japanese in every subtitle language (user 2026-11-13). game/voice.js lists only
   // the lines whose recording matches the current text; a line that was rewritten stays silent until voice.py is run again.
   const VL = (CP && CP.voice && CP.voice.lang) || 'ja', VOICE = (window.DP_VOICE || {})[VL] || {}, IDS = new Map(G.lines().map((l) => [l.text, l.id]));
-  const spoken = (text) => { const id = IDS.get(text), d = id && VOICE[id]; return d ? { voice: `${DIR.voice}/${VL}/${id}.m4a`, voiceDur: d } : {}; };
+  const spoken = (text) => { const id = IDS.get(text), DV = window.DP_VOICE || {}, lg = id && DV[PG.lang] && DV[PG.lang][id] ? PG.lang : VL, d = id && (DV[lg] || {})[id]; return d ? { voice: `${DIR.voice}/${lg}/${id}.m4a`, voiceDur: d } : {}; };   // the subtitle language's recording when there is one (en), else the pack's voice language
   const say = (text, o = {}) => {
     const id = IDS.get(text), L = id && (SL.lines || {})[id];
     if (L && useLL() && PG.ll.shown) PG.ll.set({ ...('face' in L ? { face: L.face } : {}), ...(L.act ? { act: L.act, at: L.at, secs: L.secs } : {}) });
-    return ui.say(text, { ...spoken(text), ...o });
+    return ui.say(text, { ...spoken(text), ...(text && text.me ? { name: '' } : {}), ...o });   // text.me = your own thought / narration: no speaker name, never voiced
   };
 
   // ---------------------------------------------------------------- numbers on screen
@@ -162,25 +166,39 @@
     if (r.tired) { ui.toast(U('tired')); await day('tired', null, { line: 'tired' }); await say(G.TIRED); return; }
     if (a.fans) fx.burst('note', 50, 34, 8);
     await say(a.line, a.cold ? { th: { [a.cold + 'c']: .9 } } : {});   // a.cold: the cold bottle against that cheek
+    if (a.msg) { ui.toast(U('voiceMsg'), 1200); await say(a.msg); }   // a place may bring his voice message (content ACTS[].msg; UI.voiceMsg)
+    if (a.gift) { (S.inv = S.inv || []).push(a.gift); const pr = (CP && CP.props || {})[a.gift]; ui.toast(U('gotGift', { g: pr && pr.label ? T(pr.label) : a.gift }), 1800); sfx.up(); }   // a day place gives an item: a gift for the night (asmr-love)
+  }
+  // the night: an ASMR episode (story.json via PG.story, engine/raise/night.js) — gifts from the inventory, its choices move the numbers
+  async function night(ev) {
+    app.dataset.screen = 'night'; ui.sheet(null); here = null;
+    // music under the call: the game's night theme (G.MUSIC.night, a story may name its own), quiet; off while he is at your ear (rules.music.closeOff)
+    const MU = RULES.music || {}, nm = (window.PG_STORIES[ev.night] || {}).bgm || (G.MUSIC || {}).night || 'none';
+    const under = (b) => { music(nm, MU.closeOff && b && b.dist === 'close' ? 0 : MU.night ?? .16); };
+    under(null);
+    const r = await PG.night.run(ev.night, { inventory: (S.inv = S.inv || []), onStat: (fx2) => { const d = R.add(S.s, fx2); showDelta(d); hud(); }, onBeat: under });
+    app.dataset.screen = 'play'; Therm.direct(null); return r;
   }
   // a story line: [pose, text, ear?, thermal?]
   const line = async (l, poseFn) => { await poseFn(l[0], null, { line: IDS.get(l[1]), ear: l[2] }); if (l[2]) fx.burst('heart', l[2] === 'L' ? 22 : 78, 30, 3); await say(l[1], { ear: l[2], th: l[3] }); };
   async function event(n) {
-    const ev = G.EVENTS[n]; if (!ev) return; scene(ev.scene);
-    for (const l of ev.lines) await line(l, day);
+    const ev = G.EVENTS[n]; if (!ev) return; if (ev.scene) scene(ev.scene);
+    for (const l of ev.lines || []) await line(l, day);
+    if (ev.night) await night(ev);
     if (ev.choices) { const c = ev.choices[await ui.choose(ev.choices)]; const d = R.add(S.s, c.fx); showDelta(d); for (const cq of G.CHAPTERS) songUp(cq.song, d['m_' + cq.song] || 0); await line(c.re, day); }
     if (ev.stage) {   // the chapter's small stage: 30 s of its song, in costume
       const ch = R.chapterOf(n), q = G.CHAPTERS[ch].song, ps = Live.parts(q, 30), r = await songPart(q, ps[1] || ps[0], U('stageKicker', { n: ch + 1 }), true), acc = r.skipped ? null : r.acc;
       here = null; scene(ev.scene); const up = R.practise(S.s, q, AUTO ? .8 : acc, 'stage'), fans = R.stageFans(S.s, acc); R.add(S.s, { fans }); hud(); ui.sheet(null);
       ui.toast(U('stageFans', { n: fans }), 2400); songUp(q, up); sfx.fanfare(); fx.rays(true); fx.burst('confetti', 50, 30, 36); await day('wave'); await sleep(1100); fx.burst('confetti', 30, 28, 20); fx.burst('confetti', 70, 28, 20); await sleep(1300); fx.rays(G.SCENES[ev.scene].rays);
     }
+    if (ev.night && ev.after && ev.scene) { here = null; scene(ev.scene); }
     for (const l of ev.after || []) await line(l, day);
   }
 
   // ---------------------------------------------------------------- the concert: a part of the three other songs, then the main song in full → ending
   // a story without songs (no CHAPTERS / no song pack): straight to the ending, ranked on the numbers alone
   async function quietFinale(my) {
-    S.week = G.WEEKS + 1; hud(); const rank = R.rank(S.s, 0); scene(HOME.scene);
+    S.week = G.WEEKS + 1; hud(); const rank = R.rank(S.s, 0); here = null; scene(HOME.scene); if ((G.MUSIC || {}).ending) music(G.MUSIC.ending);
     for (const l of (G.ENDING || {})[rank] || []) await line(l, day); if (my !== run) return;
     await showCG(rank, T(G.RANKS[rank].title)); store.set('save', null); await result(null, rank, false, null);
   }
@@ -242,9 +260,10 @@
     const cg = await cgImage(secret ? 'secret' : q || rank), hasCG = !!cg;
     const st = Live && q && LLS[q] && still(SST, LLS[q].model, 'x_sing', []), [bg, ch] = hasCG ? [cg, { naturalWidth: 0 }] : st ? await Promise.all([PG.load(Live.songs[q].bg), PG.load(st.src)]) : [{ naturalWidth: 0 }, { naturalWidth: 0 }];
     const text = (s, x, y, size, weight = 700, align = 'center', color = '#fff') => { c.font = `${weight} ${size}px ${font}`; c.textAlign = align; c.fillStyle = color; c.shadowColor = 'rgba(20,0,30,.85)'; c.shadowBlur = color === '#fff' ? 14 : 0; c.fillText(s, x, y); c.shadowBlur = 0; };
+    const fit = (s, max, size, weight = 700) => { c.font = `${weight} ${size}px ${font}`; const m = c.measureText(s).width; return m > max ? Math.floor(size * max / m) : size; };   // a long stat name shrinks to its column
     const cover = (im, x, y, w, h, top) => { const s = Math.max(w / im.naturalWidth, h / im.naturalHeight), sw = w / s, sh = h / s; c.drawImage(im, (im.naturalWidth - sw) / 2, top ? 0 : (im.naturalHeight - sh) / 2, sw, sh, x, y, w, h); };
     const stats = G.CARD_STATS || BARS.filter((k) => !['stamina', 'mood'].includes(k)).slice(0, 4);
-    const typeLine = info ? (PG.lang === 'en' ? T(info.type) : `「${T(info.type)}」`) : T(G.RANKS[rank].title), titleLine = secret ? T(G.SECRET.title) : T(G.RANKS[rank].title);
+    const typeLine = info ? (PG.lang === 'en' ? T(info.type) : `「${T(info.type)}」`) : T(G.RANKS[rank].title), titleLine = secret ? T(G.SECRET.title) : info ? T(G.RANKS[rank].title) : '';   // no song: the rank title is the big line, said once
     c.fillStyle = '#1b1420'; c.fillRect(0, 0, W, H);
     if (!wide) {
       if (bg.naturalWidth) cover(bg, 0, 0, W, H, hasCG);
@@ -253,7 +272,7 @@
       g = c.createLinearGradient(0, 960, 0, 1110); g.addColorStop(0, 'rgba(30,10,40,0)'); g.addColorStop(1, 'rgba(30,10,40,.92)'); c.fillStyle = g; c.fillRect(0, 960, W, 150); c.fillStyle = 'rgba(30,10,40,.92)'; c.fillRect(0, 1110, W, H - 1110);
       text(U('cardLine'), W / 2, 96, 40, 600); text(typeLine, W / 2, 186, 84, 900); text(titleLine, W / 2, 252, 44, 700);
       c.beginPath(); c.arc(940, 1010, 80, 0, Math.PI * 2); c.fillStyle = 'rgba(255,255,255,.94)'; c.fill(); text(rank, 940, 1048, 108, 900, 'center', accent);   // low on the right: not over the face
-      stats.forEach((k, i) => { const y = 1128 + i * 48; text(T(G.STATS[k]), 90, y + 13, 36, 700, 'left'); c.fillStyle = 'rgba(255,255,255,.28)'; c.beginPath(); c.roundRect(270, y - 10, 300, 22, 11); c.fill(); c.fillStyle = '#fff'; c.beginPath(); c.roundRect(270, y - 10, Math.max(22, 300 * S.s[k] / 100), 22, 11); c.fill(); text(String(Math.round(S.s[k])), 590, y + 13, 36, 700, 'left'); });
+      stats.forEach((k, i) => { const y = 1128 + i * 48; text(T(G.STATS[k]), 90, y + 13, fit(T(G.STATS[k]), 168, 36), 700, 'left'); c.fillStyle = 'rgba(255,255,255,.28)'; c.beginPath(); c.roundRect(270, y - 10, 300, 22, 11); c.fill(); c.fillStyle = '#fff'; c.beginPath(); c.roundRect(270, y - 10, Math.max(22, 300 * S.s[k] / 100), 22, 11); c.fill(); text(String(Math.round(S.s[k])), 590, y + 13, 36, 700, 'left'); });
       text(`♥ ${S.s.fans.toLocaleString()}`, 990, 1176, 56, 900, 'right'); text(T(G.STATS.fans), 990, 1226, 32, 500, 'right');
       if (info) text(`${U('cardSong')}  ♪ ${T(info.song)}`, 90, 1336, 36, 700, 'left'); if (live && !live.skipped) text(U('cardLive', { p: Math.round(live.acc * 100) }), 990, 1336, 32, 700, 'right');
       c.fillStyle = 'rgba(255,255,255,.3)'; c.fillRect(90, 1362, 900, 2); text(`${U('title')} · ${U('sub')}`, 90, 1410, 32, 800, 'left'); text('MoHeat Evo', 990, 1410, 30, 600, 'right');
@@ -269,7 +288,7 @@
     const cx = px + pw / 2 + 20, L = px + 90, R = W - 70;
     text(U('cardLine'), cx, 92, 36, 600); text(typeLine, cx, 172, 70, 900); text(titleLine, cx, 226, 38, 700);   // the lower part of the panel is left for the buttons (raise.css)
     c.beginPath(); c.arc(cx, 330, 70, 0, Math.PI * 2); c.fillStyle = 'rgba(255,255,255,.94)'; c.fill(); text(rank, cx, 364, 94, 900, 'center', accent);
-    stats.forEach((k, i) => { const y = 462 + i * 52, bx = L + 170, bw = R - bx - 90; text(T(G.STATS[k]), L, y + 13, 33, 700, 'left'); c.fillStyle = 'rgba(255,255,255,.28)'; c.beginPath(); c.roundRect(bx, y - 10, bw, 22, 11); c.fill(); c.fillStyle = '#fff'; c.beginPath(); c.roundRect(bx, y - 10, Math.max(22, bw * S.s[k] / 100), 22, 11); c.fill(); text(String(Math.round(S.s[k])), R, y + 13, 33, 700, 'right'); });
+    stats.forEach((k, i) => { const y = 462 + i * 52, bx = L + 170, bw = R - bx - 90; text(T(G.STATS[k]), L, y + 13, fit(T(G.STATS[k]), 158, 33), 700, 'left'); c.fillStyle = 'rgba(255,255,255,.28)'; c.beginPath(); c.roundRect(bx, y - 10, bw, 22, 11); c.fill(); c.fillStyle = '#fff'; c.beginPath(); c.roundRect(bx, y - 10, Math.max(22, bw * S.s[k] / 100), 22, 11); c.fill(); text(String(Math.round(S.s[k])), R, y + 13, 33, 700, 'right'); });
     text(`♥ ${S.s.fans.toLocaleString()}`, L, 712, 50, 900, 'left'); text(T(G.STATS.fans), L + 6, 750, 26, 500, 'left');
     if (live && !live.skipped) text(U('cardLive', { p: Math.round(live.acc * 100) }), R, 712, 30, 700, 'right');
     if (info) text(`${U('cardSong')}  ♪ ${T(info.song)}`, L, 796, 28, 700, 'left');
@@ -319,6 +338,10 @@
     run++; $('title').hidden = true; S = { week: G.WEEKS + 1, s: { ...G.START, vocal: 80, dance: 78, charm: 82, bond: 66, fans: 52000 } };
     const q = Q.get('ending'), rank = Q.get('rank') || 'A', sec = Q.has('secret');
     showCG(sec ? 'secret' : q, `${G.SONGS[q] ? T(G.SONGS[q].type) : ''}\n${T(G.RANKS[rank].title)}`).then(() => result(q, rank, sec, { skipped: false, acc: .91, maxCombo: 88 }));
+  }
+  else if (Q.has('night') && window.PG_STORIES) {   // test: ?night=H1[&inv=scarf,porridge] → that night episode alone, then the title
+    run++; $('title').hidden = true; S = { week: 1, s: { ...G.START }, inv: (Q.get('inv') || '').split(',').filter(Boolean) }; app.dataset.screen = 'play'; hud();
+    night({ night: Q.get('night') }).then(toTitle);
   }
   else if (AUTO || Q.has('start')) game(null);
   window.DP = { get S() { return S; }, toTitle, get here() { return here; } };   // (tests)

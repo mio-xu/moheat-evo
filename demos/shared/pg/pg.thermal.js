@@ -71,6 +71,9 @@
           const w = { L: 0, R: 0 }, add = (s, k2) => { if (s === 'C') { w.L += k2 * R.voice.both; w.R += k2 * R.voice.both; } else if (s) w[s] += k2; };
           if (b) { add(a, 1 - p); add(b, p); } else add(a, 1);
           for (const sd of ['L', 'R']) if (w[sd] > 0) { vt[sd] = Math.max(vt[sd], lv * w[sd]); if (e.over) vOver[sd] = true; }
+        } else if (e.type === 'touch') {   // a short close warm / cool with a named source (his breath, him leaning in, a prop): { ear, mode, level ≤ .6, dur | secs, source }
+          const m = e.mode === 'cool' ? 'c' : 'h', lv = Math.min(e.level ?? .4, .6), en = e.t + (e.dur || e.secs || 1.5); if (t > en) continue;
+          for (const sd of sides(e.ear || 'C')) { d[sd][m] = Math.max(d[sd][m], lv); d[sd].near = m; }
         } else if (e.type === 'breath') {   // mode 'haa' | 'fuu' | 'blow' (or 'warm' | 'cool' + breath name)
           const m = e.mode === 'haa' || e.mode === 'warm' ? 'h' : 'c', lv = R.breath[e.breath || e.mode] ?? R.breath[m === 'h' ? 'haa' : 'fuu'] ?? .6;
           for (const sd of sides(e.ear === 'C' ? 'C' : e.ear)) { d[sd][m] = Math.max(d[sd][m], lv); d[sd].near = m; }
@@ -128,10 +131,12 @@
     for (const e of ['L', 'R']) if (voice[e] > 0 && !Object.values(sources).some((v) => (v[e + 'c'] || 0) > 0)) { t[e + 'h'] = Math.max(t[e + 'h'], voice[e]); if (voice[e] > .3) t[e + 'c'] = 0; }   // the voice never fights a visible cool source on that ear
     return t;
   }
+  let halted = false;   // ■ STOP: everything off until pressed again
   let safety = null;   // the ASMR safety scheduler (rules.thermal.safety, set by the genre preset): flip-off, gaps, caps, warm-only, rest
   function tick() {
     const $ = PG.$, TR = (window.PG_RULES || {}).thermal || {};
-    let t = target();
+    let t = halted ? { Lc: 0, Lh: 0, Rc: 0, Rh: 0 } : target();
+    if (!halted && TR.warmOnly) t.Lc = t.Rc = 0;   // warm-only mode (the player's setting): every cool → 0 (its picture fx still shows)
     if (TR.safety) { if (!safety) safety = PG.Safety(TR); t = safety.step(performance.now() / 1000, t); } else safety = null;
     for (const k in shown) shown[k] += (t[k] - shown[k]) * .45;
     if (!$('glowL')) return;
@@ -170,6 +175,9 @@
     quiet() { voice.L = voice.R = 0; },
     /** A short event on top of the place for ms. v = one state, or a list of states that alternate every `each` ms (≥ 1000: faster cannot be felt). */
     pulse(v, ms, each = 1000) { pulse = ms > 0 ? { steps: Array.isArray(v) ? v : [v], t0: performance.now(), until: performance.now() + ms, each } : null; },
+    /** ■ STOP (the player's button): true = every element off now and until released; the device gets 'stop' at once. */
+    halt(on) { halted = !!on; if (halted) stop(); lastSent = halted ? 'stop' : ''; dispatchEvent(new CustomEvent('pg:halt', { detail: halted })); },
+    get halted() { return halted; },
     /** A ready-made track value (or null to go back to the layers). */
     direct(v) { direct = v; },
     get state() { return target(); },
