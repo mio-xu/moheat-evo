@@ -94,7 +94,9 @@
   // chapters = #steps for the shell) or a PG game (PG.ui).
   const UI = {
     site: {
-      sub(tx) { const s = $('subs'); if (!s) return; $('subJa').textContent = tx ? tx.ja || '' : ''; $('subEn').textContent = tx ? tx.en || '' : ''; s.classList.toggle('show', !!tx); },
+      sub(tx) { const s = $('subs'); if (!s) return; clearTimeout(s._clr);
+        if (!tx) { s.classList.remove('show'); s._clr = setTimeout(() => { $('subJa').textContent = ''; $('subEn').textContent = ''; }, 300); return; }   // fade out first, then empty (no empty box during the fade)
+        $('subJa').textContent = tx.ja || ''; $('subEn').textContent = tx.en || ''; s.classList.add('show'); },
       choose(ask, story) {
         return new Promise((done) => {
           const box = $('choices'), opts = ask.options || [], esc = (s) => String(s).replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
