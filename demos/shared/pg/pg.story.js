@@ -73,7 +73,7 @@
   function askSegment(ask, st) {
     const secs = ask.secs || 5, tl = [];
     if (ask.type === 'hold') tl.push({ t: 0, type: 'touch', ear: ask.ear || (String(st.lastEar || 'L').split('>').pop() === 'R' ? 'R' : 'L'), mode: 'warm', level: Math.min(ask.level ?? .35, .35), dur: secs, source: 'lean' });
-    tl.push({ t: secs, type: 'end' }); return { timeline: tl, beats: [], secs, stop: null, next: 0 };
+    return { timeline: { dur: secs, events: tl }, beats: [], secs, stop: null, next: 0 };   // the planner's { dur, events } shape, like compile()
   }
   const branch = (stack, story, id) => { const br = story.branches?.[id]; if (br) stack.push({ list: br.beats, i: 0, then: br.then }); else jump(stack, story, id); };
   function jump(stack, story, id) {   // continue the main line at the beat with this id

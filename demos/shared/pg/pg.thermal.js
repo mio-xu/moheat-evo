@@ -40,7 +40,7 @@
   function thermalPlan(tl, o = {}) {
     const R = rulesOf(o.rules); if (o.warmOnly != null) R.warmOnly = o.warmOnly;
     if (Array.isArray(tl)) {   // pg.story.js compile() format: a list of { t, kind } with a final { kind: 'end' }
-      const end = tl.find((e) => e.kind === 'end'); tl = { dur: end ? end.t : Math.max(0, ...tl.map((e) => e.t + (e.dur || 0))), events: tl.filter((e) => e.kind !== 'end').map((e) => ({ ...e, type: e.type || e.kind })) };
+      const isEnd = (e) => (e.type || e.kind) === 'end', end = tl.find(isEnd); tl = { dur: end ? end.t : Math.max(0, ...tl.map((e) => e.t + (e.dur || 0))), events: tl.filter((e) => !isEnd(e)).map((e) => ({ ...e, type: e.type || e.kind })) };
     }
     const rate = o.rate || 20, dt = 1 / rate, ev = [...(tl.events || [])].sort((a, b) => a.t - b.t), N = Math.ceil((tl.dur || 0) * rate) + 1;
     const vs = { L: 0, R: 0, ...((o.start && o.start.voice) || {}) }, VR = R.voice.rise || .05, VF = R.voice.fall || .8;   // smoothed voice warmth per ear: fast up, slow down
