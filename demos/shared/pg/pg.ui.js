@@ -58,7 +58,9 @@
         if (PG.AUTO && PG.HOLD !== 'choice') setTimeout(() => done(PG.Q.get('pick') != null ? Math.min(list.length - 1, +PG.Q.get('pick')) : Math.floor(Math.random() * list.length)), 10);
       });
     },
-    toast(text, ms = 1800) { const t = PG.$('toast'); t.textContent = text; t.classList.add('on'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), ms); },
+    toast(text, ms = 1800) {   // a stage-only mount (a site page) has no #toast of its own: made on first use inside the stage
+      let t = PG.$('toast'); if (!t) { if (!PG.app) return; t = document.createElement('div'); t.id = 'toast'; PG.app.appendChild(t); }
+      t.textContent = text; t.classList.add('on'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), ms); },
     /** A number that floats up. i = position in a batch (two columns). */
     pop(text, i = 0, color = '') { const p = document.createElement('div'); p.className = 'pop'; p.textContent = text; if (color) p.style.color = color;
       // a LivLiv character on screen: the numbers float up beside her face, never over it (pg.ll.js sets the face zone --llfx / --llfy / --llfr)

@@ -104,7 +104,13 @@
     }
     res.secondsOn = +res.secondsOn.toFixed(1); if (res.minFlipOff != null) res.minFlipOff = +res.minFlipOff.toFixed(2); return res;
   }
-  const api = { Safety, thermalPlan, thermalCheck };
+  /** One ear's device command: BOTH channels every time, the one going off first (2026-11-14 QA B3: an ear that went off wrote only H0,
+   *  so a listener that tracks per channel kept the cool channel on). e.g. "LH0 LC58" · "LC0 LH120" · "LC0 LH0". */
+  function thermCmdEar(sd, c, h, RANGE = { heatMin: 0, heatMax: 200, coolMin: 35, coolMax: 80 }, OFF = .03) {
+    const C = c > OFF ? Math.round(RANGE.coolMin + c * (RANGE.coolMax - RANGE.coolMin)) : 0, H = c > OFF ? 0 : h > OFF ? Math.round(RANGE.heatMin + h * (RANGE.heatMax - RANGE.heatMin)) : 0;
+    return C ? `${sd}H0 ${sd}C${C}` : `${sd}C0 ${sd}H${H}`;
+  }
+  const api = { Safety, thermalPlan, thermalCheck, thermCmdEar };
   if (root.PG) Object.assign(root.PG, api); else root.PG_THERMAL = api;
   if (typeof module !== 'undefined') module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -117,7 +123,7 @@
   const PG = window.PG, RANGE = { heatMin: 0, heatMax: 200, coolMin: 35, coolMax: 80 }, OFF = .03;
   let amb = {}, sources = {}, voice = { L: 0, R: 0 }, pulse = null, direct = null, intensity = 1, lastSent = '', device = null;
   const shown = { Lc: 0, Lh: 0, Rc: 0, Rh: 0 };
-  const part = (sd, c, h) => (c > OFF ? `${sd}C${Math.round(RANGE.coolMin + c * (RANGE.coolMax - RANGE.coolMin))}` : h > OFF ? `${sd}H${Math.round(RANGE.heatMin + h * (RANGE.heatMax - RANGE.heatMin))}` : `${sd}H0`);
+  const part = (sd, c, h) => PG.thermCmdEar(sd, c, h, RANGE, OFF);
 
   function target() {
     if (direct) return direct;
