@@ -169,6 +169,7 @@
     try {
       for (const b of seg.beats) {
         fd.align(b.at);
+        if (opts.steps && b.step != null && b.step !== S.stepI) { S.stepI = b.step; ui.steps(opts.steps, b.step); opts.onStep?.(b.step); }   // a chapter can start mid-segment
         if (b.scene && opts.pack.scenes?.[b.scene]) { S.scene = b.scene; const sc = opts.pack.scenes[b.scene]; PG.stage.place(opts.base + sc.src); PG.fx.ambient((sc.ambient || []).map((a) => a.fx).find(Boolean) || sc.fx || null); }
         if (b.prop) { for (const o of b.prop.off || []) delete S.props[o.split(':')[0]]; for (const [id, s] of Object.entries(b.prop.on || {})) S.props[id] = S.mirror ? swapLR(s) : s; }   // off first: a prop can move in one beat
         stageFor(b, S, opts);
@@ -234,12 +235,11 @@
     if (S.scene && opts.pack.scenes?.[S.scene]) { const sc = opts.pack.scenes[S.scene]; PG.stage.place(opts.base + sc.src); PG.fx.ambient((sc.ambient || []).map((a) => a.fx).find(Boolean) || null); }
     const outfit = story.outfit || opts.pack.defaultOutfit;
     if (PG.ll && opts.pack.models?.[outfit]) await PG.ll.show(opts.base + opts.pack.models[outfit], { pose: (opts.pack.poses?.idle || [])[1] || null, cam: ((root.PG_RULES || {}).cams || {}).talk });
-    const steps = story.steps || null; let stepI = -1;
+    const steps = story.steps || null; S.stepI = -1; opts = { ...opts, steps };
     const stack = [{ list: story.beats, i: 0 }];
     while (stack.length) {
       const top = stack[stack.length - 1];
       if (top.i >= top.list.length) { stack.pop(); if (top.then) jump(stack, story, top.then); continue; }
-      const b0 = top.list[top.i]; if (steps && b0.step != null && b0.step !== stepI) { stepI = b0.step; ui.steps(steps, stepI); opts.onStep?.(stepI); }
       const cs = { ...S, props: { ...S.props } }, seg = compile(top.list, top.i, { ...ctx(), state: cs }); top.i = seg.next; S.declared = cs.declared;
       await playSegment(seg, S, opts, ui);
       if (!seg.stop) continue;
