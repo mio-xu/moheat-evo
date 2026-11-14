@@ -1,0 +1,10 @@
+{
+ "_note": "UI v2 cover data for the game (Games/tools/publish_asmr.py copies it; tools/game_covers.py renders media/cover/<lang>.*)",
+ "title": { "en": "Hinata Diary", "ja": "ひなた日記", "zh": "日向日记", "ko": "히나타 다이어리" },
+ "tagline": { "en": "Three days, three nights of calls — gifts, his whisper at your ear, three endings", "ja": "3日間と3つの夜の電話 — おくりもの、耳もとの声、3つのエンディング", "zh": "三天三夜的通话 — 礼物、耳边的声音、三种结局", "ko": "사흘, 세 번의 밤 통화 — 선물, 귓가의 목소리, 세 가지 엔딩" },
+ "chips": [
+  { "kind": "warm", "text": { "en": "his voice close · a scarf · porridge", "ja": "近くの声・マフラー・おかゆ", "zh": "贴近的声音・围巾・白粥", "ko": "가까운 목소리・목도리・죽" } },
+  { "kind": "cool", "text": { "en": "snowy night · a cool towel", "ja": "雪の夜・ひんやりタオル", "zh": "雪夜・冰毛巾", "ko": "눈 오는 밤・시원한 수건" } }
+ ],
+ "tone": "8 8 24"
+}

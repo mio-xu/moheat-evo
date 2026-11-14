@@ -1,0 +1,2 @@
+// Hinata Diary music: the engine's generic game themes (from diva-diary audio/bgm, "game" = not a character's song). a, b = loop points (s).
+window.DP_BGM = {"day":{"src":"audio/bgm/day.m4a","a":0.5,"b":34.7796,"from":"game"},"walk":{"src":"audio/bgm/walk.m4a","a":0.5,"b":30.5125,"from":"game"},"night":{"src":"audio/bgm/night.m4a","a":0.5,"b":27.1593,"from":"game"},"heart":{"src":"audio/bgm/heart.m4a","a":0.5,"b":24.5,"from":"game"}};
