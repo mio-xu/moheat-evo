@@ -170,9 +170,14 @@
       // is off but was on less than MINSW ago waits at 0 until MINSW after the other one stopped. Both on at once (DUAL) is not a switch.
       // The same rules for pages without this shell (private live/ pages): shared/thermguard.js — keep the two in step.
       const MINSW = 950, dom = { L: { s: '', t: -1e9 }, R: { s: '', t: -1e9 } }, lastOn = { LC: -1e9, LH: -1e9, RC: -1e9, RH: -1e9 }, isOn = {};
+      // channels of one command line. Old form = one mode per ear: naming one channel of an ear ("RH0", "RC46") sets the other one to 0
+      // too (QA 2026-11-14, Demo73: "RH0" never cleared RC, so every later R warm was held at 0). DUAL names all four.
+      const chans = (line) => { const v = {}; line.replace(/\b([LR][CH])(\d+)\b/g, (m, k, n) => { v[k] = +n; return m; });
+        if (!/^DUAL/i.test(line)) for (const e of ['L', 'R']) if ((e + 'C') in v || (e + 'H') in v) { if (!((e + 'C') in v)) v[e + 'C'] = 0; if (!((e + 'H') in v)) v[e + 'H'] = 0; }
+        return v; };
       const offAll = (now) => { for (const k in isOn) if (isOn[k]) { isOn[k] = false; lastOn[k] = now; } };
       const minSwitch = (line, now) => {
-        const v = {}; line.replace(/\b([LR][CH])(\d+)\b/g, (m, k, n) => { v[k] = +n; return m; });
+        const v = chans(line);
         let wait = 0; const hold = {};
         for (const e of ['L', 'R']) for (const [x, y] of [['C', 'H'], ['H', 'C']]) {
           const k = e + x, o = e + y; if (!(v[k] > 0) || isOn[k]) continue;   // a fresh start of one mode
@@ -189,7 +194,7 @@
           else { st.s = s; st.t = now; }
         }
         const out = wait ? line.replace(/\b([LR][CH])(\d+)\b/g, (m, k) => (hold[k] ? `${k}0` : m)) : line;
-        out.replace(/\b([LR][CH])(\d+)\b/g, (m, k, n) => { const on = +n > 0; if (isOn[k] && !on) lastOn[k] = now; if (on) lastOn[k] = now; isOn[k] = on; return m; });
+        for (const [k, n] of Object.entries(chans(out))) { const on = n > 0; if (isOn[k] && !on) lastOn[k] = now; if (on) lastOn[k] = now; isOn[k] = on; }
         return { wait, out };
       };
       inst.send = (line) => {
@@ -224,7 +229,8 @@
     if (SH.autoplay) { if (!G.busy) { let r; try { r = SH.autoplay(G); } catch (e) { real.st(() => { throw e; }); } if (r) return; } else return; }   // the game plays itself (below)
     // the first visible control that was not pressed in the last 5 s (a press that did nothing — e.g. the demo was not listening
     // yet — is repeated instead of waiting forever); it is pressed after a natural 2.2 s pause
-    const n = vnow(), els = [...document.querySelectorAll(SEL())].filter(vis).filter((x) => !(seen.get(x) < 0 && n + seen.get(x) < 5000)); if (!els.length) return;
+    const n = vnow(), els = [...document.querySelectorAll(SEL())].filter(vis).filter((x) => !x.matches('.ch-nodefault, [data-default="no"]'))   // never the default: e.g. a game's "give up" (QA 2026-11-14, Demo74)
+      .filter((x) => !(seen.get(x) < 0 && n + seen.get(x) < 5000)); if (!els.length) return;
     const e = els[0]; if (!seen.has(e) || seen.get(e) < 0) { seen.set(e, n); return; }
     if (n - seen.get(e) < 2200) return;
     seen.set(e, -n);

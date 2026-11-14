@@ -14,9 +14,14 @@
     const send = inst.send;
     const dom = { L: { s: '', t: -1e9 }, R: { s: '', t: -1e9 } }, lastOn = { LC: -1e9, LH: -1e9, RC: -1e9, RH: -1e9 }, isOn = {};
     let retry = 0;
+    // channels of one command line. Old form = one mode per ear: naming one channel of an ear ("RH0", "RC46") sets the other one to 0
+    // too (QA 2026-11-14, Demo73: "RH0" never cleared RC, so every later R warm was held at 0). DUAL names all four.
+    const chans = (line) => { const v = {}; line.replace(/\b([LR][CH])(\d+)\b/g, (m, k, n) => { v[k] = +n; return m; });
+      if (!/^DUAL/i.test(line)) for (const e of ['L', 'R']) if ((e + 'C') in v || (e + 'H') in v) { if (!((e + 'C') in v)) v[e + 'C'] = 0; if (!((e + 'H') in v)) v[e + 'H'] = 0; }
+      return v; };
     const offAll = (t) => { for (const k in isOn) if (isOn[k]) { isOn[k] = false; lastOn[k] = t; } };
     const filter = (line, t) => {
-      const v = {}; line.replace(/\b([LR][CH])(\d+)\b/g, (m, k, n) => { v[k] = +n; return m; });
+      const v = chans(line);
       let wait = 0; const hold = {};
       for (const e of ['L', 'R']) for (const [x, y] of [['C', 'H'], ['H', 'C']]) {
         const k = e + x, o = e + y; if (!(v[k] > 0) || isOn[k]) continue;
@@ -32,7 +37,7 @@
         else { st.s = s; st.t = t; }
       }
       const out = wait ? line.replace(/\b([LR][CH])(\d+)\b/g, (m, k) => (hold[k] ? `${k}0` : m)) : line;
-      out.replace(/\b([LR][CH])(\d+)\b/g, (m, k, n) => { const on = +n > 0; if (isOn[k] && !on) lastOn[k] = t; if (on) lastOn[k] = t; isOn[k] = on; return m; });
+      for (const [k, n] of Object.entries(chans(out))) { const on = n > 0; if (isOn[k] && !on) lastOn[k] = t; if (on) lastOn[k] = t; isOn[k] = on; }
       return { wait, out };
     };
     inst.send = (line) => {
