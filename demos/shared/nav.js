@@ -24,6 +24,7 @@
     { cat: 'asmr-love', dir: 'Demo73_HinataSnowWalk', ja: 'ゆきの帰り道', en: 'Snowy Walk Home', zh: '雪夜送你回家', ko: '눈 오는 귀갓길', series: 'hinata', part: 1, cast: 'hinata_m', new: true, group: 6 },
     { cat: 'asmr-love', dir: 'Demo74_HinataWhisperGame', ja: 'こあくまの ないしょばなし', en: "The Little Devil's Whisper Game", zh: '小恶魔的悄悄话', ko: '작은 악마의 귓속말 게임', series: 'hinata', part: 2, cast: 'hinata_m', new: true, group: 6 },
     { cat: 'asmr-love', dir: 'Demo75_HinataSickDay', ja: 'ねつの日の、ひなた', en: 'Hinata on a Sick Day', zh: '生病时，他来照顾你', ko: '열나는 날의 히나타', series: 'hinata', part: 3, cast: 'hinata_m', new: true, group: 6 },
+    { cat: 'asmr-love', dir: 'games/hinata-diary', kind: 'game', ja: 'ひなた日記 · ゲーム', en: 'Hinata Diary · Game', zh: '日向日记 · 游戏', ko: '히나타 다이어리 · 게임', series: 'hinata', part: 4, cast: 'hinata_m', new: true, group: 6 },
     { cat: 'all-ages', dir: 'Demo04_SeasonsExpress', ja: '季節が、暴走する。', en: 'The Runaway Seasons Express', zh: '四季失控的魔法列车', ko: '계절이 폭주한다.', cast: 'train', group: 0 },
     { cat: 'all-ages', dir: 'Demo47_GhostLantern', ja: 'ひやっと！おばけやしきの ちょうちんばん', en: 'Lantern Keeper of the Spooky House', zh: '鬼屋提灯值日生', ko: '오싹! 유령의 집 등불 당번', cast: 'bonchan+yurari', new: true, group: 0 },
     { cat: 'all-ages', dir: 'Demo48_AnimalOnsen', ja: 'ゆけむり どうぶつおんせん', en: 'Steamy Animal Hot Spring', zh: '蒸汽腾腾的动物温泉', ko: '모락모락 동물 온천', cast: 'yuzujii', new: true, group: 0 },
