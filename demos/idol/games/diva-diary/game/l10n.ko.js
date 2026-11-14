@@ -1,0 +1,95 @@
+// Korean for Diva Diary: English text (exactly as in content.js) → Korean. A line that is missing here is shown in English.
+// After changing an English text in content.js, change its key here too (tools/check_l10n.js lists what is missing).
+PG.addL10n('ko', {
+  // numbers, places
+  'Vocal': '노래', 'Dance': '댄스', 'Charm': '매력', 'Energy': '체력', 'Mood': '기분', 'Bond': '친밀', 'Fans': '팬',
+  'The office': '사무소', 'Music room · snow outside, fire inside': '음악실 · 창밖엔 눈, 안에는 벽난로', 'Rehearsal stage · hot lights, a breeze from the door': '리허설 무대 · 뜨거운 조명, 문틈의 바람',
+  'Rooftop · hot amps, a storm coming': '옥상 · 뜨거운 앰프, 다가오는 폭풍', 'Attic · a snowy window and a little heater': '다락방 · 눈 내리는 창과 작은 난로',
+  'Seaside stage · lanterns and sea wind': '바닷가 무대 · 등불과 바닷바람', 'Radio booth · a lamp and a rainy window': '라디오 부스 · 스탠드와 비 오는 창',
+  'Greenhouse café · sunshine and a fountain': '온실 카페 · 햇살과 분수', 'Cherry riverside · sunset and river breeze': '벚꽃 강변 · 노을과 강바람',
+  // activities
+  'Voice lesson': '보컬 레슨', 'Vocal↑ −14': '노래↑ 체력-14', 'Aah— ♪ That high note felt steadier, right?': '아— ♪ 방금 고음, 조금 안정됐지?',
+  'Dance lesson': '댄스 레슨', 'Dance↑ −18': '댄스↑ 체력-18', 'One, two, three, turn! …Phew, right on the beat this time!': '원, 투, 쓰리, 턴! …후, 이번엔 박자 안 틀렸어!',
+  'Smile practice': '표정 연습', 'Charm↑ −9': '매력↑ 체력-9', 'Eyes on the camera — heart! Hehe, is this my cute angle?': '카메라 보고— 하트! 헤헤, 이 각도 귀여워?',
+  'Band session': '밴드 연습', 'Vocal+Dance↑ rock': '노래·댄스↑ 록', 'Amps all the way up! Louder than the thunder!': '앰프 최대로! 천둥보다 크게!',
+  'Night writing': '밤의 작사', 'Vocal+Charm↑ moody': '노래·매력↑ 감성', '…Snow falls without a sound. I want that line in the song.': '…눈은 소리 없이 내리네. 이 한 줄, 노래에 넣고 싶어.',
+  'Seaside gig': '바닷가 라이브', 'Fans↑↑ −14': '팬↑↑ 체력-14', "Everyone—! I'm Ayane! Stay till the end, okay?": '여러분—! 아야네예요! 끝까지 들어 줘요!',
+  'Radio guest': '라디오 출연', 'Charm↑ Fans↑': '매력↑ 팬↑', 'Good evening, this is Ayane. …Talking this softly makes my heart race.': '안녕하세요, 아야네예요. …작은 목소리로 말하니까 조금 두근거려요.',
+  'Café break': '카페에서 휴식', 'Energy +42 Mood↑': '체력+42 기분↑', 'Here, an ice-cold soda. Against your cheek — chilly?': '자, 차가운 사이다. 볼에— 시원해?',
+  'Riverside walk': '강변 산책', 'Bond↑ Mood↑': '친밀↑ 기분↑', "No work talk today! …Borrow my hat, the sunset's bright.": '오늘은 일 얘기 금지! …모자 빌려줄게, 노을이 눈부시니까.',
+  '…Sorry, my legs are wobbly. Can I rest today?': '…미안해, 다리가 후들거려. 오늘은 쉬어도 돼?',
+  // week 0
+  "Producer! I'm in your hands from today!": '프로듀서님! 오늘부터 잘 부탁해!', 'Eight weeks from now is my very first solo concert.': '8주 뒤가 내 첫 솔로 콘서트야.',
+  'Pick three things each week. The song I sing depends on how we spend these weeks.': '매주 세 가지 일정을 정해 줘. 어떤 노래를 부를지는 이 8주로 정해져.', "…I'll do my best. So keep your eyes on me.": '…열심히 할게. 그러니까 계속 지켜봐 줘.',
+  // week 1
+  'Week one, done! Here — ice-cold soda.': '첫 주 수고했어! 자, 차가운 사이다.', 'Hup — on your cheek. Cold?': '에잇, 볼에— 차가워?', 'So cold! …Thank you': '차가워! …고마워', 'Hehe, your reaction was so cute.': '헤헤, 프로듀서님 반응 귀여워.',
+  "Break's over — one more set": '쉬었으니 한 세트 더', "Ehh—! …Fine, I'll follow you!": '에에—! …알았어, 따라갈게!',
+  // week 2
+  "…I still can't land that turn.": '…그 턴, 아직 잘 안 돼.', "Everyone's gone home. Producer, what should I do?": '다들 집에 갔어. 프로듀서님, 어떻게 하면 좋을까?',
+  "I'll stay. Once more": '같이 있을게, 한 번 더', '…I did it! Did you see that?!': '…됐다! 봤어!? 방금 그거!', 'Enough for today. Tomorrow will be better': '오늘은 여기까지. 내일은 더 잘될 거야', '…Okay. Thanks for not letting me push too hard.': '…응. 무리하지 않게 해 줘서 고마워.',
+  // week 3
+  "It's so hot today… let me fan you.": '오늘 덥다… 부채질해 줄게.', 'Left — right — is that cooler?': '왼쪽— 오른쪽— 시원해?', 'My turn to fan you': '이번엔 내가 부쳐 줄게', 'Wow… that feels nice. J-just a little longer.': '와… 기분 좋다. 조, 조금만 더.',
+  "Let's use that fan on stage": '그 부채, 콘서트에서 쓰자', "Great idea! I'll work out a fan move!": '좋은 생각! 부채 안무 만들어 볼게!',
+  // week 4
+  "Today's the mini show… so many people came.": '오늘은 미니 라이브… 사람이 많이 왔어.', '…My hands are shaking. Producer, say something.': '…손이 떨려. 프로듀서님, 뭐라도 말해 줘.',
+  'You can do this': '너라면 할 수 있어', '…Right! Here I go!': '…응! 다녀올게!', 'Just like in practice': '연습한 대로만', 'Like practice… okay. Deep breath.': '연습한 대로… 응. 심호흡.',
+  "I'll be watching from the front row": '맨 앞에서 보고 있을게', "…Then I'll sing just for you.": '…그럼, 너한테만 불러 줄게.',
+  // week 5
+  "It's time to settle the main song for the concert.": '콘서트의 메인 곡, 이제 정해야 해.', 'Producer, what kind of song do you want to hear from me?': '프로듀서님은 어떤 노래가 듣고 싶어?',
+  'A sparkling song that makes everyone jump': '모두가 뛰어오르는 반짝이는 노래', 'The sparkly kind! Leave it to me!': '반짝반짝한 거! 맡겨 줘!', 'Rock like a thunderstorm': '폭풍 같은 록', '…I want to try it. A cooler me.': '…해 보고 싶어. 멋있는 나.',
+  'A quiet ballad for a snowy night': '눈 내리는 밤의 조용한 발라드', "…Yes. I want to sing what's in my heart, slowly.": '…응. 마음속 말을 천천히 부르고 싶어.', 'A gentle song like a summer festival': '여름 축제 같은 다정한 노래', 'Lanterns, fireworks, wind chimes… I love that.': '등불, 불꽃놀이, 풍경… 정말 좋아해.',
+  // week 6
+  'This… is for you. Thank you for everything.': '이거… 줄게. 항상 고마워.', "I picked the hat myself. …Don't laugh.": '내가 고른 모자야. …웃지 마.', "Put it on — let's take a photo together": '쓰고 같이 사진 찍자', "Three, two, one — ♪ This one's a treasure.": '셋, 둘, 하나— ♪ 이건 보물로 할래.',
+  "I'll take it after the concert succeeds": '콘서트가 성공하면 받을게', '…No fair. Then I have to make it a success.': '…치사해. 그럼 꼭 성공시킬 거야.',
+  // week 7
+  "…I can't sleep. One week left.": '…잠이 안 와. 이제 일주일.', 'Producer… can I really stand on that stage?': '프로듀서님… 나, 정말 그 무대에 설 수 있을까?', 'Take her hands': '손을 잡아 준다', "…So warm. Okay. I'm not scared now.": '…따뜻해. 응, 이제 안 무서워.',
+  'Then we practise until you feel sure': '안심될 때까지 연습하자', "…You'd stay up with me. Thank you.": '…같이 밤새 줄 거구나. 고마워.',
+  // week 8
+  'Eight weeks went by in a blink.': '8주, 눈 깜짝할 사이였네.', "Tonight's song is the one we made together.": '오늘 밤의 노래는 둘이서 만든 노래야.', "I'm off — wait for me in the front row!": '다녀올게— 맨 앞에서 기다려 줘!',
+  // songs, ranks, endings
+  'Sparkling Idol': '반짝반짝 아이돌', 'Storm Rocker': '폭풍의 록', 'Snow-night Balladeer': '눈 내리는 밤의 발라드', 'Summer-festival Diva': '여름 축제의 가희',
+  'Sparkling Ice & Fire': '반짝반짝 얼음과 불꽃', 'Storm Heart': '스톰 하트', 'Snow by the Window': '창가의 눈', 'Summer Night Festival': '여름밤 축제',
+  'lively × bright': '활기 × 밝음', 'lively × dark': '활기 × 쿨', 'calm × dark': '차분 × 쿨', 'calm × bright': '차분 × 밝음',
+  'Legendary Diva': '전설의 가희', 'Star Diva': '인기 가희', 'Rising Star': '빛나는 신성', "Tomorrow's Star": '내일의 별', 'Your One and Only Diva': '너만의 가희',
+  '…Did you hear that? The whole hall is calling my name.': '…들었어? 모두가 내 이름을 부르고 있어.', 'You brought me here. Thank you, Producer.': '여기까지 데려와 준 건 너야. 고마워, 프로듀서님.',
+  "We did it…! I-I'm not crying.": '해냈다…! 우, 우는 거 아니야.', 'Next time, a bigger stage. Stay with me, okay?': '다음엔 더 큰 무대에서. 앞으로도 잘 부탁해.',
+  'I slipped in a few places… but it was so much fun.': '조금 실수했지만… 그래도 즐거웠어.', 'I can get better. Practise with me again.': '더 잘할 수 있어. 또 같이 연습해 줘.',
+  "…I'm sorry. I couldn't sing it well.": '…미안해, 잘 못 불렀어.', "But I don't want to give up. Give me eight more weeks?": '그래도 포기하고 싶지 않아. 8주만 더 줄래?',
+  '…One more encore. Not on the set list.': '…앙코르가 하나 더 있어. 세트리스트에는 없는 거.', 'Only for you. — I love you so much.': '너한테만 불러 줄게. ——정말 좋아해.',
+  // v0.4 · four chapters
+  'Debut': '데뷔', 'Summer': '여름', 'Storm': '폭풍', 'Her Own Words': '마음의 소리', 'Ice & Fire': '얼음과 불꽃', 'Snow': '창가의 눈', 'Festival': '여름 축제',
+  'Vocal+Dance↑ Mood↑': '노래·댄스↑ 기분↑', 'Vocal+Charm↑ Mood↓': '노래·매력↑ 기분↓',
+  'I have four songs — one for every two weeks. Which one becomes the main song depends on these eight weeks.': '노래는 네 곡. 2주에 한 곡씩 연습할 거야. 어느 곡이 메인이 될지는 이 8주에 달렸어.',
+  '"Sparkling Ice & Fire"… I still can\'t land the turn in the chorus.': '「반짝반짝 얼음과 불꽃」… 후렴의 턴, 아직 잘 안 돼.',
+  "Today's the little show at the office… my first time singing this song in front of people.": '오늘은 사무소의 미니 라이브… 이 노래를 사람들 앞에서 부르는 건 처음이야.',
+  '…My heart is racing. Producer, can you hear it?': '…심장이 너무 빨리 뛰어. 프로듀서님, 들려?', 'I can hear it. Go on': '들려. 다녀와',
+  'Everyone clapped…! Hehe, for my very first fan — a heart.': '모두 박수 쳐 줬어…! 헤헤, 내 첫 번째 팬에게— 하트.',
+  'Next is "Summer Night Festival". I\'ve been invited to sing at the summer festival!': '다음 곡은 「여름밤 축제」. 여름 축제에 게스트로 초대받았어!',
+  "It's so hot today… let me fan you. Left — right — is that cooler?": '오늘 덥다… 부채질해 줄게. 왼쪽— 오른쪽— 시원해?',
+  'The lanterns are all lit… so many people came.': '등불이 다 켜졌어… 사람이 많이 왔네.', '…Right! Watch me!': '…응! 지켜봐 줘!',
+  'Phew — done! Here, an ice-cold soda. On your cheek — cold?': '후— 다 불렀다! 자, 차가운 사이다. 볼에— 차가워?',
+  '…Someone at the radio station said, "Ayane can only do cute, right?"': '…오늘 라디오에서 그런 말을 들었어. "아야네는 귀엽기만 하잖아"라고.',
+  'It stung. I want to sing the next one, "Storm Heart", and be cool. …Is that weird?': '분해. 다음 곡 「스톰 하트」는 멋있게 부르고 싶어. …이상해?',
+  'Not weird at all. I want to see it': '전혀 이상하지 않아. 보고 싶어', "…Really? Then I'm turning the amps all the way up!": '…정말? 그럼 앰프 최대로 갈게!',
+  'Being cute is your weapon too': '귀여움도 너의 무기야', '…Mm. But I want both.': '…응. 그래도 둘 다 갖고 싶어.',
+  "A storm's coming. …Perfect.": '폭풍이 오네. …딱 좋아.', 'Producer, come closer. I might be a little scary today.': '프로듀서님, 더 가까이 와. 오늘의 나는 조금 무서울지도 몰라.',
+  'Show me': '보여 줘', "Then don't blink.": '그럼 눈 깜빡이지 마.', "You'll catch a cold in the rain": '비 맞으면 감기 걸려', "I'll think about that after the song!": '노래하고 나서 생각할게!',
+  'Hah… hah…! Did you hear the thunder? I was louder!': '하아… 하아…! 천둥 소리 들었어? 내가 더 컸어!',
+  'The last song, "Snow by the Window" — I wrote the words myself.': '마지막 곡 「창가의 눈」은 내가 가사를 썼어.',
+  "…They're about someone who has been watching over me the whole time.": '…계속 곁에서 지켜봐 준 사람에 대한 이야기야.',
+  "This… is for you. I picked the hat myself. …Don't laugh.": '이거… 줄게. 내가 고른 모자야. …웃지 마.',
+  'Eight weeks went by in a blink. All four songs — we practised every one together.': '8주, 눈 깜짝할 사이였네. 네 곡 전부, 너와 함께 연습한 노래야.',
+  "Tonight I'll sing all four for you. The last one is the song we're best at.": '오늘 밤은 네 곡 전부 너에게 불러 줄게. 마지막 한 곡은 우리가 제일 잘하는 노래.',
+  'Before we go, rehearse "Snow by the Window" with me one more time.': '출발하기 전에 「창가의 눈」 리허설, 한 번만 더 같이 해 줘.',
+  'Accuracy {p}%   training effect ×{m}': '달성도 {p}%　레슨 효과 ×{m}',
+  'Chapter {n} · {t}': '제 {n} 장 · {t}', 'These two weeks: practising "{s}".': '이번 2주는 「{s}」를 연습합니다.', '{a} · practice': '{a} · 연습',
+  'Small stage · chapter {n}': '미니 스테이지 · 제 {n} 장', 'Small stage done! Fans +{n}': '미니 스테이지 성공! 팬 +{n}',
+  'Solo concert · song {i} of 4': '솔로 콘서트 · {i} / 4 번째 곡', 'Solo concert · main song': '솔로 콘서트 · 메인 곡', 'How well she knows each song': '곡 숙련도',
+  // interface
+  'MoHeat Evo · raising sim': 'MoHeat Evo · 육성', 'Diva Diary': '가희 육성 일기', "Ayane's 8 Weeks": '아야네의 8주', 'Start': '시작', 'Continue (week {w})': '이어하기 ({w}주차)',
+  'Orange / blue at the screen edges = warm / cool on your left and right ear. Connect MoHeat Evo to really feel it.': '화면 양옆의 주황 / 파랑 = 왼쪽·오른쪽 귀의 따뜻함 / 시원함. MoHeat Evo를 연결하면 실제로 느낄 수 있습니다.',
+  'Ayane': '아야네', 'Week {w} / 8': '{w} / 8 주차', 'What shall we do this week?': '이번 주에는 뭘 할까?', 'Pick 3': '3개 선택', 'Energy {a} → {b}': '체력 {a} → {b}', 'Go': '출발',
+  'Too tired → rest': '너무 지쳐서 휴식', 'Mini show! Fans +{n}': '미니 라이브! 팬 +{n}', 'Song direction now: {t}': '지금의 노래 방향: {t}', 'Solo concert · training rank {r}': '솔로 콘서트 · 레슨 평가 {r}',
+  'Mini show': '미니 라이브', '{a} · practice': '{a} · 연습',
+  'Show {p}% · max combo {c}': '라이브 달성도 {p}% · 최대 콤보 {c}', 'Show {p}%': '라이브 달성도 {p}%', 'Save card': '결과 저장', 'Play again': '다시 키우기', 'I raised a': '내가 키운 것은', 'Song': '부른 곡',
+});

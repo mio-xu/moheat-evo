@@ -1,0 +1,76 @@
+<!doctype html>
+<!-- Published from ~/ClaudeWork/Games (tools/publish_idol.py). Engine: ../../_kit/game/ · character + songs: ../../_kit/characters/ayane/ -->
+<html lang="zh">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#1b1420" />
+  <title>Diva Diary · Ayane's 8 Weeks</title>
+  <link rel="stylesheet" href="../../_kit/game/pg.css?v=68" />
+  <link rel="stylesheet" href="../../_kit/game/raise/raise.css?v=68" />
+</head>
+<body>
+  <!-- The engine (PG.mount) adds the shared layers; below: the raise engine's own screens (HUD, week plan, title, CG, result card). -->
+  <main id="app" data-screen="title">
+    <header id="hud">
+      <div class="row1">
+        <b id="hudWeek"></b>
+        <span id="hudFans"></span>
+        <span class="therm" aria-hidden="true"><i id="tL"></i><i id="tR"></i></span>
+        <button type="button" id="btnGear" aria-label="Settings">⚙</button>
+      </div>
+      <div class="bars" id="hudBars"></div>
+    </header>
+
+    <section class="sheet" id="plan" data-notap hidden>
+      <div class="planHead"><b id="planTitle"></b><span id="planHint"></span></div>
+      <div id="mastery"></div>
+      <div id="cards"></div>
+      <div class="planFoot"><div id="slots"></div><button type="button" class="go" id="planGo" disabled></button></div>
+    </section>
+
+    <section id="title" data-notap>
+      <div class="logo"><small id="tKicker"></small><h1 id="tName"></h1><p id="tSub"></p></div>
+      <div class="titleBtns">
+        <button type="button" class="go" id="btnStart"></button>
+        <button type="button" class="ghost" id="btnContinue" hidden></button>
+        <div class="langs" data-pg-langs></div>
+        <p class="fine" id="tFine"></p>
+      </div>
+    </section>
+
+    <section id="cg" hidden><img alt="" /><p id="cgCap"></p><i id="cgNext">▼</i></section>
+
+    <section id="result" data-notap hidden>
+      <canvas id="card" width="1080" height="1440"></canvas>
+      <div class="resBtns"><button type="button" class="go" id="btnSave"></button><button type="button" class="ghost" id="btnAgain"></button></div>
+    </section>
+  </main>
+
+  <script>window.PG_LIVLIV = "../../_kit/diva/ll/livliv/index.js?v=050";</script>
+  <script src="../../../../device.js?v=68"></script>
+  <script src="../../_kit/game/rules.js?v=68"></script>
+  <script src="../../_kit/game/pg.js?v=68"></script>
+  <script src="../../_kit/game/pg.l10n.ko.js?v=68"></script>
+  <script src="../../_kit/game/pg.audio.js?v=68"></script>
+  <script src="../../_kit/game/pg.fx.js?v=68"></script>
+  <script src="../../_kit/game/pg.thermal.js?v=68"></script>
+  <script src="../../_kit/game/pg.stage.js?v=68"></script>
+  <script src="../../_kit/game/pg.ll.js?v=68"></script>
+  <script src="../../_kit/game/pg.ui.js?v=68"></script>
+  <script src="../../_kit/game/pg.rhythm.js?v=68"></script>
+  <script src="../../_kit/game/pg.live.js?v=68"></script>
+  <script src="../../_kit/characters/ayane/pack.js?v=68"></script>
+  <script src="../../_kit/characters/ayane/stills/char.js?v=68"></script>
+  <script src="../../_kit/characters/ayane/songs/l10n.ko.js?v=68"></script>
+  <script src="../../_kit/characters/ayane/stills/songs.js?v=68"></script>
+  <script src="../../_kit/characters/ayane/songs/game.js?v=68"></script>
+  <script src="game/bgm.js?v=68"></script>
+  <script src="game/voice.js?v=68"></script>
+  <script src="game/content.js?v=68"></script>
+  <script src="game/l10n.ko.js?v=68"></script>
+  <script src="game/story_ll.js?v=68"></script>
+  <script src="game/setup.js?v=68"></script>
+  <script src="../../_kit/game/raise/flow.js?v=68"></script>
+</body>
+</html>

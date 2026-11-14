@@ -1,0 +1,27 @@
+/* Ayane concert kit (live.js): title, subtitle, progress, skip. Sizes relative to the PG frame (cqh and the base unit --u, see pg.css). */
+#live { position: absolute; inset: 0; z-index: 7; pointer-events: none; }
+#live > * { pointer-events: auto; }
+#liveTitle { position: absolute; left: 0; right: 0; top: calc(16 * var(--u)); text-align: center; color: #fff; text-shadow: 0 calc(.3 * var(--u)) calc(1.2 * var(--u)) rgba(20, 0, 30, .9); font-weight: 800; font-size: calc(4.6 * var(--u)); pointer-events: none; }
+#liveTitle small { display: block; font-weight: 500; font-size: calc(3.2 * var(--u)); opacity: .9; }
+#liveSub { position: absolute; left: calc(4 * var(--u)); right: calc(4 * var(--u)); bottom: 15cqh; margin: 0; text-align: center; color: #fff; font-weight: 700; font-size: calc(4.6 * var(--u)); line-height: 1.5; text-shadow: 0 0 calc(1.4 * var(--u)) rgba(20, 0, 30, 1), 0 calc(.3 * var(--u)) calc(.6 * var(--u)) rgba(20, 0, 30, .9); min-height: 3em; pointer-events: none; }
+#liveBar { position: absolute; left: calc(6 * var(--u)); right: calc(6 * var(--u)); bottom: calc(env(safe-area-inset-bottom, 0px) + 9cqh); height: calc(1 * var(--u)); border-radius: calc(1 * var(--u)); background: rgba(255, 255, 255, .3); overflow: hidden; }
+#liveBar i { display: block; height: 100%; width: 0; background: #fff; }
+#liveSkip { position: absolute; right: calc(4 * var(--u)); bottom: calc(env(safe-area-inset-bottom, 0px) + 2.5cqh); padding: calc(2 * var(--u)) calc(5 * var(--u)); border-radius: calc(6 * var(--u)); background: rgba(30, 15, 40, .6); color: #fff; font-size: calc(3.5 * var(--u)); }
+#liveCheer { position: absolute; left: calc(4 * var(--u)); bottom: calc(env(safe-area-inset-bottom, 0px) + 3.2cqh); color: #fff; font-size: calc(3.5 * var(--u)); text-shadow: 0 calc(.2 * var(--u)) calc(1 * var(--u)) rgba(20, 0, 30, .9); pointer-events: none; }
+
+#liveHow { position: absolute; left: calc(3 * var(--u)); right: calc(3 * var(--u)); top: calc(30 * var(--u)); margin: 0; text-align: center; color: #fff; font-size: calc(2.9 * var(--u)); white-space: nowrap; font-weight: 600; text-shadow: 0 calc(.2 * var(--u)) calc(1 * var(--u)) rgba(20, 0, 30, .9); transition: opacity .6s; pointer-events: none; }
+#liveHow:empty { display: none; }
+/* rhythm mode: the notes use the lower half, so the words move up */
+#live.rhythm #liveSub { bottom: auto; top: calc(31 * var(--u)); font-size: calc(4 * var(--u)); min-height: 0; }
+#live.rhythm #liveBar { bottom: calc(env(safe-area-inset-bottom, 0px) + 7cqh); }
+#live.rhythm #liveSkip { bottom: calc(env(safe-area-inset-bottom, 0px) + 1.4cqh); padding: calc(1.4 * var(--u)) calc(4 * var(--u)); font-size: calc(3.2 * var(--u)); }
+
+/* UI v2: a skip button that is easy to hit */
+#liveSkip, #live.rhythm #liveSkip { min-height: calc(11 * var(--u)); padding: 0 calc(5.4 * var(--u)); font-size: calc(3.9 * var(--u)); border: 1px solid rgba(255, 255, 255, .3); background: rgba(30, 15, 40, .62); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+
+@media (min-aspect-ratio: 5/4) and (min-height: 280px) {
+  html:not(.portrait) #liveBar { left: 50%; right: auto; width: calc(100 * var(--u)); transform: translateX(-50%); }
+  /* the words go low between the lanes (over her legs, never over her face; 2026-11-14 LivLiv stage) */
+  html:not(.portrait) #live.rhythm #liveSub, html:not(.portrait) #liveSub { top: auto; bottom: 15cqh; left: 50%; right: auto; width: calc(120 * var(--u)); transform: translateX(-50%); min-height: 0; }
+  html:not(.portrait) #liveHow { top: auto; bottom: 15cqh; }
+}

@@ -1,0 +1,36 @@
+{
+ "_note": "UI v2 cover data for the game (Games/tools/publish_idol.py copies it; render with tools/web/covers.py)",
+ "title": {
+  "en": "Prince Diary",
+  "ja": "プリンス・プロデュース",
+  "zh": "王子养成日记",
+  "ko": "프린스 다이어리"
+ },
+ "tagline": {
+  "en": "Hibiki's 8 weeks — raise the prince for his first solo concert",
+  "ja": "響の8週間 — 王子のはじめてのソロライブへ",
+  "zh": "响的八周 — 培养王子走向第一场个人演唱会",
+  "ko": "히비키의 8주 — 왕자의 첫 솔로 콘서트를 향해"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "his whisper at your ear · braziers",
+    "ja": "耳もとのささやき・かがり火",
+    "zh": "耳边的低语・火盆",
+    "ko": "귓가의 속삭임・화톳불"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "snowlight · spring breeze",
+    "ja": "ゆきあかり・春風",
+    "zh": "雪光・春风",
+    "ko": "눈빛・봄바람"
+   }
+  }
+ ],
+ "tone": "8 8 24"
+}

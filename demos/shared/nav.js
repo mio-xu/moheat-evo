@@ -14,6 +14,8 @@
     { cat: 'idol', dir: 'Demo63_AyaneDivaRock', ja: 'ストーム・ハート', en: 'Storm Heart', zh: '风暴之心', ko: '스톰 하트', series: 'ayane', part: 3, cast: 'ayane', new: true, group: 5 },
     { cat: 'idol', dir: 'Demo65_AyaneDivaBallad', ja: 'まどべの ゆき', en: 'Snow by the Window', zh: '窗边的雪', ko: '창가의 눈', series: 'ayane', part: 4, cast: 'ayane', new: true, group: 5 },
     { cat: 'idol', dir: 'Demo64_AyaneDivaWafu', ja: 'なつよい まつり', en: 'Summer Night Matsuri', zh: '夏宵祭', ko: '여름밤 마츠리', series: 'ayane', part: 5, cast: 'ayane', new: true, group: 5 },
+    { cat: 'idol', dir: 'games/diva-diary', kind: 'game', ja: '歌姫プロデュース · ゲーム', en: 'Diva Diary · Game', zh: '歌姬养成日记 · 游戏', ko: '디바 다이어리 · 게임', series: 'ayane', part: 6, cast: 'ayane', new: true, group: 5 },
+    { cat: 'idol', dir: 'games/hibiki-diary', kind: 'game', ja: 'プリンス・プロデュース · ゲーム', en: 'Prince Diary · Game', zh: '王子养成日记 · 游戏', ko: '프린스 다이어리 · 게임', cast: 'hibiki', new: true, group: 5 },
     { cat: 'all-ages', dir: 'Demo04_SeasonsExpress', ja: '季節が、暴走する。', en: 'The Runaway Seasons Express', zh: '四季失控的魔法列车', ko: '계절이 폭주한다.', cast: 'train', group: 0 },
     { cat: 'all-ages', dir: 'Demo47_GhostLantern', ja: 'ひやっと！おばけやしきの ちょうちんばん', en: 'Lantern Keeper of the Spooky House', zh: '鬼屋提灯值日生', ko: '오싹! 유령의 집 등불 당번', cast: 'bonchan+yurari', new: true, group: 0 },
     { cat: 'all-ages', dir: 'Demo48_AnimalOnsen', ja: 'ゆけむり どうぶつおんせん', en: 'Steamy Animal Hot Spring', zh: '蒸汽腾腾的动物温泉', ko: '모락모락 동물 온천', cast: 'yuzujii', new: true, group: 0 },

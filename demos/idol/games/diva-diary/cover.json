@@ -1,0 +1,36 @@
+{
+ "_note": "UI v2 cover data for the game (Games/tools/publish_idol.py copies it; render with tools/web/covers.py)",
+ "title": {
+  "en": "Diva Diary",
+  "ja": "歌姫プロデュース",
+  "zh": "歌姬养成日记",
+  "ko": "디바 다이어리"
+ },
+ "tagline": {
+  "en": "Ayane's 8 weeks — raise her for her first solo concert",
+  "ja": "綾音の8週間 — はじめてのソロライブへ",
+  "zh": "绫音的八周 — 培养她走向第一场个人演唱会",
+  "ko": "아야네의 8주 — 첫 솔로 콘서트를 향해"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "her voice at your ear · stage lights",
+    "ja": "耳もとの声・ステージの光",
+    "zh": "耳边的声音・舞台灯光",
+    "ko": "귓가의 목소리・무대 조명"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "snowy windows · sea wind",
+    "ja": "雪の窓・海風",
+    "zh": "雪窗・海风",
+    "ko": "눈 내린 창・바닷바람"
+   }
+  }
+ ],
+ "tone": "8 8 24"
+}
