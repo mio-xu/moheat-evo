@@ -45,6 +45,13 @@
         "dist": { "close": "ear", "mid": "talk", "far": "full" } }
     }
   }/*RULES*/;
+  // the genre's preset over the rules, ONCE, before anything reads them (2026-11-14 QA M4: the site story pages never merged it):
+  // PG.mount({ genre }) · PG.story.run (asmr-love) · the raise flow call it. Not part of the JSON (non-enumerable).
+  Object.defineProperty(RULES, 'use', { enumerable: false, value(genre) {
+    if (!genre || RULES._genre === genre) return RULES; const pre = (RULES.presets || {})[genre]; if (!pre) return RULES;
+    const deep = (a, b) => { for (const [k, v] of Object.entries(b)) { if (v && typeof v === 'object' && !Array.isArray(v) && a[k] && typeof a[k] === 'object' && !Array.isArray(a[k])) deep(a[k], v); else a[k] = JSON.parse(JSON.stringify(v)); } return a; };
+    deep(RULES, pre); Object.defineProperty(RULES, '_genre', { value: genre, enumerable: false, configurable: true, writable: true }); return RULES;
+  } });
   root.PG_RULES = RULES;
   if (typeof module !== 'undefined') module.exports = RULES;
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -177,7 +177,7 @@
     return new Promise((done) => {
       const box = document.createElement('div'); box.className = 'holdAsk';
       box.innerHTML = `<button type="button" class="holdBtn"><i></i><span></span></button><p></p>`; box.querySelector('span').textContent = T(ask.button || { zh: '按住，牵手', ja: 'おして、手をにぎる', en: 'Press and hold his hand', ko: '꾹 눌러 손 잡기' });
-      box.querySelector('p').textContent = T(ask.hint || { zh: '按住不放，手会越来越暖', ja: 'はなさずにいると、手があたたかくなる', en: 'Keep holding — his hand gets warmer', ko: '계속 잡고 있으면 따뜻해져요' });
+      box.querySelector('p').textContent = T(ask.hint || { zh: '按住不放，他会靠近你', ja: 'はなさずにいると、すぐそばに来てくれる', en: 'Keep holding — he leans in close', ko: '계속 잡고 있으면 그가 다가와요' });
       PG.app.appendChild(box); PG.Therm.direct(null);
       const need = (ask.secs || 6) * 1000, cap = Math.min(ask.level ?? .35, .35), ring = box.querySelector('i'), side = ask.ear || (String(S.lastEar || 'L').split('>').pop() === 'R' ? 'R' : 'L');   // he leans in on his side while you hold his hand: that ear only, gently
       let held = 0, down = 0, lv = 0, t0 = performance.now(), last = t0, end = null;
@@ -185,6 +185,7 @@
       btn.addEventListener('pointerdown', on); addEventListener('pointerup', off); addEventListener('pointercancel', off);
       const iv = setInterval(() => {
         const now = performance.now(), dt = now - last; last = now; if (down || PG.AUTO) held += dt;
+        const lbl = T(ask.button || { zh: '按住，牵手', ja: 'おして、手をにぎる', en: 'Press and hold his hand', ko: '꾹 눌러 손 잡기' }), sp = box.querySelector('span'); if (sp.textContent !== lbl) { sp.textContent = lbl; box.querySelector('p').textContent = T(ask.hint || { zh: '按住不放，他会靠近你', ja: 'はなさずにいると、すぐそばに来てくれる', en: 'Keep holding — he leans in close', ko: '계속 잡고 있으면 그가 다가와요' }); }   // follows a language switch (QA m4)
         lv += ((down || PG.AUTO ? cap : 0) - lv) * Math.min(1, dt / 900); PG.Therm.source('hold', lv > .02 ? { [side + 'h']: lv } : null);
         ring.style.setProperty('--p', Math.min(1, held / need));
         if (held >= need) end = 'held'; else if (now - t0 > (ask.timeout || 20) * 1000) end = 'let';
@@ -319,7 +320,7 @@
     // "I give up" at any time: a judged button (shared/voice.js hears the accept phrases) → the give-up branch after this round
     let quit = null;
     if (ask.giveUp && opts.ui !== 'pg') { quit = document.createElement('button'); quit.className = 'ch'; quit.type = 'button'; quit.dataset.ws = 'quit'; quit.dataset.voice = Object.values(ask.giveUp.accept || {}).flat().join('|');
-      quit.innerHTML = `<b>${(ask.giveUp.button || {}).ja || ''}</b><span>${T(ask.giveUp.button)}</span>`; quit.addEventListener('click', () => { S.gaveUp = true; quit.disabled = true; }); $('choices')?.appendChild(quit); $('choices')?.classList.add('show'); }
+      quit.dataset.default = 'no'; quit.classList.add('ch-nodefault');   /* never the listen-only mode's pick (QA M5) */ quit.innerHTML = `<b>${(ask.giveUp.button || {}).ja || ''}</b><span>${T(ask.giveUp.button)}</span>`; quit.addEventListener('click', () => { S.gaveUp = true; quit.disabled = true; }); $('choices')?.appendChild(quit); $('choices')?.classList.add('show'); }
     const url = (c) => `${opts.media.voice}${lang === 'ja' ? '' : lang + '/'}${c}.m4a`;
     for (const [n, r] of (ask.rounds || []).entries()) {
       const seg = compile([{ clip: r.intro, ear: 'C', dist: 'mid' }, { wait: r.lead ?? 1.4 }, { clip: r.clip, ear: r.ear, dist: 'close', breath: r.do === 'blow' ? 'blow' : undefined, gap: 0 },
@@ -328,7 +329,7 @@
       const zone = (e) => { if (answer || !hitAt || e.target.closest('button:not([data-ws])') || e.target.dataset?.ws === 'quit') return; const rc = PG.app.getBoundingClientRect(); answer = e.target.dataset?.ws || (e.clientX - rc.left < rc.width / 2 ? 'L' : 'R'); answer = { side: answer, secs: (performance.now() - hitAt) / 1000 }; };
       PG.app.addEventListener('pointerdown', zone);
       let behindBtn = null;
-      if (r.ear === 'C') { behindBtn = document.createElement('button'); behindBtn.className = 'ch'; behindBtn.dataset.ws = 'C'; behindBtn.dataset.voice = Object.values(ask.behind || {}).flat().join('|'); behindBtn.textContent = T(ask.behindLabel) || 'Behind'; $('choices')?.appendChild(behindBtn); $('choices')?.classList.add('show'); }
+      if (r.ear === 'C') { behindBtn = document.createElement('button'); behindBtn.className = 'ch'; behindBtn.dataset.ws = 'C'; behindBtn.dataset.voice = Object.values(ask.behind || {}).flat().join('|'); behindBtn.textContent = T(ask.behindLabel) || 'Behind'; behindBtn.onclick = () => { if (!answer && hitAt) answer = { side: 'C', secs: (performance.now() - hitAt) / 1000 }; }; $('choices')?.appendChild(behindBtn); $('choices')?.classList.add('show'); }   // its own click (QA M1: #choices may sit outside the stage, so the stage's tap listener never hears it; voice.js clicks it too)
       try {
         for (const b of seg.beats) {
           fd.align(b.at); stageFor(b, S, opts); opts.onBeat?.(b);
@@ -357,6 +358,7 @@
 
   /** Play the whole story. Resolves with { path: [option ids], score } at the end. */
   async function run(story, opts) {
+    if (root.PG_RULES && root.PG_RULES.use) root.PG_RULES.use(opts.genre || story.genre || 'asmr-love');   // a story is an asmr-love piece unless it says otherwise (QA M4)
     const ui = UI[opts.ui || 'site'], lang = () => (opts.lang ? opts.lang() : 'ja');
     const S = { scene: story.scene || null, props: {}, mirror: false, therm: null, path: [] };
     const ctx = () => ({ pack: opts.pack, dur: opts.media.dur[lang()] || opts.media.dur.ja, env: (opts.media.env || {})[lang()], state: S });

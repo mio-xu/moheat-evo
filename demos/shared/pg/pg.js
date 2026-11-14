@@ -126,6 +126,7 @@
 
   /** Build the frame inside <main id="app">. o: { id (save namespace), langs, text (extra engine texts), onReset() } */
   PG.mount = (o = {}) => {
+    if (o.genre && window.PG_RULES && window.PG_RULES.use) window.PG_RULES.use(o.genre);   // the genre preset first (rules.js presets)
     const app = PG.app = $('app'); PG.id = o.id || 'pg'; if (o.langs) PG.langs = o.langs; Object.assign(TEXT, o.text || {});
     app.insertAdjacentHTML('afterbegin', FRAME_BACK); if (!o.stage) app.insertAdjacentHTML('beforeend', FRAME_FRONT);   // stage: true = the picture layers only (a site page whose UI v2 shell owns the bar, ⚙ and the device ids)
     const n = (navigator.language || 'en').toLowerCase(), guess = PG.langs.find((k) => n.startsWith(k)) || 'en';

@@ -11,9 +11,7 @@
 (window.PG_READY || Promise.resolve()).then(() => {
   const PG = window.PG, G = window.DP_GAME, R = G.rules, SET = window.GAME_SETUP || {}, Live = (SET.live && window[SET.live]) || null;
   // the genre's preset (engine/rules.js presets[genre]: e.g. asmr-love = thermal safety scheduler on, talk camera, dist → camera) over the rules, before anything reads them
-  { const RU = window.PG_RULES || {}, pre = (RU.presets || {})[SET.genre || G.GENRE];
-    const deep = (a, b) => { for (const [k, v] of Object.entries(b || {})) { if (v && typeof v === 'object' && !Array.isArray(v) && a[k] && typeof a[k] === 'object') deep(a[k], v); else a[k] = v; } return a; };
-    if (pre) deep(RU, pre); }
+  if (window.PG_RULES && window.PG_RULES.use) window.PG_RULES.use(SET.genre || G.GENRE);
   const CP = window.CHAR_PACK || null, SL = window.STORY_LL || {}, RULES = window.PG_RULES || {}, DIR = Object.assign({ scenes: 'art/scenes', cg: 'art/cg', voice: 'audio/voice' }, SET.dirs || {});
   const HOME = Object.assign({ scene: Object.keys(G.SCENES)[0], pose: 'front' }, SET.home || {}), TITLE = Object.assign({ scene: HOME.scene, x: 50, amb: {}, pose: HOME.pose, fx: 'petals', bgm: 'day' }, SET.title || {});
   if (CP && CP.colours) { const st = document.documentElement.style; if (CP.colours.accent) st.setProperty('--accent', CP.colours.accent); if (CP.colours.accent2) st.setProperty('--accent2', CP.colours.accent2); if (CP.colours.go) st.setProperty('--go', CP.colours.go); }
