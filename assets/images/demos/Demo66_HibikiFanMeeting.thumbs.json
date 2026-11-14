@@ -1,0 +1,32 @@
+{
+ "base": {
+  "inputs": {
+   "demos/idol/Demo66_HibikiFanMeeting/media/cover/stamp.json": "c33f60e6af1af0a76b6875148b3787b883b52b03"
+  },
+  "thumb": "5a9ffb95c3141747e767d2f894116f02a7ff44d3"
+ },
+ "en": {
+  "inputs": {
+   "demos/idol/Demo66_HibikiFanMeeting/media/cover/stamp.json": "c33f60e6af1af0a76b6875148b3787b883b52b03"
+  },
+  "thumb": "5a9ffb95c3141747e767d2f894116f02a7ff44d3"
+ },
+ "ja": {
+  "inputs": {
+   "demos/idol/Demo66_HibikiFanMeeting/media/cover/stamp.json": "c33f60e6af1af0a76b6875148b3787b883b52b03"
+  },
+  "thumb": "a03a85c12ae20197baf344897c95ae870546030b"
+ },
+ "ko": {
+  "inputs": {
+   "demos/idol/Demo66_HibikiFanMeeting/media/cover/stamp.json": "c33f60e6af1af0a76b6875148b3787b883b52b03"
+  },
+  "thumb": "9d2effe413839260ccb2c0ab43182f37011e00fb"
+ },
+ "zh": {
+  "inputs": {
+   "demos/idol/Demo66_HibikiFanMeeting/media/cover/stamp.json": "c33f60e6af1af0a76b6875148b3787b883b52b03"
+  },
+  "thumb": "9fdd50966c520cc91e65bafbcfdd12f01748f67b"
+ }
+}

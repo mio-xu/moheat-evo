@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ja" data-u2>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#1a0d24" />
+  <meta name="robots" content="noindex" />
+  <meta property="og:title" content="Crown of Ice — Hibiki Diva · MoHeat Evo ASMR Demo" />
+  <meta property="og:image" content="media/cover.jpg" />
+  <title>なつよい まつり · Crown of Ice — Hibiki Diva · MoHeat Evo ASMR Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=1ab98250" />
+  <link rel="stylesheet" href="../../shared/series.css?v=17452442" />
+  <script>if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add('embed');</script>
+  <style>/* ?embed=1 — used by the site's demo menu: stage + transport only */
+    html.embed .bar, html.embed .side, html.embed .legend { display: none !important; }
+    html.embed body { background: #000; overflow: hidden; }
+    html.embed .layout { display: block; padding: 0; max-width: none; }
+    html.embed .stage { border-radius: 0; border: 0; box-shadow: none; }
+    html.embed .transport { margin: 6px 10px 0; }
+    html.embed .intro .hint { display: none; }
+  </style>
+</head>
+<body>
+  <header class="bar">
+    <a class="brand" href="../../../">MoHeat <span>Evo</span> <em>ASMR · 響 Live</em></a>
+    <div class="device">
+      <select id="portSelect" aria-label="Serial port"></select>
+      <button class="btn sm" id="addPort" type="button" title="Authorize a USB or Bluetooth serial port">+ Add</button>
+      <button class="btn sm primary" id="connectBtn" type="button" disabled>Connect</button>
+      <p class="status" id="deviceStatus"><i></i><span>Not connected</span></p>
+    </div>
+    <button class="estop" id="estop" type="button" title="Esc">■ STOP</button>
+  </header>
+
+  <main class="layout">
+    <section class="stage-col">
+      <div class="stage" id="stage">
+        <canvas id="scene" width="1920" height="1080"></canvas>
+        <canvas id="ll" aria-label="響 Hibiki"></canvas>
+        <video id="film" playsinline hidden></video>
+        <div class="scene-title" id="sceneTitle"></div>
+        <div class="subs" id="subs" aria-live="polite"></div>
+
+        <div class="intro" id="intro">
+          <div class="cover-bg" aria-hidden="true"></div>
+          <div class="cover-snow" aria-hidden="true"></div>
+          
+          <div class="cover-copy">
+            <div class="intro-actions">
+              <button class="btn primary big" id="startBtn" type="button">▶ はじめる · Start</button>
+              <button class="btn" id="lrBtn" type="button">🎧 Left / Right check</button>
+            </div>
+            <p class="draft" id="credits"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="transport">
+        <button class="btn icon" id="playBtn" type="button" title="Space">▶</button>
+        <span class="time" id="time">0:00 / 2:30</span>
+        <div class="timeline" id="timelineWrap">
+          <canvas id="timeline" width="1600" height="72"></canvas>
+          <i class="playhead" id="playhead"></i>
+        </div>
+      </div>
+      <p class="legend"><span class="sw cool"></span>cooling <span class="sw heat"></span>warming · top row = left ear, bottom row = right ear · click to jump</p>
+    </section>
+
+    <aside class="side">
+      <div class="card">
+        <div class="card-head"><span>Sounds around you</span><b id="posInfo"></b></div>
+        <canvas id="radar" width="480" height="420"></canvas>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><span>Thermal output</span><b id="cmd" class="mono">stop</b></div>
+        <div class="meters">
+          <div class="meter-row"><span>L cool</span><div class="m cool"><i id="mLc"></i></div><b id="vLc">0</b></div>
+          <div class="meter-row"><span>L warm</span><div class="m heat"><i id="mLh"></i></div><b id="vLh">0</b></div>
+          <div class="meter-row"><span>R cool</span><div class="m cool"><i id="mRc"></i></div><b id="vRc">0</b></div>
+          <div class="meter-row"><span>R warm</span><div class="m heat"><i id="mRh"></i></div><b id="vRh">0</b></div>
+        </div>
+        <p class="note">Each ear is computed from its own side of the mix: drums, bass and his voice warm it (the braziers on that side flare, fire on the big hits), cymbals, rain hiss and highs cool it (driving rain, lightning). Hibiki stands where his voice is.</p>
+      </div>
+
+      <div class="card">
+        <label class="row"><span>Intensity</span><input id="intensity" type="range" min="0" max="100" value="100" /><b id="intensityVal">100%</b></label>
+        <label class="row"><span>Device lead</span><input id="offset" type="range" min="-500" max="1000" step="50" value="0" /><b id="offsetVal">+0 ms</b></label>
+        <label class="row"><span>Thermal</span>
+          <select id="thermalMode">
+            <option value="B">Mode B · song energy (per ear)</option>
+          </select>
+        </label>
+        <label class="row check"><input id="sendOn" type="checkbox" checked /> <span>Send to device</span></label>
+      </div>
+
+    </aside>
+  </main>
+
+  <audio id="mix" src="media/mix.m4a?v=9e3d81a0" preload="auto"></audio>
+  <script src="media/data.js?v=2b7469dc"></script>
+  <script src="media/energy.js?v=c536caac"></script>
+  <script src="media/vowel.js?v=32ec299b"></script>
+  <script>/* cheer any time (hearts + a little warmth, ../_kit/diva/ix.js); the song never pauses; after it he asks you to call his name (his own close-to-ear lines, voiced r4_a) */
+    (() => { const M = window.DEMO_DATA.anim.marks; window.MOHEAT_GATES = { cheer: true, thankAt: M.thank, gates: [
+      { t: M.gate, kind: 'read', what: ['ヒビキ！', 'Hibiki!'], how: ['響の なまえを よんであげて', 'Call his name'], done: 'へへ…！', doneEn: 'Hehe…!' },
+    ] }; })();
+  </script>
+  <script src="../../../device.js?v=1b7cb0e6"></script>
+  <script src="../../shared/shell.js?v=f54b050f"></script>
+  <script src="theme.js?v=57c6df1b"></script>
+  <script src="../_kit/diva/ll/diva_ll.js?v=9089523d"></script>
+  <script src="../../shared/voice.js?v=193765ef"></script>
+  <script src="../_kit/diva/ix.js?v=80facb06"></script>
+  <script>/* ?autoplay=1 (site demo menu): start right away when the browser allows it, else the cover's Start button stays */
+    if (/[?&]autoplay\b/.test(location.search)) {
+      const m = document.getElementById('mix');
+      m.play().then(() => { m.pause(); document.getElementById('startBtn').click(); }).catch(() => {});
+    }
+  </script>
+  <script src="../../shared/nav.js?v=8acc29a1"></script>
+  <script src="../../shared/scrub.js?v=1"></script>
+</body>
+</html>

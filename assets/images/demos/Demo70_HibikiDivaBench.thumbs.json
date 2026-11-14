@@ -1,0 +1,32 @@
+{
+ "base": {
+  "inputs": {
+   "demos/idol/Demo70_HibikiDivaBench/media/cover/stamp.json": "2226fdc022479f387776be7ca48dd26b0361b2fe"
+  },
+  "thumb": "4e5176226a2d4f6a299d1def07ce83cc0921a5d4"
+ },
+ "en": {
+  "inputs": {
+   "demos/idol/Demo70_HibikiDivaBench/media/cover/stamp.json": "2226fdc022479f387776be7ca48dd26b0361b2fe"
+  },
+  "thumb": "4e5176226a2d4f6a299d1def07ce83cc0921a5d4"
+ },
+ "ja": {
+  "inputs": {
+   "demos/idol/Demo70_HibikiDivaBench/media/cover/stamp.json": "2226fdc022479f387776be7ca48dd26b0361b2fe"
+  },
+  "thumb": "cef2e47106eedd923565d8774a5e920ac7ae02cf"
+ },
+ "ko": {
+  "inputs": {
+   "demos/idol/Demo70_HibikiDivaBench/media/cover/stamp.json": "2226fdc022479f387776be7ca48dd26b0361b2fe"
+  },
+  "thumb": "c1523edd489d9d15d25192be500fb0c7dec00a62"
+ },
+ "zh": {
+  "inputs": {
+   "demos/idol/Demo70_HibikiDivaBench/media/cover/stamp.json": "2226fdc022479f387776be7ca48dd26b0361b2fe"
+  },
+  "thumb": "f1a9526532ffaeca220d162fc2b90e7aac0eb727"
+ }
+}

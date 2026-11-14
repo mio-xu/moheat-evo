@@ -6,6 +6,8 @@
 //   beat0 (first downbeat, s; default A.song[0]) · range (pan width share) · hop / nod (scales, default 1)
 //   seq / chorus (2-bar pose rotations) · chorusKeys (segment keys that use `chorus`) · marks { <old pose name>: x_<pose> | [x_<pose>, …] (in turn) } (the demo's
 //   own A.poses moments that keep a fixed pose) · jumpPose (old pose name of the drops → `jump` pose + a jump arc) · intro · whisper · ask · bow
+//   at [[t0, t1, x_<pose>], …] fixed poses at lyric moments (song clock) · fig.poseDy { x_<pose>: model px } moves the WHOLE character (head included)
+//   down while that pose shows, eased in / out with the pose switch (a seated pose: he sits down / stands up; Hibiki q4_sit 716 = the drawn bench's feet on the floor)
 //   faces { whisper, first, arrive: [visit idx], visitEnd, poses { x_<pose>: face }, segs { <segment key>: face } } (face names below)
 //   acts [[t s, id, secs?], …] LivLiv's own built-in actions on the song clock (2026-11-14 user: use them): nod (agree) · shake (no) · tilt
 //   (question) · hop (excitement) · shy (shy, looks down) · lookL / lookR (look to that side, lookAt). Never 'away' (it hides every expression,
@@ -258,7 +260,8 @@ const SEQ = LLX.seq, CHORUS = LLX.chorus;
 const JUMPS = LLX.jumpPose ? A.poses.filter((p) => p[1] === LLX.jumpPose).map((p) => p[0]) : [];   // the song's drops (the old engine's jump marks)
 // the demo's own pose moments that keep a fixed pose (e.g. ballad reach → point): [t0, t1, x_pose]
 const MARKS = (() => { const n = {}; return A.poses.map((p, i) => { const v = LLX.marks[p[1]], k = n[p[1]] = (n[p[1]] ?? -1) + 1;   // a list = used in turn
-  return [p[0], (A.poses[i + 1] || [A.duration])[0], Array.isArray(v) ? v[k % v.length] : v]; }).filter((m) => m[2] && m[1] - m[0] >= .6); })();
+  return [p[0], (A.poses[i + 1] || [A.duration])[0], Array.isArray(v) ? v[k % v.length] : v]; }).filter((m) => m[2] && m[1] - m[0] >= .6)
+  .concat(LLX.at || []).sort((a, b) => a[0] - b[0]); })();   // + DIVA_THEME.ll.at = [[t0, t1, x_<pose>], …]: fixed poses on the song clock (lyric moments)
 const EXID = { smile: 'smile', shy: 'x_9a6503', surprise: 'x_40056d', sad: 'x_ba0413', tired: 'x_221c59', pout: 'x_d7dec3', serious: 'x_13c45e', wink: 'x_051b17' };   // 笑顔 照れ 驚き 悲しみ 疲れ ぷんぷん 真剣 ウインク
 const EX = (n) => (n ? EXID[n] || n : null);
 const closeWin = (t) => CLOSE.find((w) => t >= w.t0 && t <= w.t1) || null;
@@ -548,7 +551,7 @@ const LL_BASE = new URL('.', LL_SRC).href;   // this file's folder (the kit), fo
 // head locks are lifted (parameterProfile = {}, no angle / body overrides; lookL / R also turn idle on for lookAt), then restored.
 const ACTS = [...(LLX.acts || []), ...(LLX.lookEar === false ? [] : (A.close || []).flatMap((w) => w.lines.map(([lt, e]) => [lt - .15, e === 'L' ? 'lookL' : 'lookR', 2.2])))]
   .filter((c) => c[1] !== 'away').sort((a, b) => a[0] - b[0]);
-const LL = { act: null, actUntil: 0, prof: null, p: null, K: 2, UX: 1000, UY: 1000, C0: { x: 0, y: 0 }, cal: true, map: null, pose: null, prev: null, dropAt: 0, bounceAt: -1, lastT: null, exprKey: '', pr: 0 };
+const LL = { dy: 0, dyT: 0, act: null, actUntil: 0, prof: null, p: null, K: 2, UX: 1000, UY: 1000, C0: { x: 0, y: 0 }, cal: true, map: null, pose: null, prev: null, dropAt: 0, bounceAt: -1, lastT: null, exprKey: '', pr: 0 };
 const llc = $('ll');
 const BASE_PR = 2, CLOSE_PR = Math.min(3, Math.max(2, devicePixelRatio || 2));   // sharper head while the camera is pushed in
 function llMap() {   // scene px → CSS px inside the overlay (it has #scene's box; #scene draws with object-fit)
@@ -585,6 +588,8 @@ function llUpdate(f) {
     if (seekA) { if (LL.act) llActEnd(); } else for (const c of ACTS) if (c[0] > LL.lastT && c[0] <= T.t) llAct(c[1], c[2]);
     if (LL.act && now > LL.actUntil) llActEnd(); }
   LL.lastT = T.t;
+  { const tg = LLM.poseDy?.[LL.pose] || 0, dt = Math.min(.1, (now - (LL.dyT || now)) / 1000); LL.dyT = now;   // sit down / stand up over ≈ 0.5 s
+    LL.dy = Math.abs(T.t - (LL.dyAt ?? T.t)) > .5 ? tg : LL.dy + (tg - LL.dy) * (1 - Math.exp(-dt / .14)); LL.dyAt = T.t; }
   const e = { [LL.pose]: 1 }; if (LL.prev && now < LL.dropAt) e[LL.prev] = 1; if (T.face) e[T.face] = 1;
   const key = Object.keys(e).sort().join(','); if (key !== LL.exprKey) { LL.exprKey = key; p.expr = e; }
   // head: nods only (no left / right turn, no tilt), no body sway / breath; mouth + vowel from the voice track; our own blinks
@@ -595,7 +600,7 @@ function llUpdate(f) {
   let s = T.sq, dip = 0;
   if (LL.bounceAt >= 0) { const k = (now - LL.bounceAt) / 220; if (k >= 1) LL.bounceAt = -1; else { s *= 1 + .03 * Math.sin(Math.PI * k); dip = 8 * Math.sin(2 * Math.PI * k); } }
   const toS = (x, y) => ({ x: m.ox + x * m.s - m.w / 2, y: m.oy + y * m.s - m.h / 2 });
-  const Zb = T.k * m.s * LL.K * s, base = llPlace({ x: LLM.cx, y: LLM.bottom }, toS(T.x, T.foot + dip), Zb);
+  const Zb = T.k * m.s * LL.K * s, base = llPlace({ x: LLM.cx, y: LLM.bottom - LL.dy }, toS(T.x, T.foot + dip), Zb);   // LL.dy: fig.poseDy of the pose, eased
   let v = base;
   if (T.ear && T.ck > 0) {
     const Zc = Math.max(Zb, (T.ear.fh * m.s / LLM.face.h) * LL.K), c = llPlace(LLM.face, toS(T.ear.x, T.ear.y), Zc), k = T.ck;

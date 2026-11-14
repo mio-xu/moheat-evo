@@ -9,7 +9,7 @@
 //   cams { <name>: { x, y, fh } } face centre (fractions of the 16:9 frame) + face height (fraction of the frame height)
 //   views { <story view>: [x_<pose>, cam name, face?] } · ear { <view>: 'L' | 'R' } (views that are at an ear: whisper face + look toward it)
 //   lines { <line id>: { face, act, at (s after the line starts, default .25), pose, push (0..1 toward cams.push) } }
-//   faces { ear } (default face at an ear) · lookEar (default true) · lookK (default .6) · mouth { floor, span } (voice level → mouth open)
+//   fig.poseDy { x_<pose>: model px } (the whole character lower while that pose shows, eased: a seated pose) · faces { ear } (default face at an ear) · lookEar (default true) · lookK (default .6) · mouth { floor, span } (voice level → mouth open)
 // Actions: nod · shake · tilt · hop · shy · lookL / lookR (lookAt). Never 'away' (it hides every expression, so the pose body vanishes).
 // While an action plays our head locks are lifted (parameterProfile = {}, no angle / body overrides), then restored.
 (() => {
@@ -44,7 +44,7 @@
   }
 
   // ---- LivLiv player (hidden canvas, read back into the scene canvas: preserveDrawingBuffer is on in the player)
-  const LL = { p: null, K: 2, UX: 1000, UY: 1000, C0: { x: 0, y: 0 }, cal: true, pose: null, prev: null, dropAt: 0, bounceAt: -1, exprKey: '', act: null, actUntil: 0, prof: null, ready: false };
+  const LL = { dy: 0, p: null, K: 2, UX: 1000, UY: 1000, C0: { x: 0, y: 0 }, cal: true, pose: null, prev: null, dropAt: 0, bounceAt: -1, exprKey: '', act: null, actUntil: 0, prof: null, ready: false };
   const twoFrames = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
   async function calibrate() {   // model px per CSS px at zoom 1 (K) and CSS px per unit of view.x / view.y on this canvas size
     const p = LL.p, cw = llc.clientWidth, ch = llc.clientHeight; if (!p || !cw || !ch) return;
@@ -96,7 +96,8 @@
     if (LL.bounceAt >= 0) { const b = (now - LL.bounceAt) / 220; if (b >= 1) LL.bounceAt = -1; else { s = 1 + .03 * Math.sin(Math.PI * b); dip = .006 * Math.sin(2 * Math.PI * b); } }
     const cw = llc.clientWidth, ch = llc.clientHeight;
     const Z = (cam.fh * ch / FIG.face.h) * LL.K * s;
-    Object.assign(p.view, place(FIG.face, { x: (cam.x - .5) * cw, y: (cam.y + dip - .5) * ch }, Z));
+    LL.dy += ((FIG.poseDy?.[LL.pose] || 0) - LL.dy) * (1 - Math.exp(-dt / .14));   // sit down / stand up
+    Object.assign(p.view, place(FIG.face, { x: (cam.x - .5) * cw, y: (cam.y + dip - .5) * ch + LL.dy * Z / LL.K }, Z));
     const pr = cam.fh > .12 ? Math.min(3, Math.max(2, devicePixelRatio || 2)) : 2; if (pr !== LL.pr) { LL.pr = pr; p.maxPixelRatio = pr; }
   }
   // draw her into the scene canvas right after the plate (under the demo's FX and the fade / dark / flash overlays)

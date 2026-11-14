@@ -1,0 +1,32 @@
+{
+ "base": {
+  "inputs": {
+   "demos/idol/Demo69_HibikiDivaSnow/media/cover/stamp.json": "0e957b92105817ad752ec33062882d935984826a"
+  },
+  "thumb": "2603b673de1e972ca3176e8aefea2908e1fa3a7c"
+ },
+ "en": {
+  "inputs": {
+   "demos/idol/Demo69_HibikiDivaSnow/media/cover/stamp.json": "0e957b92105817ad752ec33062882d935984826a"
+  },
+  "thumb": "2603b673de1e972ca3176e8aefea2908e1fa3a7c"
+ },
+ "ja": {
+  "inputs": {
+   "demos/idol/Demo69_HibikiDivaSnow/media/cover/stamp.json": "0e957b92105817ad752ec33062882d935984826a"
+  },
+  "thumb": "63582bd71109f270155f3bbf81619d044bf18e5d"
+ },
+ "ko": {
+  "inputs": {
+   "demos/idol/Demo69_HibikiDivaSnow/media/cover/stamp.json": "0e957b92105817ad752ec33062882d935984826a"
+  },
+  "thumb": "a2a493619d86d2d581ab69991aeff4612855155f"
+ },
+ "zh": {
+  "inputs": {
+   "demos/idol/Demo69_HibikiDivaSnow/media/cover/stamp.json": "0e957b92105817ad752ec33062882d935984826a"
+  },
+  "thumb": "95bd16cc245764e95c5206b258d12f78e90422d8"
+ }
+}

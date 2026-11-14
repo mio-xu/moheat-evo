@@ -16,6 +16,11 @@
     { cat: 'idol', dir: 'Demo64_AyaneDivaWafu', ja: 'なつよい まつり', en: 'Summer Night Matsuri', zh: '夏宵祭', ko: '여름밤 마츠리', series: 'ayane', part: 5, cast: 'ayane', new: true, group: 5 },
     { cat: 'idol', dir: 'games/diva-diary', kind: 'game', ja: '歌姫プロデュース · ゲーム', en: 'Diva Diary · Game', zh: '歌姬养成日记 · 游戏', ko: '디바 다이어리 · 게임', series: 'ayane', part: 6, cast: 'ayane', new: true, group: 5 },
     { cat: 'idol', dir: 'games/hibiki-diary', kind: 'game', ja: 'プリンス・プロデュース · ゲーム', en: 'Prince Diary · Game', zh: '王子养成日记 · 游戏', ko: '프린스 다이어리 · 게임', cast: 'hibiki', new: true, group: 5 },
+    { cat: 'idol', dir: 'Demo66_HibikiFanMeeting', ja: '響の、きみだけのファンミーティング', en: "Hibiki's Fan Meeting", zh: '响的专属见面会', ko: '히비키의 팬미팅', series: 'hibiki', part: 1, cast: 'hibiki', new: true, group: 5 },
+    { cat: 'idol', dir: 'Demo67_HibikiDivaParade', ja: 'ほしふる パレード', en: 'Starfall Parade', zh: '星落游行', ko: '별이 쏟아지는 퍼레이드', series: 'hibiki', part: 2, cast: 'hibiki', new: true, group: 5 },
+    { cat: 'idol', dir: 'Demo68_HibikiDivaCrown', ja: 'こおりの おうかん', en: 'Crown of Ice', zh: '冰之王冠', ko: '얼음 왕관', series: 'hibiki', part: 3, cast: 'hibiki', new: true, group: 5 },
+    { cat: 'idol', dir: 'Demo69_HibikiDivaSnow', ja: 'ゆきあかり', en: 'Snowlight', zh: '雪光', ko: '눈빛', series: 'hibiki', part: 4, cast: 'hibiki', new: true, group: 5 },
+    { cat: 'idol', dir: 'Demo70_HibikiDivaBench', ja: 'ひだまりの ベンチ', en: 'The Sunny Bench', zh: '向阳的长椅', ko: '양지바른 벤치', series: 'hibiki', part: 5, cast: 'hibiki', new: true, group: 5 },
     { cat: 'all-ages', dir: 'Demo04_SeasonsExpress', ja: '季節が、暴走する。', en: 'The Runaway Seasons Express', zh: '四季失控的魔法列车', ko: '계절이 폭주한다.', cast: 'train', group: 0 },
     { cat: 'all-ages', dir: 'Demo47_GhostLantern', ja: 'ひやっと！おばけやしきの ちょうちんばん', en: 'Lantern Keeper of the Spooky House', zh: '鬼屋提灯值日生', ko: '오싹! 유령의 집 등불 당번', cast: 'bonchan+yurari', new: true, group: 0 },
     { cat: 'all-ages', dir: 'Demo48_AnimalOnsen', ja: 'ゆけむり どうぶつおんせん', en: 'Steamy Animal Hot Spring', zh: '蒸汽腾腾的动物温泉', ko: '모락모락 동물 온천', cast: 'yuzujii', new: true, group: 0 },
@@ -58,7 +63,7 @@
   // thermal-use score (推荐度 = how fully the thermal feedback is used: tools/qa/thermal_score.py, best first) → demos with the same main
   // character next to each other → folder number. "Try these first" = featured + the top 3 by score. ‹ ›, swipes and the "n / N" follow it.
   const SERIES = {
-    snowfox: { ja: '小雪と焔', en: 'Koyuki & Homura', zh: '小雪与焰', ko: '코유키와 호무라' }, ayane: { ja: '星乃綾音', en: 'Hoshino Ayane', zh: '星乃绫音', ko: '호시노 아야네' },
+    snowfox: { ja: '小雪と焔', en: 'Koyuki & Homura', zh: '小雪与焰', ko: '코유키와 호무라' }, ayane: { ja: '星乃綾音', en: 'Hoshino Ayane', zh: '星乃绫音', ko: '호시노 아야네' }, hibiki: { ja: '響', en: 'Hibiki', zh: '响', ko: '히비키' },
     naomi: { ja: 'ナオミ', en: 'Naomi', zh: 'Naomi', ko: '나오미' }, family: { ja: 'じいちゃん・ばあちゃん', en: 'Grandma & Grandpa', zh: '爷爷奶奶', ko: '할아버지·할머니' },
     stream: { ja: '配信ルーム', en: 'Live streams', zh: '直播间', ko: '라이브 방송' }, nobunaga: { ja: '信長と家康 · 全5話', en: 'Nobunaga & Ieyasu · 5 episodes', zh: '信长与家康 · 共5集', ko: '노부나가와 이에야스 · 전 5화' },
     talk: { ja: '語らう', en: 'Talk with them', zh: '对谈', ko: '이야기 나누기' },

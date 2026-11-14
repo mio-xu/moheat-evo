@@ -1,0 +1,101 @@
+{
+ "_note": "UI v2 cover data: edit, then python3 tools/web/covers.py Demo67_HibikiDivaParade",
+ "title": {
+  "ja": "ほしふる\nパレード",
+  "en": "Starfall\nParade",
+  "zh": "星落游行",
+  "ko": "① 별이 쏟아지는 퍼레이드"
+ },
+ "tagline": {
+  "ja": "響ディーバ ① ほしふる パレード — 花火と海風を 左右の耳で",
+  "en": "Hibiki Diva ① Starfall Parade — fireworks and sea breeze, ear by ear",
+  "zh": "响歌姬 ① 星落游行 — 用左右耳感受烟花与海风",
+  "ko": "히비키 디바 ① 별이 쏟아지는 퍼레이드 — 불꽃과 바닷바람을 양쪽 귀로"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "ja": "花火・ステージライト・歌声",
+    "en": "fireworks · stage lights · his voice",
+    "zh": "烟花・舞台灯・歌声",
+    "ko": "불꽃・무대 조명・목소리"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "ja": "海風・波しぶき・きらめき",
+    "en": "sea breeze · spray · glitter",
+    "zh": "海风・浪花・闪光",
+    "ko": "바닷바람・물보라・반짝임"
+   }
+  }
+ ],
+ "tone": "10 14 30",
+ "chapters": [
+  {
+   "ja": "開演前",
+   "en": "Before the show",
+   "zh": "开演前",
+   "ko": "공연 전"
+  },
+  {
+   "ja": "前奏",
+   "en": "Intro",
+   "zh": "前奏",
+   "ko": "전주"
+  },
+  {
+   "ja": "Aメロ",
+   "en": "Verse",
+   "zh": "主歌",
+   "ko": "벌스"
+  },
+  {
+   "ja": "Bメロ",
+   "en": "Pre-chorus",
+   "zh": "导歌",
+   "ko": "프리코러스"
+  },
+  {
+   "ja": "サビ",
+   "en": "Chorus",
+   "zh": "副歌",
+   "ko": "코러스"
+  },
+  {
+   "ja": "ブレイク",
+   "en": "Break",
+   "zh": "间奏",
+   "ko": "브레이크"
+  },
+  {
+   "ja": "ラストサビ",
+   "en": "Final chorus",
+   "zh": "最后的副歌",
+   "ko": "라스트 코러스"
+  },
+  {
+   "ja": "アウトロ",
+   "en": "Outro",
+   "zh": "尾奏",
+   "ko": "아웃트로"
+  },
+  {
+   "ja": "ありがとう",
+   "en": "Thank you",
+   "zh": "谢谢你",
+   "ko": "고마워"
+  }
+ ],
+ "faces": {
+  "eye": [
+   72,
+   34
+  ],
+  "face": 24,
+  "duo": false,
+  "_why": "LivLiv render composed to these 2b numbers (_kit/diva/tools/cover_ll.py)"
+ }
+}

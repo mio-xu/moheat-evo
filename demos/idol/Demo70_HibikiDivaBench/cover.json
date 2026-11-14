@@ -1,0 +1,113 @@
+{
+ "_note": "UI v2 cover data: edit, then python3 tools/web/covers.py Demo70_HibikiDivaBench",
+ "title": {
+  "ja": "ひだまりの\nベンチ",
+  "en": "The\nSunny Bench",
+  "zh": "向阳的长椅",
+  "ko": "④ 양지바른 벤치"
+ },
+ "tagline": {
+  "ja": "響ディーバ ④ ひだまりの ベンチ — 陽ざしと春風を 左右の耳で",
+  "en": "Hibiki Diva ④ The Sunny Bench — sunlight and spring breeze, ear by ear",
+  "zh": "响歌姬 ④ 向阳的长椅 — 用左右耳感受阳光与春风",
+  "ko": "히비키 디바 ④ 양지바른 벤치 — 햇살과 봄바람을 양쪽 귀로"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "ja": "ひだまり・陽ざし・歌声",
+    "en": "sunny spot · sunlight · his voice",
+    "zh": "向阳处・阳光・歌声",
+    "ko": "양지・햇살・목소리"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "ja": "春風・花びら・小川",
+    "en": "spring breeze · petals · stream",
+    "zh": "春风・花瓣・小溪",
+    "ko": "봄바람・꽃잎・시냇물"
+   }
+  }
+ ],
+ "tone": "14 18 12",
+ "chapters": [
+  {
+   "ja": "開演前",
+   "en": "Before the show",
+   "zh": "开演前",
+   "ko": "공연 전"
+  },
+  {
+   "ja": "前奏",
+   "en": "Intro",
+   "zh": "前奏",
+   "ko": "전주"
+  },
+  {
+   "ja": "1番",
+   "en": "Verse 1",
+   "zh": "主歌 1",
+   "ko": "벌스 1"
+  },
+  {
+   "ja": "2番",
+   "en": "Verse 2",
+   "zh": "主歌 2",
+   "ko": "벌스 2"
+  },
+  {
+   "ja": "Bメロ",
+   "en": "Pre-chorus",
+   "zh": "导歌",
+   "ko": "프리코러스"
+  },
+  {
+   "ja": "Bメロ 2",
+   "en": "Pre-chorus 2",
+   "zh": "导歌 2",
+   "ko": "프리코러스 2"
+  },
+  {
+   "ja": "サビ",
+   "en": "Chorus",
+   "zh": "副歌",
+   "ko": "코러스"
+  },
+  {
+   "ja": "ブリッジ",
+   "en": "Bridge",
+   "zh": "桥段",
+   "ko": "브리지"
+  },
+  {
+   "ja": "ブリッジ 2",
+   "en": "Bridge 2",
+   "zh": "桥段 2",
+   "ko": "브리지 2"
+  },
+  {
+   "ja": "ラストサビ",
+   "en": "Final chorus",
+   "zh": "最后的副歌",
+   "ko": "라스트 코러스"
+  },
+  {
+   "ja": "ありがとう",
+   "en": "Thank you",
+   "zh": "谢谢你",
+   "ko": "고마워"
+  }
+ ],
+ "faces": {
+  "eye": [
+   72,
+   34
+  ],
+  "face": 24,
+  "duo": false,
+  "_why": "LivLiv render composed to these 2b numbers (_kit/diva/tools/cover_ll.py)"
+ }
+}

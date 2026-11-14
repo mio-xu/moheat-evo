@@ -1,0 +1,95 @@
+{
+ "_note": "UI v2 cover data: edit, then python3 tools/web/covers.py Demo69_HibikiDivaSnow",
+ "title": {
+  "ja": "ゆきあかり",
+  "en": "Snowlight",
+  "zh": "雪光",
+  "ko": "③ 눈빛"
+ },
+ "tagline": {
+  "ja": "響ディーバ ③ ゆきあかり — 雪の窓と灯りを 左右の耳で",
+  "en": "Hibiki Diva ③ Snowlight — the snowy window and the lamp, ear by ear",
+  "zh": "响歌姬 ③ 雪光 — 用左右耳感受雪窗与灯光",
+  "ko": "히비키 디바 ③ 눈빛 — 눈 창과 불빛을 양쪽 귀로"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "ja": "デスクライト・ヒーター・歌声",
+    "en": "desk lamp · heater · his voice",
+    "zh": "台灯・暖炉・歌声",
+    "ko": "스탠드・히터・목소리"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "ja": "雪の窓・月あかり",
+    "en": "snowy window · moonlight",
+    "zh": "雪窗・月光",
+    "ko": "눈 내리는 창・달빛"
+   }
+  }
+ ],
+ "tone": "10 10 24",
+ "chapters": [
+  {
+   "ja": "開演前",
+   "en": "Before the show",
+   "zh": "开演前",
+   "ko": "공연 전"
+  },
+  {
+   "ja": "前奏",
+   "en": "Intro",
+   "zh": "前奏",
+   "ko": "전주"
+  },
+  {
+   "ja": "1番",
+   "en": "Verse 1",
+   "zh": "主歌 1",
+   "ko": "벌스 1"
+  },
+  {
+   "ja": "2番",
+   "en": "Verse 2",
+   "zh": "主歌 2",
+   "ko": "벌스 2"
+  },
+  {
+   "ja": "たかまり",
+   "en": "Swell",
+   "zh": "渐强",
+   "ko": "고조"
+  },
+  {
+   "ja": "サビ",
+   "en": "Peak",
+   "zh": "高潮",
+   "ko": "절정"
+  },
+  {
+   "ja": "エンディング",
+   "en": "Ending",
+   "zh": "尾声",
+   "ko": "엔딩"
+  },
+  {
+   "ja": "ありがとう",
+   "en": "Thank you",
+   "zh": "谢谢你",
+   "ko": "고마워"
+  }
+ ],
+ "faces": {
+  "eye": [
+   72,
+   34
+  ],
+  "face": 24,
+  "duo": false,
+  "_why": "LivLiv render composed to these 2b numbers (_kit/diva/tools/cover_ll.py)"
+ }
+}

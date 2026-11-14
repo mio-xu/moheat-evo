@@ -1,0 +1,90 @@
+{
+ "_note": "UI v2 cover data: edit, then python3 tools/web/covers.py Demo66_HibikiFanMeeting (art = media/cover/art.webp: salon plate + Hibiki)",
+ "title": {
+  "en": "Hibiki's\nFan Meeting",
+  "ja": "響の、\nきみだけの\nファンミーティング",
+  "zh": "响的\n专属见面会",
+  "ko": "히비키의\n팬미팅"
+ },
+ "tagline": {
+  "en": "The little prince whispers — one ear at a time",
+  "ja": "小さな王子さまが、片耳ずつ ささやく",
+  "zh": "小王子凑到耳边，一只耳朵一只耳朵地说悄悄话",
+  "ko": "작은 왕자님이 한쪽 귀씩 속삭여요"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "en": "his whisper · sunlight · a blanket",
+    "ja": "ささやき・日ざし・ブランケット",
+    "zh": "悄悄话・阳光・毯子",
+    "ko": "속삭임・햇살・담요"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "en": "the fountain's cool mist",
+    "ja": "噴水のひんやりミスト",
+    "zh": "喷泉的清凉水雾",
+    "ko": "분수의 시원한 물안개"
+   }
+  }
+ ],
+ "tone": "20 26 46",
+ "options": [],
+ "chapters": [
+  {
+   "ja": "ようこそ",
+   "en": "Welcome",
+   "zh": "欢迎",
+   "ko": "어서 와"
+  },
+  {
+   "ja": "握手",
+   "en": "Handshake",
+   "zh": "握手",
+   "ko": "악수"
+  },
+  {
+   "ja": "ひみつの話",
+   "en": "A secret",
+   "zh": "秘密",
+   "ko": "비밀 이야기"
+  },
+  {
+   "ja": "マントと夜風",
+   "en": "Cape or night breeze",
+   "zh": "披风与夜风",
+   "ko": "망토와 밤바람"
+  },
+  {
+   "ja": "ツーショット",
+   "en": "A photo together",
+   "zh": "合影",
+   "ko": "투샷"
+  },
+  {
+   "ja": "プレゼント",
+   "en": "A present",
+   "zh": "礼物",
+   "ko": "선물"
+  },
+  {
+   "ja": "またね",
+   "en": "See you",
+   "zh": "下次见",
+   "ko": "또 봐"
+  }
+ ],
+ "faces": {
+  "eye": [
+   72,
+   34
+  ],
+  "face": 24,
+  "duo": false,
+  "_why": "LivLiv render composed to these 2b numbers (_kit/diva/tools/cover_ll.py)"
+ }
+}

@@ -1,0 +1,101 @@
+{
+ "_note": "UI v2 cover data: edit, then python3 tools/web/covers.py Demo68_HibikiDivaCrown",
+ "title": {
+  "ja": "こおりの\nおうかん",
+  "en": "Crown\nof Ice",
+  "zh": "冰之王冠",
+  "ko": "② 얼음 왕관"
+ },
+ "tagline": {
+  "ja": "響ディーバ ② こおりの おうかん — かがり火と嵐を 左右の耳で",
+  "en": "Hibiki Diva ② Crown of Ice — braziers and storm, ear by ear",
+  "zh": "响歌姬 ② 冰之王冠 — 用左右耳感受火盆与暴风雨",
+  "ko": "히비키 디바 ② 얼음 왕관 — 화톳불과 폭풍을 양쪽 귀로"
+ },
+ "chips": [
+  {
+   "kind": "warm",
+   "text": {
+    "ja": "かがり火・城の灯り・歌声",
+    "en": "braziers · castle lights · his voice",
+    "zh": "火盆・城堡灯火・歌声",
+    "ko": "화톳불・성의 불빛・목소리"
+   }
+  },
+  {
+   "kind": "cool",
+   "text": {
+    "ja": "嵐・雨・いなずま",
+    "en": "storm · rain · lightning",
+    "zh": "暴风雨・雨・闪电",
+    "ko": "폭풍・비・번개"
+   }
+  }
+ ],
+ "tone": "8 10 26",
+ "chapters": [
+  {
+   "ja": "開演前",
+   "en": "Before the show",
+   "zh": "开演前",
+   "ko": "공연 전"
+  },
+  {
+   "ja": "前奏",
+   "en": "Intro",
+   "zh": "前奏",
+   "ko": "전주"
+  },
+  {
+   "ja": "Aメロ",
+   "en": "Verse",
+   "zh": "主歌",
+   "ko": "벌스"
+  },
+  {
+   "ja": "Bメロ",
+   "en": "Pre-chorus",
+   "zh": "导歌",
+   "ko": "프리코러스"
+  },
+  {
+   "ja": "サビ",
+   "en": "Chorus",
+   "zh": "副歌",
+   "ko": "코러스"
+  },
+  {
+   "ja": "ブリッジ",
+   "en": "Bridge",
+   "zh": "桥段",
+   "ko": "브리지"
+  },
+  {
+   "ja": "ラストサビ",
+   "en": "Final chorus",
+   "zh": "最后的副歌",
+   "ko": "라스트 코러스"
+  },
+  {
+   "ja": "アウトロ",
+   "en": "Outro",
+   "zh": "尾奏",
+   "ko": "아웃트로"
+  },
+  {
+   "ja": "ありがとう",
+   "en": "Thank you",
+   "zh": "谢谢你",
+   "ko": "고마워"
+  }
+ ],
+ "faces": {
+  "eye": [
+   72,
+   34
+  ],
+  "face": 24,
+  "duo": false,
+  "_why": "LivLiv render composed to these 2b numbers (_kit/diva/tools/cover_ll.py)"
+ }
+}

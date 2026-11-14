@@ -1,0 +1,32 @@
+{
+ "base": {
+  "inputs": {
+   "demos/idol/Demo67_HibikiDivaParade/media/cover/stamp.json": "4c670417886101171e13274f0cb14a99b0248bab"
+  },
+  "thumb": "58a3e4b1124e172b796c0403a5ddf4fbcd77bb15"
+ },
+ "en": {
+  "inputs": {
+   "demos/idol/Demo67_HibikiDivaParade/media/cover/stamp.json": "4c670417886101171e13274f0cb14a99b0248bab"
+  },
+  "thumb": "58a3e4b1124e172b796c0403a5ddf4fbcd77bb15"
+ },
+ "ja": {
+  "inputs": {
+   "demos/idol/Demo67_HibikiDivaParade/media/cover/stamp.json": "4c670417886101171e13274f0cb14a99b0248bab"
+  },
+  "thumb": "b4a7d0045a193051cc91b0891593d67d57625b3d"
+ },
+ "ko": {
+  "inputs": {
+   "demos/idol/Demo67_HibikiDivaParade/media/cover/stamp.json": "4c670417886101171e13274f0cb14a99b0248bab"
+  },
+  "thumb": "c264e3daad4257cf9a45ada239aed27c1df080c5"
+ },
+ "zh": {
+  "inputs": {
+   "demos/idol/Demo67_HibikiDivaParade/media/cover/stamp.json": "4c670417886101171e13274f0cb14a99b0248bab"
+  },
+  "thumb": "5f0582996067f9e354c4918724406f5a00ec5204"
+ }
+}
