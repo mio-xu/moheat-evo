@@ -138,18 +138,29 @@
     if (b.act && PG.ll) setTimeout(() => PG.ll.act(b.act), (b.at || 0) * 1000);
     userProps(S, opts);
   }
-  /** Props on YOU (layer "user"): pictures at screen anchors (PG_RULES.story.anchors: name → { x, y, h } in % of the frame; _L / _R sides). */
+  /** Props on YOU (layer "user": a scarf round your neck, a cool towel on your forehead / at an ear) are seen first-person, never as a small
+   *  object in the scene: a soft band along that edge of the frame, fading in. Placement = data: PG_RULES.story.anchors[<anchor>[_<side>]]
+   *  { pov: 'bottom' | 'top' | 'left' | 'right' | 'glow', show (% of the frame), fade (% of the band fading toward the middle), opacity, blur },
+   *  overridden per prop by the pack's prop.pov. The band is the prop's colour (pov.color, a soft tint) — or, when the pack gives a picture
+   *  drawn for it (pov.src: a first-person close-up, e.g. the scarf's knit filling the bottom edge), that picture (zoom, pos). 'glow' = nothing
+   *  drawn (the thermal edge glow alone). */
   function userProps(S, opts) {
     const P = opts.pack, A = RULES().anchors || {}; let box = $('storyProps');
-    if (!box) { box = document.createElement('div'); box.id = 'storyProps'; Object.assign(box.style, { position: 'absolute', inset: 0, pointerEvents: 'none' }); PG.app.appendChild(box); }
+    if (!box) { box = document.createElement('div'); box.id = 'storyProps'; Object.assign(box.style, { position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' });
+      const fxEl = $('fx'); if (fxEl) fxEl.after(box); else PG.app.appendChild(box); }   // above the scene and him, under every sheet / button
     const want = Object.entries(S.props).filter(([id]) => P.props?.[id]?.layer === 'user');
-    for (const el of [...box.children]) if (!want.some(([id, side]) => el.dataset.k === `${id}:${side}`)) { el.style.opacity = 0; setTimeout(() => el.remove(), 600); }
+    for (const el of [...box.children]) if (!want.some(([id, side]) => el.dataset.k === `${id}:${side}`)) { el.style.opacity = 0; el.style.transform = el.dataset.off || ''; setTimeout(() => el.remove(), 900); }
     for (const [id, side] of want) {
       if (box.querySelector(`[data-k="${id}:${side}"]`)) continue;
-      const pr = P.props[id], an = A[`${pr.anchor}_${side}`] || A[pr.anchor] || { x: 50, y: 85, h: 30 };
-      const im = new Image(); im.src = opts.base + pr.src; im.dataset.k = `${id}:${side}`;
-      Object.assign(im.style, { position: 'absolute', left: `${an.x}%`, top: `${an.y}%`, height: `${an.h}%`, transform: `translate(-50%, -50%)${an.flip ? ' scaleX(-1)' : ''}`, opacity: 0, transition: 'opacity .6s' });
-      box.appendChild(im); requestAnimationFrame(() => { im.style.opacity = 1; });
+      const pr = P.props[id], an = { pov: 'bottom', show: 18, zoom: 2.4, pos: '50% 20%', blur: 5, fade: 75, opacity: .6, ...(A[`${pr.anchor}_${side}`] || A[pr.anchor] || {}), ...(pr.pov || {}) };
+      if (an.pov === 'glow') continue;
+      const el = document.createElement('div'), e = an.pov, vert = e === 'left' || e === 'right', grad = { bottom: 'to top', top: 'to bottom', left: 'to right', right: 'to left' }[e];
+      el.dataset.k = `${id}:${side}`; el.dataset.off = { bottom: 'translateY(30%)', top: 'translateY(-30%)', left: 'translateX(-30%)', right: 'translateX(30%)' }[e];
+      const mask = `linear-gradient(${grad}, #000 ${100 - an.fade}%, transparent)`, pic = an.src ? { backgroundImage: `url("${opts.base + an.src}")`, backgroundRepeat: 'no-repeat',
+        backgroundSize: vert ? `auto ${an.zoom * 100}%` : `${an.zoom * 100}% auto`, backgroundPosition: an.pos, filter: `blur(${an.blur}px)` } : { background: an.color || 'rgba(255,255,255,.5)' };
+      Object.assign(el.style, { position: 'absolute', [e]: `-${an.blur * 2}px`, ...(vert ? { top: 0, bottom: 0, width: `${an.show}%` } : { left: `-${an.blur * 2}px`, right: `-${an.blur * 2}px`, height: `${an.show}%` }),
+        ...pic, webkitMaskImage: mask, maskImage: mask, opacity: 0, transform: el.dataset.off, transition: 'opacity .9s ease, transform .9s ease' });
+      box.appendChild(el); requestAnimationFrame(() => requestAnimationFrame(() => { el.style.opacity = an.opacity; el.style.transform = 'none'; }));
     }
   }
 
